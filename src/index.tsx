@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 
 import 'reset-css';
 
+import 'logger';
 import store from 'store';
 import theme from 'theme';
 import App from 'components/App';
