@@ -1,26 +1,19 @@
-import React, { Suspense } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 import Loader from 'components/Loader';
+import RoutesLoader from 'components/RoutesLoader';
 
-import { Container } from './App.styles';
+import routes from './routes';
 
 export interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
   return (
-    <Container>
-      <BrowserRouter>
-        <Suspense fallback={<Loader />}>
-          <Switch>
-            <Route path="/">Home</Route>
-          </Switch>
-        </Suspense>
-      </BrowserRouter>
-    </Container>
+    <BrowserRouter>
+      <RoutesLoader fallback={<Loader />} routes={routes} />
+    </BrowserRouter>
   );
 };
-
-App.displayName = 'App';
 
 export default App;
