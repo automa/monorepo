@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 import theme from 'theme';
