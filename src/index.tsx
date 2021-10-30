@@ -8,7 +8,7 @@ import 'reset-css';
 import 'logger';
 import store from 'store';
 import theme from 'theme';
-import App from 'components/App';
+import App from 'views/App';
 
 ReactDOM.render(
   <React.StrictMode>

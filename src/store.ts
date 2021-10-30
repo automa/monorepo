@@ -1,8 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
-// Slices live in `slices` folder
-
 const store = configureStore({
   reducer: {},
   devTools: process.env.NODE_ENV !== 'production',
