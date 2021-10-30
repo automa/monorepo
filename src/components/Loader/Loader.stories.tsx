@@ -1,7 +1,6 @@
-import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
-import Loader, { LoaderProps } from './Loader';
+import Loader from './Loader';
 
 export default {
   title: 'Loader',
@@ -9,8 +8,6 @@ export default {
   argTypes: {},
 } as Meta;
 
-const Template: Story<LoaderProps> = (args) => <Loader {...args} />;
-
-export const Default = Template.bind({});
-
-Default.args = {};
+export const Default = {
+  args: {},
+};
