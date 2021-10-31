@@ -1,9 +1,12 @@
 const typography = {
-  body: () => `
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 24px;
-  `,
+  h1: () => ``,
+  h2: () => ``,
+  h3: () => ``,
+  h4: () => ``,
+  h5: () => ``,
+  h6: () => ``,
+  body1: () => ``,
+  body2: () => ``,
 };
 
 export default typography;
