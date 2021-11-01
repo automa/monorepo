@@ -1,12 +1,14 @@
+import { css } from 'styled-components';
+
 const typography = {
-  h1: () => ``,
-  h2: () => ``,
-  h3: () => ``,
-  h4: () => ``,
-  h5: () => ``,
-  h6: () => ``,
-  body1: () => ``,
-  body2: () => ``,
+  h1: () => css``,
+  h2: () => css``,
+  h3: () => css``,
+  h4: () => css``,
+  h5: () => css``,
+  h6: () => css``,
+  body1: () => css``,
+  body2: () => css``,
 };
 
 export default typography;
