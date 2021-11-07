@@ -27,7 +27,7 @@ export type TypographyProps = $<
 const Typography = CssWrapper<TypographyProps>(
   ({
     element = 'div',
-    variant,
+    variant = 'body1',
     textAlign,
     noWrap = false,
     children,
