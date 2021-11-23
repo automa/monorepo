@@ -25,37 +25,38 @@ interface CssProps {
 const cssValue = (theme: DefaultTheme, val?: CssValue) =>
   !!val && (typeof val === 'string' ? val : `${theme.spacing(val)}px`);
 
-const cssLine = (key: string, cssKey: string) => ({
-  theme,
-  ...props
-}: {
-  theme: DefaultTheme;
-} & CssProps) =>
-  css`
-    ${cssKey}: ${
-      // @ts-ignore
-      cssValue(theme, props[key])
-    };
-  `;
+const cssLine =
+  (key: string, cssKey: string) =>
+  ({
+    theme,
+    ...props
+  }: {
+    theme: DefaultTheme;
+  } & CssProps) =>
+    css`
+      ${cssKey}: ${
+        // @ts-ignore
+        cssValue(theme, props[key])
+      };
+    `;
 
-const cssFour = (key: string, cssKey: string) => ({
-  theme,
-  ...props
-}: { theme: DefaultTheme } & CssProps) => {
-  // @ts-ignore
-  const val = props[key] as CssValues;
-  let cssVal;
+const cssFour =
+  (key: string, cssKey: string) =>
+  ({ theme, ...props }: { theme: DefaultTheme } & CssProps) => {
+    // @ts-ignore
+    const val = props[key] as CssValues;
+    let cssVal;
 
-  if (Array.isArray(val)) {
-    cssVal = val.map((item) => cssValue(theme, item)).join(' ');
-  } else {
-    cssVal = cssValue(theme, val);
-  }
+    if (Array.isArray(val)) {
+      cssVal = val.map((item) => cssValue(theme, item)).join(' ');
+    } else {
+      cssVal = cssValue(theme, val);
+    }
 
-  return css`
-    ${cssKey}: ${cssVal};
-  `;
-};
+    return css`
+      ${cssKey}: ${cssVal};
+    `;
+  };
 
 export const CssWrapper = <T>(
   component: (args: Component<T>) => JSX.Element | null,

@@ -4,8 +4,7 @@ import { Route } from 'types';
 const routes = [
   {
     Component: lazy(() => import('views/Home')),
-    path: '/',
-    exact: true,
+    path: '',
   },
 ] as Route[];
 
