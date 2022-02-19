@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+
 import { Route } from 'types';
 
 const routes = [

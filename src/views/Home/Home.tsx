@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Container } from './Home.styles';
+import { HomeProps } from './types';
 
-export interface HomeProps extends React.HTMLAttributes<HTMLDivElement> {}
+import { Container } from './Home.styles';
 
 const Home: React.FC<HomeProps> = ({ ...props }) => {
   return <Container {...props}>Home</Container>;

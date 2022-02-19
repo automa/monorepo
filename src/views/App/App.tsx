@@ -5,6 +5,7 @@ import Loader from 'components/Loader';
 import RoutesLoader from 'components/RoutesLoader';
 
 import routes from './routes';
+
 import { Container } from './App.styles';
 
 export interface AppProps {}

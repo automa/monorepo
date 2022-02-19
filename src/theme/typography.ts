@@ -1,14 +1,15 @@
 import { css } from 'styled-components';
 
 const typography = {
-  h1: () => css``,
-  h2: () => css``,
-  h3: () => css``,
-  h4: () => css``,
-  h5: () => css``,
-  h6: () => css``,
+  title1: () => css``,
+  title2: () => css``,
+  title3: () => css``,
+  title4: () => css``,
+  title5: () => css``,
+  title6: () => css``,
   body1: () => css``,
   body2: () => css``,
-};
+  body3: () => css``,
+} as const;
 
 export default typography;

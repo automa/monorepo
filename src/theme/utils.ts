@@ -9,7 +9,7 @@ type CssValues =
   | [CssValue, CssValue, CssValue]
   | [CssValue, CssValue, CssValue, CssValue];
 
-interface CssProps {
+interface CommonProps {
   margin?: CssValues;
   marginTop?: CssValue;
   marginRight?: CssValue;
@@ -23,7 +23,7 @@ interface CssProps {
 }
 
 const cssValue = (theme: DefaultTheme, val?: CssValue) =>
-  !!val && (typeof val === 'string' ? val : `${theme.spacing(val)}px`);
+  !!val && (typeof val === 'string' ? `${val}px` : `${theme.spacing(val)}px`);
 
 const cssLine =
   (key: string, cssKey: string) =>
@@ -32,7 +32,7 @@ const cssLine =
     ...props
   }: {
     theme: DefaultTheme;
-  } & CssProps) =>
+  } & CommonProps) =>
     css`
       ${cssKey}: ${
         // @ts-ignore
@@ -42,7 +42,7 @@ const cssLine =
 
 const cssFour =
   (key: string, cssKey: string) =>
-  ({ theme, ...props }: { theme: DefaultTheme } & CssProps) => {
+  ({ theme, ...props }: { theme: DefaultTheme } & CommonProps) => {
     // @ts-ignore
     const val = props[key] as CssValues;
     let cssVal;
@@ -58,10 +58,10 @@ const cssFour =
     `;
   };
 
-export const CssWrapper = <T>(
+export const CommonWrapper = <T>(
   component: (args: Component<T>) => JSX.Element | null,
 ) =>
-  styled((props: Component<T> & CssProps) => {
+  styled((props: Common<T>) => {
     const {
       margin,
       marginTop,
@@ -76,9 +76,8 @@ export const CssWrapper = <T>(
       ...componentProps
     } = props;
 
-    // @ts-ignore
     return component(componentProps as Component<T>);
-  })<Component<T> & CssProps>`
+  })<Common<T>>`
     ${cssFour('margin', 'margin')}
     ${cssLine('marginTop', 'margin-top')}
     ${cssLine('marginRight', 'margin-right')}
@@ -93,50 +92,74 @@ export const CssWrapper = <T>(
 
 // Utility wrapper for building different types of props needed for a component.
 //
-// `S` are the props used in the component and also used in styled component.
-// They will be prefixed with `$` for the styled component. Would not recommend
-// including any `HTMLAttributes` in this.
+// `SR` are the props used in the component and also required in styled component.
+// They will be prefixed with `$` for the styled component.
 //
-// `N` are the props used only in the component. If they contain `HTMLAttributes`,
+// `SO` are the props used in the component and also used optionally in styled component.
+// They will be prefixed with `$` for the styled component.
+//
+// **NOTE**: Would not recommend including any `HTMLAttributes` in the above.
+//
+// `C` are the props used only in the component. If they contain `HTMLAttributes`,
 // they can be forwarded to styled component as the base element props without any
 // modifications.
 //
 //   ```
 //   export type ButtonProps = $<{
-//     checked: boolean;
-//   }, React.HTMLAttributes<HTMLButtonElement>;
+//     // This will be `?` in component props only
+//     checked?: boolean;
+//   }, {
+//     // This will be `?` in both component and styled props
+//     color: Property.Color;
+//   }, React.HTMLAttributes<HTMLButtonElement>>;
 //   ```
 //
-// All the component props are available under `Type['component']` or `Component<Type>`.
+// All the component props are available under `Component<Type>`.
 //
 //   ```
-//   const Button: React.FC<Component<ButtonProps>> = ({ checked, ...props }) => {
-//     return <ButtonContainer {...props} $checked={checked} />;
+//   const Button: React.FC<Component<ButtonProps>> = ({
+//     checked = false,
+//     color,
+//     ...props
+//   }) => {
+//     return <ButtonContainer {...props} $checked={checked} $color={color} />;
 //   };
 //   ```
 //
-// All the styled props are available under `Type['styled']` or `Styled<Type>`.
+// All the styled props are available under `Styled<Type>`.
 //
 //   ```
 //   const ButtonContainer = styled.button<Styled<ButtonProps>>``;
 //   ```
-export type $<S, N> = {
-  component: S & N;
-  styled: {
-    [K in keyof S as `$${Extract<K, string>}`]: S[K];
+export type $<SR, SO, C> = {
+  componentDirect: SR & C;
+  componentStyledOptional: {
+    [K in keyof SO]?: SO[K];
+  };
+  styledRequired: {
+    [K in keyof SR as `$${Extract<K, string>}`]-?: SR[K];
+  };
+  styledOptional: {
+    [K in keyof SO as `$${Extract<K, string>}`]?: SO[K];
   };
 };
 
 export type Component<T> = T extends {
-  component: unknown;
-  styled: unknown;
+  componentDirect: unknown;
+  componentStyledOptional: unknown;
+  styledRequired: unknown;
+  styledOptional: unknown;
 }
-  ? T['component']
+  ? T['componentDirect'] & T['componentStyledOptional']
   : T;
 
 export type Styled<T> = T extends {
-  component: unknown;
-  styled: unknown;
+  componentDirect: unknown;
+  componentStyledOptional: unknown;
+  styledRequired: unknown;
+  styledOptional: unknown;
 }
-  ? T['styled']
+  ? T['styledRequired'] & T['styledOptional']
   : T;
+
+export type Common<T> = Component<T> & CommonProps;

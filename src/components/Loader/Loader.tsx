@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Container } from './Loader.styles';
+import { LoaderProps } from './types';
 
-export interface LoaderProps extends React.HTMLAttributes<HTMLDivElement> {}
+import { Container } from './Loader.styles';
 
 const Loader: React.FC<LoaderProps> = ({ ...props }) => {
   return <Container {...props}>Loading...</Container>;

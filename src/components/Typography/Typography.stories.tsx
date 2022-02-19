@@ -14,10 +14,10 @@ export const Default = {
   },
 };
 
-export const Heading1 = {
+export const Title1 = {
   args: {
     ...Default.args,
-    variant: 'h1',
+    variant: 'title1',
   },
 };
 

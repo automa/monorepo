@@ -1,50 +1,57 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import theme, { $, CssWrapper } from 'theme';
+import { CommonWrapper } from 'theme';
+
+import { TypographyProps } from './types';
 
 import { Container } from './Typography.styles';
 
-type TextAlign =
-  | 'inherit'
-  | 'initial'
-  | 'left'
-  | 'center'
-  | 'right'
-  | 'justify';
-
-type TypographyVariant = keyof typeof theme['typography'];
-
-export type TypographyProps = $<
-  {
-    element?: React.ElementType;
-    variant?: TypographyVariant;
-    textAlign?: TextAlign;
-    noWrap?: boolean;
-  },
-  {} & React.HTMLAttributes<HTMLDivElement>
->;
-
-const Typography = CssWrapper<TypographyProps>(
+const Typography = CommonWrapper<TypographyProps>(
   ({
     element = 'div',
+    color = 'body',
     variant = 'body1',
-    textAlign,
     noWrap = false,
+    wordBreak,
+    textAlign,
+    textTransform,
     children,
     ...props
   }) => {
-    let asElement = element;
+    const asElement = useMemo(() => {
+      switch (variant) {
+        case 'title1':
+          return 'h1';
 
-    if (!!variant && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(variant)) {
-      asElement = variant as React.ElementType;
-    }
+        case 'title2':
+          return 'h2';
+
+        case 'title3':
+          return 'h3';
+
+        case 'title4':
+          return 'h4';
+
+        case 'title5':
+          return 'h5';
+
+        case 'title6':
+          return 'h6';
+
+        default:
+          return element;
+      }
+    }, [element, variant]);
 
     return (
       <Container
         as={asElement}
+        $color={color}
         $variant={variant}
-        $textAlign={textAlign}
         $noWrap={noWrap}
+        $wordBreak={wordBreak}
+        $textAlign={textAlign}
+        $textTransform={textTransform}
         {...props}
       >
         {children}

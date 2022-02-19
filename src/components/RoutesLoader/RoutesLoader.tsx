@@ -1,12 +1,7 @@
-import React, { ReactNode, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Routes, Route as ReactRoute } from 'react-router-dom';
 
-import { Route } from 'types';
-
-export interface RoutesLoaderProps {
-  fallback: ReactNode;
-  routes: Route[];
-}
+import { RoutesLoaderProps } from './types';
 
 const RoutesLoader: React.FC<RoutesLoaderProps> = ({
   fallback = null,
