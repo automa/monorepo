@@ -16,20 +16,17 @@
     "styled-components": "~5.3.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "check": "prettier --check .",
-    "format": "prettier --write .",
-    "lint": "eslint .",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "test": "react-scripts test",
+    "build": "react-scripts build",
+    "format": "prettier --write .",
+    "format-check": "prettier --check .",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
+    "prepare": "husky install",
+    "start": "react-scripts start",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "storybook-build": "build-storybook",
+    "test": "react-scripts test"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -67,7 +64,7 @@
     "eslint-config-prettier": "~8.3.0",
     "eslint-config-react-app": "~7.0.0",
     "eslint-plugin-prettier": "~4.0.0",
-    "husky": "^4.0.0",
+    "husky": "~7.0.4",
     "lint-staged": "~12.1.2",
     "prettier": "~2.5.1",
     "source-map-explorer": "~2.5.2",
