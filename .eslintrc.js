@@ -4,9 +4,15 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:import/warnings',
   ],
-  rules: {
-    'prettier/prettier': 2,
-  },
+  rules: {},
+  ignorePatterns: [
+    '!.storybook',
+    '!.prettierrc.js',
+    'build',
+    'coverage',
+    'public',
+    'yarn.lock',
+  ],
   overrides: [
     {
       files: ['**/*.stories.*'],
