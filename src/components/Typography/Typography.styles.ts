@@ -4,9 +4,9 @@ import { TypographyStyledProps } from './types';
 
 export const Container = styled.div<TypographyStyledProps>`
   color: ${({ theme, $color }) =>
-    theme.colors[$color as keyof typeof theme['colors']] ||
-    $color ||
-    'inherit'};
+    !!$color
+      ? theme.colors[$color as keyof typeof theme['colors']] || $color
+      : 'inherit'};
 
   ${({ theme, $variant }) => theme.typography[$variant]()}
 

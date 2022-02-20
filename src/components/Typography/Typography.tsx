@@ -9,9 +9,9 @@ import { Container } from './Typography.styles';
 const Typography = CommonWrapper<TypographyProps>(
   ({
     element = 'div',
-    color = 'body',
-    variant = 'body1',
     noWrap = false,
+    variant = 'body1',
+    color,
     wordBreak,
     textAlign,
     textTransform,

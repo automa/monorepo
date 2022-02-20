@@ -17,11 +17,11 @@ export type TextVariant = keyof typeof theme['typography'];
 
 export type TypographyProps = $<
   {
-    color?: TextColor;
-    variant?: TextVariant;
     noWrap?: boolean;
+    variant?: TextVariant;
   },
   {
+    color?: TextColor;
     wordBreak?: Property.WordBreak;
     textAlign?: TextAlign;
     textTransform?: Property.TextTransform;
