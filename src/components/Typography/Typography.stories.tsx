@@ -21,6 +21,64 @@ export const Title1 = {
   },
 };
 
+export const Title2 = {
+  args: {
+    ...Default.args,
+    variant: 'title2',
+  },
+};
+
+export const Title3 = {
+  args: {
+    ...Default.args,
+    variant: 'title3',
+  },
+};
+
+export const Title4 = {
+  args: {
+    ...Default.args,
+    variant: 'title4',
+  },
+};
+
+export const Title5 = {
+  args: {
+    ...Default.args,
+    variant: 'title5',
+  },
+};
+
+export const Title6 = {
+  args: {
+    ...Default.args,
+    variant: 'title6',
+  },
+};
+
+export const Color = {
+  args: {
+    ...Default.args,
+    color: 'body',
+  },
+};
+
+export const ColorNative = {
+  args: {
+    ...Default.args,
+    color: 'red',
+  },
+};
+
+export const Ellipsis = {
+  args: {
+    ...Default.args,
+    ellipsis: {
+      width: '50px',
+    },
+  },
+};
+
 export const AlignLeft = {
   args: {
     ...Default.args,
@@ -39,5 +97,12 @@ export const AlignRight = {
   args: {
     ...Default.args,
     textAlign: 'right',
+  },
+};
+
+export const Uppercase = {
+  args: {
+    ...Default.args,
+    textTransform: 'uppercase',
   },
 };

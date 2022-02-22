@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { ellipsis } from 'polished';
 
 import { TypographyStyledProps } from './types';
 
@@ -11,6 +12,13 @@ export const Container = styled.div<TypographyStyledProps>`
   ${({ theme, $variant }) => theme.typography[$variant]()}
 
   white-space: ${({ $noWrap }) => ($noWrap ? 'nowrap' : 'normal')};
+
+  ${({ $ellipsis }) =>
+    !!$ellipsis &&
+    !!Object.keys($ellipsis).length &&
+    css`
+      ${ellipsis($ellipsis.width, $ellipsis.lines)}
+    `}
 
   ${({ $wordBreak }) =>
     !!$wordBreak &&

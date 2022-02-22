@@ -23,7 +23,7 @@ interface CommonProps {
 }
 
 const cssValue = (theme: DefaultTheme, val?: CssValue) =>
-  !!val && (typeof val === 'string' ? `${val}px` : `${theme.spacing(val)}px`);
+  !!val && (typeof val === 'string' ? `${val}` : `${theme.spacing(val)}px`);
 
 const cssLine =
   (key: string, cssKey: string) =>

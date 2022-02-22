@@ -1,6 +1,5 @@
 const colors = {
-  title: '#000000',
-  body: '#000000',
+  body: '#666666',
 } as const;
 
 export default colors;

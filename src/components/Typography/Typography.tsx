@@ -12,6 +12,7 @@ const Typography = CommonWrapper<TypographyProps>(
     noWrap = false,
     variant = 'body1',
     color,
+    ellipsis,
     wordBreak,
     textAlign,
     textTransform,
@@ -49,6 +50,7 @@ const Typography = CommonWrapper<TypographyProps>(
         $color={color}
         $variant={variant}
         $noWrap={noWrap}
+        $ellipsis={ellipsis}
         $wordBreak={wordBreak}
         $textAlign={textAlign}
         $textTransform={textTransform}

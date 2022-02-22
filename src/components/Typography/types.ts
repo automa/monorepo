@@ -5,15 +5,12 @@ import theme, { $, Common, Styled } from 'theme';
 
 export type TextColor = keyof typeof theme['colors'] | Property.Color;
 
-export type TextAlign =
-  | 'inherit'
-  | 'initial'
-  | 'left'
-  | 'center'
-  | 'right'
-  | 'justify';
-
 export type TextVariant = keyof typeof theme['typography'];
+
+export type Ellipsis = {
+  lines?: number;
+  width?: string | number;
+};
 
 export type TypographyProps = $<
   {
@@ -22,8 +19,9 @@ export type TypographyProps = $<
   },
   {
     color?: TextColor;
+    ellipsis?: Ellipsis;
     wordBreak?: Property.WordBreak;
-    textAlign?: TextAlign;
+    textAlign?: Property.TextAlign;
     textTransform?: Property.TextTransform;
   },
   {
