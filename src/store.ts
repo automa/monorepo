@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
+export const reducer = {};
+
 const store = configureStore({
-  reducer: {},
+  reducer,
   devTools: process.env.NODE_ENV !== 'production',
 });
 
