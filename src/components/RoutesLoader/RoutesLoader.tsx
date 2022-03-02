@@ -4,8 +4,9 @@ import { Routes, Route as ReactRoute } from 'react-router-dom';
 import { RoutesLoaderProps } from './types';
 
 const RoutesLoader: React.FC<RoutesLoaderProps> = ({
-  fallback = null,
   routes,
+  fallback = null,
+  location,
 }) => {
   if (!routes.length) {
     return null;
@@ -13,7 +14,7 @@ const RoutesLoader: React.FC<RoutesLoaderProps> = ({
 
   return (
     <Suspense fallback={fallback}>
-      <Routes>
+      <Routes location={location} key={location?.pathname}>
         {routes.map(({ path, Component, props }, index) => {
           return (
             <ReactRoute
