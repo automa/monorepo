@@ -4,6 +4,7 @@ import mediaQueries from './mediaQueries';
 import typography from './typography';
 import zIndex from './zIndex';
 
+export { default as GlobalStyle } from './global';
 export * from './utils';
 
 const theme = {

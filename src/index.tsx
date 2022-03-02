@@ -7,12 +7,13 @@ import 'reset-css';
 
 import 'logger';
 import store from 'store';
-import theme from 'theme';
+import theme, { GlobalStyle } from 'theme';
 import App from 'views/App';
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <Provider store={store}>
         <App />
       </Provider>
