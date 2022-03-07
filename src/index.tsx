@@ -5,6 +5,8 @@ import { ThemeProvider } from 'styled-components';
 
 import 'reset-css';
 
+import 'index.css';
+
 import 'logger';
 import store from 'store';
 import theme, { GlobalStyle } from 'theme';
