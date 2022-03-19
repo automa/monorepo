@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { configureStore, PreloadedState } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
@@ -10,10 +11,14 @@ import { reducer, RootState } from 'store';
 const customRender = (
   ui: ReactElement,
   {
-    preloadedState,
+    state,
+    history,
+    path,
     ...options
   }: RenderOptions & {
-    preloadedState?: PreloadedState<RootState>;
+    state?: PreloadedState<RootState>;
+    history?: string[];
+    path?: string;
   } = {},
 ) => {
   const AllTheProviders: React.FC = ({ children }) => {
@@ -22,18 +27,37 @@ const customRender = (
         <Provider
           store={configureStore({
             reducer,
-            preloadedState,
+            preloadedState: state,
           })}
         >
-          {children}
+          <MemoryRouter initialEntries={history}>{children}</MemoryRouter>
         </Provider>
       </ThemeProvider>
     );
   };
 
-  return render(ui, { wrapper: AllTheProviders, ...options });
+  return render(
+    path ? (
+      <Routes>
+        <Route path={path} element={ui} />
+      </Routes>
+    ) : (
+      ui
+    ),
+    {
+      wrapper: AllTheProviders,
+      ...options,
+    },
+  );
 };
+
+const mockedUseNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUseNavigate,
+}));
 
 export * from '@testing-library/react';
 
-export { customRender as render };
+export { customRender as render, mockedUseNavigate };
