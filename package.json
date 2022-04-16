@@ -42,8 +42,9 @@
   "browserslist": {
     "production": [
       "since 2010",
-      ">0.2%",
+      ">0.3%",
       "not dead",
+      "not ie 11",
       "not op_mini all"
     ],
     "development": [
