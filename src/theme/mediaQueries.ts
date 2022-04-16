@@ -1,19 +1,62 @@
 import breakpoints from './breakpoints';
 
+type Breakpoint = keyof typeof breakpoints;
+
+export type ScreenSize =
+  | {
+      min: Breakpoint;
+      max: Breakpoint;
+    }
+  | {
+      min: Breakpoint;
+      max?: never;
+    }
+  | {
+      min?: never;
+      max: Breakpoint;
+    };
+
+export const checkScreenSize = ({ min, max }: ScreenSize) => {
+  // If both props are given
+  if (min && max) {
+    // Error if they are equal
+    if (min === max) {
+      throw new Error('Same value is given for both min and max breakpoints');
+    }
+
+    // Swap if the smaller one is bigger
+    if (breakpoints[min] > breakpoints[max]) {
+      return { min: max, max: min };
+    }
+  }
+
+  return { min, max };
+};
+
+const screenSize = (size: ScreenSize) => {
+  const { min, max } = checkScreenSize(size);
+
+  const conditions: string[] = [];
+
+  if (min) {
+    conditions.push(`min-width: ${breakpoints[min] + 1}px`);
+  }
+
+  if (max) {
+    conditions.push(`max-width: ${breakpoints[max]}px`);
+  }
+
+  return `@media (${conditions.join(' and ')})`;
+};
+
 const mediaQueries = {
-  mobileOnly: `@media (max-width: ${breakpoints.mobile}px)`,
-  tabletOnly: `@media (min-width: ${breakpoints.mobile + 1}px and max-width: ${
-    breakpoints.tablet
-  }px)`,
-  desktopOnly: `@media (min-width: ${breakpoints.tablet + 1}px and max-width: ${
-    breakpoints.desktop
-  })`,
-  wideOnly: `@media (min-width: ${breakpoints.desktop + 1}px and max-width: ${
-    breakpoints.wide
-  })`,
-  extraWideOnly: `@media (min-width: ${breakpoints.wide + 1})`,
-  tabletOrMobile: `@media (max-width ${breakpoints.tablet})`,
-  desktopOrWide: `@media (min-width ${breakpoints.tablet + 1})`,
+  screenSize,
+  mobileOnly: screenSize({ max: 'mobile' }),
+  tabletOnly: screenSize({ min: 'mobile', max: 'tablet' }),
+  laptopOnly: screenSize({ min: 'tablet', max: 'laptop' }),
+  desktopOnly: screenSize({ min: 'laptop', max: 'desktop' }),
+  wideOnly: screenSize({ min: 'desktop', max: 'wide' }),
+  extraWideOnly: screenSize({ min: 'wide' }),
 } as const;
 
 export default mediaQueries;
