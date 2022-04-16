@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { configureStore, PreloadedState } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components/macro';
 import { render, RenderOptions } from '@testing-library/react';
 
 import theme from 'theme';

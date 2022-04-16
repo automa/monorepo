@@ -1,4 +1,4 @@
-import 'styled-components';
+import 'styled-components/macro';
 import theme from 'theme';
 
 declare module 'styled-components' {

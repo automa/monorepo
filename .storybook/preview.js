@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components/macro';
 
 import store from 'store';
 import theme, { GlobalStyle } from 'theme';

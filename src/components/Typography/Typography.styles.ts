@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components/macro';
 import { ellipsis } from 'polished';
 
 import { TypographyStyledProps } from './types';
