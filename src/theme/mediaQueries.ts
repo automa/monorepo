@@ -1,3 +1,12 @@
+import {
+  css,
+  CSSObject,
+  Interpolation,
+  InterpolationFunction,
+  ThemedStyledProps,
+  DefaultTheme,
+} from 'styled-components/macro';
+
 import breakpoints from './breakpoints';
 
 type Breakpoint = keyof typeof breakpoints;
@@ -46,7 +55,17 @@ const screenSize = (size: ScreenSize) => {
     conditions.push(`max-width: ${breakpoints[max]}px`);
   }
 
-  return `@media (${conditions.join(' and ')})`;
+  return <P extends object>(
+    first:
+      | TemplateStringsArray
+      | CSSObject
+      | InterpolationFunction<ThemedStyledProps<P, DefaultTheme>>,
+    ...interpolations: Array<Interpolation<ThemedStyledProps<P, DefaultTheme>>>
+  ) => css`
+    @media (${conditions.join(' and ')}) {
+      ${css(first, ...interpolations)}
+    }
+  `;
 };
 
 const mediaQueries = {
