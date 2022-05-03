@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   extends: [
     'react-app',
     'react-app/jest',
@@ -25,7 +26,6 @@ module.exports = {
     'build',
     'coverage',
     'public',
-    'yarn.lock',
   ],
   overrides: [
     {
