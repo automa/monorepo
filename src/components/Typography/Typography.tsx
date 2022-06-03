@@ -9,11 +9,11 @@ import { Container } from './Typography.styles';
 const Typography = CommonWrapper<TypographyProps>(
   ({
     element = 'div',
-    noWrap = false,
     variant = 'body1',
     color,
     ellipsis,
     wordBreak,
+    whiteSpace,
     textAlign,
     textTransform,
     children,
@@ -49,9 +49,9 @@ const Typography = CommonWrapper<TypographyProps>(
         as={asElement}
         $color={color}
         $variant={variant}
-        $noWrap={noWrap}
         $ellipsis={ellipsis}
         $wordBreak={wordBreak}
+        $whiteSpace={whiteSpace}
         $textAlign={textAlign}
         $textTransform={textTransform}
         {...props}

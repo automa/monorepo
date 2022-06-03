@@ -14,13 +14,13 @@ export type Ellipsis = {
 
 export type TypographyProps = $<
   {
-    noWrap?: boolean;
     variant?: TextVariant;
   },
   {
     color?: TextColor;
     ellipsis?: Ellipsis;
     wordBreak?: Property.WordBreak;
+    whiteSpace?: Property.WhiteSpace;
     textAlign?: Property.TextAlign;
     textTransform?: Property.TextTransform;
   },

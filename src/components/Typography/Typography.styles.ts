@@ -11,8 +11,6 @@ export const Container = styled.div<TypographyStyledProps>`
 
   ${({ theme, $variant }) => theme.typography[$variant]()}
 
-  white-space: ${({ $noWrap }) => ($noWrap ? 'nowrap' : 'normal')};
-
   ${({ $ellipsis }) =>
     !!$ellipsis &&
     !!Object.keys($ellipsis).length &&
@@ -24,6 +22,13 @@ export const Container = styled.div<TypographyStyledProps>`
     !!$wordBreak &&
     css`
       word-break: ${$wordBreak};
+      hyphens: auto;
+    `}
+
+  ${({ $whiteSpace }) =>
+    !!$whiteSpace &&
+    css`
+      white-space: ${$whiteSpace};
     `}
 
   ${({ $textAlign }) =>
