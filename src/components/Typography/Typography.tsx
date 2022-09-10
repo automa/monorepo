@@ -16,6 +16,7 @@ const Typography = CommonWrapper<TypographyProps>(
     whiteSpace,
     textAlign,
     textTransform,
+    link,
     children,
     ...props
   }) => {
@@ -39,6 +40,11 @@ const Typography = CommonWrapper<TypographyProps>(
         case 'title6':
           return 'h6';
 
+        case 'link1':
+        case 'link2':
+        case 'link3':
+          return 'a';
+
         default:
           return element;
       }
@@ -54,6 +60,7 @@ const Typography = CommonWrapper<TypographyProps>(
         $whiteSpace={whiteSpace}
         $textAlign={textAlign}
         $textTransform={textTransform}
+        $link={link || asElement === 'a'}
         {...props}
       >
         {children}

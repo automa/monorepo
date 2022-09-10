@@ -23,6 +23,7 @@ export type TypographyProps = $<
     whiteSpace?: Property.WhiteSpace;
     textAlign?: Property.TextAlign;
     textTransform?: Property.TextTransform;
+    link?: boolean;
   },
   {
     element?: ElementType;

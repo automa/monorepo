@@ -56,6 +56,20 @@ export const Title6 = {
   },
 };
 
+export const Link = {
+  args: {
+    ...Default.args,
+    variant: 'link1',
+  },
+};
+
+export const LinkCustom = {
+  args: {
+    ...Default.args,
+    link: 'true',
+  },
+};
+
 export const Color = {
   args: {
     ...Default.args,
@@ -104,5 +118,25 @@ export const Uppercase = {
   args: {
     ...Default.args,
     textTransform: 'uppercase',
+  },
+};
+
+export const Whitespace = {
+  args: {
+    ...Default.args,
+    whiteSpace: 'nowrap',
+    style: {
+      width: '50px',
+    },
+  },
+};
+
+export const WordBreak = {
+  args: {
+    ...Default.args,
+    wordBreak: 'break-all',
+    style: {
+      width: '25px',
+    },
   },
 };

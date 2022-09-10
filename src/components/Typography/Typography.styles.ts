@@ -42,4 +42,11 @@ export const Container = styled.div<TypographyStyledProps>`
     css`
       text-transform: ${$textTransform};
     `}
+
+  ${({ $link }) =>
+    !!$link
+      ? css`
+          cursor: pointer;
+        `
+      : undefined}
 `;
