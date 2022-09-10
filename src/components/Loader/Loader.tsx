@@ -8,6 +8,4 @@ const Loader: React.FC<LoaderProps> = ({ ...props }) => {
   return <Container {...props}>Loading...</Container>;
 };
 
-Loader.displayName = 'Loader';
-
 export default Loader;

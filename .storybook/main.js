@@ -6,6 +6,10 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/preset-create-react-app',
   ],
+  framework: '@storybook/react',
+  features: {
+    storyStoreV7: true,
+  },
   core: {
     builder: 'webpack5',
   },

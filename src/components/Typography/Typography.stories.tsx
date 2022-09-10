@@ -1,129 +1,125 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import Typography from './Typography';
+import { TypographyComponentProps } from './types';
 
 export default {
   title: 'Typography',
   component: Typography,
-  argTypes: {},
-} as Meta;
-
-export const Default = {
   args: {
     children: 'This is text',
   },
-};
+  argTypes: {},
+} as Meta<TypographyComponentProps>;
 
-export const Title1 = {
+export const Default: StoryObj<TypographyComponentProps> = {};
+
+export const Title1: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     variant: 'title1',
   },
 };
 
-export const Title2 = {
+export const Title2: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     variant: 'title2',
   },
 };
 
-export const Title3 = {
+export const Title3: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     variant: 'title3',
   },
 };
 
-export const Title4 = {
+export const Title4: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     variant: 'title4',
   },
 };
 
-export const Title5 = {
+export const Title5: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     variant: 'title5',
   },
 };
 
-export const Title6 = {
+export const Title6: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     variant: 'title6',
   },
 };
 
-export const Link = {
+export const Link1: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     variant: 'link1',
   },
 };
 
-export const LinkCustom = {
+export const Link2: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
-    link: 'true',
+    variant: 'link2',
   },
 };
 
-export const Color = {
+export const Link3: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
+    variant: 'link3',
+  },
+};
+
+export const Link: StoryObj<TypographyComponentProps> = {
+  args: {
+    link: true,
+  },
+};
+
+export const Color: StoryObj<TypographyComponentProps> = {
+  args: {
     color: 'body',
   },
 };
 
-export const ColorNative = {
+export const ColorNative: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     color: 'red',
   },
 };
 
-export const Ellipsis = {
+export const Ellipsis: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     ellipsis: {
       width: '50px',
     },
   },
 };
 
-export const AlignLeft = {
+export const AlignLeft: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     textAlign: 'left',
   },
 };
 
-export const AlignCenter = {
+export const AlignCenter: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     textAlign: 'center',
   },
 };
 
-export const AlignRight = {
+export const AlignRight: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     textAlign: 'right',
   },
 };
 
-export const Uppercase = {
+export const Uppercase: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     textTransform: 'uppercase',
   },
 };
 
-export const Whitespace = {
+export const Whitespace: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     whiteSpace: 'nowrap',
     style: {
       width: '50px',
@@ -131,9 +127,8 @@ export const Whitespace = {
   },
 };
 
-export const WordBreak = {
+export const WordBreak: StoryObj<TypographyComponentProps> = {
   args: {
-    ...Default.args,
     wordBreak: 'break-all',
     style: {
       width: '25px',

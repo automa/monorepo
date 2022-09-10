@@ -1,13 +1,14 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import Home from './Home';
+import { HomeProps } from './types';
 
 export default {
   title: 'Home',
   component: Home,
   argTypes: {},
-} as Meta;
+} as Meta<HomeProps>;
 
-export const Default = {
+export const Default: StoryObj<HomeProps> = {
   args: {},
 };
