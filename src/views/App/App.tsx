@@ -1,7 +1,6 @@
 import React from 'react';
 
-import Loader from 'components/Loader';
-import RoutesLoader from 'components/RoutesLoader';
+import { Loader, RoutesLoader } from 'components';
 
 import routes from './routes';
 
