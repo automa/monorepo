@@ -3,8 +3,9 @@ module.exports = {
   extends: [
     'react-app',
     'react-app/jest',
-    'plugin:prettier/recommended',
     'plugin:import/warnings',
+    'plugin:prettier/recommended',
+    'plugin:storybook/recommended',
   ],
   rules: {
     'no-restricted-imports': [
@@ -32,6 +33,11 @@ module.exports = {
       files: ['**/*.stories.*'],
       rules: {
         'import/no-anonymous-default-export': 'off',
+        'storybook/hierarchy-separator': 'error',
+        'storybook/csf-component': 'error',
+        'storybook/no-redundant-story-name': 'error',
+        'storybook/no-stories-of': 'error',
+        'storybook/prefer-pascal-case': 'error',
       },
     },
   ],
