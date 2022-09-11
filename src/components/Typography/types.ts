@@ -1,7 +1,7 @@
 import { ElementType, HTMLAttributes } from 'react';
 import { Property } from 'csstype';
 
-import theme, { $, Common, Styled } from 'theme';
+import theme, { $, Component, Styled } from 'theme';
 
 export type TextColor = keyof typeof theme['colors'] | Property.Color;
 
@@ -30,6 +30,6 @@ export type TypographyProps = $<
   } & HTMLAttributes<HTMLDivElement>
 >;
 
-export type TypographyComponentProps = Common<TypographyProps>;
+export type TypographyComponentProps = Component<TypographyProps>;
 
 export type TypographyStyledProps = Styled<TypographyProps>;

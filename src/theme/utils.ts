@@ -58,9 +58,7 @@ const cssFour =
     `;
   };
 
-export const CommonWrapper = <T>(
-  component: (args: Component<T>) => JSX.Element | null,
-) =>
+export const CommonWrapper = <T>(component: (args: T) => JSX.Element | null) =>
   styled((props: Common<T>) => {
     const {
       margin,
@@ -76,7 +74,7 @@ export const CommonWrapper = <T>(
       ...componentProps
     } = props;
 
-    return component(componentProps as Component<T>);
+    return component(componentProps as T);
   })<Common<T>>`
     ${cssFour('margin', 'margin')}
     ${cssLine('marginTop', 'margin-top')}
@@ -162,4 +160,4 @@ export type Styled<T> = T extends {
   ? T['styledRequired'] & T['styledOptional']
   : T;
 
-export type Common<T> = Component<T> & CommonProps;
+export type Common<T> = T & CommonProps;

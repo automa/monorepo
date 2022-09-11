@@ -2,11 +2,11 @@ import React, { useMemo } from 'react';
 
 import { CommonWrapper } from 'theme';
 
-import { TypographyProps } from './types';
+import { TypographyComponentProps } from './types';
 
 import { Container } from './Typography.styles';
 
-const Typography = CommonWrapper<TypographyProps>(
+const Typography = CommonWrapper<TypographyComponentProps>(
   ({
     element = 'div',
     variant = 'body1',
