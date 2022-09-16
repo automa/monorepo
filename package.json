@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@qatalog/react-flex": "~0.1.0",
+    "@qatalog/react-flex": "~0.2.0",
     "@reduxjs/toolkit": "~1.7.0",
     "csstype": "~3.0.10",
     "logdown": "~3.3.1",

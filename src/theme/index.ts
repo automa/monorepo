@@ -1,4 +1,5 @@
 import breakpoints from './breakpoints';
+import buttons from './buttons';
 import colors from './colors';
 import mediaQueries from './mediaQueries';
 import typography from './typography';
@@ -11,6 +12,7 @@ export * from './utils';
 
 const theme = {
   breakpoints,
+  buttons,
   colors,
   mediaQueries,
   spacing: (x: number): number => x * 8,
