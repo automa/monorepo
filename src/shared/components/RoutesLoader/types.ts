@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Location } from 'react-router-dom';
 
-import { Route } from 'types';
+import { Route } from 'shared/types';
 
 export interface RoutesLoaderProps {
   routes: Route[];

@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-import { Route } from 'types';
+import { Route } from 'shared';
 
 const routes = [
   {

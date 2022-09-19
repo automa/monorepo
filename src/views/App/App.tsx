@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Loader, RoutesLoader } from 'components';
+import { Loader, RoutesLoader } from 'shared';
 
 import routes from './routes';
 

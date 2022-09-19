@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Flex } from 'components';
+import { Flex } from 'shared';
 
 import { HomeProps } from './types';
 

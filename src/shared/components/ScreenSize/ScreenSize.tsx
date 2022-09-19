@@ -8,7 +8,7 @@ import {
   useIsDesktopOnly,
   useIsWideOnly,
   useIsExtraWideOnly,
-} from 'hooks';
+} from 'shared';
 
 import { ScreenSizeHelperProps, ScreenSizeProps } from './types';
 
