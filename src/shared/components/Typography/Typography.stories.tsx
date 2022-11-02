@@ -50,21 +50,21 @@ export const Title6: StoryObj<TypographyComponentProps> = {
   },
 };
 
-export const Link1: StoryObj<TypographyComponentProps> = {
+export const Body1: StoryObj<TypographyComponentProps> = {
   args: {
-    variant: 'link1',
+    variant: 'body1',
   },
 };
 
-export const Link2: StoryObj<TypographyComponentProps> = {
+export const Body2: StoryObj<TypographyComponentProps> = {
   args: {
-    variant: 'link2',
+    variant: 'body2',
   },
 };
 
-export const Link3: StoryObj<TypographyComponentProps> = {
+export const Body3: StoryObj<TypographyComponentProps> = {
   args: {
-    variant: 'link3',
+    variant: 'body3',
   },
 };
 

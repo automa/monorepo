@@ -10,9 +10,6 @@ const typography = {
   body1: () => css``,
   body2: () => css``,
   body3: () => css``,
-  link1: () => css``,
-  link2: () => css``,
-  link3: () => css``,
 } as const;
 
 export default typography;

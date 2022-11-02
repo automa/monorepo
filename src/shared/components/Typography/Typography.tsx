@@ -40,11 +40,6 @@ const Typography = CommonWrapper<TypographyComponentProps>(
         case 'title6':
           return 'h6';
 
-        case 'link1':
-        case 'link2':
-        case 'link3':
-          return 'a';
-
         default:
           return element;
       }
