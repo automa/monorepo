@@ -5,6 +5,7 @@
   "dependencies": {
     "@apollo/client": "~3.6.9",
     "@qatalog/react-flex": "~0.2.0",
+    "@radix-ui/react-tooltip": "~1.0.2",
     "@reduxjs/toolkit": "~1.7.0",
     "axios": "~0.27.2",
     "csstype": "~3.0.10",

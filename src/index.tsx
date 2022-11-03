@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components/macro';
+import { Provider as TooltipProvider } from '@radix-ui/react-tooltip';
 
 import 'reset-css';
 
@@ -19,7 +20,9 @@ ReactDOM.render(
       <GlobalStyle />
       <Provider store={store}>
         <BrowserRouter>
-          <App />
+          <TooltipProvider delayDuration={500}>
+            <App />
+          </TooltipProvider>
         </BrowserRouter>
       </Provider>
     </ThemeProvider>
