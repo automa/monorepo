@@ -4,11 +4,7 @@
     "target": "es5",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "strict": true,
     "esModuleInterop": true,
     "noFallthroughCasesInSwitch": true,
@@ -21,7 +17,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
