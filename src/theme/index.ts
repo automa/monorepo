@@ -2,6 +2,7 @@ import breakpoints from './breakpoints';
 import buttons from './buttons';
 import colors from './colors';
 import mediaQueries from './mediaQueries';
+import toasts from './toasts';
 import typography from './typography';
 import zIndex from './zIndex';
 
@@ -16,6 +17,7 @@ const theme = {
   colors,
   mediaQueries,
   spacing: (x: number): number => x * 8,
+  toasts,
   typography,
   zIndex,
 };

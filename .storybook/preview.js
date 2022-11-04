@@ -2,6 +2,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components/macro';
 import * as Tooltip from '@radix-ui/react-tooltip';
+import * as Toast from '@radix-ui/react-toast';
 
 import store from 'store';
 import theme, { GlobalStyle } from 'theme';
@@ -14,7 +15,10 @@ export const decorators = [
         <Provider store={store}>
           <BrowserRouter>
             <Tooltip.Provider>
-              <Story />
+              <Toast.Provider>
+                <Story />
+                <Toast.Viewport />
+              </Toast.Provider>
             </Tooltip.Provider>
           </BrowserRouter>
         </Provider>

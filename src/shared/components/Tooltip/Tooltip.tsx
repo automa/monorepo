@@ -9,7 +9,7 @@ import {
   Container,
   TriggerContainer,
   ContentContainer,
-  ArrowContainer,
+  Arrow,
 } from './Tooltip.styles';
 
 const Tooltip = CommonWrapper<TooltipComponentProps>(
@@ -37,9 +37,7 @@ const Tooltip = CommonWrapper<TooltipComponentProps>(
             arrowPadding={arrowPadding}
           >
             <ContentContainer>{content()}</ContentContainer>
-            <ArrowContainer>
-              <TooltipPrimitive.Arrow offset={8} height={8} width={8} />
-            </ArrowContainer>
+            <Arrow offset={8} height={8} width={8} />
           </TooltipPrimitive.Content>
         </TooltipPrimitive.Root>
       </Container>
