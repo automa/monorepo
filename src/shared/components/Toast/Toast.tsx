@@ -15,7 +15,7 @@ const Toast: React.FC<ToastComponentProps> = ({
   variant = 'info',
   type = 'foreground',
   duration,
-  title,
+  description,
   action,
   close,
   children,
@@ -24,10 +24,12 @@ const Toast: React.FC<ToastComponentProps> = ({
   return (
     <ToastPrimitive.Root asChild type={type} duration={duration}>
       <Container $variant={variant} {...props}>
-        {!!title && <TitleContainer $variant={variant}>{title}</TitleContainer>}
-        <DescriptionContainer $variant={variant}>
-          {children}
-        </DescriptionContainer>
+        <TitleContainer $variant={variant}>{children}</TitleContainer>
+        {!!description && (
+          <DescriptionContainer $variant={variant}>
+            {description()}
+          </DescriptionContainer>
+        )}
         {!!action && (
           <ActionContainer asChild $variant={variant} altText={action.altText}>
             {action.cta()}

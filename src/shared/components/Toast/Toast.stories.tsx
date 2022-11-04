@@ -7,16 +7,16 @@ export default {
   title: 'Toast',
   component: Toast,
   args: {
-    children: 'Description',
+    children: 'Title',
   },
   argTypes: {},
 } as Meta<ToastComponentProps>;
 
 export const Default: StoryObj<ToastComponentProps> = {};
 
-export const Title: StoryObj<ToastComponentProps> = {
+export const Description: StoryObj<ToastComponentProps> = {
   args: {
-    title: 'Title',
+    description: () => 'Description',
   },
 };
 
@@ -35,16 +35,16 @@ export const Close: StoryObj<ToastComponentProps> = {
   },
 };
 
-export const TitleAndAction: StoryObj<ToastComponentProps> = {
+export const DescriptionAndAction: StoryObj<ToastComponentProps> = {
   args: {
-    ...Title.args,
+    ...Description.args,
     ...Action.args,
   },
 };
 
-export const TitleAndClose: StoryObj<ToastComponentProps> = {
+export const DescriptionAndClose: StoryObj<ToastComponentProps> = {
   args: {
-    ...Title.args,
+    ...Description.args,
     ...Close.args,
   },
 };
@@ -56,9 +56,9 @@ export const ActionAndClose: StoryObj<ToastComponentProps> = {
   },
 };
 
-export const TitleAndActionAndClose: StoryObj<ToastComponentProps> = {
+export const DescriptionAndActionAndClose: StoryObj<ToastComponentProps> = {
   args: {
-    ...Title.args,
+    ...Description.args,
     ...Action.args,
     ...Close.args,
   },
@@ -67,14 +67,14 @@ export const TitleAndActionAndClose: StoryObj<ToastComponentProps> = {
 export const Error: StoryObj<ToastComponentProps> = {
   args: {
     variant: 'error',
-    ...TitleAndActionAndClose.args,
+    ...DescriptionAndActionAndClose.args,
   },
 };
 
 export const Success: StoryObj<ToastComponentProps> = {
   args: {
     variant: 'success',
-    ...TitleAndActionAndClose.args,
+    ...DescriptionAndActionAndClose.args,
   },
 };
 

@@ -2,10 +2,7 @@ import { css } from 'styled-components/macro';
 
 const toasts = {
   info: {
-    root: () => css`
-      background-color: ${({ theme }) => theme.colors.black};
-      color: ${({ theme }) => theme.colors.white};
-    `,
+    root: () => css``,
     title: () => css``,
     description: () => css``,
     action: () => css``,

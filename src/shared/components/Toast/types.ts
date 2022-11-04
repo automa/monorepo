@@ -13,7 +13,7 @@ export type ToastProps = $<
   {
     type?: Toast.ToastProps['type'];
     duration?: Toast.ToastProps['duration'];
-    title?: string;
+    description?: () => React.ReactNode;
     action?: {
       cta: () => React.ReactNode;
       altText: Toast.ToastActionProps['altText'];

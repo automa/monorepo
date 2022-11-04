@@ -22,9 +22,5 @@ export const CloseContainer = styled(Toast.Close)<ToastStyledProps>`
 export const Container = styled.div<ToastStyledProps>`
   ${({ theme, $variant }) => theme.toasts[$variant].root()}
 
-  border-radius: ${({ theme }) => theme.spacing(0.5)}px;
-  padding: ${({ theme }) => theme.spacing(0.75)}px;
-
-  max-width: ${({ theme }) => theme.breakpoints.mobile}px;
   list-style: none;
 `;
