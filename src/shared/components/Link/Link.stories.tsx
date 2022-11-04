@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import Link from './Link';
-import { LinkProps } from './types';
+import { LinkComponentProps } from './types';
 
 export default {
   title: 'Link',
@@ -11,8 +11,9 @@ export default {
     children: 'Children',
     variant: 'title1',
     color: 'body',
+    activeColor: 'black',
   },
   argTypes: {},
-} as Meta<LinkProps>;
+} as Meta<LinkComponentProps>;
 
-export const Default: StoryObj<LinkProps> = {};
+export const Default: StoryObj<LinkComponentProps> = {};
