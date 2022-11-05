@@ -10,8 +10,8 @@ export const TriggerContainer = styled.div``;
 export const ContentContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.black};
   color: ${({ theme }) => theme.colors.white};
-  border-radius: ${({ theme }) => theme.spacing(0.5)}px;
-  padding: ${({ theme }) => theme.spacing(0.75)}px;
+  border-radius: ${({ theme }) => theme.spacing(1)}px;
+  padding: ${({ theme }) => theme.spacing(1)}px;
 `;
 
 export const Arrow = styled(Tooltip.Arrow)`

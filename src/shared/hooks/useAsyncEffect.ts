@@ -29,7 +29,7 @@ const useAsyncEffect = <D = any>(
 
     return () => {
       mounted = false;
-      destroy(result);
+      destroy?.(result);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);

@@ -36,7 +36,9 @@ const Tooltip = CommonWrapper<TooltipComponentProps>(
             alignOffset={alignOffset}
             arrowPadding={arrowPadding}
           >
-            <ContentContainer>{content()}</ContentContainer>
+            <ContentContainer>
+              {typeof content === 'string' ? content : content()}
+            </ContentContainer>
             <Arrow offset={8} height={8} width={8} />
           </TooltipPrimitive.Content>
         </TooltipPrimitive.Root>
