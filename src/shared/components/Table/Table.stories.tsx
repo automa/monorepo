@@ -1,5 +1,11 @@
 import { Meta } from '@storybook/react';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+} from '@tanstack/react-table';
+import { useState } from 'react';
 
 import Table from './Table';
 import { TableComponentProps } from './types';
@@ -22,6 +28,8 @@ export default {
 } as Meta<TableComponentProps<Data>>;
 
 export const Default = () => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns: [
@@ -31,12 +39,17 @@ export const Default = () => {
         cell: ({ row }) => row.original.name,
       },
       {
-        id: 'amount',
+        accessorKey: 'amount',
         header: 'Amount',
         cell: ({ row }) => row.original.amount,
       },
     ],
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return <Table table={table} />;

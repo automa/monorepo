@@ -11,9 +11,6 @@ import {
   Body,
   Row,
   Cell,
-  Footer,
-  FooterRow,
-  FooterCell,
 } from './Table.styles';
 
 const Table = <T,>({ table, onRowClick, ...props }: TableComponentProps<T>) => {
@@ -23,13 +20,22 @@ const Table = <T,>({ table, onRowClick, ...props }: TableComponentProps<T>) => {
         {table.getHeaderGroups().map((headerGroup) => (
           <HeaderRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <HeaderCell key={header.id}>
+              <HeaderCell
+                key={header.id}
+                colSpan={header.colSpan}
+                onClick={
+                  header.column.getCanSort()
+                    ? header.column.getToggleSortingHandler()
+                    : undefined
+                }
+              >
                 {header.isPlaceholder
                   ? null
                   : flexRender(
                       header.column.columnDef.header,
                       header.getContext(),
                     )}
+                {header.column.getIsSorted()}
               </HeaderCell>
             ))}
           </HeaderRow>
@@ -46,22 +52,6 @@ const Table = <T,>({ table, onRowClick, ...props }: TableComponentProps<T>) => {
           </Row>
         ))}
       </Body>
-      <Footer>
-        {table.getFooterGroups().map((footerGroup) => (
-          <FooterRow key={footerGroup.id}>
-            {footerGroup.headers.map((header) => (
-              <FooterCell key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.footer,
-                      header.getContext(),
-                    )}
-              </FooterCell>
-            ))}
-          </FooterRow>
-        ))}
-      </Footer>
     </Container>
   );
 };
