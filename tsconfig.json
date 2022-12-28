@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "outDir": "build",
+    "declaration": true,
     "target": "es2021",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -13,9 +12,6 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "skipLibCheck": true,
-  },
-  "include": [
-    "src"
-  ]
+    "skipLibCheck": true
+  }
 }

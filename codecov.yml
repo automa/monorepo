@@ -1,0 +1,34 @@
+comment: false
+coverage:
+  status:
+    default_rules:
+      flag_coverage_not_uploaded_behavior: exclude
+    project:
+      default: false
+      backend:
+        flags:
+          - backend
+        informational: true
+      frontend:
+        flags:
+          - frontend
+        informational: true
+    patch:
+      default: false
+      backend:
+        flags:
+          - backend
+        informational: true
+      frontend:
+        flags:
+          - frontend
+        informational: true
+flags:
+  backend:
+    carryforward: true
+    paths:
+      - packages/backend
+  frontend:
+    carryforward: true
+    paths:
+      - packages/frontend
