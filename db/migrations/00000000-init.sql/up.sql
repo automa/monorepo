@@ -23,6 +23,7 @@ CREATE TABLE public.orgs (
   provider_type public.provider NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
   is_user BOOLEAN NOT NULL DEFAULT FALSE,
+  has_installation BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
