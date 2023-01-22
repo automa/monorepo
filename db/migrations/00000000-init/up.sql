@@ -26,9 +26,10 @@ CREATE TABLE public.repos (
   name VARCHAR(255) NOT NULL,
   provider_type public.provider NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
-  is_private BOOLEAN NOT NULL,
+  is_private BOOLEAN NOT NULL DEFAULT FALSE,
   is_active BOOLEAN NOT NULL DEFAULT FALSE,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  is_archived BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 COMMIT;

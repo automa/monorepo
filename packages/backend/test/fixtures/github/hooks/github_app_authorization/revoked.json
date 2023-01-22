@@ -1,0 +1,23 @@
+{
+  "action": "revoked",
+  "sender": {
+    "login": "pksunkara",
+    "id": 174703,
+    "node_id": "MDQ6VXNlcjE3NDcwMw==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/174703?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/pksunkara",
+    "html_url": "https://github.com/pksunkara",
+    "followers_url": "https://api.github.com/users/pksunkara/followers",
+    "following_url": "https://api.github.com/users/pksunkara/following{/other_user}",
+    "gists_url": "https://api.github.com/users/pksunkara/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/pksunkara/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/pksunkara/subscriptions",
+    "organizations_url": "https://api.github.com/users/pksunkara/orgs",
+    "repos_url": "https://api.github.com/users/pksunkara/repos",
+    "events_url": "https://api.github.com/users/pksunkara/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/pksunkara/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}

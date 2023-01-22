@@ -49,7 +49,7 @@ const deleted: GithubEventActionHandler = async (app, body) => {
     return;
   }
 
-  await app.prisma.orgs.updateMany({
+  await app.prisma.orgs.update({
     where: {
       id: org.id,
     },
@@ -68,7 +68,33 @@ const deleted: GithubEventActionHandler = async (app, body) => {
   });
 };
 
+const suspend: GithubEventActionHandler = async (app, body) => {
+  await app.prisma.orgs.updateMany({
+    where: {
+      provider_type: 'github',
+      provider_id: `${body.installation.account.id}`,
+    },
+    data: {
+      is_active: false,
+    },
+  });
+};
+
+const unsuspend: GithubEventActionHandler = async (app, body) => {
+  await app.prisma.orgs.updateMany({
+    where: {
+      provider_type: 'github',
+      provider_id: `${body.installation.account.id}`,
+    },
+    data: {
+      is_active: true,
+    },
+  });
+};
+
 export default {
   created,
   deleted,
+  suspend,
+  unsuspend,
 };

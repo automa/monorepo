@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 
 export enum GithubEventType {
+  GithubAppAuthorization = 'github_app_authorization',
   Installation = 'installation',
   InstallationRepositories = 'installation_repositories',
 }
