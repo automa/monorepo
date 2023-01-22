@@ -1,10 +1,11 @@
 module.exports = {
   apps: [
+    // TODO: Make this optional
     {
       name: 'tunnel',
       script: 'ngrok',
-      interpreter: '/bin/bash',
-      args: 'http 3000',
+      interpreter: 'none',
+      args: 'http --subdomain=automa 3000',
     },
     {
       name: 'prisma-dev',

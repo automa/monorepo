@@ -12,7 +12,10 @@ export default async function (app: FastifyInstance) {
     // Get github event
     const event = request.headers['x-github-event'];
 
-    request.log.info({ event }, 'Received github event');
+    request.log.info(
+      { event, action: request.body.action },
+      'Received github event',
+    );
 
     if (!event || typeof event !== 'string') {
       request.log.error('No event');
@@ -35,7 +38,7 @@ export default async function (app: FastifyInstance) {
     }
 
     // Verify github sha256 signature
-    let hmac = createHmac('sha256', app.config.GITHUB_WEBHOOK_SECRET);
+    let hmac = createHmac('sha256', app.config.GITHUB_APP.WEBHOOK_SECRET);
     hmac = hmac.update(JSON.stringify(request.body));
 
     const digest = Buffer.from(`sha256=${hmac.digest('hex')}`, 'utf8');
