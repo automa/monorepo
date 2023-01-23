@@ -1,0 +1,86 @@
+{
+  "name": "@automa/frontend",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@apollo/client": "~3.6.9",
+    "@qatalog/react-flex": "~0.2.0",
+    "@radix-ui/react-toast": "~1.1.1",
+    "@radix-ui/react-tooltip": "~1.0.2",
+    "@reduxjs/toolkit": "~1.7.0",
+    "@tanstack/react-table": "~8.5.22",
+    "axios": "~1.1.2",
+    "csstype": "~3.0.10",
+    "logdown": "~3.3.1",
+    "polished": "~4.1.4",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-redux": "~7.2.6",
+    "react-responsive": "9.0.0-beta.10",
+    "react-router-dom": "~6.0.2",
+    "react-scripts": "~5.0.0",
+    "reset-css": "~5.0.1",
+    "styled-components": "~5.3.3"
+  },
+  "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "build": "react-scripts build",
+    "start": "react-scripts start",
+    "storybook": "start-storybook -p 6006",
+    "storybook-build": "build-storybook",
+    "test": "react-scripts test --watchAll=false",
+    "test-cover": "react-scripts test --watchAll=false --coverage",
+    "test-storybook": "test-storybook"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      ".*\\.stories\\..*"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      "since 2010",
+      ">0.3%",
+      "not dead",
+      "not ie 11",
+      "not op_mini all"
+    ],
+    "development": [
+      "since 2010",
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "~6.5.10",
+    "@storybook/addon-interactions": "~6.5.10",
+    "@storybook/addon-links": "~6.5.10",
+    "@storybook/builder-webpack5": "~6.5.10",
+    "@storybook/jest": "~0.0.10",
+    "@storybook/manager-webpack5": "~6.5.10",
+    "@storybook/node-logger": "~6.5.10",
+    "@storybook/preset-create-react-app": "~4.1.2",
+    "@storybook/react": "~6.5.10",
+    "@storybook/test-runner": "~0.7.1",
+    "@storybook/testing-library": "~0.0.13",
+    "@testing-library/jest-dom": "~5.16.2",
+    "@testing-library/react": "~12.1.3",
+    "@testing-library/user-event": "~13.5.0",
+    "@types/jest": "~27.4.1",
+    "@types/node": "^14.0.0",
+    "@types/react": "~17.0.37",
+    "@types/react-dom": "~17.0.11",
+    "@types/react-router-dom": "~5.3.2",
+    "@types/styled-components": "~5.1.18",
+    "eslint": "~8.9.0",
+    "eslint-config-prettier": "~8.3.0",
+    "eslint-config-react-app": "~7.0.0",
+    "eslint-plugin-prettier": "~4.0.0",
+    "eslint-plugin-storybook": "~0.6.4",
+    "jest": "~27.5.1",
+    "prettier": "~2.5.1",
+    "source-map-explorer": "~2.5.2",
+    "typescript": "~4.4.4"
+  }
+}

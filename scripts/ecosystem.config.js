@@ -5,7 +5,7 @@ module.exports = {
       name: 'tunnel',
       script: 'ngrok',
       interpreter: 'none',
-      args: 'http --subdomain=automa 3000',
+      args: 'http --subdomain=automa 8080',
     },
     {
       name: 'prisma-dev',
@@ -26,6 +26,13 @@ module.exports = {
       cwd: 'packages/backend',
       watch: ['build'],
       script: 'build/index.js',
+    },
+    {
+      name: 'frontend',
+      cwd: 'packages/frontend',
+      script: 'yarn',
+      interpreter: '/bin/bash',
+      args: 'start',
     },
   ],
 };

@@ -1,0 +1,32 @@
+name: Testing (frontend)
+on: [pull_request]
+concurrency:
+  group: testing-frontend-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: '**/node_modules'
+          key: deps-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            deps-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Run tests
+        run: yarn test-cover
+        working-directory: packages/frontend
+      - name: Upload coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/frontend/coverage/lcov.info
+          flags: frontend
+          name: frontend.${{ github.event.number }}
+          fail_ci_if_error: false

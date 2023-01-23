@@ -9,8 +9,8 @@ export const schema = Type.Object({
   }),
   GITHUB_APP: Type.Object(
     {
-      CALLBACK_URL: Type.String({
-        default: 'http://localhost:3000/callbacks/github',
+      CALLBACK_URI: Type.String({
+        default: '/callbacks/github',
       }),
       CLIENT_ID: Type.String({
         default: 'Iv1.0e7aa571acf06cb6',
@@ -34,7 +34,7 @@ export const schema = Type.Object({
     },
   ),
   PORT: Type.String({
-    default: 3000,
+    default: 8080,
   }),
 });
 
