@@ -15,6 +15,13 @@ module.exports = {
       args: 'dev',
     },
     {
+      name: 'common-dev',
+      cwd: 'packages/common',
+      script: 'yarn',
+      interpreter: '/bin/bash',
+      args: 'dev',
+    },
+    {
       name: 'backend-dev',
       cwd: 'packages/backend',
       script: 'yarn',

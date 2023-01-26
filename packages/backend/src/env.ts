@@ -1,14 +1,29 @@
 import { Static, Type } from '@sinclair/typebox';
 
 export const schema = Type.Object({
+  API_URI: Type.String({
+    default: 'http://localhost:8080',
+  }),
+  CLIENT_URI: Type.String({
+    default: 'http://localhost:3000',
+  }),
   COOKIE_SECRET: Type.String({
     default: 'thisismycoupdetathandsupupgethigh',
   }),
   CORS_ORIGIN: Type.String({
-    default: '*',
+    default: 'http://localhost:3000',
   }),
   GITHUB_APP: Type.Object(
     {
+      ACCESS_TOKEN_URL: Type.String({
+        default: 'https://github.com/login/oauth/access_token',
+      }),
+      API_URI: Type.String({
+        default: 'https://api.github.com',
+      }),
+      AUTHORIZE_URL: Type.String({
+        default: 'https://github.com/login/oauth/authorize',
+      }),
       CALLBACK_URI: Type.String({
         default: '/callbacks/github',
       }),
@@ -35,6 +50,9 @@ export const schema = Type.Object({
   ),
   PORT: Type.String({
     default: 8080,
+  }),
+  REDIS_URL: Type.String({
+    default: 'redis://localhost:6379',
   }),
 });
 

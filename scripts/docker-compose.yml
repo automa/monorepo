@@ -12,3 +12,8 @@ services:
     environment:
       POSTGRES_USER: automa
       POSTGRES_HOST_AUTH_METHOD: trust
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - 6379:6379

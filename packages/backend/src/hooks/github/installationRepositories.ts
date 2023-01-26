@@ -22,9 +22,20 @@ const added: GithubEventActionHandler = async (app, body) => {
 };
 
 const removed: GithubEventActionHandler = async (app, body) => {
-  await app.prisma.repos.updateMany({
+  const org = await app.prisma.orgs.findFirst({
     where: {
       provider_type: 'github',
+      provider_id: `${body.installation.account.id}`,
+    },
+  });
+
+  if (!org) {
+    return;
+  }
+
+  await app.prisma.repos.updateMany({
+    where: {
+      org_id: org.id,
       provider_id: {
         in: body.repositories_removed.map((repo: any) => `${repo.id}`),
       },
@@ -42,7 +53,7 @@ export const addRepo = async (
 ) => {
   const repo = await app.prisma.repos.findFirst({
     where: {
-      provider_type: 'github',
+      org_id: org.id,
       provider_id: `${repository.id}`,
     },
   });
@@ -52,7 +63,6 @@ export const addRepo = async (
       data: {
         org_id: org.id,
         name: repository.name,
-        provider_type: 'github',
         provider_id: `${repository.id}`,
         is_private: repository.private,
         is_active: true,

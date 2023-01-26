@@ -25,6 +25,7 @@ async function server() {
 
   app.register(fastifyCors, {
     origin: app.config.CORS_ORIGIN,
+    credentials: true,
   });
 
   await session(app, envionment);

@@ -8,10 +8,11 @@ datasource db {
 }
 
 model users {
-  id         Int      @id @default(autoincrement())
-  name       String   @db.VarChar(255)
-  email      String   @db.VarChar(255)
-  created_at DateTime @default(now()) @db.Timestamp(6)
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(255)
+  email          String           @unique @db.VarChar(255)
+  created_at     DateTime         @default(now()) @db.Timestamp(6)
+  user_providers user_providers[]
 }
 
 model orgs {
@@ -22,21 +23,38 @@ model orgs {
   is_user                Boolean  @default(false)
   is_active              Boolean  @default(false)
   created_at             DateTime @default(now()) @db.Timestamp(6)
-  github_installation_id Int?
+  github_installation_id Int?     @unique
   repos                  repos[]
+
+  @@unique([provider_type, provider_id])
 }
 
 model repos {
-  id            Int      @id @default(autoincrement())
-  org_id        Int
-  name          String   @db.VarChar(255)
-  provider_type provider
-  provider_id   String   @db.VarChar(255)
-  is_private    Boolean  @default(false)
-  is_active     Boolean  @default(false)
-  created_at    DateTime @default(now()) @db.Timestamp(6)
-  is_archived   Boolean  @default(false)
-  orgs          orgs     @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id          Int      @id @default(autoincrement())
+  org_id      Int
+  name        String   @db.VarChar(255)
+  provider_id String   @db.VarChar(255)
+  is_private  Boolean  @default(false)
+  is_active   Boolean  @default(false)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  is_archived Boolean  @default(false)
+  orgs        orgs     @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([org_id, provider_id])
+}
+
+model user_providers {
+  id             Int      @id @default(autoincrement())
+  user_id        Int
+  provider_type  provider
+  provider_id    String   @db.VarChar(255)
+  provider_email String   @db.VarChar(255)
+  refresh_token  String   @unique @db.VarChar(255)
+  created_at     DateTime @default(now()) @db.Timestamp(6)
+  users          users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([provider_type, provider_id])
+  @@unique([user_id, provider_type])
 }
 
 enum provider {

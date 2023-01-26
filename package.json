@@ -38,6 +38,7 @@
   "workspaces": {
     "packages": [
       "packages/backend",
+      "packages/common",
       "packages/frontend",
       "packages/prisma"
     ]

@@ -19,13 +19,14 @@ const generateAppToken = (id: string, pem: string) => {
 // Get github installation's access token
 const getInstallationAccessToken = async (
   installationId: string,
+  uri: string,
   id: string,
   pem: string,
 ) => {
   const token = generateAppToken(id, pem);
 
   const { data } = await axios.post(
-    `https://api.github.com/app/installations/${installationId}/access_tokens`,
+    `${uri}/app/installations/${installationId}/access_tokens`,
     {},
     {
       headers: {
@@ -41,14 +42,19 @@ const getInstallationAccessToken = async (
 };
 
 export const caller = async (app: FastifyInstance, installationId: string) => {
+  const {
+    config: { GITHUB_APP },
+  } = app;
+
   const accessToken = await getInstallationAccessToken(
     installationId,
-    app.config.GITHUB_APP.ID,
-    app.config.GITHUB_APP.PEM,
+    GITHUB_APP.API_URI,
+    GITHUB_APP.ID,
+    GITHUB_APP.PEM,
   );
 
   return axios.create({
-    baseURL: 'https://api.github.com',
+    baseURL: GITHUB_APP.API_URI,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${accessToken}`,
