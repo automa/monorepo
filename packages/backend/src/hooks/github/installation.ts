@@ -16,7 +16,7 @@ const created: GithubEventActionHandler = async (app, body) => {
         provider_type: 'github',
         provider_id: `${body.installation.account.id}`,
         is_user: body.installation.account.type === 'User',
-        is_active: true,
+        has_installation: true,
         github_installation_id: body.installation.id,
       },
     });
@@ -26,7 +26,7 @@ const created: GithubEventActionHandler = async (app, body) => {
         id: org.id,
       },
       data: {
-        is_active: true,
+        has_installation: true,
         github_installation_id: body.installation.id,
       },
     });
@@ -54,7 +54,7 @@ const deleted: GithubEventActionHandler = async (app, body) => {
       id: org.id,
     },
     data: {
-      is_active: false,
+      has_installation: false,
     },
   });
 
@@ -63,7 +63,7 @@ const deleted: GithubEventActionHandler = async (app, body) => {
       org_id: org.id,
     },
     data: {
-      is_active: false,
+      has_installation: false,
     },
   });
 };
@@ -75,7 +75,7 @@ const suspend: GithubEventActionHandler = async (app, body) => {
       provider_id: `${body.installation.account.id}`,
     },
     data: {
-      is_active: false,
+      has_installation: false,
     },
   });
 };
@@ -87,7 +87,7 @@ const unsuspend: GithubEventActionHandler = async (app, body) => {
       provider_id: `${body.installation.account.id}`,
     },
     data: {
-      is_active: true,
+      has_installation: true,
     },
   });
 };

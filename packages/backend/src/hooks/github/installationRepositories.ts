@@ -41,7 +41,7 @@ const removed: GithubEventActionHandler = async (app, body) => {
       },
     },
     data: {
-      is_active: false,
+      has_installation: false,
     },
   });
 };
@@ -65,7 +65,7 @@ export const addRepo = async (
         name: repository.name,
         provider_id: `${repository.id}`,
         is_private: repository.private,
-        is_active: true,
+        has_installation: true,
       },
     });
   } else {
@@ -74,7 +74,7 @@ export const addRepo = async (
         id: repo.id,
       },
       data: {
-        is_active: true,
+        has_installation: true,
         is_private: repository.private,
       },
     });

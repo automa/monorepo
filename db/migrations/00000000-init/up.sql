@@ -29,7 +29,7 @@ CREATE TABLE public.orgs (
   provider_type public.provider NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
   is_user BOOLEAN NOT NULL DEFAULT FALSE,
-  is_active BOOLEAN NOT NULL DEFAULT FALSE,
+  has_installation BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   github_installation_id INT NULL,
   UNIQUE (provider_type, provider_id),
@@ -42,7 +42,7 @@ CREATE TABLE public.repos (
   name VARCHAR(255) NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
   is_private BOOLEAN NOT NULL DEFAULT FALSE,
-  is_active BOOLEAN NOT NULL DEFAULT FALSE,
+  has_installation BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   is_archived BOOLEAN NOT NULL DEFAULT FALSE,
   UNIQUE (org_id, provider_id)
