@@ -10,8 +10,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w --preserveWatchOutput",
-    "prisma-db-pull": "prisma db pull",
-    "prisma-generate": "prisma generate"
+    "generate-prisma": "prisma db pull && prisma generate"
   },
   "engines": {
     "node": ">=16.10.0"

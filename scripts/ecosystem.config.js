@@ -22,11 +22,28 @@ module.exports = {
       args: 'dev',
     },
     {
+      name: 'common-graphql-dev',
+      watch: ['packages/backend/src/graphql/schema'],
+      script: 'yarn',
+      interpreter: '/bin/bash',
+      args: 'generate-graphql',
+      autorestart: false,
+    },
+    {
       name: 'backend-dev',
       cwd: 'packages/backend',
       script: 'yarn',
       interpreter: '/bin/bash',
       args: 'dev',
+    },
+    {
+      name: 'backend-graphql-dev',
+      cwd: 'packages/backend',
+      watch: ['src/graphql/schema'],
+      script: 'yarn',
+      interpreter: '/bin/bash',
+      args: 'copy-graphql',
+      autorestart: false,
     },
     {
       name: 'backend',

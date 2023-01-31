@@ -5,7 +5,7 @@ import fastifySession from '@fastify/session';
 import { Redis } from 'ioredis';
 import redisStoreFactory from 'connect-redis';
 
-export default async function (app: FastifyInstance, environment: string) {
+export default async function (app: FastifyInstance, isProduction: boolean) {
   // @ts-ignore
   const RedisStore = redisStoreFactory(fastifySession);
 
@@ -21,7 +21,7 @@ export default async function (app: FastifyInstance, environment: string) {
     secret: app.config.COOKIE_SECRET,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      secure: environment === 'production',
+      secure: isProduction,
       sameSite: 'lax',
     },
     store,

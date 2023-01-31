@@ -10,14 +10,17 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import httpErrors from 'http-errors';
 
 import { schema } from './env';
+import graphql from './graphql';
 import logger from './logger';
 import session from './session';
 
 const envionment = process.env.NODE_ENV || 'development';
+const isProduction = envionment === 'production';
 
 async function server() {
   const app = fastify({
     logger: logger[envionment as keyof typeof logger],
+    forceCloseConnections: true,
   });
 
   app.register(fastifySensible);
@@ -28,7 +31,7 @@ async function server() {
     credentials: true,
   });
 
-  await session(app, envionment);
+  await session(app, isProduction);
 
   app.register(fastifyAutoload, {
     dir: join(__dirname, 'plugins'),
@@ -66,6 +69,8 @@ async function server() {
   });
 
   app.register(fastifySwaggerUi, {});
+
+  await graphql(app, isProduction);
 
   app.register(fastifyAutoload, {
     dir: join(__dirname, 'routes'),

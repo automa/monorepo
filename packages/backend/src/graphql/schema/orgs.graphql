@@ -1,0 +1,10 @@
+type Query {
+  orgs: [Org!]!
+  org(id: Int!): Org
+}
+
+type Org {
+  id: Int!
+  name: String!
+  is_user: Boolean!
+}

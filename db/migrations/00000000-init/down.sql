@@ -1,5 +1,7 @@
 BEGIN;
 
+DROP TABLE public.user_repos;
+DROP TABLE public.user_orgs;
 DROP TABLE public.repos;
 DROP TABLE public.orgs;
 DROP TABLE public.user_providers;

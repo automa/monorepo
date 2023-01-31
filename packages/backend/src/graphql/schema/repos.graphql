@@ -1,0 +1,9 @@
+type Query {
+  repos: [Repo!]!
+  repo(id: Int!): Repo
+}
+
+type Repo {
+  id: Int!
+  name: String!
+}

@@ -18,8 +18,6 @@ const App: React.FC<AppProps> = () => {
 
   const navigate = useNavigate();
 
-  axios.defaults.withCredentials = true;
-
   const initAxiosInterceptors = () => {
     axios.interceptors.response.use(
       (response) => response,
@@ -37,9 +35,7 @@ const App: React.FC<AppProps> = () => {
     initAxiosInterceptors();
 
     try {
-      const { data } = await axios(
-        `${process.env.REACT_APP_API_URI}/api/session`,
-      );
+      const { data } = await axios('/api/session');
 
       setAuth(data);
     } catch (_) {}

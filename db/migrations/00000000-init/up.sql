@@ -48,4 +48,20 @@ CREATE TABLE public.repos (
   UNIQUE (org_id, provider_id)
 );
 
+CREATE TABLE public.user_orgs (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  UNIQUE (user_id, org_id)
+);
+
+CREATE TABLE public.user_repos (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  repo_id INTEGER NOT NULL REFERENCES public.repos(id) ON DELETE CASCADE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  UNIQUE (user_id, repo_id)
+);
+
 COMMIT;

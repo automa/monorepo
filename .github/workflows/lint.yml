@@ -36,6 +36,10 @@ jobs:
             deps-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: GraphQL types check
+        run: |
+          yarn generate-graphql
+          git diff --exit-code
       - name: Lint check
         run: yarn lint
       - name: Formatting check

@@ -7,6 +7,7 @@
     "format-check": "prettier --check .",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
+    "generate-graphql": "graphql-codegen --config generate-graphql.ts",
     "prepare": "husky install",
     "start": "bash ./scripts/start.sh",
     "stop": "bash ./scripts/stop.sh"
@@ -15,6 +16,9 @@
     "node": ">=16.10.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.16.5",
+    "@graphql-codegen/typescript": "2.8.8",
+    "@graphql-codegen/typescript-resolvers": "2.7.13",
     "@types/chai": "~4.3.3",
     "@types/mocha": "~9.1.1",
     "@types/node": "~16.11.38",

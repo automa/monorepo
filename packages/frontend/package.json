@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@apollo/client": "~3.7.5",
     "@automa/common": "link:../common",
-    "@apollo/client": "~3.6.9",
     "@qatalog/react-flex": "~0.2.0",
     "@radix-ui/react-toast": "~1.1.1",
     "@radix-ui/react-tooltip": "~1.0.2",

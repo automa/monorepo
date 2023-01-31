@@ -18,5 +18,10 @@ module.exports = {
     node: true,
     mocha: true,
   },
-  ignorePatterns: ['!.prettierrc.js', 'build', 'coverage'],
+  ignorePatterns: [
+    '!.prettierrc.js',
+    'build',
+    'coverage',
+    'packages/common/src/graphql.ts',
+  ],
 };
