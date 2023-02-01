@@ -3,10 +3,6 @@ import { FastifyPluginAsync, preHandlerHookHandler } from 'fastify';
 import { users } from '@automa/prisma';
 
 declare module 'fastify' {
-  interface FastifyContextConfig {
-    auth?: boolean;
-  }
-
   interface FastifyRequest {
     user: users | null;
   }

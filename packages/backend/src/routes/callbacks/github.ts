@@ -3,6 +3,8 @@ import axios from 'axios';
 
 import { users } from '@automa/prisma';
 
+import { sync } from '../../clients/github';
+
 export default async function (app: FastifyInstance) {
   const createProvider = async (
     user: users,
@@ -139,24 +141,22 @@ export default async function (app: FastifyInstance) {
     }
 
     // Update the data in the provider
-    if (
-      provider.refresh_token !== refreshToken ||
-      provider.provider_email !== email
-    ) {
-      await app.prisma.user_providers.update({
-        where: {
-          id: provider.id,
-        },
-        data: {
-          provider_email: email,
-          refresh_token: refreshToken,
-        },
-      });
-    }
+    await app.prisma.user_providers.update({
+      where: {
+        id: provider.id,
+      },
+      data: {
+        provider_email: email,
+        refresh_token: refreshToken,
+      },
+    });
 
     // Login the user linked to the existing/created provider
     request.session.userId = provider.user_id;
     request.session.githubAccessToken = accessToken;
+
+    // Sync the user's data
+    await sync(app, request);
 
     reply.redirect(request.session.referer || CLIENT_URI);
   });

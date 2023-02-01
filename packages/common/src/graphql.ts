@@ -16,10 +16,19 @@ export type Scalars = {
 
 export type Org = {
   __typename?: 'Org';
+  has_installation: Scalars['Boolean'];
   id: Scalars['Int'];
   is_user: Scalars['Boolean'];
   name: Scalars['String'];
+  provider_id: Scalars['String'];
+  provider_type: Scalars['String'];
 };
+
+export enum ProviderType {
+  Bitbucket = 'bitbucket',
+  Github = 'github',
+  Gitlab = 'gitlab'
+}
 
 export type Query = {
   __typename?: 'Query';
@@ -31,7 +40,8 @@ export type Query = {
 
 
 export type QueryOrgArgs = {
-  id: Scalars['Int'];
+  name: Scalars['String'];
+  provider_type: ProviderType;
 };
 
 
@@ -117,6 +127,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Org: ResolverTypeWrapper<Org>;
+  ProviderType: ProviderType;
   Query: ResolverTypeWrapper<{}>;
   Repo: ResolverTypeWrapper<Repo>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -133,14 +144,17 @@ export type ResolversParentTypes = {
 };
 
 export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['Org'] = ResolversParentTypes['Org']> = {
+  has_installation?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   is_user?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  provider_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  org?: Resolver<Maybe<ResolversTypes['Org']>, ParentType, ContextType, RequireFields<QueryOrgArgs, 'id'>>;
+  org?: Resolver<Maybe<ResolversTypes['Org']>, ParentType, ContextType, RequireFields<QueryOrgArgs, 'name' | 'provider_type'>>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'id'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType>;

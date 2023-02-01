@@ -15,18 +15,18 @@ export const Query: QueryResolvers<Context> = {
 
     return result.map((r) => r.orgs);
   },
-  org: async (root, { id }, { user, prisma }) => {
-    const result = await prisma.user_orgs.findFirst({
+  org: async (root, { provider_type, name }, { user, prisma }) => {
+    return prisma.orgs.findFirst({
       where: {
-        user_id: user.id,
-        org_id: id,
-      },
-      include: {
-        orgs: true,
+        provider_type,
+        name,
+        user_orgs: {
+          some: {
+            user_id: user.id,
+          },
+        },
       },
     });
-
-    return result?.orgs ?? null;
   },
 };
 
