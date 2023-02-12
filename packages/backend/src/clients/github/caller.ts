@@ -36,8 +36,6 @@ const getInstallationAccessToken = async (
     },
   );
 
-  console.log(data);
-
   return data.token as string;
 };
 
@@ -53,12 +51,15 @@ export const caller = async (app: FastifyInstance, installationId: string) => {
     GITHUB_APP.PEM,
   );
 
-  return axios.create({
-    baseURL: GITHUB_APP.API_URI,
-    headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${accessToken}`,
-      'User-Agent': 'Automa App',
-    },
-  });
+  return {
+    accessToken,
+    axios: axios.create({
+      baseURL: GITHUB_APP.API_URI,
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${accessToken}`,
+        'User-Agent': 'Automa App',
+      },
+    }),
+  };
 };
