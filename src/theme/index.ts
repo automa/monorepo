@@ -1,3 +1,5 @@
+import FontFaceObserver from 'fontfaceobserver';
+
 import breakpoints from './breakpoints';
 import buttons from './buttons';
 import colors from './colors';
@@ -21,5 +23,7 @@ const theme = {
   typography,
   zIndex,
 };
+
+export const loadFonts = async () => {};
 
 export default theme;

@@ -12,26 +12,28 @@ import 'index.css';
 
 import 'logger';
 import store from 'store';
-import theme, { GlobalStyle } from 'theme';
+import theme, { GlobalStyle, loadFonts } from 'theme';
 import App from 'views/App';
 
 export const ToastContainer = styled(Toast.Viewport)``;
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <Provider store={store}>
-        <BrowserRouter>
-          <Tooltip.Provider delayDuration={500}>
-            <Toast.Provider>
-              <App />
-              <ToastContainer />
-            </Toast.Provider>
-          </Tooltip.Provider>
-        </BrowserRouter>
-      </Provider>
-    </ThemeProvider>
-  </React.StrictMode>,
-  document.getElementById('root'),
-);
+loadFonts().then(() => {
+  ReactDOM.render(
+    <React.StrictMode>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Provider store={store}>
+          <BrowserRouter>
+            <Tooltip.Provider delayDuration={500}>
+              <Toast.Provider>
+                <App />
+                <ToastContainer />
+              </Toast.Provider>
+            </Tooltip.Provider>
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
+    </React.StrictMode>,
+    document.getElementById('root'),
+  );
+});
