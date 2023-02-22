@@ -10,7 +10,7 @@ export const Container = styled.button<ButtonStyledProps>`
   ${({ $disabled }) =>
     !!$disabled &&
     css`
-      pointer-events: none;
+      cursor: initial;
     `}
 
   ${({ $fullWidth }) =>

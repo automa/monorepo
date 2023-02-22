@@ -1,4 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { expect } from '@storybook/jest';
+import { userEvent, within } from '@storybook/testing-library';
 
 import Button from './Button';
 import { ButtonComponentProps } from './types';
@@ -7,9 +9,13 @@ export default {
   title: 'Button',
   component: Button,
   args: {
-    children: 'Children',
+    children: 'One',
   },
-  argTypes: {},
+  argTypes: {
+    onClick: {
+      action: true,
+    },
+  },
 } as Meta<ButtonComponentProps>;
 
 export const Default: StoryObj<ButtonComponentProps> = {};
@@ -89,5 +95,27 @@ export const LargeTertiary: StoryObj<ButtonComponentProps> = {
 export const FullWidth: StoryObj<ButtonComponentProps> = {
   args: {
     fullWidth: true,
+  },
+};
+
+export const Clickable: StoryObj<ButtonComponentProps> = {
+  args: {},
+  play: async ({ args, canvasElement }) => {
+    const { getByText } = within(canvasElement);
+
+    userEvent.click(getByText('One'));
+    expect(args.onClick).toHaveBeenCalled();
+  },
+};
+
+export const NonClickable: StoryObj<ButtonComponentProps> = {
+  args: {
+    ...Disabled.args,
+  },
+  play: async ({ args, canvasElement }) => {
+    const { getByText } = within(canvasElement);
+
+    userEvent.click(getByText('One'));
+    expect(args.onClick).not.toHaveBeenCalled();
   },
 };

@@ -16,15 +16,22 @@ type Data = {
 };
 
 const data: Data[] = [
+  { name: 'Jenny', amount: 400 },
   { name: 'John', amount: 100 },
-  { name: 'Jane', amount: 200 },
+  { name: 'Jill', amount: 500 },
+  { name: 'Jane', amount: 300 },
+  { name: 'June', amount: 200 },
 ];
 
 export default {
   title: 'Table',
   component: Table,
   args: {},
-  argTypes: {},
+  argTypes: {
+    onRowClick: {
+      action: true,
+    },
+  },
 } as Meta<TableComponentProps<Data>>;
 
 export const Default = () => {

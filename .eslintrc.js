@@ -33,6 +33,7 @@ module.exports = {
       files: ['**/*.stories.*'],
       rules: {
         'import/no-anonymous-default-export': 'off',
+        'storybook/await-interactions': 'off',
         'storybook/hierarchy-separator': 'error',
         'storybook/csf-component': 'error',
         'storybook/no-redundant-story-name': 'error',

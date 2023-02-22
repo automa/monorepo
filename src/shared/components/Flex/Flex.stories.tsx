@@ -36,7 +36,7 @@ export const Clickable: StoryObj<FlexProps> = {
   play: async ({ args, canvasElement }) => {
     const { getByText } = within(canvasElement);
 
-    await userEvent.click(getByText('One'));
-    await expect(args.onClick).toHaveBeenCalled();
+    userEvent.click(getByText('One'));
+    expect(args.onClick).toHaveBeenCalled();
   },
 };

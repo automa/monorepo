@@ -4,6 +4,7 @@ import { configureStore, PreloadedState } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components/macro';
 import { render, RenderOptions } from '@testing-library/react';
+import mockedFetch from 'jest-fetch-mock';
 
 import theme from 'theme';
 import { reducer, RootState } from 'store';
@@ -30,7 +31,7 @@ const customRender = (
             preloadedState: state,
           })}
         >
-          <MemoryRouter initialEntries={history}>{children}</MemoryRouter>
+          <MemoryRouter initialEntries={path && !history ? [path] : history}>{children}</MemoryRouter>
         </Provider>
       </ThemeProvider>
     );
@@ -60,4 +61,4 @@ jest.mock('react-router-dom', () => ({
 
 export * from '@testing-library/react';
 
-export { customRender as render, mockedUseNavigate };
+export { customRender as render, mockedUseNavigate, mockedFetch };
