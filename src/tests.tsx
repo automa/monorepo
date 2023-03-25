@@ -31,7 +31,9 @@ const customRender = (
             preloadedState: state,
           })}
         >
-          <MemoryRouter initialEntries={path && !history ? [path] : history}>{children}</MemoryRouter>
+          <MemoryRouter initialEntries={path && !history ? [path] : history}>
+            {children}
+          </MemoryRouter>
         </Provider>
       </ThemeProvider>
     );

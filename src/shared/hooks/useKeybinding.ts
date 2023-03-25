@@ -4,26 +4,32 @@ export type Keybinding =
   | string
   | {
       key: string;
-      shiftKey?: boolean;
-      ctrlKey?: boolean;
-      altKey?: boolean;
-      metaKey?: boolean;
+      mod?: boolean;
+      alt?: boolean;
+      shift?: boolean;
     };
 
 const useKeybinding = (binding: Keybinding, callback: () => void) => {
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
       if (typeof binding === 'string') {
-        if (binding === event.key) {
+        if (
+          binding === event.key &&
+          !event.ctrlKey &&
+          !event.metaKey &&
+          !event.altKey &&
+          !event.shiftKey
+        ) {
           callback();
         }
       } else {
+        let modKey = event.ctrlKey || event.metaKey;
+
         if (
           binding.key === event.key &&
-          (binding.shiftKey ?? false) === event.shiftKey &&
-          (binding.ctrlKey ?? false) === event.ctrlKey &&
-          (binding.altKey ?? false) === event.altKey &&
-          (binding.metaKey ?? false) === event.metaKey
+          (binding.mod ?? false) === modKey &&
+          (binding.alt ?? false) === event.altKey &&
+          (binding.shift ?? false) === event.shiftKey
         ) {
           callback();
         }

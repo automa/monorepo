@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { DependencyList, useEffect } from 'react';
 
 const useAsyncEffect = <D = any>(
   callback: (isMounted: () => boolean) => D | Promise<D>,
-  onDestroyOrDependencies: null | ((result?: D) => void) | any[] = [],
-  dependencies: any[] = [],
+  onDestroyOrDependencies: null | ((result?: D) => void) | DependencyList,
+  dependencies: DependencyList = [],
 ) => {
-  let deps: any[];
+  let deps: DependencyList;
   let destroy: (result?: D) => void;
 
   if (typeof onDestroyOrDependencies === 'function') {
