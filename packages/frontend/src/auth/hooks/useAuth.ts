@@ -10,6 +10,7 @@ import { User } from 'auth/types';
 
 const useAuth = () => {
   const dispatch = useAppDispatch();
+
   const authLoading = useAppSelector(selectAuthLoading);
 
   const setAuth = (user: User) => {

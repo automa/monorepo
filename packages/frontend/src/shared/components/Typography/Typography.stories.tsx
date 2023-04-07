@@ -1,4 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { expect } from '@storybook/jest';
+import { userEvent, within } from '@storybook/testing-library';
 
 import Typography from './Typography';
 import { TypographyComponentProps } from './types';
@@ -7,9 +9,13 @@ export default {
   title: 'Typography',
   component: Typography,
   args: {
-    children: 'This is text',
+    children: 'One',
   },
-  argTypes: {},
+  argTypes: {
+    onClick: {
+      action: true,
+    },
+  },
 } as Meta<TypographyComponentProps>;
 
 export const Default: StoryObj<TypographyComponentProps> = {};
@@ -133,5 +139,15 @@ export const WordBreak: StoryObj<TypographyComponentProps> = {
     style: {
       width: '25px',
     },
+  },
+};
+
+export const Clickable: StoryObj<TypographyComponentProps> = {
+  args: {},
+  play: async ({ args, canvasElement }) => {
+    const { getByText } = within(canvasElement);
+
+    userEvent.click(getByText('One'));
+    expect(args.onClick).toHaveBeenCalled();
   },
 };

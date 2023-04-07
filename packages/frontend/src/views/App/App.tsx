@@ -37,7 +37,9 @@ const App: React.FC<AppProps> = () => {
     try {
       const { data } = await axios('/api/session');
 
-      setAuth(data);
+      if (!!data) {
+        setAuth(data);
+      }
     } catch (_) {}
 
     setAuthLoading(false);

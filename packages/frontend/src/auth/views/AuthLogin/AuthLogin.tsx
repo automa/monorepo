@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 import { Button } from 'shared';
-import { useUser } from 'auth';
+import { useUser } from 'auth/hooks';
 
 import { AuthLoginProps } from './types';
 

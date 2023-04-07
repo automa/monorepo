@@ -14,27 +14,30 @@ import 'index.css';
 import client from 'client';
 import 'logger';
 import store from 'store';
-import theme, { GlobalStyle } from 'theme';
+import theme, { GlobalStyle, loadFonts } from 'theme';
 import App from 'views/App';
+
 export const ToastContainer = styled(Toast.Viewport)``;
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Provider store={store}>
-          <BrowserRouter>
-            <Tooltip.Provider delayDuration={500}>
-              <Toast.Provider>
-                <App />
-                <ToastContainer />
-              </Toast.Provider>
-            </Tooltip.Provider>
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
-    </ApolloProvider>
-  </React.StrictMode>,
-  document.getElementById('root'),
-);
+loadFonts().then(() => {
+  ReactDOM.render(
+    <React.StrictMode>
+      <ApolloProvider client={client}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <Provider store={store}>
+            <BrowserRouter>
+              <Tooltip.Provider delayDuration={500}>
+                <Toast.Provider>
+                  <App />
+                  <ToastContainer />
+                </Toast.Provider>
+              </Tooltip.Provider>
+            </BrowserRouter>
+          </Provider>
+        </ThemeProvider>
+      </ApolloProvider>
+    </React.StrictMode>,
+    document.getElementById('root'),
+  );
+});

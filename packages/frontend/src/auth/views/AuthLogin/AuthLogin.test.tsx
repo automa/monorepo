@@ -5,6 +5,6 @@ import { render, screen } from 'tests';
 
 import AuthLogin from './AuthLogin';
 
-test('interaction', async () => {
+test('renders', async () => {
   render(<AuthLogin />);
 });
