@@ -1,6 +1,6 @@
 import { DependencyList, EffectCallback, useEffect, useRef } from 'react';
 
-const useAsyncEffect = (
+const useEffectAfterMount = (
   effect: EffectCallback,
   dependencies: DependencyList = [],
 ) => {
@@ -17,4 +17,4 @@ const useAsyncEffect = (
   }, dependencies);
 };
 
-export default useAsyncEffect;
+export default useEffectAfterMount;

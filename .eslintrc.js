@@ -3,7 +3,6 @@ module.exports = {
   extends: [
     'react-app',
     'react-app/jest',
-    'plugin:import/warnings',
     'plugin:prettier/recommended',
     'plugin:storybook/recommended',
   ],
@@ -20,9 +19,11 @@ module.exports = {
         patterns: ['!styled-components/macro'],
       },
     ],
+    'storybook/no-uninstalled-addons': 'off',
   },
   ignorePatterns: [
     '!.storybook',
+    '!.babel-plugin-macrosrc.js',
     '!.prettierrc.js',
     'build',
     'coverage',
