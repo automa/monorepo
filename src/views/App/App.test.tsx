@@ -7,6 +7,6 @@ import App from './App';
 test('home is default route', async () => {
   render(<App />);
 
-  const headline = await screen.findByText('Hello');
+  const headline = await screen.findByText('Home');
   expect(headline).toBeInTheDocument();
 });
