@@ -1,5 +1,7 @@
 BEGIN;
 
+CREATE EXTENSION "pg_jsonschema";
+
 CREATE TABLE public.users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -42,9 +44,9 @@ CREATE TABLE public.repos (
   name VARCHAR(255) NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
   is_private BOOLEAN NOT NULL DEFAULT FALSE,
+  is_archived BOOLEAN NOT NULL DEFAULT FALSE,
   has_installation BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  is_archived BOOLEAN NOT NULL DEFAULT FALSE,
   UNIQUE (org_id, provider_id)
 );
 
