@@ -19,7 +19,7 @@ const Tooltip = CommonWrapper<TooltipComponentProps>(
     align,
     alignOffset,
     arrowPadding,
-    content,
+    body,
     children,
     ...props
   }) => {
@@ -37,7 +37,7 @@ const Tooltip = CommonWrapper<TooltipComponentProps>(
             arrowPadding={arrowPadding}
           >
             <ContentContainer>
-              {typeof content === 'string' ? content : content()}
+              {typeof body === 'string' ? body : body()}
             </ContentContainer>
             <Arrow offset={8} height={8} width={8} />
           </TooltipPrimitive.Content>
