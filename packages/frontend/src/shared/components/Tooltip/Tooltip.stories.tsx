@@ -8,7 +8,7 @@ export default {
   component: Tooltip,
   args: {
     children: 'Children',
-    content: () => 'Content',
+    body: () => 'Content',
   },
   argTypes: {},
 } as Meta<TooltipComponentProps>;

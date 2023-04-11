@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { FC, ReactNode, ReactElement } from 'react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { configureStore, PreloadedState } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
@@ -22,7 +22,7 @@ const customRender = (
     path?: string;
   } = {},
 ) => {
-  const AllTheProviders: React.FC = ({ children }) => {
+  const AllTheProviders: FC<{ children: ReactNode }> = ({ children }) => {
     return (
       <ThemeProvider theme={theme}>
         <Provider

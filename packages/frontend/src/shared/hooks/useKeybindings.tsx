@@ -127,7 +127,7 @@ const useKeybindings = (bindings: Keybinding[]) => {
 
       return ({ children }: { children: ReactNode }) => (
         <Tooltip
-          content={() => (
+          body={() => (
             <Flex alignItems="center">
               <Flex gap={0.5} marginRight={0.5}>
                 {modSymbol}

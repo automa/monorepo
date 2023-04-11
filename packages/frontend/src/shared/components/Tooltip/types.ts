@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
 import { $, Component, Styled } from 'theme';
@@ -12,7 +12,7 @@ export type TooltipProps = $<
     align?: Tooltip.TooltipContentProps['align'];
     alignOffset?: Tooltip.TooltipContentProps['alignOffset'];
     arrowPadding?: Tooltip.TooltipContentProps['arrowPadding'];
-    content: (() => React.ReactNode) | string;
+    body: (() => ReactNode) | string;
   } & HTMLAttributes<HTMLDivElement>
 >;
 
