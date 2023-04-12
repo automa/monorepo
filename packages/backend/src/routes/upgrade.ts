@@ -32,7 +32,7 @@ const command = async (
 
 const run = async (
   app: FastifyInstance,
-  installationId: string,
+  installationId: number,
   uri: string,
   language: string,
   dep: string,
@@ -123,7 +123,7 @@ export default async function (app: FastifyInstance) {
       },
     });
 
-    if (!repo) {
+    if (!repo?.orgs?.github_installation_id) {
       return reply.code(404).send();
     }
 

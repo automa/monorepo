@@ -18,7 +18,7 @@ const generateAppToken = (id: string, pem: string) => {
 
 // Get github installation's access token
 const getInstallationAccessToken = async (
-  installationId: string,
+  installationId: number,
   uri: string,
   id: string,
   pem: string,
@@ -39,7 +39,7 @@ const getInstallationAccessToken = async (
   return data.token as string;
 };
 
-export const caller = async (app: FastifyInstance, installationId: string) => {
+export const caller = async (app: FastifyInstance, installationId: number) => {
   const {
     config: { GITHUB_APP },
   } = app;
