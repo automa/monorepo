@@ -1,6 +1,11 @@
 import { Static, Type } from '@sinclair/typebox';
+import envSchema from 'env-schema';
 
-export const schema = Type.Object({
+export const environment = process.env.NODE_ENV || 'development';
+
+export const isProduction = environment === 'production';
+
+const schema = Type.Object({
   API_URI: Type.String({
     default: 'http://localhost:8080',
   }),
@@ -57,6 +62,8 @@ export const schema = Type.Object({
 });
 
 type Schema = Static<typeof schema>;
+
+export const env = envSchema({ schema });
 
 declare module 'fastify' {
   interface FastifyInstance {

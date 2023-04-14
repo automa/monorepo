@@ -1,30 +1,30 @@
+// Always setup the environment first
+import { env, environment, isProduction } from './env';
+import './telemetry';
+
 import { join } from 'path';
 
 import fastify from 'fastify';
 import fastifySensible from '@fastify/sensible';
-import fastifyEnv from '@fastify/env';
 import fastifyCors from '@fastify/cors';
 import fastifyAutoload from '@fastify/autoload';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import httpErrors from 'http-errors';
 
-import { schema } from './env';
 import graphql from './graphql';
 import logger from './logger';
 import session from './session';
 
-const envionment = process.env.NODE_ENV || 'development';
-const isProduction = envionment === 'production';
-
 async function server() {
   const app = fastify({
-    logger: logger[envionment as keyof typeof logger],
+    logger: logger[environment as keyof typeof logger],
     forceCloseConnections: true,
   });
 
+  app.decorate('config', env);
+
   app.register(fastifySensible);
-  await app.register(fastifyEnv, { schema });
 
   app.register(fastifyCors, {
     origin: app.config.CORS_ORIGIN,

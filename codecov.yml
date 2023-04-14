@@ -5,9 +5,9 @@ coverage:
       flag_coverage_not_uploaded_behavior: exclude
     project:
       default: false
-      backend:
+      api:
         flags:
-          - backend
+          - api
         informational: true
       frontend:
         flags:
@@ -15,19 +15,19 @@ coverage:
         informational: true
     patch:
       default: false
-      backend:
+      api:
         flags:
-          - backend
+          - api
         informational: true
       frontend:
         flags:
           - frontend
         informational: true
 flags:
-  backend:
+  api:
     carryforward: true
     paths:
-      - packages/backend
+      - packages/api
   frontend:
     carryforward: true
     paths:

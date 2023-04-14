@@ -1,7 +1,7 @@
-name: Testing (backend)
+name: Testing (api)
 on: [pull_request]
 concurrency:
-  group: testing-backend-${{ github.ref }}
+  group: testing-api-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   test:
@@ -21,12 +21,12 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Run tests
         run: yarn test-cover
-        working-directory: packages/backend
+        working-directory: packages/api
       - name: Upload coverage
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/backend/coverage/lcov.info
-          flags: backend
-          name: backend.${{ github.event.number }}
+          files: packages/api/coverage/lcov.info
+          flags: api
+          name: api.${{ github.event.number }}
           fail_ci_if_error: false
