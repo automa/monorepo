@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -18,7 +18,7 @@ const App: React.FC<AppProps> = () => {
 
   const navigate = useNavigate();
 
-  const initAxiosInterceptors = () => {
+  useEffect(() => {
     axios.interceptors.response.use(
       (response) => response,
       (error) => {
@@ -29,11 +29,9 @@ const App: React.FC<AppProps> = () => {
         return Promise.reject(error);
       },
     );
-  };
+  }, [unsetAuth]);
 
   useAsyncEffect(async () => {
-    initAxiosInterceptors();
-
     try {
       const { data } = await axios('/api/session');
 
