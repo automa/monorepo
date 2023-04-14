@@ -1,5 +1,9 @@
 import { Static, Type } from '@sinclair/typebox';
 
+export const environment = process.env.NODE_ENV || 'development';
+
+export const isProduction = environment === 'production';
+
 export const schema = Type.Object({
   API_URI: Type.String({
     default: 'http://localhost:8080',

@@ -49,4 +49,6 @@ COPY --from=builder /app/packages/prisma/.env ./packages/prisma/.env
 
 RUN yarn install --frozen-lockfile --production
 
+EXPOSE 8080
+
 CMD ["node", "packages/backend/build/index.js"]
