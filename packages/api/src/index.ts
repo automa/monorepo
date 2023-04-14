@@ -1,3 +1,7 @@
+// Always setup the environment first
+import { schema, environment, isProduction } from './env';
+import './telemetry';
+
 import { join } from 'path';
 
 import fastify from 'fastify';
@@ -9,8 +13,6 @@ import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import httpErrors from 'http-errors';
 
-import { schema, environment, isProduction } from './env';
-import './telemetry';
 import graphql from './graphql';
 import logger from './logger';
 import session from './session';

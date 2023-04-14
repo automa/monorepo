@@ -17,6 +17,8 @@
     "@fastify/swagger": "~8.2.1",
     "@fastify/swagger-ui": "~1.3.0",
     "@graphql-tools/load-files": "~6.6.1",
+    "@opentelemetry/instrumentation-fastify": "~0.31.1",
+    "@opentelemetry/instrumentation-graphql": "~0.34.0",
     "@opentelemetry/resources": "~1.12.0",
     "@opentelemetry/sdk-node": "~0.38.0",
     "@opentelemetry/sdk-trace-base": "~1.12.0",
