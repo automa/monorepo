@@ -1,5 +1,5 @@
 {
-  "name": "@automa/backend",
+  "name": "@automa/api",
   "version": "0.0.1",
   "private": true,
   "main": "build/index.js",
