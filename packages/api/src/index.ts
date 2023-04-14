@@ -1,12 +1,11 @@
 // Always setup the environment first
-import { schema, environment, isProduction } from './env';
+import { env, environment, isProduction } from './env';
 import './telemetry';
 
 import { join } from 'path';
 
 import fastify from 'fastify';
 import fastifySensible from '@fastify/sensible';
-import fastifyEnv from '@fastify/env';
 import fastifyCors from '@fastify/cors';
 import fastifyAutoload from '@fastify/autoload';
 import fastifySwagger from '@fastify/swagger';
@@ -23,8 +22,9 @@ async function server() {
     forceCloseConnections: true,
   });
 
+  app.decorate('config', env);
+
   app.register(fastifySensible);
-  await app.register(fastifyEnv, { schema });
 
   app.register(fastifyCors, {
     origin: app.config.CORS_ORIGIN,
