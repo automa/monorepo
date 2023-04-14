@@ -22,6 +22,34 @@ const sync = async (app: FastifyInstance, request: FastifyRequest) => {
     })),
     skipDuplicates: true,
   });
+
+  await Promise.all(
+    orgs.map(async (org) => {
+      const { repositories } = await request.github<{
+        // TODO: permissions
+        repositories: { id: number }[];
+      }>({
+        path: `/user/installations/${org.github_installation_id}/repositories?per_page=100`,
+      });
+
+      const repos = await app.prisma.repos.findMany({
+        where: {
+          org_id: org.id,
+          provider_id: {
+            in: repositories.map(({ id }) => `${id}`),
+          },
+        },
+      });
+
+      return app.prisma.user_repos.createMany({
+        data: repos.map((repo) => ({
+          user_id: request.session.userId!,
+          repo_id: repo.id,
+        })),
+        skipDuplicates: true,
+      });
+    }),
+  );
 };
 
 export default sync;
