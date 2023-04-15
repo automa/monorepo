@@ -16,4 +16,7 @@ type Org {
   provider_id: String!
   is_user: Boolean!
   has_installation: Boolean!
+  github_installation_id: Int
+
+  repos: [Repo!]!
 }

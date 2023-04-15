@@ -1,9 +1,14 @@
 type Query {
-  repos: [Repo!]!
-  repo(id: Int!): Repo
+  repo(provider_type: ProviderType!, org_name: String!, name: String!): Repo
 }
 
 type Repo {
   id: Int!
   name: String!
+  provider_id: String!
+  is_private: Boolean!
+  is_archived: Boolean!
+  has_installation: Boolean!
+
+  org: Org!
 }

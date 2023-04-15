@@ -1,33 +1,32 @@
-import { QueryResolvers } from '@automa/common';
+import { QueryResolvers, RepoResolvers } from '@automa/common';
 
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  repos: async (root, args, { user, prisma }) => {
-    const result = await prisma.user_repos.findMany({
+  repo: (root, { provider_type, org_name, name }, { user, prisma }) => {
+    return prisma.repos.findFirst({
       where: {
-        user_id: user.id,
-      },
-      include: {
-        repos: true,
+        name,
+        orgs: {
+          name: org_name,
+          provider_type,
+        },
+        user_repos: {
+          some: {
+            user_id: user.id,
+          },
+        },
       },
     });
-
-    return result.map((r) => r.repos);
-  },
-  repo: async (root, { id }, { user, prisma }) => {
-    const result = await prisma.user_repos.findFirst({
-      where: {
-        user_id: user.id,
-        repo_id: id,
-      },
-      include: {
-        repos: true,
-      },
-    });
-
-    return result?.repos ?? null;
   },
 };
 
-export const Repo = {};
+export const Repo: RepoResolvers<Context> = {
+  org: ({ org_id }, args, { prisma }) => {
+    return prisma.orgs.findUniqueOrThrow({
+      where: {
+        id: org_id,
+      },
+    });
+  },
+};

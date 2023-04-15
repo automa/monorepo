@@ -26,22 +26,25 @@ const OrgList: React.FC<OrgListProps> = ({ ...props }) => {
     <Container {...props}>
       <Flex direction="column" alignItems="center" gap={1}>
         <Flex paddingBottom={2}>Dashboard</Flex>
-        {loading && <div>Loading...</div>}
-        {orgs && (
-          <Flex direction="column" gap={1}>
-            <Typography onClick={sync} link>
-              Sync
-            </Typography>
-            {orgs.map((org) => (
-              <Typography
-                key={org.id}
-                onClick={() => navigate(`/orgs/github/${org.name}`)}
-                link
-              >
-                {org.name}
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          orgs && (
+            <Flex direction="column" gap={1}>
+              <Typography onClick={sync} link>
+                Sync
               </Typography>
-            ))}
-          </Flex>
+              {orgs.map((org) => (
+                <Typography
+                  key={org.id}
+                  onClick={() => navigate(`/orgs/github/${org.name}`)}
+                  link
+                >
+                  {org.name}
+                </Typography>
+              ))}
+            </Flex>
+          )
         )}
       </Flex>
     </Container>

@@ -5,6 +5,6 @@ import { render, screen } from 'tests';
 
 import OrgOverview from './OrgOverview';
 
-test('interaction', async () => {
+test('renders', async () => {
   render(<OrgOverview />);
 });

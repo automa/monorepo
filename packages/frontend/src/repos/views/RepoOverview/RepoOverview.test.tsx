@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event';
 
 import { render, screen } from 'tests';
 
-import OrgList from './OrgList';
+import RepoOverview from './RepoOverview';
 
 test('renders', async () => {
-  render(<OrgList />);
+  render(<RepoOverview />);
 });

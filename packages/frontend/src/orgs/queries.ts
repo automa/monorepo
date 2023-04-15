@@ -5,9 +5,14 @@ export const GET_ORG = gql`
     org(provider_type: $provider_type, name: $name) {
       id
       name
-      provider_type
-      provider_id
-      has_installation
+      github_installation_id
+      repos {
+        id
+        name
+        is_private
+        is_archived
+        has_installation
+      }
     }
   }
 `;
@@ -17,6 +22,7 @@ export const GET_ORGS = gql`
     orgs {
       id
       name
+      has_installation
     }
   }
 `;

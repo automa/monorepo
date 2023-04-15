@@ -6,6 +6,12 @@ const config: CodegenConfig = {
   generates: {
     'packages/common/src/graphql.ts': {
       plugins: ['typescript', 'typescript-resolvers'],
+      config: {
+        mappers: {
+          Org: '.prisma/client#orgs',
+          Repo: '.prisma/client#repos',
+        },
+      },
     },
   },
 };

@@ -5,6 +5,6 @@ import { render, screen } from 'tests';
 
 import AuthNavbar from './AuthNavbar';
 
-test('interaction', async () => {
+test('renders', async () => {
   render(<AuthNavbar />);
 });

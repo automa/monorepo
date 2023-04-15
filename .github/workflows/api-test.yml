@@ -19,6 +19,8 @@ jobs:
             deps-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Start dependencies
+        run: yarn start-deps
       - name: Run tests
         run: yarn test-cover
         working-directory: packages/api
