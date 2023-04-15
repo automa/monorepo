@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { orgs, repos } from '.prisma/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -16,12 +17,14 @@ export type Scalars = {
 
 export type Org = {
   __typename?: 'Org';
+  github_installation_id?: Maybe<Scalars['Int']>;
   has_installation: Scalars['Boolean'];
   id: Scalars['Int'];
   is_user: Scalars['Boolean'];
   name: Scalars['String'];
   provider_id: Scalars['String'];
   provider_type: Scalars['String'];
+  repos: Array<Repo>;
 };
 
 export enum ProviderType {
@@ -35,7 +38,6 @@ export type Query = {
   org?: Maybe<Org>;
   orgs: Array<Org>;
   repo?: Maybe<Repo>;
-  repos: Array<Repo>;
 };
 
 
@@ -46,13 +48,20 @@ export type QueryOrgArgs = {
 
 
 export type QueryRepoArgs = {
-  id: Scalars['Int'];
+  name: Scalars['String'];
+  org_name: Scalars['String'];
+  provider_type: ProviderType;
 };
 
 export type Repo = {
   __typename?: 'Repo';
+  has_installation: Scalars['Boolean'];
   id: Scalars['Int'];
+  is_archived: Scalars['Boolean'];
+  is_private: Scalars['Boolean'];
   name: Scalars['String'];
+  org: Org;
+  provider_id: Scalars['String'];
 };
 
 
@@ -126,10 +135,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  Org: ResolverTypeWrapper<Org>;
+  Org: ResolverTypeWrapper<orgs>;
   ProviderType: ProviderType;
   Query: ResolverTypeWrapper<{}>;
-  Repo: ResolverTypeWrapper<Repo>;
+  Repo: ResolverTypeWrapper<repos>;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
 
@@ -137,32 +146,38 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Int: Scalars['Int'];
-  Org: Org;
+  Org: orgs;
   Query: {};
-  Repo: Repo;
+  Repo: repos;
   String: Scalars['String'];
 };
 
 export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['Org'] = ResolversParentTypes['Org']> = {
+  github_installation_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   has_installation?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   is_user?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   provider_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   org?: Resolver<Maybe<ResolversTypes['Org']>, ParentType, ContextType, RequireFields<QueryOrgArgs, 'name' | 'provider_type'>>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
-  repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'id'>>;
-  repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType>;
+  repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name' | 'provider_type'>>;
 };
 
 export type RepoResolvers<ContextType = any, ParentType extends ResolversParentTypes['Repo'] = ResolversParentTypes['Repo']> = {
+  has_installation?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  is_archived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  is_private?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
+  provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
