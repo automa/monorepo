@@ -11,10 +11,12 @@ declare module 'fastify' {
 }
 
 const prismaPlugin: FastifyPluginAsync = async (app) => {
-  await prisma.$connect();
+  const client = prisma(app.config.DATABASE_URL);
+
+  await client.$connect();
 
   // Make Prisma Client available through the fastify app instance: app.prisma
-  app.decorate('prisma', prisma);
+  app.decorate('prisma', client);
 
   app.addHook('onClose', async (app) => {
     await app.prisma.$disconnect();

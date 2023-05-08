@@ -62,7 +62,7 @@ async function server() {
       },
       servers: [
         {
-          url: 'http://localhost',
+          url: app.config.API_URI,
         },
       ],
     },

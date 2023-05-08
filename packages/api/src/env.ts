@@ -18,6 +18,9 @@ const schema = Type.Object({
   CORS_ORIGIN: Type.String({
     default: 'http://localhost:3000',
   }),
+  DATABASE_URL: Type.String({
+    default: 'postgresql://automa@localhost:5432/automa',
+  }),
   GITHUB_APP: Type.Object(
     {
       ACCESS_TOKEN_URL: Type.String({

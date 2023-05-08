@@ -4,7 +4,7 @@ networks:
     name: automa
 services:
   postgres:
-    container_name: postgres
+    container_name: automa-postgres
     image: automa/postgres
     build: ../db
     ports:
@@ -13,7 +13,7 @@ services:
       POSTGRES_USER: automa
       POSTGRES_HOST_AUTH_METHOD: trust
   redis:
-    container_name: redis
+    container_name: automa-redis
     image: redis:alpine
     ports:
       - 6379:6379
