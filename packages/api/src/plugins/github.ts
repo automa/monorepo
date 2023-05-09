@@ -2,6 +2,8 @@ import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
 import axios, { AxiosError, Method } from 'axios';
 
+import { env } from '../env';
+
 declare module 'fastify' {
   interface FastifyRequest {
     github: <ReponseBody>(options: {
@@ -19,13 +21,11 @@ const headers = {
 };
 
 const githubPlugin: FastifyPluginAsync = async (app) => {
-  const { GITHUB_APP } = app.config;
-
   app.addHook('preHandler', async (request, reply) => {
     request.github = async ({ path, method = 'GET', data = undefined }) => {
       const call = (accessToken: string) =>
         axios({
-          url: `${GITHUB_APP.API_URI}${path}`,
+          url: `${env.GITHUB_APP.API_URI}${path}`,
           method,
           data,
           headers: {
@@ -64,10 +64,10 @@ const githubPlugin: FastifyPluginAsync = async (app) => {
 
       // Get new access token
       const tokens = await axios.post(
-        GITHUB_APP.ACCESS_TOKEN_URL,
+        env.GITHUB_APP.ACCESS_TOKEN_URL,
         {
-          client_id: GITHUB_APP.CLIENT_ID,
-          client_secret: GITHUB_APP.CLIENT_SECRET,
+          client_id: env.GITHUB_APP.CLIENT_ID,
+          client_secret: env.GITHUB_APP.CLIENT_SECRET,
           refresh_token: userProvider.refresh_token,
           grant_type: 'refresh_token',
         },

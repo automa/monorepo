@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { users } from '@automa/prisma';
 
+import { env } from '../../env';
 import { sync } from '../../clients/github';
 
 export default async function (app: FastifyInstance) {
@@ -46,9 +47,7 @@ export default async function (app: FastifyInstance) {
       return reply.unauthorized();
     }
 
-    const {
-      config: { GITHUB_APP, CLIENT_URI },
-    } = app;
+    const { GITHUB_APP, CLIENT_URI } = env;
 
     const {
       data: { access_token: accessToken, refresh_token: refreshToken },

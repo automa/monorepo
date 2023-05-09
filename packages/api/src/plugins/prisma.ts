@@ -4,6 +4,8 @@ import { PrismaClient } from '@prisma/client';
 
 import prisma from '@automa/prisma';
 
+import { env } from '../env';
+
 declare module 'fastify' {
   interface FastifyInstance {
     prisma: PrismaClient;
@@ -11,7 +13,7 @@ declare module 'fastify' {
 }
 
 const prismaPlugin: FastifyPluginAsync = async (app) => {
-  const client = prisma(app.config.DATABASE_URL);
+  const client = prisma(env.DATABASE_URL);
 
   await client.$connect();
 
