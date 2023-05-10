@@ -21,7 +21,6 @@ COPY packages/api/src/graphql/schema ./packages/api/src/graphql/schema
 RUN yarn workspace @automa/api copy-graphql
 RUN yarn generate-graphql
 
-COPY packages/prisma/.env ./packages/prisma/
 COPY packages/prisma/src ./packages/prisma/src
 COPY packages/common/src ./packages/common/src
 COPY packages/api/src ./packages/api/src
@@ -45,7 +44,6 @@ COPY --from=builder /app/packages/common/package.json ./packages/common/package.
 
 COPY --from=builder /app/packages/prisma/build ./packages/prisma/build
 COPY --from=builder /app/packages/prisma/package.json ./packages/prisma/package.json
-COPY --from=builder /app/packages/prisma/.env ./packages/prisma/.env
 
 RUN yarn install --frozen-lockfile --production
 
