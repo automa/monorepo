@@ -1,7 +1,7 @@
 name: Testing (frontend)
 on: [pull_request]
 concurrency:
-  group: testing-frontend-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   test:

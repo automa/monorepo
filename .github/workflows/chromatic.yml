@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [master]
 concurrency:
-  group: chromatic-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
   cancel-in-progress: true
 jobs:
   chromatic:
