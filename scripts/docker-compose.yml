@@ -17,3 +17,20 @@ services:
     image: redis:alpine
     ports:
       - 6379:6379
+  jaeger:
+    container_name: automa-jaeger
+    image: jaegertracing/all-in-one
+    ports:
+      - 4318:4318
+      - 16686:16686
+    environment:
+      COLLECTOR_OTLP_ENABLED: 'true'
+  prometheus:
+    container_name: automa-prometheus
+    image: prom/prometheus
+    ports:
+      - 16687:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    extra_hosts:
+      - host.docker.internal:host-gateway

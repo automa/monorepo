@@ -56,20 +56,83 @@ const schema = Type.Object({
       default: {},
     },
   ),
+  OTEL: Type.Object(
+    {
+      LOGS: Type.Object(
+        {
+          ENABLED: Type.Boolean({
+            default: isProduction,
+          }),
+        },
+        {
+          default: {},
+        },
+      ),
+      METRICS: Type.Object(
+        {
+          EXPORT_INTERVAL: Type.Number({
+            default: 1000,
+          }),
+        },
+        {
+          default: {},
+        },
+      ),
+      TRACES: Type.Object(
+        {
+          SAMPLING_RATE: Type.Number({
+            default: 1,
+            maximum: 1,
+            minimum: 0,
+          }),
+        },
+        {
+          default: {},
+        },
+      ),
+    },
+    {
+      default: {},
+    },
+  ),
   PORT: Type.String({
     default: 8080,
   }),
   REDIS_URL: Type.String({
     default: 'redis://localhost:6379',
   }),
+  SEGMENT: Type.Object(
+    {
+      ENABLED: Type.Boolean({
+        default: isProduction,
+      }),
+      KEY: Type.String({
+        default: 'DS0ZF0LeGPSHEXSYXwKCpiWqmUTasJtR',
+      }),
+    },
+    {
+      default: {},
+    },
+  ),
+  SENTRY: Type.Object(
+    {
+      ENABLED: Type.Boolean({
+        default: isProduction,
+      }),
+      DSN: Type.String({
+        default:
+          'https://f13ba741210b40eb9891fcf9d90a7dc1@o4505098669588480.ingest.sentry.io/4505098783031296',
+      }),
+    },
+    {
+      default: {},
+    },
+  ),
+  STATSIG_KEY: Type.String({
+    default: 'secret-fdn7OUPBxuy070vzfwvKKbx1G4dnwDJM7Gtir3mvxGI',
+  }),
 });
 
 type Schema = Static<typeof schema>;
 
-export const env = envSchema({ schema });
-
-declare module 'fastify' {
-  interface FastifyInstance {
-    config: Schema;
-  }
-}
+export const env = envSchema<Schema>({ schema });

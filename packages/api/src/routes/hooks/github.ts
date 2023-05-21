@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { createHmac, timingSafeEqual } from 'crypto';
 
+import { env } from '../../env';
 import { GithubEventType, github } from '../../hooks';
 
 export default async function (app: FastifyInstance) {
@@ -38,7 +39,7 @@ export default async function (app: FastifyInstance) {
     }
 
     // Verify github sha256 signature
-    let hmac = createHmac('sha256', app.config.GITHUB_APP.WEBHOOK_SECRET);
+    let hmac = createHmac('sha256', env.GITHUB_APP.WEBHOOK_SECRET);
     hmac = hmac.update(JSON.stringify(request.body));
 
     const digest = Buffer.from(`sha256=${hmac.digest('hex')}`, 'utf8');

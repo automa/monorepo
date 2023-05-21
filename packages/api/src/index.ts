@@ -1,5 +1,5 @@
 // Always setup the environment first
-import { env, environment, isProduction } from './env';
+import { env, isProduction } from './env';
 import './telemetry';
 
 import { join } from 'path';
@@ -13,21 +13,18 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import httpErrors from 'http-errors';
 
 import graphql from './graphql';
-import logger from './logger';
 import session from './session';
 
 async function server() {
   const app = fastify({
-    logger: logger[environment as keyof typeof logger],
+    logger: false,
     forceCloseConnections: true,
   });
-
-  app.decorate('config', env);
 
   app.register(fastifySensible);
 
   app.register(fastifyCors, {
-    origin: app.config.CORS_ORIGIN,
+    origin: env.CORS_ORIGIN,
     credentials: true,
   });
 
@@ -62,7 +59,7 @@ async function server() {
       },
       servers: [
         {
-          url: app.config.API_URI,
+          url: env.API_URI,
         },
       ],
     },
@@ -79,7 +76,7 @@ async function server() {
 
   try {
     await app.listen({
-      port: parseInt(app.config.PORT, 10),
+      port: parseInt(env.PORT, 10),
     });
   } catch (err) {
     app.log.error(err);

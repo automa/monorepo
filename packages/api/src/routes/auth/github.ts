@@ -1,6 +1,8 @@
 import crypto from 'crypto';
 import { FastifyInstance } from 'fastify';
 
+import { env } from '../../env';
+
 export default async function (app: FastifyInstance) {
   app.get<{
     Querystring: {
@@ -8,9 +10,7 @@ export default async function (app: FastifyInstance) {
       from: string;
     };
   }>('/github', async (request, reply) => {
-    const {
-      config: { GITHUB_APP, API_URI },
-    } = app;
+    const { GITHUB_APP, API_URI } = env;
 
     const state = crypto.randomUUID();
 

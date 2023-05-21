@@ -5,12 +5,14 @@ import fastifySession from '@fastify/session';
 import { Redis } from 'ioredis';
 import redisStoreFactory from 'connect-redis';
 
+import { env } from './env';
+
 export default async function (app: FastifyInstance, secure: boolean) {
   // @ts-ignore
   const RedisStore = redisStoreFactory(fastifySession);
 
   const store = new RedisStore({
-    client: new Redis(app.config.REDIS_URL),
+    client: new Redis(env.REDIS_URL),
   });
 
   app.register(fasitfyCookie);
@@ -18,7 +20,7 @@ export default async function (app: FastifyInstance, secure: boolean) {
   // @ts-ignore
   app.register(fastifySession, {
     saveUninitialized: false,
-    secret: app.config.COOKIE_SECRET,
+    secret: env.COOKIE_SECRET,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       secure,
