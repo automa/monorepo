@@ -24,4 +24,9 @@ module.exports = {
     'coverage',
     'packages/common/src/graphql.ts',
   ],
+  settings: {
+    'import/resolver': {
+      typescript: true,
+    },
+  },
 };

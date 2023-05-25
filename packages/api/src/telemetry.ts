@@ -49,6 +49,7 @@ const sdk = new NodeSDK({
   resource: new resources.Resource({
     [SemanticResourceAttributes.SERVICE_NAMESPACE]: 'automa',
     [SemanticResourceAttributes.SERVICE_NAME]: 'api',
+    [SemanticResourceAttributes.SERVICE_VERSION]: pkg.version,
     [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: environment,
   }),
   sampler: new ParentBasedSampler({
