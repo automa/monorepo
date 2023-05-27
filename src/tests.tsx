@@ -3,8 +3,8 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { configureStore, PreloadedState } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components/macro';
+import { vi } from 'vitest';
 import { render, RenderOptions } from '@testing-library/react';
-import mockedFetch from 'jest-fetch-mock';
 
 import theme from 'theme';
 import { reducer, RootState } from 'store';
@@ -54,13 +54,13 @@ const customRender = (
   );
 };
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockedUseNavigate,
 }));
 
 export * from '@testing-library/react';
 
-export { customRender as render, mockedUseNavigate, mockedFetch };
+export { customRender as render, mockedUseNavigate };

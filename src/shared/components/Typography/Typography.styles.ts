@@ -5,7 +5,7 @@ import { TypographyStyledProps } from './types';
 
 export const Container = styled.div<TypographyStyledProps>`
   color: ${({ theme, $color }) =>
-    !!$color
+    $color
       ? theme.colors[$color as keyof typeof theme['colors']] || $color
       : 'inherit'};
 
@@ -44,7 +44,7 @@ export const Container = styled.div<TypographyStyledProps>`
     `}
 
   ${({ $link }) =>
-    !!$link
+    $link
       ? css`
           cursor: pointer;
         `

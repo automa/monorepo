@@ -24,6 +24,8 @@ const theme = {
   zIndex,
 };
 
-export const loadFonts = async () => {};
+export const loadFonts = async () => {
+  //
+};
 
 export default theme;

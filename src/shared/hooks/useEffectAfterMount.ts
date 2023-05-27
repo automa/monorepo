@@ -4,7 +4,7 @@ const useEffectAfterMount = (
   effect: EffectCallback,
   dependencies: DependencyList = [],
 ) => {
-  let didMountRef = useRef(false);
+  const didMountRef = useRef(false);
 
   useEffect(() => {
     if (didMountRef.current) {

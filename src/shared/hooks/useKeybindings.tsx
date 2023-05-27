@@ -47,7 +47,7 @@ const useKeybindings = (bindings: Keybinding[]) => {
           continue;
         }
 
-        let modPressed = event.ctrlKey || event.metaKey;
+        const modPressed = event.ctrlKey || event.metaKey;
 
         if (
           key.toLowerCase() === event.key.toLowerCase() &&
@@ -125,7 +125,7 @@ const useKeybindings = (bindings: Keybinding[]) => {
         keyLabel = keyText.toUpperCase();
       }
 
-      return ({ children }: { children: ReactNode }) => (
+      const KeyTooltip = ({ children }: { children: ReactNode }) => (
         <Tooltip
           body={() => (
             <Flex alignItems="center">
@@ -142,6 +142,8 @@ const useKeybindings = (bindings: Keybinding[]) => {
           {children}
         </Tooltip>
       );
+
+      return KeyTooltip;
     });
   }, [bindings]);
 

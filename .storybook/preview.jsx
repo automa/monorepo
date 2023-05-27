@@ -1,11 +1,12 @@
+import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components/macro';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as Toast from '@radix-ui/react-toast';
 
-import store from 'store';
-import theme, { GlobalStyle } from 'theme';
+import store from '../src/store';
+import theme, { GlobalStyle } from '../src/theme';
 
 export const decorators = [
   (Story) => {

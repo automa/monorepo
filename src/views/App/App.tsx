@@ -21,7 +21,7 @@ const App: React.FC<AppProps> = () => {
     try {
       const { data } = await Promise.resolve({ data: { id: 'fixme' } });
 
-      if (!!data) {
+      if (data) {
         setAuth(data);
       }
     } catch (_) {}

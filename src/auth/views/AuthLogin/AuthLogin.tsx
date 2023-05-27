@@ -10,7 +10,7 @@ import { Container } from './AuthLogin.styles';
 const AuthLogin: React.FC<AuthLoginProps> = ({ ...props }) => {
   const user = useUser();
 
-  if (!!user) {
+  if (user) {
     return <Navigate to="/" />;
   }
 

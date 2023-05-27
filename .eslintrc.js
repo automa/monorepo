@@ -1,12 +1,22 @@
 module.exports = {
   root: true,
   extends: [
-    'react-app',
-    'react-app/jest',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:import/recommended',
+    'plugin:jsx-a11y/recommended',
     'plugin:prettier/recommended',
     'plugin:storybook/recommended',
   ],
   rules: {
+    'no-empty': [
+      'error',
+      {
+        allowEmptyCatch: true,
+      },
+    ],
     'no-restricted-imports': [
       'error',
       {
@@ -19,11 +29,23 @@ module.exports = {
         patterns: ['!styled-components/macro'],
       },
     ],
+    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        types: {
+          '{}': false,
+        },
+        extendDefaults: true,
+      },
+    ],
+    'react/react-in-jsx-scope': 'off',
     'storybook/no-uninstalled-addons': 'off',
   },
   ignorePatterns: [
     '!.storybook',
     '!.babel-plugin-macrosrc.js',
+    '!.lintstagedrc.js',
     '!.prettierrc.js',
     'build',
     'coverage',
@@ -42,5 +64,25 @@ module.exports = {
         'storybook/prefer-pascal-case': 'error',
       },
     },
+    {
+      files: [
+        '.storybook/*.js',
+        '.babel-plugin-macrosrc.js',
+        '.eslintrc.js',
+        '.lintstagedrc.js',
+        '.prettierrc.js',
+      ],
+      env: {
+        node: true,
+      },
+    },
   ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+    'import/resolver': {
+      typescript: true,
+    },
+  },
 };
