@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [master]
 concurrency:
-  group: chromatic-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
   cancel-in-progress: true
 jobs:
   chromatic:
@@ -28,6 +28,7 @@ jobs:
       - name: Chromatic
         uses: chromaui/action@v1
         with:
+          buildScriptName: storybook-build
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true

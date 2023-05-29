@@ -3,7 +3,7 @@ on:
   push:
     branches: [master]
 concurrency:
-  group: deploy
+  group: ${{ github.workflow }}
   cancel-in-progress: false
 jobs:
   deploy:
