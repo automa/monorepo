@@ -36,7 +36,8 @@
     "test-cover": "vitest run --coverage",
     "test-watch": "vitest watch",
     "test-storybook": "test-storybook",
-    "test-storybook-cover": "test-storybook --coverage"
+    "test-storybook-cover": "test-storybook --coverage",
+    "update-boilerplate": "git pull --no-rebase https://git.sr.ht/~pksunkara/frontend-react master"
   },
   "browserslist": {
     "production": [

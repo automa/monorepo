@@ -10,7 +10,6 @@ module.exports = {
   framework: '@storybook/react-vite',
   features: {
     interactionsDebugger: true,
-    storyStoreV7: true,
   },
   docs: {
     autodocs: true,
