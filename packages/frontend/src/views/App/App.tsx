@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -35,7 +35,7 @@ const App: React.FC<AppProps> = () => {
     try {
       const { data } = await axios('/api/session');
 
-      if (!!data) {
+      if (data) {
         setAuth(data);
       }
     } catch (_) {}

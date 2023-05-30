@@ -36,6 +36,7 @@ const cssLine =
   } & CommonProps) =>
     css`
       ${cssKey}: ${
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         cssValue(theme, props[key])
       };
@@ -44,6 +45,7 @@ const cssLine =
 const cssFour =
   (key: string, cssKey: string) =>
   ({ theme, ...props }: { theme: DefaultTheme } & CommonProps) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const val = props[key] as CssValues;
     let cssVal;

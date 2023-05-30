@@ -19,6 +19,7 @@ module.exports = {
     mocha: true,
   },
   ignorePatterns: [
+    '!.lintstagedrc.js',
     '!.prettierrc.js',
     'build',
     'coverage',

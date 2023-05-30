@@ -1,4 +1,7 @@
 import '@testing-library/jest-dom';
-import fetchMock from 'jest-fetch-mock';
+import { vi } from 'vitest';
+import fetchMock from 'vitest-fetch-mock';
 
-fetchMock.enableMocks();
+const fetchMocker = fetchMock(vi);
+
+fetchMocker.enableMocks();

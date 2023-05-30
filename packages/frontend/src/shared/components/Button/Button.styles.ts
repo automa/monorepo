@@ -21,7 +21,7 @@ export const Container = styled.button<ButtonStyledProps>`
     `}
 
   color: ${({ theme, $color }) =>
-    !!$color
+    $color
       ? theme.colors[$color as keyof typeof theme['colors']] || $color
       : 'inherit'};
 
