@@ -9,7 +9,7 @@ export const reducer = {
 
 const store = configureStore({
   reducer,
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: import.meta.env.DEV,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

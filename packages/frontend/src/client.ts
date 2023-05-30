@@ -2,7 +2,7 @@ import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import axios from 'axios';
 
 const httpLink = new HttpLink({
-  uri: `${process.env.REACT_APP_API_URI}/api/graphql`,
+  uri: `${import.meta.env.VITE_API_URI}/api/graphql`,
   credentials: 'include',
 });
 
@@ -11,7 +11,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URI;
+axios.defaults.baseURL = import.meta.env.VITE_API_URI;
 axios.defaults.withCredentials = true;
 
 export default client;

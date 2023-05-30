@@ -16,7 +16,9 @@ const AuthLogin: React.FC<AuthLoginProps> = ({ ...props }) => {
   }
 
   const loginWithGithub = () => {
-    window.location.href = `${process.env.REACT_APP_API_URI}/auth/github?from=${window.location.href}`;
+    window.location.href = `${import.meta.env.VITE_API_URI}/auth/github?from=${
+      window.location.href
+    }`;
   };
 
   return (
