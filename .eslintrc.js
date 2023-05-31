@@ -40,6 +40,12 @@ module.exports = {
       },
     ],
     'react/react-in-jsx-scope': 'off',
+    'import/no-cycle': [
+      'error',
+      {
+        maxDepth: 3,
+      },
+    ],
     'storybook/no-uninstalled-addons': 'off',
   },
   ignorePatterns: [
