@@ -90,5 +90,6 @@ module.exports = {
     'import/resolver': {
       typescript: true,
     },
+    'import/internal-regex': '^@frontend-react/',
   },
 };
