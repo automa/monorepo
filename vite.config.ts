@@ -25,7 +25,7 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
-    open: true,
+    open: 'http://localhost:3000',
   },
   test: {
     globals: true,
