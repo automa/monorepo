@@ -23,8 +23,8 @@
     "styled-components": "~5.3.3"
   },
   "scripts": {
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "build": "tsc && vite build",
+    "build-analyze": "BUILD_SOURCEMAP=1 vite build && source-map-explorer 'build/assets/*.js'",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
     "lint": "eslint .",

@@ -10,6 +10,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   build: {
     outDir: 'build',
+    sourcemap: !!process.env.BUILD_SOURCEMAP,
   },
   plugins: [
     react(),
