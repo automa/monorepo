@@ -16,70 +16,70 @@ import graphql from './graphql';
 import session from './session';
 
 async function server() {
-  const app = fastify({
-    logger: false,
-    forceCloseConnections: true,
-  });
-
-  app.register(fastifySensible);
-
-  app.register(fastifyCors, {
-    origin: env.CORS_ORIGIN,
-    credentials: true,
-  });
-
-  await session(app, isProduction);
-
-  app.register(fastifyAutoload, {
-    dir: join(__dirname, 'plugins'),
-  });
-
-  app.setErrorHandler((error, _, reply) => {
-    if (error instanceof httpErrors.HttpError) {
-      return error;
-    }
-
-    if (error.statusCode === 400) {
-      return reply.unprocessableEntity(error.message);
-    }
-
-    for (const line of (error.stack ?? '').split('\n')) {
-      console.error(line);
-    }
-
-    return reply.internalServerError();
-  });
-
-  app.register(fastifySwagger, {
-    openapi: {
-      info: {
-        title: 'Automa API',
-        description: 'Automa API documentation',
-        version: '0.1.0',
-      },
-      servers: [
-        {
-          url: env.API_URI,
-        },
-      ],
-    },
-  });
-
-  app.register(fastifySwaggerUi, {});
-
-  await graphql(app, isProduction);
-
-  app.register(fastifyAutoload, {
-    dir: join(__dirname, 'routes'),
-    routeParams: true,
-  });
-
   try {
+    const app = fastify({
+      logger: false,
+      forceCloseConnections: true,
+    });
+
+    app.register(fastifySensible);
+
+    app.register(fastifyCors, {
+      origin: env.CORS_ORIGIN,
+      credentials: true,
+    });
+
+    await session(app, isProduction);
+
+    app.register(fastifyAutoload, {
+      dir: join(__dirname, 'plugins'),
+    });
+
+    app.setErrorHandler((error, _, reply) => {
+      if (error instanceof httpErrors.HttpError) {
+        return error;
+      }
+
+      if (error.statusCode === 400) {
+        return reply.unprocessableEntity(error.message);
+      }
+
+      for (const line of (error.stack ?? '').split('\n')) {
+        console.error(line);
+      }
+
+      return reply.internalServerError();
+    });
+
+    app.register(fastifySwagger, {
+      openapi: {
+        info: {
+          title: 'Automa API',
+          description: 'Automa API documentation',
+          version: '0.1.0',
+        },
+        servers: [
+          {
+            url: env.API_URI,
+          },
+        ],
+      },
+    });
+
+    app.register(fastifySwaggerUi, {});
+
+    await graphql(app, isProduction);
+
+    app.register(fastifyAutoload, {
+      dir: join(__dirname, 'routes'),
+      routeParams: true,
+    });
+
     await app.listen({
       port: parseInt(env.PORT, 10),
     });
   } catch (err) {
-    app.log.error(err);
+    console.error(err);
     process.exit(1);
   }
 }
