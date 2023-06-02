@@ -1,6 +1,9 @@
 /// <reference types="vitest" />
-import react from '@vitejs/plugin-react';
+
 import { defineConfig } from 'vite';
+
+import react from '@vitejs/plugin-react';
+import { webpackStats } from 'rollup-plugin-webpack-stats';
 import macros from 'vite-plugin-babel-macros';
 import checker from 'vite-plugin-checker';
 import eslint from 'vite-plugin-eslint';
@@ -23,6 +26,7 @@ export default defineConfig({
     eslint({
       exclude: ['/virtual:/**', 'node_modules/**'],
     }),
+    process.env.BUILD_STATS ? webpackStats() : undefined,
   ],
   server: {
     port: 3000,
