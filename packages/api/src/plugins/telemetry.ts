@@ -1,8 +1,7 @@
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
-import { SeverityNumber } from '@opentelemetry/api-logs';
 
-import { logger, meter } from '../telemetry';
+import { logger, meter, SeverityNumber } from '../telemetry';
 
 const telemetryPlugin: FastifyPluginAsync = async (app) => {
   const responseTimer = meter.createHistogram('http_response_time');
