@@ -4,6 +4,8 @@ import { FastifyInstance } from 'fastify';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
+import { env } from '../../env';
+
 const generateAppToken = (id: string, pem: string) => {
   const claims = {
     iat: Math.floor(Date.now() / 1000) - 60,
@@ -40,9 +42,7 @@ const getInstallationAccessToken = async (
 };
 
 export const caller = async (app: FastifyInstance, installationId: number) => {
-  const {
-    config: { GITHUB_APP },
-  } = app;
+  const { GITHUB_APP } = env;
 
   const accessToken = await getInstallationAccessToken(
     installationId,
