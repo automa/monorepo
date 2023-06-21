@@ -2,7 +2,6 @@ ARG postgresql_major=15
 ARG postgresql_release=${postgresql_major}.1
 
 ARG pg_jsonschema_release=0.1.4
-ARG pgx_ulid_release=0.1.0
 
 ####################
 # Postgres
