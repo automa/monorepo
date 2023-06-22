@@ -34,8 +34,8 @@ export const Secondary: StoryObj<ButtonComponentProps> = {
 
 export const SecondaryDisabled: StoryObj<ButtonComponentProps> = {
   args: {
-    variant: 'secondary',
-    disabled: true,
+    ...Secondary.args,
+    ...Disabled.args,
   },
 };
 
@@ -47,8 +47,8 @@ export const Tertiary: StoryObj<ButtonComponentProps> = {
 
 export const TertiaryDisabled: StoryObj<ButtonComponentProps> = {
   args: {
-    variant: 'tertiary',
-    disabled: true,
+    ...Tertiary.args,
+    ...Disabled.args,
   },
 };
 
@@ -60,15 +60,15 @@ export const Small: StoryObj<ButtonComponentProps> = {
 
 export const SmallSecondary: StoryObj<ButtonComponentProps> = {
   args: {
-    size: 'small',
-    variant: 'secondary',
+    ...Small.args,
+    ...Secondary.args,
   },
 };
 
 export const SmallTertiary: StoryObj<ButtonComponentProps> = {
   args: {
-    size: 'small',
-    variant: 'tertiary',
+    ...Small.args,
+    ...Tertiary.args,
   },
 };
 
@@ -80,15 +80,15 @@ export const Large: StoryObj<ButtonComponentProps> = {
 
 export const LargeSecondary: StoryObj<ButtonComponentProps> = {
   args: {
-    size: 'large',
-    variant: 'secondary',
+    ...Large.args,
+    ...Secondary.args,
   },
 };
 
 export const LargeTertiary: StoryObj<ButtonComponentProps> = {
   args: {
-    size: 'large',
-    variant: 'tertiary',
+    ...Large.args,
+    ...Tertiary.args,
   },
 };
 
