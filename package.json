@@ -40,6 +40,9 @@
     "test-storybook-cover": "test-storybook --coverage",
     "update-boilerplate": "git pull --no-rebase https://git.sr.ht/~pksunkara/frontend-react master"
   },
+  "engines": {
+    "node": ">=18.15.0"
+  },
   "browserslist": {
     "production": [
       "since 2010",
@@ -69,7 +72,7 @@
     "@testing-library/react": "~14.0.0",
     "@testing-library/user-event": "~14.4.3",
     "@types/fontfaceobserver": "~2.1.0",
-    "@types/node": "^16.0.0",
+    "@types/node": "~18.16.19",
     "@types/react": "~18.0.34",
     "@types/react-dom": "~18.0.11",
     "@types/react-router-dom": "~5.3.2",
