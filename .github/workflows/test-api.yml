@@ -23,6 +23,10 @@ jobs:
             deps-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Compile typescript
+        run: |
+          yarn workspace @automa/prisma build
+          yarn workspace @automa/common build
       - name: Start dependencies
         run: yarn start-deps
       - name: Run tests

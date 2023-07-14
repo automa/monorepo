@@ -84,5 +84,6 @@ module.exports = {
         project: 'packages/frontend',
       },
     },
+    'import/internal-regex': '^@automa/',
   },
 };

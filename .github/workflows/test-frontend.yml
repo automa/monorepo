@@ -23,6 +23,8 @@ jobs:
             deps-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Compile typescript
+        run: yarn workspace @automa/common build
       - name: Run tests
         run: yarn test-cover
         working-directory: packages/frontend

@@ -29,6 +29,8 @@ jobs:
             deps-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Compile typescript
+        run: yarn workspace @automa/common build
       - name: Chromatic
         uses: chromaui/action@v1
         with:
@@ -37,3 +39,4 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_FRONTEND }}
           exitZeroOnChanges: true
           exitOnceUploaded: true
+          workingDir: packages/frontend

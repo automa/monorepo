@@ -29,11 +29,14 @@ jobs:
             deps-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Compile typescript
+        run: yarn workspace @automa/common build
       - name: Build stats
         run: yarn build-stats
+        working-directory: packages/frontend
       - name: RelativeCI
         uses: relative-ci/agent-action@v2
         with:
-          webpackStatsFile: build/webpack-stats.json
+          webpackStatsFile: packages/frontend/build/webpack-stats.json
           token: ${{ secrets.GITHUB_TOKEN }}
           key: ${{ secrets.RELATIVE_CI_KEY_FRONTEND }}
