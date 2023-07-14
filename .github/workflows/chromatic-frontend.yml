@@ -1,0 +1,39 @@
+name: Chromatic (frontend)
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
+  cancel-in-progress: true
+jobs:
+  chromatic-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: '**/node_modules'
+          key: deps-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            deps-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Chromatic
+        uses: chromaui/action@v1
+        with:
+          buildScriptName: storybook-build
+          token: ${{ secrets.GITHUB_TOKEN }}
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_FRONTEND }}
+          exitZeroOnChanges: true
+          exitOnceUploaded: true

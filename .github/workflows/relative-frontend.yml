@@ -1,4 +1,4 @@
-name: Chromatic
+name: RelativeCI (frontend)
 on:
   push:
     branches: [master]
@@ -8,7 +8,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
   cancel-in-progress: true
 jobs:
-  chromatic:
+  relative-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 18
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         id: cache
         with:
           path: '**/node_modules'
@@ -29,11 +29,11 @@ jobs:
             deps-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Chromatic
-        uses: chromaui/action@v1
+      - name: Build stats
+        run: yarn build-stats
+      - name: RelativeCI
+        uses: relative-ci/agent-action@v2
         with:
-          buildScriptName: storybook-build
+          webpackStatsFile: build/webpack-stats.json
           token: ${{ secrets.GITHUB_TOKEN }}
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          exitZeroOnChanges: true
-          exitOnceUploaded: true
+          key: ${{ secrets.RELATIVE_CI_KEY_FRONTEND }}
