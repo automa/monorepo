@@ -9,6 +9,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
       - name: Cache dependencies
         uses: actions/cache@v3
         id: cache
@@ -19,6 +23,8 @@ jobs:
             deps-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Compile typescript
+        run: yarn workspace @automa/common build
       - name: Build site
         run: yarn build
         working-directory: packages/frontend
@@ -27,6 +33,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
       - name: Cache dependencies
         uses: actions/cache@v3
         id: cache
@@ -44,6 +54,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
       - name: Cache dependencies
         uses: actions/cache@v3
         id: cache

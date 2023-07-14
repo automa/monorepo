@@ -4,6 +4,7 @@
   "private": true,
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "module": "src/index.ts",
   "dependencies": {
     "@prisma/client": "~4.8.0"
   },

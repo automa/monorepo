@@ -1,15 +1,19 @@
 /// <reference types="vitest" />
+
 import { defineConfig } from 'vite';
+
 import react from '@vitejs/plugin-react';
+import { webpackStats } from 'rollup-plugin-webpack-stats';
+import macros from 'vite-plugin-babel-macros';
+import checker from 'vite-plugin-checker';
+import eslint from 'vite-plugin-eslint';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import macros from 'vite-plugin-babel-macros';
-import eslint from 'vite-plugin-eslint';
-import checker from 'vite-plugin-checker';
 
 export default defineConfig({
   build: {
     outDir: 'build',
+    sourcemap: !!process.env.BUILD_SOURCEMAP,
   },
   plugins: [
     react(),
@@ -20,12 +24,13 @@ export default defineConfig({
       typescript: true,
     }),
     eslint({
-      exclude: ['/virtual:/**', 'node_modules/**'],
+      exclude: ['/virtual:/**', '**/node_modules/**'],
     }),
+    process.env.BUILD_STATS ? webpackStats() : undefined,
   ],
   server: {
     port: 3000,
-    open: true,
+    open: 'http://localhost:3000',
   },
   test: {
     globals: true,

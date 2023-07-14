@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "module": "src/index.ts",
   "dependencies": {
     "http-status-codes": "~2.2.0"
   },

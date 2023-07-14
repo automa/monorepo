@@ -8,7 +8,7 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
-    'plugin:import/warnings',
+    'plugin:import/recommended',
     'plugin:mocha/recommended',
   ],
   rules: {
@@ -29,5 +29,6 @@ module.exports = {
     'import/resolver': {
       typescript: true,
     },
+    'import/internal-regex': '^@automa/',
   },
 };

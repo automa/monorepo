@@ -40,6 +40,12 @@ module.exports = {
       },
     ],
     'react/react-in-jsx-scope': 'off',
+    'import/no-cycle': [
+      'error',
+      {
+        maxDepth: 3,
+      },
+    ],
     'storybook/no-uninstalled-addons': 'off',
   },
   ignorePatterns: [
@@ -78,5 +84,6 @@ module.exports = {
         project: 'packages/frontend',
       },
     },
+    'import/internal-regex': '^@automa/',
   },
 };
