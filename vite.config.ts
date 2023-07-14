@@ -24,7 +24,7 @@ export default defineConfig({
       typescript: true,
     }),
     eslint({
-      exclude: ['/virtual:/**', 'node_modules/**'],
+      exclude: ['/virtual:/**', '**/node_modules/**'],
     }),
     process.env.BUILD_STATS ? webpackStats() : undefined,
   ],
