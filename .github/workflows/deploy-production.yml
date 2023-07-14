@@ -13,7 +13,7 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
 jobs:
-  deploy:
+  deploy-production:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
