@@ -1,18 +1,28 @@
 import React from 'react';
+import { Preview } from '@storybook/react';
+import { withThemeFromJSXProvider } from '@storybook/addon-styling';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components/macro';
+
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as Toast from '@radix-ui/react-toast';
 
 import store from '../src/store';
 import theme, { GlobalStyle } from '../src/theme';
 
-export const decorators = [
-  (Story) => {
-    return (
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
+const preview: Preview = {
+  decorators: [
+    withThemeFromJSXProvider({
+      themes: {
+        normal: theme,
+      },
+      defaultTheme: 'normal',
+      Provider: ThemeProvider,
+      GlobalStyles: GlobalStyle,
+    }),
+    (Story) => {
+      return (
         <Provider store={store}>
           <BrowserRouter>
             <Tooltip.Provider>
@@ -23,17 +33,18 @@ export const decorators = [
             </Tooltip.Provider>
           </BrowserRouter>
         </Provider>
-      </ThemeProvider>
-    );
-  },
-];
-
-export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/,
+      );
+    },
+  ],
+  parameters: {
+    actions: { argTypesRegex: '^on[A-Z].*' },
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/,
+      },
     },
   },
 };
+
+export default preview;

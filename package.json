@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "~3.6.9",
-    "@qatalog/react-flex": "~0.2.0",
+    "@qatalog/react-flex": "~0.2.2",
     "@radix-ui/react-toast": "~1.1.1",
     "@radix-ui/react-tooltip": "~1.0.2",
     "@reduxjs/toolkit": "~1.7.0",
@@ -63,6 +63,7 @@
     "@storybook/addon-essentials": "~7.0.18",
     "@storybook/addon-interactions": "~7.0.18",
     "@storybook/addon-links": "~7.0.18",
+    "@storybook/addon-styling": "~1.3.4",
     "@storybook/jest": "~0.1.0",
     "@storybook/node-logger": "~7.0.18",
     "@storybook/react-vite": "~7.0.18",
