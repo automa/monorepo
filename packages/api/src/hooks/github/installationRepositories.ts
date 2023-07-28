@@ -1,6 +1,9 @@
 import { FastifyInstance } from 'fastify';
+import { AxiosInstance } from 'axios';
 
 import { orgs } from '@automa/prisma';
+
+import { caller } from '../../clients/github';
 
 import { GithubEventActionHandler } from './types';
 
@@ -16,8 +19,10 @@ const added: GithubEventActionHandler = async (app, body) => {
     return;
   }
 
+  const { axios } = await caller(app, body.installation.id);
+
   for (const repository of body.repositories_added) {
-    await addRepo(app, org, repository);
+    await addRepo(app, org, axios, repository);
   }
 };
 
@@ -49,8 +54,12 @@ const removed: GithubEventActionHandler = async (app, body) => {
 export const addRepo = async (
   app: FastifyInstance,
   org: orgs,
+  axios: AxiosInstance,
   repository: any,
 ) => {
+  // Read repository information from GitHub API
+  const { data } = await axios.get(`/repos/${repository.full_name}`);
+
   await app.prisma.repos.upsert({
     where: {
       org_id_provider_id: {
@@ -61,6 +70,7 @@ export const addRepo = async (
     update: {
       name: repository.name,
       is_private: repository.private,
+      is_archived: data.archived,
       has_installation: true,
     },
     create: {
@@ -68,6 +78,7 @@ export const addRepo = async (
       provider_id: `${repository.id}`,
       name: repository.name,
       is_private: repository.private,
+      is_archived: data.archived,
       has_installation: true,
     },
   });

@@ -1,3 +1,5 @@
+import { caller } from '../../clients/github';
+
 import { GithubEventActionHandler } from './types';
 import { addRepo } from './installationRepositories';
 
@@ -23,8 +25,10 @@ const created: GithubEventActionHandler = async (app, body) => {
     },
   });
 
+  const { axios } = await caller(app, body.installation.id);
+
   for (const repository of body.repositories) {
-    await addRepo(app, org, repository);
+    await addRepo(app, org, axios, repository);
   }
 };
 
