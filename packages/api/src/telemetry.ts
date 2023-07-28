@@ -5,60 +5,68 @@ import {
   api,
   resources,
   tracing,
+  logs,
   metrics,
 } from '@opentelemetry/sdk-node';
-import {
-  LoggerProvider,
-  BatchLogRecordProcessor,
-  SimpleLogRecordProcessor,
-  ConsoleLogRecordExporter,
-} from '@opentelemetry/sdk-logs';
-export { SeverityNumber } from '@opentelemetry/api-logs';
+import { logs as logsAPI } from '@opentelemetry/api-logs';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { TraceExporter as GCPTraceExporter } from '@google-cloud/opentelemetry-cloud-trace-exporter';
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
+import { MetricExporter as GCPMetricExporter } from '@google-cloud/opentelemetry-cloud-monitoring-exporter';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { FastifyInstrumentation } from '@opentelemetry/instrumentation-fastify';
 import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
 import { PrismaInstrumentation } from '@prisma/instrumentation';
 import { IORedisInstrumentation } from '@opentelemetry/instrumentation-ioredis';
 
+export { SeverityNumber } from '@opentelemetry/api-logs';
+
 const {
   BatchSpanProcessor,
   SimpleSpanProcessor,
-  ConsoleSpanExporter,
   ParentBasedSampler,
   TraceIdRatioBasedSampler,
 } = tracing;
 
-const { PeriodicExportingMetricReader, ConsoleMetricExporter } = metrics;
+const { PeriodicExportingMetricReader } = metrics;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import pkg from '../package.json';
-import { environment, isProduction, env } from './env';
+const {
+  BatchLogRecordProcessor,
+  SimpleLogRecordProcessor,
+  ConsoleLogRecordExporter,
+} = logs;
 
-const loggerProvider = new LoggerProvider();
-
-loggerProvider.addLogRecordProcessor(
-  isProduction
-    ? new BatchLogRecordProcessor(new ConsoleLogRecordExporter())
-    : new SimpleLogRecordProcessor(new ConsoleLogRecordExporter()),
-);
+import {
+  environment,
+  isTest,
+  isProduction,
+  env,
+  product,
+  service,
+  version,
+} from './env';
 
 const sdk = new NodeSDK({
   resource: new resources.Resource({
-    [SemanticResourceAttributes.SERVICE_NAMESPACE]: 'automa',
-    [SemanticResourceAttributes.SERVICE_NAME]: 'api',
-    [SemanticResourceAttributes.SERVICE_VERSION]: pkg.version,
+    [SemanticResourceAttributes.SERVICE_NAMESPACE]: product,
+    [SemanticResourceAttributes.SERVICE_NAME]: service,
+    [SemanticResourceAttributes.SERVICE_VERSION]: version,
     [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: environment,
   }),
   sampler: new ParentBasedSampler({
-    root: new TraceIdRatioBasedSampler(env.OTEL.TRACES.SAMPLING_RATE),
+    root: new TraceIdRatioBasedSampler(env.OTEL.TRACES.SAMPLER_ARG),
   }),
-  spanProcessor: isProduction
-    ? new BatchSpanProcessor(new ConsoleSpanExporter())
-    : new SimpleSpanProcessor(new OTLPTraceExporter()),
+  spanProcessor: !isTest
+    ? isProduction
+      ? new BatchSpanProcessor(
+          new GCPTraceExporter({
+            credentials: JSON.parse(env.GCP.CREDENTIALS),
+            projectId: env.GCP.PROJECT_ID,
+          }),
+        )
+      : new SimpleSpanProcessor(new OTLPTraceExporter())
+    : undefined,
   instrumentations: [
     new PrismaInstrumentation({ middleware: true }),
     new IORedisInstrumentation(),
@@ -66,19 +74,28 @@ const sdk = new NodeSDK({
     new FastifyInstrumentation(),
     new GraphQLInstrumentation(),
   ],
-  metricReader: isProduction
-    ? new PeriodicExportingMetricReader({
-        exporter: new ConsoleMetricExporter(),
-        exportIntervalMillis: env.OTEL.METRICS.EXPORT_INTERVAL,
-      })
-    : new PrometheusExporter(),
+  logRecordProcessor: !isTest
+    ? isProduction
+      ? new BatchLogRecordProcessor(new ConsoleLogRecordExporter())
+      : new SimpleLogRecordProcessor(new ConsoleLogRecordExporter())
+    : undefined,
+  metricReader: !isTest
+    ? isProduction
+      ? new PeriodicExportingMetricReader({
+          exporter: new GCPMetricExporter({
+            credentials: JSON.parse(env.GCP.CREDENTIALS),
+            projectId: env.GCP.PROJECT_ID,
+          }),
+        })
+      : new PrometheusExporter()
+    : undefined,
 });
 
 sdk.start();
 
-export const logger = loggerProvider.getLogger('default');
-
 export const tracer = api.trace.getTracer('default');
+
+export const logger = logsAPI.getLogger('default');
 
 export const meter = api.metrics.getMeter('default');
 

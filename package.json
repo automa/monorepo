@@ -14,7 +14,7 @@
     "stop": "bash ./scripts/stop.sh"
   },
   "engines": {
-    "node": ">=16.10.0"
+    "node": ">=18.15.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "2.16.5",

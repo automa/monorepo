@@ -1,4 +1,4 @@
-FROM node:16-alpine as builder
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
@@ -17,10 +17,12 @@ COPY package.json yarn.lock ./
 # Install dependencies
 RUN yarn install --frozen-lockfile
 
+# Build grahql schema
 COPY packages/api/src/graphql/schema ./packages/api/src/graphql/schema
 RUN yarn workspace @automa/api copy-graphql
 RUN yarn generate-graphql
 
+# Build server
 COPY packages/prisma/src ./packages/prisma/src
 COPY packages/common/src ./packages/common/src
 COPY packages/api/src ./packages/api/src
@@ -29,7 +31,7 @@ RUN yarn workspace @automa/prisma build
 RUN yarn workspace @automa/common build
 RUN yarn workspace @automa/api build
 
-FROM node:16-alpine as runner
+FROM node:18-alpine AS runner
 
 WORKDIR /app
 
@@ -46,7 +48,5 @@ COPY --from=builder /app/packages/prisma/build ./packages/prisma/build
 COPY --from=builder /app/packages/prisma/package.json ./packages/prisma/package.json
 
 RUN yarn install --frozen-lockfile --production
-
-EXPOSE 8080
 
 CMD ["node", "packages/api/build/index.js"]

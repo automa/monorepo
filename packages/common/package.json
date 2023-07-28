@@ -15,6 +15,6 @@
     "test-cover": "nyc --reporter=lcov --reporter=text-summary yarn test"
   },
   "engines": {
-    "node": ">=16.10.0"
+    "node": ">=18.15.0"
   }
 }

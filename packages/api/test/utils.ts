@@ -1,21 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import axios, { AxiosError, AxiosResponse, Method } from 'axios';
+import { InjectOptions } from 'fastify';
 
-export const call = async (uri: string, method: Method = 'GET', data?: any) => {
-  let result: any, error: any;
+import { server } from '../src';
 
-  try {
-    result = await axios.request({
-      method,
-      url: `http://localhost:8080${uri}`,
-      data,
-    });
-  } catch (err) {
-    error = err;
-  }
+// Import the modules to use their typings
+import '../src/plugins/analytics';
+import '../src/plugins/auth';
+import '../src/plugins/error';
+import '../src/plugins/optimizer';
+import '../src/plugins/prisma';
+import '../src/plugins/redis';
 
-  return {
-    result: result as AxiosResponse | undefined,
-    error: error as AxiosError<any, any> | undefined,
-  };
+export const call = async (
+  uri: string,
+  options?: Omit<InjectOptions, 'url' | 'path' | 'server' | 'Request'>,
+) => {
+  const app = await server();
+
+  const response = await app.inject({
+    url: uri,
+    ...options,
+  });
+
+  await app.close();
+
+  return response;
 };

@@ -1,6 +1,6 @@
 // Always setup the environment first
-import { env, isProduction } from './env';
-import './telemetry';
+import { env, version } from './env';
+import { logger, SeverityNumber } from './telemetry';
 
 import { join } from 'path';
 
@@ -12,71 +12,102 @@ import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import httpErrors from 'http-errors';
 
+import { Prisma } from '@automa/prisma';
+
 import graphql from './graphql';
 import session from './session';
 
-async function server() {
-  try {
-    const app = fastify({
-      logger: false,
-      forceCloseConnections: true,
-    });
+export const server = async () => {
+  const app = fastify({
+    logger: false,
+    forceCloseConnections: true,
+    pluginTimeout: 15_000,
+  });
 
-    app.register(fastifySensible);
+  await app.register(fastifyAutoload, {
+    dir: join(__dirname, 'plugins'),
+  });
 
-    app.register(fastifyCors, {
-      origin: env.CORS_ORIGIN,
-      credentials: true,
-    });
+  await session(app);
 
-    await session(app, isProduction);
+  await app.register(fastifySensible);
 
-    app.register(fastifyAutoload, {
-      dir: join(__dirname, 'plugins'),
-    });
+  await app.register(fastifyCors, {
+    origin: env.CORS_ORIGIN,
+    credentials: true,
+  });
 
-    app.setErrorHandler((error, _, reply) => {
-      if (error instanceof httpErrors.HttpError) {
-        return error;
+  app.setErrorHandler((error, _, reply) => {
+    if (error instanceof httpErrors.HttpError) {
+      return error;
+    }
+
+    if (error.code === 'FST_ERR_VALIDATION') {
+      return reply.unprocessableEntity(error.message);
+    } else if (error.code === 'FST_ERR_CTP_BODY_TOO_LARGE') {
+      return reply.payloadTooLarge(error.message);
+    } else if (error.code === 'FST_ERR_CTP_INVALID_MEDIA_TYPE') {
+      return reply.unsupportedMediaType(error.message);
+    } else if (error.statusCode === 400) {
+      return reply.badRequest(error.message);
+    }
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      switch (error.code) {
+        case 'P2025':
+          return reply.notFound();
+
+        default:
+          break;
       }
+    }
 
-      if (error.statusCode === 400) {
-        return reply.unprocessableEntity(error.message);
-      }
+    app.error.capture(error);
 
-      for (const line of (error.stack ?? '').split('\n')) {
-        console.error(line);
-      }
+    return reply.internalServerError();
+  });
 
-      return reply.internalServerError();
-    });
-
-    app.register(fastifySwagger, {
-      openapi: {
-        info: {
-          title: 'Automa API',
-          description: 'Automa API documentation',
-          version: '0.1.0',
-        },
-        servers: [
-          {
-            url: env.API_URI,
-          },
-        ],
+  await app.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: 'Automa API',
+        description: 'Automa API documentation',
+        version,
       },
-    });
+      servers: [
+        {
+          url: env.API_URI,
+        },
+      ],
+    },
+  });
+  await app.register(fastifySwaggerUi, {});
 
-    app.register(fastifySwaggerUi, {});
+  await graphql(app);
 
-    await graphql(app, isProduction);
+  await app.register(fastifyAutoload, {
+    dir: join(__dirname, 'routes'),
+    routeParams: true,
+  });
 
-    app.register(fastifyAutoload, {
-      dir: join(__dirname, 'routes'),
-      routeParams: true,
-    });
+  return app;
+};
+
+async function start() {
+  try {
+    const app = await server();
 
     await app.listen({
-      port: parseInt(env.PORT, 10),
+      port: env.PORT,
+      host: '0.0.0.0',
+    });
+
+    logger.emit({
+      severityNumber: SeverityNumber.INFO,
+      body: 'Server started',
+      attributes: {
+        port: env.PORT,
+      },
     });
   } catch (err) {
     console.error(err);
@@ -84,4 +115,7 @@ async function server() {
   }
 }
 
-server();
+// Only start the server if this file is the entrypoint
+if (require.main === module) {
+  start();
+}

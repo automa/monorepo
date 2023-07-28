@@ -8,9 +8,11 @@ import fastifyApollo, {
 import { loadFiles } from '@graphql-tools/load-files';
 import { FastifyInstance } from 'fastify';
 
+import { isProduction } from '../env';
+
 import { Context } from './types';
 
-export default async function (app: FastifyInstance, isProduction: boolean) {
+export default async function (app: FastifyInstance) {
   const context: ApolloFastifyContextFunction<Context> = async (request) => {
     return {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

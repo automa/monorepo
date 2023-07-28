@@ -6,7 +6,7 @@
   "types": "build/index.d.ts",
   "module": "src/index.ts",
   "dependencies": {
-    "@prisma/client": "~4.8.0"
+    "@prisma/client": "~5.0.0"
   },
   "scripts": {
     "build": "tsc",
@@ -14,10 +14,10 @@
     "generate-prisma": "prisma db pull && prisma generate"
   },
   "engines": {
-    "node": ">=16.10.0"
+    "node": ">=18.15.0"
   },
   "devDependencies": {
-    "prettier-plugin-prisma": "~4.8.0",
-    "prisma": "~4.8.0"
+    "prettier-plugin-prisma": "~5.0.0",
+    "prisma": "~5.0.0"
   }
 }
