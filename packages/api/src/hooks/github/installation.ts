@@ -2,35 +2,26 @@ import { GithubEventActionHandler } from './types';
 import { addRepo } from './installationRepositories';
 
 const created: GithubEventActionHandler = async (app, body) => {
-  let org = await app.prisma.orgs.findFirst({
+  const org = await app.prisma.orgs.upsert({
     where: {
-      provider_type: 'github',
-      provider_id: `${body.installation.account.id}`,
-    },
-  });
-
-  if (!org) {
-    org = await app.prisma.orgs.create({
-      data: {
-        name: body.installation.account.login,
+      provider_type_provider_id: {
         provider_type: 'github',
         provider_id: `${body.installation.account.id}`,
-        is_user: body.installation.account.type === 'User',
-        has_installation: true,
-        github_installation_id: body.installation.id,
       },
-    });
-  } else {
-    await app.prisma.orgs.update({
-      where: {
-        id: org.id,
-      },
-      data: {
-        has_installation: true,
-        github_installation_id: body.installation.id,
-      },
-    });
-  }
+    },
+    update: {
+      has_installation: true,
+      github_installation_id: body.installation.id,
+    },
+    create: {
+      name: body.installation.account.login,
+      provider_type: 'github',
+      provider_id: `${body.installation.account.id}`,
+      is_user: body.installation.account.type === 'User',
+      has_installation: true,
+      github_installation_id: body.installation.id,
+    },
+  });
 
   for (const repository of body.repositories) {
     await addRepo(app, org, repository);

@@ -51,34 +51,26 @@ export const addRepo = async (
   org: orgs,
   repository: any,
 ) => {
-  const repo = await app.prisma.repos.findFirst({
+  await app.prisma.repos.upsert({
     where: {
+      org_id_provider_id: {
+        org_id: org.id,
+        provider_id: `${repository.id}`,
+      },
+    },
+    update: {
+      name: repository.name,
+      is_private: repository.private,
+      has_installation: true,
+    },
+    create: {
       org_id: org.id,
       provider_id: `${repository.id}`,
+      name: repository.name,
+      is_private: repository.private,
+      has_installation: true,
     },
   });
-
-  if (!repo) {
-    await app.prisma.repos.create({
-      data: {
-        org_id: org.id,
-        name: repository.name,
-        provider_id: `${repository.id}`,
-        is_private: repository.private,
-        has_installation: true,
-      },
-    });
-  } else {
-    await app.prisma.repos.update({
-      where: {
-        id: repo.id,
-      },
-      data: {
-        has_installation: true,
-        is_private: repository.private,
-      },
-    });
-  }
 };
 
 export default {
