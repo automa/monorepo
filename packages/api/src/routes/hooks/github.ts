@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { createHmac, timingSafeEqual } from 'crypto';
 
 import { env } from '../../env';
+import { logger, SeverityNumber } from '../../telemetry';
 import { GithubEventType, github } from '../../hooks';
 
 export default async function (app: FastifyInstance) {
@@ -13,20 +14,33 @@ export default async function (app: FastifyInstance) {
     // Get github event
     const event = request.headers['x-github-event'];
 
-    request.log.info(
-      { event, action: request.body.action },
-      'Received github event',
-    );
-
-    if (!event || typeof event !== 'string') {
+    if (!event || typeof event !== 'string' || !request.body) {
       request.log.error('No event');
       return reply.unauthorized();
     }
 
-    const handler = github[event as GithubEventType]?.[request.body.action];
+    logger.emit({
+      severityNumber: SeverityNumber.INFO,
+      body: 'Received github event',
+      attributes: {
+        event,
+        action: request.body.action,
+      },
+    });
+
+    const handler =
+      github[event as GithubEventType]?.[request.body.action ?? event];
 
     if (!handler) {
-      request.log.info('Ignoring event');
+      logger.emit({
+        severityNumber: SeverityNumber.INFO,
+        body: 'Ignoring event',
+        attributes: {
+          event,
+          action: request.body.action,
+        },
+      });
+
       return reply.status(204).send();
     }
 
@@ -34,7 +48,11 @@ export default async function (app: FastifyInstance) {
     const signature = request.headers['x-hub-signature-256'];
 
     if (!signature || typeof signature !== 'string') {
-      request.log.error('No signature');
+      logger.emit({
+        severityNumber: SeverityNumber.WARN,
+        body: 'No signature',
+      });
+
       return reply.unauthorized();
     }
 
@@ -49,7 +67,11 @@ export default async function (app: FastifyInstance) {
       checksum.length !== digest.length ||
       !timingSafeEqual(digest, checksum)
     ) {
-      request.log.error('Invalid signature');
+      logger.emit({
+        severityNumber: SeverityNumber.WARN,
+        body: 'Invalid signature',
+      });
+
       return reply.unauthorized();
     }
 
