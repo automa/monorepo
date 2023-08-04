@@ -1,3 +1,5 @@
+import { FastifyInstance } from 'fastify';
+
 import { caller } from '../../clients/github';
 
 import { GithubEventActionHandler } from './types';
@@ -32,11 +34,29 @@ const created: GithubEventActionHandler = async (app, body) => {
   }
 };
 
-const deleted: GithubEventActionHandler = async (app, body) => {
-  const org = await app.prisma.orgs.findFirst({
+const deleted: GithubEventActionHandler = async (app, body) =>
+  inactive(app, body.installation.account.id);
+
+const suspend: GithubEventActionHandler = async (app, body) =>
+  inactive(app, body.installation.account.id);
+
+const unsuspend: GithubEventActionHandler = async (app, body) => {
+  await app.prisma.orgs.updateMany({
     where: {
       provider_type: 'github',
       provider_id: `${body.installation.account.id}`,
+    },
+    data: {
+      has_installation: true,
+    },
+  });
+};
+
+const inactive = async (app: FastifyInstance, providerId: number) => {
+  const org = await app.prisma.orgs.findFirst({
+    where: {
+      provider_type: 'github',
+      provider_id: `${providerId}`,
     },
   });
 
@@ -59,30 +79,6 @@ const deleted: GithubEventActionHandler = async (app, body) => {
     },
     data: {
       has_installation: false,
-    },
-  });
-};
-
-const suspend: GithubEventActionHandler = async (app, body) => {
-  await app.prisma.orgs.updateMany({
-    where: {
-      provider_type: 'github',
-      provider_id: `${body.installation.account.id}`,
-    },
-    data: {
-      has_installation: false,
-    },
-  });
-};
-
-const unsuspend: GithubEventActionHandler = async (app, body) => {
-  await app.prisma.orgs.updateMany({
-    where: {
-      provider_type: 'github',
-      provider_id: `${body.installation.account.id}`,
-    },
-    data: {
-      has_installation: true,
     },
   });
 };
