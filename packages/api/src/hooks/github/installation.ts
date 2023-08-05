@@ -1,47 +1,62 @@
+import { FastifyInstance } from 'fastify';
+
+import { caller } from '../../clients/github';
+
 import { GithubEventActionHandler } from './types';
 import { addRepo } from './installationRepositories';
 
 const created: GithubEventActionHandler = async (app, body) => {
-  let org = await app.prisma.orgs.findFirst({
+  const org = await app.prisma.orgs.upsert({
+    where: {
+      provider_type_provider_id: {
+        provider_type: 'github',
+        provider_id: `${body.installation.account.id}`,
+      },
+    },
+    update: {
+      has_installation: true,
+      github_installation_id: body.installation.id,
+    },
+    create: {
+      name: body.installation.account.login,
+      provider_type: 'github',
+      provider_id: `${body.installation.account.id}`,
+      is_user: body.installation.account.type === 'User',
+      has_installation: true,
+      github_installation_id: body.installation.id,
+    },
+  });
+
+  const { axios } = await caller(app, body.installation.id);
+
+  for (const repository of body.repositories) {
+    await addRepo(app, org, axios, repository);
+  }
+};
+
+const deleted: GithubEventActionHandler = async (app, body) =>
+  inactive(app, body.installation.account.id);
+
+const suspend: GithubEventActionHandler = async (app, body) =>
+  inactive(app, body.installation.account.id);
+
+const unsuspend: GithubEventActionHandler = async (app, body) => {
+  await app.prisma.orgs.updateMany({
     where: {
       provider_type: 'github',
       provider_id: `${body.installation.account.id}`,
     },
+    data: {
+      has_installation: true,
+    },
   });
-
-  if (!org) {
-    org = await app.prisma.orgs.create({
-      data: {
-        name: body.installation.account.login,
-        provider_type: 'github',
-        provider_id: `${body.installation.account.id}`,
-        is_user: body.installation.account.type === 'User',
-        has_installation: true,
-        github_installation_id: body.installation.id,
-      },
-    });
-  } else {
-    await app.prisma.orgs.update({
-      where: {
-        id: org.id,
-      },
-      data: {
-        has_installation: true,
-        github_installation_id: body.installation.id,
-      },
-    });
-  }
-
-  for (const repository of body.repositories) {
-    await addRepo(app, org, repository);
-  }
 };
 
-const deleted: GithubEventActionHandler = async (app, body) => {
+const inactive = async (app: FastifyInstance, providerId: number) => {
   const org = await app.prisma.orgs.findFirst({
     where: {
       provider_type: 'github',
-      provider_id: `${body.installation.account.id}`,
+      provider_id: `${providerId}`,
     },
   });
 
@@ -64,30 +79,6 @@ const deleted: GithubEventActionHandler = async (app, body) => {
     },
     data: {
       has_installation: false,
-    },
-  });
-};
-
-const suspend: GithubEventActionHandler = async (app, body) => {
-  await app.prisma.orgs.updateMany({
-    where: {
-      provider_type: 'github',
-      provider_id: `${body.installation.account.id}`,
-    },
-    data: {
-      has_installation: false,
-    },
-  });
-};
-
-const unsuspend: GithubEventActionHandler = async (app, body) => {
-  await app.prisma.orgs.updateMany({
-    where: {
-      provider_type: 'github',
-      provider_id: `${body.installation.account.id}`,
-    },
-    data: {
-      has_installation: true,
     },
   });
 };

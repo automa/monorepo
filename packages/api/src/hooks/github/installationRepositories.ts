@@ -1,6 +1,9 @@
 import { FastifyInstance } from 'fastify';
+import { AxiosInstance } from 'axios';
 
 import { orgs } from '@automa/prisma';
+
+import { caller } from '../../clients/github';
 
 import { GithubEventActionHandler } from './types';
 
@@ -16,28 +19,22 @@ const added: GithubEventActionHandler = async (app, body) => {
     return;
   }
 
+  const { axios } = await caller(app, body.installation.id);
+
   for (const repository of body.repositories_added) {
-    await addRepo(app, org, repository);
+    await addRepo(app, org, axios, repository);
   }
 };
 
 const removed: GithubEventActionHandler = async (app, body) => {
-  const org = await app.prisma.orgs.findFirst({
-    where: {
-      provider_type: 'github',
-      provider_id: `${body.installation.account.id}`,
-    },
-  });
-
-  if (!org) {
-    return;
-  }
-
   await app.prisma.repos.updateMany({
     where: {
-      org_id: org.id,
       provider_id: {
         in: body.repositories_removed.map((repo: any) => `${repo.id}`),
+      },
+      orgs: {
+        provider_type: 'github',
+        provider_id: `${body.installation.account.id}`,
       },
     },
     data: {
@@ -49,36 +46,34 @@ const removed: GithubEventActionHandler = async (app, body) => {
 export const addRepo = async (
   app: FastifyInstance,
   org: orgs,
+  axios: AxiosInstance,
   repository: any,
 ) => {
-  const repo = await app.prisma.repos.findFirst({
+  // Read repository information from GitHub API
+  const { data } = await axios.get(`/repos/${repository.full_name}`);
+
+  await app.prisma.repos.upsert({
     where: {
+      org_id_provider_id: {
+        org_id: org.id,
+        provider_id: `${repository.id}`,
+      },
+    },
+    update: {
+      name: repository.name,
+      is_private: repository.private,
+      is_archived: data.archived,
+      has_installation: true,
+    },
+    create: {
       org_id: org.id,
       provider_id: `${repository.id}`,
+      name: repository.name,
+      is_private: repository.private,
+      is_archived: data.archived,
+      has_installation: true,
     },
   });
-
-  if (!repo) {
-    await app.prisma.repos.create({
-      data: {
-        org_id: org.id,
-        name: repository.name,
-        provider_id: `${repository.id}`,
-        is_private: repository.private,
-        has_installation: true,
-      },
-    });
-  } else {
-    await app.prisma.repos.update({
-      where: {
-        id: repo.id,
-      },
-      data: {
-        has_installation: true,
-        is_private: repository.private,
-      },
-    });
-  }
 };
 
 export default {

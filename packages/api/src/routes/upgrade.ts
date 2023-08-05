@@ -53,16 +53,12 @@ const run = async (
     `https://x-access-token:${accessToken}@github.com/${uri}`,
     workingDir,
   ]);
-  await command('git', ['config', 'user.name', 'automa-bot[bot]'], {
+  await command('git', ['config', 'user.name', 'automa[bot]'], {
     cwd: workingDir,
   });
   await command(
     'git',
-    [
-      'config',
-      'user.email',
-      '60525818+automa-bot[bot]@@users.noreply.github.com',
-    ],
+    ['config', 'user.email', '60525818+automa[bot]@@users.noreply.github.com'],
     { cwd: workingDir },
   );
   await command('git', ['checkout', '-b', branch], {

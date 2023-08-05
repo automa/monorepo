@@ -1,10 +1,21 @@
 import { assert } from 'chai';
+import { FastifyInstance } from 'fastify';
 
-import { call } from './utils';
+import { server, call } from './utils';
 
 suite('error', () => {
+  let app: FastifyInstance;
+
+  suiteSetup(async () => {
+    app = await server();
+  });
+
+  suiteTeardown(async () => {
+    await app.close();
+  });
+
   test('unhandled routes return 404', async () => {
-    const response = await call('/unhandled-route');
+    const response = await call(app, '/unhandled-route');
 
     assert.equal(response.statusCode, 404);
 

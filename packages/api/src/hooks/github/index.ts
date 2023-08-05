@@ -3,6 +3,8 @@ import { GithubEventType, GithubEventHandler } from './types';
 import githubAppAuthorization from './githubAppAuthorization';
 import installation from './installation';
 import installationRepositories from './installationRepositories';
+import organization from './organization';
+import repository from './repository';
 
 export const eventHandlers: {
   [type in GithubEventType]: GithubEventHandler;
@@ -10,6 +12,8 @@ export const eventHandlers: {
   [GithubEventType.GithubAppAuthorization]: githubAppAuthorization,
   [GithubEventType.Installation]: installation,
   [GithubEventType.InstallationRepositories]: installationRepositories,
+  [GithubEventType.Organization]: organization,
+  [GithubEventType.Repository]: repository,
 };
 
 export default eventHandlers;
