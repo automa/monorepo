@@ -53,20 +53,12 @@ const unsuspend: GithubEventActionHandler = async (app, body) => {
 };
 
 const inactive = async (app: FastifyInstance, providerId: number) => {
-  const org = await app.prisma.orgs.findFirst({
-    where: {
-      provider_type: 'github',
-      provider_id: `${providerId}`,
-    },
-  });
-
-  if (!org) {
-    return;
-  }
-
   await app.prisma.orgs.update({
     where: {
-      id: org.id,
+      provider_type_provider_id: {
+        provider_type: 'github',
+        provider_id: `${providerId}`,
+      },
     },
     data: {
       has_installation: false,
@@ -75,7 +67,10 @@ const inactive = async (app: FastifyInstance, providerId: number) => {
 
   await app.prisma.repos.updateMany({
     where: {
-      org_id: org.id,
+      orgs: {
+        provider_type: 'github',
+        provider_id: `${providerId}`,
+      },
     },
     data: {
       has_installation: false,

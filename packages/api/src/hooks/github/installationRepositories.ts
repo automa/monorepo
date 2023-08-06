@@ -12,6 +12,7 @@ const added: GithubEventActionHandler = async (app, body) => {
     where: {
       provider_type: 'github',
       provider_id: `${body.installation.account.id}`,
+      has_installation: true,
     },
   });
 
@@ -49,7 +50,6 @@ export const addRepo = async (
   axios: AxiosInstance,
   repository: any,
 ) => {
-  // Read repository information from GitHub API
   const { data } = await axios.get(`/repos/${repository.full_name}`);
 
   await app.prisma.repos.upsert({
