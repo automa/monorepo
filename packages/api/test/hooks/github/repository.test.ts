@@ -1,18 +1,23 @@
 import { assert } from 'chai';
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
+import axios from 'axios';
+import { SinonSandbox, SinonStub, createSandbox } from 'sinon';
 
-import { repos } from '@automa/prisma';
+import { orgs, repos } from '@automa/prisma';
 
 import { server } from '../../utils';
 import { callWithFixture } from './utils';
 
 suite('github hook repository event', () => {
-  let app: FastifyInstance, response: LightMyRequestResponse, repository: repos;
+  let app: FastifyInstance,
+    response: LightMyRequestResponse,
+    org: orgs,
+    repository: repos;
 
   suiteSetup(async () => {
     app = await server();
 
-    const org = await app.prisma.orgs.create({
+    org = await app.prisma.orgs.create({
       data: {
         name: 'automa',
         provider_type: 'github',
@@ -22,7 +27,14 @@ suite('github hook repository event', () => {
         github_installation_id: 40335964,
       },
     });
+  });
 
+  suiteTeardown(async () => {
+    await app.close();
+    await app.prisma.orgs.deleteMany();
+  });
+
+  setup(async () => {
     repository = await app.prisma.repos.create({
       data: {
         org_id: org.id,
@@ -35,9 +47,8 @@ suite('github hook repository event', () => {
     });
   });
 
-  suiteTeardown(async () => {
-    await app.close();
-    await app.prisma.orgs.deleteMany();
+  teardown(async () => {
+    await app.prisma.repos.deleteMany();
   });
 
   suite('archived', () => {
@@ -167,6 +178,88 @@ suite('github hook repository event', () => {
         is_archived: false,
         has_installation: true,
       });
+    });
+  });
+
+  suite('edited', () => {
+    let sandbox: SinonSandbox, postStub: SinonStub, getStub: SinonStub;
+
+    suiteSetup(async () => {
+      sandbox = createSandbox();
+    });
+
+    suiteTeardown(async () => {
+      sandbox.restore();
+    });
+
+    setup(async () => {
+      postStub = sandbox
+        .stub(axios, 'post')
+        .resolves({ data: { token: 'abcdef' } });
+
+      getStub = sandbox.stub(axios, 'get');
+      getStub.withArgs('/repos/automa/tmp/branches/production').resolves({
+        data: {
+          commit: { sha: 'a2006e2015d93931f00fc3a8a04d24d66b7059da' },
+        },
+      });
+      getStub.withArgs('/repos/automa/tmp/contents/automa.json').resolves({
+        data: {
+          content: 'eyJib3RzIjp7ImRlcGVuZGVuY3kiOnt9fX0=',
+        },
+      });
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      sandbox.stub(axios, 'create').returns({
+        get: getStub,
+      });
+
+      response = await callWithFixture(app, 'repository', 'edited');
+    });
+
+    teardown(async () => {
+      sandbox.restore();
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should get information about settings', async () => {
+      assert.equal(postStub.callCount, 1);
+      assert.equal(
+        postStub.firstCall.args[0],
+        'https://api.github.com/app/installations/40335964/access_tokens',
+      );
+
+      assert.equal(getStub.callCount, 2);
+      assert.equal(
+        getStub.withArgs('/repos/automa/tmp/branches/production').callCount,
+        1,
+      );
+      assert.equal(
+        getStub.withArgs('/repos/automa/tmp/contents/automa.json').callCount,
+        1,
+      );
+    });
+
+    test('should update repository settings', async () => {
+      const repo = await app.prisma.repos.findFirstOrThrow({
+        where: {
+          id: repository.id,
+        },
+      });
+
+      assert.deepOwnInclude(repo, {
+        name: 'tmp',
+        provider_id: '674157076',
+        is_private: true,
+        is_archived: false,
+        has_installation: true,
+        last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+      });
+      assert.deepEqual(repo.settings, { bots: { dependency: {} } });
     });
   });
 });

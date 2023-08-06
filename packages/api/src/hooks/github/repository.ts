@@ -1,13 +1,25 @@
-import { GithubEventActionHandler } from './types';
+import { caller } from '../../clients/github';
 
-const archived: GithubEventActionHandler = async (app, body) => {
+import {
+  GithubEventActionHandler,
+  GithubInstallationMinimal,
+  GithubRepository,
+} from './types';
+import { syncSettings } from './settings';
+
+// NOTE: User's repositories does not contain organization information.
+
+const archived: GithubEventActionHandler<{
+  installation: GithubInstallationMinimal;
+  repository: GithubRepository;
+}> = async (app, body) => {
   await app.prisma.repos.updateMany({
     where: {
       provider_id: `${body.repository.id}`,
       is_archived: false,
       orgs: {
         provider_type: 'github',
-        provider_id: `${body.organization.id}`,
+        provider_id: `${body.repository.owner.id}`,
       },
     },
     data: {
@@ -16,18 +28,53 @@ const archived: GithubEventActionHandler = async (app, body) => {
   });
 };
 
+const edited: GithubEventActionHandler<{
+  changes: {
+    default_branch?: {
+      from: string;
+    };
+  };
+  installation: GithubInstallationMinimal;
+  repository: GithubRepository;
+}> = async (app, body) => {
+  if (!body.changes.default_branch) {
+    return;
+  }
+
+  const repo = await app.prisma.repos.findFirst({
+    where: {
+      provider_id: `${body.repository.id}`,
+      orgs: {
+        provider_type: 'github',
+        provider_id: `${body.repository.owner.id}`,
+      },
+    },
+  });
+
+  if (!repo) {
+    return;
+  }
+
+  const { axios } = await caller(app, body.installation.id);
+
+  return syncSettings(app, axios, repo, body.repository);
+};
+
 // We are not handling the `repository.deleted` event because we will not
 // recieve it at all. Instead, we handle the change with the
 // `installation_repositories.removed` event.
 
-const privatized: GithubEventActionHandler = async (app, body) => {
+const privatized: GithubEventActionHandler<{
+  installation: GithubInstallationMinimal;
+  repository: GithubRepository;
+}> = async (app, body) => {
   await app.prisma.repos.updateMany({
     where: {
       provider_id: `${body.repository.id}`,
       is_private: false,
       orgs: {
         provider_type: 'github',
-        provider_id: `${body.organization.id}`,
+        provider_id: `${body.repository.owner.id}`,
       },
     },
     data: {
@@ -36,14 +83,17 @@ const privatized: GithubEventActionHandler = async (app, body) => {
   });
 };
 
-const publicized: GithubEventActionHandler = async (app, body) => {
+const publicized: GithubEventActionHandler<{
+  installation: GithubInstallationMinimal;
+  repository: GithubRepository;
+}> = async (app, body) => {
   await app.prisma.repos.updateMany({
     where: {
       provider_id: `${body.repository.id}`,
       is_private: true,
       orgs: {
         provider_type: 'github',
-        provider_id: `${body.organization.id}`,
+        provider_id: `${body.repository.owner.id}`,
       },
     },
     data: {
@@ -52,13 +102,16 @@ const publicized: GithubEventActionHandler = async (app, body) => {
   });
 };
 
-const renamed: GithubEventActionHandler = async (app, body) => {
+const renamed: GithubEventActionHandler<{
+  installation: GithubInstallationMinimal;
+  repository: GithubRepository;
+}> = async (app, body) => {
   await app.prisma.repos.updateMany({
     where: {
       provider_id: `${body.repository.id}`,
       orgs: {
         provider_type: 'github',
-        provider_id: `${body.organization.id}`,
+        provider_id: `${body.repository.owner.id}`,
       },
     },
     data: {
@@ -72,14 +125,17 @@ const renamed: GithubEventActionHandler = async (app, body) => {
 // handle the change with the `installation_repositories.added` and the
 // `installation_repositories.removed` events.
 
-const unarchived: GithubEventActionHandler = async (app, body) => {
+const unarchived: GithubEventActionHandler<{
+  installation: GithubInstallationMinimal;
+  repository: GithubRepository;
+}> = async (app, body) => {
   await app.prisma.repos.updateMany({
     where: {
       provider_id: `${body.repository.id}`,
       is_archived: true,
       orgs: {
         provider_type: 'github',
-        provider_id: `${body.organization.id}`,
+        provider_id: `${body.repository.owner.id}`,
       },
     },
     data: {
@@ -90,6 +146,7 @@ const unarchived: GithubEventActionHandler = async (app, body) => {
 
 export default {
   archived,
+  edited,
   privatized,
   publicized,
   renamed,

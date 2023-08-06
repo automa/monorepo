@@ -1,5 +1,5 @@
 ARG postgresql_major=15
-ARG postgresql_release=${postgresql_major}.1
+ARG postgresql_release=${postgresql_major}.4
 
 ARG pg_jsonschema_release=0.1.4
 

@@ -4,6 +4,7 @@ import githubAppAuthorization from './githubAppAuthorization';
 import installation from './installation';
 import installationRepositories from './installationRepositories';
 import organization from './organization';
+import push from './push';
 import repository from './repository';
 
 export const eventHandlers: {
@@ -13,6 +14,7 @@ export const eventHandlers: {
   [GithubEventType.Installation]: installation,
   [GithubEventType.InstallationRepositories]: installationRepositories,
   [GithubEventType.Organization]: organization,
+  [GithubEventType.Push]: push,
   [GithubEventType.Repository]: repository,
 };
 
