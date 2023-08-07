@@ -41,6 +41,7 @@
     "ioredis": "~5.2.5",
     "jsonwebtoken": "~9.0.0",
     "nested-env-schema": "~1.0.2",
+    "parse-link-header": "~2.0.0",
     "statsig-node": "~5.5.0"
   },
   "scripts": {
@@ -56,6 +57,7 @@
   "devDependencies": {
     "@types/connect-redis": "~0.0.19",
     "@types/http-errors": "~2.0.1",
-    "@types/jsonwebtoken": "~9.0.1"
+    "@types/jsonwebtoken": "~9.0.1",
+    "@types/parse-link-header": "~2.0.1"
   }
 }

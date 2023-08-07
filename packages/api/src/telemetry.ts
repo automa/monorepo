@@ -81,12 +81,13 @@ const sdk = new NodeSDK({
     : undefined,
   metricReader: !isTest
     ? isProduction
-      ? new PeriodicExportingMetricReader({
-          exporter: new GCPMetricExporter({
-            credentials: JSON.parse(env.GCP.CREDENTIALS),
-            projectId: env.GCP.PROJECT_ID,
-          }),
-        })
+      ? // new PeriodicExportingMetricReader({
+        //   exporter: new GCPMetricExporter({
+        //     credentials: JSON.parse(env.GCP.CREDENTIALS),
+        //     projectId: env.GCP.PROJECT_ID,
+        //   }),
+        // })
+        undefined
       : new PrometheusExporter()
     : undefined,
 });

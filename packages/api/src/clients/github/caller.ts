@@ -5,6 +5,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
 import { env } from '../../env';
+import { createAxiosInstance } from '../utils';
 
 const generateAppToken = (id: string, pem: string) => {
   const claims = {
@@ -51,15 +52,18 @@ export const caller = async (app: FastifyInstance, installationId: number) => {
     GITHUB_APP.PEM,
   );
 
+  const { axiosInstance, paginate } = createAxiosInstance({
+    baseURL: GITHUB_APP.API_URI,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${accessToken}`,
+      'User-Agent': 'Automa App',
+    },
+  });
+
   return {
     accessToken,
-    axios: axios.create({
-      baseURL: GITHUB_APP.API_URI,
-      headers: {
-        Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${accessToken}`,
-        'User-Agent': 'Automa App',
-      },
-    }),
+    axios: axiosInstance,
+    paginate,
   };
 };

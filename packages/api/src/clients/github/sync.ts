@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 
-const sync = async (app: FastifyInstance, request: FastifyRequest) => {
+export const sync = async (app: FastifyInstance, request: FastifyRequest) => {
   const { installations } = await request.github<{
     installations: { id: number }[];
   }>({
@@ -51,5 +51,3 @@ const sync = async (app: FastifyInstance, request: FastifyRequest) => {
     }),
   );
 };
-
-export default sync;
