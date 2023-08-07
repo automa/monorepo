@@ -41,15 +41,47 @@ const suspend: GithubEventActionHandler = async (app, body) =>
   inactive(app, body.installation.account.id);
 
 const unsuspend: GithubEventActionHandler = async (app, body) => {
-  await app.prisma.orgs.updateMany({
+  const org = await app.prisma.orgs.update({
     where: {
-      provider_type: 'github',
-      provider_id: `${body.installation.account.id}`,
+      provider_type_provider_id: {
+        provider_type: 'github',
+        provider_id: `${body.installation.account.id}`,
+      },
     },
     data: {
       has_installation: true,
     },
   });
+
+  const { paginate } = await caller(app, body.installation.id);
+
+  const pages = paginate('/installation/repositories');
+
+  for await (const data of pages) {
+    for (const repository of data.repositories) {
+      const update = {
+        name: repository.name,
+        is_private: repository.private,
+        is_archived: repository.archived,
+        has_installation: true,
+      };
+
+      await app.prisma.repos.upsert({
+        where: {
+          org_id_provider_id: {
+            org_id: org.id,
+            provider_id: `${repository.id}`,
+          },
+        },
+        update,
+        create: {
+          org_id: org.id,
+          provider_id: `${repository.id}`,
+          ...update,
+        },
+      });
+    }
+  }
 };
 
 const inactive = async (app: FastifyInstance, providerId: number) => {

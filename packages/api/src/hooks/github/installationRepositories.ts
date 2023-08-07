@@ -52,6 +52,13 @@ export const addRepo = async (
 ) => {
   const { data } = await axios.get(`/repos/${repository.full_name}`);
 
+  const update = {
+    name: repository.name,
+    is_private: repository.private,
+    is_archived: data.archived,
+    has_installation: true,
+  };
+
   await app.prisma.repos.upsert({
     where: {
       org_id_provider_id: {
@@ -59,19 +66,11 @@ export const addRepo = async (
         provider_id: `${repository.id}`,
       },
     },
-    update: {
-      name: repository.name,
-      is_private: repository.private,
-      is_archived: data.archived,
-      has_installation: true,
-    },
+    update,
     create: {
       org_id: org.id,
       provider_id: `${repository.id}`,
-      name: repository.name,
-      is_private: repository.private,
-      is_archived: data.archived,
-      has_installation: true,
+      ...update,
     },
   });
 };
