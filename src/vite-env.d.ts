@@ -2,6 +2,8 @@
 /// <reference types="vite-plugin-svgr/client" />
 
 interface ImportMetaEnv {
+  readonly VITE_API_URI: string;
+  readonly VITE_GRAPHQL_URI: string;
   readonly VITE_STATSIG_KEY: string;
 }
 
