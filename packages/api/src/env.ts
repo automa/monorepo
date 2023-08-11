@@ -91,13 +91,8 @@ const schema = Type.Object({
       default: 'DS0ZF0LeGPSHEXSYXwKCpiWqmUTasJtR',
     }),
   }),
-  SENTRY: Type.Object({
-    ENABLED: Type.Boolean({
-      default: isProduction,
-    }),
-    DSN: Type.String({
-      default: '',
-    }),
+  SENTRY_DSN: Type.String({
+    default: '',
   }),
   STATSIG_KEY: Type.String({
     default: 'secret-fdn7OUPBxuy070vzfwvKKbx1G4dnwDJM7Gtir3mvxGI',
