@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
+import { isProduction } from 'env';
 import { authReducer } from 'auth';
 
 export const reducer = {
@@ -9,7 +10,7 @@ export const reducer = {
 
 const store = configureStore({
   reducer,
-  devTools: import.meta.env.DEV,
+  devTools: !isProduction,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

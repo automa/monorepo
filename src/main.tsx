@@ -10,9 +10,11 @@ import 'reset-css';
 
 import 'index.css';
 
+import 'env';
 import 'logger';
 import store from 'store';
 import theme, { GlobalStyle, loadFonts } from 'theme';
+
 import App from 'views/App';
 
 export const ToastContainer = styled(Toast.Viewport)``;

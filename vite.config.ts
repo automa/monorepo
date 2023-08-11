@@ -12,6 +12,9 @@ import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+  },
   build: {
     outDir: 'build',
     sourcemap: !!process.env.BUILD_SOURCEMAP,
