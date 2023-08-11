@@ -66,6 +66,10 @@ const App: React.FC<AppProps> = () => {
           environment: {
             tier: environment,
           },
+          disableAutoMetricsLogging: true,
+          disableCurrentPageLogging: true,
+          disableDiagnosticsLogging: true,
+          disableErrorLogging: true,
         }}
         user={{
           userID: user?.id,
