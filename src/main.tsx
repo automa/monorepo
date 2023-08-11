@@ -13,6 +13,8 @@ import 'index.css';
 
 import 'env';
 import 'telemetry';
+
+import { ErrorBoundary } from 'error';
 import client from 'client';
 import store from 'store';
 import theme, { GlobalStyle, loadFonts } from 'theme';
@@ -33,7 +35,9 @@ loadFonts().then(() => {
             <BrowserRouter>
               <Tooltip.Provider delayDuration={500}>
                 <Toast.Provider>
-                  <App />
+                  <ErrorBoundary>
+                    <App />
+                  </ErrorBoundary>
                   <ToastContainer />
                 </Toast.Provider>
               </Tooltip.Provider>
