@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StatsigProvider } from 'statsig-react';
+import axios from 'axios';
 
 import { environment } from 'env';
 import { Loader, RoutesLoader, useAsyncEffect } from 'shared';
@@ -13,11 +14,24 @@ import { Container } from './App.styles';
 export interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
-  const { setAuth, setAuthLoading, authLoading } = useAuth();
+  const { setAuth, unsetAuth, setAuthLoading, authLoading } = useAuth();
 
   const user = useUser();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response.status === 401) {
+          unsetAuth();
+        }
+
+        return Promise.reject(error);
+      },
+    );
+  }, [unsetAuth]);
 
   useAsyncEffect(async () => {
     try {
