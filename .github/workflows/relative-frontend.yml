@@ -2,8 +2,22 @@ name: RelativeCI (frontend)
 on:
   push:
     branches: [master]
+    paths:
+      - .github/workflows/relative-frontend.yml
+      - packages/frontend/public/**
+      - packages/frontend/src/**
+      - packages/frontend/index.html
+      - packages/frontend/vite.config.ts
+      - yarn.lock
   pull_request:
     branches: [master]
+    paths:
+      - .github/workflows/relative-frontend.yml
+      - packages/frontend/public/**
+      - packages/frontend/src/**
+      - packages/frontend/index.html
+      - packages/frontend/vite.config.ts
+      - yarn.lock
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
   cancel-in-progress: true
