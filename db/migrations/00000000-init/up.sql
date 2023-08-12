@@ -1,11 +1,12 @@
 BEGIN;
 
 CREATE EXTENSION "pg_jsonschema";
+CREATE EXTENSION citext;
 
 CREATE TABLE public.users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
+  email citext NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   UNIQUE (email)
 );
@@ -17,7 +18,7 @@ CREATE TABLE public.user_providers (
   user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   provider_type public.provider NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
-  provider_email VARCHAR(255) NOT NULL,
+  provider_email citext NOT NULL,
   refresh_token VARCHAR(255) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   UNIQUE (provider_type, provider_id),

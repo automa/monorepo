@@ -10,6 +10,7 @@ DROP TYPE public.provider;
 
 DROP TABLE public.users;
 
+DROP EXTENSION citext;
 DROP EXTENSION "pg_jsonschema";
 
 COMMIT;
