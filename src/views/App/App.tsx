@@ -4,6 +4,7 @@ import { StatsigProvider } from 'statsig-react';
 import axios from 'axios';
 
 import { environment } from 'env';
+
 import { Loader, RoutesLoader, useAsyncEffect } from 'shared';
 import { useAuth, useUser } from 'auth';
 

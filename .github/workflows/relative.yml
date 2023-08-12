@@ -2,8 +2,22 @@ name: RelativeCI
 on:
   push:
     branches: [master]
+    paths:
+      - .github/workflows/relative.yml
+      - public/**
+      - src/**
+      - index.html
+      - vite.config.ts
+      - yarn.lock
   pull_request:
     branches: [master]
+    paths:
+      - .github/workflows/relative.yml
+      - public/**
+      - src/**
+      - index.html
+      - vite.config.ts
+      - yarn.lock
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
   cancel-in-progress: true

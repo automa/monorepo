@@ -2,8 +2,22 @@ name: Chromatic
 on:
   push:
     branches: [master]
+    paths:
+      - .github/workflows/chromatic.yml
+      - public/**
+      - src/**
+      - index.html
+      - vite.config.ts
+      - yarn.lock
   pull_request:
     branches: [master]
+    paths:
+      - .github/workflows/chromatic.yml
+      - public/**
+      - src/**
+      - index.html
+      - vite.config.ts
+      - yarn.lock
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
   cancel-in-progress: true
