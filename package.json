@@ -27,7 +27,7 @@
     "styled-components": "~5.3.3"
   },
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "vite build",
     "build-analyze": "BUILD_SOURCEMAP=1 vite build && source-map-explorer 'build/assets/*.js'",
     "build-stats": "BUILD_STATS=1 vite build",
     "format": "prettier --write .",
@@ -106,7 +106,6 @@
     "vite": "~4.3.2",
     "vite-plugin-babel-macros": "~1.0.6",
     "vite-plugin-checker": "~0.6.0",
-    "vite-plugin-eslint": "~1.8.1",
     "vite-plugin-image-optimizer": "~1.1.6",
     "vite-plugin-svgr": "~3.2.0",
     "vite-tsconfig-paths": "~4.2.0",
