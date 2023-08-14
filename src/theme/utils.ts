@@ -38,10 +38,9 @@ const cssLine =
     ...props
   }: {
     theme: DefaultTheme;
-  } & CommonPropsSingle) =>
-    css`
-      ${cssKey}: ${cssValue(theme, props[key])};
-    `;
+  } & CommonPropsSingle) => css`
+    ${cssKey}: ${cssValue(theme, props[key])};
+  `;
 
 const cssFour =
   (key: keyof CommonPropsMultiple, cssKey: string) =>
@@ -60,37 +59,38 @@ const cssFour =
     `;
   };
 
-export const CommonWrapper = <T>(component: (args: T) => JSX.Element | null) =>
-  styled((props: Common<T>) => {
-    const {
-      /* eslint-disable @typescript-eslint/no-unused-vars */
-      margin,
-      marginTop,
-      marginRight,
-      marginBottom,
-      marginLeft,
-      padding,
-      paddingTop,
-      paddingRight,
-      paddingBottom,
-      paddingLeft,
-      /* eslint-enable */
-      ...componentProps
-    } = props;
+export const CommonWrapper = <T>(
+  component: (args: T) => JSX.Element | null,
+) => styled((props: Common<T>) => {
+  const {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    margin,
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
+    padding,
+    paddingTop,
+    paddingRight,
+    paddingBottom,
+    paddingLeft,
+    /* eslint-enable */
+    ...componentProps
+  } = props;
 
-    return component(componentProps as T);
-  })<Common<T>>`
-    ${cssFour('margin', 'margin')}
-    ${cssLine('marginTop', 'margin-top')}
-    ${cssLine('marginRight', 'margin-right')}
-    ${cssLine('marginBottom', 'margin-bottom')}
-    ${cssLine('marginLeft', 'margin-left')}
-    ${cssFour('padding', 'padding')}
-    ${cssLine('paddingTop', 'padding-top')}
-    ${cssLine('paddingRight', 'padding-right')}
-    ${cssLine('paddingBottom', 'padding-bottom')}
-    ${cssLine('paddingLeft', 'padding-left')}
-  `;
+  return component(componentProps as T);
+})<Common<T>>`
+  ${cssFour('margin', 'margin')}
+  ${cssLine('marginTop', 'margin-top')}
+  ${cssLine('marginRight', 'margin-right')}
+  ${cssLine('marginBottom', 'margin-bottom')}
+  ${cssLine('marginLeft', 'margin-left')}
+  ${cssFour('padding', 'padding')}
+  ${cssLine('paddingTop', 'padding-top')}
+  ${cssLine('paddingRight', 'padding-right')}
+  ${cssLine('paddingBottom', 'padding-bottom')}
+  ${cssLine('paddingLeft', 'padding-left')}
+`;
 
 // Utility wrapper for building different types of props needed for a component.
 //
