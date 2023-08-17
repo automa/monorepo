@@ -39,9 +39,27 @@ suite('github hook installation_repositories event', () => {
       .stub(axios, 'post')
       .resolves({ data: { token: 'abcdef' } });
 
-    getStub = sandbox
-      .stub(axios, 'get')
-      .resolves({ data: { archived: false } });
+    getStub = sandbox.stub(axios, 'get');
+    getStub.withArgs('/repos/automa/tmp').resolves({
+      data: {
+        id: 674157076,
+        name: 'tmp',
+        full_name: 'automa/tmp',
+        private: true,
+        archived: false,
+        default_branch: 'master',
+      },
+    });
+    getStub.withArgs('/repos/automa/tmp/branches/master').resolves({
+      data: {
+        commit: { sha: 'a2006e2015d93931f00fc3a8a04d24d66b7059da' },
+      },
+    });
+    getStub.withArgs('/repos/automa/tmp/contents/automa.json').resolves({
+      data: {
+        content: 'eyJib3RzIjp7ImRlcGVuZGVuY3kiOnt9fX0=',
+      },
+    });
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -73,15 +91,23 @@ suite('github hook installation_repositories event', () => {
       assert.equal(response.statusCode, 200);
     });
 
-    test('should get information about repository', async () => {
+    test('should get information about repository and settings', async () => {
       assert.equal(postStub.callCount, 1);
       assert.equal(
         postStub.firstCall.args[0],
         'https://api.github.com/app/installations/40335964/access_tokens',
       );
 
-      assert.equal(getStub.callCount, 1);
-      assert.equal(getStub.firstCall.args[0], '/repos/automa/tmp');
+      assert.equal(getStub.callCount, 3);
+      assert.equal(getStub.withArgs('/repos/automa/tmp').callCount, 1);
+      assert.equal(
+        getStub.withArgs('/repos/automa/tmp/branches/master').callCount,
+        1,
+      );
+      assert.equal(
+        getStub.withArgs('/repos/automa/tmp/contents/automa.json').callCount,
+        1,
+      );
     });
 
     test('should create repository', async () => {
@@ -101,7 +127,9 @@ suite('github hook installation_repositories event', () => {
         is_private: true,
         is_archived: false,
         has_installation: true,
+        last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
       });
+      assert.deepEqual(repos[0].settings, { bots: { dependency: {} } });
     });
 
     suite('and removed', () => {
@@ -164,8 +192,17 @@ suite('github hook installation_repositories event', () => {
             'https://api.github.com/app/installations/40335964/access_tokens',
           );
 
-          assert.equal(getStub.callCount, 1);
-          assert.equal(getStub.firstCall.args[0], '/repos/automa/tmp');
+          assert.equal(getStub.callCount, 3);
+          assert.equal(getStub.withArgs('/repos/automa/tmp').callCount, 1);
+          assert.equal(
+            getStub.withArgs('/repos/automa/tmp/branches/master').callCount,
+            1,
+          );
+          assert.equal(
+            getStub.withArgs('/repos/automa/tmp/contents/automa.json')
+              .callCount,
+            1,
+          );
         });
 
         test('should mark repository as active', async () => {
@@ -185,7 +222,9 @@ suite('github hook installation_repositories event', () => {
             is_private: true,
             is_archived: false,
             has_installation: true,
+            last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
           });
+          assert.deepEqual(repos[0].settings, { bots: { dependency: {} } });
         });
       });
     });

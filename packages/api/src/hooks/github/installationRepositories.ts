@@ -5,9 +5,18 @@ import { orgs } from '@automa/prisma';
 
 import { caller } from '../../clients/github';
 
-import { GithubEventActionHandler } from './types';
+import {
+  GithubEventActionHandler,
+  GithubInstallation,
+  GithubRepository,
+  GithubRepositoryMinimal,
+} from './types';
+import { syncSettings } from './settings';
 
-const added: GithubEventActionHandler = async (app, body) => {
+const added: GithubEventActionHandler<{
+  installation: GithubInstallation;
+  repositories_added: GithubRepositoryMinimal[];
+}> = async (app, body) => {
   const org = await app.prisma.orgs.findFirst({
     where: {
       provider_type: 'github',
@@ -23,15 +32,18 @@ const added: GithubEventActionHandler = async (app, body) => {
   const { axios } = await caller(app, body.installation.id);
 
   for (const repository of body.repositories_added) {
-    await addRepo(app, org, axios, repository);
+    await addRepo(app, axios, org, repository);
   }
 };
 
-const removed: GithubEventActionHandler = async (app, body) => {
+const removed: GithubEventActionHandler<{
+  installation: GithubInstallation;
+  repositories_removed: GithubRepositoryMinimal[];
+}> = async (app, body) => {
   await app.prisma.repos.updateMany({
     where: {
       provider_id: {
-        in: body.repositories_removed.map((repo: any) => `${repo.id}`),
+        in: body.repositories_removed.map((repo) => `${repo.id}`),
       },
       orgs: {
         provider_type: 'github',
@@ -46,20 +58,29 @@ const removed: GithubEventActionHandler = async (app, body) => {
 
 export const addRepo = async (
   app: FastifyInstance,
-  org: orgs,
   axios: AxiosInstance,
-  repository: any,
+  org: orgs,
+  repository: GithubRepositoryMinimal,
 ) => {
   const { data } = await axios.get(`/repos/${repository.full_name}`);
 
+  return updateRepo(app, axios, org, data);
+};
+
+export const updateRepo = async (
+  app: FastifyInstance,
+  axios: AxiosInstance,
+  org: orgs,
+  repository: GithubRepository,
+) => {
   const update = {
     name: repository.name,
     is_private: repository.private,
-    is_archived: data.archived,
+    is_archived: repository.archived,
     has_installation: true,
   };
 
-  await app.prisma.repos.upsert({
+  const repo = await app.prisma.repos.upsert({
     where: {
       org_id_provider_id: {
         org_id: org.id,
@@ -73,6 +94,8 @@ export const addRepo = async (
       ...update,
     },
   });
+
+  return syncSettings(app, axios, repo, repository);
 };
 
 export default {

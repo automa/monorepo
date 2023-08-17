@@ -5,12 +5,49 @@ export enum GithubEventType {
   Installation = 'installation',
   InstallationRepositories = 'installation_repositories',
   Organization = 'organization',
+  Push = 'push',
   Repository = 'repository',
 }
 
-export type GithubEventActionHandler = (
+export type GithubEventActionHandler<T = any> = (
   app: FastifyInstance,
-  payload: any,
+  payload: T,
 ) => Promise<void>;
 
 export type GithubEventHandler = Record<string, GithubEventActionHandler>;
+
+export type GithubInstallationMinimal = {
+  id: number;
+};
+
+export type GithubInstallation = GithubInstallationMinimal & {
+  account: {
+    login: string;
+    id: number;
+    type: 'User' | 'Organization';
+  };
+};
+
+export type GithubRepositoryMinimal = {
+  id: number;
+  name: string;
+  full_name: string;
+  private: boolean;
+};
+
+export type GithubRepository = GithubRepositoryMinimal & {
+  owner: {
+    login: string;
+    id: number;
+    type: 'User' | 'Organization';
+  };
+  fork: boolean;
+  archived: boolean;
+  disabled: boolean;
+  default_branch: string;
+};
+
+export type GithubOrganization = {
+  login: string;
+  id: number;
+};

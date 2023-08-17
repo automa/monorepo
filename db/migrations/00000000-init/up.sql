@@ -1,7 +1,7 @@
 BEGIN;
 
-CREATE EXTENSION "pg_jsonschema";
 CREATE EXTENSION citext;
+CREATE EXTENSION pg_jsonschema;
 
 CREATE TABLE public.users (
   id SERIAL PRIMARY KEY,
@@ -34,7 +34,7 @@ CREATE TABLE public.orgs (
   is_user BOOLEAN NOT NULL DEFAULT FALSE,
   has_installation BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  github_installation_id INT NULL,
+  github_installation_id INT,
   UNIQUE (provider_type, provider_id),
   UNIQUE (github_installation_id)
 );
@@ -48,6 +48,8 @@ CREATE TABLE public.repos (
   is_archived BOOLEAN NOT NULL DEFAULT FALSE,
   has_installation BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  settings JSONB,
+  last_commit_synced VARCHAR(40),
   UNIQUE (org_id, provider_id)
 );
 

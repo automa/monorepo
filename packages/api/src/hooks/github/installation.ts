@@ -2,10 +2,17 @@ import { FastifyInstance } from 'fastify';
 
 import { caller } from '../../clients/github';
 
-import { GithubEventActionHandler } from './types';
-import { addRepo } from './installationRepositories';
+import {
+  GithubEventActionHandler,
+  GithubInstallation,
+  GithubRepositoryMinimal,
+} from './types';
+import { addRepo, updateRepo } from './installationRepositories';
 
-const created: GithubEventActionHandler = async (app, body) => {
+const created: GithubEventActionHandler<{
+  installation: GithubInstallation;
+  repositories: GithubRepositoryMinimal[];
+}> = async (app, body) => {
   const org = await app.prisma.orgs.upsert({
     where: {
       provider_type_provider_id: {
@@ -30,17 +37,22 @@ const created: GithubEventActionHandler = async (app, body) => {
   const { axios } = await caller(app, body.installation.id);
 
   for (const repository of body.repositories) {
-    await addRepo(app, org, axios, repository);
+    await addRepo(app, axios, org, repository);
   }
 };
 
-const deleted: GithubEventActionHandler = async (app, body) =>
-  inactive(app, body.installation.account.id);
+const deleted: GithubEventActionHandler<{
+  installation: GithubInstallation;
+  repositories: GithubRepositoryMinimal[];
+}> = async (app, body) => inactive(app, body.installation.account.id);
 
-const suspend: GithubEventActionHandler = async (app, body) =>
-  inactive(app, body.installation.account.id);
+const suspend: GithubEventActionHandler<{
+  installation: GithubInstallation;
+}> = async (app, body) => inactive(app, body.installation.account.id);
 
-const unsuspend: GithubEventActionHandler = async (app, body) => {
+const unsuspend: GithubEventActionHandler<{
+  installation: GithubInstallation;
+}> = async (app, body) => {
   const org = await app.prisma.orgs.update({
     where: {
       provider_type_provider_id: {
@@ -53,33 +65,13 @@ const unsuspend: GithubEventActionHandler = async (app, body) => {
     },
   });
 
-  const { paginate } = await caller(app, body.installation.id);
+  const { axios, paginate } = await caller(app, body.installation.id);
 
   const pages = paginate('/installation/repositories');
 
   for await (const data of pages) {
     for (const repository of data.repositories) {
-      const update = {
-        name: repository.name,
-        is_private: repository.private,
-        is_archived: repository.archived,
-        has_installation: true,
-      };
-
-      await app.prisma.repos.upsert({
-        where: {
-          org_id_provider_id: {
-            org_id: org.id,
-            provider_id: `${repository.id}`,
-          },
-        },
-        update,
-        create: {
-          org_id: org.id,
-          provider_id: `${repository.id}`,
-          ...update,
-        },
-      });
+      await updateRepo(app, axios, org, repository);
     }
   }
 };
