@@ -38,7 +38,7 @@ jobs:
         id: cache
         with:
           path: '**/node_modules'
-          key: deps-${{ hashFiles('**/yarn.lock') }}
+          key: deps-${{ hashFiles('**/yarn.lock', '**/schema.prisma') }}
           restore-keys: |
             deps-
       - name: Install dependencies
