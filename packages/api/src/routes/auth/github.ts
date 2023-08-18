@@ -10,7 +10,7 @@ export default async function (app: FastifyInstance) {
       from: string;
     };
   }>('/github', async (request, reply) => {
-    const { GITHUB_APP, API_URI } = env;
+    const { GITHUB_APP, BASE_URI } = env;
 
     const state = crypto.randomUUID();
 
@@ -18,7 +18,7 @@ export default async function (app: FastifyInstance) {
     request.session.githubOauthState = state;
 
     reply.redirect(
-      `${GITHUB_APP.AUTHORIZE_URL}?client_id=${GITHUB_APP.CLIENT_ID}&redirect_uri=${API_URI}${GITHUB_APP.CALLBACK_URI}&state=${state}`,
+      `${GITHUB_APP.AUTHORIZE_URL}?client_id=${GITHUB_APP.CLIENT_ID}&redirect_uri=${BASE_URI}${GITHUB_APP.CALLBACK_URI}&state=${state}`,
     );
   });
 }

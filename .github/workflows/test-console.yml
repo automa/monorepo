@@ -1,10 +1,10 @@
-name: Testing (frontend)
+name: Testing (console)
 on: [pull_request]
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  test-frontend:
+  test-console:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,12 +27,12 @@ jobs:
         run: yarn workspace @automa/common build
       - name: Run tests
         run: yarn test-cover
-        working-directory: packages/frontend
+        working-directory: packages/console
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/frontend/coverage/lcov.info
-          flags: frontend
-          name: frontend.${{ github.event.number }}
+          files: packages/console/coverage/lcov.info
+          flags: console
+          name: console.${{ github.event.number }}
           fail_ci_if_error: false

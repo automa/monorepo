@@ -47,7 +47,7 @@
     "packages": [
       "packages/api",
       "packages/common",
-      "packages/frontend",
+      "packages/console",
       "packages/prisma"
     ]
   }

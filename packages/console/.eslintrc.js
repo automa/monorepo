@@ -81,7 +81,7 @@ module.exports = {
     },
     'import/resolver': {
       typescript: {
-        project: 'packages/frontend',
+        project: 'packages/console',
       },
     },
     'import/internal-regex': '^@automa/',

@@ -15,7 +15,7 @@ export const service = 'api';
 export const version = pkg.version;
 
 const schema = Type.Object({
-  API_URI: Type.String({
+  BASE_URI: Type.String({
     default: 'http://localhost:8080',
   }),
   CLIENT_URI: Type.String({
@@ -23,9 +23,6 @@ const schema = Type.Object({
   }),
   COOKIE_SECRET: Type.String({
     default: 'thisismycoupdetathandsupupgethigh',
-  }),
-  CORS_ORIGIN: Type.String({
-    default: 'http://localhost:3000',
   }),
   DATABASE_URL: Type.String({
     default: 'postgresql://automa@localhost:5432/automa',
@@ -35,7 +32,7 @@ const schema = Type.Object({
       default: '{}',
     }),
     PROJECT_ID: Type.String({
-      default: 'advisory',
+      default: 'automa',
     }),
   }),
   GITHUB_APP: Type.Object({

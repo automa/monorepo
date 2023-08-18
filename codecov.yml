@@ -9,9 +9,9 @@ coverage:
         flags:
           - api
         informational: true
-      frontend:
+      console:
         flags:
-          - frontend
+          - console
         informational: true
     patch:
       default: false
@@ -19,16 +19,16 @@ coverage:
         flags:
           - api
         informational: true
-      frontend:
+      console:
         flags:
-          - frontend
+          - console
         informational: true
 flags:
   api:
     carryforward: true
     paths:
       - packages/api
-  frontend:
+  console:
     carryforward: true
     paths:
-      - packages/frontend
+      - packages/console
