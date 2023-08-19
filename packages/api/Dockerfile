@@ -46,6 +46,7 @@ COPY --from=builder /app/packages/common/package.json ./packages/common/package.
 
 COPY --from=builder /app/packages/prisma/build ./packages/prisma/build
 COPY --from=builder /app/packages/prisma/package.json ./packages/prisma/package.json
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 RUN yarn install --frozen-lockfile --production
 
