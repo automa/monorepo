@@ -1,28 +1,28 @@
-name: RelativeCI (frontend)
+name: Chromatic (console)
 on:
   push:
     branches: [master]
     paths:
-      - .github/workflows/relative-frontend.yml
-      - packages/frontend/public/**
-      - packages/frontend/src/**
-      - packages/frontend/index.html
-      - packages/frontend/vite.config.ts
+      - .github/workflows/chromatic-console.yml
+      - packages/console/public/**
+      - packages/console/src/**
+      - packages/console/index.html
+      - packages/console/vite.config.ts
       - yarn.lock
   pull_request:
     branches: [master]
     paths:
-      - .github/workflows/relative-frontend.yml
-      - packages/frontend/public/**
-      - packages/frontend/src/**
-      - packages/frontend/index.html
-      - packages/frontend/vite.config.ts
+      - .github/workflows/chromatic-console.yml
+      - packages/console/public/**
+      - packages/console/src/**
+      - packages/console/index.html
+      - packages/console/vite.config.ts
       - yarn.lock
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
   cancel-in-progress: true
 jobs:
-  relative-frontend:
+  chromatic-console:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: 18
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache
         with:
           path: '**/node_modules'
@@ -45,12 +45,12 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Compile typescript
         run: yarn workspace @automa/common build
-      - name: Build stats
-        run: yarn build-stats
-        working-directory: packages/frontend
-      - name: RelativeCI
-        uses: relative-ci/agent-action@v2
+      - name: Chromatic
+        uses: chromaui/action@v1
         with:
-          webpackStatsFile: packages/frontend/build/webpack-stats.json
+          buildScriptName: storybook-build
           token: ${{ secrets.GITHUB_TOKEN }}
-          key: ${{ secrets.RELATIVE_CI_KEY_FRONTEND }}
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_CONSOLE }}
+          exitZeroOnChanges: true
+          exitOnceUploaded: true
+          workingDir: packages/console

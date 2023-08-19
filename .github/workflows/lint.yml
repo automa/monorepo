@@ -27,7 +27,7 @@ jobs:
         run: yarn workspace @automa/common build
       - name: Build site
         run: yarn build
-        working-directory: packages/frontend
+        working-directory: packages/console
   lockfile:
     runs-on: ubuntu-latest
     steps:

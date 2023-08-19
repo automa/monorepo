@@ -1,4 +1,4 @@
-# @automa/frontend
+# @automa/console
 
 ## Available Scripts
 

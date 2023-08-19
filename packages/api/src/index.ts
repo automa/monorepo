@@ -33,7 +33,7 @@ export const server = async () => {
   await app.register(fastifySensible);
 
   await app.register(fastifyCors, {
-    origin: env.CORS_ORIGIN,
+    origin: env.CLIENT_URI,
     credentials: true,
   });
 
@@ -76,7 +76,7 @@ export const server = async () => {
       },
       servers: [
         {
-          url: env.API_URI,
+          url: env.BASE_URI,
         },
       ],
     },

@@ -52,8 +52,8 @@ module.exports = {
       script: 'build/index.js',
     },
     {
-      name: 'frontend',
-      cwd: 'packages/frontend',
+      name: 'console',
+      cwd: 'packages/console',
       script: 'yarn',
       interpreter: '/bin/bash',
       args: 'start',

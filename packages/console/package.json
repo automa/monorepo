@@ -1,5 +1,5 @@
 {
-  "name": "@automa/frontend",
+  "name": "@automa/console",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
@@ -39,7 +39,7 @@
     "test-watch": "vitest watch",
     "test-storybook": "test-storybook",
     "test-storybook-cover": "test-storybook --coverage",
-    "update-boilerplate": "git pull --no-rebase -s subtree -X subtree=packages/frontend https://git.sr.ht/~pksunkara/frontend-react master"
+    "update-boilerplate": "git pull --no-rebase -s subtree -X subtree=packages/console https://git.sr.ht/~pksunkara/frontend-react master"
   },
   "engines": {
     "node": ">=18.15.0"

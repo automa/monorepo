@@ -1,0 +1,60 @@
+name: Deploy Production (console)
+on:
+  push:
+    branches: [production]
+    paths:
+      - .github/workflows/deploy-production-console.yml
+      - packages/console/public/**
+      - packages/console/src/**
+      - packages/console/index.html
+      - packages/console/vite.config.ts
+      - yarn.lock
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+jobs:
+  deploy-production-console:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: '**/node_modules'
+          key: deps-${{ hashFiles('**/yarn.lock', '**/schema.prisma') }}
+          restore-keys: |
+            deps-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Compile typescript
+        run: yarn workspace @automa/common build
+      - name: Build site
+        env:
+          NODE_ENV: production
+          VITE_API_URI: ${{ secrets.PRODUCTION_API_URI_CONSOLE }}
+          VITE_GRAPHQL_URI: ${{ secrets.PRODUCTION_GRAPHQL_URI_CONSOLE }}
+          VITE_SEGMENT_KEY: ${{ secrets.PRODUCTION_SEGMENT_KEY_CONSOLE }}
+          VITE_SENTRY_DSN: ${{ secrets.PRODUCTION_SENTRY_DSN_CONSOLE }}
+          VITE_STATSIG_KEY: ${{ secrets.PRODUCTION_STATSIG_KEY_CONSOLE }}
+        run: yarn build
+        working-directory: packages/console
+      - name: Upload to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID_CONSOLE }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY_CONSOLE }}
+          AWS_REGION: ${{ secrets.PRODUCTION_AWS_REGION_CONSOLE }}
+        run: aws s3 sync packages/console/build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET_CONSOLE }}
+      - name: Invalidate cloudfront cache
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID_CONSOLE }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY_CONSOLE }}
+          AWS_REGION: ${{ secrets.PRODUCTION_AWS_REGION_CONSOLE }}
+        run: aws cloudfront create-invalidation
+          --distribution-id ${{ secrets.PRODUCTION_AWS_CLOUDFRONT_DISTRIBUTION_CONSOLE }}
+          --paths '/index.html'
