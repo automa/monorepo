@@ -72,7 +72,7 @@ module.exports = {
     },
     {
       files: [
-        '.storybook/*.js',
+        '.storybook/*.ts',
         '.babel-plugin-macrosrc.js',
         '.eslintrc.js',
         '.lintstagedrc.js',
