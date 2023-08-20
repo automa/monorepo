@@ -1,5 +1,13 @@
 name: Testing (api)
-on: [pull_request]
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - .github/workflows/test-api.yml
+      - packages/prisma/**
+      - packages/common/**
+      - packages/api/**
+      - yarn.lock
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

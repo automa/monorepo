@@ -1,5 +1,12 @@
 name: Testing (console)
-on: [pull_request]
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - .github/workflows/test-console.yml
+      - packages/common/**
+      - packages/console/**
+      - yarn.lock
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
