@@ -2,7 +2,7 @@ import React from 'react';
 import { Preview } from '@storybook/react';
 import { withThemeByClassName } from '@storybook/addon-styling';
 
-import '../index.css';
+import 'components/index.css';
 
 const preview: Preview = {
   decorators: [

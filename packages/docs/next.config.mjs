@@ -9,6 +9,11 @@ const withNextra = nextra({
 });
 
 export default withNextra({
+  output: 'export',
+  distDir: 'build',
+  images: {
+    unoptimized: true,
+  },
   webpack: (config) => {
     if (process.env.BUILD_STATS) {
       config.plugins.push(
