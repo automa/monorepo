@@ -3,9 +3,9 @@ import { Property } from 'csstype';
 
 import theme, { $, Component, Styled } from 'theme';
 
-export type TextColor = keyof typeof theme['colors'] | Property.Color;
+export type TextColor = keyof (typeof theme)['colors'] | Property.Color;
 
-export type TextVariant = keyof typeof theme['typography'];
+export type TextVariant = keyof (typeof theme)['typography'];
 
 export type Ellipsis = {
   lines?: number;

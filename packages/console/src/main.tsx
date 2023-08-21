@@ -11,10 +11,14 @@ import 'reset-css';
 
 import 'index.css';
 
+import 'env';
+import 'telemetry';
+
+import { ErrorBoundary } from 'error';
 import client from 'client';
-import 'logger';
 import store from 'store';
 import theme, { GlobalStyle, loadFonts } from 'theme';
+
 import App from 'views/App';
 
 export const ToastContainer = styled(Toast.Viewport)``;
@@ -31,7 +35,9 @@ loadFonts().then(() => {
             <BrowserRouter>
               <Tooltip.Provider delayDuration={500}>
                 <Toast.Provider>
-                  <App />
+                  <ErrorBoundary>
+                    <App />
+                  </ErrorBoundary>
                   <ToastContainer />
                 </Toast.Provider>
               </Tooltip.Provider>

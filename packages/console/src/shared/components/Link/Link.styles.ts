@@ -16,7 +16,7 @@ export const Container = styled(Link)<LinkStyledProps>`
     &:active {
       color: ${({ theme, $activeColor }) =>
         $activeColor
-          ? theme.colors[$activeColor as keyof typeof theme['colors']] ||
+          ? theme.colors[$activeColor as keyof (typeof theme)['colors']] ||
             $activeColor
           : 'inherit'};
     }

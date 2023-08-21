@@ -1,4 +1,5 @@
 export { default as Button } from './Button';
+export { default as ErrorCard } from './ErrorCard';
 export { default as Flex } from './Flex';
 export { default as Link } from './Link';
 export { default as Loader } from './Loader';

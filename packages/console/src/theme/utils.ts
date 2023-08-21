@@ -9,44 +9,42 @@ type CssValues =
   | [CssValue, CssValue, CssValue]
   | [CssValue, CssValue, CssValue, CssValue];
 
-interface CommonProps {
+interface CommonPropsMultiple {
   margin?: CssValues;
+  padding?: CssValues;
+}
+
+interface CommonPropsSingle {
   marginTop?: CssValue;
   marginRight?: CssValue;
   marginBottom?: CssValue;
   marginLeft?: CssValue;
-  padding?: CssValues;
   paddingTop?: CssValue;
   paddingRight?: CssValue;
   paddingBottom?: CssValue;
   paddingLeft?: CssValue;
 }
 
+type CommonProps = CommonPropsMultiple & CommonPropsSingle;
+
 const cssValue = (theme: DefaultTheme, val?: CssValue) =>
   val !== undefined &&
   (typeof val === 'string' ? `${val}` : `${theme.spacing(val)}px`);
 
 const cssLine =
-  (key: string, cssKey: string) =>
+  (key: keyof CommonPropsSingle, cssKey: string) =>
   ({
     theme,
     ...props
   }: {
     theme: DefaultTheme;
-  } & CommonProps) =>
-    css`
-      ${cssKey}: ${
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        cssValue(theme, props[key])
-      };
-    `;
+  } & CommonPropsSingle) => css`
+    ${cssKey}: ${cssValue(theme, props[key])};
+  `;
 
 const cssFour =
-  (key: string, cssKey: string) =>
-  ({ theme, ...props }: { theme: DefaultTheme } & CommonProps) => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+  (key: keyof CommonPropsMultiple, cssKey: string) =>
+  ({ theme, ...props }: { theme: DefaultTheme } & CommonPropsMultiple) => {
     const val = props[key] as CssValues;
     let cssVal;
 
@@ -61,35 +59,38 @@ const cssFour =
     `;
   };
 
-export const CommonWrapper = <T>(component: (args: T) => JSX.Element | null) =>
-  styled((props: Common<T>) => {
-    const {
-      margin,
-      marginTop,
-      marginRight,
-      marginBottom,
-      marginLeft,
-      padding,
-      paddingTop,
-      paddingRight,
-      paddingBottom,
-      paddingLeft,
-      ...componentProps
-    } = props;
+export const CommonWrapper = <T>(
+  component: (args: T) => JSX.Element | null,
+) => styled((props: Common<T>) => {
+  const {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    margin,
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
+    padding,
+    paddingTop,
+    paddingRight,
+    paddingBottom,
+    paddingLeft,
+    /* eslint-enable */
+    ...componentProps
+  } = props;
 
-    return component(componentProps as T);
-  })<Common<T>>`
-    ${cssFour('margin', 'margin')}
-    ${cssLine('marginTop', 'margin-top')}
-    ${cssLine('marginRight', 'margin-right')}
-    ${cssLine('marginBottom', 'margin-bottom')}
-    ${cssLine('marginLeft', 'margin-left')}
-    ${cssFour('padding', 'padding')}
-    ${cssLine('paddingTop', 'padding-top')}
-    ${cssLine('paddingRight', 'padding-right')}
-    ${cssLine('paddingBottom', 'padding-bottom')}
-    ${cssLine('paddingLeft', 'padding-left')}
-  `;
+  return component(componentProps as T);
+})<Common<T>>`
+  ${cssFour('margin', 'margin')}
+  ${cssLine('marginTop', 'margin-top')}
+  ${cssLine('marginRight', 'margin-right')}
+  ${cssLine('marginBottom', 'margin-bottom')}
+  ${cssLine('marginLeft', 'margin-left')}
+  ${cssFour('padding', 'padding')}
+  ${cssLine('paddingTop', 'padding-top')}
+  ${cssLine('paddingRight', 'padding-right')}
+  ${cssLine('paddingBottom', 'padding-bottom')}
+  ${cssLine('paddingLeft', 'padding-left')}
+`;
 
 // Utility wrapper for building different types of props needed for a component.
 //

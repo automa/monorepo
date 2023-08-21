@@ -3,7 +3,7 @@ import * as Toast from '@radix-ui/react-toast';
 
 import theme, { $, Component, Styled } from 'theme';
 
-export type ToastVariant = keyof typeof theme['toasts'];
+export type ToastVariant = keyof (typeof theme)['toasts'];
 
 export type ToastProps = $<
   {

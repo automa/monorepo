@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { Routes, Route as ReactRoute } from 'react-router-dom';
+import { Statsig } from 'statsig-react';
 
 import { RoutesLoaderProps } from './types';
 
@@ -15,15 +16,17 @@ const RoutesLoader: React.FC<RoutesLoaderProps> = ({
   return (
     <Suspense fallback={fallback}>
       <Routes location={location} key={location?.pathname}>
-        {routes.map(({ path, Component, props }, index) => {
-          return (
-            <ReactRoute
-              key={index}
-              path={path}
-              element={<Component {...props} />}
-            />
-          );
-        })}
+        {routes
+          .filter(({ gate }) => !gate || Statsig.checkGate(gate))
+          .map(({ path, Component, props }, index) => {
+            return (
+              <ReactRoute
+                key={index}
+                path={path}
+                element={<Component {...props} />}
+              />
+            );
+          })}
       </Routes>
     </Suspense>
   );

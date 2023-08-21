@@ -2,7 +2,7 @@ import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import axios from 'axios';
 
 const httpLink = new HttpLink({
-  uri: `${import.meta.env.VITE_API_URI}/api/graphql`,
+  uri: import.meta.env.VITE_GRAPHQL_URI,
   credentials: 'include',
 });
 

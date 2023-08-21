@@ -4,4 +4,5 @@ export interface Route {
   Component: LazyExoticComponent<() => ReactElement>;
   path: string;
   props: any;
+  gate?: string;
 }
