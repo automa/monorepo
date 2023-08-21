@@ -1,0 +1,28 @@
+{
+  "name": "@automa/docs",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "next": "~13.4.19",
+    "nextra": "~2.11.1",
+    "nextra-theme-docs": "~2.11.1",
+    "react": "~18.2.0",
+    "react-dom": "~18.2.0"
+  },
+  "scripts": {
+    "build": "next build",
+    "build-stats": "BUILD_STATS=1 yarn build",
+    "start": "next dev",
+    "storybook": "storybook dev -p 6006",
+    "storybook-build": "storybook build",
+    "test-storybook": "test-storybook",
+    "test-storybook-cover": "test-storybook --coverage"
+  },
+  "engines": {
+    "node": ">=18.15.0"
+  },
+  "devDependencies": {
+    "@storybook/nextjs": "~7.0.27",
+    "webpack-stats-plugin": "^1.1.3"
+  }
+}
