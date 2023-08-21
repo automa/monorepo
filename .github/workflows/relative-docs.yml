@@ -1,0 +1,56 @@
+name: RelativeCI (docs)
+on:
+  push:
+    branches: [master]
+    paths:
+      - .github/workflows/relative-docs.yml
+      - packages/docs/components/**
+      - packages/docs/pages/**
+      - packages/docs/public/**
+      - packages/docs/next.config.js
+      - packages/docs/theme.config.tsx
+      - yarn.lock
+  pull_request:
+    branches: [master]
+    paths:
+      - .github/workflows/relative-docs.yml
+      - packages/docs/components/**
+      - packages/docs/pages/**
+      - packages/docs/public/**
+      - packages/docs/next.config.js
+      - packages/docs/theme.config.tsx
+      - yarn.lock
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
+  cancel-in-progress: true
+jobs:
+  relative-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: '**/node_modules'
+          key: deps-${{ hashFiles('**/yarn.lock', '**/schema.prisma') }}
+          restore-keys: |
+            deps-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build stats
+        run: yarn build-stats
+        working-directory: packages/docs
+      - name: RelativeCI
+        uses: relative-ci/agent-action@v2
+        with:
+          webpackStatsFile: packages/docs/.next/webpack-stats.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+          key: ${{ secrets.RELATIVE_CI_KEY_DOCS }}

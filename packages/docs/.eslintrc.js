@@ -2,6 +2,7 @@ module.exports = {
   root: true,
   extends: [
     'eslint:recommended',
+    'plugin:@next/next/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
@@ -9,24 +10,13 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:prettier/recommended',
     'plugin:storybook/recommended',
+    'plugin:tailwindcss/recommended',
   ],
   rules: {
     'no-empty': [
       'error',
       {
         allowEmptyCatch: true,
-      },
-    ],
-    'no-restricted-imports': [
-      'error',
-      {
-        paths: [
-          {
-            name: 'styled-components',
-            message: 'Please import from styled-components/macro.',
-          },
-        ],
-        patterns: ['!styled-components/macro'],
       },
     ],
     '@typescript-eslint/no-empty-interface': 'off',
@@ -47,14 +37,12 @@ module.exports = {
       },
     ],
     'storybook/no-uninstalled-addons': 'off',
+    'tailwindcss/classnames-order': 'off',
+    'tailwindcss/enforces-negative-arbitrary-values': 'error',
+    'tailwindcss/enforces-shorthand': 'error',
+    'tailwindcss/no-arbitrary-value': 'error',
   },
-  ignorePatterns: [
-    '!.storybook',
-    '!.babel-plugin-macrosrc.js',
-    'build',
-    'coverage',
-    'public',
-  ],
+  ignorePatterns: ['!.storybook', '.next', 'coverage', 'public'],
   overrides: [
     {
       files: ['**/*.stories.*'],
@@ -69,7 +57,13 @@ module.exports = {
       },
     },
     {
-      files: ['.storybook/*.ts', '.babel-plugin-macrosrc.js', '.eslintrc.js'],
+      files: [
+        '.storybook/*.ts',
+        '.eslintrc.js',
+        'next.config.mjs',
+        'postcss.config.js',
+        'tailwind.config.ts',
+      ],
       env: {
         node: true,
       },
@@ -81,7 +75,7 @@ module.exports = {
     },
     'import/resolver': {
       typescript: {
-        project: 'packages/console',
+        project: 'packages/docs',
       },
     },
     'import/internal-regex': '^@automa/',

@@ -1,4 +1,6 @@
 build
+.next
 coverage
+.nyc_output
 
 packages/common/src/graphql.ts
