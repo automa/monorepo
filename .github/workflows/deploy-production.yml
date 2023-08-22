@@ -42,7 +42,12 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.PRODUCTION_AWS_REGION }}
-        run: aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET }}
+        run: |
+          aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET }} \
+            --exclude '*.html' \
+            --cache-control max-age=31536000
+          aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET }} \
+            --exclude '*' --include '*.html'
       - name: Invalidate cloudfront cache
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
