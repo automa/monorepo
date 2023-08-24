@@ -13,6 +13,10 @@ coverage:
         flags:
           - console
         informational: true
+      docs:
+        flags:
+          - docs
+        informational: true
     patch:
       default: false
       api:
@@ -23,6 +27,10 @@ coverage:
         flags:
           - console
         informational: true
+      docs:
+        flags:
+          - docs
+        informational: true
 flags:
   api:
     carryforward: true
@@ -32,3 +40,7 @@ flags:
     carryforward: true
     paths:
       - packages/console
+  docs:
+    carryforward: true
+    paths:
+      - packages/docs

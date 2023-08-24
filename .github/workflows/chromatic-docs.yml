@@ -6,6 +6,7 @@ on:
       - .github/workflows/chromatic-docs.yml
       - packages/docs/components/**
       - packages/docs/public/**
+      - packages/docs/tailwind.config.ts
       - yarn.lock
   pull_request:
     branches: [master]
@@ -13,6 +14,7 @@ on:
       - .github/workflows/chromatic-docs.yml
       - packages/docs/components/**
       - packages/docs/public/**
+      - packages/docs/tailwind.config.ts
       - yarn.lock
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}

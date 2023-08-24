@@ -42,7 +42,7 @@ module.exports = {
     'tailwindcss/enforces-shorthand': 'error',
     'tailwindcss/no-arbitrary-value': 'error',
   },
-  ignorePatterns: ['!.storybook', '.next', 'coverage', 'public'],
+  ignorePatterns: ['!.storybook', '.next', 'build', 'coverage', 'public'],
   overrides: [
     {
       files: ['**/*.stories.*'],
