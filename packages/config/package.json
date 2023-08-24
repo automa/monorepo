@@ -1,0 +1,20 @@
+{
+  "name": "@automa/schema",
+  "version": "0.0.1",
+  "private": true,
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "module": "src/index.ts",
+  "dependencies": {
+    "ajv": "~8.12.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w --preserveWatchOutput",
+    "test": "mocha test",
+    "test-cover": "nyc --reporter=lcov --reporter=text-summary yarn test"
+  },
+  "engines": {
+    "node": ">=18.15.0"
+  }
+}

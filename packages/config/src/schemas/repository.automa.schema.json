@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://automa.app/repository.automa.schema.json",
+  "allOf": [{ "$ref": "repository.schema.json" }],
+  "type": "object",
+  "properties": {},
+  "unevaluatedProperties": false
+}

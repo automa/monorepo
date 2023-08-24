@@ -1,0 +1,42 @@
+name: Testing (config)
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - .github/workflows/test-config.yml
+      - packages/config/**
+      - yarn.lock
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: '**/node_modules'
+          key: deps-${{ hashFiles('**/yarn.lock', '**/schema.prisma') }}
+          restore-keys: |
+            deps-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Run tests
+        run: yarn test-cover
+        working-directory: packages/config
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/config/coverage/lcov.info
+          flags: config
+          name: config.${{ github.event.number }}
+          fail_ci_if_error: false
