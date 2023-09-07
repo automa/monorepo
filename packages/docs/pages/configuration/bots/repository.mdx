@@ -1,0 +1,101 @@
+### assignees
+
+```json filename="automa.json"
+{
+  "repository": {
+    "assignees": ["alice"]
+  },
+  "bots": {
+    "dependency": {
+      "repository": {
+        "assignees": ["bob"]
+      }
+    }
+  }
+}
+```
+
+### assigneesReplace
+
+```json filename="automa.json"
+{
+  "repository": {
+    "assignees": ["alice"]
+  },
+  "bots": {
+    "dependency": {
+      "repository": {
+        "assigneesReplace": ["bob"]
+      }
+    }
+  }
+}
+```
+
+### labels
+
+```json filename="automa.json"
+{
+  "repository": {
+    "labels": ["automa"]
+  },
+  "bots": {
+    "dependency": {
+      "repository": {
+        "labels": ["dependency"]
+      }
+    }
+  }
+}
+```
+
+### labelsReplace
+
+```json filename="automa.json"
+{
+  "repository": {
+    "labels": ["automa"]
+  },
+  "bots": {
+    "dependency": {
+      "repository": {
+        "labelsReplace": ["dependency"]
+      }
+    }
+  }
+}
+```
+
+### reviewers
+
+```json filename="automa.json"
+{
+  "repository": {
+    "reviewers": ["alice", "my-org/backend"]
+  },
+  "bots": {
+    "dependency": {
+      "repository": {
+        "reviewersReplace": ["bob", "my-org/devops"]
+      }
+    }
+  }
+}
+```
+
+### reviewersReplace
+
+```json filename="automa.json"
+{
+  "repository": {
+    "reviewers": ["alice", "my-org/backend"]
+  },
+  "bots": {
+    "dependency": {
+      "repository": {
+        "reviewersReplace": ["bob", "my-org/devops"]
+      }
+    }
+  }
+}
+```

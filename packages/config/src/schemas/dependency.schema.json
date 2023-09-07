@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://automa.app/dependency.schema.json",
+  "type": "object",
+  "properties": {
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "repository": { "$ref": "repository.bot.schema.json" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "repository": { "$ref": "repository.bot.schema.json" }
+  },
+  "additionalProperties": false
+}

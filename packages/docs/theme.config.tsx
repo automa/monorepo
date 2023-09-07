@@ -3,6 +3,17 @@ import * as nextraDocs from 'nextra-theme-docs';
 import { Logo, Footer } from 'components';
 
 const config: nextraDocs.DocsThemeConfig = {
+  useNextSeoProps() {
+    return {
+      titleTemplate: 'Automa Docs | %s',
+    };
+  },
+  head: (
+    <>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="description" content="Documentation for Automa" />
+    </>
+  ),
   nextThemes: {
     defaultTheme: 'dark',
   },
@@ -28,11 +39,6 @@ const config: nextraDocs.DocsThemeConfig = {
   },
   footer: {
     component: <Footer />,
-  },
-  useNextSeoProps() {
-    return {
-      titleTemplate: '%s | Automa Docs',
-    };
   },
 };
 

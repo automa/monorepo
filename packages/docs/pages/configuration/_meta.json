@@ -1,6 +1,6 @@
 {
-  "index": "Introduction",
   "repository": "Repository",
+  "bots": "Bots",
   "dependency": "Dependency bot",
   "files": "Files bot"
 }

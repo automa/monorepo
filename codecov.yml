@@ -9,6 +9,10 @@ coverage:
         flags:
           - api
         informational: true
+      config:
+        flags:
+          - config
+        informational: true
       console:
         flags:
           - console
@@ -23,6 +27,10 @@ coverage:
         flags:
           - api
         informational: true
+      config:
+        flags:
+          - config
+        informational: true
       console:
         flags:
           - console
@@ -36,6 +44,10 @@ flags:
     carryforward: true
     paths:
       - packages/api
+  config:
+    carryforward: true
+    paths:
+      - packages/config
   console:
     carryforward: true
     paths:

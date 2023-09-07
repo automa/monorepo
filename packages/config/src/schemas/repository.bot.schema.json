@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://automa.app/repository.bot.schema.json",
+  "allOf": [{ "$ref": "repository.schema.json" }],
+  "type": "object",
+  "properties": {
+    "assigneesReplace": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "labelsReplace": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reviewersReplace": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "unevaluatedProperties": false
+}
