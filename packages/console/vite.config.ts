@@ -28,6 +28,9 @@ export default defineConfig({
       typescript: true,
       eslint: {
         lintCommand: 'eslint .',
+        dev: {
+          logLevel: ['error'],
+        },
       },
     }),
     process.env.BUILD_STATS ? webpackStats() : undefined,
