@@ -18,6 +18,7 @@ suite('github hook installation event', () => {
   suiteSetup(async () => {
     app = await server();
     sandbox = createSandbox();
+    await app.prisma.orgs.deleteMany();
   });
 
   suiteTeardown(async () => {
@@ -147,7 +148,7 @@ suite('github hook installation event', () => {
           provider_id: '65730741',
           is_user: false,
           has_installation: false,
-          github_installation_id: 40335964,
+          github_installation_id: null,
         });
       });
 

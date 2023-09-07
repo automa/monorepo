@@ -39,6 +39,8 @@ CREATE TABLE public.orgs (
   UNIQUE (github_installation_id)
 );
 
+INSERT INTO public.orgs VALUES (1, 'automa', 'github', '65730741', FALSE, FALSE, NOW(), NULL);
+
 CREATE TABLE public.repos (
   id SERIAL PRIMARY KEY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,

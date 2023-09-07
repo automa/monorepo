@@ -44,7 +44,7 @@ const created: GithubEventActionHandler<{
 const deleted: GithubEventActionHandler<{
   installation: GithubInstallation;
   repositories: GithubRepositoryMinimal[];
-}> = async (app, body) => inactive(app, body.installation.account.id);
+}> = async (app, body) => inactive(app, body.installation.account.id, true);
 
 const suspend: GithubEventActionHandler<{
   installation: GithubInstallation;
@@ -76,7 +76,11 @@ const unsuspend: GithubEventActionHandler<{
   }
 };
 
-const inactive = async (app: FastifyInstance, providerId: number) => {
+const inactive = async (
+  app: FastifyInstance,
+  providerId: number,
+  deleted = false,
+) => {
   await app.prisma.orgs.update({
     where: {
       provider_type_provider_id: {
@@ -86,6 +90,9 @@ const inactive = async (app: FastifyInstance, providerId: number) => {
     },
     data: {
       has_installation: false,
+      ...(deleted && {
+        github_installation_id: null,
+      }),
     },
   });
 
