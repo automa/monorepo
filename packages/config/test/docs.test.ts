@@ -1,16 +1,19 @@
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { dirname, join } from 'path';
 
 const assertDocumented = (schemaFile: string, docsFile: string) => {
   const schema = JSON.parse(
     readFileSync(
-      join(__dirname, `../src/schemas/${schemaFile}.schema.json`),
+      join(dirname(__dirname), `schemas/${schemaFile}.schema.json`),
       'utf8',
     ),
   );
 
   const docs = readFileSync(
-    join(__dirname, `../../docs/pages/configuration/${docsFile}.mdx`),
+    join(
+      dirname(dirname(__dirname)),
+      `docs/pages/configuration/${docsFile}.mdx`,
+    ),
     'utf8',
   );
 

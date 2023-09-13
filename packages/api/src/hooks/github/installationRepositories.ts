@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { AxiosInstance } from 'axios';
 
+import { CauseType } from '@automa/common';
 import { orgs } from '@automa/prisma';
 
 import { caller } from '../../clients/github';
@@ -32,7 +33,7 @@ const added: GithubEventActionHandler<{
   const { axios } = await caller(app, body.installation.id);
 
   for (const repository of body.repositories_added) {
-    await addRepo(app, axios, org, repository);
+    await addRepo(app, axios, org, repository, CauseType.REPOSITORY_ADDED);
   }
 };
 
@@ -61,10 +62,11 @@ export const addRepo = async (
   axios: AxiosInstance,
   org: orgs,
   repository: GithubRepositoryMinimal,
+  cause: CauseType,
 ) => {
   const { data } = await axios.get(`/repos/${repository.full_name}`);
 
-  return updateRepo(app, axios, org, data);
+  return updateRepo(app, axios, org, data, cause);
 };
 
 export const updateRepo = async (
@@ -72,6 +74,7 @@ export const updateRepo = async (
   axios: AxiosInstance,
   org: orgs,
   repository: GithubRepository,
+  cause: CauseType,
 ) => {
   const update = {
     name: repository.name,
@@ -95,7 +98,7 @@ export const updateRepo = async (
     },
   });
 
-  return syncSettings(app, axios, repo, repository);
+  return syncSettings(app, axios, repo, repository, cause);
 };
 
 export default {

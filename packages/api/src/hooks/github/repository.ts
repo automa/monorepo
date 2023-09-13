@@ -1,3 +1,5 @@
+import { CauseType } from '@automa/common';
+
 import { caller } from '../../clients/github';
 
 import {
@@ -57,7 +59,13 @@ const edited: GithubEventActionHandler<{
 
   const { axios } = await caller(app, body.installation.id);
 
-  return syncSettings(app, axios, repo, body.repository);
+  return syncSettings(
+    app,
+    axios,
+    repo,
+    body.repository,
+    CauseType.DEFAULT_BRANCH_CHANGED,
+  );
 };
 
 // We are not handling the `repository.deleted` event because we will not

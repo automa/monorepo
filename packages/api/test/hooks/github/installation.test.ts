@@ -3,6 +3,7 @@ import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import axios from 'axios';
 import { SinonSandbox, SinonStub, createSandbox } from 'sinon';
 
+import { CauseType } from '@automa/common';
 import { orgs, repos } from '@automa/prisma';
 
 import { server } from '../../utils';
@@ -107,26 +108,54 @@ suite('github hook installation event', () => {
       );
     });
 
-    test('should create repository', async () => {
-      const repos = await app.prisma.repos.findMany({
-        where: {
-          orgs: {
-            provider_type: 'github',
-            provider_id: '65730741',
+    suite('and repository', () => {
+      let repos: repos[];
+
+      setup(async () => {
+        repos = await app.prisma.repos.findMany({
+          where: {
+            orgs: {
+              provider_type: 'github',
+              provider_id: '65730741',
+            },
           },
-        },
+        });
       });
 
-      assert.equal(repos.length, 1);
-      assert.deepOwnInclude(repos[0], {
-        name: 'automa',
-        provider_id: '592296270',
-        is_private: true,
-        is_archived: false,
-        has_installation: true,
-        last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+      test('should be created', async () => {
+        assert.equal(repos.length, 1);
+        assert.deepOwnInclude(repos[0], {
+          name: 'automa',
+          provider_id: '592296270',
+          is_private: true,
+          is_archived: false,
+          has_installation: true,
+          last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+        });
       });
-      assert.deepEqual(repos[0].settings, { bots: { dependency: {} } });
+
+      test('and settings should be created', async () => {
+        const settings = await app.prisma.repo_settings.findMany({
+          where: {
+            repo_id: repos[0].id,
+          },
+          orderBy: {
+            created_at: 'desc',
+          },
+        });
+
+        assert.equal(settings.length, 1);
+
+        assert.deepOwnInclude(settings[0], {
+          repo_id: repos[0].id,
+          cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
+          commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+          validation_errors: null,
+          imported_from_dependabot: false,
+          imported_from_renovate: false,
+        });
+        assert.deepEqual(settings[0].settings, { bots: { dependency: {} } });
+      });
     });
 
     suite('and deleted', () => {
@@ -169,6 +198,7 @@ suite('github hook installation event', () => {
           is_private: true,
           is_archived: false,
           has_installation: false,
+          last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         });
       });
 
@@ -228,26 +258,67 @@ suite('github hook installation event', () => {
           );
         });
 
-        test('should mark repository as active', async () => {
-          const repos = await app.prisma.repos.findMany({
-            include: {
-              orgs: true,
-            },
+        suite('and repository', () => {
+          let repos: repos[];
+
+          setup(async () => {
+            repos = await app.prisma.repos.findMany({
+              where: {
+                orgs: {
+                  provider_type: 'github',
+                  provider_id: '65730741',
+                },
+              },
+            });
           });
 
-          assert.equal(repos.length, 1);
-          assert.deepOwnInclude(repos[0], {
-            name: 'automa',
-            provider_id: '592296270',
-            is_private: true,
-            is_archived: false,
-            last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+          test('should be marked active', async () => {
+            assert.equal(repos.length, 1);
+            assert.deepOwnInclude(repos[0], {
+              name: 'automa',
+              provider_id: '592296270',
+              is_private: true,
+              is_archived: false,
+              has_installation: true,
+              last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+            });
           });
-          assert.deepEqual(repos[0].settings, { bots: { dependency: {} } });
-          assert.deepOwnInclude(repos[0].orgs, {
-            name: 'automa',
-            provider_type: 'github',
-            provider_id: '65730741',
+
+          test('should create settings for repository', async () => {
+            const settings = await app.prisma.repo_settings.findMany({
+              where: {
+                repo_id: repos[0].id,
+              },
+              orderBy: {
+                created_at: 'desc',
+              },
+            });
+
+            assert.equal(settings.length, 2);
+
+            assert.deepOwnInclude(settings[0], {
+              repo_id: repos[0].id,
+              cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
+              commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+              validation_errors: null,
+              imported_from_dependabot: false,
+              imported_from_renovate: false,
+            });
+            assert.deepEqual(settings[0].settings, {
+              bots: { dependency: {} },
+            });
+
+            assert.deepOwnInclude(settings[1], {
+              repo_id: repos[0].id,
+              cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
+              commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+              validation_errors: null,
+              imported_from_dependabot: false,
+              imported_from_renovate: false,
+            });
+            assert.deepEqual(settings[1].settings, {
+              bots: { dependency: {} },
+            });
           });
         });
       });
@@ -293,6 +364,7 @@ suite('github hook installation event', () => {
           is_private: true,
           is_archived: false,
           has_installation: false,
+          last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         });
       });
 
@@ -405,10 +477,10 @@ suite('github hook installation event', () => {
         });
 
         suite('and checking repositories', () => {
-          let repositories: repos[];
+          let repos: repos[];
 
           setup(async () => {
-            repositories = await app.prisma.repos.findMany({
+            repos = await app.prisma.repos.findMany({
               where: {
                 orgs: {
                   provider_type: 'github',
@@ -422,8 +494,8 @@ suite('github hook installation event', () => {
           });
 
           test('should create another repository', () => {
-            assert.equal(repositories.length, 2);
-            assert.deepOwnInclude(repositories[1], {
+            assert.equal(repos.length, 2);
+            assert.deepOwnInclude(repos[1], {
               name: 'tmp',
               provider_id: '674157076',
               is_private: true,
@@ -431,25 +503,84 @@ suite('github hook installation event', () => {
               has_installation: true,
               last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
             });
-            assert.deepEqual(repositories[0].settings, {
-              bots: { dependency: {} },
-            });
           });
 
-          test('should mark repository as active', () => {
-            assert.deepOwnInclude(repositories[0], {
+          test('should mark existing repository as active', () => {
+            assert.deepOwnInclude(repos[0], {
               name: 'automa',
               provider_id: '592296270',
               has_installation: true,
+              last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
             });
           });
 
-          test('should mark repository as archived & public', async () => {
-            assert.deepOwnInclude(repositories[0], {
+          test('should mark existing repository as archived & public', async () => {
+            assert.deepOwnInclude(repos[0], {
               name: 'automa',
               provider_id: '592296270',
               is_private: false,
               is_archived: true,
+              last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+            });
+          });
+
+          test('should create settings for repositories', async () => {
+            let settings = await app.prisma.repo_settings.findMany({
+              where: {
+                repo_id: repos[0].id,
+              },
+              orderBy: {
+                created_at: 'desc',
+              },
+            });
+
+            assert.equal(settings.length, 2);
+
+            assert.deepOwnInclude(settings[0], {
+              repo_id: repos[0].id,
+              cause: CauseType.REPOSITORY_SYNCED_AFTER_UNSUSPENDED,
+              commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+              validation_errors: null,
+              imported_from_dependabot: false,
+              imported_from_renovate: false,
+            });
+            assert.deepEqual(settings[0].settings, {
+              bots: { dependency: {} },
+            });
+
+            assert.deepOwnInclude(settings[1], {
+              repo_id: repos[0].id,
+              cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
+              commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+              validation_errors: null,
+              imported_from_dependabot: false,
+              imported_from_renovate: false,
+            });
+            assert.deepEqual(settings[1].settings, {
+              bots: { dependency: {} },
+            });
+
+            settings = await app.prisma.repo_settings.findMany({
+              where: {
+                repo_id: repos[1].id,
+              },
+              orderBy: {
+                created_at: 'desc',
+              },
+            });
+
+            assert.equal(settings.length, 1);
+
+            assert.deepOwnInclude(settings[0], {
+              repo_id: repos[1].id,
+              cause: CauseType.REPOSITORY_SYNCED_AFTER_UNSUSPENDED,
+              commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+              validation_errors: null,
+              imported_from_dependabot: false,
+              imported_from_renovate: false,
+            });
+            assert.deepEqual(settings[0].settings, {
+              bots: { dependency: {} },
             });
           });
         });

@@ -3,6 +3,7 @@ import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import axios from 'axios';
 import { SinonSandbox, SinonStub, createSandbox } from 'sinon';
 
+import { CauseType } from '@automa/common';
 import { orgs, repos } from '@automa/prisma';
 
 import { server } from '../../utils';
@@ -17,6 +18,7 @@ suite('github hook repository event', () => {
   suiteSetup(async () => {
     app = await server();
 
+    await app.prisma.orgs.deleteMany();
     org = await app.prisma.orgs.create({
       data: {
         name: 'automa',
@@ -244,7 +246,7 @@ suite('github hook repository event', () => {
       );
     });
 
-    test('should update repository settings', async () => {
+    test('should update repository commit', async () => {
       const repo = await app.prisma.repos.findFirstOrThrow({
         where: {
           id: repository.id,
@@ -259,7 +261,29 @@ suite('github hook repository event', () => {
         has_installation: true,
         last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
       });
-      assert.deepEqual(repo.settings, { bots: { dependency: {} } });
+    });
+
+    test('should create repository settings', async () => {
+      const settings = await app.prisma.repo_settings.findMany({
+        where: {
+          repo_id: repository.id,
+        },
+        orderBy: {
+          created_at: 'desc',
+        },
+      });
+
+      assert.equal(settings.length, 1);
+
+      assert.deepOwnInclude(settings[0], {
+        repo_id: repository.id,
+        cause: CauseType.DEFAULT_BRANCH_CHANGED,
+        commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+        validation_errors: null,
+        imported_from_dependabot: false,
+        imported_from_renovate: false,
+      });
+      assert.deepEqual(settings[0].settings, { bots: { dependency: {} } });
     });
   });
 });

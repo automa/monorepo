@@ -1,4 +1,4 @@
-import { CONFIG_FILES } from '@automa/common';
+import { CONFIG_FILES, CauseType } from '@automa/common';
 
 import { caller } from '../../clients/github';
 
@@ -40,20 +40,20 @@ const push: GithubEventActionHandler<{
     return;
   }
 
-  const sync = async () => {
+  const sync = async (cause: CauseType) => {
     const { axios } = await caller(app, repo.orgs.github_installation_id!);
-    return syncSettings(app, axios, repo, body.repository, body.after);
+    return syncSettings(app, axios, repo, body.repository, cause, body.after);
   };
 
   // If it's a force push, just read from branch because when some of those commits
   // were pushed in a different branch before, this event will not contain them.
   if (body.forced) {
-    return sync();
+    return sync(CauseType.COMMIT_FORCE_PUSHED);
   }
 
   // If we lost some commits and last tracked commit is not the base commit for the event
   if (body.before !== repo.last_commit_synced) {
-    return sync();
+    return sync(CauseType.COMMIT_UNKNOWN_BASE);
   }
 
   // If any of the files we care about were changed
@@ -63,7 +63,7 @@ const push: GithubEventActionHandler<{
         CONFIG_FILES.includes(file),
       )
     ) {
-      return sync();
+      return sync(CauseType.COMMIT_SETTINGS_CHANGED);
     }
   }
 

@@ -1,7 +1,8 @@
 import { FastifyInstance } from 'fastify';
 import { AxiosInstance } from 'axios';
 
-import { CONFIG_FILES } from '@automa/common';
+import { CONFIG_FILES, CauseType } from '@automa/common';
+import { validate } from '@automa/config';
 import { Prisma, repos } from '@automa/prisma';
 
 import { GithubRepository } from './types';
@@ -11,6 +12,7 @@ export const syncSettings = async (
   axios: AxiosInstance,
   repo: repos,
   repository: GithubRepository,
+  cause: CauseType,
   headCommit?: string,
 ) => {
   const [settings, commit] = await Promise.all([
@@ -18,17 +20,46 @@ export const syncSettings = async (
     headCommit ?? readBranchHead(axios, repository),
   ]);
 
+  let errors, settingsJSON;
+
+  if (settings) {
+    try {
+      settingsJSON = JSON.parse(settings);
+    } catch (err) {
+      errors = { deserialize: (err as Error).message };
+    }
+  }
+
+  if (!errors) {
+    const errs = validate(settingsJSON);
+
+    if (errs) {
+      errors = { schema: errs };
+    }
+  }
+
   await app.prisma.repos.update({
     where: {
       id: repo.id,
     },
     data: {
-      settings: settings === null ? Prisma.JsonNull : JSON.parse(settings),
       last_commit_synced: commit,
+      repo_settings: {
+        createMany: {
+          data: [
+            {
+              cause,
+              commit,
+              settings: settings === null ? Prisma.JsonNull : settingsJSON,
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              validation_errors: errors === null ? Prisma.JsonNull : errors,
+            },
+          ],
+        },
+      },
     },
   });
-
-  // TODO: validate settings
 };
 
 const readSettings = async (
