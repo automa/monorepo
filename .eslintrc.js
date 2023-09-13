@@ -12,6 +12,7 @@ module.exports = {
     'plugin:mocha/recommended',
   ],
   rules: {
+    '@typescript-eslint/ban-ts-comment': 'off',
     'mocha/no-mocha-arrows': 'off',
   },
   env: {

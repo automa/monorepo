@@ -1,7 +1,6 @@
 import { Static, Type } from '@sinclair/typebox';
 import envSchema from 'nested-env-schema';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import pkg from '../package.json';
 

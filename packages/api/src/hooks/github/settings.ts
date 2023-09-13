@@ -51,7 +51,6 @@ export const syncSettings = async (
               cause,
               commit,
               settings: settings === null ? Prisma.JsonNull : settingsJSON,
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               validation_errors: errors === null ? Prisma.JsonNull : errors,
             },

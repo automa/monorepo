@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { FastifyInstance } from 'fastify';
 import fasitfyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';

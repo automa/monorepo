@@ -211,7 +211,6 @@ suite('github hook repository event', () => {
         },
       });
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       sandbox.stub(axios, 'create').returns({
         get: getStub,
