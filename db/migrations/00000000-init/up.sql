@@ -2,9 +2,10 @@ BEGIN;
 
 CREATE EXTENSION citext;
 CREATE EXTENSION pg_jsonschema;
+CREATE EXTENSION "uuid-ossp";
 
 CREATE TABLE public.users (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name VARCHAR(255) NOT NULL,
   email citext NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -14,7 +15,7 @@ CREATE TABLE public.users (
 CREATE TYPE public.provider AS ENUM ('github', 'gitlab', 'bitbucket');
 
 CREATE TABLE public.user_providers (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   provider_type public.provider NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
@@ -27,7 +28,7 @@ CREATE TABLE public.user_providers (
 );
 
 CREATE TABLE public.orgs (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name VARCHAR(255) NOT NULL,
   provider_type public.provider NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
@@ -39,10 +40,11 @@ CREATE TABLE public.orgs (
   UNIQUE (github_installation_id)
 );
 
-INSERT INTO public.orgs VALUES (1, 'automa', 'github', '65730741', FALSE, FALSE, NOW(), NULL);
+INSERT INTO public.orgs (name, provider_type, provider_id)
+VALUES ('automa', 'github', '65730741');
 
 CREATE TABLE public.repos (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
@@ -50,13 +52,26 @@ CREATE TABLE public.repos (
   is_archived BOOLEAN NOT NULL DEFAULT FALSE,
   has_installation BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  settings JSONB,
   last_commit_synced VARCHAR(40),
   UNIQUE (org_id, provider_id)
 );
 
+CREATE TABLE public.repo_settings (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  repo_id INTEGER NOT NULL REFERENCES public.repos(id) ON DELETE CASCADE,
+  cause INTEGER NOT NULL,
+  commit VARCHAR(40) NOT NULL,
+  settings JSONB,
+  validation_errors JSONB,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  imported_from_dependabot BOOLEAN NOT NULL DEFAULT FALSE,
+  imported_from_renovate BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE INDEX repo_settings_repo_id_created_at_idx ON public.repo_settings (repo_id, created_at DESC);
+
 CREATE TABLE public.user_orgs (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -64,11 +79,28 @@ CREATE TABLE public.user_orgs (
 );
 
 CREATE TABLE public.user_repos (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   repo_id INTEGER NOT NULL REFERENCES public.repos(id) ON DELETE CASCADE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   UNIQUE (user_id, repo_id)
 );
+
+CREATE TYPE public.bot_type AS ENUM ('scheduled', 'push');
+
+CREATE TABLE public.bots (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
+  name VARCHAR(255) NOT NULL,
+  type public.bot_type NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  UNIQUE (org_id, name)
+);
+
+INSERT INTO public.bots (org_id, name, type)
+VALUES
+  (1, 'automa', 'push'),
+  (1, 'dependency', 'scheduled'),
+  (1, 'files', 'scheduled');
 
 COMMIT;

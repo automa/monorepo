@@ -1,13 +1,13 @@
 import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 
 import Ajv from 'ajv/dist/2019';
 
 import { Config } from './types';
 
 const ajv = new Ajv({
-  schemas: readdirSync(join(__dirname, 'schemas')).map((file) =>
-    JSON.parse(readFileSync(join(__dirname, 'schemas', file), 'utf8')),
+  schemas: readdirSync(join(dirname(__dirname), 'schemas')).map((file) =>
+    JSON.parse(readFileSync(join(dirname(__dirname), 'schemas', file), 'utf8')),
   ),
 });
 

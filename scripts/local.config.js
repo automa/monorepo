@@ -15,7 +15,14 @@ module.exports = {
       args: 'dev',
     },
     {
-      name: 'common-graphql-dev',
+      name: 'config-dev',
+      cwd: 'packages/config',
+      script: 'yarn',
+      interpreter: '/bin/bash',
+      args: 'dev',
+    },
+    {
+      name: 'graphql-dev',
       watch: ['packages/api/src/graphql/schema'],
       script: 'yarn',
       interpreter: '/bin/bash',

@@ -1,5 +1,7 @@
 import { FastifyInstance } from 'fastify';
 
+import { CauseType } from '@automa/common';
+
 import { caller } from '../../clients/github';
 
 import {
@@ -37,7 +39,13 @@ const created: GithubEventActionHandler<{
   const { axios } = await caller(app, body.installation.id);
 
   for (const repository of body.repositories) {
-    await addRepo(app, axios, org, repository);
+    await addRepo(
+      app,
+      axios,
+      org,
+      repository,
+      CauseType.APP_INSTALLED_WITH_REPOSITORY,
+    );
   }
 };
 
@@ -71,7 +79,13 @@ const unsuspend: GithubEventActionHandler<{
 
   for await (const data of pages) {
     for (const repository of data.repositories) {
-      await updateRepo(app, axios, org, repository);
+      await updateRepo(
+        app,
+        axios,
+        org,
+        repository,
+        CauseType.REPOSITORY_SYNCED_AFTER_UNSUSPENDED,
+      );
     }
   }
 };

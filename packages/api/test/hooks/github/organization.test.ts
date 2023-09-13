@@ -14,6 +14,7 @@ suite('github hook organization event', () => {
   suiteSetup(async () => {
     app = await server();
 
+    await app.prisma.orgs.deleteMany();
     organization = await app.prisma.orgs.create({
       data: {
         name: 'automa',

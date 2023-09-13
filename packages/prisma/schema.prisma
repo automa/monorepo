@@ -27,6 +27,7 @@ model orgs {
   has_installation       Boolean     @default(false)
   created_at             DateTime    @default(now()) @db.Timestamp(6)
   github_installation_id Int?        @unique
+  bots                   bots[]
   repos                  repos[]
   user_orgs              user_orgs[]
 
@@ -34,17 +35,17 @@ model orgs {
 }
 
 model repos {
-  id                 Int          @id @default(autoincrement())
+  id                 Int             @id @default(autoincrement())
   org_id             Int
-  name               String       @db.VarChar(255)
-  provider_id        String       @db.VarChar(255)
-  is_private         Boolean      @default(false)
-  is_archived        Boolean      @default(false)
-  has_installation   Boolean      @default(false)
-  created_at         DateTime     @default(now()) @db.Timestamp(6)
-  settings           Json?
-  last_commit_synced String?      @db.VarChar(40)
-  orgs               orgs         @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  name               String          @db.VarChar(255)
+  provider_id        String          @db.VarChar(255)
+  is_private         Boolean         @default(false)
+  is_archived        Boolean         @default(false)
+  has_installation   Boolean         @default(false)
+  created_at         DateTime        @default(now()) @db.Timestamp(6)
+  last_commit_synced String?         @db.VarChar(40)
+  repo_settings      repo_settings[]
+  orgs               orgs            @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   user_repos         user_repos[]
 
   @@unique([org_id, provider_id])
@@ -86,8 +87,39 @@ model user_repos {
   @@unique([user_id, repo_id])
 }
 
+model bots {
+  id         Int      @id @default(autoincrement())
+  org_id     Int
+  name       String   @db.VarChar(255)
+  type       bot_type
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  orgs       orgs     @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([org_id, name])
+}
+
+model repo_settings {
+  id                       String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  repo_id                  Int
+  cause                    Int
+  commit                   String   @db.VarChar(40)
+  settings                 Json?
+  validation_errors        Json?
+  created_at               DateTime @default(now()) @db.Timestamp(6)
+  imported_from_dependabot Boolean  @default(false)
+  imported_from_renovate   Boolean  @default(false)
+  repos                    repos    @relation(fields: [repo_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([repo_id, created_at(sort: Desc)])
+}
+
 enum provider {
   github
   gitlab
   bitbucket
+}
+
+enum bot_type {
+  scheduled
+  push
 }
