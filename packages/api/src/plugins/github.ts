@@ -26,7 +26,7 @@ const githubPlugin: FastifyPluginAsync = async (app) => {
   app.addHook('preHandler', async (request, reply) => {
     request.github = async ({ path, method = 'GET', data = undefined }) => {
       const call = (accessToken: string) =>
-        axios({
+        axios.request({
           url: `${env.GITHUB_APP.API_URI}${path}`,
           method,
           data,

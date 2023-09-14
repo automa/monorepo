@@ -68,6 +68,42 @@ export default async function (app: FastifyInstance) {
       },
     });
 
+    const updateProvider = (userProviderId: number) =>
+      app.prisma.user_providers.update({
+        where: {
+          id: userProviderId,
+        },
+        data: {
+          provider_email: email,
+          refresh_token: refreshToken,
+        },
+      });
+
+    const finish = async (userId: number) => {
+      // Login the user linked to the existing/created provider
+      request.session.userId = userId;
+      request.session.githubAccessToken = accessToken;
+
+      // Sync the user's organizations
+      await sync(app, request, userId);
+
+      return reply.redirect(referer);
+    };
+
+    // Check if provider exists
+    const existingProvider = await app.prisma.user_providers.findFirst({
+      where: {
+        provider_type: provider.github,
+        provider_id: `${id}`,
+      },
+    });
+
+    // Update the provider data if it exists and return
+    if (existingProvider) {
+      await updateProvider(existingProvider.id);
+      return finish(existingProvider.user_id);
+    }
+
     // Check if user exists
     let user = await app.prisma.users.findFirst({
       where: {
@@ -75,37 +111,10 @@ export default async function (app: FastifyInstance) {
       },
     });
 
-    // Check if provider exists
-    let userProvider = await app.prisma.user_providers.findFirst({
-      where: {
-        provider_type: provider.github,
-        provider_id: `${id}`,
-      },
-    });
-
-    if (request.user) {
-      if (request.user && user && user.id !== request.user.id) {
-        return replyError(ErrorType.ACCOUNT_WITH_EMAIL_EXISTS);
-      }
-
-      if (userProvider && userProvider.user_id !== request.user.id) {
-        return replyError(ErrorType.PROVIDER_ALREADY_LINKED);
-      }
-
-      user = request.user;
-    } else {
-      if (user && userProvider && userProvider.user_id !== user.id) {
-        // User must have had multiple accounts with different emails
-        // linked to different providers and must have updated their
-        // email in one of the provider
-        user = await app.prisma.users.findFirst({
-          where: {
-            id: userProvider.user_id,
-          },
-        });
-      }
-
-      if (!user) {
+    if (!user) {
+      if (request.user) {
+        user = request.user;
+      } else {
         user = await app.prisma.users.create({
           data: {
             name,
@@ -115,6 +124,19 @@ export default async function (app: FastifyInstance) {
       }
     }
 
+    // Check if provider exists for the user
+    let userProvider = await app.prisma.user_providers.findFirst({
+      where: {
+        user_id: user.id,
+        provider_type: provider.github,
+      },
+    });
+
+    if (userProvider && userProvider.provider_id !== `${id}`) {
+      return replyError(ErrorType.PROVIDER_ALREADY_LINKED);
+    }
+
+    // Create a provider
     if (!userProvider) {
       userProvider = await app.prisma.user_providers.create({
         data: {
@@ -125,26 +147,10 @@ export default async function (app: FastifyInstance) {
           refresh_token: refreshToken,
         },
       });
+    } else {
+      await updateProvider(userProvider.id);
     }
 
-    // Update the data in the provider
-    await app.prisma.user_providers.update({
-      where: {
-        id: userProvider.id,
-      },
-      data: {
-        provider_email: email,
-        refresh_token: refreshToken,
-      },
-    });
-
-    // Login the user linked to the existing/created provider
-    request.session.userId = userProvider.user_id;
-    request.session.githubAccessToken = accessToken;
-
-    // Sync the user's data
-    await sync(app, request, user);
-
-    return reply.redirect(referer);
+    return finish(user.id);
   });
 }
