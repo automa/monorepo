@@ -19,6 +19,8 @@ import client from 'client';
 import store from 'store';
 import theme, { GlobalStyle, loadFonts } from 'theme';
 
+import { AnalyticsProvider } from 'analytics';
+
 import App from 'views/App';
 
 export const ToastContainer = styled(Toast.Viewport)``;
@@ -28,23 +30,25 @@ loadFonts().then(() => {
 
   root.render(
     <React.StrictMode>
-      <ApolloProvider client={client}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <Provider store={store}>
-            <BrowserRouter>
-              <Tooltip.Provider delayDuration={500}>
-                <Toast.Provider>
-                  <ErrorBoundary>
-                    <App />
-                  </ErrorBoundary>
-                  <ToastContainer />
-                </Toast.Provider>
-              </Tooltip.Provider>
-            </BrowserRouter>
-          </Provider>
-        </ThemeProvider>
-      </ApolloProvider>
+      <AnalyticsProvider>
+        <ApolloProvider client={client}>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <Provider store={store}>
+              <BrowserRouter>
+                <Tooltip.Provider delayDuration={500}>
+                  <Toast.Provider>
+                    <ErrorBoundary>
+                      <App />
+                    </ErrorBoundary>
+                    <ToastContainer />
+                  </Toast.Provider>
+                </Tooltip.Provider>
+              </BrowserRouter>
+            </Provider>
+          </ThemeProvider>
+        </ApolloProvider>
+      </AnalyticsProvider>
     </React.StrictMode>,
   );
 });
