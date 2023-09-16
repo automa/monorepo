@@ -33,10 +33,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build site
-        run: yarn build
         env:
           NODE_ENV: production
+          VITE_SEGMENT_KEY: ${{ secrets.PRODUCTION_SEGMENT_KEY }}
+          VITE_SENTRY_DSN: ${{ secrets.PRODUCTION_SENTRY_DSN }}
           VITE_STATSIG_KEY: ${{ secrets.PRODUCTION_STATSIG_KEY }}
+        run: yarn build
       - name: Upload to S3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}

@@ -10,6 +10,8 @@ import { FetchMock } from 'vitest-fetch-mock';
 import theme from 'theme';
 import { reducer, RootState } from 'store';
 
+import { AnalyticsProvider } from 'analytics';
+
 const customRender = (
   ui: ReactElement,
   {
@@ -25,18 +27,20 @@ const customRender = (
 ) => {
   const AllTheProviders: FC<{ children: ReactNode }> = ({ children }) => {
     return (
-      <ThemeProvider theme={theme}>
-        <Provider
-          store={configureStore({
-            reducer,
-            preloadedState: state,
-          })}
-        >
-          <MemoryRouter initialEntries={path && !history ? [path] : history}>
-            {children}
-          </MemoryRouter>
-        </Provider>
-      </ThemeProvider>
+      <AnalyticsProvider>
+        <ThemeProvider theme={theme}>
+          <Provider
+            store={configureStore({
+              reducer,
+              preloadedState: state,
+            })}
+          >
+            <MemoryRouter initialEntries={path && !history ? [path] : history}>
+              {children}
+            </MemoryRouter>
+          </Provider>
+        </ThemeProvider>
+      </AnalyticsProvider>
     );
   };
 
