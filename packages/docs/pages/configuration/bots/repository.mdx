@@ -15,7 +15,7 @@
 }
 ```
 
-### assigneesReplace
+### assigneesOverride
 
 ```json filename="automa.json"
 {
@@ -25,7 +25,7 @@
   "bots": {
     "dependency": {
       "repository": {
-        "assigneesReplace": ["bob"]
+        "assigneesOverride": ["bob"]
       }
     }
   }
@@ -49,7 +49,7 @@
 }
 ```
 
-### labelsReplace
+### labelsOverride
 
 ```json filename="automa.json"
 {
@@ -59,7 +59,7 @@
   "bots": {
     "dependency": {
       "repository": {
-        "labelsReplace": ["dependency"]
+        "labelsOverride": ["dependency"]
       }
     }
   }
@@ -83,7 +83,7 @@
 }
 ```
 
-### reviewersReplace
+### reviewersOverride
 
 ```json filename="automa.json"
 {
@@ -93,7 +93,7 @@
   "bots": {
     "dependency": {
       "repository": {
-        "reviewersReplace": ["bob", "my-org/devops"]
+        "reviewersOverride": ["bob", "my-org/devops"]
       }
     }
   }
