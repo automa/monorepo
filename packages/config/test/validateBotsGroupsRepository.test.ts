@@ -182,7 +182,7 @@ suite('validate - bots * groups repository', () => {
     );
   });
 
-  test('assigneesReplace being an array of strings is valid', () => {
+  test('assigneesOverride being an array of strings is valid', () => {
     assert.isNull(
       validate({
         bots: {
@@ -190,7 +190,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  assigneesReplace: ['foo', 'bar'],
+                  assigneesOverride: ['foo', 'bar'],
                 },
               },
             ],
@@ -200,7 +200,7 @@ suite('validate - bots * groups repository', () => {
     );
   });
 
-  test('assigneesReplace being null is invalid', () => {
+  test('assigneesOverride being null is invalid', () => {
     assert.deepEqual(
       validate({
         bots: {
@@ -208,65 +208,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  assigneesReplace: null,
-                },
-              },
-            ],
-          },
-        },
-      }),
-      [
-        {
-          instancePath: '/bots/dependency/groups/0/repository/assigneesReplace',
-          keyword: 'type',
-          message: 'must be array',
-          params: {
-            type: 'array',
-          },
-          schemaPath: '#/properties/assigneesReplace/type',
-        },
-      ],
-    );
-  });
-
-  test('assigneesReplace being a string is invalid', () => {
-    assert.deepEqual(
-      validate({
-        bots: {
-          dependency: {
-            groups: [
-              {
-                repository: {
-                  assigneesReplace: 'foo',
-                },
-              },
-            ],
-          },
-        },
-      }),
-      [
-        {
-          instancePath: '/bots/dependency/groups/0/repository/assigneesReplace',
-          keyword: 'type',
-          message: 'must be array',
-          params: {
-            type: 'array',
-          },
-          schemaPath: '#/properties/assigneesReplace/type',
-        },
-      ],
-    );
-  });
-
-  test('assigneesReplace being an array of non-string is invalid', () => {
-    assert.deepEqual(
-      validate({
-        bots: {
-          dependency: {
-            groups: [
-              {
-                repository: {
-                  assigneesReplace: [1],
+                  assigneesOverride: null,
                 },
               },
             ],
@@ -276,19 +218,19 @@ suite('validate - bots * groups repository', () => {
       [
         {
           instancePath:
-            '/bots/dependency/groups/0/repository/assigneesReplace/0',
+            '/bots/dependency/groups/0/repository/assigneesOverride',
           keyword: 'type',
-          message: 'must be string',
+          message: 'must be array',
           params: {
-            type: 'string',
+            type: 'array',
           },
-          schemaPath: '#/properties/assigneesReplace/items/type',
+          schemaPath: '#/properties/assigneesOverride/type',
         },
       ],
     );
   });
 
-  test('assigneesReplace being an array of null is invalid', () => {
+  test('assigneesOverride being a string is invalid', () => {
     assert.deepEqual(
       validate({
         bots: {
@@ -296,7 +238,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  assigneesReplace: [null],
+                  assigneesOverride: 'foo',
                 },
               },
             ],
@@ -306,13 +248,73 @@ suite('validate - bots * groups repository', () => {
       [
         {
           instancePath:
-            '/bots/dependency/groups/0/repository/assigneesReplace/0',
+            '/bots/dependency/groups/0/repository/assigneesOverride',
+          keyword: 'type',
+          message: 'must be array',
+          params: {
+            type: 'array',
+          },
+          schemaPath: '#/properties/assigneesOverride/type',
+        },
+      ],
+    );
+  });
+
+  test('assigneesOverride being an array of non-string is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            groups: [
+              {
+                repository: {
+                  assigneesOverride: [1],
+                },
+              },
+            ],
+          },
+        },
+      }),
+      [
+        {
+          instancePath:
+            '/bots/dependency/groups/0/repository/assigneesOverride/0',
           keyword: 'type',
           message: 'must be string',
           params: {
             type: 'string',
           },
-          schemaPath: '#/properties/assigneesReplace/items/type',
+          schemaPath: '#/properties/assigneesOverride/items/type',
+        },
+      ],
+    );
+  });
+
+  test('assigneesOverride being an array of null is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            groups: [
+              {
+                repository: {
+                  assigneesOverride: [null],
+                },
+              },
+            ],
+          },
+        },
+      }),
+      [
+        {
+          instancePath:
+            '/bots/dependency/groups/0/repository/assigneesOverride/0',
+          keyword: 'type',
+          message: 'must be string',
+          params: {
+            type: 'string',
+          },
+          schemaPath: '#/properties/assigneesOverride/items/type',
         },
       ],
     );
@@ -452,7 +454,7 @@ suite('validate - bots * groups repository', () => {
     );
   });
 
-  test('labelsReplace being an array of strings is valid', () => {
+  test('labelsOverride being an array of strings is valid', () => {
     assert.isNull(
       validate({
         bots: {
@@ -460,7 +462,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  labelsReplace: ['foo', 'bar'],
+                  labelsOverride: ['foo', 'bar'],
                 },
               },
             ],
@@ -470,7 +472,7 @@ suite('validate - bots * groups repository', () => {
     );
   });
 
-  test('labelsReplace being null is invalid', () => {
+  test('labelsOverride being null is invalid', () => {
     assert.deepEqual(
       validate({
         bots: {
@@ -478,7 +480,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  labelsReplace: null,
+                  labelsOverride: null,
                 },
               },
             ],
@@ -487,19 +489,19 @@ suite('validate - bots * groups repository', () => {
       }),
       [
         {
-          instancePath: '/bots/dependency/groups/0/repository/labelsReplace',
+          instancePath: '/bots/dependency/groups/0/repository/labelsOverride',
           keyword: 'type',
           message: 'must be array',
           params: {
             type: 'array',
           },
-          schemaPath: '#/properties/labelsReplace/type',
+          schemaPath: '#/properties/labelsOverride/type',
         },
       ],
     );
   });
 
-  test('labelsReplace being a string is invalid', () => {
+  test('labelsOverride being a string is invalid', () => {
     assert.deepEqual(
       validate({
         bots: {
@@ -507,7 +509,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  labelsReplace: 'foo',
+                  labelsOverride: 'foo',
                 },
               },
             ],
@@ -516,19 +518,19 @@ suite('validate - bots * groups repository', () => {
       }),
       [
         {
-          instancePath: '/bots/dependency/groups/0/repository/labelsReplace',
+          instancePath: '/bots/dependency/groups/0/repository/labelsOverride',
           keyword: 'type',
           message: 'must be array',
           params: {
             type: 'array',
           },
-          schemaPath: '#/properties/labelsReplace/type',
+          schemaPath: '#/properties/labelsOverride/type',
         },
       ],
     );
   });
 
-  test('labelsReplace being an array of non-string is invalid', () => {
+  test('labelsOverride being an array of non-string is invalid', () => {
     assert.deepEqual(
       validate({
         bots: {
@@ -536,7 +538,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  labelsReplace: [1],
+                  labelsOverride: [1],
                 },
               },
             ],
@@ -545,19 +547,19 @@ suite('validate - bots * groups repository', () => {
       }),
       [
         {
-          instancePath: '/bots/dependency/groups/0/repository/labelsReplace/0',
+          instancePath: '/bots/dependency/groups/0/repository/labelsOverride/0',
           keyword: 'type',
           message: 'must be string',
           params: {
             type: 'string',
           },
-          schemaPath: '#/properties/labelsReplace/items/type',
+          schemaPath: '#/properties/labelsOverride/items/type',
         },
       ],
     );
   });
 
-  test('labelsReplace being an array of null is invalid', () => {
+  test('labelsOverride being an array of null is invalid', () => {
     assert.deepEqual(
       validate({
         bots: {
@@ -565,7 +567,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  labelsReplace: [null],
+                  labelsOverride: [null],
                 },
               },
             ],
@@ -574,13 +576,13 @@ suite('validate - bots * groups repository', () => {
       }),
       [
         {
-          instancePath: '/bots/dependency/groups/0/repository/labelsReplace/0',
+          instancePath: '/bots/dependency/groups/0/repository/labelsOverride/0',
           keyword: 'type',
           message: 'must be string',
           params: {
             type: 'string',
           },
-          schemaPath: '#/properties/labelsReplace/items/type',
+          schemaPath: '#/properties/labelsOverride/items/type',
         },
       ],
     );
@@ -720,7 +722,7 @@ suite('validate - bots * groups repository', () => {
     );
   });
 
-  test('reviewersReplace being an array of strings is valid', () => {
+  test('reviewersOverride being an array of strings is valid', () => {
     assert.isNull(
       validate({
         bots: {
@@ -728,7 +730,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  reviewersReplace: ['foo', 'bar'],
+                  reviewersOverride: ['foo', 'bar'],
                 },
               },
             ],
@@ -738,7 +740,7 @@ suite('validate - bots * groups repository', () => {
     );
   });
 
-  test('reviewersReplace being null is invalid', () => {
+  test('reviewersOverride being null is invalid', () => {
     assert.deepEqual(
       validate({
         bots: {
@@ -746,65 +748,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  reviewersReplace: null,
-                },
-              },
-            ],
-          },
-        },
-      }),
-      [
-        {
-          instancePath: '/bots/dependency/groups/0/repository/reviewersReplace',
-          keyword: 'type',
-          message: 'must be array',
-          params: {
-            type: 'array',
-          },
-          schemaPath: '#/properties/reviewersReplace/type',
-        },
-      ],
-    );
-  });
-
-  test('reviewersReplace being a string is invalid', () => {
-    assert.deepEqual(
-      validate({
-        bots: {
-          dependency: {
-            groups: [
-              {
-                repository: {
-                  reviewersReplace: 'foo',
-                },
-              },
-            ],
-          },
-        },
-      }),
-      [
-        {
-          instancePath: '/bots/dependency/groups/0/repository/reviewersReplace',
-          keyword: 'type',
-          message: 'must be array',
-          params: {
-            type: 'array',
-          },
-          schemaPath: '#/properties/reviewersReplace/type',
-        },
-      ],
-    );
-  });
-
-  test('reviewersReplace being an array of non-string is invalid', () => {
-    assert.deepEqual(
-      validate({
-        bots: {
-          dependency: {
-            groups: [
-              {
-                repository: {
-                  reviewersReplace: [1],
+                  reviewersOverride: null,
                 },
               },
             ],
@@ -814,19 +758,19 @@ suite('validate - bots * groups repository', () => {
       [
         {
           instancePath:
-            '/bots/dependency/groups/0/repository/reviewersReplace/0',
+            '/bots/dependency/groups/0/repository/reviewersOverride',
           keyword: 'type',
-          message: 'must be string',
+          message: 'must be array',
           params: {
-            type: 'string',
+            type: 'array',
           },
-          schemaPath: '#/properties/reviewersReplace/items/type',
+          schemaPath: '#/properties/reviewersOverride/type',
         },
       ],
     );
   });
 
-  test('reviewersReplace being an array of null is invalid', () => {
+  test('reviewersOverride being a string is invalid', () => {
     assert.deepEqual(
       validate({
         bots: {
@@ -834,7 +778,7 @@ suite('validate - bots * groups repository', () => {
             groups: [
               {
                 repository: {
-                  reviewersReplace: [null],
+                  reviewersOverride: 'foo',
                 },
               },
             ],
@@ -844,13 +788,73 @@ suite('validate - bots * groups repository', () => {
       [
         {
           instancePath:
-            '/bots/dependency/groups/0/repository/reviewersReplace/0',
+            '/bots/dependency/groups/0/repository/reviewersOverride',
+          keyword: 'type',
+          message: 'must be array',
+          params: {
+            type: 'array',
+          },
+          schemaPath: '#/properties/reviewersOverride/type',
+        },
+      ],
+    );
+  });
+
+  test('reviewersOverride being an array of non-string is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            groups: [
+              {
+                repository: {
+                  reviewersOverride: [1],
+                },
+              },
+            ],
+          },
+        },
+      }),
+      [
+        {
+          instancePath:
+            '/bots/dependency/groups/0/repository/reviewersOverride/0',
           keyword: 'type',
           message: 'must be string',
           params: {
             type: 'string',
           },
-          schemaPath: '#/properties/reviewersReplace/items/type',
+          schemaPath: '#/properties/reviewersOverride/items/type',
+        },
+      ],
+    );
+  });
+
+  test('reviewersOverride being an array of null is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            groups: [
+              {
+                repository: {
+                  reviewersOverride: [null],
+                },
+              },
+            ],
+          },
+        },
+      }),
+      [
+        {
+          instancePath:
+            '/bots/dependency/groups/0/repository/reviewersOverride/0',
+          keyword: 'type',
+          message: 'must be string',
+          params: {
+            type: 'string',
+          },
+          schemaPath: '#/properties/reviewersOverride/items/type',
         },
       ],
     );

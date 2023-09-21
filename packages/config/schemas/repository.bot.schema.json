@@ -4,19 +4,19 @@
   "allOf": [{ "$ref": "repository.schema.json" }],
   "type": "object",
   "properties": {
-    "assigneesReplace": {
+    "assigneesOverride": {
       "type": "array",
       "items": {
         "type": "string"
       }
     },
-    "labelsReplace": {
+    "labelsOverride": {
       "type": "array",
       "items": {
         "type": "string"
       }
     },
-    "reviewersReplace": {
+    "reviewersOverride": {
       "type": "array",
       "items": {
         "type": "string"
