@@ -1,7 +1,8 @@
-import { BotBase, Repository } from './bot';
+import { BotBase, Repository, Schedule } from './bot';
 
 export type Config = {
   repository?: Repository;
+  schedule?: Schedule;
   bots?: {
     [key: string]:
       | (BotBase & {

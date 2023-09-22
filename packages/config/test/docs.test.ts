@@ -36,4 +36,8 @@ suite('docs', () => {
     assertDocumented('repository', 'bots/repository');
     assertDocumented('repository.bot', 'bots/repository');
   });
+
+  test('schedule', () => {
+    assertDocumented('schedule', 'schedule');
+  });
 });

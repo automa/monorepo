@@ -4,6 +4,7 @@
   "type": "object",
   "properties": {
     "repository": { "$ref": "repository.automa.schema.json" },
+    "schedule": { "$ref": "schedule.schema.json" },
     "bots": {
       "type": "object",
       "properties": {
