@@ -10,6 +10,7 @@ suite('validate', () => {
   test('additional properties are invalid', () => {
     assert.deepEqual(
       validate({
+        // @ts-ignore
         foo: 'bar',
       }),
       [

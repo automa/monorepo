@@ -15,6 +15,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           foo: 'bar',
         },
       }),
@@ -46,6 +47,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           assignees: null,
         },
       }),
@@ -67,6 +69,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           assignees: 'foo',
         },
       }),
@@ -88,6 +91,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           assignees: [1],
         },
       }),
@@ -109,6 +113,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           assignees: [null],
         },
       }),
@@ -140,6 +145,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           labels: null,
         },
       }),
@@ -161,6 +167,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           labels: 'foo',
         },
       }),
@@ -182,6 +189,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           labels: [1],
         },
       }),
@@ -203,6 +211,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           labels: [null],
         },
       }),
@@ -234,6 +243,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           reviewers: null,
         },
       }),
@@ -255,6 +265,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           reviewers: 'foo',
         },
       }),
@@ -276,6 +287,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           reviewers: [1],
         },
       }),
@@ -297,6 +309,7 @@ suite('validate - repository', () => {
     assert.deepEqual(
       validate({
         repository: {
+          // @ts-ignore
           reviewers: [null],
         },
       }),

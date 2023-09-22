@@ -21,6 +21,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               foo: 'bar',
             },
           },
@@ -60,6 +61,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assignees: null,
             },
           },
@@ -85,6 +87,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assignees: 'foo',
             },
           },
@@ -110,6 +113,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assignees: [1],
             },
           },
@@ -135,6 +139,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assignees: [null],
             },
           },
@@ -174,6 +179,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assigneesOverride: null,
             },
           },
@@ -199,6 +205,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assigneesOverride: 'foo',
             },
           },
@@ -224,6 +231,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assigneesOverride: [1],
             },
           },
@@ -249,6 +257,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assigneesOverride: [null],
             },
           },
@@ -288,6 +297,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labels: null,
             },
           },
@@ -313,6 +323,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labels: 'foo',
             },
           },
@@ -338,6 +349,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labels: [1],
             },
           },
@@ -363,6 +375,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labels: [null],
             },
           },
@@ -402,6 +415,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labelsOverride: null,
             },
           },
@@ -427,6 +441,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labelsOverride: 'foo',
             },
           },
@@ -452,6 +467,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labelsOverride: [1],
             },
           },
@@ -477,6 +493,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labelsOverride: [null],
             },
           },
@@ -516,6 +533,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewers: null,
             },
           },
@@ -541,6 +559,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewers: 'foo',
             },
           },
@@ -566,6 +585,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewers: [1],
             },
           },
@@ -591,6 +611,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewers: [null],
             },
           },
@@ -630,6 +651,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewersOverride: null,
             },
           },
@@ -655,6 +677,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewersOverride: 'foo',
             },
           },
@@ -680,6 +703,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewersOverride: [1],
             },
           },
@@ -705,6 +729,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewersOverride: [null],
             },
           },
