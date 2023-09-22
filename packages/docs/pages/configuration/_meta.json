@@ -1,5 +1,6 @@
 {
   "repository": "Repository",
+  "schedule": "Schedule",
   "bots": "Bots",
   "dependency": "Dependency bot"
 }

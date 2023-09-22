@@ -8,12 +8,14 @@
       "items": {
         "type": "object",
         "properties": {
-          "repository": { "$ref": "repository.bot.schema.json" }
+          "repository": { "$ref": "repository.bot.schema.json" },
+          "schedule": { "$ref": "schedule.schema.json" }
         },
         "additionalProperties": false
       }
     },
-    "repository": { "$ref": "repository.bot.schema.json" }
+    "repository": { "$ref": "repository.bot.schema.json" },
+    "schedule": { "$ref": "schedule.schema.json" }
   },
   "additionalProperties": false
 }

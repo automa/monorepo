@@ -10,7 +10,10 @@ export type RepositoryExtended = Repository & {
   reviewersOverride?: string[];
 };
 
+export type Schedule = object;
+
 export type BotBase = {
   enabled?: boolean;
   repository?: RepositoryExtended;
+  schedule?: Schedule;
 };

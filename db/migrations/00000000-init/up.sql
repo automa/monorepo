@@ -87,7 +87,7 @@ CREATE TABLE public.user_repos (
   UNIQUE (user_id, repo_id)
 );
 
-CREATE TYPE public.bot_type AS ENUM ('scheduled', 'push');
+CREATE TYPE public.bot_type AS ENUM ('scheduled', 'push'); -- Trigger based: PR created, etc..
 
 CREATE TABLE public.bots (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
