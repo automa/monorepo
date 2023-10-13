@@ -72,6 +72,7 @@ const App: React.FC<AppProps> = () => {
         waitForInitialization={isTest ? false : true}
         initializingComponent={<Loader />}
         options={{
+          // Checking for undefined because we don't allow loading segment in development
           overrideStableID: anonymousId ? `${anonymousId}` : undefined,
           environment: {
             tier: environment,
