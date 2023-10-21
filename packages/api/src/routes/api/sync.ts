@@ -4,7 +4,7 @@ import { sync as githubSync } from '../../clients/github';
 
 export default async function (app: FastifyInstance) {
   app.post('/sync', async (request, reply) => {
-    await githubSync(app, request);
+    await githubSync(app, request, request.user!);
 
     return reply.code(204).send();
   });

@@ -42,7 +42,10 @@ const App: React.FC<AppProps> = () => {
       const { data } = await axios('/api/session');
 
       if (data) {
-        setAuth(data);
+        setAuth({
+          ...data,
+          id: `${data.id}`,
+        });
       }
     } catch (_) {}
 

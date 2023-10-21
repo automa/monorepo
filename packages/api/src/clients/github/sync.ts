@@ -1,6 +1,11 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
+import { users } from '@automa/prisma';
 
-export const sync = async (app: FastifyInstance, request: FastifyRequest) => {
+export const sync = async (
+  app: FastifyInstance,
+  request: FastifyRequest,
+  user: users,
+) => {
   const { installations } = await request.github<{
     installations: { id: number }[];
   }>({
@@ -17,7 +22,7 @@ export const sync = async (app: FastifyInstance, request: FastifyRequest) => {
 
   await app.prisma.user_orgs.createMany({
     data: orgs.map((org) => ({
-      user_id: request.session.userId!,
+      user_id: user.id,
       org_id: org.id,
     })),
     skipDuplicates: true,
@@ -43,7 +48,7 @@ export const sync = async (app: FastifyInstance, request: FastifyRequest) => {
 
       return app.prisma.user_repos.createMany({
         data: repos.map((repo) => ({
-          user_id: request.session.userId!,
+          user_id: user.id,
           repo_id: repo.id,
         })),
         skipDuplicates: true,
