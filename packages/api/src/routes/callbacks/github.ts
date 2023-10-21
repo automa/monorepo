@@ -155,7 +155,7 @@ export default async function (app: FastifyInstance) {
     request.session.githubAccessToken = accessToken;
 
     // Sync the user's data
-    await sync(app, request);
+    await sync(app, request, user);
 
     reply.redirect(request.session.referer || CLIENT_URI);
   });

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { AnalyticsBrowser, ID } from '@segment/analytics-next';
 
-import { isTest, isProduction } from 'env';
+import { isProduction } from 'env';
 
 import { useAsyncEffect } from 'shared';
 import AnalyticsContext from 'analytics/context';
@@ -12,7 +12,7 @@ const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [anonymousId, setAnonymousId] = useState<ID | null>(null);
 
-  const shouldLoad = !isTest && isProduction;
+  const shouldLoad = isProduction;
 
   const analytics = useMemo(() => {
     const analytics = new AnalyticsBrowser();
