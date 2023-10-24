@@ -40,6 +40,7 @@ jobs:
           VITE_API_URI: ${{ secrets.PRODUCTION_API_URI_CONSOLE }}
           VITE_GRAPHQL_URI: ${{ secrets.PRODUCTION_GRAPHQL_URI_CONSOLE }}
           VITE_SEGMENT_KEY: ${{ secrets.PRODUCTION_SEGMENT_KEY_CONSOLE }}
+          VITE_SEGMENT_HOST: ${{ secrets.PRODUCTION_SEGMENT_HOST_CONSOLE }}
           VITE_SENTRY_DSN: ${{ secrets.PRODUCTION_SENTRY_DSN_CONSOLE }}
           VITE_STATSIG_KEY: ${{ secrets.PRODUCTION_STATSIG_KEY_CONSOLE }}
         run: yarn build

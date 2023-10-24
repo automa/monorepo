@@ -38,6 +38,7 @@ jobs:
         env:
           NEXT_PUBLIC_NODE_ENV: production
           NEXT_PUBLIC_SEGMENT_KEY: ${{ secrets.PRODUCTION_SEGMENT_KEY_DOCS }}
+          NEXT_PUBLIC_SEGMENT_HOST: ${{ secrets.PRODUCTION_SEGMENT_HOST_DOCS }}
         run: yarn build
         working-directory: packages/docs
       - name: Upload to S3
