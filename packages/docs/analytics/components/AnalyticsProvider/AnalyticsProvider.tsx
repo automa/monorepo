@@ -12,22 +12,34 @@ const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [anonymousId, setAnonymousId] = useState<ID | null>(null);
 
-  const shouldLoad = isProduction;
+  const isAnalyticsEnabled = isProduction;
 
   const analytics = useMemo(() => {
     const analytics = new AnalyticsBrowser();
+    const apiHost = process.env.NEXT_PUBLIC_SEGMENT_HOST!;
 
-    if (shouldLoad) {
-      analytics.load({
-        writeKey: process.env.NEXT_PUBLIC_SEGMENT_KEY!,
-      });
+    if (isAnalyticsEnabled) {
+      analytics.load(
+        {
+          writeKey: process.env.NEXT_PUBLIC_SEGMENT_KEY!,
+        },
+        apiHost
+          ? {
+              integrations: {
+                'Segment.io': {
+                  apiHost: `${apiHost}/v1`,
+                },
+              },
+            }
+          : undefined,
+      );
     }
 
     return analytics;
-  }, [shouldLoad]);
+  }, [isAnalyticsEnabled]);
 
   useAsyncEffect(async () => {
-    if (shouldLoad) {
+    if (isAnalyticsEnabled) {
       const anonymousId = (await analytics.user()).anonymousId();
       setAnonymousId(anonymousId);
     }

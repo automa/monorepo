@@ -40,7 +40,9 @@ jobs:
           VITE_API_URI: ${{ secrets.STAGING_API_URI_CONSOLE }}
           VITE_GRAPHQL_URI: ${{ secrets.STAGING_GRAPHQL_URI_CONSOLE }}
           VITE_SEGMENT_KEY: ${{ secrets.STAGING_SEGMENT_KEY_CONSOLE }}
+          VITE_SEGMENT_HOST: ${{ secrets.STAGING_SEGMENT_HOST_CONSOLE }}
           VITE_SENTRY_DSN: ${{ secrets.STAGING_SENTRY_DSN_CONSOLE }}
+          VITE_SENTRY_HOST: ${{ secrets.STAGING_SENTRY_HOST_CONSOLE }}
           VITE_STATSIG_KEY: ${{ secrets.STAGING_STATSIG_KEY_CONSOLE }}
         run: yarn build
         working-directory: packages/console

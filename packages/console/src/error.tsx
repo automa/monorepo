@@ -6,12 +6,14 @@ import { environment, product, service, version } from 'env';
 import { ErrorCard } from 'shared';
 
 const isSentryEnabled = !!import.meta.env.VITE_SENTRY_DSN;
+const tunnelHost = import.meta.env.VITE_SENTRY_HOST;
 
 if (isSentryEnabled) {
   init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     release: `${product}-${service}@${version}`,
     environment,
+    tunnel: tunnelHost ? `https://${tunnelHost}` : undefined,
   });
 }
 
