@@ -2,7 +2,7 @@ module.exports = {
   root: true,
   extends: [
     'eslint:recommended',
-    'plugin:@next/next/recommended',
+    'plugin:@next/next/core-web-vitals',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
@@ -31,6 +31,7 @@ module.exports = {
       },
     ],
     'react/react-in-jsx-scope': 'off',
+    'react/jsx-no-target-blank': 'off',
     'import/no-cycle': [
       'error',
       {
@@ -43,7 +44,7 @@ module.exports = {
     'tailwindcss/enforces-shorthand': 'error',
     'tailwindcss/no-arbitrary-value': 'error',
   },
-  ignorePatterns: ['!.storybook', '.next', 'build', 'coverage', 'public'],
+  ignorePatterns: ['!.storybook', 'build', 'coverage', 'public'],
   overrides: [
     {
       files: ['**/*.stories.*'],

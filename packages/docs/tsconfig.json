@@ -6,10 +6,15 @@
     "module": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "noEmit": true,
+    "jsx": "preserve",
     "incremental": true,
-    "allowJs": true,
-    "jsx": "preserve"
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "allowJs": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["build/types/**/*.ts", "next-env.d.ts", "src"],
   "exclude": ["node_modules"]
 }
