@@ -1,58 +1,17 @@
 comment: false
+flag_management:
+  default_rules:
+    carryforward: true
+    statuses:
+      - type: project
+        informational: true
+      - type: patch
+        informational: true
 coverage:
   status:
     default_rules:
       flag_coverage_not_uploaded_behavior: exclude
     project:
       default: false
-      api:
-        flags:
-          - api
-        informational: true
-      config:
-        flags:
-          - config
-        informational: true
-      console:
-        flags:
-          - console
-        informational: true
-      docs:
-        flags:
-          - docs
-        informational: true
     patch:
       default: false
-      api:
-        flags:
-          - api
-        informational: true
-      config:
-        flags:
-          - config
-        informational: true
-      console:
-        flags:
-          - console
-        informational: true
-      docs:
-        flags:
-          - docs
-        informational: true
-flags:
-  api:
-    carryforward: true
-    paths:
-      - packages/api
-  config:
-    carryforward: true
-    paths:
-      - packages/config
-  console:
-    carryforward: true
-    paths:
-      - packages/console
-  docs:
-    carryforward: true
-    paths:
-      - packages/docs
