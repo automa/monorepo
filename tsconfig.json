@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "declaration": true,
+    "sourceMap": true,
     "target": "es2021",
     "module": "commonjs",
     "moduleResolution": "node",

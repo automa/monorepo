@@ -23,8 +23,7 @@ CREATE TABLE public.user_providers (
   refresh_token VARCHAR(255) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   UNIQUE (provider_type, provider_id),
-  UNIQUE (user_id, provider_type),
-  UNIQUE (refresh_token)
+  UNIQUE (user_id, provider_type)
 );
 
 CREATE TABLE public.orgs (
@@ -68,7 +67,8 @@ CREATE TABLE public.repo_settings (
   imported_from_renovate BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-CREATE INDEX repo_settings_repo_id_created_at_idx ON public.repo_settings (repo_id, created_at DESC);
+CREATE INDEX repo_settings_repo_id_created_at_idx
+ON public.repo_settings (repo_id, created_at DESC);
 
 CREATE TABLE public.user_orgs (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -100,7 +100,6 @@ CREATE TABLE public.bots (
 INSERT INTO public.bots (org_id, name, type)
 VALUES
   (1, 'automa', 'push'),
-  (1, 'dependency', 'scheduled'),
-  (1, 'files', 'scheduled');
+  (1, 'dependency', 'scheduled');
 
 COMMIT;

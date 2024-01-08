@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { StatsigProvider } from 'statsig-react';
 import axios from 'axios';
 
@@ -23,6 +23,8 @@ const App: React.FC<AppProps> = () => {
   const user = useUser();
 
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   useEffect(() => {
     axios.interceptors.response.use(
@@ -53,10 +55,12 @@ const App: React.FC<AppProps> = () => {
   }, []);
 
   useEffect(() => {
-    if (!user && !authLoading) {
-      navigate('/auth/login');
+    if (!user && !authLoading && location.pathname !== '/auth/login') {
+      navigate('/auth/login', {
+        state: { from: window.location.href },
+      });
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, location]);
 
   useEffect(() => {
     identify(user);

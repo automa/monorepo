@@ -56,8 +56,9 @@ export const caller = async (app: FastifyInstance, installationId: number) => {
     baseURL: GITHUB_APP.API_URI,
     headers: {
       Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${accessToken}`,
       'User-Agent': 'Automa App',
+      'X-GitHub-Api-Version': '2022-11-28',
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 

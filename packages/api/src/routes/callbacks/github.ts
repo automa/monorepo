@@ -1,53 +1,34 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import axios from 'axios';
 
-import { users } from '@automa/prisma';
+import { ErrorType } from '@automa/common';
 
 import { env } from '../../env';
 import { sync } from '../../clients/github';
 
 export default async function (app: FastifyInstance) {
-  const createProvider = async (
-    user: users,
-    refreshToken: string,
-    { id, email }: { id: number; email: string },
-  ) => {
-    return app.prisma.user_providers.create({
-      data: {
-        user_id: user.id,
-        provider_type: 'github',
-        provider_id: `${id}`,
-        provider_email: email,
-        refresh_token: refreshToken,
-      },
-    });
-  };
-
-  const replyError = (
-    request: FastifyRequest,
-    reply: FastifyReply,
-    code: number,
-  ) => {
-    return reply.redirect(`${request.session.referer}?error=${code}`);
-  };
-
   app.get<{
     Querystring: {
       code: string;
       state: string;
     };
   }>('/github', async (request, reply) => {
+    const { GITHUB_APP, BASE_URI, CLIENT_URI } = env;
+
+    const referer = request.session.referer || CLIENT_URI;
+
+    const replyError = (code: number) =>
+      reply.redirect(`${referer}?error=${code}`);
+
     const { code, state } = request.query;
 
     if (!code || !state) {
-      return reply.badRequest();
+      return replyError(ErrorType.UNABLE_TO_LOGIN_WITH_PROVIDER);
     }
 
     if (request.session.githubOauthState !== state) {
-      return reply.unauthorized();
+      return replyError(ErrorType.UNABLE_TO_LOGIN_WITH_PROVIDER);
     }
-
-    const { GITHUB_APP, CLIENT_URI } = env;
 
     const {
       data: { access_token: accessToken, refresh_token: refreshToken },
@@ -59,6 +40,7 @@ export default async function (app: FastifyInstance) {
       {
         client_id: GITHUB_APP.CLIENT_ID,
         client_secret: GITHUB_APP.CLIENT_SECRET,
+        redirect_uri: `${BASE_URI}${GITHUB_APP.CALLBACK_URI}`,
         code,
       },
       {
@@ -69,7 +51,7 @@ export default async function (app: FastifyInstance) {
     );
 
     if (!refreshToken || !accessToken) {
-      return replyError(request, reply, 1002);
+      return replyError(ErrorType.UNABLE_TO_LOGIN_WITH_PROVIDER);
     }
 
     // Get email & username from GitHub
@@ -102,11 +84,11 @@ export default async function (app: FastifyInstance) {
 
     if (request.user) {
       if (request.user && user && user.id !== request.user.id) {
-        return replyError(request, reply, 1000);
+        return replyError(ErrorType.ACCOUNT_WITH_EMAIL_EXISTS);
       }
 
       if (provider && provider.user_id !== request.user.id) {
-        return replyError(request, reply, 1001);
+        return replyError(ErrorType.PROVIDER_ALREADY_LINKED);
       }
 
       user = request.user;
@@ -133,9 +115,14 @@ export default async function (app: FastifyInstance) {
     }
 
     if (!provider) {
-      provider = await createProvider(user, refreshToken, {
-        id,
-        email,
+      provider = await app.prisma.user_providers.create({
+        data: {
+          user_id: user.id,
+          provider_type: 'github',
+          provider_id: `${id}`,
+          provider_email: email,
+          refresh_token: refreshToken,
+        },
       });
     }
 
@@ -157,6 +144,6 @@ export default async function (app: FastifyInstance) {
     // Sync the user's data
     await sync(app, request, user);
 
-    reply.redirect(request.session.referer || CLIENT_URI);
+    return reply.redirect(referer);
   });
 }
