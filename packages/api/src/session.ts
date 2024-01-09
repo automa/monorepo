@@ -8,9 +8,11 @@ import { env, isProduction } from './env';
 declare module 'fastify' {
   interface Session {
     userId?: number;
+    orgId?: number;
     referer?: string;
     githubOauthState?: string;
     githubAccessToken?: string;
+    integrationOauthState?: string;
   }
 }
 

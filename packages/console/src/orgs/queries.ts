@@ -5,6 +5,7 @@ export const GET_ORG = gql`
     org(provider_type: $provider_type, name: $name) {
       id
       name
+      provider_type
       github_installation_id
       repos {
         id
@@ -22,7 +23,28 @@ export const GET_ORGS = gql`
     orgs {
       id
       name
+      provider_type
       has_installation
+    }
+  }
+`;
+
+export const GET_ORG_INTEGRATIONS = gql`
+  query GetOrgIntegrations($provider_type: ProviderType!, $name: String!) {
+    org(provider_type: $provider_type, name: $name) {
+      id
+      name
+      provider_type
+      project_providers {
+        id
+        name
+        provider_type
+        config
+        created_at
+        author {
+          name
+        }
+      }
     }
   }
 `;

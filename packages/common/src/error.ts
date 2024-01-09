@@ -4,6 +4,7 @@ export enum ErrorType {
   ACCOUNT_WITH_EMAIL_EXISTS = 1000,
   PROVIDER_ALREADY_LINKED,
   UNABLE_TO_LOGIN_WITH_PROVIDER,
+  UNABLE_TO_CONNECT_INTEGRATION,
 }
 
 export type Error = {
@@ -26,5 +27,9 @@ export const errors: { [key in ErrorType]: Omit<Error, 'code'> } = {
   [ErrorType.UNABLE_TO_LOGIN_WITH_PROVIDER]: {
     status: StatusCodes.FORBIDDEN,
     message: 'Unable to login with given provider account.',
+  },
+  [ErrorType.UNABLE_TO_CONNECT_INTEGRATION]: {
+    status: StatusCodes.BAD_REQUEST,
+    message: 'Unable to connect integration.',
   },
 };

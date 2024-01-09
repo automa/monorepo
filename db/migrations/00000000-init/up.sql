@@ -103,4 +103,17 @@ VALUES
   (1, 'automa', 'push'),
   (1, 'dependency', 'scheduled');
 
+CREATE TYPE public.project_provider AS ENUM ('github', 'linear');
+
+CREATE TABLE public.org_project_providers (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
+  provider_type public.project_provider NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  config JSONB NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  UNIQUE (org_id, provider_type, name)
+);
+
 COMMIT;

@@ -11,11 +11,13 @@ type Query {
 type Org {
   id: Int!
   name: String!
-  provider_type: String!
+  provider_type: ProviderType!
   provider_id: String!
   is_user: Boolean!
   has_installation: Boolean!
   github_installation_id: Int
+  created_at: DateTime!
 
   repos: [Repo!]!
+  project_providers: [OrgProjectProvider!]!
 }
