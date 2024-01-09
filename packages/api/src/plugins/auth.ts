@@ -1,5 +1,6 @@
 import fp from 'fastify-plugin';
-import { FastifyPluginAsync, preHandlerHookHandler } from 'fastify';
+import { FastifyPluginAsync } from 'fastify';
+
 import { users } from '@automa/prisma';
 
 declare module 'fastify' {
@@ -22,23 +23,6 @@ const authPlugin: FastifyPluginAsync = async (app) => {
         id: userId,
       },
     });
-  });
-
-  const handler: preHandlerHookHandler = async (request, reply) => {
-    if (!request.user) {
-      return reply.unauthorized();
-    }
-  };
-
-  // Gate all `/api` routes behind authentication
-  app.addHook('onRoute', async (routeOptions) => {
-    if (routeOptions.preHandler && !Array.isArray(routeOptions.preHandler)) {
-      routeOptions.preHandler = [routeOptions.preHandler];
-    }
-
-    if (routeOptions.path.startsWith('/api/')) {
-      routeOptions.preHandler = [...(routeOptions.preHandler || []), handler];
-    }
   });
 };
 

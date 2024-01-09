@@ -5,6 +5,15 @@ import redisStoreFactory from 'connect-redis';
 
 import { env, isProduction } from './env';
 
+declare module 'fastify' {
+  interface Session {
+    userId?: number;
+    referer?: string;
+    githubOauthState?: string;
+    githubAccessToken?: string;
+  }
+}
+
 export default async function (app: FastifyInstance) {
   // @ts-ignore
   const RedisStore = redisStoreFactory(fastifySession);
@@ -25,13 +34,4 @@ export default async function (app: FastifyInstance) {
     },
     store,
   });
-}
-
-declare module 'fastify' {
-  interface Session {
-    userId?: number;
-    referer?: string;
-    githubOauthState?: string;
-    githubAccessToken?: string;
-  }
 }

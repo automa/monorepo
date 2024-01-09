@@ -88,6 +88,8 @@ export const server = async () => {
   await app.register(fastifyAutoload, {
     dir: join(__dirname, 'routes'),
     routeParams: true,
+    autoHooks: true,
+    cascadeHooks: true,
   });
 
   return app;

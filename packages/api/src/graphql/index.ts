@@ -1,9 +1,10 @@
 import { join } from 'path';
 
 import { ApolloServer } from '@apollo/server';
-import fastifyApollo, {
+import {
   ApolloFastifyContextFunction,
   fastifyApolloDrainPlugin,
+  fastifyApolloHandler,
 } from '@as-integrations/fastify';
 import { loadFiles } from '@graphql-tools/load-files';
 import { FastifyInstance } from 'fastify';
@@ -35,9 +36,17 @@ export default async function (app: FastifyInstance) {
 
   await apollo.start();
 
-  await app.register(fastifyApollo(apollo), {
-    method: 'POST',
-    path: '/api/graphql',
-    context,
-  });
+  app.post(
+    '/graphql',
+    {
+      // If we want to allow unauthed users to access the API, we need to
+      // remove this prehandler and use a graphql decorator
+      preHandler: async (request, reply) => {
+        if (!request.user) {
+          return reply.unauthorized();
+        }
+      },
+    },
+    fastifyApolloHandler(apollo, { context }),
+  );
 }
