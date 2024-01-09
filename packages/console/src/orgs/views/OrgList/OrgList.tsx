@@ -37,7 +37,9 @@ const OrgList: React.FC<OrgListProps> = ({ ...props }) => {
               {orgs.map((org) => (
                 <Typography
                   key={org.id}
-                  onClick={() => navigate(`/orgs/github/${org.name}`)}
+                  onClick={() =>
+                    navigate(`/orgs/${org.provider_type}/${org.name}`)
+                  }
                   link
                 >
                   {org.name}

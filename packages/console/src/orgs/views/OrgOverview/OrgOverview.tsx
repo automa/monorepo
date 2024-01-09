@@ -33,7 +33,9 @@ const OrgOverview: React.FC<OrgOverviewProps> = ({ ...props }) => {
                     <Typography
                       key={repo.id}
                       onClick={() =>
-                        navigate(`/orgs/${provider}/${org.name}/${repo.name}`)
+                        navigate(
+                          `/orgs/${org.provider_type}/${org.name}/repos/${repo.name}`,
+                        )
                       }
                       link
                     >
