@@ -28,7 +28,6 @@ export type Org = {
 };
 
 export enum ProviderType {
-  Bitbucket = 'bitbucket',
   Github = 'github',
   Gitlab = 'gitlab'
 }

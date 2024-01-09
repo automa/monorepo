@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 
 import { CauseType } from '@automa/common';
+import { provider } from '@automa/prisma';
 
 import { caller } from '../../clients/github';
 
@@ -18,7 +19,7 @@ const created: GithubEventActionHandler<{
   const org = await app.prisma.orgs.upsert({
     where: {
       provider_type_provider_id: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${body.installation.account.id}`,
       },
     },
@@ -28,7 +29,7 @@ const created: GithubEventActionHandler<{
     },
     create: {
       name: body.installation.account.login,
-      provider_type: 'github',
+      provider_type: provider.github,
       provider_id: `${body.installation.account.id}`,
       is_user: body.installation.account.type === 'User',
       has_installation: true,
@@ -64,7 +65,7 @@ const unsuspend: GithubEventActionHandler<{
   const org = await app.prisma.orgs.update({
     where: {
       provider_type_provider_id: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${body.installation.account.id}`,
       },
     },
@@ -98,7 +99,7 @@ const inactive = async (
   await app.prisma.orgs.update({
     where: {
       provider_type_provider_id: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${providerId}`,
       },
     },
@@ -113,7 +114,7 @@ const inactive = async (
   await app.prisma.repos.updateMany({
     where: {
       orgs: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${providerId}`,
       },
     },

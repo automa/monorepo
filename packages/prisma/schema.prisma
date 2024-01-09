@@ -116,7 +116,6 @@ model repo_settings {
 enum provider {
   github
   gitlab
-  bitbucket
 }
 
 enum bot_type {

@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import axios from 'axios';
 
 import { ErrorType } from '@automa/common';
+import { provider } from '@automa/prisma';
 
 import { env } from '../../env';
 import { sync } from '../../clients/github';
@@ -75,9 +76,9 @@ export default async function (app: FastifyInstance) {
     });
 
     // Check if provider exists
-    let provider = await app.prisma.user_providers.findFirst({
+    let userProvider = await app.prisma.user_providers.findFirst({
       where: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${id}`,
       },
     });
@@ -87,19 +88,19 @@ export default async function (app: FastifyInstance) {
         return replyError(ErrorType.ACCOUNT_WITH_EMAIL_EXISTS);
       }
 
-      if (provider && provider.user_id !== request.user.id) {
+      if (userProvider && userProvider.user_id !== request.user.id) {
         return replyError(ErrorType.PROVIDER_ALREADY_LINKED);
       }
 
       user = request.user;
     } else {
-      if (user && provider && provider.user_id !== user.id) {
+      if (user && userProvider && userProvider.user_id !== user.id) {
         // User must have had multiple accounts with different emails
         // linked to different providers and must have updated their
         // email in one of the provider
         user = await app.prisma.users.findFirst({
           where: {
-            id: provider.user_id,
+            id: userProvider.user_id,
           },
         });
       }
@@ -114,11 +115,11 @@ export default async function (app: FastifyInstance) {
       }
     }
 
-    if (!provider) {
-      provider = await app.prisma.user_providers.create({
+    if (!userProvider) {
+      userProvider = await app.prisma.user_providers.create({
         data: {
           user_id: user.id,
-          provider_type: 'github',
+          provider_type: provider.github,
           provider_id: `${id}`,
           provider_email: email,
           refresh_token: refreshToken,
@@ -129,7 +130,7 @@ export default async function (app: FastifyInstance) {
     // Update the data in the provider
     await app.prisma.user_providers.update({
       where: {
-        id: provider.id,
+        id: userProvider.id,
       },
       data: {
         provider_email: email,
@@ -138,7 +139,7 @@ export default async function (app: FastifyInstance) {
     });
 
     // Login the user linked to the existing/created provider
-    request.session.userId = provider.user_id;
+    request.session.userId = userProvider.user_id;
     request.session.githubAccessToken = accessToken;
 
     // Sync the user's data

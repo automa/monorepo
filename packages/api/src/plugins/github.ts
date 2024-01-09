@@ -2,6 +2,8 @@ import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
 import axios, { AxiosError, Method } from 'axios';
 
+import { provider } from '@automa/prisma';
+
 import { env } from '../env';
 
 declare module 'fastify' {
@@ -58,7 +60,7 @@ const githubPlugin: FastifyPluginAsync = async (app) => {
       const userProvider = await app.prisma.user_providers.findFirstOrThrow({
         where: {
           user_id: request.session.userId,
-          provider_type: 'github',
+          provider_type: provider.github,
         },
       });
 

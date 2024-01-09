@@ -12,7 +12,7 @@ CREATE TABLE public.users (
   UNIQUE (email)
 );
 
-CREATE TYPE public.provider AS ENUM ('github', 'gitlab', 'bitbucket');
+CREATE TYPE public.provider AS ENUM ('github', 'gitlab');
 
 CREATE TABLE public.user_providers (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

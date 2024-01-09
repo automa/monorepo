@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { AxiosInstance } from 'axios';
 
 import { CauseType } from '@automa/common';
-import { orgs } from '@automa/prisma';
+import { orgs, provider } from '@automa/prisma';
 
 import { caller } from '../../clients/github';
 
@@ -20,7 +20,7 @@ const added: GithubEventActionHandler<{
 }> = async (app, body) => {
   const org = await app.prisma.orgs.findFirst({
     where: {
-      provider_type: 'github',
+      provider_type: provider.github,
       provider_id: `${body.installation.account.id}`,
       has_installation: true,
     },
@@ -47,7 +47,7 @@ const removed: GithubEventActionHandler<{
         in: body.repositories_removed.map((repo) => `${repo.id}`),
       },
       orgs: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${body.installation.account.id}`,
       },
     },

@@ -1,4 +1,5 @@
 import { CONFIG_FILES, CauseType } from '@automa/common';
+import { provider } from '@automa/prisma';
 
 import { caller } from '../../clients/github';
 
@@ -27,7 +28,7 @@ const push: GithubEventActionHandler<{
       provider_id: `${body.repository.id}`,
       has_installation: true,
       orgs: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${body.repository.owner.id}`,
       },
     },

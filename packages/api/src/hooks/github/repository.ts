@@ -1,4 +1,5 @@
 import { CauseType } from '@automa/common';
+import { provider } from '@automa/prisma';
 
 import { caller } from '../../clients/github';
 
@@ -20,7 +21,7 @@ const archived: GithubEventActionHandler<{
       provider_id: `${body.repository.id}`,
       is_archived: false,
       orgs: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${body.repository.owner.id}`,
       },
     },
@@ -47,7 +48,7 @@ const edited: GithubEventActionHandler<{
     where: {
       provider_id: `${body.repository.id}`,
       orgs: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${body.repository.owner.id}`,
       },
     },
@@ -81,7 +82,7 @@ const privatized: GithubEventActionHandler<{
       provider_id: `${body.repository.id}`,
       is_private: false,
       orgs: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${body.repository.owner.id}`,
       },
     },
@@ -100,7 +101,7 @@ const publicized: GithubEventActionHandler<{
       provider_id: `${body.repository.id}`,
       is_private: true,
       orgs: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${body.repository.owner.id}`,
       },
     },
@@ -118,7 +119,7 @@ const renamed: GithubEventActionHandler<{
     where: {
       provider_id: `${body.repository.id}`,
       orgs: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${body.repository.owner.id}`,
       },
     },
@@ -142,7 +143,7 @@ const unarchived: GithubEventActionHandler<{
       provider_id: `${body.repository.id}`,
       is_archived: true,
       orgs: {
-        provider_type: 'github',
+        provider_type: provider.github,
         provider_id: `${body.repository.owner.id}`,
       },
     },
