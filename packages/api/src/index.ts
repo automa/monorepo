@@ -1,5 +1,5 @@
 // Always setup the environment first
-import { env, version } from './env';
+import { env, isProduction, version } from './env';
 import { logger, SeverityNumber } from './telemetry';
 
 import { join } from 'path';
@@ -67,21 +67,18 @@ export const server = async () => {
     return reply.internalServerError();
   });
 
-  await app.register(fastifySwagger, {
-    openapi: {
-      info: {
-        title: 'Automa API',
-        description: 'Automa API documentation',
-        version,
-      },
-      servers: [
-        {
-          url: env.BASE_URI,
+  if (!isProduction) {
+    await app.register(fastifySwagger, {
+      openapi: {
+        info: {
+          title: 'Automa API',
+          description: 'Automa API documentation',
+          version,
         },
-      ],
-    },
-  });
-  await app.register(fastifySwaggerUi, {});
+      },
+    });
+    await app.register(fastifySwaggerUi, {});
+  }
 
   await graphql(app);
 
