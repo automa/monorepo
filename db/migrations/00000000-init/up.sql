@@ -55,6 +55,8 @@ CREATE TABLE public.repos (
   UNIQUE (org_id, provider_id)
 );
 
+CREATE TYPE public.competitors AS ENUM ('dependabot', 'renovate');
+
 CREATE TABLE public.repo_settings (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   repo_id INTEGER NOT NULL REFERENCES public.repos(id) ON DELETE CASCADE,
@@ -63,8 +65,7 @@ CREATE TABLE public.repo_settings (
   settings JSONB,
   validation_errors JSONB,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  imported_from_dependabot BOOLEAN NOT NULL DEFAULT FALSE,
-  imported_from_renovate BOOLEAN NOT NULL DEFAULT FALSE
+  imported_from public.competitors
 );
 
 CREATE INDEX repo_settings_repo_id_created_at_idx

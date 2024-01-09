@@ -1,3 +1,8 @@
+enum CompetitorType {
+  dependabot
+  renovate
+}
+
 type Query {
   repo(provider_type: ProviderType!, org_name: String!, name: String!): Repo
 }

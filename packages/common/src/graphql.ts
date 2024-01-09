@@ -15,6 +15,11 @@ export type Scalars = {
   Float: number;
 };
 
+export enum CompetitorType {
+  Dependabot = 'dependabot',
+  Renovate = 'renovate'
+}
+
 export type Org = {
   __typename?: 'Org';
   github_installation_id?: Maybe<Scalars['Int']>;
@@ -133,6 +138,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CompetitorType: CompetitorType;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Org: ResolverTypeWrapper<orgs>;
   ProviderType: ProviderType;

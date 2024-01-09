@@ -103,8 +103,7 @@ suite('github hook push event', () => {
         cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
         commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         validation_errors: null,
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[0].settings, {});
     });
@@ -195,8 +194,7 @@ suite('github hook push event', () => {
         cause: CauseType.COMMIT_SETTINGS_CHANGED,
         commit: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
         validation_errors: null,
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[0].settings, { bots: { dependency: {} } });
 
@@ -205,8 +203,7 @@ suite('github hook push event', () => {
         cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
         commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         validation_errors: null,
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[1].settings, {});
     });
@@ -251,8 +248,7 @@ suite('github hook push event', () => {
         cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
         commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         validation_errors: null,
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[0].settings, {});
     });
@@ -343,8 +339,7 @@ suite('github hook push event', () => {
         cause: CauseType.COMMIT_UNKNOWN_BASE,
         commit: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
         validation_errors: null,
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[0].settings, { bots: { dependency: {} } });
 
@@ -353,8 +348,7 @@ suite('github hook push event', () => {
         cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
         commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         validation_errors: null,
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[1].settings, {});
     });
@@ -445,8 +439,7 @@ suite('github hook push event', () => {
         cause: CauseType.COMMIT_FORCE_PUSHED,
         commit: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
         validation_errors: null,
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[0].settings, { bots: { dependency: {} } });
 
@@ -455,8 +448,7 @@ suite('github hook push event', () => {
         cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
         commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         validation_errors: null,
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[1].settings, {});
     });
@@ -546,8 +538,7 @@ suite('github hook push event', () => {
         repo_id: repository.id,
         cause: CauseType.COMMIT_SETTINGS_CHANGED,
         commit: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[0].settings, null);
       assert.deepEqual(settings[0].validation_errors, {
@@ -559,8 +550,7 @@ suite('github hook push event', () => {
         cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
         commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         validation_errors: null,
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[1].settings, {});
     });
@@ -650,8 +640,7 @@ suite('github hook push event', () => {
         repo_id: repository.id,
         cause: CauseType.COMMIT_SETTINGS_CHANGED,
         commit: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[0].settings, { bots: { files: {} } });
       assert.deepEqual(settings[0].validation_errors, {
@@ -671,8 +660,7 @@ suite('github hook push event', () => {
         cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
         commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         validation_errors: null,
-        imported_from_dependabot: false,
-        imported_from_renovate: false,
+        imported_from: null,
       });
       assert.deepEqual(settings[1].settings, {});
     });
