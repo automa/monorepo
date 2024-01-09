@@ -1,5 +1,5 @@
-import { GraphQLResolveInfo } from 'graphql';
-import { orgs, repos } from '.prisma/client';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { users, orgs, repos, org_project_providers } from '.prisma/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -13,6 +13,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: any;
+  JSON: any;
 };
 
 export enum CompetitorType {
@@ -22,15 +24,32 @@ export enum CompetitorType {
 
 export type Org = {
   __typename?: 'Org';
+  created_at: Scalars['DateTime'];
   github_installation_id?: Maybe<Scalars['Int']>;
   has_installation: Scalars['Boolean'];
   id: Scalars['Int'];
   is_user: Scalars['Boolean'];
   name: Scalars['String'];
+  project_providers: Array<OrgProjectProvider>;
   provider_id: Scalars['String'];
-  provider_type: Scalars['String'];
+  provider_type: ProviderType;
   repos: Array<Repo>;
 };
+
+export type OrgProjectProvider = {
+  __typename?: 'OrgProjectProvider';
+  author: User;
+  config: Scalars['JSON'];
+  created_at: Scalars['DateTime'];
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  provider_type: ProjectProviderType;
+};
+
+export enum ProjectProviderType {
+  Github = 'github',
+  Linear = 'linear'
+}
 
 export enum ProviderType {
   Github = 'github',
@@ -59,6 +78,7 @@ export type QueryRepoArgs = {
 
 export type Repo = {
   __typename?: 'Repo';
+  created_at: Scalars['DateTime'];
   has_installation: Scalars['Boolean'];
   id: Scalars['Int'];
   is_archived: Scalars['Boolean'];
@@ -66,6 +86,11 @@ export type Repo = {
   name: Scalars['String'];
   org: Org;
   provider_id: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  name: Scalars['String'];
 };
 
 
@@ -139,33 +164,62 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CompetitorType: CompetitorType;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  JSON: ResolverTypeWrapper<Scalars['JSON']>;
   Org: ResolverTypeWrapper<orgs>;
+  OrgProjectProvider: ResolverTypeWrapper<org_project_providers>;
+  ProjectProviderType: ProjectProviderType;
   ProviderType: ProviderType;
   Query: ResolverTypeWrapper<{}>;
   Repo: ResolverTypeWrapper<repos>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  User: ResolverTypeWrapper<users>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  DateTime: Scalars['DateTime'];
   Int: Scalars['Int'];
+  JSON: Scalars['JSON'];
   Org: orgs;
+  OrgProjectProvider: org_project_providers;
   Query: {};
   Repo: repos;
   String: Scalars['String'];
+  User: users;
 };
 
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
+
+export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON';
+}
+
 export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['Org'] = ResolversParentTypes['Org']> = {
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   github_installation_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   has_installation?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   is_user?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  project_providers?: Resolver<Array<ResolversTypes['OrgProjectProvider']>, ParentType, ContextType>;
   provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  provider_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  provider_type?: Resolver<ResolversTypes['ProviderType'], ParentType, ContextType>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OrgProjectProviderResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrgProjectProvider'] = ResolversParentTypes['OrgProjectProvider']> = {
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  config?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  provider_type?: Resolver<ResolversTypes['ProjectProviderType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -176,6 +230,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type RepoResolvers<ContextType = any, ParentType extends ResolversParentTypes['Repo'] = ResolversParentTypes['Repo']> = {
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   has_installation?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   is_archived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -186,9 +241,18 @@ export type RepoResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
+  DateTime?: GraphQLScalarType;
+  JSON?: GraphQLScalarType;
   Org?: OrgResolvers<ContextType>;
+  OrgProjectProvider?: OrgProjectProviderResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Repo?: RepoResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 };
 

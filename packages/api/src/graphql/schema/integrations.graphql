@@ -1,0 +1,14 @@
+enum ProjectProviderType {
+  github
+  linear
+}
+
+type OrgProjectProvider {
+  id: Int!
+  name: String!
+  provider_type: ProjectProviderType!
+  config: JSON!
+  created_at: DateTime!
+
+  author: User!
+}

@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 
 import { Repo, ProviderType } from '@automa/common';
 
-import { GET_REPO } from 'repos/queries';
+import { GET_REPO } from '../queries';
 
 const useRepo = (provider: ProviderType, orgName: string, name: string) => {
   const { data, loading, error, refetch } = useQuery<{ repo?: Repo }>(

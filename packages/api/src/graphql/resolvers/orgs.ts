@@ -46,4 +46,11 @@ export const Org: OrgResolvers<Context> = {
 
     return result.map((r) => r.repos);
   },
+  project_providers: async ({ id }, args, { user, prisma }) => {
+    return prisma.org_project_providers.findMany({
+      where: {
+        org_id: id,
+      },
+    });
+  },
 };

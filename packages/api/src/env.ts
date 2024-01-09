@@ -64,6 +64,26 @@ const schema = Type.Object({
       default: 'thisismygithubsecret',
     }),
   }),
+  LINEAR_APP: Type.Object({
+    ACCESS_TOKEN_URL: Type.String({
+      default: 'https://api.linear.app/oauth/token',
+    }),
+    API_URI: Type.String({
+      default: 'https://api.linear.app',
+    }),
+    AUTHORIZE_URL: Type.String({
+      default: 'https://linear.app/oauth/authorize',
+    }),
+    CALLBACK_URI: Type.String({
+      default: '/callbacks/linear',
+    }),
+    CLIENT_ID: Type.String({
+      default: '896839d929f08c9c54d1fef96550fa9c',
+    }),
+    CLIENT_SECRET: Type.String({
+      default: '439b86ac5f88f138985666467f59c04c',
+    }),
+  }),
   OTEL: Type.Object({
     TRACES: Type.Object({
       SAMPLER_ARG: Type.Number({
