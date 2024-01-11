@@ -1,27 +1,18 @@
 import { join } from 'path';
 
 import { ApolloServer } from '@apollo/server';
-import {
-  ApolloFastifyContextFunction,
+import fastifyApollo, {
   fastifyApolloDrainPlugin,
-  fastifyApolloHandler,
 } from '@as-integrations/fastify';
 import { loadFiles } from '@graphql-tools/load-files';
 import { FastifyInstance } from 'fastify';
+import { GraphQLError } from 'graphql';
 
 import { isProduction } from '../env';
 
 import { Context } from './types';
 
 export default async function (app: FastifyInstance) {
-  const context: ApolloFastifyContextFunction<Context> = async (request) => {
-    return {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      user: request.user!,
-      prisma: app.prisma,
-    };
-  };
-
   const typeDefs = await loadFiles(join(__dirname, 'schema/*.graphql'));
   const resolvers = await loadFiles(join(__dirname, 'resolvers/*.{js,ts}'));
 
@@ -29,24 +20,34 @@ export default async function (app: FastifyInstance) {
     typeDefs,
     resolvers,
     plugins: [fastifyApolloDrainPlugin(app)],
+    status400ForVariableCoercionErrors: true,
     introspection: !isProduction,
     includeStacktraceInErrorResponses: !isProduction,
     nodeEnv: '',
+    // TODO: formatError - https://www.apollographql.com/docs/apollo-server/data/errors#for-client-responses
   });
 
   await apollo.start();
 
-  app.post(
-    '/graphql',
-    {
-      // If we want to allow unauthed users to access the API, we need to
-      // remove this prehandler and use a graphql decorator
-      preHandler: async (request, reply) => {
-        if (!request.user) {
-          return reply.unauthorized();
-        }
-      },
+  await app.register(fastifyApollo(apollo), {
+    method: ['GET', 'POST'],
+    path: '/graphql',
+    context: async (request) => {
+      if (!request.user) {
+        throw new GraphQLError('User is not authenticated', {
+          extensions: {
+            code: 'UNAUTHORIZED',
+            http: { status: 401 },
+          },
+        });
+      }
+
+      return {
+        user: request.user,
+        prisma: app.prisma,
+        analytics: app.analytics,
+        optimizer: app.optimizer,
+      };
     },
-    fastifyApolloHandler(apollo, { context }),
-  );
+  });
 }

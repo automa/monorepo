@@ -9,6 +9,7 @@ import checker from 'vite-plugin-checker';
 import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimizer';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { babelOptimizerPlugin } from '@graphql-codegen/client-preset';
 
 export default defineConfig({
   define: {
@@ -20,7 +21,19 @@ export default defineConfig({
   },
   plugins: [
     imageOptimizer(),
-    react(),
+    react({
+      babel: {
+        plugins: [
+          [
+            babelOptimizerPlugin,
+            {
+              artifactDirectory: './src/gql',
+              gqlTagName: 'gql',
+            },
+          ],
+        ],
+      },
+    }),
     svgr(),
     tsconfigPaths(),
     macros(),

@@ -13,6 +13,7 @@
     "@sentry/browser": "~7.63.0",
     "@tanstack/react-table": "~8.5.22",
     "axios": "~1.1.2",
+    "crypto-hash": "~3.0.0",
     "csstype": "~3.0.10",
     "fontfaceobserver": "~2.3.0",
     "graphql": "~16.6.0",

@@ -5,16 +5,18 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  DateTime: any;
-  JSON: any;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
 };
 
 export enum CompetitorType {
@@ -24,14 +26,14 @@ export enum CompetitorType {
 
 export type Org = {
   __typename?: 'Org';
-  created_at: Scalars['DateTime'];
-  github_installation_id?: Maybe<Scalars['Int']>;
-  has_installation: Scalars['Boolean'];
-  id: Scalars['Int'];
-  is_user: Scalars['Boolean'];
-  name: Scalars['String'];
+  created_at: Scalars['DateTime']['output'];
+  github_installation_id?: Maybe<Scalars['Int']['output']>;
+  has_installation: Scalars['Boolean']['output'];
+  id: Scalars['Int']['output'];
+  is_user: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
   project_integration_connections: Array<ProjectIntegrationConnection>;
-  provider_id: Scalars['String'];
+  provider_id: Scalars['String']['output'];
   provider_type: ProviderType;
   repos: Array<Repo>;
 };
@@ -39,10 +41,10 @@ export type Org = {
 export type ProjectIntegrationConnection = {
   __typename?: 'ProjectIntegrationConnection';
   author: User;
-  config: Scalars['JSON'];
-  created_at: Scalars['DateTime'];
-  id: Scalars['Int'];
-  name: Scalars['String'];
+  config: Scalars['JSON']['output'];
+  created_at: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
   provider_type: ProjectProviderType;
 };
 
@@ -65,32 +67,32 @@ export type Query = {
 
 
 export type QueryOrgArgs = {
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
   provider_type: ProviderType;
 };
 
 
 export type QueryRepoArgs = {
-  name: Scalars['String'];
-  org_name: Scalars['String'];
+  name: Scalars['String']['input'];
+  org_name: Scalars['String']['input'];
   provider_type: ProviderType;
 };
 
 export type Repo = {
   __typename?: 'Repo';
-  created_at: Scalars['DateTime'];
-  has_installation: Scalars['Boolean'];
-  id: Scalars['Int'];
-  is_archived: Scalars['Boolean'];
-  is_private: Scalars['Boolean'];
-  name: Scalars['String'];
+  created_at: Scalars['DateTime']['output'];
+  has_installation: Scalars['Boolean']['output'];
+  id: Scalars['Int']['output'];
+  is_archived: Scalars['Boolean']['output'];
+  is_private: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
   org: Org;
-  provider_id: Scalars['String'];
+  provider_id: Scalars['String']['output'];
 };
 
 export type User = {
   __typename?: 'User';
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
 };
 
 
@@ -160,34 +162,36 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CompetitorType: CompetitorType;
-  DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  JSON: ResolverTypeWrapper<Scalars['JSON']>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Org: ResolverTypeWrapper<orgs>;
   ProjectIntegrationConnection: ResolverTypeWrapper<org_project_providers>;
   ProjectProviderType: ProjectProviderType;
   ProviderType: ProviderType;
   Query: ResolverTypeWrapper<{}>;
   Repo: ResolverTypeWrapper<repos>;
-  String: ResolverTypeWrapper<Scalars['String']>;
+  String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<users>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Boolean: Scalars['Boolean'];
-  DateTime: Scalars['DateTime'];
-  Int: Scalars['Int'];
-  JSON: Scalars['JSON'];
+  Boolean: Scalars['Boolean']['output'];
+  DateTime: Scalars['DateTime']['output'];
+  Int: Scalars['Int']['output'];
+  JSON: Scalars['JSON']['output'];
   Org: orgs;
   ProjectIntegrationConnection: org_project_providers;
   Query: {};
   Repo: repos;
-  String: Scalars['String'];
+  String: Scalars['String']['output'];
   User: users;
 };
 

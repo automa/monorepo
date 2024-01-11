@@ -1,3 +1,3 @@
 export * from './hooks';
-export * from './queries';
+export * from './org.queries';
 export * from './routes';

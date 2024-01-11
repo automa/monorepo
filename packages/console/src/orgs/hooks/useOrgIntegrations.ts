@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 
 import { Org, ProviderType } from '@automa/common';
 
-import { GET_ORG_INTEGRATIONS } from '../queries';
+import { GET_ORG_INTEGRATIONS } from '../org.queries';
 
 const useOrgIntegrations = (provider: ProviderType, name: string) => {
   const { data, loading, error, refetch } = useQuery<{ org: Org }>(

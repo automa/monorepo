@@ -55,6 +55,7 @@ module.exports = {
     'build',
     'coverage',
     'public',
+    'src/gql',
   ],
   overrides: [
     {

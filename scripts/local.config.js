@@ -23,7 +23,10 @@ module.exports = {
     },
     {
       name: 'graphql-dev',
-      watch: ['packages/api/src/graphql/schema'],
+      watch: [
+        'packages/api/src/graphql/schema',
+        'packages/console/src/**/*.queries.ts',
+      ],
       script: 'yarn',
       interpreter: '/bin/bash',
       args: 'generate-graphql',

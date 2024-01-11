@@ -13,9 +13,7 @@ import routes from './routes';
 
 import { Container } from './App.styles';
 
-export interface AppProps {}
-
-const App: React.FC<AppProps> = () => {
+const App: React.FC<{}> = () => {
   const { anonymousId, identify } = useAnalytics();
 
   const { setAuth, unsetAuth, setAuthLoading, authLoading } = useAuth();
@@ -27,7 +25,7 @@ const App: React.FC<AppProps> = () => {
   const location = useLocation();
 
   useEffect(() => {
-    axios.interceptors.response.use(
+    const interceptor = axios.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response.status === 401) {
@@ -37,6 +35,8 @@ const App: React.FC<AppProps> = () => {
         return Promise.reject(error);
       },
     );
+
+    return axios.interceptors.request.eject(interceptor);
   }, [unsetAuth]);
 
   useAsyncEffect(async () => {
