@@ -15,13 +15,15 @@ const telemetryPlugin: FastifyPluginAsync = async (app) => {
         reqId: request.id,
         reqMethod: request.method,
         reqUrl: request.url,
+        reqPath: request.routerPath,
         reqIp: request.ip,
       },
     });
 
     requestCounter.add(1, {
-      method: request.routerMethod ?? request.method,
-      url: request.routerPath ?? request.url,
+      method: request.method,
+      reqUrl: request.url,
+      reqPath: request.routerPath,
     });
   });
 
@@ -39,8 +41,9 @@ const telemetryPlugin: FastifyPluginAsync = async (app) => {
     });
 
     responseTimer.record(responseTime, {
-      method: request.routerMethod ?? request.method,
-      url: request.routerPath ?? request.url,
+      method: request.method,
+      reqUrl: request.url,
+      reqPath: request.routerPath,
     });
   });
 
