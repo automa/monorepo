@@ -30,14 +30,14 @@ export type Org = {
   id: Scalars['Int'];
   is_user: Scalars['Boolean'];
   name: Scalars['String'];
-  project_providers: Array<OrgProjectProvider>;
+  project_integration_connections: Array<ProjectIntegrationConnection>;
   provider_id: Scalars['String'];
   provider_type: ProviderType;
   repos: Array<Repo>;
 };
 
-export type OrgProjectProvider = {
-  __typename?: 'OrgProjectProvider';
+export type ProjectIntegrationConnection = {
+  __typename?: 'ProjectIntegrationConnection';
   author: User;
   config: Scalars['JSON'];
   created_at: Scalars['DateTime'];
@@ -168,7 +168,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   Org: ResolverTypeWrapper<orgs>;
-  OrgProjectProvider: ResolverTypeWrapper<org_project_providers>;
+  ProjectIntegrationConnection: ResolverTypeWrapper<org_project_providers>;
   ProjectProviderType: ProjectProviderType;
   ProviderType: ProviderType;
   Query: ResolverTypeWrapper<{}>;
@@ -184,7 +184,7 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'];
   JSON: Scalars['JSON'];
   Org: orgs;
-  OrgProjectProvider: org_project_providers;
+  ProjectIntegrationConnection: org_project_providers;
   Query: {};
   Repo: repos;
   String: Scalars['String'];
@@ -206,14 +206,14 @@ export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTy
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   is_user?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  project_providers?: Resolver<Array<ResolversTypes['OrgProjectProvider']>, ParentType, ContextType>;
+  project_integration_connections?: Resolver<Array<ResolversTypes['ProjectIntegrationConnection']>, ParentType, ContextType>;
   provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   provider_type?: Resolver<ResolversTypes['ProviderType'], ParentType, ContextType>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type OrgProjectProviderResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrgProjectProvider'] = ResolversParentTypes['OrgProjectProvider']> = {
+export type ProjectIntegrationConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectIntegrationConnection'] = ResolversParentTypes['ProjectIntegrationConnection']> = {
   author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   config?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -250,7 +250,7 @@ export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
   JSON?: GraphQLScalarType;
   Org?: OrgResolvers<ContextType>;
-  OrgProjectProvider?: OrgProjectProviderResolvers<ContextType>;
+  ProjectIntegrationConnection?: ProjectIntegrationConnectionResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Repo?: RepoResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

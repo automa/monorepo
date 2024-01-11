@@ -3,7 +3,7 @@ enum ProjectProviderType {
   linear
 }
 
-type OrgProjectProvider {
+type ProjectIntegrationConnection {
   id: Int!
   name: String!
   provider_type: ProjectProviderType!

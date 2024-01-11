@@ -39,7 +39,7 @@ const OrgIntegrationsProjects: React.FC<OrgIntegrationsProps> = ({
           org && (
             <Flex direction="column" gap={2}>
               <div>{org.name}</div>
-              {org.project_providers.map(
+              {org.project_integration_connections.map(
                 ({ id, name, provider_type, author }) => (
                   <div key={id}>
                     <div>{provider_type}</div>

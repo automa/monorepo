@@ -19,5 +19,5 @@ type Org {
   created_at: DateTime!
 
   repos: [Repo!]!
-  project_providers: [OrgProjectProvider!]!
+  project_integration_connections: [ProjectIntegrationConnection!]!
 }

@@ -35,7 +35,7 @@ export const GET_ORG_INTEGRATIONS = gql`
       id
       name
       provider_type
-      project_providers {
+      project_integration_connections {
         id
         name
         provider_type

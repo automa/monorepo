@@ -11,7 +11,7 @@ const config: CodegenConfig = {
           User: '.prisma/client#users',
           Org: '.prisma/client#orgs',
           Repo: '.prisma/client#repos',
-          OrgProjectProvider: '.prisma/client#org_project_providers',
+          ProjectIntegrationConnection: '.prisma/client#org_project_providers',
         },
       },
     },
