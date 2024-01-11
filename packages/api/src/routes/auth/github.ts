@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import { randomUUID } from 'crypto';
 import { URLSearchParams } from 'url';
 import { FastifyInstance } from 'fastify';
 
@@ -12,7 +12,7 @@ export default async function (app: FastifyInstance) {
   }>('/github', async (request, reply) => {
     const { GITHUB_APP, BASE_URI } = env;
 
-    const state = crypto.randomUUID();
+    const state = randomUUID();
 
     request.session.referer = request.query.from;
     request.session.githubOauthState = state;

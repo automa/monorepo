@@ -1,7 +1,7 @@
-import { gql } from '@apollo/client';
+import { gql } from 'gql';
 
-export const GET_REPO = gql`
-  query GetRepo(
+export const REPO_QUERY = gql(`
+  query Repo(
     $provider_type: ProviderType!
     $org_name: String!
     $name: String!
@@ -16,8 +16,9 @@ export const GET_REPO = gql`
       org {
         id
         name
+        provider_type
         github_installation_id
       }
     }
   }
-`;
+`);

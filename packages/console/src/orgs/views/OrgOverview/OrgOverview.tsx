@@ -1,51 +1,46 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
-import { ProviderType } from '@automa/common';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
 
 import { Flex, Typography } from 'shared';
 
-import { useOrg } from 'orgs/hooks';
-
 import { OrgOverviewProps } from './types';
 
+import { REPOS_QUERY } from './OrgOverview.queries';
 import { Container } from './OrgOverview.styles';
 
-const OrgOverview: React.FC<OrgOverviewProps> = ({ ...props }) => {
-  const { provider, orgName } = useParams();
-
+const OrgOverview: React.FC<OrgOverviewProps> = ({ org, ...props }) => {
   const navigate = useNavigate();
 
-  const { org, loading } = useOrg(provider as ProviderType, orgName!);
+  // TODO: Add infinite scroll
+  const { data, loading } = useQuery(REPOS_QUERY, {
+    variables: {
+      provider_type: org.provider_type,
+      name: org.name,
+    },
+  });
 
   return (
     <Container {...props}>
       <Flex direction="column" alignItems="center" gap={1}>
-        {loading ? (
-          <div>loading...</div>
+        {loading && !data ? (
+          <div>Loading</div>
+        ) : !data?.org?.repos ? (
+          <div>Not found</div>
+        ) : !data?.org?.repos?.length ? (
+          <div>No repos</div>
         ) : (
-          org && (
-            <Flex direction="column" gap={2}>
-              <div>{org.name}</div>
-              {org.repos && (
-                <Flex direction="column" gap={1}>
-                  {org.repos.map((repo) => (
-                    <Typography
-                      key={repo.id}
-                      onClick={() =>
-                        navigate(
-                          `/orgs/${org.provider_type}/${org.name}/repos/${repo.name}`,
-                        )
-                      }
-                      link
-                    >
-                      {repo.name}
-                    </Typography>
-                  ))}
-                </Flex>
-              )}
-            </Flex>
-          )
+          data.org.repos.map((repo) => (
+            <Typography
+              key={repo.id}
+              onClick={() =>
+                navigate(`/${org.provider_type}/${org.name}/${repo.name}`)
+              }
+              link
+            >
+              {repo.name}
+            </Typography>
+          ))
         )}
       </Flex>
     </Container>

@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import { randomUUID } from 'crypto';
 import { URLSearchParams } from 'url';
 import { FastifyInstance } from 'fastify';
 
@@ -8,7 +8,7 @@ export default async function (app: FastifyInstance) {
   app.get('/linear', async (request, reply) => {
     const { LINEAR_APP, BASE_URI } = env;
 
-    const state = crypto.randomUUID();
+    const state = randomUUID();
 
     request.session.orgId = request.org?.id;
     request.session.integrationOauthState = state;

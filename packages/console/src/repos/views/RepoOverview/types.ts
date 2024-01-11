@@ -1,3 +1,7 @@
 import { HTMLAttributes } from 'react';
 
-export interface RepoOverviewProps extends HTMLAttributes<HTMLDivElement> {}
+import { RepoQuery } from 'gql/graphql';
+
+export interface RepoOverviewProps extends HTMLAttributes<HTMLDivElement> {
+  repo: NonNullable<RepoQuery['repo']>;
+}

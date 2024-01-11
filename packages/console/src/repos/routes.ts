@@ -4,7 +4,7 @@ import { Route } from 'shared';
 
 export const routes = [
   {
-    Component: lazy(() => import('repos/views/RepoOverview')),
-    path: '/orgs/:provider/:orgName/repos/:repoName',
+    Component: lazy(() => import('repos/views/Repo')),
+    path: ':provider/:orgName/:repoName/*',
   },
 ] as Route[];

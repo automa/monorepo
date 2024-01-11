@@ -23,7 +23,7 @@ export default async function (app: FastifyInstance) {
     });
 
     const referer = org
-      ? `${CLIENT_URI}/orgs/${org.provider_type}/${org.name}/integrations/projects`
+      ? `${CLIENT_URI}/${org.provider_type}/${org.name}/~/integrations/projects`
       : CLIENT_URI;
 
     const replyError = (code: number) =>

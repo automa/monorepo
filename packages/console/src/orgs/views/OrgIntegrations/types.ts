@@ -1,3 +1,7 @@
 import { HTMLAttributes } from 'react';
 
-export interface OrgIntegrationsProps extends HTMLAttributes<HTMLDivElement> {}
+import { OrgQuery } from 'gql/graphql';
+
+export interface OrgIntegrationsProps extends HTMLAttributes<HTMLDivElement> {
+  org: NonNullable<OrgQuery['org']>;
+}

@@ -60,6 +60,7 @@ export enum ProviderType {
 
 export type Query = {
   __typename?: 'Query';
+  me: User;
   org?: Maybe<Org>;
   orgs: Array<Org>;
   repo?: Maybe<Repo>;
@@ -92,6 +93,8 @@ export type Repo = {
 
 export type User = {
   __typename?: 'User';
+  email: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
 };
 
@@ -228,6 +231,7 @@ export type ProjectIntegrationConnectionResolvers<ContextType = any, ParentType 
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   org?: Resolver<Maybe<ResolversTypes['Org']>, ParentType, ContextType, RequireFields<QueryOrgArgs, 'name' | 'provider_type'>>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name' | 'provider_type'>>;
@@ -246,6 +250,8 @@ export type RepoResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

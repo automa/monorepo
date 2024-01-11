@@ -1,41 +1,16 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 
-import { ProviderType } from '@automa/common';
-
-import { Flex, Typography } from 'shared';
-
-import { useRepo } from 'repos/hooks';
+import { Flex } from 'shared';
 
 import { RepoOverviewProps } from './types';
 
 import { Container } from './RepoOverview.styles';
 
-const RepoOverview: React.FC<RepoOverviewProps> = ({ ...props }) => {
-  const { provider, orgName, repoName } = useParams();
-
-  const navigate = useNavigate();
-
-  const { repo, loading } = useRepo(
-    provider as ProviderType,
-    orgName!,
-    repoName!,
-  );
-
+const RepoOverview: React.FC<RepoOverviewProps> = ({ repo, ...props }) => {
   return (
     <Container {...props}>
       <Flex direction="column" alignItems="center" gap={1}>
-        {loading ? (
-          <div>loading...</div>
-        ) : (
-          repo && (
-            <Flex direction="column" gap={2}>
-              <div>
-                {repo.org.name}/{repo.name}
-              </div>
-            </Flex>
-          )
-        )}
+        {repo.org.name}/{repo.name}
       </Flex>
     </Container>
   );
