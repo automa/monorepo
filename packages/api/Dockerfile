@@ -3,7 +3,7 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy rarely changing files first
-COPY tsconfig.json generate-graphql.ts ./
+COPY tsconfig.json ./
 COPY packages/prisma/tsconfig.json ./packages/prisma/
 COPY packages/common/tsconfig.json ./packages/common/
 COPY packages/config/tsconfig.json ./packages/config/
@@ -19,10 +19,9 @@ COPY package.json yarn.lock ./
 # Install dependencies
 RUN yarn install --frozen-lockfile
 
-# Build grahql schema
+# Copy grahql schema
 COPY packages/api/src/graphql/schema ./packages/api/src/graphql/schema
 RUN yarn workspace @automa/api copy-graphql
-RUN yarn generate-graphql
 
 # Build server
 COPY packages/prisma/src ./packages/prisma/src
