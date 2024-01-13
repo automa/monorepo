@@ -24,7 +24,7 @@
     "node": ">=18.15.0"
   },
   "devDependencies": {
-    "@storybook/nextjs": "~7.0.27",
+    "@storybook/nextjs": "~7.5.2",
     "webpack-stats-plugin": "~1.1.3"
   }
 }

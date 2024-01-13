@@ -1,6 +1,6 @@
 import React from 'react';
 import { Preview } from '@storybook/react';
-import { withThemeByClassName } from '@storybook/addon-styling';
+import { withThemeByClassName } from '@storybook/addon-themes';
 
 import 'components/index.css';
 
@@ -24,12 +24,16 @@ const preview: Preview = {
   ],
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
+    backgrounds: {
+      disable: true,
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/,
       },
     },
+    layout: 'fullscreen',
   },
 };
 
