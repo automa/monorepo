@@ -12,6 +12,8 @@ module.exports = {
     'plugin:mocha/recommended',
   ],
   rules: {
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/ban-ts-comment': 'off',
     'mocha/no-mocha-arrows': 'off',
   },
