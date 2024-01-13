@@ -13,9 +13,7 @@ import routes from './routes';
 
 import { Container } from './App.styles';
 
-export interface AppProps {}
-
-const App: React.FC<AppProps> = () => {
+const App: React.FC<{}> = () => {
   const { anonymousId, identify } = useAnalytics();
 
   const { setAuth, unsetAuth, setAuthLoading, authLoading } = useAuth();
