@@ -23,7 +23,7 @@ const App: React.FC<{}> = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.interceptors.response.use(
+    const interceptor = axios.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response.status === 401) {
@@ -33,6 +33,8 @@ const App: React.FC<{}> = () => {
         return Promise.reject(error);
       },
     );
+
+    return axios.interceptors.request.eject(interceptor);
   }, [unsetAuth]);
 
   useAsyncEffect(async () => {
