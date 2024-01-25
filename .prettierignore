@@ -1,4 +1,6 @@
 build
 coverage
 
+pnpm-lock.yaml
+
 src/gql

@@ -13,18 +13,22 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Cache dependencies
         uses: actions/cache@v2
         id: cache
         with:
-          path: '**/node_modules'
-          key: deps-${{ hashFiles('**/yarn.lock') }}
+          path: 'node_modules'
+          key: deps-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             deps-
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Run tests
-        run: yarn test-cover
+        run: pnpm test-cover
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:

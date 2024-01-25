@@ -4,14 +4,14 @@
 
 In the project directory, you can run:
 
-### `yarn start`
+### `pnpm start`
 
 Runs the app in the development mode.
 
-### `yarn test`
+### `pnpm test`
 
 Launches the test runner in the watch mode.
 
-### `yarn build`
+### `pnpm build`
 
 Builds the app for production to the `build` folder.

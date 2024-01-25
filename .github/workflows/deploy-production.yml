@@ -8,7 +8,7 @@ on:
       - src/**
       - index.html
       - vite.config.ts
-      - yarn.lock
+      - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
@@ -22,16 +22,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Cache dependencies
         uses: actions/cache@v3
         id: cache
         with:
-          path: '**/node_modules'
-          key: deps-${{ hashFiles('**/yarn.lock') }}
+          path: 'node_modules'
+          key: deps-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             deps-
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Build site
         env:
           NODE_ENV: production
@@ -40,7 +44,7 @@ jobs:
           VITE_SENTRY_DSN: ${{ secrets.PRODUCTION_SENTRY_DSN }}
           VITE_SENTRY_HOST: ${{ secrets.PRODUCTION_SENTRY_HOST }}
           VITE_STATSIG_KEY: ${{ secrets.PRODUCTION_STATSIG_KEY }}
-        run: yarn build
+        run: pnpm build
       - name: Upload to S3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
