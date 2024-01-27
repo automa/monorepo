@@ -7,7 +7,7 @@ on:
       - public/**
       - src/**
       - index.html
-      - vite.config.ts
+      - vite.config.mts
       - pnpm-lock.yaml
   pull_request:
     branches: [master]
@@ -16,7 +16,7 @@ on:
       - public/**
       - src/**
       - index.html
-      - vite.config.ts
+      - vite.config.mts
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
