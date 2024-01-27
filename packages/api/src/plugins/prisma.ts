@@ -1,8 +1,7 @@
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
-import { PrismaClient } from '@prisma/client';
 
-import prisma from '@automa/prisma';
+import prisma, { PrismaClient } from '@automa/prisma';
 
 import { env } from '../env';
 

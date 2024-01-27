@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "~3.7.5",
-    "@automa/common": "link:../common",
+    "@automa/common": "workspace:*",
+    "@graphql-typed-document-node/core": "^3.1.1",
     "@qatalog/react-flex": "~0.2.2",
     "@radix-ui/react-toast": "~1.1.1",
     "@radix-ui/react-tooltip": "~1.0.2",

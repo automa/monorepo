@@ -2,6 +2,8 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
+RUN npm install -g pnpm
+
 # Copy rarely changing files first
 COPY tsconfig.json ./
 COPY packages/prisma/tsconfig.json ./packages/prisma/
@@ -14,14 +16,10 @@ COPY packages/prisma/package.json packages/prisma/schema.prisma ./packages/prism
 COPY packages/common/package.json ./packages/common/
 COPY packages/config/package.json ./packages/config/
 COPY packages/api/package.json ./packages/api/
-COPY package.json yarn.lock ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 
 # Install dependencies
-RUN yarn install --frozen-lockfile
-
-# Copy grahql schema
-COPY packages/api/src/graphql/schema ./packages/api/src/graphql/schema
-RUN yarn workspace @automa/api copy-graphql
+RUN pnpm install --frozen-lockfile
 
 # Build server
 COPY packages/prisma/src ./packages/prisma/src
@@ -30,17 +28,21 @@ COPY packages/config/src ./packages/config/src
 COPY packages/config/schemas ./packages/config/schemas
 COPY packages/api/src ./packages/api/src
 
-RUN yarn workspace @automa/prisma build
-RUN yarn workspace @automa/common build
-RUN yarn workspace @automa/config build
-RUN yarn workspace @automa/api build
+RUN pnpm --filter @automa/prisma build
+RUN pnpm --filter @automa/common build
+RUN pnpm --filter @automa/config build
+RUN pnpm --filter @automa/api build
+
+RUN pnpm --filter @automa/api copy-graphql
+
+# Install production dependencies
+RUN rm -rf node_modules
+RUN pnpm install --frozen-lockfile --prod --ignore-scripts
+RUN pnpm --filter @automa/prisma prisma-generate
 
 FROM node:18-alpine AS runner
 
 WORKDIR /app
-
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/yarn.lock ./yarn.lock
 
 COPY --from=builder /app/packages/api/build ./packages/api/build
 COPY --from=builder /app/packages/api/package.json ./packages/api/package.json
@@ -54,8 +56,11 @@ COPY --from=builder /app/packages/common/package.json ./packages/common/package.
 
 COPY --from=builder /app/packages/prisma/build ./packages/prisma/build
 COPY --from=builder /app/packages/prisma/package.json ./packages/prisma/package.json
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
-RUN yarn install --frozen-lockfile --production
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages/api/node_modules ./packages/api/node_modules
+COPY --from=builder /app/packages/config/node_modules ./packages/config/node_modules
+COPY --from=builder /app/packages/common/node_modules ./packages/common/node_modules
+COPY --from=builder /app/packages/prisma/node_modules ./packages/prisma/node_modules
 
 CMD ["node", "packages/api/build/index.js"]

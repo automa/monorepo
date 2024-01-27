@@ -65,15 +65,5 @@
     "tailwindcss": "~3.3.2",
     "ts-node": "~10.9.1",
     "typescript": "~5.2.2"
-  },
-  "workspaces": {
-    "packages": [
-      "packages/api",
-      "packages/common",
-      "packages/config",
-      "packages/console",
-      "packages/docs",
-      "packages/prisma"
-    ]
   }
 }

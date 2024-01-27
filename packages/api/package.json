@@ -6,9 +6,9 @@
   "dependencies": {
     "@apollo/server": "~4.10.0",
     "@as-integrations/fastify": "~2.1.1",
-    "@automa/common": "link:../common",
-    "@automa/config": "link:../config",
-    "@automa/prisma": "link:../prisma",
+    "@automa/common": "workspace:*",
+    "@automa/config": "workspace:*",
+    "@automa/prisma": "workspace:*",
     "@fastify/autoload": "~5.7.1",
     "@fastify/cookie": "~8.3.0",
     "@fastify/cors": "~8.3.0",
@@ -40,18 +40,18 @@
     "fastify-plugin": "~4.5.1",
     "graphql": "~16.7.0",
     "http-errors": "~2.0.0",
-    "ioredis": "~5.2.5",
+    "ioredis": "~5.3.2",
     "jsonwebtoken": "~9.0.0",
     "nested-env-schema": "~1.0.2",
     "parse-link-header": "~2.0.0",
     "statsig-node": "~5.5.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf build && tsc",
     "copy-graphql": "mkdir -p build/graphql/schema && cp src/graphql/schema/* build/graphql/schema/",
     "dev": "tsc -w --preserveWatchOutput",
     "test": "NODE_ENV=test mocha test",
-    "test-cover": "nyc --reporter=lcov --reporter=text-summary yarn test"
+    "test-cover": "nyc --reporter=lcov --reporter=text-summary pnpm test"
   },
   "engines": {
     "node": ">=18.15.0"

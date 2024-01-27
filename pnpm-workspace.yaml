@@ -1,0 +1,7 @@
+packages:
+  - packages/api
+  - packages/common
+  - packages/config
+  - packages/console
+  - packages/docs
+  - packages/prisma

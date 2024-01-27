@@ -3,5 +3,7 @@ build
 coverage
 .nyc_output
 
+pnpm-lock.yaml
+
 packages/common/src/graphql.ts
 packages/console/src/gql
