@@ -1,18 +1,20 @@
-name: Testing (api)
+name: Build check (docs)
 on:
   pull_request:
     branches: [master]
     paths:
-      - .github/workflows/test-api.yml
-      - packages/common/src/**
-      - packages/prisma/**
-      - packages/api/**
+      - .github/workflows/build-check-docs.yml
+      - packages/docs/components/**
+      - packages/docs/pages/**
+      - packages/docs/next.config.js
+      - packages/docs/tailwind.config.ts
+      - packages/docs/theme.config.tsx
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  test-api:
+  build-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,16 +37,8 @@ jobs:
             deps-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Start dependencies
-        run: pnpm start-deps
-      - name: Run tests
-        run: pnpm test-cover
-        working-directory: packages/api
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/api/coverage/lcov.info
-          flags: api
-          name: api.${{ github.event.number }}
-          fail_ci_if_error: false
+      - name: Compile typescript
+        run: pnpm --filter @automa/common build
+      - name: Build site
+        run: pnpm build
+        working-directory: packages/docs

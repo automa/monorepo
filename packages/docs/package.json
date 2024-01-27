@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "next build",
-    "build-stats": "BUILD_STATS=1 yarn build",
+    "build-stats": "BUILD_STATS=1 pnpm build",
     "start": "next dev",
     "storybook": "storybook dev -p 6006",
     "storybook-build": "storybook build",

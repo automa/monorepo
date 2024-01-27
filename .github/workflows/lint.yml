@@ -4,30 +4,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  build-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        id: cache
-        with:
-          path: '**/node_modules'
-          key: deps-${{ hashFiles('**/yarn.lock', '**/schema.prisma') }}
-          restore-keys: |
-            deps-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-      - name: Compile typescript
-        run: yarn workspace @automa/common build
-      - name: Build site
-        run: yarn build
-        working-directory: packages/console
   lockfile:
     runs-on: ubuntu-latest
     steps:
@@ -37,17 +13,21 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Cache dependencies
         uses: actions/cache@v3
         id: cache
         with:
-          path: '**/node_modules'
-          key: deps-${{ hashFiles('**/yarn.lock') }}
+          path: 'node_modules'
+          key: deps-${{ hashFiles('**/pnpm-lock.yaml', '**/schema.prisma') }}
           restore-keys: |
             deps-
       - name: Lockfile check
         run: |
-          yarn install
+          pnpm install
           git diff --exit-code
   lint:
     runs-on: ubuntu-latest
@@ -58,21 +38,25 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Cache dependencies
         uses: actions/cache@v3
         id: cache
         with:
-          path: '**/node_modules'
-          key: deps-${{ hashFiles('**/yarn.lock') }}
+          path: 'node_modules'
+          key: deps-${{ hashFiles('**/pnpm-lock.yaml', '**/schema.prisma') }}
           restore-keys: |
             deps-
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: GraphQL types check
         run: |
-          yarn generate-graphql
+          pnpm generate-graphql
           git diff --exit-code
       - name: Lint check
-        run: yarn lint
+        run: pnpm lint
       - name: Formatting check
-        run: yarn format-check
+        run: pnpm format-check

@@ -4,20 +4,22 @@ on:
     branches: [master]
     paths:
       - .github/workflows/relative-console.yml
+      - packages/common/src/**
       - packages/console/public/**
       - packages/console/src/**
       - packages/console/index.html
-      - packages/console/vite.config.ts
-      - yarn.lock
+      - packages/console/vite.config.mts
+      - pnpm-lock.yaml
   pull_request:
     branches: [master]
     paths:
       - .github/workflows/relative-console.yml
+      - packages/common/src/**
       - packages/console/public/**
       - packages/console/src/**
       - packages/console/index.html
-      - packages/console/vite.config.ts
-      - yarn.lock
+      - packages/console/vite.config.mts
+      - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
   cancel-in-progress: true
@@ -33,20 +35,24 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Cache dependencies
         uses: actions/cache@v2
         id: cache
         with:
-          path: '**/node_modules'
-          key: deps-${{ hashFiles('**/yarn.lock', '**/schema.prisma') }}
+          path: 'node_modules'
+          key: deps-${{ hashFiles('**/pnpm-lock.yaml', '**/schema.prisma') }}
           restore-keys: |
             deps-
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Compile typescript
-        run: yarn workspace @automa/common build
+        run: pnpm --filter @automa/common build
       - name: Build stats
-        run: yarn build-stats
+        run: pnpm build-stats
         working-directory: packages/console
       - name: RelativeCI
         uses: relative-ci/agent-action@v2
