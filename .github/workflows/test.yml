@@ -1,5 +1,12 @@
 name: Testing
-on: [pull_request]
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - .github/workflows/test.yml
+      - src/**
+      - vite.config.mts
+      - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
