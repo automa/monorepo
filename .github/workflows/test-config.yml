@@ -5,7 +5,7 @@ on:
     paths:
       - .github/workflows/test-config.yml
       - packages/config/**
-      - yarn.lock
+      - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -14,23 +14,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install node
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Cache dependencies
         uses: actions/cache@v3
         id: cache
         with:
-          path: '**/node_modules'
-          key: deps-${{ hashFiles('**/yarn.lock', '**/schema.prisma') }}
+          path: 'node_modules'
+          key: deps-${{ hashFiles('**/pnpm-lock.yaml', '**/schema.prisma') }}
           restore-keys: |
             deps-
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Run tests
-        run: yarn test-cover
+        run: pnpm test-cover
         working-directory: packages/config
       - name: Upload coverage
         uses: codecov/codecov-action@v3

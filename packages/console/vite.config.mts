@@ -22,17 +22,18 @@ export default defineConfig({
   plugins: [
     imageOptimizer(),
     react({
-      babel: {
-        plugins: [
-          [
-            babelOptimizerPlugin,
-            {
-              artifactDirectory: './src/gql',
-              gqlTagName: 'gql',
-            },
-          ],
-        ],
-      },
+      // TODO: Uncomment when https://github.com/dotansimha/graphql-code-generator/issues/9774 is fixed
+      // babel: {
+      //   plugins: [
+      //     [
+      //       babelOptimizerPlugin,
+      //       {
+      //         artifactDirectory: './src/gql',
+      //         gqlTagName: 'gql',
+      //       },
+      //     ],
+      //   ],
+      // },
     }),
     svgr(),
     tsconfigPaths(),

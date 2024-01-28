@@ -9,7 +9,7 @@ const config: StorybookConfig = {
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
-    '@storybook/addon-styling',
+    '@storybook/addon-themes',
     '@storybook/addon-interactions',
     '@storybook/addon-coverage',
   ],

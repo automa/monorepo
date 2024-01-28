@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, ReactElement } from 'react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { configureStore, PreloadedState } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components/macro';
 import { render, RenderOptions } from '@testing-library/react';
@@ -20,7 +20,7 @@ const customRender = (
     path,
     ...options
   }: RenderOptions & {
-    state?: PreloadedState<RootState>;
+    state?: RootState;
     history?: string[];
     path?: string;
   } = {},
