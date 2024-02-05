@@ -3,12 +3,7 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 
 const config: Config = {
   darkMode: 'class',
-  content: [
-    './pages/**/*.{md,mdx}',
-    './components/**/*.{ts,tsx}',
-    './theme.config.tsx',
-    './.storybook/preview.tsx',
-  ],
+  content: ['./src/**/*.{ts,tsx,md,mdx}', './pages/**/*.{md,mdx}'],
   theme: {
     extend: {
       fontFamily: {

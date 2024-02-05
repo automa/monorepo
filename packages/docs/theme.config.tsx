@@ -1,6 +1,6 @@
 import * as nextraDocs from 'nextra-theme-docs';
 
-import { Logo, Footer } from 'components';
+import { Logo, Footer, Banner } from 'components';
 
 const config: nextraDocs.DocsThemeConfig = {
   useNextSeoProps() {
@@ -14,23 +14,13 @@ const config: nextraDocs.DocsThemeConfig = {
       <meta name="description" content="Documentation for Automa" />
     </>
   ),
-  nextThemes: {
-    defaultTheme: 'dark',
-  },
   banner: {
     key: 'alpha',
-    text: (
-      <div className="text-base font-light">
-        Automa is in <span className="font-bold">alpha</span>. Please report any
-        issues to{' '}
-        <a href="mailto:support@automa.app" className="font-semibold">
-          support@automa.app
-        </a>
-      </div>
-    ),
+    text: <Banner />,
     dismissible: false,
   },
   logo: <Logo />,
+  direction: 'ltr',
   editLink: {
     text: null,
   },

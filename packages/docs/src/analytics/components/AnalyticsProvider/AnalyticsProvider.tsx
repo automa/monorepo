@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { AnalyticsBrowser, ID } from '@segment/analytics-next';
 
 import { isProduction } from 'env';
-import { useAsyncEffect } from 'hooks';
+import { useAsyncEffect } from 'shared';
 
 import AnalyticsContext from 'analytics/context';
 

@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "target": "es5",
     "module": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -15,6 +15,11 @@
     ],
     "allowJs": true
   },
-  "include": ["build/types/**/*.ts", "next-env.d.ts", "src"],
+  "include": [
+    "build/types/**/*.ts",
+    "next-env.d.ts",
+    "src",
+    "theme.config.tsx"
+  ],
   "exclude": ["node_modules"]
 }
