@@ -41,10 +41,9 @@ jobs:
         run: pnpm test-cover
         working-directory: packages/console
       - name: Upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: packages/console/coverage/lcov.info
           flags: console
           name: console.${{ github.event.number }}
-          fail_ci_if_error: false
