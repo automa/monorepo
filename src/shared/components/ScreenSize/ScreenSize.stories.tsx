@@ -1,24 +1,26 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import ScreenSize from './ScreenSize';
-import { ScreenSizeProps } from './types';
 
-export default {
+const meta = {
   title: 'ScreenSize',
   component: ScreenSize,
-  argTypes: {},
-} as Meta<ScreenSizeProps>;
+} satisfies Meta<typeof ScreenSize>;
 
-export const BelowTablet: StoryObj<ScreenSizeProps> = {
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const BelowTablet = {
   args: {
     max: 'tablet',
     children: <div>Below tablet</div>,
   },
-};
+} satisfies Story;
 
-export const AboveTablet: StoryObj<ScreenSizeProps> = {
+export const AboveTablet = {
   args: {
     min: 'tablet',
     children: <div>Above tablet</div>,
   },
-};
+} satisfies Story;

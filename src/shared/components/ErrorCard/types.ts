@@ -3,7 +3,7 @@ import { FallbackProps } from 'react-error-boundary';
 
 import { $, Component, Styled } from 'theme';
 
-export type ErrorCardProps = $<
+type ErrorCardProps = $<
   {},
   {},
   {} & FallbackProps & HTMLAttributes<HTMLDivElement>

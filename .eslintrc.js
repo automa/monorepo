@@ -65,7 +65,6 @@ module.exports = {
     {
       files: ['**/*.stories.*'],
       rules: {
-        'import/no-anonymous-default-export': 'off',
         'storybook/await-interactions': 'off',
         'storybook/hierarchy-separator': 'error',
         'storybook/csf-component': 'error',
@@ -81,6 +80,8 @@ module.exports = {
         '.eslintrc.js',
         '.lintstagedrc.js',
         '.prettierrc.js',
+        'generate-graphql.ts',
+        'vite.config.mts',
       ],
       env: {
         node: true,

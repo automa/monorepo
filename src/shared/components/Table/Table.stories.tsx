@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import {
   getCoreRowModel,
   getSortedRowModel,
@@ -8,7 +8,6 @@ import {
 import { useState } from 'react';
 
 import Table from './Table';
-import { TableComponentProps } from './types';
 
 type Data = {
   name: string;
@@ -23,16 +22,19 @@ const data: Data[] = [
   { name: 'June', amount: 200 },
 ];
 
-export default {
+const meta = {
   title: 'Table',
   component: Table,
-  args: {},
   argTypes: {
     onRowClick: {
       action: true,
     },
   },
-} as Meta<TableComponentProps<Data>>;
+} satisfies Meta<typeof Table>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
 
 export const Default = () => {
   const [sorting, setSorting] = useState<SortingState>([]);

@@ -5,9 +5,9 @@ import { userEvent, within } from '@storybook/testing-library';
 import Typography from './Typography';
 import { TypographyComponentProps } from './types';
 
-export default {
+const meta = {
   title: 'Typography',
-  component: Typography,
+  component: (props) => <Typography {...props} />,
   args: {
     children: 'One',
   },
@@ -16,138 +16,141 @@ export default {
       action: true,
     },
   },
-} as Meta<TypographyComponentProps>;
+} satisfies Meta<TypographyComponentProps>;
 
-export const Default: StoryObj<TypographyComponentProps> = {};
+export default meta;
 
-export const Title1: StoryObj<TypographyComponentProps> = {
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;
+
+export const Title1 = {
   args: {
     variant: 'title1',
   },
-};
+} satisfies Story;
 
-export const Title2: StoryObj<TypographyComponentProps> = {
+export const Title2 = {
   args: {
     variant: 'title2',
   },
-};
+} satisfies Story;
 
-export const Title3: StoryObj<TypographyComponentProps> = {
+export const Title3 = {
   args: {
     variant: 'title3',
   },
-};
+} satisfies Story;
 
-export const Title4: StoryObj<TypographyComponentProps> = {
+export const Title4 = {
   args: {
     variant: 'title4',
   },
-};
+} satisfies Story;
 
-export const Title5: StoryObj<TypographyComponentProps> = {
+export const Title5 = {
   args: {
     variant: 'title5',
   },
-};
+} satisfies Story;
 
-export const Title6: StoryObj<TypographyComponentProps> = {
+export const Title6 = {
   args: {
     variant: 'title6',
   },
 };
 
-export const Body1: StoryObj<TypographyComponentProps> = {
+export const Body1 = {
   args: {
     variant: 'body1',
   },
-};
+} satisfies Story;
 
-export const Body2: StoryObj<TypographyComponentProps> = {
+export const Body2 = {
   args: {
     variant: 'body2',
   },
-};
+} satisfies Story;
 
-export const Body3: StoryObj<TypographyComponentProps> = {
+export const Body3 = {
   args: {
     variant: 'body3',
   },
 };
 
-export const Link: StoryObj<TypographyComponentProps> = {
+export const Link = {
   args: {
     link: true,
   },
-};
+} satisfies Story;
 
-export const Color: StoryObj<TypographyComponentProps> = {
+export const Color = {
   args: {
     color: 'body',
   },
-};
+} satisfies Story;
 
-export const ColorNative: StoryObj<TypographyComponentProps> = {
+export const ColorNative = {
   args: {
     color: 'red',
   },
-};
+} satisfies Story;
 
-export const Ellipsis: StoryObj<TypographyComponentProps> = {
+export const Ellipsis = {
   args: {
     ellipsis: {
       width: '50px',
     },
   },
-};
+} satisfies Story;
 
-export const AlignLeft: StoryObj<TypographyComponentProps> = {
+export const AlignLeft = {
   args: {
     textAlign: 'left',
   },
-};
+} satisfies Story;
 
-export const AlignCenter: StoryObj<TypographyComponentProps> = {
+export const AlignCenter = {
   args: {
     textAlign: 'center',
   },
-};
+} satisfies Story;
 
-export const AlignRight: StoryObj<TypographyComponentProps> = {
+export const AlignRight = {
   args: {
     textAlign: 'right',
   },
-};
+} satisfies Story;
 
-export const Uppercase: StoryObj<TypographyComponentProps> = {
+export const Uppercase = {
   args: {
     textTransform: 'uppercase',
   },
-};
+} satisfies Story;
 
-export const Whitespace: StoryObj<TypographyComponentProps> = {
+export const Whitespace = {
   args: {
     whiteSpace: 'nowrap',
     style: {
       width: '50px',
     },
   },
-};
+} satisfies Story;
 
-export const WordBreak: StoryObj<TypographyComponentProps> = {
+export const WordBreak = {
   args: {
     wordBreak: 'break-all',
     style: {
       width: '25px',
     },
   },
-};
+} satisfies Story;
 
-export const Clickable: StoryObj<TypographyComponentProps> = {
-  args: {},
+export const Clickable = {
   play: async ({ args, canvasElement }) => {
     const { getByText } = within(canvasElement);
 
     await userEvent.click(getByText('One'));
     expect(args.onClick).toHaveBeenCalled();
   },
-};
+} satisfies Story;

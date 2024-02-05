@@ -3,7 +3,7 @@ import { Table, Row } from '@tanstack/react-table';
 
 import { $, Component, Styled } from 'theme';
 
-export type TableProps<T> = $<
+type TableProps<T> = $<
   {},
   {},
   {

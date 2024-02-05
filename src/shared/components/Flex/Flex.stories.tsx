@@ -5,9 +5,9 @@ import { userEvent, within } from '@storybook/testing-library';
 import Flex from './Flex';
 import { FlexProps } from './types';
 
-export default {
+const meta = {
   title: 'Flex',
-  component: Flex,
+  component: (props) => <Flex {...props} />,
   args: {
     children: (
       <>
@@ -21,22 +21,25 @@ export default {
       action: true,
     },
   },
-} as Meta<FlexProps>;
+} satisfies Meta<FlexProps>;
 
-export const Default: StoryObj<FlexProps> = {};
+export default meta;
 
-export const Gap: StoryObj<FlexProps> = {
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;
+
+export const Gap = {
   args: {
     gap: 2,
   },
-};
+} satisfies Story;
 
-export const Clickable: StoryObj<FlexProps> = {
-  args: {},
+export const Clickable = {
   play: async ({ args, canvasElement }) => {
     const { getByText } = within(canvasElement);
 
     await userEvent.click(getByText('One'));
     expect(args.onClick).toHaveBeenCalled();
   },
-};
+} satisfies Story;

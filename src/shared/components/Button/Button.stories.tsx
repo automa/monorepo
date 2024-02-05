@@ -5,9 +5,9 @@ import { userEvent, within } from '@storybook/testing-library';
 import Button from './Button';
 import { ButtonComponentProps } from './types';
 
-export default {
+const meta = {
   title: 'Button',
-  component: Button,
+  component: (props) => <Button {...props} />,
   args: {
     children: 'One',
   },
@@ -16,106 +16,107 @@ export default {
       action: true,
     },
   },
-} as Meta<ButtonComponentProps>;
+} satisfies Meta<ButtonComponentProps>;
 
-export const Default: StoryObj<ButtonComponentProps> = {};
+export default meta;
 
-export const Disabled: StoryObj<ButtonComponentProps> = {
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;
+
+export const Disabled = {
   args: {
     disabled: true,
   },
-};
+} satisfies Story;
 
-export const Secondary: StoryObj<ButtonComponentProps> = {
+export const Secondary = {
   args: {
     variant: 'secondary',
   },
-};
+} satisfies Story;
 
-export const SecondaryDisabled: StoryObj<ButtonComponentProps> = {
+export const SecondaryDisabled = {
   args: {
     ...Secondary.args,
     ...Disabled.args,
   },
-};
+} satisfies Story;
 
-export const Tertiary: StoryObj<ButtonComponentProps> = {
+export const Tertiary = {
   args: {
     variant: 'tertiary',
   },
-};
+} satisfies Story;
 
-export const TertiaryDisabled: StoryObj<ButtonComponentProps> = {
+export const TertiaryDisabled = {
   args: {
     ...Tertiary.args,
     ...Disabled.args,
   },
-};
+} satisfies Story;
 
-export const Small: StoryObj<ButtonComponentProps> = {
+export const Small = {
   args: {
     size: 'small',
   },
-};
+} satisfies Story;
 
-export const SmallSecondary: StoryObj<ButtonComponentProps> = {
+export const SmallSecondary = {
   args: {
     ...Small.args,
     ...Secondary.args,
   },
-};
+} satisfies Story;
 
-export const SmallTertiary: StoryObj<ButtonComponentProps> = {
+export const SmallTertiary = {
   args: {
     ...Small.args,
     ...Tertiary.args,
   },
-};
+} satisfies Story;
 
-export const Large: StoryObj<ButtonComponentProps> = {
+export const Large = {
   args: {
     size: 'large',
   },
-};
+} satisfies Story;
 
-export const LargeSecondary: StoryObj<ButtonComponentProps> = {
+export const LargeSecondary = {
   args: {
     ...Large.args,
     ...Secondary.args,
   },
-};
+} satisfies Story;
 
-export const LargeTertiary: StoryObj<ButtonComponentProps> = {
+export const LargeTertiary = {
   args: {
     ...Large.args,
     ...Tertiary.args,
   },
-};
+} satisfies Story;
 
-export const FullWidth: StoryObj<ButtonComponentProps> = {
+export const FullWidth = {
   args: {
     fullWidth: true,
   },
-};
+} satisfies Story;
 
-export const Clickable: StoryObj<ButtonComponentProps> = {
-  args: {},
+export const Clickable = {
   play: async ({ args, canvasElement }) => {
     const { getByText } = within(canvasElement);
 
     await userEvent.click(getByText('One'));
     expect(args.onClick).toHaveBeenCalled();
   },
-};
+} satisfies Story;
 
-export const NonClickable: StoryObj<ButtonComponentProps> = {
-  args: {
-    ...Disabled.args,
-  },
+export const NonClickable = {
+  ...Disabled,
   play: async ({ args, canvasElement }) => {
     const { getByText } = within(canvasElement);
 
     await userEvent.click(getByText('One'));
     expect(args.onClick).not.toHaveBeenCalled();
   },
-};
+} satisfies Story;

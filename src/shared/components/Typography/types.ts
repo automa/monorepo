@@ -3,16 +3,16 @@ import { Property } from 'csstype';
 
 import theme, { $, Component, Styled } from 'theme';
 
-export type TextColor = keyof (typeof theme)['colors'] | Property.Color;
+type TextColor = keyof (typeof theme)['colors'] | Property.Color;
 
-export type TextVariant = keyof (typeof theme)['typography'];
+type TextVariant = keyof (typeof theme)['typography'];
 
-export type Ellipsis = {
+type Ellipsis = {
   lines?: number;
   width?: string | number;
 };
 
-export type TypographyProps = $<
+type TypographyProps = $<
   {
     variant?: TextVariant;
   },

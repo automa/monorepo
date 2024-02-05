@@ -5,7 +5,7 @@ import theme, { $, Component, Styled } from 'theme';
 
 export type ToastVariant = keyof (typeof theme)['toasts'];
 
-export type ToastProps = $<
+type ToastProps = $<
   {
     variant?: ToastVariant;
   },

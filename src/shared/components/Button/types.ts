@@ -3,13 +3,13 @@ import { Property } from 'csstype';
 
 import theme, { $, Component, Styled } from 'theme';
 
-export type TextColor = keyof (typeof theme)['colors'] | Property.Color;
+type TextColor = keyof (typeof theme)['colors'] | Property.Color;
 
-export type ButtonSize = keyof (typeof theme)['buttons']['sizes'];
+type ButtonSize = keyof (typeof theme)['buttons']['sizes'];
 
-export type ButtonVariant = keyof (typeof theme)['buttons']['variants'];
+type ButtonVariant = keyof (typeof theme)['buttons']['variants'];
 
-export type ButtonProps = $<
+type ButtonProps = $<
   {
     variant?: ButtonVariant;
     size?: ButtonSize;
