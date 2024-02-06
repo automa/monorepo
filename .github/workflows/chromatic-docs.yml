@@ -4,16 +4,18 @@ on:
     branches: [master]
     paths:
       - .github/workflows/chromatic-docs.yml
-      - packages/docs/components/**
       - packages/docs/public/**
+      - packages/docs/src/**
+      - packages/docs/next.config.js
       - packages/docs/tailwind.config.ts
       - pnpm-lock.yaml
   pull_request:
     branches: [master]
     paths:
       - .github/workflows/chromatic-docs.yml
-      - packages/docs/components/**
       - packages/docs/public/**
+      - packages/docs/src/**
+      - packages/docs/next.config.js
       - packages/docs/tailwind.config.ts
       - pnpm-lock.yaml
 concurrency:

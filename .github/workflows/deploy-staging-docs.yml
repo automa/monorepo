@@ -4,9 +4,9 @@ on:
     branches: [master]
     paths:
       - .github/workflows/deploy-staging-docs.yml
-      - packages/docs/components/**
-      - packages/docs/pages/**
       - packages/docs/public/**
+      - packages/docs/src/**
+      - packages/docs/pages/**
       - packages/docs/next.config.js
       - packages/docs/tailwind.config.ts
       - packages/docs/theme.config.tsx
