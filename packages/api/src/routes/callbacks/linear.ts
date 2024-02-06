@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import axios from 'axios';
-import generate from 'better-random-words';
+import { generateSlug } from 'random-word-slugs';
 
 import { ErrorType } from '@automa/common';
 import { project_provider } from '@automa/prisma';
@@ -68,7 +68,7 @@ export default async function (app: FastifyInstance) {
       data: {
         org_id: org.id,
         provider_type: project_provider.linear,
-        name: generate({ exactly: 2, join: '-' }),
+        name: generateSlug(2, { format: 'kebab' }),
         config: {
           access_token: accessToken,
         },
