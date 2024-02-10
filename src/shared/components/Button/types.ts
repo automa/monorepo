@@ -1,9 +1,9 @@
 import { ButtonHTMLAttributes } from 'react';
-import { Property } from 'csstype';
+import { CSSProperties } from 'styled-components';
 
 import theme, { $, Component, Styled } from 'theme';
 
-type TextColor = keyof (typeof theme)['colors'] | Property.Color;
+type TextColor = keyof (typeof theme)['colors'] | CSSProperties['color'];
 
 type ButtonSize = keyof (typeof theme)['buttons']['sizes'];
 

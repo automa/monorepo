@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import * as Toast from '@radix-ui/react-toast';
 
 import { ToastStyledProps } from './types';

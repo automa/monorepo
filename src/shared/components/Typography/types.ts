@@ -1,9 +1,9 @@
 import { ElementType, HTMLAttributes } from 'react';
-import { Property } from 'csstype';
+import { CSSProperties } from 'styled-components';
 
 import theme, { $, Component, Styled } from 'theme';
 
-type TextColor = keyof (typeof theme)['colors'] | Property.Color;
+type TextColor = keyof (typeof theme)['colors'] | CSSProperties['color'];
 
 type TextVariant = keyof (typeof theme)['typography'];
 
@@ -19,10 +19,10 @@ type TypographyProps = $<
   {
     color?: TextColor;
     ellipsis?: Ellipsis;
-    wordBreak?: Property.WordBreak;
-    whiteSpace?: Property.WhiteSpace;
-    textAlign?: Property.TextAlign;
-    textTransform?: Property.TextTransform;
+    wordBreak?: CSSProperties['wordBreak'];
+    whiteSpace?: CSSProperties['whiteSpace'];
+    textAlign?: CSSProperties['textAlign'];
+    textTransform?: CSSProperties['textTransform'];
     link?: boolean;
   },
   {

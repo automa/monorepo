@@ -1,11 +1,5 @@
-import {
-  css,
-  CSSObject,
-  Interpolation,
-  InterpolationFunction,
-  ThemedStyledProps,
-  DefaultTheme,
-} from 'styled-components/macro';
+import { css, Interpolation } from 'styled-components';
+import { Styles } from 'styled-components/dist/types';
 
 import breakpoints from './breakpoints';
 
@@ -56,14 +50,11 @@ const screenSize = (size: ScreenSize) => {
   }
 
   return <P extends object>(
-    first:
-      | TemplateStringsArray
-      | CSSObject
-      | InterpolationFunction<ThemedStyledProps<P, DefaultTheme>>,
-    ...interpolations: Array<Interpolation<ThemedStyledProps<P, DefaultTheme>>>
-  ) => css`
+    first: Styles<P>,
+    ...interpolations: Interpolation<P>[]
+  ) => css<P>`
     @media (${conditions.join(' and ')}) {
-      ${css(first, ...interpolations)}
+      ${css<P>(first, ...interpolations)}
     }
   `;
 };

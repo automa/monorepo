@@ -1,8 +1,15 @@
-import 'styled-components/macro';
+import type { CSSProp } from 'styled-components';
+
 import theme from 'theme';
 
-declare module 'styled-components' {
-  type Theme = typeof theme;
+type ThemeType = typeof theme;
 
-  export interface DefaultTheme extends Theme {}
+declare module 'styled-components' {
+  export interface DefaultTheme extends ThemeType {}
+}
+
+declare module 'react' {
+  interface Attributes {
+    css?: CSSProp;
+  }
 }

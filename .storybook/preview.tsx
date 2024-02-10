@@ -3,7 +3,7 @@ import { Preview } from '@storybook/react';
 import { withThemeFromJSXProvider } from '@storybook/addon-themes';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components/macro';
+import { ThemeProvider } from 'styled-components';
 
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as Toast from '@radix-ui/react-toast';

@@ -1,4 +1,4 @@
-import styled, { css, DefaultTheme } from 'styled-components/macro';
+import styled, { css, DefaultTheme } from 'styled-components';
 
 type CssValue = number | string;
 

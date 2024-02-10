@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ApolloProvider } from '@apollo/client';
-import styled, { ThemeProvider } from 'styled-components/macro';
+import styled, { ThemeProvider } from 'styled-components';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as Toast from '@radix-ui/react-toast';
 

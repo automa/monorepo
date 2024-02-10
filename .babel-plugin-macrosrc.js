@@ -1,5 +1,1 @@
-module.exports = {
-  styledComponents: {
-    pure: true,
-  },
-};
+module.exports = {};

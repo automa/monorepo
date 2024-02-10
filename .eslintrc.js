@@ -17,18 +17,6 @@ module.exports = {
         allowEmptyCatch: true,
       },
     ],
-    'no-restricted-imports': [
-      'error',
-      {
-        paths: [
-          {
-            name: 'styled-components',
-            message: 'Please import from styled-components/macro.',
-          },
-        ],
-        patterns: ['!styled-components/macro'],
-      },
-    ],
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': 'warn',
@@ -40,6 +28,12 @@ module.exports = {
           '{}': false,
         },
         extendDefaults: true,
+      },
+    ],
+    'react/no-unknown-property': [
+      'error',
+      {
+        ignore: ['css'],
       },
     ],
     'react/react-in-jsx-scope': 'off',

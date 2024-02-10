@@ -3,7 +3,7 @@ import { expect } from '@storybook/jest';
 import { userEvent, within } from '@storybook/testing-library';
 
 import Flex from './Flex';
-import { FlexProps } from './types';
+import { FlexComponentProps } from './types';
 
 const meta = {
   title: 'Flex',
@@ -21,7 +21,7 @@ const meta = {
       action: true,
     },
   },
-} satisfies Meta<FlexProps>;
+} satisfies Meta<FlexComponentProps>;
 
 export default meta;
 
@@ -29,9 +29,34 @@ type Story = StoryObj<typeof meta>;
 
 export const Default = {} satisfies Story;
 
+export const Direction = {
+  args: {
+    direction: 'column',
+  },
+} satisfies Story;
+
+export const JustifyContent = {
+  args: {
+    justifyContent: 'space-between',
+  },
+} satisfies Story;
+
+export const AlignItems = {
+  args: {
+    ...Direction.args,
+    alignItems: 'flex-end',
+  },
+} satisfies Story;
+
 export const Gap = {
   args: {
     gap: 2,
+  },
+} satisfies Story;
+
+export const Inline = {
+  args: {
+    inline: true,
   },
 } satisfies Story;
 
