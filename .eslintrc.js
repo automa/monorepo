@@ -9,6 +9,7 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:prettier/recommended',
     'plugin:storybook/recommended',
+    'plugin:tailwindcss/recommended',
   ],
   rules: {
     'no-empty': [
@@ -33,7 +34,7 @@ module.exports = {
     'react/no-unknown-property': [
       'error',
       {
-        ignore: ['css'],
+        ignore: ['tw'],
       },
     ],
     'react/react-in-jsx-scope': 'off',
@@ -44,6 +45,10 @@ module.exports = {
       },
     ],
     'storybook/no-uninstalled-addons': 'off',
+    'tailwindcss/classnames-order': 'off',
+    'tailwindcss/enforces-negative-arbitrary-values': 'error',
+    'tailwindcss/enforces-shorthand': 'error',
+    'tailwindcss/no-arbitrary-value': 'error',
   },
   ignorePatterns: [
     '!.storybook',
@@ -75,6 +80,8 @@ module.exports = {
         '.lintstagedrc.js',
         '.prettierrc.js',
         'generate-graphql.ts',
+        'postcss.config.js',
+        'tailwind.config.ts',
         'vite.config.mts',
       ],
       env: {

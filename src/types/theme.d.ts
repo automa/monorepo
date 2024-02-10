@@ -1,4 +1,4 @@
-import type { CSSProp } from 'styled-components';
+import 'twin.macro';
 
 import theme from 'theme';
 
@@ -10,6 +10,6 @@ declare module 'styled-components' {
 
 declare module 'react' {
   interface Attributes {
-    css?: CSSProp;
+    tw?: string;
   }
 }

@@ -7,8 +7,6 @@ import styled, { ThemeProvider } from 'styled-components';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as Toast from '@radix-ui/react-toast';
 
-import 'reset-css';
-
 import 'index.css';
 
 import 'env';

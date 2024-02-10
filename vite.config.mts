@@ -22,6 +22,7 @@ export default defineConfig({
   },
   plugins: [
     imageOptimizer(),
+    macros(),
     react({
       babel: {
         plugins: [
@@ -43,7 +44,6 @@ export default defineConfig({
     }),
     svgr(),
     tsconfigPaths(),
-    macros(),
     checker({
       typescript: true,
       eslint: {
