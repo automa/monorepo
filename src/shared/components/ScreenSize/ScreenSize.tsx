@@ -2,52 +2,47 @@ import React from 'react';
 
 import {
   useIsScreenSize,
-  useIsMobileOnly,
-  useIsTabletOnly,
-  useIsLaptopOnly,
-  useIsDesktopOnly,
-  useIsWideOnly,
-  useIsExtraWideOnly,
+  useIsExtraSmallOnly,
+  useIsSmallOnly,
+  useIsMediumOnly,
+  useIsLargeOnly,
+  useIsExtraLargeOnly,
 } from 'shared';
 
 import { ScreenSizeHelperProps, ScreenSizeProps } from './types';
 
-export const MobileOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
-  const isMobileOnly = useIsMobileOnly();
-
-  return isMobileOnly ? (children as JSX.Element) : null;
-};
-
-export const TabletOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
-  const isTabletOnly = useIsTabletOnly();
-
-  return isTabletOnly ? (children as JSX.Element) : null;
-};
-
-export const LaptopOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
-  const isLaptopOnly = useIsLaptopOnly();
-
-  return isLaptopOnly ? (children as JSX.Element) : null;
-};
-
-export const DesktopOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
-  const isDesktopOnly = useIsDesktopOnly();
-
-  return isDesktopOnly ? (children as JSX.Element) : null;
-};
-
-export const WideOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
-  const isWideOnly = useIsWideOnly();
-
-  return isWideOnly ? (children as JSX.Element) : null;
-};
-
-export const ExtraWideOnly: React.FC<ScreenSizeHelperProps> = ({
+export const ExtraSmallOnly: React.FC<ScreenSizeHelperProps> = ({
   children,
 }) => {
-  const isExtraWideOnly = useIsExtraWideOnly();
+  const isExtraSmallOnly = useIsExtraSmallOnly();
 
-  return isExtraWideOnly ? (children as JSX.Element) : null;
+  return isExtraSmallOnly ? (children as JSX.Element) : null;
+};
+
+export const SmallOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
+  const isSmallOnly = useIsSmallOnly();
+
+  return isSmallOnly ? (children as JSX.Element) : null;
+};
+
+export const MediumOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
+  const isMediumOnly = useIsMediumOnly();
+
+  return isMediumOnly ? (children as JSX.Element) : null;
+};
+
+export const LargeOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
+  const isLargeOnly = useIsLargeOnly();
+
+  return isLargeOnly ? (children as JSX.Element) : null;
+};
+
+export const ExtraLargeOnly: React.FC<ScreenSizeHelperProps> = ({
+  children,
+}) => {
+  const isExtraLargeOnly = useIsExtraLargeOnly();
+
+  return isExtraLargeOnly ? (children as JSX.Element) : null;
 };
 
 const ScreenSize: React.FC<ScreenSizeProps> = ({ children, ...size }) => {

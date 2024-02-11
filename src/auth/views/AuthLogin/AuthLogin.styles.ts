@@ -1,5 +1,3 @@
-import styled from 'styled-components';
+import { tw } from 'theme';
 
-import { AuthLoginProps } from './types';
-
-export const Container = styled.div<AuthLoginProps>``;
+export const Container = tw.div``;

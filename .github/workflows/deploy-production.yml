@@ -8,6 +8,7 @@ on:
       - src/**
       - index.html
       - vite.config.mts
+      - tailwind.config.ts
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}

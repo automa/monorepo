@@ -11,7 +11,6 @@ const meta = {
   args: {
     to: '/path',
     children: 'One',
-    activeColor: 'red',
   },
   argTypes: {
     onClick: {

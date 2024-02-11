@@ -2,14 +2,14 @@ import React from 'react';
 
 import Typography from '../Typography';
 
-import { ErrorCardComponentProps } from './types';
+import { ErrorCardProps } from './types';
 
 import { Container } from './ErrorCard.styles';
 
-const ErrorCard: React.FC<ErrorCardComponentProps> = ({ error, ...props }) => {
+const ErrorCard: React.FC<ErrorCardProps> = ({ error, ...props }) => {
   return (
     <Container {...props}>
-      <Typography variant="body3">
+      <Typography variant="small">
         {error?.message ?? 'Something went wrong'}
       </Typography>
     </Container>

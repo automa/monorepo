@@ -1,25 +1,16 @@
+import { VariantProps } from 'class-variance-authority';
 import { ButtonHTMLAttributes } from 'react';
-import { CSSProperties } from 'styled-components';
 
-import theme, { $, Component, Styled } from 'theme';
+import { $, Component, Styled } from 'theme';
 
-type TextColor = keyof (typeof theme)['colors'] | CSSProperties['color'];
-
-type ButtonSize = keyof (typeof theme)['buttons']['sizes'];
-
-type ButtonVariant = keyof (typeof theme)['buttons']['variants'];
+import { button } from './Button.cva';
 
 type ButtonProps = $<
+  {},
   {
-    variant?: ButtonVariant;
-    size?: ButtonSize;
-    disabled?: boolean;
     fullWidth?: boolean;
-  },
-  {
-    color?: TextColor;
-  },
-  Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'>
+  } & VariantProps<typeof button>,
+  ButtonHTMLAttributes<HTMLButtonElement>
 >;
 
 export type ButtonComponentProps = Component<ButtonProps>;

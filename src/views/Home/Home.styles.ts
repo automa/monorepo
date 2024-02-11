@@ -1,5 +1,3 @@
-import styled from 'styled-components';
+import { tw } from 'theme';
 
-import { HomeProps } from './types';
-
-export const Container = styled.div<HomeProps>``;
+export const Container = tw.div``;

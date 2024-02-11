@@ -1,96 +1,11 @@
-import styled, { css, DefaultTheme } from 'styled-components';
+import { twMerge } from 'tailwind-merge';
+import { cx, createTwc } from 'react-twc';
 
-type CssValue = number | string;
+export const tw = createTwc({
+  compose: (...inputs) => twMerge(cx(inputs)),
+});
 
-type CssValues =
-  | CssValue
-  | [CssValue]
-  | [CssValue, CssValue]
-  | [CssValue, CssValue, CssValue]
-  | [CssValue, CssValue, CssValue, CssValue];
-
-interface CommonPropsMultiple {
-  margin?: CssValues;
-  padding?: CssValues;
-}
-
-interface CommonPropsSingle {
-  marginTop?: CssValue;
-  marginRight?: CssValue;
-  marginBottom?: CssValue;
-  marginLeft?: CssValue;
-  paddingTop?: CssValue;
-  paddingRight?: CssValue;
-  paddingBottom?: CssValue;
-  paddingLeft?: CssValue;
-}
-
-type CommonProps = CommonPropsMultiple & CommonPropsSingle;
-
-const cssValue = (theme: DefaultTheme, val?: CssValue) =>
-  val !== undefined &&
-  (typeof val === 'string' ? `${val}` : `${theme.spacing(val)}px`);
-
-const cssLine =
-  (key: keyof CommonPropsSingle, cssKey: string) =>
-  ({
-    theme,
-    ...props
-  }: {
-    theme: DefaultTheme;
-  } & CommonPropsSingle) => css`
-    ${cssKey}: ${cssValue(theme, props[key])};
-  `;
-
-const cssFour =
-  (key: keyof CommonPropsMultiple, cssKey: string) =>
-  ({ theme, ...props }: { theme: DefaultTheme } & CommonPropsMultiple) => {
-    const val = props[key] as CssValues;
-    let cssVal;
-
-    if (Array.isArray(val)) {
-      cssVal = val.map((item) => cssValue(theme, item)).join(' ');
-    } else {
-      cssVal = cssValue(theme, val);
-    }
-
-    return css`
-      ${cssKey}: ${cssVal};
-    `;
-  };
-
-export const CommonWrapper = <T>(
-  component: (args: T) => JSX.Element | null,
-) => styled((props: Common<T>) => {
-  const {
-    /* eslint-disable @typescript-eslint/no-unused-vars */
-    margin,
-    marginTop,
-    marginRight,
-    marginBottom,
-    marginLeft,
-    padding,
-    paddingTop,
-    paddingRight,
-    paddingBottom,
-    paddingLeft,
-    /* eslint-enable */
-    ...componentProps
-  } = props;
-
-  return component(componentProps as T);
-})<Common<T>>`
-  ${cssFour('margin', 'margin')}
-  ${cssLine('marginTop', 'margin-top')}
-  ${cssLine('marginRight', 'margin-right')}
-  ${cssLine('marginBottom', 'margin-bottom')}
-  ${cssLine('marginLeft', 'margin-left')}
-  ${cssFour('padding', 'padding')}
-  ${cssLine('paddingTop', 'padding-top')}
-  ${cssLine('paddingRight', 'padding-right')}
-  ${cssLine('paddingBottom', 'padding-bottom')}
-  ${cssLine('paddingLeft', 'padding-left')}
-`;
+export const twp = (strings: TemplateStringsArray) => strings[0];
 
 // Utility wrapper for building different types of props needed for a component.
 //
@@ -163,5 +78,3 @@ export type Styled<T> = T extends {
 }
   ? T['styledRequired'] & T['styledOptional']
   : T;
-
-export type Common<T> = T & CommonProps;

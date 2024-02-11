@@ -6,9 +6,7 @@ import { TypographyComponentProps } from 'shared/components/Typography';
 
 type LinkProps = $<
   {},
-  {
-    activeColor?: TypographyComponentProps['color'];
-  },
+  {},
   {
     to: To;
   } & TypographyComponentProps

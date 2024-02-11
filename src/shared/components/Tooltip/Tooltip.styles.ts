@@ -1,19 +1,13 @@
-import styled from 'styled-components';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
-import { TooltipStyledProps } from './types';
+import { tw } from 'theme';
 
-export const Container = styled.div<TooltipStyledProps>``;
+export const Container = tw.div``;
 
-export const TriggerContainer = styled.div``;
+export const TriggerContainer = tw.div``;
 
-export const ContentContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.black};
-  color: ${({ theme }) => theme.colors.white};
-  border-radius: ${({ theme }) => theme.spacing(1)}px;
-  padding: ${({ theme }) => theme.spacing(1)}px;
-`;
+export const Content = tw(
+  Tooltip.Content,
+)`rounded-md bg-black px-3 py-1.5 text-white text-xs z-50`;
 
-export const Arrow = styled(Tooltip.Arrow)`
-  fill: ${({ theme }) => theme.colors.black};
-`;
+export const Arrow = tw(Tooltip.Arrow)`fill-black`;

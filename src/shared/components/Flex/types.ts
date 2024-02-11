@@ -1,19 +1,15 @@
 import { HTMLAttributes } from 'react';
-import { CSSProperties } from 'styled-components';
+import { VariantProps } from 'class-variance-authority';
 
 import { $, Component, Styled } from 'theme';
+
+import { flex } from './Flex.cva';
 
 type FlexProps = $<
   {},
   {
-    direction?: CSSProperties['flexDirection'];
-    wrap?: CSSProperties['flexWrap'];
-    justifyContent?: CSSProperties['justifyContent'];
-    alignItems?: CSSProperties['alignItems'];
-    alignContent?: CSSProperties['alignContent'];
-    gap?: number | [number, number];
     inline?: boolean;
-  },
+  } & VariantProps<typeof flex>,
   HTMLAttributes<HTMLDivElement>
 >;
 

@@ -1,30 +1,14 @@
-import styled, { css } from 'styled-components';
+import { TwcComponentProps } from 'react-twc';
+
+import { tw, twp } from 'theme';
 
 import { ButtonStyledProps } from './types';
+import { button } from './Button.cva';
 
-export const Container = styled.button<ButtonStyledProps>`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-
-  ${({ $disabled }) =>
-    !!$disabled &&
-    css`
-      cursor: initial;
-    `}
-
-  ${({ $fullWidth }) =>
-    !!$fullWidth &&
-    css`
-      width: 100%;
-      justify-content: center;
-    `}
-
-  color: ${({ theme, $color }) =>
-    $color
-      ? theme.colors[$color as keyof (typeof theme)['colors']] || $color
-      : 'inherit'};
-
-  ${({ theme, $variant }) => theme.buttons.variants[$variant]()};
-  ${({ theme, $size }) => theme.buttons.sizes[$size]()};
-`;
+export const Container = tw.button<
+  TwcComponentProps<'button'> & ButtonStyledProps
+>(({ $variant, $size, $fullWidth, disabled }) => [
+  button({ variant: $variant, size: $size }),
+  $fullWidth && twp`w-full justify-center`,
+  disabled && twp`cursor-not-allowed opacity-50`,
+]);

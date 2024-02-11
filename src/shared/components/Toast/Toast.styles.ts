@@ -1,26 +1,32 @@
-import styled from 'styled-components';
 import * as Toast from '@radix-ui/react-toast';
 
+import { tw } from 'theme';
+
 import { ToastStyledProps } from './types';
+import {
+  toast,
+  toastTitle,
+  toastDescription,
+  toastAction,
+  toastClose,
+} from './Toast.cva';
 
-export const TitleContainer = styled(Toast.Title)<ToastStyledProps>`
-  ${({ theme, $variant }) => theme.toasts[$variant].title()}
-`;
+export const Container = tw(Toast.Root)<
+  React.ComponentProps<typeof Toast.Root> & ToastStyledProps
+>(({ $variant }) => toast({ variant: $variant }));
 
-export const DescriptionContainer = styled(Toast.Description)<ToastStyledProps>`
-  ${({ theme, $variant }) => theme.toasts[$variant].description()}
-`;
+export const Title = tw(Toast.Title)<
+  React.ComponentProps<typeof Toast.Title> & ToastStyledProps
+>(({ $variant }) => toastTitle({ variant: $variant }));
 
-export const ActionContainer = styled(Toast.Action)<ToastStyledProps>`
-  ${({ theme, $variant }) => theme.toasts[$variant].action()}
-`;
+export const Description = tw(Toast.Description)<
+  React.ComponentProps<typeof Toast.Description> & ToastStyledProps
+>(({ $variant }) => toastDescription({ variant: $variant }));
 
-export const CloseContainer = styled(Toast.Close)<ToastStyledProps>`
-  ${({ theme, $variant }) => theme.toasts[$variant].close()}
-`;
+export const Action = tw(Toast.Action)<
+  React.ComponentProps<typeof Toast.Action> & ToastStyledProps
+>(({ $variant }) => toastAction({ variant: $variant }));
 
-export const Container = styled.div<ToastStyledProps>`
-  ${({ theme, $variant }) => theme.toasts[$variant].root()}
-
-  list-style: none;
-`;
+export const Close = tw(Toast.Close)<
+  React.ComponentProps<typeof Toast.Close> & ToastStyledProps
+>(({ $variant }) => toastClose({ variant: $variant }));

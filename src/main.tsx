@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ApolloProvider } from '@apollo/client';
-import styled, { ThemeProvider } from 'styled-components';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as Toast from '@radix-ui/react-toast';
 
@@ -15,13 +14,11 @@ import 'telemetry';
 import { ErrorBoundary } from 'error';
 import client from 'client';
 import store from 'store';
-import theme, { GlobalStyle, loadFonts } from 'theme';
+import { loadFonts } from 'theme';
 
 import { AnalyticsProvider } from 'analytics';
 
 import App from 'views/App';
-
-export const ToastContainer = styled(Toast.Viewport)``;
 
 loadFonts().then(() => {
   const root = createRoot(document.getElementById('root')!);
@@ -30,21 +27,18 @@ loadFonts().then(() => {
     <React.StrictMode>
       <AnalyticsProvider>
         <ApolloProvider client={client}>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <Provider store={store}>
-              <BrowserRouter>
-                <Tooltip.Provider delayDuration={500}>
-                  <Toast.Provider>
-                    <ErrorBoundary>
-                      <App />
-                    </ErrorBoundary>
-                    <ToastContainer />
-                  </Toast.Provider>
-                </Tooltip.Provider>
-              </BrowserRouter>
-            </Provider>
-          </ThemeProvider>
+          <Provider store={store}>
+            <BrowserRouter>
+              <Tooltip.Provider delayDuration={500}>
+                <Toast.Provider>
+                  <ErrorBoundary>
+                    <App />
+                  </ErrorBoundary>
+                  <Toast.Viewport />
+                </Toast.Provider>
+              </Tooltip.Provider>
+            </BrowserRouter>
+          </Provider>
         </ApolloProvider>
       </AnalyticsProvider>
     </React.StrictMode>,

@@ -1,36 +1,34 @@
 import React from 'react';
 
-import { CommonWrapper } from 'theme';
-
 import { FlexComponentProps } from './types';
 
 import { Container } from './Flex.styles';
 
-const Flex = CommonWrapper<FlexComponentProps>(
-  ({
-    direction,
-    wrap,
-    justifyContent,
-    alignItems,
-    alignContent,
-    gap,
-    inline,
-    children,
-    ...props
-  }) => (
+const Flex: React.FC<FlexComponentProps> = ({
+  inline,
+  direction,
+  wrap,
+  justifyContent,
+  justifyItems,
+  alignContent,
+  alignItems,
+  children,
+  ...props
+}) => {
+  return (
     <Container
+      $inline={inline}
       $direction={direction}
       $wrap={wrap}
       $justifyContent={justifyContent}
-      $alignItems={alignItems}
+      $justifyItems={justifyItems}
       $alignContent={alignContent}
-      $gap={gap}
-      $inline={inline}
+      $alignItems={alignItems}
       {...props}
     >
       {children}
     </Container>
-  ),
-);
+  );
+};
 
 export default Flex;

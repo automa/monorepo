@@ -1,5 +1,3 @@
-import styled from 'styled-components';
+import { tw } from 'theme';
 
-import { ErrorCardStyledProps } from './types';
-
-export const Container = styled.div<ErrorCardStyledProps>``;
+export const Container = tw.div``;

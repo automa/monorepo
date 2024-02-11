@@ -1,5 +1,3 @@
-import styled from 'styled-components';
+import { tw } from 'theme';
 
-import { LoaderProps } from './types';
-
-export const Container = styled.div<LoaderProps>``;
+export const Container = tw.div``;

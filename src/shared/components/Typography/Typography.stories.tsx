@@ -7,9 +7,9 @@ import { TypographyComponentProps } from './types';
 
 const meta = {
   title: 'Typography',
-  component: (props) => <Typography {...props} />,
+  component: Typography,
   args: {
-    children: 'One',
+    children: 'One two',
   },
   argTypes: {
     onClick: {
@@ -58,91 +58,74 @@ export const Title6 = {
   args: {
     variant: 'title6',
   },
-};
+} satisfies Story;
 
-export const Body1 = {
+export const Large = {
   args: {
-    variant: 'body1',
+    variant: 'large',
   },
 } satisfies Story;
 
-export const Body2 = {
+export const Small = {
   args: {
-    variant: 'body2',
-  },
-} satisfies Story;
-
-export const Body3 = {
-  args: {
-    variant: 'body3',
-  },
-};
-
-export const Link = {
-  args: {
-    link: true,
-  },
-} satisfies Story;
-
-export const Color = {
-  args: {
-    color: 'body',
-  },
-} satisfies Story;
-
-export const ColorNative = {
-  args: {
-    color: 'red',
-  },
-} satisfies Story;
-
-export const Ellipsis = {
-  args: {
-    ellipsis: {
-      width: '50px',
-    },
-  },
-} satisfies Story;
-
-export const AlignLeft = {
-  args: {
-    textAlign: 'left',
-  },
-} satisfies Story;
-
-export const AlignCenter = {
-  args: {
-    textAlign: 'center',
-  },
-} satisfies Story;
-
-export const AlignRight = {
-  args: {
-    textAlign: 'right',
+    variant: 'small',
   },
 } satisfies Story;
 
 export const Uppercase = {
   args: {
-    textTransform: 'uppercase',
+    transform: 'uppercase',
+  },
+} satisfies Story;
+
+export const Lowercase = {
+  args: {
+    transform: 'lowercase',
+  },
+} satisfies Story;
+
+export const Capitalize = {
+  args: {
+    transform: 'capitalize',
+  },
+} satisfies Story;
+
+export const AlignLeft = {
+  args: {
+    align: 'left',
+  },
+} satisfies Story;
+
+export const AlignCenter = {
+  args: {
+    align: 'center',
+  },
+} satisfies Story;
+
+export const AlignRight = {
+  args: {
+    align: 'right',
+  },
+} satisfies Story;
+
+export const AlighJustify = {
+  args: {
+    align: 'justify',
   },
 } satisfies Story;
 
 export const Whitespace = {
   args: {
-    whiteSpace: 'nowrap',
+    whitespace: 'nowrap',
     style: {
       width: '50px',
     },
   },
 } satisfies Story;
 
-export const WordBreak = {
+export const Link = {
   args: {
-    wordBreak: 'break-all',
-    style: {
-      width: '25px',
-    },
+    link: true,
   },
 } satisfies Story;
 

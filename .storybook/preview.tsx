@@ -1,25 +1,24 @@
 import React from 'react';
 import { Preview } from '@storybook/react';
-import { withThemeFromJSXProvider } from '@storybook/addon-themes';
+import { withThemeByClassName } from '@storybook/addon-themes';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
 
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as Toast from '@radix-ui/react-toast';
 
+import '../src/index.css';
+
 import store from '../src/store';
-import theme, { GlobalStyle } from '../src/theme';
 
 const preview: Preview = {
   decorators: [
-    withThemeFromJSXProvider({
+    withThemeByClassName({
       themes: {
-        normal: theme,
+        light: '',
+        dark: 'dark',
       },
-      defaultTheme: 'normal',
-      Provider: ThemeProvider,
-      GlobalStyles: GlobalStyle,
+      defaultTheme: 'light',
     }),
     (Story) => {
       return (

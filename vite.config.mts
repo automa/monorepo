@@ -9,7 +9,6 @@ import checker from 'vite-plugin-checker';
 import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimizer';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import babelStyledComponentsPlugin from 'babel-plugin-styled-components';
 import { babelOptimizerPlugin } from '@graphql-codegen/client-preset';
 
 export default defineConfig({
@@ -26,12 +25,6 @@ export default defineConfig({
     react({
       babel: {
         plugins: [
-          [
-            babelStyledComponentsPlugin,
-            {
-              pure: true,
-            },
-          ],
           [
             babelOptimizerPlugin,
             {

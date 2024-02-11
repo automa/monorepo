@@ -7,7 +7,7 @@ import { FlexComponentProps } from './types';
 
 const meta = {
   title: 'Flex',
-  component: (props) => <Flex {...props} />,
+  component: Flex,
   args: {
     children: (
       <>
@@ -45,12 +45,6 @@ export const AlignItems = {
   args: {
     ...Direction.args,
     alignItems: 'flex-end',
-  },
-} satisfies Story;
-
-export const Gap = {
-  args: {
-    gap: 2,
   },
 } satisfies Story;
 

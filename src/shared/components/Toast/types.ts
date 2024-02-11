@@ -1,15 +1,14 @@
-import React, { HTMLAttributes } from 'react';
+import React from 'react';
+import { VariantProps } from 'class-variance-authority';
 import * as Toast from '@radix-ui/react-toast';
 
-import theme, { $, Component, Styled } from 'theme';
+import { $, Component, Styled } from 'theme';
 
-export type ToastVariant = keyof (typeof theme)['toasts'];
+import { toast } from './Toast.cva';
 
 type ToastProps = $<
-  {
-    variant?: ToastVariant;
-  },
   {},
+  VariantProps<typeof toast>,
   {
     type?: Toast.ToastProps['type'];
     duration?: Toast.ToastProps['duration'];
@@ -20,7 +19,7 @@ type ToastProps = $<
     };
     close?: () => React.ReactNode;
     children: React.ReactNode;
-  } & HTMLAttributes<HTMLDivElement>
+  }
 >;
 
 export type ToastComponentProps = Component<ToastProps>;

@@ -13,14 +13,14 @@ type Story = StoryObj<typeof meta>;
 
 export const BelowTablet = {
   args: {
-    max: 'tablet',
+    max: 'md',
     children: <div>Below tablet</div>,
   },
 } satisfies Story;
 
 export const AboveTablet = {
   args: {
-    min: 'tablet',
+    min: 'md',
     children: <div>Above tablet</div>,
   },
 } satisfies Story;

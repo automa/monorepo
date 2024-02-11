@@ -31,12 +31,6 @@ module.exports = {
         extendDefaults: true,
       },
     ],
-    'react/no-unknown-property': [
-      'error',
-      {
-        ignore: ['tw'],
-      },
-    ],
     'react/react-in-jsx-scope': 'off',
     'import/no-cycle': [
       'error',

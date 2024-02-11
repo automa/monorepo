@@ -1,45 +1,28 @@
-import styled, { css } from 'styled-components';
+import { TwcComponentProps } from 'react-twc';
+
+import { tw } from 'theme';
 
 import { FlexStyledProps } from './types';
+import { flex } from './Flex.cva';
 
-export const Container = styled.div<FlexStyledProps>`
-  display: ${({ $inline }) => ($inline ? 'inline-flex' : 'flex')};
-
-  ${({ $direction }) =>
-    !!$direction &&
-    css`
-      flex-direction: ${$direction};
-    `}
-
-  ${({ $wrap }) =>
-    !!$wrap &&
-    css`
-      flex-wrap: ${$wrap};
-    `}
-
-  ${({ $justifyContent }) =>
-    !!$justifyContent &&
-    css`
-      justify-content: ${$justifyContent};
-    `}
-
-  ${({ $alignItems }) =>
-    !!$alignItems &&
-    css`
-      align-items: ${$alignItems};
-    `}
-
-  ${({ $alignContent }) =>
-    !!$alignContent &&
-    css`
-      align-content: ${$alignContent};
-    `}
-
-  ${({ theme, $gap }) =>
-    !!$gap &&
-    css`
-      gap: ${typeof $gap === 'number'
-        ? `${theme.spacing($gap)}px`
-        : `${theme.spacing($gap[0])}px ${theme.spacing($gap[1])}px`};
-    `}
-`;
+export const Container = tw.div<TwcComponentProps<'div'> & FlexStyledProps>(
+  ({
+    $inline,
+    $direction,
+    $wrap,
+    $justifyContent,
+    $justifyItems,
+    $alignContent,
+    $alignItems,
+  }) => [
+    $inline ? 'inline-flex' : 'flex',
+    flex({
+      direction: $direction,
+      wrap: $wrap,
+      justifyContent: $justifyContent,
+      justifyItems: $justifyItems,
+      alignContent: $alignContent,
+      alignItems: $alignItems,
+    }),
+  ],
+);
