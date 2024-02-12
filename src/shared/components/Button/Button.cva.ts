@@ -1,8 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-import { twp } from 'theme';
-
-export const button = cva(twp`flex cursor-pointer items-center`, {
+export const button = cva('flex cursor-pointer items-center', {
   variants: {
     variant: {
       primary: '',

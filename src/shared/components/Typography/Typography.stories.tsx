@@ -133,7 +133,7 @@ export const Clickable = {
   play: async ({ args, canvasElement }) => {
     const { getByText } = within(canvasElement);
 
-    await userEvent.click(getByText('One'));
+    await userEvent.click(getByText('One two'));
     expect(args.onClick).toHaveBeenCalled();
   },
 } satisfies Story;
