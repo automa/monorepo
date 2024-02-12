@@ -1,13 +1,14 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import AuthLogout from './AuthLogout';
-import { AuthLogoutProps } from './types';
 
-export default {
+const meta = {
   title: 'AuthLogout',
   component: AuthLogout,
-  args: {},
-  argTypes: {},
-} as Meta<AuthLogoutProps>;
+} satisfies Meta<typeof AuthLogout>;
 
-export const Default: StoryObj<AuthLogoutProps> = {};
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;

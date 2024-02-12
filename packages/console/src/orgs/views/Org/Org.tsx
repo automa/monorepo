@@ -33,13 +33,13 @@ const Org: React.FC<OrgProps> = ({ ...props }) => {
 
   return (
     <Container {...props}>
-      <Flex direction="column" alignItems="center" gap={1}>
+      <Flex direction="column" alignItems="center" className="gap-2">
         {loading && !data ? (
           <div>loading...</div>
         ) : !data?.org ? (
           <div>Not found</div>
         ) : (
-          <Flex direction="column" gap={2}>
+          <Flex direction="column" className="gap-4">
             <div>{data.org.name}</div>
             <RoutesLoader
               fallback={<Loader />}

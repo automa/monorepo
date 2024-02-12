@@ -3,9 +3,9 @@ import { expect } from '@storybook/jest';
 import { userEvent, within } from '@storybook/testing-library';
 
 import Flex from './Flex';
-import { FlexProps } from './types';
+import { FlexComponentProps } from './types';
 
-export default {
+const meta = {
   title: 'Flex',
   component: Flex,
   args: {
@@ -21,22 +21,44 @@ export default {
       action: true,
     },
   },
-} as Meta<FlexProps>;
+} satisfies Meta<FlexComponentProps>;
 
-export const Default: StoryObj<FlexProps> = {};
+export default meta;
 
-export const Gap: StoryObj<FlexProps> = {
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;
+
+export const Direction = {
   args: {
-    gap: 2,
+    direction: 'column',
   },
-};
+} satisfies Story;
 
-export const Clickable: StoryObj<FlexProps> = {
-  args: {},
+export const JustifyContent = {
+  args: {
+    justifyContent: 'space-between',
+  },
+} satisfies Story;
+
+export const AlignItems = {
+  args: {
+    ...Direction.args,
+    alignItems: 'flex-end',
+  },
+} satisfies Story;
+
+export const Inline = {
+  args: {
+    inline: true,
+  },
+} satisfies Story;
+
+export const Clickable = {
   play: async ({ args, canvasElement }) => {
     const { getByText } = within(canvasElement);
 
     await userEvent.click(getByText('One'));
     expect(args.onClick).toHaveBeenCalled();
   },
-};
+} satisfies Story;

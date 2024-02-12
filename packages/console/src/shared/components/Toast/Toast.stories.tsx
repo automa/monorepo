@@ -1,85 +1,87 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import Toast from './Toast';
-import { ToastComponentProps } from './types';
 
-export default {
+const meta = {
   title: 'Toast',
   component: Toast,
   args: {
     children: 'Title',
   },
-  argTypes: {},
-} as Meta<ToastComponentProps>;
+} satisfies Meta<typeof Toast>;
 
-export const Default: StoryObj<ToastComponentProps> = {};
+export default meta;
 
-export const Description: StoryObj<ToastComponentProps> = {
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;
+
+export const Description = {
   args: {
     description: () => 'Description',
   },
-};
+} satisfies Story;
 
-export const Action: StoryObj<ToastComponentProps> = {
+export const Action = {
   args: {
     action: {
       altText: 'Action',
       cta: () => <div>Action</div>,
     },
   },
-};
+} satisfies Story;
 
-export const Close: StoryObj<ToastComponentProps> = {
+export const Close = {
   args: {
     close: () => <div>X</div>,
   },
-};
+} satisfies Story;
 
-export const DescriptionAndAction: StoryObj<ToastComponentProps> = {
+export const DescriptionAndAction = {
   args: {
     ...Description.args,
     ...Action.args,
   },
-};
+} satisfies Story;
 
-export const DescriptionAndClose: StoryObj<ToastComponentProps> = {
+export const DescriptionAndClose = {
   args: {
     ...Description.args,
     ...Close.args,
   },
-};
+} satisfies Story;
 
-export const ActionAndClose: StoryObj<ToastComponentProps> = {
+export const ActionAndClose = {
   args: {
     ...Action.args,
     ...Close.args,
   },
-};
+} satisfies Story;
 
-export const DescriptionAndActionAndClose: StoryObj<ToastComponentProps> = {
+export const DescriptionAndActionAndClose = {
   args: {
     ...Description.args,
     ...Action.args,
     ...Close.args,
   },
-};
+} satisfies Story;
 
-export const Error: StoryObj<ToastComponentProps> = {
+export const Error = {
   args: {
     variant: 'error',
     ...DescriptionAndActionAndClose.args,
   },
-};
+} satisfies Story;
 
-export const Success: StoryObj<ToastComponentProps> = {
+export const Success = {
   args: {
     variant: 'success',
     ...DescriptionAndActionAndClose.args,
   },
-};
+} satisfies Story;
 
-export const Empty: StoryObj<ToastComponentProps> = {
+export const Empty = {
   args: {
     children: null,
   },
-};
+} satisfies Story;

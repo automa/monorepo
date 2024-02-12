@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useMemo } from 'react';
-import styled from 'styled-components/macro';
+
+import { tw } from 'theme';
 
 import { Tooltip, Flex } from 'shared/components';
 
@@ -22,13 +23,7 @@ export type Keybinding = (
   preventDefault?: boolean;
 };
 
-const KeySymbol = styled.kbd`
-  padding: ${({ theme }) => theme.spacing(0.25)}px;
-  border-radius: ${({ theme }) => theme.spacing(0.5)}px;
-  background-color: ${({ theme }) => theme.colors.body};
-  min-width: ${({ theme }) => theme.spacing(2)}px;
-  text-align: center;
-`;
+const KeySymbol = tw.kbd`min-w-4 rounded p-0.5 text-center`;
 
 const useKeybindings = (bindings: Keybinding[]) => {
   useEffect(() => {
@@ -85,7 +80,7 @@ const useKeybindings = (bindings: Keybinding[]) => {
       } = binding;
 
       if (Array.isArray(key)) {
-        return null;
+        return () => null;
       }
 
       const modSymbol = mod ? (
@@ -129,7 +124,7 @@ const useKeybindings = (bindings: Keybinding[]) => {
         <Tooltip
           body={() => (
             <Flex alignItems="center">
-              <Flex gap={0.5} marginRight={0.5}>
+              <Flex className="mr-1 gap-1">
                 {modSymbol}
                 {altSymbol}
                 {shiftSymbol}

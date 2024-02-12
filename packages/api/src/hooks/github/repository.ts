@@ -24,7 +24,7 @@ const updateRepo =
     await app.prisma.repos.updateMany({
       where: {
         provider_id: `${body.repository.id}`,
-        is_archived: false,
+        ...{ [key]: !value },
         orgs: {
           provider_type: provider.github,
           provider_id: `${body.repository.owner.id}`,

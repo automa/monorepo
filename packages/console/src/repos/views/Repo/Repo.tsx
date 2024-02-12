@@ -29,13 +29,13 @@ const Repo: React.FC<RepoProps> = ({ ...props }) => {
 
   return (
     <Container {...props}>
-      <Flex direction="column" alignItems="center" gap={1}>
+      <Flex direction="column" alignItems="center" className="gap-2">
         {loading && !data ? (
           <div>loading...</div>
         ) : !data?.repo ? (
           <div>Not found</div>
         ) : (
-          <Flex direction="column" gap={2}>
+          <Flex direction="column" className="gap-4">
             <div>{data.repo.name}</div>
             <RoutesLoader
               fallback={<Loader />}

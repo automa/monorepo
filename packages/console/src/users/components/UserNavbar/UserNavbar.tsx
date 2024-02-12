@@ -16,7 +16,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
 
   return (
     <Container {...props}>
-      <Flex direction="column" alignItems="center" gap={1}>
+      <Flex direction="column" alignItems="center" className="gap-2">
         {data.me.name}
       </Flex>
     </Container>

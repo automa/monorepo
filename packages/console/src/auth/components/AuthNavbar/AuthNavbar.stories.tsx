@@ -1,13 +1,14 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import AuthNavbar from './AuthNavbar';
-import { AuthNavbarProps } from './types';
 
-export default {
+const meta = {
   title: 'AuthNavbar',
   component: AuthNavbar,
-  args: {},
-  argTypes: {},
-} as Meta<AuthNavbarProps>;
+} satisfies Meta<typeof AuthNavbar>;
 
-export const Default: StoryObj<AuthNavbarProps> = {};
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;

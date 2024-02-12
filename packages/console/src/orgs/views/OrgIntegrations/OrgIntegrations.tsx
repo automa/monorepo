@@ -30,7 +30,7 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org, ...props }) => {
 
   return (
     <Container {...props}>
-      <Flex direction="column" alignItems="center" gap={1}>
+      <Flex direction="column" alignItems="center" className="gap-2">
         {loading && !data ? (
           <div>Loading</div>
         ) : !data?.org ? (

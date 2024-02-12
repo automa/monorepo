@@ -1,15 +1,34 @@
 import React from 'react';
-import { useTheme } from 'styled-components/macro';
-import QatalogFlex from '@qatalog/react-flex';
 
-import { CommonWrapper } from 'theme';
+import { FlexComponentProps } from './types';
 
-import { FlexProps } from './types';
+import { Container } from './Flex.styles';
 
-const Flex = CommonWrapper<FlexProps>(({ gap, ...props }) => {
-  const theme = useTheme();
-
-  return <QatalogFlex {...props} gap={gap && theme.spacing(gap)} />;
-});
+const Flex: React.FC<FlexComponentProps> = ({
+  inline,
+  direction,
+  wrap,
+  justifyContent,
+  justifyItems,
+  alignContent,
+  alignItems,
+  children,
+  ...props
+}) => {
+  return (
+    <Container
+      $inline={inline}
+      $direction={direction}
+      $wrap={wrap}
+      $justifyContent={justifyContent}
+      $justifyItems={justifyItems}
+      $alignContent={alignContent}
+      $alignItems={alignItems}
+      {...props}
+    >
+      {children}
+    </Container>
+  );
+};
 
 export default Flex;

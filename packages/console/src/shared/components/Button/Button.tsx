@@ -1,36 +1,30 @@
 import React from 'react';
 
-import { CommonWrapper } from 'theme';
-
 import { ButtonComponentProps } from './types';
 
 import { Container } from './Button.styles';
 
-const Button = CommonWrapper<ButtonComponentProps>(
-  ({
-    variant = 'primary',
-    size = 'medium',
-    disabled = false,
-    fullWidth = false,
-    color,
-    children,
-    ...props
-  }) => {
-    return (
-      <Container
-        type="button"
-        $variant={variant}
-        $size={size}
-        $disabled={disabled}
-        disabled={disabled}
-        $fullWidth={fullWidth}
-        $color={color}
-        {...props}
-      >
-        {children}
-      </Container>
-    );
-  },
-);
+const Button: React.FC<ButtonComponentProps> = ({
+  variant,
+  size,
+  fullWidth,
+  type = 'button',
+  disabled,
+  children,
+  ...props
+}) => {
+  return (
+    <Container
+      $variant={variant}
+      $size={size}
+      $fullWidth={fullWidth}
+      type={type}
+      disabled={disabled}
+      {...props}
+    >
+      {children}
+    </Container>
+  );
+};
 
 export default Button;

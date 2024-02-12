@@ -1,5 +1,3 @@
-import styled from 'styled-components/macro';
+import { tw } from 'theme';
 
-import { OrgListProps } from './types';
-
-export const Container = styled.div<Omit<OrgListProps, 'data'>>``;
+export const Container = tw.div``;

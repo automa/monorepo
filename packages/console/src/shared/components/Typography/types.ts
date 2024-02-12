@@ -1,30 +1,15 @@
 import { ElementType, HTMLAttributes } from 'react';
-import { Property } from 'csstype';
+import { VariantProps } from 'class-variance-authority';
 
-import theme, { $, Component, Styled } from 'theme';
+import { $, Component, Styled } from 'theme';
 
-export type TextColor = keyof (typeof theme)['colors'] | Property.Color;
+import { typography } from './Typography.cva';
 
-export type TextVariant = keyof (typeof theme)['typography'];
-
-export type Ellipsis = {
-  lines?: number;
-  width?: string | number;
-};
-
-export type TypographyProps = $<
+type TypographyProps = $<
+  {},
   {
-    variant?: TextVariant;
-  },
-  {
-    color?: TextColor;
-    ellipsis?: Ellipsis;
-    wordBreak?: Property.WordBreak;
-    whiteSpace?: Property.WhiteSpace;
-    textAlign?: Property.TextAlign;
-    textTransform?: Property.TextTransform;
     link?: boolean;
-  },
+  } & VariantProps<typeof typography>,
   {
     element?: ElementType;
   } & HTMLAttributes<HTMLDivElement>

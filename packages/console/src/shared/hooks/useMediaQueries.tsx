@@ -1,48 +1,40 @@
 import { useMediaQuery } from 'react-responsive';
-import { useTheme } from 'styled-components/macro';
 
-import { checkScreenSize, ScreenSize } from 'theme';
+import { checkScreenSize, ScreenSize, breakpoints } from 'theme';
 
 export const useIsScreenSize = (size: ScreenSize) => {
-  const theme = useTheme();
   const { min, max } = checkScreenSize(size);
 
   return useMediaQuery({
-    ...(min ? { minWidth: theme.breakpoints[min] + 1 } : {}),
-    ...(max ? { maxWidth: theme.breakpoints[max] } : {}),
+    ...(min ? { minWidth: breakpoints[min] } : {}),
+    ...(max ? { maxWidth: breakpoints[max] - 1 } : {}),
   });
 };
 
-export const useIsMobileOnly = () =>
+export const useIsExtraSmallOnly = () =>
   useIsScreenSize({
-    max: 'mobile',
+    max: 'sm',
   });
 
-export const useIsTabletOnly = () =>
+export const useIsSmallOnly = () =>
   useIsScreenSize({
-    min: 'mobile',
-    max: 'tablet',
+    min: 'sm',
+    max: 'md',
   });
 
-export const useIsLaptopOnly = () =>
+export const useIsMediumOnly = () =>
   useIsScreenSize({
-    min: 'tablet',
-    max: 'laptop',
+    min: 'md',
+    max: 'lg',
   });
 
-export const useIsDesktopOnly = () =>
+export const useIsLargeOnly = () =>
   useIsScreenSize({
-    min: 'laptop',
-    max: 'desktop',
+    min: 'lg',
+    max: 'xl',
   });
 
-export const useIsWideOnly = () =>
+export const useIsExtraLargeOnly = () =>
   useIsScreenSize({
-    min: 'desktop',
-    max: 'wide',
-  });
-
-export const useIsExtraWideOnly = () =>
-  useIsScreenSize({
-    min: 'wide',
+    min: 'xl',
   });

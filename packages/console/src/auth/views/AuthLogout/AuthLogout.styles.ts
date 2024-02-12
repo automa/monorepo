@@ -1,5 +1,3 @@
-import styled from 'styled-components/macro';
+import { tw } from 'theme';
 
-import { AuthLogoutProps } from './types';
-
-export const Container = styled.div<AuthLogoutProps>``;
+export const Container = tw.div``;

@@ -1,13 +1,14 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import Loader from './Loader';
-import { LoaderProps } from './types';
 
-export default {
+const meta = {
   title: 'Loader',
   component: Loader,
-  args: {},
-  argTypes: {},
-} as Meta<LoaderProps>;
+} satisfies Meta<typeof Loader>;
 
-export const Default: StoryObj<LoaderProps> = {};
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;

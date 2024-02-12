@@ -1,5 +1,3 @@
-import styled from 'styled-components/macro';
+import { tw } from 'theme';
 
-import { RepoOverviewProps } from './types';
-
-export const Container = styled.div<Omit<RepoOverviewProps, 'repo'>>``;
+export const Container = tw.div``;
