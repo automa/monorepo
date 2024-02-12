@@ -3,15 +3,15 @@ import { cva } from 'class-variance-authority';
 export const typography = cva('', {
   variants: {
     variant: {
-      large: '',
-      medium: '',
-      small: '',
-      title1: '',
-      title2: '',
-      title3: '',
-      title4: '',
-      title5: '',
-      title6: '',
+      large: 'text-lg font-semibold lg:text-xl',
+      medium: 'text-base lg:text-lg',
+      small: 'text-sm font-medium lg:text-base',
+      title1: 'text-6xl font-bold lg:text-7xl',
+      title2: 'text-5xl font-bold lg:text-6xl',
+      title3: 'text-4xl font-bold lg:text-5xl',
+      title4: 'text-3xl font-semibold lg:text-4xl',
+      title5: 'text-2xl font-semibold lg:text-3xl',
+      title6: 'text-xl font-semibold lg:text-2xl',
     },
     transform: {
       none: 'normal-case',

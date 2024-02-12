@@ -56,6 +56,19 @@ export const TertiaryDisabled = {
   },
 } satisfies Story;
 
+export const Ghost = {
+  args: {
+    variant: 'ghost',
+  },
+} satisfies Story;
+
+export const GhostDisabled = {
+  args: {
+    ...Ghost.args,
+    ...Disabled.args,
+  },
+} satisfies Story;
+
 export const Small = {
   args: {
     size: 'small',
@@ -76,6 +89,13 @@ export const SmallTertiary = {
   },
 } satisfies Story;
 
+export const SmallGhost = {
+  args: {
+    ...Small.args,
+    ...Ghost.args,
+  },
+} satisfies Story;
+
 export const Large = {
   args: {
     size: 'large',
@@ -93,6 +113,13 @@ export const LargeTertiary = {
   args: {
     ...Large.args,
     ...Tertiary.args,
+  },
+} satisfies Story;
+
+export const LargeGhost = {
+  args: {
+    ...Large.args,
+    ...Ghost.args,
   },
 } satisfies Story;
 

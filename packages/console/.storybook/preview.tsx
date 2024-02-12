@@ -11,6 +11,8 @@ import '../src/index.css';
 
 import store from '../src/store';
 
+import { Container as AppContainer } from '../src/views/App/App.styles';
+
 const preview: Preview = {
   decorators: [
     withThemeByClassName({
@@ -26,7 +28,9 @@ const preview: Preview = {
           <BrowserRouter>
             <Tooltip.Provider>
               <Toast.Provider>
-                <Story />
+                <AppContainer>
+                  <Story />
+                </AppContainer>
                 <Toast.Viewport />
               </Toast.Provider>
             </Tooltip.Provider>
