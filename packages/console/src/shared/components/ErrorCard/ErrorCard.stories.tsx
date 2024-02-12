@@ -1,21 +1,23 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import ErrorCard from './ErrorCard';
-import { ErrorCardComponentProps } from './types';
 
-export default {
+const meta = {
   title: 'ErrorCard',
   component: ErrorCard,
   args: {
     error: new Error('Error message'),
   },
-  argTypes: {},
-} as Meta<ErrorCardComponentProps>;
+} satisfies Meta<typeof ErrorCard>;
 
-export const Default: StoryObj<ErrorCardComponentProps> = {};
+export default meta;
 
-export const WithoutMessage: StoryObj<ErrorCardComponentProps> = {
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;
+
+export const WithoutMessage = {
   args: {
     error: undefined,
   },
-};
+} satisfies Story;

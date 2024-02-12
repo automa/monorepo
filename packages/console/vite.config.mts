@@ -21,6 +21,7 @@ export default defineConfig({
   },
   plugins: [
     imageOptimizer(),
+    macros(),
     react({
       // TODO: Uncomment when https://github.com/dotansimha/graphql-code-generator/issues/9774 is fixed
       // babel: {
@@ -37,7 +38,6 @@ export default defineConfig({
     }),
     svgr(),
     tsconfigPaths(),
-    macros(),
     checker({
       typescript: true,
       eslint: {

@@ -5,149 +5,135 @@ import { userEvent, within } from '@storybook/testing-library';
 import Typography from './Typography';
 import { TypographyComponentProps } from './types';
 
-export default {
+const meta = {
   title: 'Typography',
   component: Typography,
   args: {
-    children: 'One',
+    children: 'One two',
   },
   argTypes: {
     onClick: {
       action: true,
     },
   },
-} as Meta<TypographyComponentProps>;
+} satisfies Meta<TypographyComponentProps>;
 
-export const Default: StoryObj<TypographyComponentProps> = {};
+export default meta;
 
-export const Title1: StoryObj<TypographyComponentProps> = {
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;
+
+export const Title1 = {
   args: {
     variant: 'title1',
   },
-};
+} satisfies Story;
 
-export const Title2: StoryObj<TypographyComponentProps> = {
+export const Title2 = {
   args: {
     variant: 'title2',
   },
-};
+} satisfies Story;
 
-export const Title3: StoryObj<TypographyComponentProps> = {
+export const Title3 = {
   args: {
     variant: 'title3',
   },
-};
+} satisfies Story;
 
-export const Title4: StoryObj<TypographyComponentProps> = {
+export const Title4 = {
   args: {
     variant: 'title4',
   },
-};
+} satisfies Story;
 
-export const Title5: StoryObj<TypographyComponentProps> = {
+export const Title5 = {
   args: {
     variant: 'title5',
   },
-};
+} satisfies Story;
 
-export const Title6: StoryObj<TypographyComponentProps> = {
+export const Title6 = {
   args: {
     variant: 'title6',
   },
-};
+} satisfies Story;
 
-export const Body1: StoryObj<TypographyComponentProps> = {
+export const Large = {
   args: {
-    variant: 'body1',
+    variant: 'large',
   },
-};
+} satisfies Story;
 
-export const Body2: StoryObj<TypographyComponentProps> = {
+export const Small = {
   args: {
-    variant: 'body2',
+    variant: 'small',
   },
-};
+} satisfies Story;
 
-export const Body3: StoryObj<TypographyComponentProps> = {
+export const Uppercase = {
   args: {
-    variant: 'body3',
+    transform: 'uppercase',
   },
-};
+} satisfies Story;
 
-export const Link: StoryObj<TypographyComponentProps> = {
+export const Lowercase = {
+  args: {
+    transform: 'lowercase',
+  },
+} satisfies Story;
+
+export const Capitalize = {
+  args: {
+    transform: 'capitalize',
+  },
+} satisfies Story;
+
+export const AlignLeft = {
+  args: {
+    align: 'left',
+  },
+} satisfies Story;
+
+export const AlignCenter = {
+  args: {
+    align: 'center',
+  },
+} satisfies Story;
+
+export const AlignRight = {
+  args: {
+    align: 'right',
+  },
+} satisfies Story;
+
+export const AlighJustify = {
+  args: {
+    align: 'justify',
+  },
+} satisfies Story;
+
+export const Whitespace = {
+  args: {
+    whitespace: 'nowrap',
+    style: {
+      width: '50px',
+    },
+  },
+} satisfies Story;
+
+export const Link = {
   args: {
     link: true,
   },
-};
+} satisfies Story;
 
-export const Color: StoryObj<TypographyComponentProps> = {
-  args: {
-    color: 'body',
-  },
-};
-
-export const ColorNative: StoryObj<TypographyComponentProps> = {
-  args: {
-    color: 'red',
-  },
-};
-
-export const Ellipsis: StoryObj<TypographyComponentProps> = {
-  args: {
-    ellipsis: {
-      width: '50px',
-    },
-  },
-};
-
-export const AlignLeft: StoryObj<TypographyComponentProps> = {
-  args: {
-    textAlign: 'left',
-  },
-};
-
-export const AlignCenter: StoryObj<TypographyComponentProps> = {
-  args: {
-    textAlign: 'center',
-  },
-};
-
-export const AlignRight: StoryObj<TypographyComponentProps> = {
-  args: {
-    textAlign: 'right',
-  },
-};
-
-export const Uppercase: StoryObj<TypographyComponentProps> = {
-  args: {
-    textTransform: 'uppercase',
-  },
-};
-
-export const Whitespace: StoryObj<TypographyComponentProps> = {
-  args: {
-    whiteSpace: 'nowrap',
-    style: {
-      width: '50px',
-    },
-  },
-};
-
-export const WordBreak: StoryObj<TypographyComponentProps> = {
-  args: {
-    wordBreak: 'break-all',
-    style: {
-      width: '25px',
-    },
-  },
-};
-
-export const Clickable: StoryObj<TypographyComponentProps> = {
-  args: {},
+export const Clickable = {
   play: async ({ args, canvasElement }) => {
     const { getByText } = within(canvasElement);
 
     await userEvent.click(getByText('One'));
     expect(args.onClick).toHaveBeenCalled();
   },
-};
+} satisfies Story;

@@ -1,13 +1,9 @@
-import {
-  css,
-  CSSObject,
-  Interpolation,
-  InterpolationFunction,
-  ThemedStyledProps,
-  DefaultTheme,
-} from 'styled-components/macro';
-
-import breakpoints from './breakpoints';
+export const breakpoints = {
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+} as const;
 
 type Breakpoint = keyof typeof breakpoints;
 
@@ -41,41 +37,3 @@ export const checkScreenSize = ({ min, max }: ScreenSize) => {
 
   return { min, max };
 };
-
-const screenSize = (size: ScreenSize) => {
-  const { min, max } = checkScreenSize(size);
-
-  const conditions: string[] = [];
-
-  if (min) {
-    conditions.push(`min-width: ${breakpoints[min] + 1}px`);
-  }
-
-  if (max) {
-    conditions.push(`max-width: ${breakpoints[max]}px`);
-  }
-
-  return <P extends object>(
-    first:
-      | TemplateStringsArray
-      | CSSObject
-      | InterpolationFunction<ThemedStyledProps<P, DefaultTheme>>,
-    ...interpolations: Array<Interpolation<ThemedStyledProps<P, DefaultTheme>>>
-  ) => css`
-    @media (${conditions.join(' and ')}) {
-      ${css(first, ...interpolations)}
-    }
-  `;
-};
-
-const mediaQueries = {
-  screenSize,
-  mobileOnly: screenSize({ max: 'mobile' }),
-  tabletOnly: screenSize({ min: 'mobile', max: 'tablet' }),
-  laptopOnly: screenSize({ min: 'tablet', max: 'laptop' }),
-  desktopOnly: screenSize({ min: 'laptop', max: 'desktop' }),
-  wideOnly: screenSize({ min: 'desktop', max: 'wide' }),
-  extraWideOnly: screenSize({ min: 'wide' }),
-} as const;
-
-export default mediaQueries;

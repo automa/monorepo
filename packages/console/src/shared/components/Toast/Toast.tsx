@@ -1,47 +1,35 @@
 import React from 'react';
-import * as ToastPrimitive from '@radix-ui/react-toast';
 
 import { ToastComponentProps } from './types';
 
-import {
-  Container,
-  TitleContainer,
-  DescriptionContainer,
-  ActionContainer,
-  CloseContainer,
-} from './Toast.styles';
+import { Container, Title, Description, Action, Close } from './Toast.styles';
 
 const Toast: React.FC<ToastComponentProps> = ({
-  variant = 'info',
-  type = 'foreground',
+  type,
   duration,
+  variant,
+  children,
   description,
   action,
   close,
-  children,
-  ...props
 }) => {
   return (
-    <ToastPrimitive.Root asChild type={type} duration={duration}>
-      <Container $variant={variant} {...props}>
-        <TitleContainer $variant={variant}>{children}</TitleContainer>
-        {!!description && (
-          <DescriptionContainer $variant={variant}>
-            {description()}
-          </DescriptionContainer>
-        )}
-        {!!action && (
-          <ActionContainer asChild $variant={variant} altText={action.altText}>
-            {action.cta()}
-          </ActionContainer>
-        )}
-        {!!close && (
-          <CloseContainer asChild $variant={variant}>
-            {close()}
-          </CloseContainer>
-        )}
-      </Container>
-    </ToastPrimitive.Root>
+    <Container type={type} duration={duration} $variant={variant}>
+      <Title $variant={variant}>{children}</Title>
+      {!!description && (
+        <Description $variant={variant}>{description()}</Description>
+      )}
+      {!!action && (
+        <Action asChild $variant={variant} altText={action.altText}>
+          {action.cta()}
+        </Action>
+      )}
+      {!!close && (
+        <Close asChild $variant={variant}>
+          {close()}
+        </Close>
+      )}
+    </Container>
   );
 };
 

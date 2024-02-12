@@ -1,6 +1,3 @@
-import styled from 'styled-components/macro';
+import { tw } from 'theme';
 
-export const Container = styled.div`
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-`;
+export const Container = tw.div`antialiased`;

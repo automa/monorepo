@@ -1,27 +1,17 @@
-import styled, { css } from 'styled-components/macro';
+import { tw } from 'theme';
 
-export const Container = styled.table``;
+export const Container = tw.table``;
 
-export const Header = styled.thead``;
+export const Header = tw.thead``;
 
-export const HeaderRow = styled.tr``;
+export const HeaderRow = tw.tr``;
 
-export const HeaderCell = styled.th`
-  ${({ onClick }) =>
-    !!onClick &&
-    css`
-      cursor: pointer;
-    `}
-`;
+export const HeaderCell = tw.th(({ onClick }) => [
+  !!onClick && 'cursor-pointer',
+]);
 
-export const Body = styled.tbody``;
+export const Body = tw.tbody``;
 
-export const Row = styled.tr`
-  ${({ onClick }) =>
-    !!onClick &&
-    css`
-      cursor: pointer;
-    `}
-`;
+export const Row = tw.tr(({ onClick }) => [!!onClick && 'cursor-pointer']);
 
-export const Cell = styled.td``;
+export const Cell = tw.td``;

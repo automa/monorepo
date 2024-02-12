@@ -9,6 +9,7 @@ on:
       - packages/console/src/**
       - packages/console/index.html
       - packages/console/vite.config.mts
+      - packages/console/tailwind.config.ts
       - pnpm-lock.yaml
   pull_request:
     branches: [master]
@@ -19,6 +20,7 @@ on:
       - packages/console/src/**
       - packages/console/index.html
       - packages/console/vite.config.mts
+      - packages/console/tailwind.config.ts
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}

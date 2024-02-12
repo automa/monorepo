@@ -3,14 +3,17 @@ import { Meta, StoryObj } from '@storybook/react';
 import Tooltip from './Tooltip';
 import { TooltipComponentProps } from './types';
 
-export default {
+const meta = {
   title: 'Tooltip',
-  component: Tooltip,
+  component: (props) => <Tooltip {...props} />,
   args: {
     children: 'Children',
     body: () => 'Content',
   },
-  argTypes: {},
-} as Meta<TooltipComponentProps>;
+} satisfies Meta<TooltipComponentProps>;
 
-export const Default: StoryObj<TooltipComponentProps> = {};
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;

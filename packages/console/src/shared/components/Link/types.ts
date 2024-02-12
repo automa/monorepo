@@ -4,11 +4,9 @@ import { $, Component, Styled } from 'theme';
 
 import { TypographyComponentProps } from 'shared/components/Typography';
 
-export type LinkProps = $<
+type LinkProps = $<
   {},
-  {
-    activeColor?: TypographyComponentProps['color'];
-  },
+  {},
   {
     to: To;
   } & TypographyComponentProps

@@ -19,6 +19,7 @@ on:
       - packages/docs/src/**
       - packages/docs/pages/**
       - packages/docs/next.config.js
+      - packages/docs/tailwind.config.ts
       - packages/docs/theme.config.tsx
       - pnpm-lock.yaml
 concurrency:

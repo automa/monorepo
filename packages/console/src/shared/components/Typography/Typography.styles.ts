@@ -1,52 +1,18 @@
-import styled, { css } from 'styled-components/macro';
-import { ellipsis } from 'polished';
+import { TwcComponentProps } from 'react-twc';
+
+import { tw } from 'theme';
 
 import { TypographyStyledProps } from './types';
+import { typography } from './Typography.cva';
 
-export const Container = styled.div<TypographyStyledProps>`
-  color: ${({ theme, $color }) =>
-    $color
-      ? theme.colors[$color as keyof (typeof theme)['colors']] || $color
-      : 'inherit'};
-
-  ${({ theme, $variant }) => theme.typography[$variant]()}
-
-  ${({ $ellipsis }) =>
-    !!$ellipsis &&
-    !!Object.keys($ellipsis).length &&
-    css`
-      ${ellipsis($ellipsis.width, $ellipsis.lines)}
-    `}
-
-  ${({ $wordBreak }) =>
-    !!$wordBreak &&
-    css`
-      word-break: ${$wordBreak};
-      hyphens: auto;
-    `}
-
-  ${({ $whiteSpace }) =>
-    !!$whiteSpace &&
-    css`
-      white-space: ${$whiteSpace};
-    `}
-
-  ${({ $textAlign }) =>
-    !!$textAlign &&
-    css`
-      text-align: ${$textAlign};
-    `}
-
-  ${({ $textTransform }) =>
-    !!$textTransform &&
-    css`
-      text-transform: ${$textTransform};
-    `}
-
-  ${({ $link }) =>
-    $link
-      ? css`
-          cursor: pointer;
-        `
-      : undefined}
-`;
+export const Container = tw.div<
+  TwcComponentProps<'div'> & TypographyStyledProps
+>(({ $variant, $transform, $align, $whitespace, $link }) => [
+  typography({
+    variant: $variant,
+    transform: $transform,
+    align: $align,
+    whitespace: $whitespace,
+  }),
+  $link && 'cursor-pointer',
+]);

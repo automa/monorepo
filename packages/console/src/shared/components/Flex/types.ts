@@ -1,1 +1,18 @@
-export type { FlexProps } from '@qatalog/react-flex';
+import { HTMLAttributes } from 'react';
+import { VariantProps } from 'class-variance-authority';
+
+import { $, Component, Styled } from 'theme';
+
+import { flex } from './Flex.cva';
+
+type FlexProps = $<
+  {},
+  {
+    inline?: boolean;
+  } & VariantProps<typeof flex>,
+  HTMLAttributes<HTMLDivElement>
+>;
+
+export type FlexComponentProps = Component<FlexProps>;
+
+export type FlexStyledProps = Styled<FlexProps>;

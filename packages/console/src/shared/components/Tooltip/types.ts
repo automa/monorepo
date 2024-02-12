@@ -3,7 +3,7 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 
 import { $, Component, Styled } from 'theme';
 
-export type TooltipProps = $<
+type TooltipProps = $<
   {},
   {},
   {
