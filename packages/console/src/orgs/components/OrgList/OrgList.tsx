@@ -23,7 +23,7 @@ const OrgList: React.FC<OrgListProps> = ({ data: fullData, ...props }) => {
 
   return (
     <Container {...props}>
-      <Flex direction="column" alignItems="center" gap={1}>
+      <Flex direction="column" alignItems="center" className="gap-2">
         {data.orgs.map((org) => (
           <Typography
             key={org.id}

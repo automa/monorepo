@@ -30,7 +30,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
       ) : !data ? (
         <div>Error</div>
       ) : (
-        <Flex direction="column" gap={1}>
+        <Flex direction="column" className="gap-2">
           <Typography onClick={sync} link>
             Sync
           </Typography>

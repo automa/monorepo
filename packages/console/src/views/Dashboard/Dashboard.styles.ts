@@ -1,5 +1,3 @@
-import styled from 'styled-components/macro';
+import { tw } from 'theme';
 
-import { DashboardProps } from './types';
-
-export const Container = styled.div<DashboardProps>``;
+export const Container = tw.div``;

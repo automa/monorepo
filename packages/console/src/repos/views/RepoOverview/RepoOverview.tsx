@@ -9,7 +9,7 @@ import { Container } from './RepoOverview.styles';
 const RepoOverview: React.FC<RepoOverviewProps> = ({ repo, ...props }) => {
   return (
     <Container {...props}>
-      <Flex direction="column" alignItems="center" gap={1}>
+      <Flex direction="column" alignItems="center" className="gap-2">
         {repo.org.name}/{repo.name}
       </Flex>
     </Container>

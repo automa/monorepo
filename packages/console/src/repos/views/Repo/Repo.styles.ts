@@ -1,5 +1,3 @@
-import styled from 'styled-components/macro';
+import { tw } from 'theme';
 
-import { RepoProps } from './types';
-
-export const Container = styled.div<RepoProps>``;
+export const Container = tw.div``;
