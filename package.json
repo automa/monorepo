@@ -5,9 +5,9 @@
   "scripts": {
     "format": "prettier --write .",
     "format-check": "prettier --check .",
+    "generate-graphql": "graphql-codegen --config generate-graphql.ts",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "generate-graphql": "graphql-codegen --config generate-graphql.ts",
     "prepare": "husky install",
     "start": "bash ./scripts/start.sh",
     "start-deps": "bash ./scripts/start-deps.sh",

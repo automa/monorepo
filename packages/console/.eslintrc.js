@@ -47,6 +47,7 @@ module.exports = {
   ignorePatterns: [
     '!.storybook',
     '!.babel-plugin-macrosrc.js',
+    '!.prettierrc.js',
     'build',
     'coverage',
     'public',
@@ -69,6 +70,7 @@ module.exports = {
         '.storybook/*.ts',
         '.babel-plugin-macrosrc.js',
         '.eslintrc.js',
+        '.prettierrc.js',
         'postcss.config.js',
         'tailwind.config.ts',
         'vite.config.mts',
