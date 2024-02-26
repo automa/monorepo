@@ -10,5 +10,5 @@ export const Container = tw.button<
 >(({ $variant, $size, $fullWidth, disabled }) => [
   button({ variant: $variant, size: $size }),
   $fullWidth && twp`w-full justify-center`,
-  disabled && twp`pointer-events-none opacity-50`,
+  disabled && twp`cursor-default opacity-50`,
 ]);
