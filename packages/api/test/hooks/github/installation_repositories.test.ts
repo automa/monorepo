@@ -20,7 +20,6 @@ suite('github hook installation_repositories event', () => {
     app = await server();
     sandbox = createSandbox();
 
-    await app.prisma.orgs.deleteMany();
     await app.prisma.orgs.create({
       data: {
         name: 'automa',
@@ -34,8 +33,8 @@ suite('github hook installation_repositories event', () => {
   });
 
   suiteTeardown(async () => {
-    await app.close();
     await app.prisma.orgs.deleteMany();
+    await app.close();
   });
 
   setup(() => {

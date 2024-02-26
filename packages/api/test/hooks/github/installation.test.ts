@@ -19,12 +19,10 @@ suite('github hook installation event', () => {
   suiteSetup(async () => {
     app = await server();
     sandbox = createSandbox();
-    await app.prisma.orgs.deleteMany();
   });
 
   suiteTeardown(async () => {
     await app.close();
-    sandbox.restore();
   });
 
   setup(() => {

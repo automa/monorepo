@@ -1,5 +1,5 @@
 {
-  "$schema": "packages/config/src/schemas/schema.json",
+  "$schema": "packages/config/schemas/schema.json",
   "repository": {
     "reviewers": ["automa/backend"],
     "labels": ["automa"]
