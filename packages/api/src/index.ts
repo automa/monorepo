@@ -7,6 +7,7 @@ import { join } from 'path';
 import fastify from 'fastify';
 import fastifySensible from '@fastify/sensible';
 import fastifyCors from '@fastify/cors';
+import fastifyHelmet from '@fastify/helmet';
 import fastifyAutoload from '@fastify/autoload';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
@@ -31,6 +32,7 @@ export const server = async () => {
   await session(app);
 
   await app.register(fastifySensible);
+  await app.register(fastifyHelmet);
 
   await app.register(fastifyCors, {
     origin: env.CLIENT_URI,
