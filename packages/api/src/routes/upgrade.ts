@@ -38,6 +38,8 @@ const run = async (
   dep: string,
   version: string,
 ) => {
+  const startTime = Date.now();
+
   const { accessToken, axios } = await caller(app, installationId);
 
   const { data: repo } = await axios.get(`/repos/${uri}`);
@@ -64,6 +66,9 @@ const run = async (
   await command('git', ['checkout', '-b', branch], {
     cwd: workingDir,
   });
+
+  const startUpgradeTime = Date.now();
+
   await command(
     'cargo',
     [
@@ -89,6 +94,10 @@ const run = async (
       cwd: '/home/pksunkara/Coding/pksunkara/cargo-up/cargo-up',
     },
   );
+
+  const endUpgradeTime = Date.now();
+  console.log(`Time for upgrade: ${endUpgradeTime - startUpgradeTime}ms`);
+
   await command('cargo', ['add', `${dep}@~${version}`], { cwd: workingDir });
   await command('cargo', ['fmt'], { cwd: workingDir });
   await command('git', ['add', '.'], { cwd: workingDir });
@@ -96,6 +105,9 @@ const run = async (
     cwd: workingDir,
   });
   await command('git', ['push', '-f', 'origin', branch], { cwd: workingDir });
+
+  const endTime = Date.now();
+  console.log(`Time for PR: ${endTime - startTime}ms`);
 
   await axios.post(`/repos/${uri}/pulls`, {
     title: commitMessage,
@@ -107,12 +119,16 @@ const run = async (
 export default async function (app: FastifyInstance) {
   app.get<{
     Params: {
-      repoId: string;
+      org: string;
+      repo: string;
     };
-  }>('/upgrade/:repoId', async (request, reply) => {
-    const repo = await app.prisma.repos.findUnique({
+  }>('/upgrade/:org/:repo', async (request, reply) => {
+    const repo = await app.prisma.repos.findFirst({
       where: {
-        id: parseInt(request.params.repoId, 10),
+        name: request.params.repo,
+        orgs: {
+          name: request.params.org,
+        },
       },
       include: {
         orgs: true,
@@ -132,6 +148,6 @@ export default async function (app: FastifyInstance) {
       '1.0.0',
     );
 
-    return reply.code(202).send();
+    return reply.code(202).send({ upgrade: 'started' });
   });
 }
