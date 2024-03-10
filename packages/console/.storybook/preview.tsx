@@ -7,6 +7,9 @@ import { BrowserRouter } from 'react-router-dom';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as Toast from '@radix-ui/react-toast';
 
+import '@fontsource-variable/manrope';
+import 'cal-sans';
+
 import '../src/index.css';
 
 import store from '../src/store';

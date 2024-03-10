@@ -6,6 +6,9 @@ import { ApolloProvider } from '@apollo/client';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as Toast from '@radix-ui/react-toast';
 
+import '@fontsource-variable/manrope';
+import 'cal-sans';
+
 import 'index.css';
 
 import 'env';

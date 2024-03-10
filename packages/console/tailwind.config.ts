@@ -15,7 +15,8 @@ const config: Config = {
         accent: '#DB475E',
       },
       fontFamily: {
-        sans: ['Manrope', ...defaultTheme.fontFamily.sans],
+        sans: ['Manrope Variable', ...defaultTheme.fontFamily.sans],
+        display: ['Cal sans', ...defaultTheme.fontFamily.sans],
       },
       maxWidth: {
         '8xl': '90rem',
