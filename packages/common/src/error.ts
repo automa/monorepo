@@ -1,9 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
 
 export enum ErrorType {
-  ACCOUNT_WITH_EMAIL_EXISTS = 1000,
+  UNABLE_TO_LOGIN_WITH_PROVIDER = 1000,
   PROVIDER_ALREADY_LINKED,
-  UNABLE_TO_LOGIN_WITH_PROVIDER,
   UNABLE_TO_CONNECT_INTEGRATION,
 }
 
@@ -14,19 +13,14 @@ export type Error = {
 };
 
 export const errors: { [key in ErrorType]: Omit<Error, 'code'> } = {
-  [ErrorType.ACCOUNT_WITH_EMAIL_EXISTS]: {
+  [ErrorType.UNABLE_TO_LOGIN_WITH_PROVIDER]: {
     status: StatusCodes.FORBIDDEN,
-    message:
-      "User with the given provider account's primary email already exists and you are not allowed to link this provider account to your account.",
+    message: 'Unable to login with given provider account.',
   },
   [ErrorType.PROVIDER_ALREADY_LINKED]: {
     status: StatusCodes.FORBIDDEN,
     message:
-      "Given provider account is already linked to another user's account.",
-  },
-  [ErrorType.UNABLE_TO_LOGIN_WITH_PROVIDER]: {
-    status: StatusCodes.FORBIDDEN,
-    message: 'Unable to login with given provider account.',
+      'User with this email is already linked with another provider account.',
   },
   [ErrorType.UNABLE_TO_CONNECT_INTEGRATION]: {
     status: StatusCodes.BAD_REQUEST,
