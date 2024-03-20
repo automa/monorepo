@@ -1,4 +1,9 @@
-export const CONFIG_FILES = ['automa.json', 'automa.json5'];
+export const CONFIG_FILES = [
+  'automa.json',
+  'automa.json5',
+  '.github/automa.json',
+  '.github/automa.json5',
+];
 
 export enum CauseType {
   REPOSITORY_ADDED = 1000,

@@ -23,6 +23,7 @@ export const syncSettings = async (
   let errors, settingsJSON;
 
   if (settings) {
+    // TODO: Read JSON5 files properly
     try {
       settingsJSON = JSON.parse(settings);
     } catch (err) {
