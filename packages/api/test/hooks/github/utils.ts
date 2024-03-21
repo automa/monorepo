@@ -39,3 +39,21 @@ export const callWithFixture = async (
     payload: body,
   });
 };
+
+export const encodeSettings = (fileName: string) => {
+  const data = readFileSync(
+    join(
+      dirname(dirname(__dirname)),
+      'fixtures',
+      'settings',
+      `${fileName}.json`,
+    ),
+    'utf8',
+  );
+
+  return {
+    data: {
+      content: Buffer.from(data).toString('base64'),
+    },
+  };
+};

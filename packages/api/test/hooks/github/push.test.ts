@@ -7,7 +7,7 @@ import { CauseType } from '@automa/common';
 import { orgs, repos } from '@automa/prisma';
 
 import { server } from '../../utils';
-import { callWithFixture } from './utils';
+import { callWithFixture, encodeSettings } from './utils';
 
 suite('github hook push event', () => {
   let app: FastifyInstance,
@@ -123,11 +123,7 @@ suite('github hook push event', () => {
             ref: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
           },
         })
-        .resolves({
-          data: {
-            content: 'eyJib3RzIjp7ImRlcGVuZGVuY3kiOnt9fX0=',
-          },
-        });
+        .resolves(encodeSettings('dependency'));
 
       // @ts-ignore
       sandbox.stub(axios, 'create').returns({
@@ -268,11 +264,7 @@ suite('github hook push event', () => {
             ref: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
           },
         })
-        .resolves({
-          data: {
-            content: 'eyJib3RzIjp7ImRlcGVuZGVuY3kiOnt9fX0=',
-          },
-        });
+        .resolves(encodeSettings('dependency'));
 
       // @ts-ignore
       sandbox.stub(axios, 'create').returns({
@@ -368,11 +360,7 @@ suite('github hook push event', () => {
             ref: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
           },
         })
-        .resolves({
-          data: {
-            content: 'eyJib3RzIjp7ImRlcGVuZGVuY3kiOnt9fX0=',
-          },
-        });
+        .resolves(encodeSettings('dependency'));
 
       // @ts-ignore
       sandbox.stub(axios, 'create').returns({
@@ -468,11 +456,7 @@ suite('github hook push event', () => {
             ref: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
           },
         })
-        .resolves({
-          data: {
-            content: 'eyJib3RzIjp7fQ==',
-          },
-        });
+        .resolves(encodeSettings('bad'));
 
       // @ts-ignore
       sandbox.stub(axios, 'create').returns({
@@ -570,11 +554,7 @@ suite('github hook push event', () => {
             ref: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
           },
         })
-        .resolves({
-          data: {
-            content: 'eyJib3RzIjp7ImZpbGVzIjp7fX19',
-          },
-        });
+        .resolves(encodeSettings('invalid'));
 
       // @ts-ignore
       sandbox.stub(axios, 'create').returns({
@@ -641,15 +621,17 @@ suite('github hook push event', () => {
         commit: 'e184e26a8e0d519ea0f17c6e4e32832b43870714',
         imported_from: null,
       });
-      assert.deepEqual(settings[0].settings, { bots: { files: {} } });
+      assert.deepEqual(settings[0].settings, {
+        bots: { dependency: { foo: 'bar' } },
+      });
       assert.deepEqual(settings[0].validation_errors, {
         schema: [
           {
-            instancePath: '/bots/files',
-            schemaPath: '#/required',
-            keyword: 'required',
-            params: { missingProperty: 'groups' },
-            message: "must have required property 'groups'",
+            instancePath: '/bots/dependency',
+            schemaPath: '#/additionalProperties',
+            keyword: 'additionalProperties',
+            params: { additionalProperty: 'foo' },
+            message: 'must NOT have additional properties',
           },
         ],
       });

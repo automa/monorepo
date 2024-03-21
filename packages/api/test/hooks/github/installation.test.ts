@@ -7,7 +7,7 @@ import { CauseType } from '@automa/common';
 import { orgs, repos } from '@automa/prisma';
 
 import { server } from '../../utils';
-import { callWithFixture } from './utils';
+import { callWithFixture, encodeSettings } from './utils';
 
 suite('github hook installation event', () => {
   let app: FastifyInstance,
@@ -46,11 +46,9 @@ suite('github hook installation event', () => {
         commit: { sha: 'a2006e2015d93931f00fc3a8a04d24d66b7059da' },
       },
     });
-    getStub.withArgs('/repos/automa/automa/contents/automa.json').resolves({
-      data: {
-        content: 'eyJib3RzIjp7ImRlcGVuZGVuY3kiOnt9fX0=',
-      },
-    });
+    getStub
+      .withArgs('/repos/automa/automa/contents/automa.json')
+      .resolves(encodeSettings('dependency'));
 
     // @ts-ignore
     sandbox.stub(axios, 'create').returns({
@@ -407,11 +405,9 @@ suite('github hook installation event', () => {
               commit: { sha: 'a2006e2015d93931f00fc3a8a04d24d66b7059da' },
             },
           });
-          getStub.withArgs('/repos/automa/tmp/contents/automa.json').resolves({
-            data: {
-              content: 'eyJib3RzIjp7ImRlcGVuZGVuY3kiOnt9fX0=',
-            },
-          });
+          getStub
+            .withArgs('/repos/automa/tmp/contents/automa.json')
+            .resolves(encodeSettings('dependency'));
 
           response = await callWithFixture(app, 'installation', 'unsuspend');
         });
