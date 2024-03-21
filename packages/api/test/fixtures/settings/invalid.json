@@ -1,0 +1,7 @@
+{
+  "bots": {
+    "dependency": {
+      "foo": "bar"
+    }
+  }
+}

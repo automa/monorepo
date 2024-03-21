@@ -7,8 +7,7 @@
     "bots": {
       "type": "object",
       "properties": {
-        "dependency": { "$ref": "dependency.schema.json" },
-        "files": { "$ref": "files.schema.json" }
+        "dependency": { "$ref": "dependency.schema.json" }
       },
       "additionalProperties": false
     }
