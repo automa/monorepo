@@ -3,3 +3,4 @@ build
 .next
 coverage
 .nyc_output
+*.tsbuildinfo

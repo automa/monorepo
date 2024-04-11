@@ -28,11 +28,7 @@ COPY packages/config/src ./packages/config/src
 COPY packages/config/schemas ./packages/config/schemas
 COPY packages/api/src ./packages/api/src
 
-RUN pnpm --filter @automa/prisma build
-RUN pnpm --filter @automa/common build
-RUN pnpm --filter @automa/config build
 RUN pnpm --filter @automa/api build
-
 RUN pnpm --filter @automa/api copy-graphql
 
 # Install production dependencies

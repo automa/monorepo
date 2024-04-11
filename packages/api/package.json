@@ -48,9 +48,9 @@
     "statsig-node": "~5.5.0"
   },
   "scripts": {
-    "build": "rm -rf build && tsc",
+    "build": "rm -rf build && tsc -b --force",
     "copy-graphql": "mkdir -p build/graphql/schema && cp src/graphql/schema/* build/graphql/schema/",
-    "dev": "tsc -w --preserveWatchOutput",
+    "dev": "tsc -b -w --preserveWatchOutput",
     "test": "NODE_ENV=test mocha test",
     "test-cover": "nyc --reporter=lcov --reporter=text-summary pnpm test"
   },
