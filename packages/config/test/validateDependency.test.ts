@@ -18,6 +18,7 @@ suite('validate - bots dependency', () => {
       validate({
         bots: {
           dependency: {
+            // @ts-ignore
             foo: 'bar',
           },
         },
@@ -41,6 +42,7 @@ suite('validate - bots dependency', () => {
       validate({
         bots: {
           dependency: {
+            // @ts-ignore
             groups: null,
           },
         },
@@ -64,6 +66,7 @@ suite('validate - bots dependency', () => {
       validate({
         bots: {
           dependency: {
+            // @ts-ignore
             groups: 'foo',
           },
         },
