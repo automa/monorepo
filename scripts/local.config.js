@@ -1,24 +1,6 @@
 module.exports = {
   apps: [
     {
-      name: 'prisma-dev',
-      cwd: 'packages/prisma',
-      script: 'pnpm',
-      args: 'dev',
-    },
-    {
-      name: 'common-dev',
-      cwd: 'packages/common',
-      script: 'pnpm',
-      args: 'dev',
-    },
-    {
-      name: 'config-dev',
-      cwd: 'packages/config',
-      script: 'pnpm',
-      args: 'dev',
-    },
-    {
       name: 'graphql-dev',
       watch: [
         'packages/api/src/graphql/schema',

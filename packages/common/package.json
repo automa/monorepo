@@ -11,8 +11,7 @@
     "http-status-codes": "~2.2.0"
   },
   "scripts": {
-    "build": "rm -rf build && tsc",
-    "dev": "tsc -w --preserveWatchOutput",
+    "build": "rm -rf build && tsc -b --force",
     "test": "mocha test",
     "test-cover": "nyc --reporter=lcov --reporter=text-summary pnpm test"
   },
