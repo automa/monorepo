@@ -15,6 +15,7 @@ suite('validate - bots', () => {
     assert.deepEqual(
       validate({
         bots: {
+          // @ts-ignore
           foo: 'bar',
         },
       }),

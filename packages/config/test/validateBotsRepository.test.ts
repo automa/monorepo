@@ -21,6 +21,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               foo: 'bar',
             },
           },
@@ -60,6 +61,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assignees: null,
             },
           },
@@ -85,6 +87,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assignees: 'foo',
             },
           },
@@ -110,6 +113,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assignees: [1],
             },
           },
@@ -135,6 +139,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assignees: [null],
             },
           },
@@ -149,6 +154,84 @@ suite('validate - bots * repository', () => {
             type: 'string',
           },
           schemaPath: 'repository.schema.json/properties/assignees/items/type',
+        },
+      ],
+    );
+  });
+
+  test('assignees being an empty array is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              assignees: [],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/assignees',
+          keyword: 'minItems',
+          message: 'must NOT have fewer than 1 items',
+          params: {
+            limit: 1,
+          },
+          schemaPath: 'repository.schema.json/properties/assignees/minItems',
+        },
+      ],
+    );
+  });
+
+  test('assignees being an array of empty strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              assignees: [''],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/assignees/0',
+          keyword: 'minLength',
+          message: 'must NOT have fewer than 1 characters',
+          params: {
+            limit: 1,
+          },
+          schemaPath:
+            'repository.schema.json/properties/assignees/items/minLength',
+        },
+      ],
+    );
+  });
+
+  test('assignees being an array of duplicate strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              assignees: ['foo', 'foo'],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/assignees',
+          keyword: 'uniqueItems',
+          message:
+            'must NOT have duplicate items (items ## 1 and 0 are identical)',
+          params: {
+            i: 0,
+            j: 1,
+          },
+          schemaPath: 'repository.schema.json/properties/assignees/uniqueItems',
         },
       ],
     );
@@ -174,6 +257,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assigneesOverride: null,
             },
           },
@@ -199,6 +283,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assigneesOverride: 'foo',
             },
           },
@@ -224,6 +309,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assigneesOverride: [1],
             },
           },
@@ -249,6 +335,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               assigneesOverride: [null],
             },
           },
@@ -263,6 +350,72 @@ suite('validate - bots * repository', () => {
             type: 'string',
           },
           schemaPath: '#/properties/assigneesOverride/items/type',
+        },
+      ],
+    );
+  });
+
+  test('assigneesOverride being an empty array is valid', () => {
+    assert.isNull(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              assigneesOverride: [],
+            },
+          },
+        },
+      }),
+    );
+  });
+
+  test('assigneesOverride being an array of empty strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              assigneesOverride: [''],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/assigneesOverride/0',
+          keyword: 'minLength',
+          message: 'must NOT have fewer than 1 characters',
+          params: {
+            limit: 1,
+          },
+          schemaPath: '#/properties/assigneesOverride/items/minLength',
+        },
+      ],
+    );
+  });
+
+  test('assigneesOverride being an array of duplicate strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              assigneesOverride: ['foo', 'foo'],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/assigneesOverride',
+          keyword: 'uniqueItems',
+          message:
+            'must NOT have duplicate items (items ## 1 and 0 are identical)',
+          params: {
+            i: 0,
+            j: 1,
+          },
+          schemaPath: '#/properties/assigneesOverride/uniqueItems',
         },
       ],
     );
@@ -288,6 +441,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labels: null,
             },
           },
@@ -313,6 +467,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labels: 'foo',
             },
           },
@@ -338,6 +493,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labels: [1],
             },
           },
@@ -363,6 +519,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labels: [null],
             },
           },
@@ -377,6 +534,84 @@ suite('validate - bots * repository', () => {
             type: 'string',
           },
           schemaPath: 'repository.schema.json/properties/labels/items/type',
+        },
+      ],
+    );
+  });
+
+  test('labels being an empty array is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              labels: [],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/labels',
+          keyword: 'minItems',
+          message: 'must NOT have fewer than 1 items',
+          params: {
+            limit: 1,
+          },
+          schemaPath: 'repository.schema.json/properties/labels/minItems',
+        },
+      ],
+    );
+  });
+
+  test('labels being an array of empty strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              labels: [''],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/labels/0',
+          keyword: 'minLength',
+          message: 'must NOT have fewer than 1 characters',
+          params: {
+            limit: 1,
+          },
+          schemaPath:
+            'repository.schema.json/properties/labels/items/minLength',
+        },
+      ],
+    );
+  });
+
+  test('labels being an array of duplicate strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              labels: ['foo', 'foo'],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/labels',
+          keyword: 'uniqueItems',
+          message:
+            'must NOT have duplicate items (items ## 1 and 0 are identical)',
+          params: {
+            i: 0,
+            j: 1,
+          },
+          schemaPath: 'repository.schema.json/properties/labels/uniqueItems',
         },
       ],
     );
@@ -402,6 +637,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labelsOverride: null,
             },
           },
@@ -427,6 +663,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labelsOverride: 'foo',
             },
           },
@@ -452,6 +689,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labelsOverride: [1],
             },
           },
@@ -477,6 +715,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               labelsOverride: [null],
             },
           },
@@ -491,6 +730,72 @@ suite('validate - bots * repository', () => {
             type: 'string',
           },
           schemaPath: '#/properties/labelsOverride/items/type',
+        },
+      ],
+    );
+  });
+
+  test('labelsOverride being an empty array is valid', () => {
+    assert.isNull(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              labelsOverride: [],
+            },
+          },
+        },
+      }),
+    );
+  });
+
+  test('labelsOverride being an array of empty strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              labelsOverride: [''],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/labelsOverride/0',
+          keyword: 'minLength',
+          message: 'must NOT have fewer than 1 characters',
+          params: {
+            limit: 1,
+          },
+          schemaPath: '#/properties/labelsOverride/items/minLength',
+        },
+      ],
+    );
+  });
+
+  test('labelsOverride being an array of duplicate strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              labelsOverride: ['foo', 'foo'],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/labelsOverride',
+          keyword: 'uniqueItems',
+          message:
+            'must NOT have duplicate items (items ## 1 and 0 are identical)',
+          params: {
+            i: 0,
+            j: 1,
+          },
+          schemaPath: '#/properties/labelsOverride/uniqueItems',
         },
       ],
     );
@@ -516,6 +821,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewers: null,
             },
           },
@@ -541,6 +847,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewers: 'foo',
             },
           },
@@ -566,6 +873,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewers: [1],
             },
           },
@@ -591,6 +899,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewers: [null],
             },
           },
@@ -605,6 +914,84 @@ suite('validate - bots * repository', () => {
             type: 'string',
           },
           schemaPath: 'repository.schema.json/properties/reviewers/items/type',
+        },
+      ],
+    );
+  });
+
+  test('reviewers being an empty array is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              reviewers: [],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/reviewers',
+          keyword: 'minItems',
+          message: 'must NOT have fewer than 1 items',
+          params: {
+            limit: 1,
+          },
+          schemaPath: 'repository.schema.json/properties/reviewers/minItems',
+        },
+      ],
+    );
+  });
+
+  test('reviewers being an array of empty strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              reviewers: [''],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/reviewers/0',
+          keyword: 'minLength',
+          message: 'must NOT have fewer than 1 characters',
+          params: {
+            limit: 1,
+          },
+          schemaPath:
+            'repository.schema.json/properties/reviewers/items/minLength',
+        },
+      ],
+    );
+  });
+
+  test('reviewers being an array of duplicate strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              reviewers: ['foo', 'foo'],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/reviewers',
+          keyword: 'uniqueItems',
+          message:
+            'must NOT have duplicate items (items ## 1 and 0 are identical)',
+          params: {
+            i: 0,
+            j: 1,
+          },
+          schemaPath: 'repository.schema.json/properties/reviewers/uniqueItems',
         },
       ],
     );
@@ -630,6 +1017,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewersOverride: null,
             },
           },
@@ -655,6 +1043,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewersOverride: 'foo',
             },
           },
@@ -680,6 +1069,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewersOverride: [1],
             },
           },
@@ -705,6 +1095,7 @@ suite('validate - bots * repository', () => {
         bots: {
           dependency: {
             repository: {
+              // @ts-ignore
               reviewersOverride: [null],
             },
           },
@@ -719,6 +1110,72 @@ suite('validate - bots * repository', () => {
             type: 'string',
           },
           schemaPath: '#/properties/reviewersOverride/items/type',
+        },
+      ],
+    );
+  });
+
+  test('reviewersOverride being an empty array is valid', () => {
+    assert.isNull(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              reviewersOverride: [],
+            },
+          },
+        },
+      }),
+    );
+  });
+
+  test('reviewersOverride being an array of empty strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              reviewersOverride: [''],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/reviewersOverride/0',
+          keyword: 'minLength',
+          message: 'must NOT have fewer than 1 characters',
+          params: {
+            limit: 1,
+          },
+          schemaPath: '#/properties/reviewersOverride/items/minLength',
+        },
+      ],
+    );
+  });
+
+  test('reviewersOverride being an array of duplicate strings is invalid', () => {
+    assert.deepEqual(
+      validate({
+        bots: {
+          dependency: {
+            repository: {
+              reviewersOverride: ['foo', 'foo'],
+            },
+          },
+        },
+      }),
+      [
+        {
+          instancePath: '/bots/dependency/repository/reviewersOverride',
+          keyword: 'uniqueItems',
+          message:
+            'must NOT have duplicate items (items ## 1 and 0 are identical)',
+          params: {
+            i: 0,
+            j: 1,
+          },
+          schemaPath: '#/properties/reviewersOverride/uniqueItems',
         },
       ],
     );
