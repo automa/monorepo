@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+    groups:
+      production:
+        dependency-type: production
+      development:
+        dependency-type: development
+        exclude-patterns:
+          - eslint*
+          - prettier*
+          - '@angular/*'
+      eslint:
+        patterns:
+          - eslint*
+          - prettier*
+      angular:
+        patterns:
+          - '@angular/*'
+        update-types:
+          - minor
+          - patch

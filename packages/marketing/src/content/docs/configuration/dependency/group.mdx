@@ -1,0 +1,89 @@
+### enabled
+
+```json filename="automa.json"
+{
+  "bots": {
+    "dependency": {
+      "groups": [
+        {
+          "ecosystems": ["npm"],
+          "enabled": false
+        }
+      ]
+    }
+  }
+}
+```
+
+### limit
+
+At max 5 open NPM PRs.
+
+- When a NPM PR is about to be made, it will be created only if open NPM PRs are less than 5.
+- When a cargo PR is about to be made, it will always be created.
+
+```json filename="automa.json"
+{
+  "bots": {
+    "dependency": {
+      "groups": [
+        {
+          "ecosystems": ["npm"],
+          "limit": 5
+        },
+        {
+          "ecosystems": ["cargo"]
+        }
+      ]
+    }
+  }
+}
+```
+
+At max 5 open NPM PRs. At max 10 total open dependency PRs.
+
+- When a NPM PR is about to be made, it will be created only if open NPM PRs are less than 5 and total open PRs are less than 10.
+- When a cargo PR is about to be made, it will be created only if total open PRs are less than 10.
+
+```json filename="automa.json"
+{
+  "bots": {
+    "dependency": {
+      "limit": 10,
+      "groups": [
+        {
+          "ecosystems": ["npm"],
+          "limit": 5
+        },
+        {
+          "ecosystems": ["cargo"]
+        }
+      ]
+    }
+  }
+}
+```
+
+10 max open NPM PRs setting overrides the 5 max total open dependency PRs.
+
+- When a NPM PR is about to be made, it will be created only if open NPM PRs are less than 10 and disregards the total open PRs count.
+- When a cargo PR is about to be made, it will be created only if total open PRs are less than 5.
+
+```json filename="automa.json"
+{
+  "bots": {
+    "dependency": {
+      "limit": 5,
+      "groups": [
+        {
+          "ecosystems": ["npm"],
+          "limit": 10
+        },
+        {
+          "ecosystems": ["cargo"]
+        }
+      ]
+    }
+  }
+}
+```
