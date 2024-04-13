@@ -8,11 +8,38 @@
       "items": {
         "type": "object",
         "properties": {
+          "ecosystems": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["cargo", "npm"]
+            }
+          },
+          "manifests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "combined": {
+            "type": "boolean"
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1
+          },
+          "enabled": {
+            "type": "boolean"
+          },
           "repository": { "$ref": "repository.bot.schema.json" },
           "schedule": { "$ref": "schedule.schema.json" }
         },
         "additionalProperties": false
       }
+    },
+    "limit": {
+      "type": "number",
+      "minimum": 1
     },
     "repository": { "$ref": "repository.bot.schema.json" },
     "schedule": { "$ref": "schedule.schema.json" }

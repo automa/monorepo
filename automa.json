@@ -31,7 +31,7 @@
         }
       ],
       "repository": {
-        "labels": ["files"]
+        "labels": ["filesystem"]
       }
     }
   }

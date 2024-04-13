@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+    allow:
+      - dependency-name: '@storybook/*'
+      - dependency-type: production
+    ignore:
+      - dependency-name: '@storybook/*'
+        update-types:
+          - version-update:semver-patch
+    groups:
+      storybook-addons:
+        patterns:
+          - '@storybook/addon-*'
