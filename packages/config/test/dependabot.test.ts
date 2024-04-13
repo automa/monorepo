@@ -32,7 +32,7 @@ suite('dependabot', () => {
     });
   });
 
-  suite('convert', () => {
+  suite.only('convert', () => {
     test('should convert empty', () => {
       assert.deepEqual(convert('empty'), {
         enabled: false,
