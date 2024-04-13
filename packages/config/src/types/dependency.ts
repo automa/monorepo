@@ -36,6 +36,7 @@ export type DependencyGroup = {
 };
 
 export type DependencyBot = BotBase & {
-  groups: DependencyGroup[];
+  // TODO:(PR) Does it need `?` here?
+  groups?: DependencyGroup[];
   limit?: number;
 };
