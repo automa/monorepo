@@ -78,7 +78,10 @@ const AuthLogin: React.FC<AuthLoginProps> = ({ ...props }) => {
           <Flex className="gap-1">Contiue with GitHub</Flex>
         </LoginButton>
         <Tooltip side="bottom" body="Coming soon!">
-          <LoginButton className="pointer-events-none bg-gitlab text-black hover:bg-gitlab/90">
+          <LoginButton
+            disabled
+            className="bg-gitlab text-black hover:bg-gitlab/90"
+          >
             <GitlabLogo className="h-6 w-6" />
             <Flex className="gap-1">Contiue with GitLab</Flex>
           </LoginButton>

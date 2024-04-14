@@ -63,9 +63,10 @@ suite('github auth', () => {
 
       getStub = sandbox.stub(axios, 'get').resolves({
         data: {
-          id: 1234,
+          id: 123,
           email: 'pavan@automa.app',
           name: 'Pavan Kumar Sunkara',
+          login: 'pksunkara',
         },
       });
     });
@@ -237,7 +238,7 @@ suite('github auth', () => {
           assert.lengthOf(providers, 1);
           assert.deepOwnInclude(providers[0], {
             provider_type: 'github',
-            provider_id: '1234',
+            provider_id: '123',
             provider_email: 'pavan@automa.app',
             refresh_token: '123456',
           });
@@ -272,7 +273,7 @@ suite('github auth', () => {
             },
           });
 
-          assert.lengthOf(userOrgs, 2);
+          assert.lengthOf(userOrgs, 3);
 
           assert.equal(userOrgs[0].user_id, users[0].id);
           assert.deepOwnInclude(userOrgs[0].orgs, {
@@ -288,6 +289,14 @@ suite('github auth', () => {
             provider_type: 'github',
             provider_id: '5678',
             github_installation_id: 5678,
+          });
+
+          assert.equal(userOrgs[2].user_id, users[0].id);
+          assert.deepOwnInclude(userOrgs[2].orgs, {
+            name: 'pksunkara',
+            provider_type: 'github',
+            provider_id: '123',
+            github_installation_id: null,
           });
         });
       });
@@ -366,7 +375,7 @@ suite('github auth', () => {
           assert.lengthOf(providers, 1);
           assert.deepOwnInclude(providers[0], {
             provider_type: 'github',
-            provider_id: '1234',
+            provider_id: '123',
             provider_email: 'pavan@automa.app',
             refresh_token: '123456',
           });
@@ -472,7 +481,7 @@ suite('github auth', () => {
             assert.lengthOf(providers, 1);
             assert.deepOwnInclude(providers[0], {
               provider_type: 'github',
-              provider_id: '1234',
+              provider_id: '123',
               provider_email: 'pavan@automa.app',
               refresh_token: '123456',
             });
@@ -578,7 +587,7 @@ suite('github auth', () => {
             assert.lengthOf(providers, 1);
             assert.deepOwnInclude(providers[0], {
               provider_type: 'github',
-              provider_id: '1234',
+              provider_id: '123',
               provider_email: 'pavan@automa.app',
               refresh_token: '123456',
             });
@@ -616,7 +625,7 @@ suite('github auth', () => {
           data: {
             user_id: user.id,
             provider_type: 'github',
-            provider_id: '1234',
+            provider_id: '123',
             provider_email: 'pavan@automa.app',
             refresh_token: 'acbdef',
           },
@@ -684,7 +693,7 @@ suite('github auth', () => {
           assert.lengthOf(providers, 1);
           assert.deepOwnInclude(providers[0], {
             provider_type: 'github',
-            provider_id: '1234',
+            provider_id: '123',
             provider_email: 'pavan@automa.app',
             refresh_token: '123456',
           });
@@ -723,7 +732,7 @@ suite('github auth', () => {
             data: {
               user_id: user.id,
               provider_type: 'github',
-              provider_id: '1234',
+              provider_id: '123',
               provider_email: 'pavan.sunkara@automa.app',
               refresh_token: 'acbdef',
             },
@@ -794,7 +803,7 @@ suite('github auth', () => {
             assert.lengthOf(providers, 1);
             assert.deepOwnInclude(providers[0], {
               provider_type: 'github',
-              provider_id: '1234',
+              provider_id: '123',
               provider_email: 'pavan@automa.app',
               refresh_token: '123456',
             });
@@ -1009,7 +1018,7 @@ suite('github auth', () => {
             assert.lengthOf(providers, 1);
             assert.deepOwnInclude(providers[0], {
               provider_type: 'github',
-              provider_id: '1234',
+              provider_id: '123',
               provider_email: 'pavan@automa.app',
               refresh_token: '123456',
             });

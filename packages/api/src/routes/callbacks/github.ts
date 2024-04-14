@@ -57,11 +57,12 @@ export default async function (app: FastifyInstance) {
 
     // Get email & username from GitHub
     const {
-      data: { id, email, name },
+      data: { id, email, name, login },
     } = await axios.get<{
       id: number;
       email: string;
       name: string;
+      login: string;
     }>(`${GITHUB_APP.API_URI}/user`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -85,7 +86,7 @@ export default async function (app: FastifyInstance) {
       request.session.githubAccessToken = accessToken;
 
       // Sync the user's organizations
-      await sync(app, request, userId);
+      await sync(app, request, userId, { id, login });
 
       return reply.redirect(referer);
     };
