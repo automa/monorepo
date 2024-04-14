@@ -48,6 +48,12 @@ export const AlignItems = {
   },
 } satisfies Story;
 
+export const Element = {
+  args: {
+    element: 'nav',
+  },
+} satisfies Story;
+
 export const Inline = {
   args: {
     inline: true,
