@@ -25,12 +25,6 @@ const Org: React.FC<OrgProps> = ({ ...props }) => {
     },
   });
 
-  useEffect(() => {
-    if (data?.org) {
-      // TODO: Set user.org_id to current org
-    }
-  }, [data]);
-
   return (
     <Container {...props}>
       <Flex direction="column" alignItems="center" className="gap-2">

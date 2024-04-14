@@ -20,7 +20,7 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org, ...props }) => {
 
   const redirectToConnect = useCallback(
     (provider: ProjectProviderType) => {
-      // TODO: Convert this into a functions
+      // TODO: Convert this into a function
       window.location.href = `${import.meta.env.VITE_API_URI}/api/orgs/${
         org.provider_type
       }/${org.name}/integrations/projects/${provider}`;

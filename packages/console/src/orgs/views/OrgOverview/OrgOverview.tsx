@@ -33,6 +33,7 @@ const OrgOverview: React.FC<OrgOverviewProps> = ({ org, ...props }) => {
           data.org.repos.map((repo) => (
             <Typography
               key={repo.id}
+              variant="large"
               onClick={() =>
                 navigate(`/${org.provider_type}/${org.name}/${repo.name}`)
               }

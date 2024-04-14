@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { users, orgs, repos, org_project_providers } from '@prisma/client';
+import { provider, users, user_providers, orgs, repos, org_project_providers } from '@prisma/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -7,6 +7,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type EnumResolverSignature<T, AllowedValues = any> = { [key in keyof T]?: AllowedValues };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -96,6 +97,14 @@ export type User = {
   email: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  providers: Array<UserProvider>;
+};
+
+export type UserProvider = {
+  __typename?: 'UserProvider';
+  id: Scalars['Int']['output'];
+  provider_id: Scalars['String']['output'];
+  provider_type: ProviderType;
 };
 
 
@@ -177,11 +186,12 @@ export type ResolversTypes = {
   Org: ResolverTypeWrapper<orgs>;
   ProjectIntegrationConnection: ResolverTypeWrapper<org_project_providers>;
   ProjectProviderType: ProjectProviderType;
-  ProviderType: ProviderType;
+  ProviderType: ResolverTypeWrapper<provider>;
   Query: ResolverTypeWrapper<{}>;
   Repo: ResolverTypeWrapper<repos>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<users>;
+  UserProvider: ResolverTypeWrapper<user_providers>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -196,6 +206,7 @@ export type ResolversParentTypes = {
   Repo: repos;
   String: Scalars['String']['output'];
   User: users;
+  UserProvider: user_providers;
 };
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
@@ -230,6 +241,8 @@ export type ProjectIntegrationConnectionResolvers<ContextType = any, ParentType 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProviderTypeResolvers = EnumResolverSignature<{ github?: any, gitlab?: any }, ResolversTypes['ProviderType']>;
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   org?: Resolver<Maybe<ResolversTypes['Org']>, ParentType, ContextType, RequireFields<QueryOrgArgs, 'name' | 'provider_type'>>;
@@ -253,6 +266,14 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  providers?: Resolver<Array<ResolversTypes['UserProvider']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserProviderResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserProvider'] = ResolversParentTypes['UserProvider']> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  provider_type?: Resolver<ResolversTypes['ProviderType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -261,8 +282,10 @@ export type Resolvers<ContextType = any> = {
   JSON?: GraphQLScalarType;
   Org?: OrgResolvers<ContextType>;
   ProjectIntegrationConnection?: ProjectIntegrationConnectionResolvers<ContextType>;
+  ProviderType?: ProviderTypeResolvers;
   Query?: QueryResolvers<ContextType>;
   Repo?: RepoResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  UserProvider?: UserProviderResolvers<ContextType>;
 };
 

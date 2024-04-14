@@ -7,6 +7,9 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      boxShadow: {
+        menu: '0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.02), 0px 4px 8px -4px rgba(0, 0, 0, .04), 0px 16px 24px -8px rgba(0, 0, 0, .06)',
+      },
       colors: {
         github: '#24292F',
         gitlab: '#FCA326',

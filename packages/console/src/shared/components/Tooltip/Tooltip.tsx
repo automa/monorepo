@@ -21,7 +21,6 @@ const Tooltip: React.FC<TooltipComponentProps> = ({
         <TooltipPrimitive.Trigger>{children}</TooltipPrimitive.Trigger>
         <Content {...{ side, sideOffset, align, alignOffset, arrowPadding }}>
           {body}
-          <Arrow offset={8} height={8} width={8} />
         </Content>
       </TooltipPrimitive.Root>
     </Container>

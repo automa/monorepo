@@ -9,7 +9,9 @@ const config: CodegenConfig = {
       plugins: ['typescript', 'typescript-resolvers'],
       config: {
         mappers: {
+          ProviderType: '@prisma/client#provider',
           User: '@prisma/client#users',
+          UserProvider: '@prisma/client#user_providers',
           Org: '@prisma/client#orgs',
           Repo: '@prisma/client#repos',
           ProjectIntegrationConnection: '@prisma/client#org_project_providers',
