@@ -50,9 +50,9 @@ const App: React.FC<{}> = () => {
       if (data) {
         setAuth(data);
       }
-    } catch (_) {}
-
-    setAuthLoading(false);
+    } catch (_) {
+      setAuthLoading(false);
+    }
   }, []);
 
   useEffect(() => {
