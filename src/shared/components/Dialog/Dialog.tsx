@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { X } from '@phosphor-icons/react';
 
 import { DialogComponentProps } from './types';
 
@@ -38,7 +39,11 @@ const Dialog: React.FC<DialogComponentProps> = ({
             <Title>{title}</Title>
             {description && <Description>{description}</Description>}
             {children}
-            {!skipClose && <Close>Close</Close>}
+            {!skipClose && (
+              <Close>
+                <X />
+              </Close>
+            )}
           </Content>
         </DialogPrimitive.Portal>
       </DialogPrimitive.Root>

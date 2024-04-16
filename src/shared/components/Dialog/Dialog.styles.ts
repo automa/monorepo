@@ -16,4 +16,6 @@ export const Title = tw(Dialog.Title)``;
 
 export const Description = tw(Dialog.Description)``;
 
-export const Close = tw(Dialog.Close)`absolute right-0 top-0`;
+export const Close = tw(
+  Dialog.Close,
+)`absolute right-0 top-0 disabled:pointer-events-none`;

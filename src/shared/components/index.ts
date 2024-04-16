@@ -1,5 +1,7 @@
 export { default as Button } from './Button';
 export { default as Dialog } from './Dialog';
+export { default as DropdownMenu } from './DropdownMenu';
+export * from './DropdownMenu';
 export { default as ErrorCard } from './ErrorCard';
 export { default as Flex } from './Flex';
 export { default as Link } from './Link';
