@@ -28,7 +28,7 @@ const Tooltip: React.FC<TooltipComponentProps> = ({
           alignOffset={alignOffset}
           arrowPadding={arrowPadding}
         >
-          {typeof body === 'string' ? body : body()}
+          {body}
           <Arrow offset={8} height={8} width={8} />
         </Content>
       </TooltipPrimitive.Root>

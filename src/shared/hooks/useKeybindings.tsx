@@ -122,7 +122,7 @@ const useKeybindings = (bindings: Keybinding[]) => {
 
       const KeyTooltip = ({ children }: { children: ReactNode }) => (
         <Tooltip
-          body={() => (
+          body={
             <Flex alignItems="center">
               <Flex className="mr-1 gap-1">
                 {modSymbol}
@@ -132,7 +132,7 @@ const useKeybindings = (bindings: Keybinding[]) => {
               </Flex>
               to {description}
             </Flex>
-          )}
+          }
         >
           {children}
         </Tooltip>
