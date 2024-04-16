@@ -9,6 +9,9 @@ type DialogProps = $<
     trigger: ReactNode;
     title: ReactNode;
     description?: ReactNode;
+    open?: boolean;
+    setOpen?: (open: boolean) => void;
+    skipClose?: boolean;
   } & Omit<HTMLAttributes<HTMLDivElement>, 'title'>
 >;
 

@@ -7,6 +7,7 @@ import { Container } from './Flex.styles';
 const Flex: React.FC<FlexComponentProps> = ({
   element = 'div',
   inline,
+  fullWidth,
   direction,
   wrap,
   justifyContent,
@@ -22,6 +23,7 @@ const Flex: React.FC<FlexComponentProps> = ({
     <Container
       asChild
       $inline={inline}
+      $fullWidth={fullWidth}
       $direction={direction}
       $wrap={wrap}
       $justifyContent={justifyContent}

@@ -60,6 +60,12 @@ export const Inline = {
   },
 } satisfies Story;
 
+export const FullWidth = {
+  args: {
+    fullWidth: true,
+  },
+} satisfies Story;
+
 export const Clickable = {
   play: async ({ args, canvasElement }) => {
     const { getByText } = within(canvasElement);

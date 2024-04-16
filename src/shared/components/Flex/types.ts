@@ -10,6 +10,7 @@ type FlexProps = $<
   {
     element?: ElementType;
     inline?: boolean;
+    fullWidth?: boolean;
   } & VariantProps<typeof flex>,
   HTMLAttributes<HTMLDivElement>
 >;

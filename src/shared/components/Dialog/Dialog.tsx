@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 import { DialogComponentProps } from './types';
@@ -17,19 +17,28 @@ const Dialog: React.FC<DialogComponentProps> = ({
   title,
   description,
   children,
+  open,
+  setOpen,
+  skipClose,
   ...props
 }) => {
+  const controlProps = useMemo(
+    () =>
+      open !== undefined && setOpen ? { open, onOpenChange: setOpen } : {},
+    [open, setOpen],
+  );
+
   return (
     <Container {...props} asChild>
-      <DialogPrimitive.Root modal>
-        <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
+      <DialogPrimitive.Root modal {...controlProps}>
+        <DialogPrimitive.Trigger>{trigger}</DialogPrimitive.Trigger>
         <DialogPrimitive.Portal>
           <Overlay />
           <Content>
-            <Title asChild>{title}</Title>
-            {description && <Description asChild>{description}</Description>}
+            <Title>{title}</Title>
+            {description && <Description>{description}</Description>}
             {children}
-            <Close>Close</Close>
+            {!skipClose && <Close>Close</Close>}
           </Content>
         </DialogPrimitive.Portal>
       </DialogPrimitive.Root>
