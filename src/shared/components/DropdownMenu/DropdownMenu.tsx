@@ -2,6 +2,8 @@ import React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { CaretRight } from '@phosphor-icons/react';
 
+import Flex from '../Flex';
+
 import { DropdownMenuComponentProps } from './types';
 
 import {
@@ -15,7 +17,6 @@ import {
   Sub,
   SubContent,
 } from './DropdownMenu.styles';
-import Flex from '../Flex';
 
 const DropdownMenu: React.FC<DropdownMenuComponentProps> = ({
   side,
