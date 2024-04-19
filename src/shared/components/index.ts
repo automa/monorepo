@@ -14,6 +14,8 @@ export { default as Input } from './Input';
 export { default as Loader } from './Loader';
 export { default as RoutesLoader } from './RoutesLoader';
 export { default as ScreenSize } from './ScreenSize';
+export { default as Select } from './Select';
+export * from './Select';
 export { default as Table } from './Table';
 export { default as Textarea } from './Textarea';
 export { default as Toasts } from './Toast';
