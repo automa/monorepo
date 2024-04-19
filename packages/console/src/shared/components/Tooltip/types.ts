@@ -12,7 +12,7 @@ type TooltipProps = $<
     align?: Tooltip.TooltipContentProps['align'];
     alignOffset?: Tooltip.TooltipContentProps['alignOffset'];
     arrowPadding?: Tooltip.TooltipContentProps['arrowPadding'];
-    body: (() => ReactNode) | string;
+    body: ReactNode;
   } & HTMLAttributes<HTMLDivElement>
 >;
 

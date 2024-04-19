@@ -18,6 +18,15 @@ const config: Config = {
         sans: ['Manrope Variable', ...defaultTheme.fontFamily.sans],
         display: ['Cal sans', ...defaultTheme.fontFamily.sans],
       },
+      fontSize: {
+        '2xs': '0.625rem',
+      },
+      height: {
+        '0.25': '0.0625rem',
+      },
+      width: {
+        '0.25': '0.0625rem',
+      },
       maxWidth: {
         '8xl': '90rem',
       },

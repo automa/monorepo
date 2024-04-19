@@ -49,9 +49,9 @@ const App: React.FC<{}> = () => {
           id: `${data.id}`,
         });
       }
-    } catch (_) {}
-
-    setAuthLoading(false);
+    } catch (_) {
+      setAuthLoading(false);
+    }
   }, []);
 
   useEffect(() => {

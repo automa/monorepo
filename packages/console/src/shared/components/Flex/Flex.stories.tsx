@@ -48,9 +48,21 @@ export const AlignItems = {
   },
 } satisfies Story;
 
+export const Element = {
+  args: {
+    element: 'nav',
+  },
+} satisfies Story;
+
 export const Inline = {
   args: {
     inline: true,
+  },
+} satisfies Story;
+
+export const FullWidth = {
+  args: {
+    fullWidth: true,
   },
 } satisfies Story;
 

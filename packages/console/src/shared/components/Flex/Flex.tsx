@@ -5,7 +5,9 @@ import { FlexComponentProps } from './types';
 import { Container } from './Flex.styles';
 
 const Flex: React.FC<FlexComponentProps> = ({
+  element = 'div',
   inline,
+  fullWidth,
   direction,
   wrap,
   justifyContent,
@@ -15,9 +17,13 @@ const Flex: React.FC<FlexComponentProps> = ({
   children,
   ...props
 }) => {
+  const As = element;
+
   return (
     <Container
+      asChild
       $inline={inline}
+      $fullWidth={fullWidth}
       $direction={direction}
       $wrap={wrap}
       $justifyContent={justifyContent}
@@ -26,7 +32,7 @@ const Flex: React.FC<FlexComponentProps> = ({
       $alignItems={alignItems}
       {...props}
     >
-      {children}
+      <As>{children}</As>
     </Container>
   );
 };

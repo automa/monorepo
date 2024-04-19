@@ -8,7 +8,7 @@ const meta = {
   component: (props) => <Tooltip {...props} />,
   args: {
     children: 'Children',
-    body: () => 'Content',
+    body: 'Content',
   },
 } satisfies Meta<TooltipComponentProps>;
 
@@ -17,3 +17,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default = {} satisfies Story;
+
+export const Node = {
+  args: {
+    body: <div>Content</div>,
+  },
+} satisfies Story;
