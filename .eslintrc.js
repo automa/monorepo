@@ -39,6 +39,7 @@ module.exports = {
       },
     ],
     'storybook/no-uninstalled-addons': 'off',
+    'tailwindcss/no-custom-classname': 'off',
     'tailwindcss/classnames-order': 'off',
     'tailwindcss/enforces-negative-arbitrary-values': 'error',
     'tailwindcss/enforces-shorthand': 'error',
