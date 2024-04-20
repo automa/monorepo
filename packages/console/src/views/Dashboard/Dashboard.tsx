@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 
 import Logo from 'assets/logo.svg?react';
 
-import { Loader, RoutesLoader } from 'shared';
+import { Flex, Loader, RoutesLoader } from 'shared';
 import { OrgList } from 'orgs';
 import { UserNavbar } from 'users';
 
@@ -12,14 +12,14 @@ import routes from './routes';
 import { DashboardProps } from './types';
 
 import { DASHBOARD_QUERY } from './Dashboard.queries';
-import { Header, Navbar } from './Dashboard.styles';
+import { Header } from './Dashboard.styles';
 
 const Dashboard: React.FC<DashboardProps> = () => {
   const { data, loading, refetch } = useQuery(DASHBOARD_QUERY);
 
   return (
     <>
-      <Header>
+      <Header element="header" alignItems="center">
         <Link to="/">
           <Logo className="h-8 w-8" />
         </Link>
@@ -28,10 +28,15 @@ const Dashboard: React.FC<DashboardProps> = () => {
         ) : !data ? (
           <div>Error</div>
         ) : (
-          <Navbar>
+          <Flex
+            element="nav"
+            direction="row-reverse"
+            justifyContent="space-between"
+            fullWidth
+          >
             <UserNavbar data={data} />
             <OrgList data={data} refetch={refetch} />
-          </Navbar>
+          </Flex>
         )}
       </Header>
 

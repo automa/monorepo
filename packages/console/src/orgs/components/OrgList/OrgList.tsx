@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   ArrowsClockwise,
@@ -19,6 +19,7 @@ import {
 import { getFragment } from 'gql';
 
 import { getOrgAvatarUrl } from 'orgs/utils';
+import { useOrg, useOrgs } from 'orgs/hooks';
 
 import { OrgListProps } from './types';
 
@@ -33,7 +34,22 @@ const OrgList: React.FC<OrgListProps> = ({
   const location = useLocation();
   const navigate = useNavigate();
 
+  const { setOrgs } = useOrgs();
+  const { org } = useOrg();
+
   const data = getFragment(ORGS_QUERY_FRAGMENT, fullData);
+
+  // Redirect to first org if on home page
+  useEffect(() => {
+    if (data.orgs.length && location.pathname === '/') {
+      navigate(`/${data.orgs[0].provider_type}/${data.orgs[0].name}/repos`);
+    }
+  }, [location, data, navigate]);
+
+  useEffect(() => {
+    setOrgs(data.orgs);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.orgs]);
 
   const sync = async () => {
     try {
@@ -43,30 +59,12 @@ const OrgList: React.FC<OrgListProps> = ({
     } catch (_) {}
   };
 
-  // Redirect to first org if on home page
-  useEffect(() => {
-    if (data.orgs.length && location.pathname === '/') {
-      navigate(`/${data.orgs[0].provider_type}/${data.orgs[0].name}`);
-    }
-  }, [location, data, navigate]);
-
-  // Get the current org from the URL
-  const currentOrg = useMemo(
-    () =>
-      data.orgs.find((org) =>
-        location.pathname.startsWith(`/${org.provider_type}/${org.name}`),
-      ),
-    [location, data],
-  );
-
-  useEffect(() => {
-    if (currentOrg) {
-      // TODO: Set user.org_id to current org
-    }
-  }, [currentOrg]);
+  if (!org) {
+    return null;
+  }
 
   // Don't show org list on non-org pages
-  if (!currentOrg) {
+  if (!location.pathname.startsWith(`/${org.provider_type}/${org.name}`)) {
     return null;
   }
 
@@ -79,13 +77,10 @@ const OrgList: React.FC<OrgListProps> = ({
             <Flex alignItems="center" className="gap-2">
               <Avatar
                 size="small"
-                src={getOrgAvatarUrl(
-                  currentOrg.provider_type,
-                  currentOrg.provider_id,
-                )}
-                alt={currentOrg.name}
+                src={getOrgAvatarUrl(org.provider_type, org.provider_id)}
+                alt={org.name}
               />
-              {currentOrg.name}
+              {org.name}
             </Flex>
             <Icon>
               <CaretUpDown />
@@ -94,12 +89,9 @@ const OrgList: React.FC<OrgListProps> = ({
         }
       >
         <DropdownMenuLabel>Organizations</DropdownMenuLabel>
-        {data.orgs.map((org) => (
-          <Link key={org.id} to={`/${org.provider_type}/${org.name}`}>
-            <Item
-              $active={currentOrg.id === org.id}
-              disabled={currentOrg.id === org.id}
-            >
+        {data.orgs.map((o) => (
+          <Link key={o.id} to={`/${o.provider_type}/${o.name}`}>
+            <Item $active={org.id === o.id} disabled={org.id === o.id}>
               <Flex
                 fullWidth
                 justifyContent="space-between"
@@ -108,12 +100,12 @@ const OrgList: React.FC<OrgListProps> = ({
                 <Flex alignItems="center" className="gap-2">
                   <Avatar
                     size="small"
-                    src={getOrgAvatarUrl(org.provider_type, org.provider_id)}
-                    alt={org.name}
+                    src={getOrgAvatarUrl(o.provider_type, o.provider_id)}
+                    alt={o.name}
                   />
-                  {org.name}
+                  {o.name}
                 </Flex>
-                {currentOrg.id === org.id && <Check className="font-medium" />}
+                {org.id === o.id && <Check className="font-medium" />}
               </Flex>
             </Item>
           </Link>

@@ -4,9 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isProduction } from 'env';
 
 import { authReducer } from 'auth';
+import { orgsReducer } from 'orgs';
 
 export const reducer = combineSlices({
   auth: authReducer,
+  orgs: orgsReducer,
 });
 
 const store = configureStore({

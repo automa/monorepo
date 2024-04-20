@@ -2,6 +2,6 @@ import { HTMLAttributes } from 'react';
 
 import { Org } from 'orgs';
 
-export interface OrgIntegrationsProps extends HTMLAttributes<HTMLDivElement> {
+export interface ReposProps extends HTMLAttributes<HTMLDivElement> {
   org: Org;
 }
