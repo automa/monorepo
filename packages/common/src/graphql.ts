@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { provider, users, user_providers, orgs, competitor, repos, bot, bots, project_provider, org_project_providers } from '@prisma/client';
+import { provider, users, user_providers, orgs, competitor, repos, bot, bots, bot_installations, project_provider, org_project_providers } from '@prisma/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -39,6 +39,14 @@ export type BotCreateInput = {
   name: Scalars['String']['input'];
   type: BotType;
   webhook_url?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type BotInstallation = {
+  __typename?: 'BotInstallation';
+  bot: Bot;
+  created_at: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  org: Org;
 };
 
 export enum BotType {
@@ -95,12 +103,18 @@ export enum ProviderType {
 
 export type Query = {
   __typename?: 'Query';
+  botInstallations: Array<BotInstallation>;
   bots: Array<Bot>;
   me: User;
   orgs: Array<Org>;
   project_integration_connections: Array<ProjectIntegrationConnection>;
   repo?: Maybe<Repo>;
   repos: Array<Repo>;
+};
+
+
+export type QueryBotInstallationsArgs = {
+  org_id: Scalars['Int']['input'];
 };
 
 
@@ -226,6 +240,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Bot: ResolverTypeWrapper<bots>;
   BotCreateInput: BotCreateInput;
+  BotInstallation: ResolverTypeWrapper<bot_installations>;
   BotType: ResolverTypeWrapper<bot>;
   CompetitorType: ResolverTypeWrapper<competitor>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -248,6 +263,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Bot: bots;
   BotCreateInput: BotCreateInput;
+  BotInstallation: bot_installations;
   DateTime: Scalars['DateTime']['output'];
   Int: Scalars['Int']['output'];
   JSON: Scalars['JSON']['output'];
@@ -272,6 +288,14 @@ export type BotResolvers<ContextType = any, ParentType extends ResolversParentTy
   published_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
   webhook_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BotInstallationResolvers<ContextType = any, ParentType extends ResolversParentTypes['BotInstallation'] = ResolversParentTypes['BotInstallation']> = {
+  bot?: Resolver<ResolversTypes['Bot'], ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -318,6 +342,7 @@ export type ProjectProviderTypeResolvers = EnumResolverSignature<{ github?: any,
 export type ProviderTypeResolvers = EnumResolverSignature<{ github?: any, gitlab?: any }, ResolversTypes['ProviderType']>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  botInstallations?: Resolver<Array<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<QueryBotInstallationsArgs, 'org_id'>>;
   bots?: Resolver<Array<ResolversTypes['Bot']>, ParentType, ContextType, RequireFields<QueryBotsArgs, 'org_id'>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
@@ -355,6 +380,7 @@ export type UserProviderResolvers<ContextType = any, ParentType extends Resolver
 
 export type Resolvers<ContextType = any> = {
   Bot?: BotResolvers<ContextType>;
+  BotInstallation?: BotInstallationResolvers<ContextType>;
   BotType?: BotTypeResolvers;
   CompetitorType?: CompetitorTypeResolvers;
   DateTime?: GraphQLScalarType;

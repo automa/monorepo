@@ -69,3 +69,27 @@ export const seedOrgs = (app: FastifyInstance, count: number) => {
       ),
   );
 };
+
+export const seedBots = (
+  app: FastifyInstance,
+  published: { id: number }[],
+  nonPublished: { id: number }[],
+) => {
+  return Promise.all(
+    published.concat(nonPublished).map(({ id }, index) =>
+      app.prisma.bots.create({
+        data: {
+          org_id: id,
+          name: `bot-${index}`,
+          description: `Bot ${index}`,
+          type: 'webhook',
+          webhook_url: `https://example.com/webhook/${index}`,
+          ...(index < published.length && {
+            homepage: 'https://example.com',
+            published_at: new Date(),
+          }),
+        },
+      }),
+    ),
+  );
+};

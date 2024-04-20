@@ -3,7 +3,7 @@ import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 
 import { orgs } from '@automa/prisma';
 
-import { server, graphql, seedUsers, seedOrgs } from '../utils';
+import { server, graphql, seedUsers, seedOrgs, seedBots } from '../utils';
 
 suite('graphql bots', () => {
   let app: FastifyInstance, org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
@@ -13,6 +13,7 @@ suite('graphql bots', () => {
 
     const [user] = await seedUsers(app, 1);
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
+    await seedBots(app, [org, secondOrg, nonMemberOrg], [org]);
 
     await app.prisma.user_orgs.createMany({
       data: [
@@ -23,44 +24,6 @@ suite('graphql bots', () => {
         {
           org_id: secondOrg.id,
           user_id: user.id,
-        },
-      ],
-    });
-
-    await app.prisma.bots.createMany({
-      data: [
-        {
-          org_id: org.id,
-          name: 'bot-1',
-          description: 'Bot 1',
-          type: 'webhook',
-          webhook_url: 'https://example.com/webhook/one',
-          homepage: 'https://example.com',
-          published_at: new Date(),
-        },
-        {
-          org_id: org.id,
-          name: 'bot-2',
-          type: 'webhook',
-          webhook_url: 'https://example.com/webhook/two',
-        },
-        {
-          org_id: secondOrg.id,
-          name: 'bot-3',
-          description: 'Bot 3',
-          type: 'webhook',
-          webhook_url: 'https://example.com/webhook/three',
-          homepage: 'https://example.com',
-          published_at: new Date(),
-        },
-        {
-          org_id: nonMemberOrg.id,
-          name: 'bot-4',
-          description: 'Bot 4',
-          type: 'webhook',
-          webhook_url: 'https://example.com/webhook/four',
-          homepage: 'https://example.com',
-          published_at: new Date(),
         },
       ],
     });
@@ -113,7 +76,7 @@ suite('graphql bots', () => {
         );
       });
 
-      test("should return requested org's bots only", async () => {
+      test("should return requested org's published and non-published bots", async () => {
         const {
           data: { bots },
         } = response.json();
@@ -121,14 +84,24 @@ suite('graphql bots', () => {
         assert.lengthOf(bots, 2);
 
         assert.isNumber(bots[0].id);
-        assert.equal(bots[0].name, 'bot-1');
-        assert.equal(bots[0].description, 'Bot 1');
+        assert.equal(bots[0].name, 'bot-0');
+        assert.equal(bots[0].description, 'Bot 0');
         assert.equal(bots[0].type, 'webhook');
-        assert.equal(bots[0].webhook_url, 'https://example.com/webhook/one');
+        assert.equal(bots[0].webhook_url, 'https://example.com/webhook/0');
         assert.equal(bots[0].homepage, 'https://example.com');
         assert.isString(bots[0].published_at);
         assert.isTrue(bots[0].is_published);
         assert.isString(bots[0].created_at);
+
+        assert.isNumber(bots[1].id);
+        assert.equal(bots[1].name, 'bot-3');
+        assert.equal(bots[1].description, 'Bot 3');
+        assert.equal(bots[1].type, 'webhook');
+        assert.equal(bots[1].webhook_url, 'https://example.com/webhook/3');
+        assert.isNull(bots[1].homepage);
+        assert.isNull(bots[1].published_at);
+        assert.isFalse(bots[1].is_published);
+        assert.isString(bots[1].created_at);
       });
     });
 
@@ -172,7 +145,7 @@ suite('graphql bots', () => {
           name: 'bot-5',
           description: 'Bot 5',
           type: 'webhook',
-          webhook_url: 'https://example.com/webhook/five',
+          webhook_url: 'https://example.com/webhook/5',
         });
       });
 
@@ -198,7 +171,7 @@ suite('graphql bots', () => {
         assert.equal(botCreate.name, 'bot-5');
         assert.equal(botCreate.description, 'Bot 5');
         assert.equal(botCreate.type, 'webhook');
-        assert.equal(botCreate.webhook_url, 'https://example.com/webhook/five');
+        assert.equal(botCreate.webhook_url, 'https://example.com/webhook/5');
         assert.isNull(botCreate.homepage);
         assert.isNull(botCreate.published_at);
         assert.isFalse(botCreate.is_published);
@@ -211,7 +184,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         description: 'Bot 6',
         type: 'webhook',
-        webhook_url: 'https://example.com/webhook/six',
+        webhook_url: 'https://example.com/webhook/6',
       });
 
       assert.equal(response.statusCode, 200);
@@ -230,9 +203,9 @@ suite('graphql bots', () => {
 
     test('with missing name should fail', async () => {
       const response = await botCreate(app, org.id, {
-        description: 'Bot',
+        description: 'Bot 6',
         type: 'webhook',
-        webhook_url: 'https://example.com/webhook/five',
+        webhook_url: 'https://example.com/webhook/6',
       });
 
       assert.equal(response.statusCode, 400);
@@ -255,9 +228,9 @@ suite('graphql bots', () => {
     test('with short name should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'b',
-        description: 'Bot',
+        description: 'Bot 6',
         type: 'webhook',
-        webhook_url: 'https://example.com/webhook/five',
+        webhook_url: 'https://example.com/webhook/6',
       });
 
       assert.equal(response.statusCode, 400);
@@ -289,9 +262,9 @@ suite('graphql bots', () => {
     test('with special chars in name should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-@#$%',
-        description: 'Bot',
+        description: 'Bot 6',
         type: 'webhook',
-        webhook_url: 'https://example.com/webhook/five',
+        webhook_url: 'https://example.com/webhook/6',
       });
 
       assert.equal(response.statusCode, 400);
@@ -318,19 +291,10 @@ suite('graphql bots', () => {
     });
 
     test('with duplicate name should fail', async () => {
-      await app.prisma.bots.create({
-        data: {
-          org_id: org.id,
-          name: 'bot',
-          type: 'webhook',
-          webhook_url: 'https://example.com/webhook/seven',
-        },
-      });
-
       const response = await botCreate(app, org.id, {
-        name: 'bot',
+        name: 'bot-0',
         type: 'webhook',
-        webhook_url: 'https://example.com/webhook/five',
+        webhook_url: 'https://example.com/webhook/0',
       });
 
       assert.equal(response.statusCode, 400);
@@ -351,9 +315,9 @@ suite('graphql bots', () => {
 
     test('with missing type should fail', async () => {
       const response = await botCreate(app, org.id, {
-        name: 'bot',
-        description: 'Bot',
-        webhook_url: 'https://example.com/webhook/five',
+        name: 'bot-6',
+        description: 'Bot 6',
+        webhook_url: 'https://example.com/webhook/6',
       });
 
       assert.equal(response.statusCode, 400);
@@ -375,10 +339,10 @@ suite('graphql bots', () => {
 
     test('with invalid type should fail', async () => {
       const response = await botCreate(app, org.id, {
-        name: 'bot',
-        description: 'Bot',
+        name: 'bot-6',
+        description: 'Bot 6',
         type: 'invalid',
-        webhook_url: 'https://example.com/webhook/five',
+        webhook_url: 'https://example.com/webhook/6',
       });
 
       assert.equal(response.statusCode, 400);
@@ -400,8 +364,8 @@ suite('graphql bots', () => {
 
     test.skip('with missing webhook_url should fail', async () => {
       const response = await botCreate(app, org.id, {
-        name: 'bot',
-        description: 'Bot',
+        name: 'bot-6',
+        description: 'Bot 6',
         type: 'webhook',
       });
 
@@ -424,8 +388,8 @@ suite('graphql bots', () => {
 
     test('with invalid webhook_url should fail', async () => {
       const response = await botCreate(app, org.id, {
-        name: 'bot',
-        description: 'Bot',
+        name: 'bot-6',
+        description: 'Bot 6',
         type: 'webhook',
         webhook_url: 'invalid_url',
       });

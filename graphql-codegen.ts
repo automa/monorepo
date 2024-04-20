@@ -20,6 +20,7 @@ const config: CodegenConfig = {
           Repo: '@prisma/client#repos',
           BotType: '@prisma/client#bot',
           Bot: '@prisma/client#bots',
+          BotInstallation: '@prisma/client#bot_installations',
           ProjectProviderType: '@prisma/client#project_provider',
           ProjectIntegrationConnection: '@prisma/client#org_project_providers',
         },
