@@ -1,0 +1,17 @@
+enum BotType {
+  webhook
+}
+
+type Bot {
+  id: Int!
+  name: String!
+  description: String
+  type: BotType!
+  webhook_url: String
+  homepage: String
+  published_at: DateTime
+  is_published: Boolean!
+  created_at: DateTime!
+
+  org: Org!
+}

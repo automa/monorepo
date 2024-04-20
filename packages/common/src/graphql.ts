@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { provider, users, user_providers, orgs, repos, org_project_providers } from '@prisma/client';
+import { provider, users, user_providers, orgs, competitor, repos, bot, bots, project_provider, org_project_providers } from '@prisma/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -20,6 +20,24 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type Bot = {
+  __typename?: 'Bot';
+  created_at: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  homepage?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  is_published: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  org: Org;
+  published_at?: Maybe<Scalars['DateTime']['output']>;
+  type: BotType;
+  webhook_url?: Maybe<Scalars['String']['output']>;
+};
+
+export enum BotType {
+  Webhook = 'webhook'
+}
+
 export enum CompetitorType {
   Dependabot = 'dependabot',
   Renovate = 'renovate'
@@ -27,6 +45,7 @@ export enum CompetitorType {
 
 export type Org = {
   __typename?: 'Org';
+  bots: Array<Bot>;
   created_at: Scalars['DateTime']['output'];
   github_installation_id?: Maybe<Scalars['Int']['output']>;
   has_installation: Scalars['Boolean']['output'];
@@ -179,13 +198,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  CompetitorType: CompetitorType;
+  Bot: ResolverTypeWrapper<bots>;
+  BotType: ResolverTypeWrapper<bot>;
+  CompetitorType: ResolverTypeWrapper<competitor>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Org: ResolverTypeWrapper<orgs>;
   ProjectIntegrationConnection: ResolverTypeWrapper<org_project_providers>;
-  ProjectProviderType: ProjectProviderType;
+  ProjectProviderType: ResolverTypeWrapper<project_provider>;
   ProviderType: ResolverTypeWrapper<provider>;
   Query: ResolverTypeWrapper<{}>;
   Repo: ResolverTypeWrapper<repos>;
@@ -197,6 +218,7 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  Bot: bots;
   DateTime: Scalars['DateTime']['output'];
   Int: Scalars['Int']['output'];
   JSON: Scalars['JSON']['output'];
@@ -209,6 +231,24 @@ export type ResolversParentTypes = {
   UserProvider: user_providers;
 };
 
+export type BotResolvers<ContextType = any, ParentType extends ResolversParentTypes['Bot'] = ResolversParentTypes['Bot']> = {
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
+  published_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
+  webhook_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BotTypeResolvers = EnumResolverSignature<{ webhook?: any }, ResolversTypes['BotType']>;
+
+export type CompetitorTypeResolvers = EnumResolverSignature<{ dependabot?: any, renovate?: any }, ResolversTypes['CompetitorType']>;
+
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
@@ -218,6 +258,7 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['Org'] = ResolversParentTypes['Org']> = {
+  bots?: Resolver<Array<ResolversTypes['Bot']>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   github_installation_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   has_installation?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -240,6 +281,8 @@ export type ProjectIntegrationConnectionResolvers<ContextType = any, ParentType 
   provider_type?: Resolver<ResolversTypes['ProjectProviderType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export type ProjectProviderTypeResolvers = EnumResolverSignature<{ github?: any, linear?: any }, ResolversTypes['ProjectProviderType']>;
 
 export type ProviderTypeResolvers = EnumResolverSignature<{ github?: any, gitlab?: any }, ResolversTypes['ProviderType']>;
 
@@ -278,10 +321,14 @@ export type UserProviderResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type Resolvers<ContextType = any> = {
+  Bot?: BotResolvers<ContextType>;
+  BotType?: BotTypeResolvers;
+  CompetitorType?: CompetitorTypeResolvers;
   DateTime?: GraphQLScalarType;
   JSON?: GraphQLScalarType;
   Org?: OrgResolvers<ContextType>;
   ProjectIntegrationConnection?: ProjectIntegrationConnectionResolvers<ContextType>;
+  ProjectProviderType?: ProjectProviderTypeResolvers;
   ProviderType?: ProviderTypeResolvers;
   Query?: QueryResolvers<ContextType>;
   Repo?: RepoResolvers<ContextType>;
