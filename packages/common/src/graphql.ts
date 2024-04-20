@@ -34,6 +34,14 @@ export type Bot = {
   webhook_url?: Maybe<Scalars['String']['output']>;
 };
 
+export type BotCreateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  org_id: Scalars['Int']['input'];
+  type: BotType;
+  webhook_url?: InputMaybe<Scalars['String']['input']>;
+};
+
 export enum BotType {
   Webhook = 'webhook'
 }
@@ -42,6 +50,16 @@ export enum CompetitorType {
   Dependabot = 'dependabot',
   Renovate = 'renovate'
 }
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  botCreate: Bot;
+};
+
+
+export type MutationBotCreateArgs = {
+  input: BotCreateInput;
+};
 
 export type Org = {
   __typename?: 'Org';
@@ -199,11 +217,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Bot: ResolverTypeWrapper<bots>;
+  BotCreateInput: BotCreateInput;
   BotType: ResolverTypeWrapper<bot>;
   CompetitorType: ResolverTypeWrapper<competitor>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Org: ResolverTypeWrapper<orgs>;
   ProjectIntegrationConnection: ResolverTypeWrapper<org_project_providers>;
   ProjectProviderType: ResolverTypeWrapper<project_provider>;
@@ -219,9 +239,11 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Bot: bots;
+  BotCreateInput: BotCreateInput;
   DateTime: Scalars['DateTime']['output'];
   Int: Scalars['Int']['output'];
   JSON: Scalars['JSON']['output'];
+  Mutation: {};
   Org: orgs;
   ProjectIntegrationConnection: org_project_providers;
   Query: {};
@@ -256,6 +278,10 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
   name: 'JSON';
 }
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  botCreate?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<MutationBotCreateArgs, 'input'>>;
+};
 
 export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['Org'] = ResolversParentTypes['Org']> = {
   bots?: Resolver<Array<ResolversTypes['Bot']>, ParentType, ContextType>;
@@ -326,6 +352,7 @@ export type Resolvers<ContextType = any> = {
   CompetitorType?: CompetitorTypeResolvers;
   DateTime?: GraphQLScalarType;
   JSON?: GraphQLScalarType;
+  Mutation?: MutationResolvers<ContextType>;
   Org?: OrgResolvers<ContextType>;
   ProjectIntegrationConnection?: ProjectIntegrationConnectionResolvers<ContextType>;
   ProjectProviderType?: ProjectProviderTypeResolvers;

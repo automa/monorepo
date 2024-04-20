@@ -2,6 +2,10 @@ enum BotType {
   webhook
 }
 
+type Mutation {
+  botCreate(input: BotCreateInput!): Bot!
+}
+
 type Bot {
   id: Int!
   name: String!
@@ -14,4 +18,12 @@ type Bot {
   created_at: DateTime!
 
   org: Org!
+}
+
+input BotCreateInput {
+  name: String!
+  description: String
+  org_id: Int!
+  type: BotType!
+  webhook_url: String
 }

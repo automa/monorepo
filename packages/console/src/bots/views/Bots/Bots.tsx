@@ -1,14 +1,15 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { Flex, Typography } from 'shared';
-import { Bot } from 'bots';
+import { Button, Flex, Link, Typography } from 'shared';
 
-import { OrgSettingsBotsProps } from './types';
+import { Bot } from 'bots/components';
 
-import { BOTS_QUERY } from './OrgSettingsBots.queries';
+import { BotsProps } from './types';
 
-const OrgSettingsBots: React.FC<OrgSettingsBotsProps> = ({ org }) => {
+import { BOTS_QUERY } from './Bots.queries';
+
+const Bots: React.FC<BotsProps> = ({ org }) => {
   const { data, loading } = useQuery(BOTS_QUERY, {
     variables: {
       provider_type: org.provider_type,
@@ -18,7 +19,12 @@ const OrgSettingsBots: React.FC<OrgSettingsBotsProps> = ({ org }) => {
 
   return (
     <>
-      <Typography variant="title6">Automa Bots</Typography>
+      <Flex justifyContent="space-between" alignItems="center" className="h-9">
+        <Typography variant="title6">Automa Bots</Typography>
+        <Link to={`/${org.provider_type}/${org.name}/settings/bots/new`}>
+          <Button>Create Bot</Button>
+        </Link>
+      </Flex>
       {loading && !data ? (
         <div>Loading</div>
       ) : (
@@ -38,4 +44,4 @@ const OrgSettingsBots: React.FC<OrgSettingsBotsProps> = ({ org }) => {
   );
 };
 
-export default OrgSettingsBots;
+export default Bots;
