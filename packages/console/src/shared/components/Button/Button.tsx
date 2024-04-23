@@ -4,6 +4,7 @@ import { ButtonComponentProps } from './types';
 
 import { Container } from './Button.styles';
 
+// TODO: Add loading spinner state and use it instead of disabled state
 const Button: React.FC<ButtonComponentProps> = ({
   variant,
   size,

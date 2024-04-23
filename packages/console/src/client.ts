@@ -3,6 +3,8 @@ import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { sha256 } from 'crypto-hash';
 import axios from 'axios';
 
+import { isProduction } from 'env';
+
 const persistedQueryLink = createPersistedQueryLink({
   sha256,
   useGETForHashedQueries: true,
@@ -18,10 +20,11 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   defaultOptions: {
     watchQuery: {
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-and-network',
     },
   },
+  connectToDevTools: !isProduction,
 });
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URI;

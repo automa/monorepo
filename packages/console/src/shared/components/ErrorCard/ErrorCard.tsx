@@ -9,7 +9,7 @@ import { Container } from './ErrorCard.styles';
 const ErrorCard: React.FC<ErrorCardProps> = ({ error, ...props }) => {
   return (
     <Container {...props}>
-      <Typography variant="small">
+      <Typography variant="xsmall">
         {error?.message ?? 'Something went wrong'}
       </Typography>
     </Container>

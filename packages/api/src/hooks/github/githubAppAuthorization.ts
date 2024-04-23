@@ -6,7 +6,6 @@ const revoked: GithubEventActionHandler<{
     id: number;
   };
 }> = async (app, body) => {
-  // TODO: Delete refresh token for the user
   return;
 };
 

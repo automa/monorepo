@@ -11,7 +11,6 @@ type DialogProps = $<
     description?: ReactNode;
     open?: boolean;
     setOpen?: (open: boolean) => void;
-    skipClose?: boolean;
   } & Omit<HTMLAttributes<HTMLDivElement>, 'title'>
 >;
 

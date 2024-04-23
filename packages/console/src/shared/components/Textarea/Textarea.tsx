@@ -1,26 +1,34 @@
 import React from 'react';
 import * as Label from '@radix-ui/react-label';
 
+import Flex from '../Flex';
+import Typography from '../Typography';
+
 import { TextareaComponentProps } from './types';
 
-import { Container, Control } from './Textarea.styles';
+import { Control, Text } from './Textarea.styles';
 
 const Textarea: React.FC<TextareaComponentProps> = ({
   label,
   optional,
+  description,
   error,
   textarea,
   ...props
 }) => {
   return (
-    <Container {...props}>
+    <Flex {...props} fullWidth direction="column" className="gap-2">
       <Label.Root htmlFor={textarea.name}>
-        {label}
-        {!optional && '*'}
+        <Typography className="font-semibold">
+          {label}
+          {!optional && <span className="text-red-600">&nbsp;*</span>}
+        </Typography>
       </Label.Root>
       <Control $error={error} id={textarea.name} {...textarea} />
-      {error && error}
-    </Container>
+      <Text variant="xsmall" $error={error}>
+        {error ? error : description}
+      </Text>
+    </Flex>
   );
 };
 

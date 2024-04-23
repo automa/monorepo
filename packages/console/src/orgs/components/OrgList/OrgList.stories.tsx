@@ -6,15 +6,10 @@ import { makeFragmentData } from 'gql';
 
 import OrgList from './OrgList';
 import { ORGS_QUERY_FRAGMENT } from './OrgList.queries';
-import { OrgListProps } from './types';
 
-export default {
+const meta = {
   title: 'OrgList',
   component: OrgList,
-  argTypes: {},
-} as Meta<OrgListProps>;
-
-export const Default: StoryObj<OrgListProps> = {
   args: {
     data: makeFragmentData(
       {
@@ -23,12 +18,14 @@ export const Default: StoryObj<OrgListProps> = {
             id: 1,
             name: 'automa',
             provider_type: ProviderType.Github,
+            provider_id: '65730741',
             has_installation: true,
           },
           {
             id: 2,
             name: 'pksunkara',
             provider_type: ProviderType.Github,
+            provider_id: '174703',
             has_installation: false,
           },
         ],
@@ -36,9 +33,16 @@ export const Default: StoryObj<OrgListProps> = {
       ORGS_QUERY_FRAGMENT,
     ),
   },
-};
+  argTypes: {},
+} satisfies Meta<typeof OrgList>;
 
-export const Empty: StoryObj<OrgListProps> = {
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;
+
+export const Empty = {
   args: {
     data: makeFragmentData(
       {
@@ -47,4 +51,4 @@ export const Empty: StoryObj<OrgListProps> = {
       ORGS_QUERY_FRAGMENT,
     ),
   },
-};
+} satisfies Story;

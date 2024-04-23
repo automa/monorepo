@@ -9,7 +9,6 @@ import { DropdownMenuComponentProps } from './types';
 import {
   Container,
   Content,
-  Arrow,
   Group,
   Item,
   Label,
@@ -34,8 +33,7 @@ const DropdownMenu: React.FC<DropdownMenuComponentProps> = ({
         <DropdownMenuPrimitive.Trigger>{trigger}</DropdownMenuPrimitive.Trigger>
         <DropdownMenuPrimitive.Portal>
           <Content {...{ side, sideOffset, align, alignOffset, arrowPadding }}>
-            {children}
-            <Arrow offset={8} height={8} width={8} />
+            <Flex direction="column">{children}</Flex>
           </Content>
         </DropdownMenuPrimitive.Portal>
       </DropdownMenuPrimitive.Root>

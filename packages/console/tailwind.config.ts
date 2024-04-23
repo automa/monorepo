@@ -1,12 +1,22 @@
 import type { Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme';
 import animate from 'tailwindcss-animate';
+import scrollbar from 'tailwind-scrollbar';
 
 const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
   darkMode: 'class',
   theme: {
     extend: {
+      boxShadow: {
+        border: 'inset 0 -1px rgba(0, 0, 0, 0.08)',
+        card: '0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.04)',
+        cardHover:
+          '0 0 0 1px rgba(0, 0, 0, 0.08), 0 6px 14px rgba(0, 0, 0, 0.08)',
+        menu: '0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.02), 0px 4px 8px -4px rgba(0, 0, 0, .04), 0px 16px 24px -8px rgba(0, 0, 0, .06)',
+        modal:
+          '0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.02), 0px 8px 16px -4px rgba(0, 0, 0, 0.04), 0px 24px 32px -8px rgba(0, 0, 0, 0.06)',
+      },
       colors: {
         github: '#24292F',
         gitlab: '#FCA326',
@@ -21,6 +31,9 @@ const config: Config = {
       fontSize: {
         '2xs': '0.625rem',
       },
+      gridTemplateColumns: {
+        auto: 'repeat(auto-fill, minmax(21rem, 1fr))',
+      },
       height: {
         '0.25': '0.0625rem',
       },
@@ -32,7 +45,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [animate],
+  plugins: [animate, scrollbar],
 };
 
 export default config;

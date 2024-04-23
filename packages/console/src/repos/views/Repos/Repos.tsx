@@ -4,12 +4,12 @@ import { useQuery } from '@apollo/client';
 
 import { Flex, Typography } from 'shared';
 
-import { OrgOverviewProps } from './types';
+import { ReposProps } from './types';
 
-import { REPOS_QUERY } from './OrgOverview.queries';
-import { Container } from './OrgOverview.styles';
+import { REPOS_QUERY } from './Repos.queries';
+import { Container } from './Repos.styles';
 
-const OrgOverview: React.FC<OrgOverviewProps> = ({ org, ...props }) => {
+const Repos: React.FC<ReposProps> = ({ org, ...props }) => {
   const navigate = useNavigate();
 
   // TODO: Add infinite scroll
@@ -21,18 +21,17 @@ const OrgOverview: React.FC<OrgOverviewProps> = ({ org, ...props }) => {
   });
 
   return (
-    <Container {...props}>
-      <Flex direction="column" alignItems="center" className="gap-2">
-        {loading && !data ? (
-          <div>Loading</div>
-        ) : !data?.org?.repos ? (
-          <div>Not found</div>
-        ) : !data?.org?.repos?.length ? (
-          <div>No repos</div>
-        ) : (
-          data.org.repos.map((repo) => (
+    <Container {...props} asChild>
+      {loading && !data ? (
+        <div>Loading</div>
+      ) : !data?.org?.repos?.length ? (
+        <Flex justifyContent="center">No repos</Flex>
+      ) : (
+        <Flex direction="column" alignItems="center" className="gap-2">
+          {data.org.repos.map((repo) => (
             <Typography
               key={repo.id}
+              variant="large"
               onClick={() =>
                 navigate(`/${org.provider_type}/${org.name}/${repo.name}`)
               }
@@ -40,11 +39,11 @@ const OrgOverview: React.FC<OrgOverviewProps> = ({ org, ...props }) => {
             >
               {repo.name}
             </Typography>
-          ))
-        )}
-      </Flex>
+          ))}
+        </Flex>
+      )}
     </Container>
   );
 };
 
-export default OrgOverview;
+export default Repos;

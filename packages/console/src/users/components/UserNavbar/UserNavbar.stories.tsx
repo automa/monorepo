@@ -1,18 +1,15 @@
 import { Meta, StoryObj } from '@storybook/react';
 
+import { ProviderType } from '@automa/common';
+
 import { makeFragmentData } from 'gql';
 
 import UserNavbar from './UserNavbar';
 import { ME_QUERY_FRAGMENT } from './UserNavbar.queries';
-import { UserNavbarProps } from './types';
 
-export default {
+const meta = {
   title: 'UserNavbar',
   component: UserNavbar,
-  argTypes: {},
-} as Meta<UserNavbarProps>;
-
-export const Default: StoryObj<UserNavbarProps> = {
   args: {
     data: makeFragmentData(
       {
@@ -20,9 +17,23 @@ export const Default: StoryObj<UserNavbarProps> = {
           id: 1,
           name: 'Pavan Kumar Sunkara',
           email: 'pavan.sss1991@gmail.com',
+          providers: [
+            {
+              id: 1,
+              provider_type: ProviderType.Github,
+              provider_id: '174703',
+            },
+          ],
         },
       },
       ME_QUERY_FRAGMENT,
     ),
   },
-};
+  argTypes: {},
+} satisfies Meta<typeof UserNavbar>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default = {} satisfies Story;

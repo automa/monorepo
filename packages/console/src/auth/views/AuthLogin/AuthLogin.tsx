@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 import { Button, Flex, Tooltip, Typography } from 'shared';
+
 import { useUser } from 'auth/hooks';
 
 import Logo from 'assets/logo.svg?react';

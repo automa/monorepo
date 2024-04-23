@@ -10,6 +10,7 @@ type InputProps = $<
   {
     label: string;
     optional?: boolean;
+    description?: string;
     input: InputHTMLAttributes<HTMLInputElement>;
   } & HTMLAttributes<HTMLDivElement>
 >;

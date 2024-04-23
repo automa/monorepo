@@ -6,4 +6,12 @@ type User {
   id: Int!
   name: String!
   email: String!
+
+  providers: [UserProvider!]!
+}
+
+type UserProvider {
+  id: Int!
+  provider_type: ProviderType!
+  provider_id: String!
 }

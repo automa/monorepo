@@ -29,7 +29,7 @@ const preview: Preview = {
       return (
         <Provider store={store}>
           <BrowserRouter>
-            <Tooltip.Provider>
+            <Tooltip.Provider delayDuration={500}>
               <Toast.Provider>
                 <AppContainer>
                   <Story />

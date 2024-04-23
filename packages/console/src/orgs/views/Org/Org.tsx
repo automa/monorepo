@@ -1,54 +1,103 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import React, { useEffect, useMemo } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 import { ProviderType } from '@automa/common';
 
-import { Flex, Loader, RoutesLoader } from 'shared';
+import { Loader, RoutesLoader } from 'shared';
+
+import { useOrg, useOrgs } from 'orgs/hooks';
 
 import routes from './routes';
 import { OrgProps } from './types';
 
-import { ORG_QUERY } from './Org.queries';
-import { Container } from './Org.styles';
+import { Container, Nav, Item, Content } from './Org.styles';
 
 const Org: React.FC<OrgProps> = ({ ...props }) => {
+  const location = useLocation();
+
   const { provider, orgName } = useParams() as {
-    provider: ProviderType;
-    orgName: string;
+    provider?: ProviderType;
+    orgName?: string;
   };
 
-  const { data, loading } = useQuery(ORG_QUERY, {
-    variables: {
-      provider_type: provider,
-      name: orgName,
-    },
-  });
+  const { orgsLoading } = useOrgs();
+  const { org, setOrg } = useOrg();
 
+  // Set current org from URL
   useEffect(() => {
-    if (data?.org) {
+    if (!orgsLoading && provider && orgName) {
+      setOrg(provider, orgName);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orgsLoading, provider, orgName]);
+
+  // Set user.org_id to current org
+  useEffect(() => {
+    if (org) {
       // TODO: Set user.org_id to current org
     }
-  }, [data]);
+  }, [org]);
+
+  const tabs = useMemo(() => {
+    if (!org) return [];
+
+    return [
+      {
+        name: 'Tasks',
+        path: '/tasks',
+      },
+      {
+        name: 'Repositories',
+        path: '/repos',
+      },
+      {
+        name: 'Bots',
+        path: '/bots',
+      },
+      {
+        name: 'Integrations',
+        path: '/integrations',
+      },
+      {
+        name: 'Insights',
+        path: '/insights',
+      },
+      {
+        name: 'Settings',
+        path: '/settings',
+      },
+    ];
+  }, [org]);
 
   return (
-    <Container {...props}>
-      <Flex direction="column" alignItems="center" className="gap-2">
-        {loading && !data ? (
-          <div>loading...</div>
-        ) : !data?.org ? (
-          <div>Not found</div>
-        ) : (
-          <Flex direction="column" className="gap-4">
-            <div>{data.org.name}</div>
-            <RoutesLoader
-              fallback={<Loader />}
-              routes={routes}
-              org={data.org}
-            />
-          </Flex>
-        )}
-      </Flex>
+    <Container {...props} asChild>
+      {!org ? (
+        <div>Not found</div>
+      ) : (
+        <>
+          <NavigationMenu.Root>
+            <Nav>
+              {tabs.map((tab) => {
+                const uri = `/${org.provider_type}/${org.name}${tab.path}`;
+
+                return (
+                  <Item
+                    key={tab.name}
+                    $active={location.pathname.startsWith(uri)}
+                    asChild
+                  >
+                    <Link to={uri}>{tab.name}</Link>
+                  </Item>
+                );
+              })}
+            </Nav>
+          </NavigationMenu.Root>
+          <Content>
+            <RoutesLoader fallback={<Loader />} routes={routes} org={org} />
+          </Content>
+        </>
+      )}
     </Container>
   );
 };

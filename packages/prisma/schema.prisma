@@ -28,6 +28,7 @@ model orgs {
   has_installation       Boolean                 @default(false)
   created_at             DateTime                @default(now()) @db.Timestamp(6)
   github_installation_id Int?                    @unique
+  bot_installations      bot_installations[]
   bots                   bots[]
   org_project_providers  org_project_providers[]
   repos                  repos[]
@@ -90,26 +91,32 @@ model user_repos {
 }
 
 model bots {
-  id         Int      @id @default(autoincrement())
-  org_id     Int
-  name       String   @db.VarChar(255)
-  type       bot_type
-  created_at DateTime @default(now()) @db.Timestamp(6)
-  orgs       orgs     @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id                Int                 @id @default(autoincrement())
+  org_id            Int
+  name              String              @db.VarChar(255)
+  description       String?
+  type              bot
+  webhook_url       String?             @db.VarChar(255)
+  homepage          String?             @db.VarChar(255)
+  published_at      DateTime?           @db.Timestamp(6)
+  is_published      Boolean?            @default(dbgenerated("(published_at IS NOT NULL)"))
+  created_at        DateTime            @default(now()) @db.Timestamp(6)
+  bot_installations bot_installations[]
+  orgs              orgs                @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([org_id, name])
 }
 
 model repo_settings {
-  id                String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   repo_id           Int
   cause             Int
-  commit            String       @db.VarChar(40)
+  commit            String      @db.VarChar(40)
   settings          Json?
   validation_errors Json?
-  created_at        DateTime     @default(now()) @db.Timestamp(6)
-  imported_from     competitors?
-  repos             repos        @relation(fields: [repo_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  created_at        DateTime    @default(now()) @db.Timestamp(6)
+  imported_from     competitor?
+  repos             repos       @relation(fields: [repo_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([repo_id, created_at(sort: Desc)])
 }
@@ -128,22 +135,32 @@ model org_project_providers {
   @@unique([org_id, provider_type, name])
 }
 
+model bot_installations {
+  id         Int      @id @default(autoincrement())
+  bot_id     Int
+  org_id     Int
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  bots       bots     @relation(fields: [bot_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  orgs       orgs     @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([bot_id, org_id])
+}
+
 enum provider {
   github
   gitlab
 }
 
-enum bot_type {
-  scheduled
-  push
-}
-
-enum competitors {
-  dependabot
-  renovate
-}
-
 enum project_provider {
   github
   linear
+}
+
+enum bot {
+  webhook
+}
+
+enum competitor {
+  dependabot
+  renovate
 }

@@ -1,6 +1,9 @@
 import React, { useMemo } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X } from '@phosphor-icons/react';
+
+import Button from '../Button';
+import Flex from '../Flex';
+import Typography from '../Typography';
 
 import { DialogComponentProps } from './types';
 
@@ -10,7 +13,7 @@ import {
   Content,
   Title,
   Description,
-  Close,
+  Footer,
 } from './Dialog.styles';
 
 const Dialog: React.FC<DialogComponentProps> = ({
@@ -20,7 +23,6 @@ const Dialog: React.FC<DialogComponentProps> = ({
   children,
   open,
   setOpen,
-  skipClose,
   ...props
 }) => {
   const controlProps = useMemo(
@@ -36,14 +38,17 @@ const Dialog: React.FC<DialogComponentProps> = ({
         <DialogPrimitive.Portal>
           <Overlay />
           <Content>
-            <Title>{title}</Title>
-            {description && <Description>{description}</Description>}
-            {children}
-            {!skipClose && (
-              <Close>
-                <X />
-              </Close>
-            )}
+            <Flex direction="column" alignItems="center" className="gap-8">
+              <Flex direction="column" alignItems="center" className="gap-2">
+                <Title asChild>
+                  <Typography variant="title4">{title}</Typography>
+                </Title>
+                {description && (
+                  <Description asChild>{description}</Description>
+                )}
+              </Flex>
+              {children}
+            </Flex>
           </Content>
         </DialogPrimitive.Portal>
       </DialogPrimitive.Root>
@@ -52,3 +57,21 @@ const Dialog: React.FC<DialogComponentProps> = ({
 };
 
 export default Dialog;
+
+export const DialogClose = DialogPrimitive.Close;
+
+export const DialogFooter: React.FC<{
+  cancel?: boolean;
+  children: React.ReactNode;
+}> = ({ cancel, children }) => {
+  return (
+    <Footer direction="row-reverse">
+      {children}
+      {cancel && (
+        <DialogPrimitive.Close asChild>
+          <Button variant="tertiary">Cancel</Button>
+        </DialogPrimitive.Close>
+      )}
+    </Footer>
+  );
+};

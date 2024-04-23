@@ -19,5 +19,6 @@ type Org {
   created_at: DateTime!
 
   repos: [Repo!]!
+  bots: [Bot!]!
   project_integration_connections: [ProjectIntegrationConnection!]!
 }

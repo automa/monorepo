@@ -55,7 +55,7 @@ CREATE TABLE public.repos (
   UNIQUE (org_id, provider_id)
 );
 
-CREATE TYPE public.competitors AS ENUM ('dependabot', 'renovate');
+CREATE TYPE public.competitor AS ENUM ('dependabot', 'renovate');
 
 CREATE TABLE public.repo_settings (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -65,7 +65,7 @@ CREATE TABLE public.repo_settings (
   settings JSONB,
   validation_errors JSONB,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  imported_from public.competitors
+  imported_from public.competitor
 );
 
 CREATE INDEX repo_settings_repo_id_created_at_idx
@@ -87,21 +87,40 @@ CREATE TABLE public.user_repos (
   UNIQUE (user_id, repo_id)
 );
 
-CREATE TYPE public.bot_type AS ENUM ('scheduled', 'push');
+-- TODO: Add 'prompt', 'function'
+CREATE TYPE public.bot AS ENUM ('webhook');
 
 CREATE TABLE public.bots (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
-  type public.bot_type NOT NULL,
+  description TEXT,
+  type public.bot NOT NULL,
+  webhook_url VARCHAR(255),
+  -- TODO: webhook_secret (here, check and data below)
+  -- TODO: webhook_verification / client_secret
+  homepage VARCHAR(255),
+  published_at TIMESTAMP,
+  is_published BOOLEAN GENERATED ALWAYS AS (published_at IS NOT NULL) STORED,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  UNIQUE (org_id, name)
+  UNIQUE (org_id, name),
+  -- TODO: CHECK (type = 'webhook' AND webhook_url IS NOT NULL)
+  CHECK (published_at IS NULL OR (published_at IS NOT NULL AND homepage IS NOT NULL))
 );
 
-INSERT INTO public.bots (org_id, name, type)
+INSERT INTO public.bots (org_id, name, type, webhook_url, homepage)
 VALUES
-  (1, 'automa', 'push'),
-  (1, 'dependency', 'scheduled');
+  (1, 'automa', 'webhook', 'https://api.automa.app/hooks/automa', 'https://automa.app'),
+  (1, 'dependency', 'webhook', 'https://api.dependency.bot/hooks/automa', 'https://dependency.bot'),
+  (1, 'refactor', 'webhook', 'https://api.dependency.bot/hooks/automa', 'https://refactor.bot');
+
+CREATE TABLE public.bot_installations (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  bot_id INTEGER NOT NULL REFERENCES public.bots(id) ON DELETE CASCADE,
+  org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  UNIQUE (bot_id, org_id)
+);
 
 CREATE TYPE public.project_provider AS ENUM ('github', 'linear');
 
