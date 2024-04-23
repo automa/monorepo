@@ -2,6 +2,7 @@ import React, { FC, ReactNode, ReactElement } from 'react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import * as Tooltip from '@radix-ui/react-tooltip';
 import { render, RenderOptions } from '@testing-library/react';
 import { vi } from 'vitest';
 import { FetchMock } from 'vitest-fetch-mock';
@@ -33,7 +34,7 @@ const customRender = (
           })}
         >
           <MemoryRouter initialEntries={path && !history ? [path] : history}>
-            {children}
+            <Tooltip.Provider delayDuration={500}>{children}</Tooltip.Provider>
           </MemoryRouter>
         </Provider>
       </AnalyticsProvider>
