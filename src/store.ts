@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { isProduction } from 'env';
 
-import { authReducer } from 'auth';
+import { authReducer } from 'auth/slices';
 
 export const reducer = combineSlices({
   auth: authReducer,
