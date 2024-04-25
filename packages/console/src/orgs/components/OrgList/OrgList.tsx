@@ -17,7 +17,7 @@ import {
   Typography,
 } from 'shared';
 import { getFragment } from 'gql';
-import { getOrgAvatarUrl, orgUri } from 'utils';
+import { appName, getOrgAvatarUrl, orgUri } from 'utils';
 
 import { useOrg, useOrgs } from 'orgs/hooks';
 
@@ -110,7 +110,7 @@ const OrgList: React.FC<OrgListProps> = ({
         ))}
         <DropdownMenuSeparator />
         <a
-          href="https://github.com/apps/automa/installations/select_target"
+          href={`https://github.com/apps/${appName()}/installations/select_target`}
           rel="noopener noreferrer"
           target="_blank"
         >

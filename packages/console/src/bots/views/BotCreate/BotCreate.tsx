@@ -24,7 +24,6 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
   } = useForm<BotCreateInput>({
     resolver: zodResolver(botCreateSchema),
     defaultValues: {
-      org_id: org.id,
       type: BotType.Webhook,
     },
   });
@@ -52,7 +51,12 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
   );
 
   const onSubmit: SubmitHandler<BotCreateInput> = async (data) => {
-    await botCreate({ variables: { input: data } });
+    await botCreate({
+      variables: {
+        org_id: org.id,
+        input: data,
+      },
+    });
     // TODO: Show success toast
   };
 

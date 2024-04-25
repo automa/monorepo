@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { Button, Flex, Link, Typography } from 'shared';
+import { Button, Flex, Link, Loader, Typography } from 'shared';
 import { orgUri } from 'utils';
 
 import { Bot } from 'bots/components';
@@ -11,10 +11,10 @@ import { BotsProps } from './types';
 import { BOTS_QUERY } from './Bots.queries';
 
 const Bots: React.FC<BotsProps> = ({ org }) => {
+  // TODO: Add infinite scroll
   const { data, loading } = useQuery(BOTS_QUERY, {
     variables: {
-      provider_type: org.provider_type,
-      name: org.name,
+      org_id: org.id,
     },
   });
 
@@ -27,18 +27,16 @@ const Bots: React.FC<BotsProps> = ({ org }) => {
         </Link>
       </Flex>
       {loading && !data ? (
-        <div>Loading</div>
+        <Flex justifyContent="center">
+          <Loader />
+        </Flex>
+      ) : !data?.bots?.length ? (
+        <Flex justifyContent="center">No bots</Flex>
       ) : (
-        <Flex direction="column" className="gap-8">
-          {!data?.org?.bots?.length ? (
-            <Flex justifyContent="center">No bots</Flex>
-          ) : (
-            <Flex className="grid grid-cols-auto gap-4 md:gap-6">
-              {data.org.bots.map((bot) => (
-                <Bot key={bot.id} bot={bot} />
-              ))}
-            </Flex>
-          )}
+        <Flex className="grid grid-cols-auto gap-4 md:gap-6">
+          {data.bots.map((bot) => (
+            <Bot key={bot.id} bot={bot} />
+          ))}
         </Flex>
       )}
     </>

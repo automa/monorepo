@@ -10,7 +10,6 @@ export const botCreateSchema = z.object<ZodInferSchema<BotCreateInput>>({
     .max(255)
     .regex(/^[a-z0-9-]+$/i),
   description: z.string().nullish(),
-  org_id: z.number().int(),
   type: z.nativeEnum(BotType),
   webhook_url: z.string().url().nullish(),
 });

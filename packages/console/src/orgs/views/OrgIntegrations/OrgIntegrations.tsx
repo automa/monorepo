@@ -13,8 +13,7 @@ import { Container } from './OrgIntegrations.styles';
 const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org, ...props }) => {
   const { data, loading } = useQuery(INTEGRATION_CONNECTIONS_QUERY, {
     variables: {
-      provider_type: org.provider_type,
-      name: org.name,
+      org_id: org.id,
     },
   });
 
@@ -33,10 +32,10 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org, ...props }) => {
       <Flex direction="column" alignItems="center" className="gap-2">
         {loading && !data ? (
           <div>Loading</div>
-        ) : !data?.org ? (
-          <div>Not found</div>
+        ) : !data?.project_integration_connections?.length ? (
+          <Flex justifyContent="center">No connections</Flex>
         ) : (
-          data.org.project_integration_connections.map(
+          data.project_integration_connections.map(
             ({ id, name, provider_type, author }) => (
               <div key={id}>
                 <div>{provider_type}</div>

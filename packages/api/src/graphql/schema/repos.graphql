@@ -4,6 +4,7 @@ enum CompetitorType {
 }
 
 type Query {
+  repos(org_id: Int!): [Repo!]!
   repo(provider_type: ProviderType!, org_name: String!, name: String!): Repo
 }
 
