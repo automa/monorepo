@@ -3,11 +3,12 @@ import * as Label from '@radix-ui/react-label';
 
 import { TextareaComponentProps } from './types';
 
-import { Container, Control } from './Textarea.styles';
+import { Container, Control, Text } from './Textarea.styles';
 
 const Textarea: React.FC<TextareaComponentProps> = ({
   label,
   optional,
+  description,
   error,
   textarea,
   ...props
@@ -19,7 +20,9 @@ const Textarea: React.FC<TextareaComponentProps> = ({
         {!optional && '*'}
       </Label.Root>
       <Control $error={error} id={textarea.name} {...textarea} />
-      {error && error}
+      <Text variant="small" $error={error}>
+        {error ? error : description}
+      </Text>
     </Container>
   );
 };

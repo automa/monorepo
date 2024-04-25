@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from '@phosphor-icons/react';
 
+import Typography from '../Typography';
+
 import { DialogComponentProps } from './types';
 
 import {
@@ -36,8 +38,14 @@ const Dialog: React.FC<DialogComponentProps> = ({
         <DialogPrimitive.Portal>
           <Overlay />
           <Content>
-            <Title>{title}</Title>
-            {description && <Description>{description}</Description>}
+            <Title asChild>
+              <Typography variant="title4">{title}</Typography>
+            </Title>
+            {description && (
+              <Description asChild>
+                <Typography variant="small">{description}</Typography>
+              </Description>
+            )}
             {children}
             {!skipClose && (
               <Close>

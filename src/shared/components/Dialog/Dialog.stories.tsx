@@ -8,7 +8,6 @@ const meta = {
   args: {
     trigger: 'Trigger',
     title: 'Title',
-    description: 'Description',
     children: 'Children',
   },
 } satisfies Meta<typeof Dialog>;
@@ -18,3 +17,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default = {} satisfies Story;
+
+export const Description = {
+  args: {
+    description: 'Description',
+  },
+} satisfies Story;

@@ -26,8 +26,23 @@ export const Optional = {
   },
 } satisfies Story;
 
+export const Description = {
+  args: {
+    description: 'Description',
+  },
+} satisfies Story;
+
 export const Error = {
   args: {
     error: 'Error',
+  },
+} satisfies Story;
+
+export const Disabled = {
+  args: {
+    input: {
+      ...meta.args.input,
+      disabled: true,
+    },
   },
 } satisfies Story;
