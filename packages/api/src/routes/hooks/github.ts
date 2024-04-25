@@ -1,5 +1,6 @@
+import { createHmac, timingSafeEqual } from 'node:crypto';
+
 import { FastifyInstance } from 'fastify';
-import { createHmac, timingSafeEqual } from 'crypto';
 
 import { env } from '../../env';
 import { logger, SeverityNumber } from '../../telemetry';

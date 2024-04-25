@@ -28,6 +28,7 @@ suite('github auth', () => {
   });
 
   teardown(async () => {
+    await app.prisma.orgs.deleteMany();
     await app.prisma.users.deleteMany();
     sandbox.restore();
   });
@@ -64,7 +65,7 @@ suite('github auth', () => {
       getStub = sandbox.stub(axios, 'get').resolves({
         data: {
           id: 123,
-          email: 'pavan@automa.app',
+          email: 'pavan@example.com',
           name: 'Pavan Kumar Sunkara',
           login: 'pksunkara',
         },
@@ -223,7 +224,7 @@ suite('github auth', () => {
           assert.lengthOf(users, 1);
 
           assert.deepOwnInclude(users[0], {
-            email: 'pavan@automa.app',
+            email: 'pavan@example.com',
             name: 'Pavan Kumar Sunkara',
           });
         });
@@ -239,7 +240,7 @@ suite('github auth', () => {
           assert.deepOwnInclude(providers[0], {
             provider_type: 'github',
             provider_id: '123',
-            provider_email: 'pavan@automa.app',
+            provider_email: 'pavan@example.com',
             refresh_token: '123456',
           });
         });
@@ -308,7 +309,7 @@ suite('github auth', () => {
       setup(async () => {
         await app.prisma.users.create({
           data: {
-            email: 'pavan@automa.app',
+            email: 'pavan@example.com',
             name: 'Pavan Sunkara',
           },
         });
@@ -360,7 +361,7 @@ suite('github auth', () => {
           assert.lengthOf(users, 1);
 
           assert.deepOwnInclude(users[0], {
-            email: 'pavan@automa.app',
+            email: 'pavan@example.com',
             name: 'Pavan Sunkara',
           });
         });
@@ -376,7 +377,7 @@ suite('github auth', () => {
           assert.deepOwnInclude(providers[0], {
             provider_type: 'github',
             provider_id: '123',
-            provider_email: 'pavan@automa.app',
+            provider_email: 'pavan@example.com',
             refresh_token: '123456',
           });
         });
@@ -406,7 +407,7 @@ suite('github auth', () => {
         setup(async () => {
           await app.prisma.users.create({
             data: {
-              email: 'pavan.sunkara@automa.app',
+              email: 'pavan.sunkara@example.com',
               name: 'Pavan Sunkara',
             },
           });
@@ -461,12 +462,12 @@ suite('github auth', () => {
             assert.lengthOf(users, 2);
 
             assert.deepOwnInclude(users[0], {
-              email: 'pavan.sunkara@automa.app',
+              email: 'pavan.sunkara@example.com',
               name: 'Pavan Sunkara',
             });
 
             assert.deepOwnInclude(users[1], {
-              email: 'pavan@automa.app',
+              email: 'pavan@example.com',
               name: 'Pavan Kumar Sunkara',
             });
           });
@@ -482,7 +483,7 @@ suite('github auth', () => {
             assert.deepOwnInclude(providers[0], {
               provider_type: 'github',
               provider_id: '123',
-              provider_email: 'pavan@automa.app',
+              provider_email: 'pavan@example.com',
               refresh_token: '123456',
             });
           });
@@ -513,7 +514,7 @@ suite('github auth', () => {
         setup(async () => {
           sessionUser = await app.prisma.users.create({
             data: {
-              email: 'pavan.sunkara@automa.app',
+              email: 'pavan.sunkara@example.com',
               name: 'Pavan Sunkara',
             },
           });
@@ -572,7 +573,7 @@ suite('github auth', () => {
             assert.lengthOf(users, 1);
 
             assert.deepOwnInclude(users[0], {
-              email: 'pavan.sunkara@automa.app',
+              email: 'pavan.sunkara@example.com',
               name: 'Pavan Sunkara',
             });
           });
@@ -588,7 +589,7 @@ suite('github auth', () => {
             assert.deepOwnInclude(providers[0], {
               provider_type: 'github',
               provider_id: '123',
-              provider_email: 'pavan@automa.app',
+              provider_email: 'pavan@example.com',
               refresh_token: '123456',
             });
           });
@@ -617,7 +618,7 @@ suite('github auth', () => {
       setup(async () => {
         const user = await app.prisma.users.create({
           data: {
-            email: 'pavan@automa.app',
+            email: 'pavan@example.com',
             name: 'Pavan Sunkara',
           },
         });
@@ -626,7 +627,7 @@ suite('github auth', () => {
             user_id: user.id,
             provider_type: 'github',
             provider_id: '123',
-            provider_email: 'pavan@automa.app',
+            provider_email: 'pavan@example.com',
             refresh_token: 'acbdef',
           },
         });
@@ -678,7 +679,7 @@ suite('github auth', () => {
           assert.lengthOf(users, 1);
 
           assert.deepOwnInclude(users[0], {
-            email: 'pavan@automa.app',
+            email: 'pavan@example.com',
             name: 'Pavan Sunkara',
           });
         });
@@ -694,7 +695,7 @@ suite('github auth', () => {
           assert.deepOwnInclude(providers[0], {
             provider_type: 'github',
             provider_id: '123',
-            provider_email: 'pavan@automa.app',
+            provider_email: 'pavan@example.com',
             refresh_token: '123456',
           });
         });
@@ -724,7 +725,7 @@ suite('github auth', () => {
         setup(async () => {
           const user = await app.prisma.users.create({
             data: {
-              email: 'pavan.sunkara@automa.app',
+              email: 'pavan.sunkara@example.com',
               name: 'Pavan Sunkara',
             },
           });
@@ -733,7 +734,7 @@ suite('github auth', () => {
               user_id: user.id,
               provider_type: 'github',
               provider_id: '123',
-              provider_email: 'pavan.sunkara@automa.app',
+              provider_email: 'pavan.sunkara@example.com',
               refresh_token: 'acbdef',
             },
           });
@@ -788,7 +789,7 @@ suite('github auth', () => {
             assert.lengthOf(users, 1);
 
             assert.deepOwnInclude(users[0], {
-              email: 'pavan.sunkara@automa.app',
+              email: 'pavan.sunkara@example.com',
               name: 'Pavan Sunkara',
             });
           });
@@ -804,7 +805,7 @@ suite('github auth', () => {
             assert.deepOwnInclude(providers[0], {
               provider_type: 'github',
               provider_id: '123',
-              provider_email: 'pavan@automa.app',
+              provider_email: 'pavan@example.com',
               refresh_token: '123456',
             });
           });
@@ -835,7 +836,7 @@ suite('github auth', () => {
         setup(async () => {
           const user = await app.prisma.users.create({
             data: {
-              email: 'pavan@automa.app',
+              email: 'pavan@example.com',
               name: 'Pavan Sunkara',
             },
           });
@@ -844,7 +845,7 @@ suite('github auth', () => {
               user_id: user.id,
               provider_type: 'github',
               provider_id: '12345',
-              provider_email: 'pavan.sunkara@automa.app',
+              provider_email: 'pavan.sunkara@example.com',
               refresh_token: 'acbdef',
             },
           });
@@ -898,7 +899,7 @@ suite('github auth', () => {
             assert.lengthOf(users, 1);
 
             assert.deepOwnInclude(users[0], {
-              email: 'pavan@automa.app',
+              email: 'pavan@example.com',
               name: 'Pavan Sunkara',
             });
           });
@@ -914,7 +915,7 @@ suite('github auth', () => {
             assert.deepOwnInclude(providers[0], {
               provider_type: 'github',
               provider_id: '12345',
-              provider_email: 'pavan.sunkara@automa.app',
+              provider_email: 'pavan.sunkara@example.com',
               refresh_token: 'acbdef',
             });
           });
@@ -934,7 +935,7 @@ suite('github auth', () => {
         setup(async () => {
           const user = await app.prisma.users.create({
             data: {
-              email: 'pavan.sunkara@automa.app',
+              email: 'pavan.sunkara@example.com',
               name: 'Pavan Sunkara',
             },
           });
@@ -943,7 +944,7 @@ suite('github auth', () => {
               user_id: user.id,
               provider_type: 'github',
               provider_id: '12345',
-              provider_email: 'pavan.sunkara@automa.app',
+              provider_email: 'pavan.sunkara@example.com',
               refresh_token: 'acbdef',
             },
           });
@@ -998,12 +999,12 @@ suite('github auth', () => {
             assert.lengthOf(users, 2);
 
             assert.deepOwnInclude(users[0], {
-              email: 'pavan.sunkara@automa.app',
+              email: 'pavan.sunkara@example.com',
               name: 'Pavan Sunkara',
             });
 
             assert.deepOwnInclude(users[1], {
-              email: 'pavan@automa.app',
+              email: 'pavan@example.com',
               name: 'Pavan Kumar Sunkara',
             });
           });
@@ -1019,7 +1020,7 @@ suite('github auth', () => {
             assert.deepOwnInclude(providers[0], {
               provider_type: 'github',
               provider_id: '123',
-              provider_email: 'pavan@automa.app',
+              provider_email: 'pavan@example.com',
               refresh_token: '123456',
             });
           });

@@ -1,6 +1,7 @@
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
 import { Analytics, TrackParams } from '@segment/analytics-node';
+
 import { orgs, users } from '@automa/prisma';
 
 import { env, environment, isProduction } from '../env';

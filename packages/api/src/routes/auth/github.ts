@@ -1,5 +1,6 @@
-import { randomUUID } from 'crypto';
-import { URLSearchParams } from 'url';
+import { randomUUID } from 'node:crypto';
+import { URLSearchParams } from 'node:url';
+
 import { FastifyInstance } from 'fastify';
 
 import { env } from '../../env';

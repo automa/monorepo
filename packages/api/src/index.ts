@@ -1,8 +1,8 @@
+import { join } from 'node:path';
+
 // Always setup the environment first
 import { env, isProduction, version } from './env';
 import { logger, SeverityNumber } from './telemetry';
-
-import { join } from 'path';
 
 import fastify from 'fastify';
 import fastifySensible from '@fastify/sensible';

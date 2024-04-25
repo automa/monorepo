@@ -112,7 +112,7 @@ INSERT INTO public.bots (org_id, name, type, webhook_url, homepage)
 VALUES
   (1, 'automa', 'webhook', 'https://api.automa.app/hooks/automa', 'https://automa.app'),
   (1, 'dependency', 'webhook', 'https://api.dependency.bot/hooks/automa', 'https://dependency.bot'),
-  (1, 'refactor', 'webhook', 'https://api.dependency.bot/hooks/automa', 'https://refactor.bot');
+  (1, 'refactor', 'webhook', 'https://api.refactor.bot/hooks/automa', 'https://refactor.bot');
 
 CREATE TABLE public.bot_installations (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

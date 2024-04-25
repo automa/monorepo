@@ -1,10 +1,10 @@
+import { provider } from '@automa/prisma';
+
 import {
   GithubEventActionHandler,
   GithubInstallationMinimal,
   GithubOrganization,
 } from './types';
-
-import { provider } from '@automa/prisma';
 
 // We are not handling the `organization.deleted` event because
 // we handle the change with the `installation.deleted` event.
