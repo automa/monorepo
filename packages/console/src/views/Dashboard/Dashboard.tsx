@@ -39,7 +39,6 @@ const Dashboard: React.FC<DashboardProps> = () => {
           </Flex>
         )}
       </Header>
-
       <RoutesLoader fallback={<Loader />} routes={routes} />
     </>
   );

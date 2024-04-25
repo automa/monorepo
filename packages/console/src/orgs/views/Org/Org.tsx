@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useParams } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 import { ProviderType } from '@automa/common';
 
 import { Loader, RoutesLoader } from 'shared';
+import { orgUri } from 'utils';
 
 import { useOrg, useOrgs } from 'orgs/hooks';
 
@@ -70,6 +71,11 @@ const Org: React.FC<OrgProps> = ({ ...props }) => {
     ];
   }, [org]);
 
+  // Redirect to first tab if on org page
+  if (org && location.pathname === orgUri(org)) {
+    return <Navigate to={orgUri(org, tabs[0].path)} />;
+  }
+
   return (
     <Container {...props} asChild>
       {!org ? (
@@ -79,7 +85,7 @@ const Org: React.FC<OrgProps> = ({ ...props }) => {
           <NavigationMenu.Root>
             <Nav>
               {tabs.map((tab) => {
-                const uri = `/${org.provider_type}/${org.name}${tab.path}`;
+                const uri = orgUri(org, tab.path);
 
                 return (
                   <Item

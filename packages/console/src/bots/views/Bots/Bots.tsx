@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Link, Typography } from 'shared';
+import { orgUri } from 'utils';
 
 import { Bot } from 'bots/components';
 
@@ -21,7 +22,7 @@ const Bots: React.FC<BotsProps> = ({ org }) => {
     <>
       <Flex justifyContent="space-between" alignItems="center" className="h-9">
         <Typography variant="title6">Automa Bots</Typography>
-        <Link to={`/${org.provider_type}/${org.name}/settings/bots/new`}>
+        <Link to={orgUri(org, '/settings/bots/new')}>
           <Button>Create Bot</Button>
         </Link>
       </Flex>

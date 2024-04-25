@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import {
   ArrowsClockwise,
   CaretUpDown,
@@ -17,8 +17,8 @@ import {
   Typography,
 } from 'shared';
 import { getFragment } from 'gql';
+import { getOrgAvatarUrl, orgUri } from 'utils';
 
-import { getOrgAvatarUrl } from 'orgs/utils';
 import { useOrg, useOrgs } from 'orgs/hooks';
 
 import { OrgListProps } from './types';
@@ -32,7 +32,6 @@ const OrgList: React.FC<OrgListProps> = ({
   ...props
 }) => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const { setOrgs } = useOrgs();
   const { org } = useOrg();
@@ -40,12 +39,6 @@ const OrgList: React.FC<OrgListProps> = ({
   const data = getFragment(ORGS_QUERY_FRAGMENT, fullData);
 
   // Redirect to first org if on home page
-  useEffect(() => {
-    if (data.orgs.length && location.pathname === '/') {
-      navigate(`/${data.orgs[0].provider_type}/${data.orgs[0].name}/repos`);
-    }
-  }, [location, data, navigate]);
-
   useEffect(() => {
     setOrgs(data.orgs);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,12 +52,17 @@ const OrgList: React.FC<OrgListProps> = ({
     } catch (_) {}
   };
 
+  // Redirect to first org if on home page
+  if (data.orgs.length && location.pathname === '/') {
+    return <Navigate to={orgUri(data.orgs[0])} />;
+  }
+
   if (!org) {
     return null;
   }
 
   // Don't show org list on non-org pages
-  if (!location.pathname.startsWith(`/${org.provider_type}/${org.name}`)) {
+  if (!location.pathname.startsWith(orgUri(org))) {
     return null;
   }
 
@@ -90,7 +88,7 @@ const OrgList: React.FC<OrgListProps> = ({
       >
         <DropdownMenuLabel>Organizations</DropdownMenuLabel>
         {data.orgs.map((o) => (
-          <Link key={o.id} to={`/${o.provider_type}/${o.name}`}>
+          <Link key={o.id} to={orgUri(o)}>
             <Item $active={org.id === o.id} disabled={org.id === o.id}>
               <Flex
                 fullWidth

@@ -8,7 +8,7 @@ import {
   DropdownMenuLabel,
 } from 'shared';
 import { getFragment } from 'gql';
-import { getOrgAvatarUrl } from 'orgs';
+import { getOrgAvatarUrl } from 'utils';
 
 import { UserNavbarProps } from './types';
 

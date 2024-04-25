@@ -16,6 +16,6 @@ export const Content = tw(
 
 export const Title = tw(Dialog.Title)``;
 
-export const Description = tw(Dialog.Description)``;
+export const Description = tw(Dialog.Description)`text-gray-600`;
 
 export const Footer = tw(Flex)`w-full gap-4`;

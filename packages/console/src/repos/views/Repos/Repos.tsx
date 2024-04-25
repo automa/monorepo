@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { Flex, Typography } from 'shared';
+import { orgUri } from 'utils';
 
 import { ReposProps } from './types';
 
@@ -32,9 +33,7 @@ const Repos: React.FC<ReposProps> = ({ org, ...props }) => {
             <Typography
               key={repo.id}
               variant="large"
-              onClick={() =>
-                navigate(`/${org.provider_type}/${org.name}/${repo.name}`)
-              }
+              onClick={() => navigate(orgUri(org, `/${repo.name}`))}
               link
             >
               {repo.name}
