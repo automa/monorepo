@@ -2,8 +2,12 @@ enum BotType {
   webhook
 }
 
+type Query {
+  bots(org_id: Int!): [Bot!]!
+}
+
 type Mutation {
-  botCreate(input: BotCreateInput!): Bot!
+  botCreate(org_id: Int!, input: BotCreateInput!): Bot!
 }
 
 type Bot {
@@ -23,7 +27,6 @@ type Bot {
 input BotCreateInput {
   name: String!
   description: String
-  org_id: Int!
   type: BotType!
   webhook_url: String
 }

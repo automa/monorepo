@@ -37,7 +37,6 @@ export type Bot = {
 export type BotCreateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
-  org_id: Scalars['Int']['input'];
   type: BotType;
   webhook_url?: InputMaybe<Scalars['String']['input']>;
 };
@@ -59,21 +58,19 @@ export type Mutation = {
 
 export type MutationBotCreateArgs = {
   input: BotCreateInput;
+  org_id: Scalars['Int']['input'];
 };
 
 export type Org = {
   __typename?: 'Org';
-  bots: Array<Bot>;
   created_at: Scalars['DateTime']['output'];
   github_installation_id?: Maybe<Scalars['Int']['output']>;
   has_installation: Scalars['Boolean']['output'];
   id: Scalars['Int']['output'];
   is_user: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
-  project_integration_connections: Array<ProjectIntegrationConnection>;
   provider_id: Scalars['String']['output'];
   provider_type: ProviderType;
-  repos: Array<Repo>;
 };
 
 export type ProjectIntegrationConnection = {
@@ -98,16 +95,22 @@ export enum ProviderType {
 
 export type Query = {
   __typename?: 'Query';
+  bots: Array<Bot>;
   me: User;
-  org?: Maybe<Org>;
   orgs: Array<Org>;
+  project_integration_connections: Array<ProjectIntegrationConnection>;
   repo?: Maybe<Repo>;
+  repos: Array<Repo>;
 };
 
 
-export type QueryOrgArgs = {
-  name: Scalars['String']['input'];
-  provider_type: ProviderType;
+export type QueryBotsArgs = {
+  org_id: Scalars['Int']['input'];
+};
+
+
+export type QueryProject_Integration_ConnectionsArgs = {
+  org_id: Scalars['Int']['input'];
 };
 
 
@@ -115,6 +118,11 @@ export type QueryRepoArgs = {
   name: Scalars['String']['input'];
   org_name: Scalars['String']['input'];
   provider_type: ProviderType;
+};
+
+
+export type QueryReposArgs = {
+  org_id: Scalars['Int']['input'];
 };
 
 export type Repo = {
@@ -280,21 +288,18 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  botCreate?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<MutationBotCreateArgs, 'input'>>;
+  botCreate?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<MutationBotCreateArgs, 'input' | 'org_id'>>;
 };
 
 export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['Org'] = ResolversParentTypes['Org']> = {
-  bots?: Resolver<Array<ResolversTypes['Bot']>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   github_installation_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   has_installation?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   is_user?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  project_integration_connections?: Resolver<Array<ResolversTypes['ProjectIntegrationConnection']>, ParentType, ContextType>;
   provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   provider_type?: Resolver<ResolversTypes['ProviderType'], ParentType, ContextType>;
-  repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -313,10 +318,12 @@ export type ProjectProviderTypeResolvers = EnumResolverSignature<{ github?: any,
 export type ProviderTypeResolvers = EnumResolverSignature<{ github?: any, gitlab?: any }, ResolversTypes['ProviderType']>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  bots?: Resolver<Array<ResolversTypes['Bot']>, ParentType, ContextType, RequireFields<QueryBotsArgs, 'org_id'>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  org?: Resolver<Maybe<ResolversTypes['Org']>, ParentType, ContextType, RequireFields<QueryOrgArgs, 'name' | 'provider_type'>>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
+  project_integration_connections?: Resolver<Array<ResolversTypes['ProjectIntegrationConnection']>, ParentType, ContextType, RequireFields<QueryProject_Integration_ConnectionsArgs, 'org_id'>>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name' | 'provider_type'>>;
+  repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
 };
 
 export type RepoResolvers<ContextType = any, ParentType extends ResolversParentTypes['Repo'] = ResolversParentTypes['Repo']> = {

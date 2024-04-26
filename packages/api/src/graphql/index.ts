@@ -1,12 +1,19 @@
-import { join } from 'path';
+import { join } from 'node:path';
 
 import { ApolloServer } from '@apollo/server';
+import {
+  ApolloServerErrorCode,
+  unwrapResolverError,
+} from '@apollo/server/errors';
 import fastifyApollo, {
   fastifyApolloDrainPlugin,
 } from '@as-integrations/fastify';
 import { loadFiles } from '@graphql-tools/load-files';
 import { FastifyInstance } from 'fastify';
+import { ZodError } from 'zod';
 import { GraphQLError } from 'graphql';
+
+import { Prisma } from '@automa/prisma';
 
 import { isProduction } from '../env';
 
@@ -24,7 +31,47 @@ export default async function (app: FastifyInstance) {
     introspection: !isProduction,
     includeStacktraceInErrorResponses: !isProduction,
     nodeEnv: '',
-    // TODO: formatError - https://www.apollographql.com/docs/apollo-server/data/errors#for-client-responses
+    formatError: (formattedErr, error) => {
+      const innerErr = unwrapResolverError(error);
+
+      if (innerErr instanceof Prisma.PrismaClientKnownRequestError) {
+        switch (innerErr.code) {
+          case 'P2002':
+            throw new GraphQLError('Unprocessable Entity', {
+              extensions: {
+                code: ApolloServerErrorCode.BAD_USER_INPUT,
+                unique: innerErr.meta?.target,
+                http: { status: 400 },
+              },
+            });
+
+          case 'P2025':
+            return {
+              ...formattedErr,
+              message: 'Not Found',
+              extensions: {
+                ...formattedErr.extensions,
+                code: 'NOT_FOUND',
+              },
+            };
+
+          default:
+            break;
+        }
+      }
+
+      if (innerErr instanceof ZodError) {
+        throw new GraphQLError('Unprocessable Entity', {
+          extensions: {
+            code: ApolloServerErrorCode.BAD_USER_INPUT,
+            errors: innerErr.errors,
+            http: { status: 400 },
+          },
+        });
+      }
+
+      return formattedErr;
+    },
   });
 
   await apollo.start();
@@ -34,10 +81,10 @@ export default async function (app: FastifyInstance) {
     path: '/graphql',
     context: async (request) => {
       if (!request.user) {
-        throw new GraphQLError('User is not authenticated', {
+        throw new GraphQLError('Unauthorized', {
           extensions: {
             code: 'UNAUTHORIZED',
-            http: { status: 401 },
+            http: { status: 200 },
           },
         });
       }

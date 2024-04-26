@@ -159,12 +159,12 @@
     "url": "https://github.com/automa/tmp/commit/e184e26a8e0d519ea0f17c6e4e32832b43870714",
     "author": {
       "name": "Pavan Kumar Sunkara",
-      "email": "pavan.sunkara@automa.app",
+      "email": "pavan.sunkara@example.com",
       "username": "pksunkara"
     },
     "committer": {
       "name": "Pavan Kumar Sunkara",
-      "email": "pavan.sunkara@automa.app",
+      "email": "pavan.sunkara@example.com",
       "username": "pksunkara"
     },
     "added": ["automa.json"],

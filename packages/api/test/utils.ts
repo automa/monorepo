@@ -20,3 +20,52 @@ export const call = (
     url: uri,
     ...options,
   });
+
+export const graphql = (
+  app: FastifyInstance,
+  query: string,
+  variables?: Record<string, any>,
+  options?: Omit<
+    InjectOptions,
+    'url' | 'method' | 'payload' | 'path' | 'server' | 'Request'
+  >,
+) =>
+  call(app, '/graphql', {
+    method: 'POST',
+    payload: {
+      query,
+      variables,
+    },
+    ...options,
+  });
+
+export const seedUsers = (app: FastifyInstance, count: number) =>
+  Promise.all(
+    Array(count)
+      .fill(0)
+      .map((_, i) =>
+        app.prisma.users.create({
+          data: {
+            email: `user-${i}@example.com`,
+            name: `User ${i}`,
+          },
+        }),
+      ),
+  );
+
+export const seedOrgs = (app: FastifyInstance, count: number) => {
+  return Promise.all(
+    Array(count)
+      .fill(0)
+      .map((_, i) =>
+        app.prisma.orgs.create({
+          data: {
+            name: `org-${i}`,
+            provider_type: 'github',
+            provider_id: `${i}`,
+            is_user: false,
+          },
+        }),
+      ),
+  );
+};

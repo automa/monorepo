@@ -287,6 +287,9 @@ importers:
       statsig-node:
         specifier: ~5.5.0
         version: 5.5.0
+      zod:
+        specifier: ~3.23.0
+        version: 3.23.0
     devDependencies:
       '@types/connect-redis':
         specifier: ~0.0.19
@@ -18293,7 +18296,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       scroll-into-view-if-needed: 3.1.0
-      zod: 3.22.5
+      zod: 3.23.0
     dev: false
 
   /nextra@2.11.1(next@13.4.19)(react-dom@18.2.0)(react@18.2.0):
@@ -18331,7 +18334,7 @@ packages:
       title: 3.5.3
       unist-util-remove: 4.0.0
       unist-util-visit: 5.0.0
-      zod: 3.22.5
+      zod: 3.23.0
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -23676,10 +23679,6 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
-
-  /zod@3.22.5:
-    resolution: {integrity: sha512-HqnGsCdVZ2xc0qWPLdO25WnseXThh0kEYKIdV5F/hTHO75hNZFp8thxSeHhiPrHZKrFTo1SOgkAj9po5bexZlw==}
-    dev: false
 
   /zod@3.23.0:
     resolution: {integrity: sha512-OFLT+LTocvabn6q76BTwVB0hExEBS0IduTr3cqZyMqEDbOnYmcU+y0tUAYbND4uwclpBGi4I4UUBGzylWpjLGA==}

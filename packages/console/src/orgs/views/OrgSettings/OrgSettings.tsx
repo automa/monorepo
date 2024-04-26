@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import { Flex, Loader, RoutesLoader } from 'shared';
+import { Loader, RoutesLoader } from 'shared';
+import { orgUri } from 'utils';
 
 import routes from './routes';
 import { OrgSettingsProps } from './types';
@@ -10,8 +11,6 @@ import { OrgSettingsProps } from './types';
 import { Container, Nav, Item, Content } from './OrgSettings.styles';
 
 const OrgSettings: React.FC<OrgSettingsProps> = ({ org, ...props }) => {
-  const navigate = useNavigate();
-
   const tabs = useMemo(() => {
     if (!org) return [];
 
@@ -28,18 +27,17 @@ const OrgSettings: React.FC<OrgSettingsProps> = ({ org, ...props }) => {
   }, [org]);
 
   // Redirect to first tab if on settings page
-  useEffect(() => {
-    if (location.pathname === `/${org.provider_type}/${org.name}/settings`) {
-      navigate(`/${org.provider_type}/${org.name}/settings${tabs[0].path}`);
-    }
-  }, [org, tabs, navigate]);
+  if (location.pathname === orgUri(org, '/settings')) {
+    return <Navigate to={orgUri(org, `/settings${tabs[0].path}`)} />;
+  }
 
   return (
     <Container {...props}>
       <NavigationMenu.Root orientation="vertical">
         <Nav>
           {tabs.map((tab) => {
-            const uri = `/${org.provider_type}/${org.name}/settings${tab.path}`;
+            const uri = orgUri(org, `/settings${tab.path}`);
+
             return (
               <Item
                 key={tab.name}

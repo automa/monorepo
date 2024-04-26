@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { Flex, Typography } from 'shared';
+import { orgUri } from 'utils';
 
 import { ReposProps } from './types';
 
@@ -15,8 +16,7 @@ const Repos: React.FC<ReposProps> = ({ org, ...props }) => {
   // TODO: Add infinite scroll
   const { data, loading } = useQuery(REPOS_QUERY, {
     variables: {
-      provider_type: org.provider_type,
-      name: org.name,
+      org_id: org.id,
     },
   });
 
@@ -24,17 +24,15 @@ const Repos: React.FC<ReposProps> = ({ org, ...props }) => {
     <Container {...props} asChild>
       {loading && !data ? (
         <div>Loading</div>
-      ) : !data?.org?.repos?.length ? (
+      ) : !data?.repos?.length ? (
         <Flex justifyContent="center">No repos</Flex>
       ) : (
         <Flex direction="column" alignItems="center" className="gap-2">
-          {data.org.repos.map((repo) => (
+          {data.repos.map((repo) => (
             <Typography
               key={repo.id}
               variant="large"
-              onClick={() =>
-                navigate(`/${org.provider_type}/${org.name}/${repo.name}`)
-              }
+              onClick={() => navigate(orgUri(org, `/${repo.name}`))}
               link
             >
               {repo.name}

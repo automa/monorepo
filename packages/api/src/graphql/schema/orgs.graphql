@@ -5,7 +5,6 @@ enum ProviderType {
 
 type Query {
   orgs: [Org!]!
-  org(provider_type: ProviderType!, name: String!): Org
 }
 
 type Org {
@@ -17,8 +16,4 @@ type Org {
   has_installation: Boolean!
   github_installation_id: Int
   created_at: DateTime!
-
-  repos: [Repo!]!
-  bots: [Bot!]!
-  project_integration_connections: [ProjectIntegrationConnection!]!
 }
