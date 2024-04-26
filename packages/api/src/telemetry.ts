@@ -9,7 +9,12 @@ import {
   metrics,
 } from '@opentelemetry/sdk-node';
 import { logs as logsAPI } from '@opentelemetry/api-logs';
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import {
+  SEMRESATTRS_DEPLOYMENT_ENVIRONMENT,
+  SEMRESATTRS_SERVICE_NAME,
+  SEMRESATTRS_SERVICE_NAMESPACE,
+  SEMRESATTRS_SERVICE_VERSION,
+} from '@opentelemetry/semantic-conventions';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { TraceExporter as GCPTraceExporter } from '@google-cloud/opentelemetry-cloud-trace-exporter';
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
@@ -49,10 +54,10 @@ import {
 
 const sdk = new NodeSDK({
   resource: new resources.Resource({
-    [SemanticResourceAttributes.SERVICE_NAMESPACE]: product,
-    [SemanticResourceAttributes.SERVICE_NAME]: service,
-    [SemanticResourceAttributes.SERVICE_VERSION]: version,
-    [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: environment,
+    [SEMRESATTRS_SERVICE_NAMESPACE]: product,
+    [SEMRESATTRS_SERVICE_NAME]: service,
+    [SEMRESATTRS_SERVICE_VERSION]: version,
+    [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: environment,
   }),
   sampler: new ParentBasedSampler({
     root: new TraceIdRatioBasedSampler(env.OTEL.TRACES.SAMPLER_ARG),
