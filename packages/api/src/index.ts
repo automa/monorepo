@@ -39,7 +39,7 @@ export const server = async () => {
     credentials: true,
   });
 
-  app.setErrorHandler((error, _, reply) => {
+  app.setErrorHandler((error, request, reply) => {
     if (error instanceof httpErrors.HttpError) {
       return error;
     }
@@ -64,7 +64,7 @@ export const server = async () => {
       }
     }
 
-    app.error.capture(error);
+    app.error.capture(error, { method: request.method, url: request.url });
 
     return reply.internalServerError();
   });

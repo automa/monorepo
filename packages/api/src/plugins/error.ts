@@ -8,7 +8,7 @@ import { tracer } from '../telemetry';
 declare module 'fastify' {
   interface FastifyInstance {
     error: {
-      capture: <E>(err: E) => void;
+      capture: <E>(err: E, context?: Record<string, unknown>) => void;
     };
   }
 }
@@ -26,11 +26,11 @@ const errorPlugin: FastifyPluginAsync = async (app) => {
     }
 
     app.decorate('error', {
-      capture: (err: any) => {
+      capture: (err: any, context?: Record<string, unknown>) => {
         tracer.startActiveSpan(`error:capture`, (span) => {
           if (isSentryEnabled) {
             withScope((scope) => {
-              scope.setContext('error', { message: err.message });
+              scope.setContext('error', { message: err.message, ...context });
               captureException(err);
             });
           } else {
