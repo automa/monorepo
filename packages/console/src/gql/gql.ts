@@ -21,7 +21,7 @@ const documents = {
     "\n  query Repo(\n    $provider_type: ProviderType!\n    $org_name: String!\n    $name: String!\n  ) {\n    repo(provider_type: $provider_type, org_name: $org_name, name: $name) {\n      id\n      name\n      provider_id\n      is_private\n      is_archived\n      has_installation\n      org {\n        id\n        name\n        provider_type\n        github_installation_id\n      }\n    }\n  }\n": types.RepoDocument,
     "\n  query Repos($org_id: Int!) {\n    repos(org_id: $org_id) {\n      id\n      name\n      is_private\n      is_archived\n      has_installation\n    }\n  }\n": types.ReposDocument,
     "\n  fragment MeQueryFragment on Query {\n    me {\n      id\n      name\n      email\n      providers {\n        id\n        provider_type\n        provider_id\n      }\n    }\n  }\n": types.MeQueryFragmentFragmentDoc,
-    "\n  query Dashboard {\n    ...OrgsQueryFragment\n    ...MeQueryFragment\n  }\n": types.DashboardDocument,
+    "\n  query Dashboard {\n    ...MeQueryFragment\n    ...OrgsQueryFragment\n  }\n": types.DashboardDocument,
 };
 
 /**
@@ -73,7 +73,7 @@ export function gql(source: "\n  fragment MeQueryFragment on Query {\n    me {\n
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query Dashboard {\n    ...OrgsQueryFragment\n    ...MeQueryFragment\n  }\n"): (typeof documents)["\n  query Dashboard {\n    ...OrgsQueryFragment\n    ...MeQueryFragment\n  }\n"];
+export function gql(source: "\n  query Dashboard {\n    ...MeQueryFragment\n    ...OrgsQueryFragment\n  }\n"): (typeof documents)["\n  query Dashboard {\n    ...MeQueryFragment\n    ...OrgsQueryFragment\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

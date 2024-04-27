@@ -9,7 +9,7 @@ import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
   bots: async (root, { org_id }, { user, prisma }) => {
-    // TODO: Convert the org check into a decorator
+    // TODO: Convert the org check into a directive and/or use resolver composition
     // Check if the user is a member of the org
     await prisma.orgs.findFirstOrThrow({
       where: {
@@ -60,7 +60,7 @@ export const Mutation: MutationResolvers<Context> = {
 
 export const Bot: BotResolvers<Context> = {
   org: async ({ org_id }, args, { prisma }) => {
-    // TODO: Restrict what fields can be queried
+    // TODO: Restrict what fields can be queried. Add select and specify public org type
     return prisma.orgs.findFirstOrThrow({
       where: {
         id: org_id,

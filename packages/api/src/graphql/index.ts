@@ -9,6 +9,10 @@ import fastifyApollo, {
   fastifyApolloDrainPlugin,
 } from '@as-integrations/fastify';
 import { loadFiles } from '@graphql-tools/load-files';
+import {
+  ResolversComposition,
+  composeResolvers,
+} from '@graphql-tools/resolvers-composition';
 import { FastifyInstance } from 'fastify';
 import { ZodError } from 'zod';
 import { GraphQLError } from 'graphql';
@@ -23,9 +27,15 @@ export default async function (app: FastifyInstance) {
   const typeDefs = await loadFiles(join(__dirname, 'schema/*.graphql'));
   const resolvers = await loadFiles(join(__dirname, 'resolvers/*.{js,ts}'));
 
+  const composedResolvers = resolvers.map((resolver) =>
+    composeResolvers(resolver, {
+      '*.*': [isAuthenticated],
+    }),
+  );
+
   const apollo = new ApolloServer<Context>({
     typeDefs,
-    resolvers,
+    resolvers: composedResolvers,
     plugins: [fastifyApolloDrainPlugin(app)],
     status400ForVariableCoercionErrors: true,
     introspection: !isProduction,
@@ -79,22 +89,25 @@ export default async function (app: FastifyInstance) {
   await app.register(fastifyApollo(apollo), {
     method: ['GET', 'POST'],
     path: '/graphql',
-    context: async (request) => {
-      if (!request.user) {
-        throw new GraphQLError('Unauthorized', {
-          extensions: {
-            code: 'UNAUTHORIZED',
-            http: { status: 200 },
-          },
-        });
-      }
-
-      return {
-        user: request.user,
-        prisma: app.prisma,
-        analytics: app.analytics,
-        optimizer: app.optimizer,
-      };
-    },
+    context: async (request) => ({
+      user: request.user!,
+      prisma: app.prisma,
+      analytics: app.analytics,
+      optimizer: app.optimizer,
+    }),
   });
 }
+
+const isAuthenticated: ResolversComposition =
+  (next) => async (root, args, context, info) => {
+    if (!context.user) {
+      throw new GraphQLError('Unauthorized', {
+        extensions: {
+          code: 'UNAUTHORIZED',
+          http: { status: 200 },
+        },
+      });
+    }
+
+    return next(root, args, context, info);
+  };

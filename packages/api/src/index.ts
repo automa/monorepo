@@ -35,7 +35,7 @@ export const server = async () => {
   await app.register(fastifyHelmet);
 
   await app.register(fastifyCors, {
-    origin: env.CLIENT_URI,
+    origin: isProduction ? env.CLIENT_URI : true,
     credentials: true,
   });
 
