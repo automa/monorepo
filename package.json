@@ -12,7 +12,7 @@
     "@radix-ui/react-toast": "~1.1.1",
     "@radix-ui/react-tooltip": "~1.0.2",
     "@reduxjs/toolkit": "~2.1.0",
-    "@phosphor-icons/react": "~2.1.4",
+    "@phosphor-icons/react": "~2.1.5",
     "@segment/analytics-next": "~1.55.0",
     "@sentry/browser": "~7.63.0",
     "@tanstack/react-table": "~8.5.22",
@@ -55,7 +55,7 @@
     "update-boilerplate": "git pull --no-rebase https://git.sr.ht/~pksunkara/frontend-react master"
   },
   "engines": {
-    "node": ">=18.15.0"
+    "node": ">=20.12.0"
   },
   "browserslist": {
     "production": [
@@ -90,7 +90,7 @@
     "@testing-library/react": "~14.1.0",
     "@testing-library/user-event": "~14.5.1",
     "@types/fontfaceobserver": "~2.1.0",
-    "@types/node": "~18.16.19",
+    "@types/node": "~20.12.7",
     "@types/react": "~18.2.37",
     "@types/react-dom": "~18.2.15",
     "@types/react-router-dom": "~5.3.3",
