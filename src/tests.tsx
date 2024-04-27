@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, ReactElement } from 'react';
-import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { MemoryRouter, Routes, Route, NavigateProps } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import * as Tooltip from '@radix-ui/react-tooltip';
@@ -24,15 +24,15 @@ const customRender = (
     path?: string;
   } = {},
 ) => {
+  const store = configureStore({
+    reducer,
+    preloadedState: state,
+  });
+
   const AllTheProviders: FC<{ children: ReactNode }> = ({ children }) => {
     return (
       <AnalyticsProvider>
-        <Provider
-          store={configureStore({
-            reducer,
-            preloadedState: state,
-          })}
-        >
+        <Provider store={store}>
           <MemoryRouter initialEntries={path && !history ? [path] : history}>
             <Tooltip.Provider delayDuration={500}>{children}</Tooltip.Provider>
           </MemoryRouter>
@@ -41,30 +41,43 @@ const customRender = (
     );
   };
 
-  return render(
-    path ? (
-      <Routes>
-        <Route path={path} element={ui} />
-      </Routes>
-    ) : (
-      ui
+  return {
+    store,
+    ...render(
+      path ? (
+        <Routes>
+          <Route path={path} element={ui} />
+        </Routes>
+      ) : (
+        ui
+      ),
+      {
+        wrapper: AllTheProviders,
+        ...options,
+      },
     ),
-    {
-      wrapper: AllTheProviders,
-      ...options,
-    },
-  );
+  };
 };
 
 const mockedUseNavigate = vi.fn();
+const mockedNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
   useNavigate: () => mockedUseNavigate,
+  Navigate: (props: NavigateProps) => {
+    mockedNavigate(props);
+    return null;
+  },
 }));
 
 const mockedFetch = fetch as FetchMock;
 
 export * from '@testing-library/react';
 
-export { customRender as render, mockedFetch, mockedUseNavigate };
+export {
+  customRender as render,
+  mockedFetch,
+  mockedUseNavigate,
+  mockedNavigate,
+};
