@@ -54,7 +54,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: GraphQL types check
         run: |
-          pnpm generate-graphql
+          pnpm graphql-generate
           git diff --exit-code
       - name: Lint check
         run: pnpm lint

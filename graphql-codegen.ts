@@ -5,6 +5,9 @@ const config: CodegenConfig = {
   schema: 'packages/api/src/graphql/schema',
   documents: 'packages/console/src/**/*.queries.ts',
   generates: {
+    'schema.graphql': {
+      plugins: ['schema-ast'],
+    },
     'packages/common/src/graphql.ts': {
       plugins: ['typescript', 'typescript-resolvers'],
       config: {
