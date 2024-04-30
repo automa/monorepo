@@ -5,7 +5,8 @@
   "scripts": {
     "format": "prettier --write .",
     "format-check": "prettier --check .",
-    "generate-graphql": "graphql-codegen --config generate-graphql.ts",
+    "graphql-generate": "graphql-codegen --config graphql-codegen.ts",
+    "graphql-publish": "rover graph publish $APOLLO_GRAPH_ID@current --schema schema.graphql",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "prepare": "husky install",
@@ -17,8 +18,10 @@
     "node": ">=18.15.0"
   },
   "devDependencies": {
+    "@apollo/rover": "~0.23.0",
     "@graphql-codegen/cli": "~5.0.0",
     "@graphql-codegen/client-preset": "~4.1.0",
+    "@graphql-codegen/schema-ast": "~4.0.2",
     "@graphql-codegen/typescript": "~4.0.1",
     "@graphql-codegen/typescript-resolvers": "~4.0.1",
     "@next/eslint-plugin-next": "~13.4.19",

@@ -7,7 +7,7 @@ module.exports = {
         'packages/console/src/**/*.queries.ts',
       ],
       script: 'pnpm',
-      args: 'generate-graphql',
+      args: 'graphql-generate',
       autorestart: false,
     },
     {

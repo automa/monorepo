@@ -1,0 +1,47 @@
+name: Deploy Production (api)
+on:
+  push:
+    branches: [production]
+    paths:
+      - .github/workflows/deploy-production-api.yml
+      - packages/prisma/schema.prisma
+      - packages/prisma/src/**
+      - packages/common/src/**
+      - packages/config/schemas/**
+      - packages/config/src/**
+      - packages/api/src/**
+      - pnpm-lock.yaml
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+jobs:
+  deploy-production-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: 'node_modules'
+          key: deps-${{ hashFiles('**/pnpm-lock.yaml', '**/schema.prisma') }}
+          restore-keys: |
+            deps-
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Publish graphql
+        env:
+          APOLLO_GRAPH_ID: ${{ secrets.PRODUCTION_APOLLO_GRAPH_ID_API }}
+          APOLLO_KEY: ${{ secrets.PRODUCTION_APOLLO_KEY_API }}
+        run: |
+          pnpm graphql-generate
+          pnpm graphql-publish
