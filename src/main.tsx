@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ApolloProvider } from '@apollo/client';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import * as Toast from '@radix-ui/react-toast';
 
 import 'index.css';
 
@@ -17,6 +16,7 @@ import store from 'store';
 import { loadFonts } from 'theme';
 
 import { AnalyticsProvider } from 'analytics';
+import { Toasts } from 'shared';
 
 import App from 'views/App';
 
@@ -30,12 +30,10 @@ loadFonts().then(() => {
           <Provider store={store}>
             <BrowserRouter>
               <Tooltip.Provider delayDuration={500}>
-                <Toast.Provider>
-                  <ErrorBoundary>
-                    <App />
-                  </ErrorBoundary>
-                  <Toast.Viewport />
-                </Toast.Provider>
+                <ErrorBoundary>
+                  <App />
+                </ErrorBoundary>
+                <Toasts />
               </Tooltip.Provider>
             </BrowserRouter>
           </Provider>

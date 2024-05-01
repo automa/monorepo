@@ -31,3 +31,5 @@ export const Action = tw(Toast.Action)<
 export const Close = tw(Toast.Close)<
   TwcComponentProps<typeof Toast.Close> & ToastStyledProps
 >(({ $variant }) => toastClose({ variant: $variant }));
+
+export const Viewport = tw(Toast.Viewport)``;
