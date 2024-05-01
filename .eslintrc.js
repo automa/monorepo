@@ -47,7 +47,6 @@ module.exports = {
   },
   ignorePatterns: [
     '!.storybook',
-    '!.babel-plugin-macrosrc.js',
     '!.lintstagedrc.js',
     '!.prettierrc.js',
     'build',
@@ -70,11 +69,10 @@ module.exports = {
     {
       files: [
         '.storybook/*.ts',
-        '.babel-plugin-macrosrc.js',
         '.eslintrc.js',
         '.lintstagedrc.js',
         '.prettierrc.js',
-        'generate-graphql.ts',
+        'graphql-codegen.ts',
         'postcss.config.js',
         'tailwind.config.ts',
         'vite.config.mts',
