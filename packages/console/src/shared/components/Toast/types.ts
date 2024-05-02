@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { VariantProps } from 'class-variance-authority';
 import * as Toast from '@radix-ui/react-toast';
 
@@ -10,16 +10,14 @@ type ToastProps = $<
   {},
   VariantProps<typeof toast>,
   {
-    type?: Toast.ToastProps['type'];
-    duration?: Toast.ToastProps['duration'];
-    description?: () => React.ReactNode;
+    title: ReactNode;
+    description?: ReactNode;
     action?: {
-      cta: () => React.ReactNode;
+      cta: ReactNode;
       altText: Toast.ToastActionProps['altText'];
     };
-    close?: () => React.ReactNode;
-    children: React.ReactNode;
-  }
+    close?: ReactNode;
+  } & Toast.ToastProps
 >;
 
 export type ToastComponentProps = Component<ToastProps>;
