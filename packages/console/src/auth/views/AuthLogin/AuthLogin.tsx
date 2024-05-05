@@ -33,12 +33,12 @@ const AuthLogin: React.FC<AuthLoginProps> = ({ ...props }) => {
     setIsSignup(searchParams.has('withSignUp'));
   }, [location, setIsSignup]);
 
-  if (user) {
-    return <Navigate to="/" />;
-  }
-
   if (isSignup === null) {
     return null;
+  }
+
+  if (user) {
+    return <Navigate to="/" />;
   }
 
   return (

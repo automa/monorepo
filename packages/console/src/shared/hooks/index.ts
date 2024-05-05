@@ -6,3 +6,4 @@ export { default as useKeybindings } from './useKeybindings';
 export * from './useKeybindings';
 export * from './useMediaQueries';
 export * from './useOptimizer';
+export * from './useToast';

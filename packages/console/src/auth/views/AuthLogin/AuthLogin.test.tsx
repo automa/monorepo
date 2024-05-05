@@ -1,11 +1,30 @@
-import React from 'react';
-import { test } from 'vitest';
-import userEvent from '@testing-library/user-event';
+import { expect, test } from 'vitest';
 
-import { render, screen } from 'tests';
+import { mockedNavigate, mockedUseNavigate, render } from 'tests';
 
 import AuthLogin from './AuthLogin';
 
-test('renders', async () => {
+test('with no user renders', async () => {
   render(<AuthLogin />);
+
+  expect(mockedUseNavigate).toHaveBeenCalledTimes(0);
+  expect(mockedNavigate).toHaveBeenCalledTimes(0);
+});
+
+test('with user redirects to /', async () => {
+  render(<AuthLogin />, {
+    state: {
+      auth: {
+        loading: false,
+        user: {
+          id: '1',
+          email: 'john@example.com',
+          org_id: '1',
+        },
+      },
+    },
+  });
+
+  expect(mockedNavigate).toHaveBeenCalledTimes(1);
+  expect(mockedNavigate).toHaveBeenCalledWith({ to: '/' });
 });

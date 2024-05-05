@@ -44,7 +44,9 @@ const Dialog: React.FC<DialogComponentProps> = ({
                   <Typography variant="title4">{title}</Typography>
                 </Title>
                 {description && (
-                  <Description asChild>{description}</Description>
+                  <Description asChild>
+                    <Typography variant="small">{description}</Typography>
+                  </Description>
                 )}
               </Flex>
               {children}

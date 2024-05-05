@@ -15,7 +15,7 @@
     "stop": "bash ./scripts/stop.sh"
   },
   "engines": {
-    "node": ">=18.15.0"
+    "node": ">=20.12.0"
   },
   "devDependencies": {
     "@apollo/rover": "~0.23.0",
@@ -36,7 +36,7 @@
     "@storybook/testing-library": "~0.2.2",
     "@types/chai": "~4.3.3",
     "@types/mocha": "~9.1.1",
-    "@types/node": "~18.16.19",
+    "@types/node": "~20.12.7",
     "@types/react": "~18.2.37",
     "@types/react-dom": "~18.2.15",
     "@types/sinon": "~10.0.16",

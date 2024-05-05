@@ -6,7 +6,7 @@ const meta = {
   title: 'Toast',
   component: Toast,
   args: {
-    children: 'Title',
+    title: 'Title',
   },
 } satisfies Meta<typeof Toast>;
 
@@ -18,7 +18,7 @@ export const Default = {} satisfies Story;
 
 export const Description = {
   args: {
-    description: () => 'Description',
+    description: 'Description',
   },
 } satisfies Story;
 
@@ -26,14 +26,14 @@ export const Action = {
   args: {
     action: {
       altText: 'Action',
-      cta: () => <div>Action</div>,
+      cta: <div>Action</div>,
     },
   },
 } satisfies Story;
 
 export const Close = {
   args: {
-    close: () => <div>X</div>,
+    close: <div>X</div>,
   },
 } satisfies Story;
 
@@ -77,11 +77,5 @@ export const Success = {
   args: {
     variant: 'success',
     ...DescriptionAndActionAndClose.args,
-  },
-} satisfies Story;
-
-export const Empty = {
-  args: {
-    children: null,
   },
 } satisfies Story;
