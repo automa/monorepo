@@ -502,9 +502,6 @@ importers:
       vitest:
         specifier: ~1.2.1
         version: 1.2.2(@types/node@18.16.19)(jsdom@22.1.0)
-      vitest-fetch-mock:
-        specifier: ~0.2.2
-        version: 0.2.2(vitest@1.2.2)
 
   packages/docs:
     dependencies:
@@ -22699,18 +22696,6 @@ packages:
       rollup: 4.9.6
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
-
-  /vitest-fetch-mock@0.2.2(vitest@1.2.2):
-    resolution: {integrity: sha512-XmH6QgTSjCWrqXoPREIdbj40T7i1xnGmAsTAgfckoO75W1IEHKR8hcPCQ7SO16RsdW1t85oUm6pcQRLeBgjVYQ==}
-    engines: {node: '>=14.14.0'}
-    peerDependencies:
-      vitest: '>=0.16.0'
-    dependencies:
-      cross-fetch: 3.1.6
-      vitest: 1.2.2(@types/node@18.16.19)(jsdom@22.1.0)
-    transitivePeerDependencies:
-      - encoding
     dev: true
 
   /vitest@1.2.2(@types/node@18.16.19)(jsdom@22.1.0):

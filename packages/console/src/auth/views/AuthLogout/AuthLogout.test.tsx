@@ -1,9 +1,12 @@
-import React from 'react';
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
-import { render, mockedNavigate, waitFor } from 'tests';
+import { render, mockedAxios, mockedNavigate, waitFor } from 'tests';
 
 import AuthLogout from './AuthLogout';
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
 
 test('with no user redirects to login', async () => {
   render(<AuthLogout />);
@@ -13,6 +16,8 @@ test('with no user redirects to login', async () => {
 });
 
 test('with user logs them out and redirects to login', async () => {
+  mockedAxios.mockResolvedValue({ data: null });
+
   const { store } = render(<AuthLogout />, {
     state: {
       auth: {
@@ -27,9 +32,12 @@ test('with user logs them out and redirects to login', async () => {
   });
 
   await waitFor(() => {
-    expect(mockedNavigate).toHaveBeenCalledTimes(1);
+    expect(mockedAxios).toHaveBeenCalledTimes(1);
   });
 
+  expect(mockedAxios).toHaveBeenCalledWith('/auth/logout');
+
+  expect(mockedNavigate).toHaveBeenCalledTimes(1);
   expect(mockedNavigate).toHaveBeenCalledWith({ to: '/auth/login' });
 
   expect(store.getState().auth).toEqual({

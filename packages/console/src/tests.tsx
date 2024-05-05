@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { render, RenderOptions } from '@testing-library/react';
 import { vi } from 'vitest';
-import { FetchMock } from 'vitest-fetch-mock';
+import axios from 'axios';
 
 import { reducer, RootState } from 'store';
 
@@ -19,7 +19,7 @@ const customRender = (
     path,
     ...options
   }: RenderOptions & {
-    state?: RootState;
+    state?: Partial<RootState>;
     history?: string[];
     path?: string;
   } = {},
@@ -59,6 +59,10 @@ const customRender = (
   };
 };
 
+vi.mock('axios');
+
+const mockedAxios = vi.mocked(axios);
+
 const mockedUseNavigate = vi.fn();
 const mockedNavigate = vi.fn();
 
@@ -71,13 +75,11 @@ vi.mock('react-router-dom', async () => ({
   },
 }));
 
-const mockedFetch = fetch as FetchMock;
-
 export * from '@testing-library/react';
 
 export {
   customRender as render,
-  mockedFetch,
+  mockedAxios,
   mockedUseNavigate,
   mockedNavigate,
 };

@@ -37,7 +37,7 @@ const AuthLogout: React.FC<AuthLogoutProps> = ({ ...props }) => {
   }, []);
 
   if (!user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/auth/login" />;
   }
 
   return <Container {...props}></Container>;
