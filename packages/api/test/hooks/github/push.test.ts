@@ -525,7 +525,8 @@ suite('github hook push event', () => {
       });
       assert.deepEqual(settings[0].settings, null);
       assert.deepEqual(settings[0].validation_errors, {
-        deserialize: 'Unexpected end of JSON input',
+        deserialize:
+          "Expected ',' or '}' after property value in JSON at position 11",
       });
 
       assert.deepOwnInclude(settings[1], {

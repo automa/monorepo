@@ -13,6 +13,6 @@
     "test-cover": "nyc --reporter=lcov --reporter=text-summary pnpm test"
   },
   "engines": {
-    "node": ">=18.15.0"
+    "node": ">=20.12.0"
   }
 }
