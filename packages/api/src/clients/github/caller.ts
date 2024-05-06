@@ -48,7 +48,7 @@ export const caller = async (app: FastifyInstance, installationId: number) => {
   const accessToken = await getInstallationAccessToken(
     installationId,
     GITHUB_APP.API_URI,
-    GITHUB_APP.ID,
+    GITHUB_APP.CLIENT_ID,
     GITHUB_APP.PEM,
   );
 
