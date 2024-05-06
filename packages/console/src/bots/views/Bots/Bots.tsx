@@ -3,8 +3,7 @@ import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Link, Loader, Typography } from 'shared';
 import { orgUri } from 'utils';
-
-import { Bot } from 'bots/components';
+import { BotCard } from 'bots';
 
 import { BotsProps } from './types';
 
@@ -35,7 +34,7 @@ const Bots: React.FC<BotsProps> = ({ org }) => {
       ) : (
         <Flex className="grid grid-cols-auto gap-4 md:gap-6">
           {data.bots.map((bot) => (
-            <Bot key={bot.id} bot={bot} />
+            <BotCard key={bot.id} bot={bot} />
           ))}
         </Flex>
       )}
