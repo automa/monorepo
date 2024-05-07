@@ -4,12 +4,12 @@ import { BotType } from '@automa/common';
 
 import { makeFragmentData } from 'gql';
 
-import Bot from './Bot';
-import { BOT_FRAGMENT } from './Bot.queries';
+import BotCard from './BotCard';
+import { BOT_FRAGMENT } from './BotCard.queries';
 
 const meta = {
-  title: 'Bot',
-  component: Bot,
+  title: 'BotCard',
+  component: BotCard,
   args: {
     bot: makeFragmentData(
       {
@@ -27,7 +27,7 @@ const meta = {
     ),
   },
   argTypes: {},
-} satisfies Meta<typeof Bot>;
+} satisfies Meta<typeof BotCard>;
 
 export default meta;
 

@@ -1,9 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { Flex, Typography } from 'shared';
-import { orgUri } from 'utils';
+import { Flex, Loader } from 'shared';
+import { RepoCard } from 'repos';
 
 import { ReposProps } from './types';
 
@@ -11,8 +10,6 @@ import { REPOS_QUERY } from './Repos.queries';
 import { Container } from './Repos.styles';
 
 const Repos: React.FC<ReposProps> = ({ org, ...props }) => {
-  const navigate = useNavigate();
-
   // TODO: Add infinite scroll
   const { data, loading } = useQuery(REPOS_QUERY, {
     variables: {
@@ -23,20 +20,15 @@ const Repos: React.FC<ReposProps> = ({ org, ...props }) => {
   return (
     <Container {...props} asChild>
       {loading && !data ? (
-        <div>Loading</div>
+        <Flex justifyContent="center">
+          <Loader />
+        </Flex>
       ) : !data?.repos?.length ? (
         <Flex justifyContent="center">No repos</Flex>
       ) : (
-        <Flex direction="column" alignItems="center" className="gap-2">
+        <Flex className="grid grid-cols-auto gap-4 md:gap-6">
           {data.repos.map((repo) => (
-            <Typography
-              key={repo.id}
-              variant="large"
-              onClick={() => navigate(orgUri(org, `/${repo.name}`))}
-              link
-            >
-              {repo.name}
-            </Typography>
+            <RepoCard key={repo.id} repo={repo} />
           ))}
         </Flex>
       )}
