@@ -1,4 +1,3 @@
-import React from 'react';
 import { expect, test } from 'vitest';
 
 import { mockedNavigate, mockedUseNavigate, render } from 'tests';

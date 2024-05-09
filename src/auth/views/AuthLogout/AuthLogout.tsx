@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import axios from 'axios';
 
 import { useUser, useAuth } from 'auth/hooks';
 import { useAsyncEffect } from 'shared';
@@ -21,7 +22,7 @@ const AuthLogout: React.FC<AuthLogoutProps> = ({ ...props }) => {
     setAuthLoading(true);
 
     try {
-      await Promise.resolve({ data: {} });
+      await axios('/auth/logout');
       unsetAuth();
     } catch (_) {}
 
