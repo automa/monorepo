@@ -1,7 +1,5 @@
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
 
-// TODO: Copy from vite.config.ts
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',

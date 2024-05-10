@@ -1,0 +1,11 @@
+type Query {
+  botInstallations(org_id: Int!): [BotInstallation!]!
+}
+
+type BotInstallation {
+  id: Int!
+  created_at: DateTime!
+
+  org: Org!
+  bot: Bot!
+}

@@ -2,4 +2,9 @@ import { lazy } from 'react';
 
 import { Route } from 'shared';
 
-export const routes = [] as Route[];
+export const routes = [
+  {
+    Component: lazy(() => import('bots/views/BotInstallations')),
+    path: '/bots',
+  },
+] as Route[];

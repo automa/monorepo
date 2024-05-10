@@ -28,6 +28,7 @@ CREATE TABLE public.user_providers (
 
 CREATE TABLE public.orgs (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  -- TODO: Split into org_providers and make name unique
   name VARCHAR(255) NOT NULL,
   provider_type public.provider NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
