@@ -24,6 +24,11 @@
     ],
     "allowJs": true
   },
-  "include": ["build/types/**/*.ts", "next-env.d.ts", "src"],
+  "include": [
+    "build/types/**/*.ts",
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    "src"
+  ],
   "exclude": ["node_modules"]
 }
