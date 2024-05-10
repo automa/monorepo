@@ -1,0 +1,50 @@
+{
+  "name": "@automa/marketing",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@phosphor-icons/react": "~2.1.5",
+    "class-variance-authority": "~0.7.0",
+    "next": "~14.2.3",
+    "react": "~18.2.0",
+    "react-dom": "~18.2.0",
+    "react-twc": "~1.4.1",
+    "tailwind-merge": "~2.2.1"
+  },
+  "scripts": {
+    "build": "next build",
+    "build-stats": "BUILD_STATS=1 pnpm build",
+    "format": "prettier --write .",
+    "format-check": "prettier --check .",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
+    "start": "next dev -p 4000",
+    "storybook": "storybook dev -p 6006",
+    "storybook-build": "storybook build",
+    "test-storybook": "test-storybook",
+    "test-storybook-cover": "test-storybook --coverage",
+    "update-boilerplate": "git pull --no-rebase -s subtree -X subtree=packages/marketing https://git.sr.ht/~pksunkara/marketing-next master"
+  },
+  "engines": {
+    "node": ">=20.12.0"
+  },
+  "browserslist": {
+    "production": [
+      "since 2010",
+      ">0.3%",
+      "not dead",
+      "not ie 11",
+      "not op_mini all"
+    ],
+    "development": [
+      "since 2010",
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@storybook/nextjs": "~7.5.2",
+    "@storybook/react": "~7.5.2"
+  }
+}

@@ -3,8 +3,8 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 import animate from 'tailwindcss-animate';
 
 const config: Config = {
-  darkMode: 'class',
   content: ['./src/**/*.{ts,tsx,md,mdx}', './pages/**/*.{md,mdx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {

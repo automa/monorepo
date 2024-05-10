@@ -19,9 +19,9 @@
   },
   "include": [
     "build/types/**/*.ts",
+    ".next/types/**/*.ts",
     "next-env.d.ts",
-    "src",
-    "theme.config.tsx"
+    "src"
   ],
   "exclude": ["node_modules"]
 }
