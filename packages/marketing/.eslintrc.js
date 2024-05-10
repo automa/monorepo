@@ -49,7 +49,6 @@ module.exports = {
   },
   ignorePatterns: [
     '!.storybook',
-    '!.lintstagedrc.js',
     '!.prettierrc.js',
     'build',
     'coverage',
@@ -72,7 +71,6 @@ module.exports = {
       files: [
         '.storybook/*.ts',
         '.eslintrc.js',
-        '.lintstagedrc.js',
         '.prettierrc.js',
         'next.config.mjs',
         'postcss.config.js',
@@ -88,8 +86,10 @@ module.exports = {
       version: 'detect',
     },
     'import/resolver': {
-      typescript: true,
+      typescript: {
+        project: 'packages/marketing',
+      },
     },
-    'import/internal-regex': '^@marketing-next/',
+    'import/internal-regex': '^@automa/',
   },
 };

@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'marketing-next',
-  description: 'marketing-next',
+  title: 'Automa',
+  description: 'A code automation platform',
 };
 
 export default function RootLayout({

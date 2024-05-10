@@ -1,28 +1,28 @@
-name: RelativeCI
+name: Chromatic (marketing)
 on:
   push:
     branches: [master]
     paths:
-      - .github/workflows/relative.yml
-      - public/**
-      - src/**
-      - next.config.mjs
-      - tailwind.config.ts
+      - .github/workflows/chromatic-marketing.yml
+      - packages/marketing/public/**
+      - packages/marketing/src/**
+      - packages/marketing/next.config.mjs
+      - packages/marketing/tailwind.config.ts
       - pnpm-lock.yaml
   pull_request:
     branches: [master]
     paths:
-      - .github/workflows/relative.yml
-      - public/**
-      - src/**
-      - next.config.mjs
-      - tailwind.config.ts
+      - .github/workflows/chromatic-marketing.yml
+      - packages/marketing/public/**
+      - packages/marketing/src/**
+      - packages/marketing/next.config.mjs
+      - packages/marketing/tailwind.config.ts
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
   cancel-in-progress: true
 jobs:
-  relative:
+  chromatic-marketing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,16 +42,17 @@ jobs:
         id: cache
         with:
           path: 'node_modules'
-          key: deps-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: deps-${{ hashFiles('**/pnpm-lock.yaml', '**/schema.prisma') }}
           restore-keys: |
             deps-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Build stats
-        run: pnpm build-stats
-      - name: RelativeCI
-        uses: relative-ci/agent-action@v2
+      - name: Chromatic
+        uses: chromaui/action@v1
         with:
-          webpackStatsFile: .next/webpack-stats.json
+          buildScriptName: storybook-build
           token: ${{ secrets.GITHUB_TOKEN }}
-          key: ${{ secrets.RELATIVE_CI_KEY }}
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_MARKETING }}
+          exitZeroOnChanges: true
+          exitOnceUploaded: true
+          workingDir: packages/marketing

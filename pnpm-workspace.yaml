@@ -4,4 +4,5 @@ packages:
   - packages/config
   - packages/console
   - packages/docs
+  - packages/marketing
   - packages/prisma

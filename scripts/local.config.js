@@ -36,5 +36,11 @@ module.exports = {
       script: 'pnpm',
       args: 'start',
     },
+    {
+      name: 'marketing',
+      cwd: 'packages/marketing',
+      script: 'pnpm',
+      args: 'start',
+    },
   ],
 };

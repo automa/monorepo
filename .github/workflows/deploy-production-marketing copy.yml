@@ -1,19 +1,19 @@
-name: Deploy Production
+name: Deploy Production (marketing)
 on:
   push:
     branches: [master]
     paths:
-      - .github/workflows/deploy-production.yml
-      - public/**
-      - src/**
-      - next.config.mjs
-      - tailwind.config.ts
+      - .github/workflows/deploy-production-marketing.yml
+      - packages/marketing/public/**
+      - packages/marketing/src/**
+      - packages/marketing/next.config.mjs
+      - packages/marketing/tailwind.config.ts
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
 jobs:
-  deploy-production:
+  deploy-production-marketing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,23 +31,24 @@ jobs:
         id: cache
         with:
           path: 'node_modules'
-          key: deps-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: deps-${{ hashFiles('**/pnpm-lock.yaml', '**/schema.prisma') }}
           restore-keys: |
             deps-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build site
         env:
-          NODE_ENV: production
+          NEXT_PUBLIC_NODE_ENV: production
         run: pnpm build
+        working-directory: packages/marketing
       - name: Upload to S3
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.PRODUCTION_AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID_MARKETING }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY_MARKETING }}
+          AWS_REGION: ${{ secrets.PRODUCTION_AWS_REGION_MARKETING }}
         run: |
-          aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET }} \
+          aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET_MARKETING }} \
             --exclude '*.html' \
             --cache-control max-age=31536000
-          aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET }} \
+          aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET_MARKETING }} \
             --exclude '*' --include '*.html'

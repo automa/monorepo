@@ -1,28 +1,28 @@
-name: Chromatic
+name: RelativeCI (marketing)
 on:
   push:
     branches: [master]
     paths:
-      - .github/workflows/chromatic.yml
-      - public/**
-      - src/**
-      - next.config.mjs
-      - tailwind.config.ts
+      - .github/workflows/relative-marketing.yml
+      - packages/marketing/public/**
+      - packages/marketing/src/**
+      - packages/marketing/next.config.mjs
+      - packages/marketing/tailwind.config.ts
       - pnpm-lock.yaml
   pull_request:
     branches: [master]
     paths:
-      - .github/workflows/chromatic.yml
-      - public/**
-      - src/**
-      - next.config.mjs
-      - tailwind.config.ts
+      - .github/workflows/relative-marketing.yml
+      - packages/marketing/public/**
+      - packages/marketing/src/**
+      - packages/marketing/next.config.mjs
+      - packages/marketing/tailwind.config.ts
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'push' && github.run_number }}
   cancel-in-progress: true
 jobs:
-  chromatic:
+  relative-marketing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,16 +42,17 @@ jobs:
         id: cache
         with:
           path: 'node_modules'
-          key: deps-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: deps-${{ hashFiles('**/pnpm-lock.yaml', '**/schema.prisma') }}
           restore-keys: |
             deps-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Chromatic
-        uses: chromaui/action@v1
+      - name: Build stats
+        run: pnpm build-stats
+        working-directory: packages/marketing
+      - name: RelativeCI
+        uses: relative-ci/agent-action@v2
         with:
-          buildScriptName: storybook-build
+          webpackStatsFile: packages/marketing/.next/webpack-stats.json
           token: ${{ secrets.GITHUB_TOKEN }}
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          exitZeroOnChanges: true
-          exitOnceUploaded: true
+          key: ${{ secrets.RELATIVE_CI_KEY_MARKETING }}
