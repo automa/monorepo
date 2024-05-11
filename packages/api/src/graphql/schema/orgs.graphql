@@ -12,6 +12,7 @@ type Org {
   name: String!
   provider_type: ProviderType!
   provider_id: String!
+  provider_name: String!
   is_user: Boolean!
   has_installation: Boolean!
   github_installation_id: Int

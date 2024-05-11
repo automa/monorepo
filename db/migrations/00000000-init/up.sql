@@ -28,20 +28,21 @@ CREATE TABLE public.user_providers (
 
 CREATE TABLE public.orgs (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  -- TODO: Split into org_providers and make name unique
   name VARCHAR(255) NOT NULL,
   provider_type public.provider NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
+  provider_name VARCHAR(255) NOT NULL,
   is_user BOOLEAN NOT NULL DEFAULT FALSE,
   has_installation BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   github_installation_id INT,
+  UNIQUE (name),
   UNIQUE (provider_type, provider_id),
   UNIQUE (github_installation_id)
 );
 
-INSERT INTO public.orgs (name, provider_type, provider_id)
-VALUES ('automa', 'github', '65730741');
+INSERT INTO public.orgs (name, provider_type, provider_id, provider_name)
+VALUES ('automa', 'github', '65730741', 'automa');
 
 CREATE TABLE public.repos (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

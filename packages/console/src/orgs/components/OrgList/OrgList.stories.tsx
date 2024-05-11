@@ -19,6 +19,7 @@ const meta = {
             name: 'automa',
             provider_type: ProviderType.Github,
             provider_id: '65730741',
+            provider_name: 'automa',
             has_installation: true,
           },
           {
@@ -26,6 +27,7 @@ const meta = {
             name: 'pksunkara',
             provider_type: ProviderType.Github,
             provider_id: '174703',
+            provider_name: 'pksunkara',
             has_installation: false,
           },
         ],

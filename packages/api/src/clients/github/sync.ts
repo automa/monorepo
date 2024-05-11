@@ -32,6 +32,7 @@ export const sync = async (
       name: userOrg.login,
       provider_type: provider.github,
       provider_id: `${userOrg.id}`,
+      provider_name: userOrg.login,
       is_user: true,
     },
   });

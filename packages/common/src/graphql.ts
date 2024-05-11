@@ -78,6 +78,7 @@ export type Org = {
   is_user: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   provider_id: Scalars['String']['output'];
+  provider_name: Scalars['String']['output'];
   provider_type: ProviderType;
 };
 
@@ -131,7 +132,6 @@ export type QueryProject_Integration_ConnectionsArgs = {
 export type QueryRepoArgs = {
   name: Scalars['String']['input'];
   org_name: Scalars['String']['input'];
-  provider_type: ProviderType;
 };
 
 
@@ -323,6 +323,7 @@ export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTy
   is_user?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  provider_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   provider_type?: Resolver<ResolversTypes['ProviderType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -347,7 +348,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
   project_integration_connections?: Resolver<Array<ResolversTypes['ProjectIntegrationConnection']>, ParentType, ContextType, RequireFields<QueryProject_Integration_ConnectionsArgs, 'org_id'>>;
-  repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name' | 'provider_type'>>;
+  repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
 };
 

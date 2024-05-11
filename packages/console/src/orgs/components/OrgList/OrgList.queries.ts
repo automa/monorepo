@@ -7,6 +7,7 @@ export const ORGS_QUERY_FRAGMENT = gql(`
       name
       provider_type
       provider_id
+      provider_name
       has_installation
     }
   }

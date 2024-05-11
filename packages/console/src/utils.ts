@@ -5,10 +5,8 @@ import { environment } from 'env';
 export const appName = (name: string = 'automa') =>
   `${name}${environment !== 'production' ? `-${environment}` : ''}`;
 
-export const orgUri = (
-  org: { provider_type: ProviderType; name: string },
-  path = '',
-) => `/${org.provider_type}/${org.name}${path}`;
+export const orgUri = (org: { name: string }, path = '') =>
+  `/${org.name}${path}`;
 
 export const getOrgAvatarUrl = (
   providerType: ProviderType,

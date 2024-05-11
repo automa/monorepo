@@ -20,15 +20,8 @@ export const orgsSlice = createSlice({
   name: 'orgs',
   initialState,
   reducers: {
-    setOrg: (
-      state,
-      action: PayloadAction<{ provider: ProviderType; name: string }>,
-    ) => {
-      const org = state.orgs?.find(
-        (o) =>
-          o.provider_type === action.payload.provider &&
-          o.name === action.payload.name,
-      );
+    setOrg: (state, action: PayloadAction<string>) => {
+      const org = state.orgs?.find((o) => o.name === action.payload);
 
       if (org) {
         state.org = org;

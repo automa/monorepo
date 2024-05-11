@@ -5,5 +5,6 @@ export type Org = {
   name: string;
   provider_type: ProviderType;
   provider_id: string;
+  provider_name: string;
   has_installation: boolean;
 };

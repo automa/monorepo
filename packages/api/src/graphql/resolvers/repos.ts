@@ -20,13 +20,12 @@ export const Query: QueryResolvers<Context> = {
     return result.map((r) => r.repos);
   },
   // TODO: Look into removing the below query or correcting it
-  repo: (root, { provider_type, org_name, name }, { user, prisma }) => {
+  repo: (root, { org_name, name }, { user, prisma }) => {
     return prisma.repos.findFirst({
       where: {
         name,
         orgs: {
           name: org_name,
-          provider_type,
         },
         user_repos: {
           some: {
