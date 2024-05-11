@@ -2,8 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { ProviderType } from '@automa/common';
-
 import { Flex, Loader, RoutesLoader } from 'shared';
 
 import routes from './routes';
@@ -13,15 +11,13 @@ import { REPO_QUERY } from './Repo.queries';
 import { Container } from './Repo.styles';
 
 const Repo: React.FC<RepoProps> = ({ ...props }) => {
-  const { provider, orgName, repoName } = useParams() as {
-    provider: ProviderType;
+  const { orgName, repoName } = useParams() as {
     orgName: string;
     repoName: string;
   };
 
   const { data, loading } = useQuery(REPO_QUERY, {
     variables: {
-      provider_type: provider,
       org_name: orgName,
       name: repoName,
     },

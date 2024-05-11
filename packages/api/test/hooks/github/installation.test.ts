@@ -78,6 +78,7 @@ suite('github hook installation event', () => {
         name: 'automa',
         provider_type: 'github',
         provider_id: '65730741',
+        provider_name: 'automa',
         is_user: false,
         has_installation: true,
         github_installation_id: 40335964,
@@ -169,6 +170,7 @@ suite('github hook installation event', () => {
           name: 'automa',
           provider_type: 'github',
           provider_id: '65730741',
+          provider_name: 'automa',
           is_user: false,
           has_installation: false,
           github_installation_id: null,
@@ -333,6 +335,7 @@ suite('github hook installation event', () => {
           name: 'automa',
           provider_type: 'github',
           provider_id: '65730741',
+          provider_name: 'automa',
           is_user: false,
           has_installation: false,
           github_installation_id: 40335964,
@@ -452,7 +455,7 @@ suite('github hook installation event', () => {
           );
         });
 
-        test('should mark organization as active', async () => {
+        test('should mark organization as active and update provider name', async () => {
           const orgs = await app.prisma.orgs.findMany();
 
           assert.equal(orgs.length, 1);
@@ -460,6 +463,7 @@ suite('github hook installation event', () => {
             name: 'automa',
             provider_type: 'github',
             provider_id: '65730741',
+            provider_name: 'automa-app',
             is_user: false,
             has_installation: true,
             github_installation_id: 40335964,

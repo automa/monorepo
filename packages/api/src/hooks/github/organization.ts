@@ -19,7 +19,7 @@ const renamed: GithubEventActionHandler<{
       provider_id: `${body.organization.id}`,
     },
     data: {
-      name: body.organization.login,
+      provider_name: body.organization.login,
     },
   });
 };

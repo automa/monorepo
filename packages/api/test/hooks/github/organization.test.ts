@@ -19,6 +19,7 @@ suite('github hook organization event', () => {
         name: 'automa',
         provider_type: 'github',
         provider_id: '65730741',
+        provider_name: 'automa',
         is_user: false,
         has_installation: true,
         github_installation_id: 40335964,
@@ -40,7 +41,7 @@ suite('github hook organization event', () => {
       assert.equal(response.statusCode, 200);
     });
 
-    test('should rename organization', async () => {
+    test('should update organization provider name', async () => {
       const org = await app.prisma.orgs.findFirstOrThrow({
         where: {
           id: organization.id,
@@ -48,9 +49,10 @@ suite('github hook organization event', () => {
       });
 
       assert.deepOwnInclude(org, {
-        name: 'automa-app',
+        name: 'automa',
         provider_type: 'github',
         provider_id: '65730741',
+        provider_name: 'automa-app',
         is_user: false,
         has_installation: true,
         github_installation_id: 40335964,

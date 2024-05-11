@@ -162,12 +162,14 @@ suite('github auth', () => {
               name: 'automa',
               provider_type: 'github',
               provider_id: '1234',
+              provider_name: 'automa',
               github_installation_id: 1234,
             },
             {
               name: 'automa-demo',
               provider_type: 'github',
               provider_id: '5678',
+              provider_name: 'automa-demo',
               github_installation_id: 5678,
             },
           ],
@@ -281,6 +283,7 @@ suite('github auth', () => {
             name: 'automa',
             provider_type: 'github',
             provider_id: '1234',
+            provider_name: 'automa',
             github_installation_id: 1234,
           });
 
@@ -289,6 +292,7 @@ suite('github auth', () => {
             name: 'automa-demo',
             provider_type: 'github',
             provider_id: '5678',
+            provider_name: 'automa-demo',
             github_installation_id: 5678,
           });
 
@@ -297,6 +301,7 @@ suite('github auth', () => {
             name: 'pksunkara',
             provider_type: 'github',
             provider_id: '123',
+            provider_name: 'pksunkara',
             github_installation_id: null,
           });
         });

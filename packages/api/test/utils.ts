@@ -63,6 +63,7 @@ export const seedOrgs = (app: FastifyInstance, count: number) => {
             name: `org-${i}`,
             provider_type: 'github',
             provider_id: `${i}`,
+            provider_name: `org-${i}`,
             is_user: false,
           },
         }),

@@ -2,8 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import { ProviderType } from '@automa/common';
-
 import { Loader, RoutesLoader } from 'shared';
 import { orgUri } from 'utils';
 
@@ -17,8 +15,7 @@ import { Container, Nav, Item, Content } from './Org.styles';
 const Org: React.FC<OrgProps> = ({ ...props }) => {
   const location = useLocation();
 
-  const { provider, orgName } = useParams() as {
-    provider?: ProviderType;
+  const { orgName } = useParams() as {
     orgName?: string;
   };
 
@@ -27,11 +24,11 @@ const Org: React.FC<OrgProps> = ({ ...props }) => {
 
   // Set current org from URL
   useEffect(() => {
-    if (!orgsLoading && provider && orgName) {
-      setOrg(provider, orgName);
+    if (!orgsLoading && orgName) {
+      setOrg(orgName);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orgsLoading, provider, orgName]);
+  }, [orgsLoading, orgName]);
 
   // Set user.org_id to current org
   useEffect(() => {

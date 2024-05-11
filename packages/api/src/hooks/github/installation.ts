@@ -31,6 +31,7 @@ const created: GithubEventActionHandler<{
       name: body.installation.account.login,
       provider_type: provider.github,
       provider_id: `${body.installation.account.id}`,
+      provider_name: body.installation.account.login,
       is_user: body.installation.account.type === 'User',
       has_installation: true,
       github_installation_id: body.installation.id,
@@ -70,6 +71,7 @@ const unsuspend: GithubEventActionHandler<{
       },
     },
     data: {
+      provider_name: body.installation.account.login,
       has_installation: true,
     },
   });

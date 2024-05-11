@@ -25,6 +25,7 @@ suite('github hook installation_repositories event', () => {
         name: 'automa',
         provider_type: 'github',
         provider_id: '65730741',
+        provider_name: 'automa',
         is_user: false,
         has_installation: true,
         github_installation_id: 40335964,
