@@ -1,7 +1,7 @@
 name: Deploy Production (marketing)
 on:
   push:
-    branches: [master]
+    branches: [production]
     paths:
       - .github/workflows/deploy-production-marketing.yml
       - packages/marketing/public/**
@@ -47,8 +47,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY_MARKETING }}
           AWS_REGION: ${{ secrets.PRODUCTION_AWS_REGION_MARKETING }}
         run: |
-          aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET_MARKETING }} \
+          aws s3 sync packages/marketing/build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET_MARKETING }} \
             --exclude '*.html' \
             --cache-control max-age=31536000
-          aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET_MARKETING }} \
+          aws s3 sync packages/marketing/build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET_MARKETING }} \
             --exclude '*' --include '*.html'
