@@ -89,6 +89,7 @@ const OrgList: React.FC<OrgListProps> = ({
         <DropdownMenuLabel>Organizations</DropdownMenuLabel>
         {data.orgs.map((o) => (
           // TODO: Switch the org part of the URL only and not the whole URL
+          // (can use location.pathname.replace())
           <Link key={o.id} to={orgUri(o)}>
             <Item $active={org.id === o.id} disabled={org.id === o.id}>
               <Flex
