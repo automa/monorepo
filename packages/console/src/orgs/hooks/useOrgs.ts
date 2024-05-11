@@ -4,6 +4,7 @@ import {
   setOrgs as set,
   unsetOrgs as unset,
   setOrgsLoading as setLoading,
+  selectOrgs,
   selectOrgsLoading,
 } from 'orgs/slices';
 import { Org } from 'orgs/types';
@@ -11,6 +12,7 @@ import { Org } from 'orgs/types';
 const useOrgs = () => {
   const dispatch = useAppDispatch();
 
+  const orgs = useAppSelector(selectOrgs);
   const orgsLoading = useAppSelector(selectOrgsLoading);
 
   const setOrgs = (orgs: Org[]) => {
@@ -29,6 +31,7 @@ const useOrgs = () => {
     setOrgs,
     unsetOrgs,
     setOrgsLoading,
+    orgs,
     orgsLoading,
   };
 };

@@ -42,11 +42,12 @@ export const orgsSlice = createSlice({
   },
   selectors: {
     selectOrg: (state) => state.org,
+    selectOrgs: (state) => state.orgs,
     selectOrgsLoading: (state) => state.loading,
   },
 });
 
 export const { setOrg, setOrgs, unsetOrgs, setOrgsLoading } = orgsSlice.actions;
-export const { selectOrg, selectOrgsLoading } = orgsSlice.selectors;
+export const { selectOrg, selectOrgs, selectOrgsLoading } = orgsSlice.selectors;
 
 export default orgsSlice.reducer;
