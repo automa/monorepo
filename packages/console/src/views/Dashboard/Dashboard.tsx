@@ -21,7 +21,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
     <>
       <Header element="header" alignItems="center">
         <Link to="/">
-          <Logo className="h-8 w-8" />
+          <Logo className="size-8" />
         </Link>
         {loading && !data ? (
           <div>Loading</div>

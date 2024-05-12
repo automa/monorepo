@@ -48,15 +48,15 @@ const AuthLogin: React.FC<AuthLoginProps> = ({ ...props }) => {
           justifyContent="space-between"
           className="mx-auto w-screen max-w-8xl px-6 py-4"
         >
-          <a href="https://automa.app">
+          <a href="/">
             <Flex className="gap-2">
-              <Logo className="h-8 w-8" />
+              <Logo className="size-8" />
               <Typography className="text-2xl font-bold lg:text-2xl">
                 Automa
               </Typography>
             </Flex>
           </a>
-          <Flex className="invisible gap-2 lg:visible">
+          <Flex className="invisible gap-2 md:visible">
             <Button
               size="small"
               variant="ghost"
