@@ -45,7 +45,11 @@
     ]
   },
   "devDependencies": {
+    "@mdx-js/loader": "~2.2.1",
+    "@next/mdx": "~14.2.3",
     "@storybook/nextjs": "~7.5.2",
-    "@storybook/react": "~7.5.2"
+    "@storybook/react": "~7.5.2",
+    "@types/mdx": "~2.0.13",
+    "remark-gfm": "~3.0.1"
   }
 }

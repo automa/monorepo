@@ -56,7 +56,7 @@ const AuthLogin: React.FC<AuthLoginProps> = ({ ...props }) => {
               </Typography>
             </Flex>
           </a>
-          <Flex className="invisible gap-2 md:visible">
+          <Flex className="hidden gap-2 md:block">
             <Button
               size="small"
               variant="ghost"
