@@ -1,20 +1,20 @@
-import type { Metadata } from 'next';
+import React from 'react';
 
 import './globals.css';
 
-export const metadata: Metadata = {
+import { Container } from './layout.styles';
+
+export const metadata = {
   title: 'marketing-next',
   description: 'marketing-next',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <Container>{children}</Container>
     </html>
   );
-}
+};
+
+export default AppLayout;

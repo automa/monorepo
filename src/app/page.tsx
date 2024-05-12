@@ -1,11 +1,17 @@
+import React from 'react';
+
 import { Flex } from 'components';
 
-const Home = () => {
+import { Container } from './page.styles';
+
+const AppPage: React.FC = () => {
   return (
-    <Flex direction="column" alignItems="center" className="gap-2">
-      <Flex className="pb-4">Home</Flex>
-    </Flex>
+    <Container>
+      <Flex direction="column" alignItems="center" className="gap-2">
+        <Flex className="pb-4">Home</Flex>
+      </Flex>
+    </Container>
   );
 };
 
-export default Home;
+export default AppPage;
