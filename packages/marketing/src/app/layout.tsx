@@ -7,14 +7,4 @@ export const metadata: Metadata = {
   description: 'A code automation platform',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body className="antialiased">{children}</body>
-    </html>
-  );
-}
+export { default } from './AppLayout';
