@@ -7,6 +7,7 @@
     "@radix-ui/react-navigation-menu": "~1.1.4",
     "class-variance-authority": "~0.7.0",
     "next": "~14.2.3",
+    "next-mdx-remote": "~4.4.1",
     "react": "~18.2.0",
     "react-dom": "~18.2.0",
     "react-twc": "~1.4.1",
@@ -45,7 +46,11 @@
     ]
   },
   "devDependencies": {
+    "@mdx-js/loader": "~2.2.1",
+    "@next/mdx": "~14.2.3",
     "@storybook/nextjs": "~7.5.2",
-    "@storybook/react": "~7.5.2"
+    "@storybook/react": "~7.5.2",
+    "@types/mdx": "~2.0.13",
+    "remark-gfm": "~3.0.1"
   }
 }

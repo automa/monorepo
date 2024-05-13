@@ -4,7 +4,7 @@ import { withThemeByClassName } from '@storybook/addon-themes';
 
 import '../src/app/globals.css';
 
-import { Container as AppContainer } from '../src/app/AppLayout.styles';
+import { Container as AppContainer } from '../src/app/layout.styles';
 
 const preview: Preview = {
   decorators: [

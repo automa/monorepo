@@ -1,10 +1,47 @@
-import type { Metadata } from 'next';
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import Logo from 'assets/logo.svg';
+
+import { Flex, Typography } from 'components';
 
 import './globals.css';
 
-export const metadata: Metadata = {
+import Nav from './Nav';
+
+import { Container } from './layout.styles';
+
+export const metadata = {
   title: 'Automa',
   description: 'A code automation platform',
 };
 
-export { default } from './AppLayout';
+const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <html lang="en">
+      <link rel="icon" href="/favicon.svg" />
+      <Container>
+        <Flex direction="column" className="mx-auto w-screen max-w-7xl px-6">
+          <Flex justifyContent="space-between" className="py-4">
+            <Link href="/">
+              <Flex className="gap-2">
+                <Image src={Logo} alt="logo" className="size-8" />
+                <Typography className="text-2xl font-bold lg:text-2xl">
+                  Automa
+                </Typography>
+              </Flex>
+            </Link>
+            <Flex alignItems="center" className="gap-6">
+              <Nav />
+              <button>Log In</button>
+            </Flex>
+          </Flex>
+          {children}
+        </Flex>
+      </Container>
+    </html>
+  );
+};
+
+export default AppLayout;
