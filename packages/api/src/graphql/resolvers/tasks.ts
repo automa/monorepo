@@ -1,0 +1,48 @@
+import { QueryResolvers, TaskResolvers } from '@automa/common';
+
+import { Context } from '../types';
+
+export const Query: QueryResolvers<Context> = {
+  // TODO: Add limit and offset as abstract arguments
+  tasks: async (root, { org_id }, { user, prisma }) => {
+    // Check if the user is a member of the org
+    await prisma.orgs.findFirstOrThrow({
+      where: {
+        id: org_id,
+        user_orgs: {
+          some: {
+            user_id: user.id,
+          },
+        },
+      },
+    });
+
+    return prisma.tasks.findMany({
+      where: {
+        org_id,
+      },
+      orderBy: {
+        id: 'asc',
+      },
+    });
+  },
+};
+
+export const Task: TaskResolvers<Context> = {
+  org: ({ org_id }, args, { prisma }) => {
+    return prisma.orgs.findUniqueOrThrow({
+      where: {
+        id: org_id,
+      },
+    });
+  },
+  author: ({ created_by }, args, { prisma }) => {
+    if (!created_by) return null;
+
+    return prisma.users.findUniqueOrThrow({
+      where: {
+        id: created_by,
+      },
+    });
+  },
+};

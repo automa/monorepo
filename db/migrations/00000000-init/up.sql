@@ -28,7 +28,7 @@ CREATE TABLE public.user_providers (
 
 CREATE TABLE public.orgs (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name VARCHAR(255) NOT NULL,
+  name citext NOT NULL,
   provider_type public.provider NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
   provider_name VARCHAR(255) NOT NULL,
@@ -47,7 +47,7 @@ VALUES ('automa', 'github', '65730741', 'automa');
 CREATE TABLE public.repos (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
-  name VARCHAR(255) NOT NULL,
+  name citext NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
   is_private BOOLEAN NOT NULL DEFAULT FALSE,
   is_archived BOOLEAN NOT NULL DEFAULT FALSE,
@@ -95,7 +95,7 @@ CREATE TYPE public.bot AS ENUM ('webhook');
 CREATE TABLE public.bots (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
-  name VARCHAR(255) NOT NULL,
+  name citext NOT NULL,
   description TEXT,
   type public.bot NOT NULL,
   webhook_url VARCHAR(255),
@@ -120,8 +120,17 @@ CREATE TABLE public.bot_installations (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   bot_id INTEGER NOT NULL REFERENCES public.bots(id) ON DELETE CASCADE,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
+  on_all_repos BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   UNIQUE (bot_id, org_id)
+);
+
+CREATE TABLE public.bot_installation_repositories (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  bot_installation_id INTEGER NOT NULL REFERENCES public.bot_installations(id) ON DELETE CASCADE,
+  repo_id INTEGER NOT NULL REFERENCES public.repos(id) ON DELETE CASCADE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  UNIQUE (bot_installation_id, repo_id)
 );
 
 CREATE TYPE public.project_provider AS ENUM ('github', 'linear');
@@ -130,11 +139,30 @@ CREATE TABLE public.org_project_providers (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
   provider_type public.project_provider NOT NULL,
-  name VARCHAR(255) NOT NULL,
+  name citext NOT NULL,
   config JSONB NOT NULL,
   created_by INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   UNIQUE (org_id, provider_type, name)
+);
+
+CREATE TABLE public.tasks (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  created_by INTEGER REFERENCES public.users(id) ON DELETE SET NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TYPE public.task_item AS ENUM ('message');
+
+CREATE TABLE public.task_items (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  task_id INTEGER NOT NULL REFERENCES public.tasks(id) ON DELETE CASCADE,
+  type public.task_item NOT NULL,
+  content TEXT,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CHECK (type = 'message' AND content IS NOT NULL)
 );
 
 COMMIT;

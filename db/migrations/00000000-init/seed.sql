@@ -1,9 +1,14 @@
-INSERT INTO public.bots (org_id, name, type, homepage, published_at)
+INSERT INTO public.bots (org_id, name, type, webhook_url, homepage, published_at)
 VALUES
-  (1, 'basic', 'webhook', 'https://basic.bot', NOW()),
-  (1, 'copywriting', 'webhook', 'https://copywriting.bot', NOW());
+  (1, 'code', 'webhook', 'http://localhost:5000/hooks/automa', 'https://code.automa.app', NOW()),
+  (1, 'copywriting', 'webhook', 'http://localhost:5001/hooks/automa', 'https://copywriting.bot', NOW());
 
 INSERT INTO public.bot_installations (bot_id, org_id)
 VALUES
   (4, 1),
   (5, 1);
+
+INSERT INTO public.tasks (org_id, title, created_by)
+VALUES
+  (1, 'Provision the cli repo', 1),
+  (1, 'Update the homepage headline', 1);

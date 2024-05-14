@@ -1,0 +1,12 @@
+type Query {
+  tasks(org_id: Int!): [Task!]!
+}
+
+type Task {
+  id: Int!
+  title: String!
+  created_at: DateTime!
+
+  org: Org!
+  author: User
+}

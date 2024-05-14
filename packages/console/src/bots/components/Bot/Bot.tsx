@@ -10,11 +10,7 @@ import { Container } from './Bot.styles';
 const Bot: React.FC<BotProps> = ({ bot: data, ...props }) => {
   const bot = getFragment(BOT_FRAGMENT, data);
 
-  return (
-    <Container {...props} asChild>
-      <div>{bot.name}</div>
-    </Container>
-  );
+  return <Container {...props}>{bot.name}</Container>;
 };
 
 export default Bot;
