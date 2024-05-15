@@ -2,12 +2,12 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { makeFragmentData } from 'gql';
 
-import RepoCard from './RepoCard';
-import { REPO_FRAGMENT } from './RepoCard.queries';
+import Repo from './Repo';
+import { REPO_FRAGMENT } from './Repo.queries';
 
 const meta = {
-  title: 'RepoCard',
-  component: RepoCard,
+  title: 'Repo',
+  component: Repo,
   args: {
     repo: makeFragmentData(
       {
@@ -20,8 +20,7 @@ const meta = {
       REPO_FRAGMENT,
     ),
   },
-  argTypes: {},
-} satisfies Meta<typeof RepoCard>;
+} satisfies Meta<typeof Repo>;
 
 export default meta;
 

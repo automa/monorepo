@@ -2,12 +2,12 @@ import React from 'react';
 
 import { getFragment } from 'gql';
 
-import { RepoCardProps } from './types';
+import { RepoProps } from './types';
 
-import { REPO_FRAGMENT } from './RepoCard.queries';
-import { Container } from './RepoCard.styles';
+import { REPO_FRAGMENT } from './Repo.queries';
+import { Container } from './Repo.styles';
 
-const RepoCard: React.FC<RepoCardProps> = ({ repo: data, ...props }) => {
+const Repo: React.FC<RepoProps> = ({ repo: data, ...props }) => {
   const repo = getFragment(REPO_FRAGMENT, data);
 
   // TODO: Link to orgUri(org, `/${repo.name}`)
@@ -18,4 +18,4 @@ const RepoCard: React.FC<RepoCardProps> = ({ repo: data, ...props }) => {
   );
 };
 
-export default RepoCard;
+export default Repo;

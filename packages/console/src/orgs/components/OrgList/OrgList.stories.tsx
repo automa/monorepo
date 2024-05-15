@@ -35,7 +35,6 @@ const meta = {
       ORGS_QUERY_FRAGMENT,
     ),
   },
-  argTypes: {},
 } satisfies Meta<typeof OrgList>;
 
 export default meta;

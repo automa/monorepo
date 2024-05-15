@@ -29,7 +29,6 @@ const meta = {
       ME_QUERY_FRAGMENT,
     ),
   },
-  argTypes: {},
 } satisfies Meta<typeof UserNavbar>;
 
 export default meta;

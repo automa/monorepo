@@ -1,7 +1,5 @@
-import { HTMLAttributes } from 'react';
-
 import { Org } from 'orgs';
 
-export interface OrgSettingsProps extends HTMLAttributes<HTMLDivElement> {
+export interface OrgSettingsProps {
   org: Org;
 }

@@ -1,7 +1,5 @@
-import { HTMLAttributes } from 'react';
+import { Org } from 'orgs';
 
-import { Org } from 'orgs/types';
-
-export interface BotsProps extends HTMLAttributes<HTMLDivElement> {
+export interface BotsProps {
   org: Org;
 }

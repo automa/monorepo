@@ -1,2 +1,2 @@
-export { default as RepoCard } from './RepoCard';
-export * from './RepoCard';
+export { default as Repo } from './Repo';
+export * from './Repo';
