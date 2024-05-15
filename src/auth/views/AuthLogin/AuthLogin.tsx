@@ -7,14 +7,14 @@ import { AuthLoginProps } from './types';
 
 import { Container } from './AuthLogin.styles';
 
-const AuthLogin: React.FC<AuthLoginProps> = ({ ...props }) => {
+const AuthLogin: React.FC<AuthLoginProps> = () => {
   const user = useUser();
 
   if (user) {
     return <Navigate to="/" />;
   }
 
-  return <Container {...props}></Container>;
+  return <Container></Container>;
 };
 
 export default AuthLogin;

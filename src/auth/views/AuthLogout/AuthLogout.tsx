@@ -9,7 +9,7 @@ import { AuthLogoutProps } from './types';
 
 import { Container } from './AuthLogout.styles';
 
-const AuthLogout: React.FC<AuthLogoutProps> = ({ ...props }) => {
+const AuthLogout: React.FC<AuthLogoutProps> = () => {
   const user = useUser();
 
   const { unsetAuth, setAuthLoading } = useAuth();
@@ -34,7 +34,7 @@ const AuthLogout: React.FC<AuthLogoutProps> = ({ ...props }) => {
     return <Navigate to="/auth/login" />;
   }
 
-  return <Container {...props}></Container>;
+  return <Container></Container>;
 };
 
 export default AuthLogout;
