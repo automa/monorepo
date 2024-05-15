@@ -6,6 +6,10 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        primary: '#09142F',
+        accent: '#DB475E',
+      },
       fontSize: {
         '2xs': '0.625rem',
       },

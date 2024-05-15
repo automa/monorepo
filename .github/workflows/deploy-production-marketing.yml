@@ -39,6 +39,7 @@ jobs:
       - name: Build site
         env:
           NEXT_PUBLIC_NODE_ENV: production
+          NEXT_PUBLIC_CONSOLE_URL: ${{ secrets.PRODUCTION_CONSOLE_URL_MARKETING }}
         run: pnpm build
         working-directory: packages/marketing
       - name: Upload to S3
