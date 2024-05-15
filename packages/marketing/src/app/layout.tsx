@@ -4,7 +4,8 @@ import Link from 'next/link';
 
 import Logo from 'assets/logo.svg';
 
-import { Flex, Typography } from 'components';
+import { Button, Flex, Typography } from 'components';
+import { fonts } from 'theme';
 
 import './globals.css';
 
@@ -19,13 +20,13 @@ export const metadata = {
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <html lang="en">
+    <html lang="en" className={fonts}>
       <link rel="icon" href="/favicon.svg" />
       <Container>
         <Flex direction="column" className="mx-auto w-screen max-w-7xl px-6">
-          <Flex justifyContent="space-between" className="py-4">
+          <Flex justifyContent="space-between">
             <Link href="/">
-              <Flex className="gap-2">
+              <Flex className="gap-2 py-4">
                 <Image src={Logo} alt="logo" className="size-8" />
                 <Typography className="text-2xl font-bold lg:text-2xl">
                   Automa
@@ -34,7 +35,9 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </Link>
             <Flex alignItems="center" className="gap-6">
               <Nav />
-              <button>Log In</button>
+              <Button size="large" href={process.env.NEXT_PUBLIC_CONSOLE_URL}>
+                Log In
+              </Button>
             </Flex>
           </Flex>
           {children}

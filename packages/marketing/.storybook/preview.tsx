@@ -2,6 +2,8 @@ import React from 'react';
 import { Preview } from '@storybook/react';
 import { withThemeByClassName } from '@storybook/addon-themes';
 
+import { fonts } from '../src/theme';
+
 import '../src/app/globals.css';
 
 import { Container as AppContainer } from '../src/app/layout.styles';
@@ -17,9 +19,11 @@ const preview: Preview = {
     }),
     (Story) => {
       return (
-        <AppContainer>
-          <Story />
-        </AppContainer>
+        <html lang="en" className={fonts}>
+          <AppContainer>
+            <Story />
+          </AppContainer>
+        </html>
       );
     },
   ],
