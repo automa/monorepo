@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Logo from 'assets/logo.svg';
 
 import { Button, Flex, Typography } from 'components';
+import { fonts } from 'theme';
 
 import './globals.css';
 
@@ -19,7 +20,7 @@ export const metadata = {
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <html lang="en">
+    <html lang="en" className={fonts}>
       <link rel="icon" href="/favicon.svg" />
       <Container>
         <Flex direction="column" className="mx-auto w-screen max-w-7xl px-6">
