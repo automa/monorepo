@@ -40,57 +40,43 @@ export const graphql = (
   });
 
 export const seedUsers = (app: FastifyInstance, count: number) =>
-  Promise.all(
-    Array(count)
+  app.prisma.users.createManyAndReturn({
+    data: Array(count)
       .fill(0)
-      .map((_, i) =>
-        app.prisma.users.create({
-          data: {
-            email: `user-${i}@example.com`,
-            name: `User ${i}`,
-          },
-        }),
-      ),
-  );
+      .map((_, i) => ({
+        email: `user-${i}@example.com`,
+        name: `User ${i}`,
+      })),
+  });
 
-export const seedOrgs = (app: FastifyInstance, count: number) => {
-  return Promise.all(
-    Array(count)
+export const seedOrgs = (app: FastifyInstance, count: number) =>
+  app.prisma.orgs.createManyAndReturn({
+    data: Array(count)
       .fill(0)
-      .map((_, i) =>
-        app.prisma.orgs.create({
-          data: {
-            name: `org-${i}`,
-            provider_type: 'github',
-            provider_id: `${i}`,
-            provider_name: `org-${i}`,
-            is_user: false,
-          },
-        }),
-      ),
-  );
-};
+      .map((_, i) => ({
+        name: `org-${i}`,
+        provider_type: 'github',
+        provider_id: `${i}`,
+        provider_name: `org-${i}`,
+        is_user: false,
+      })),
+  });
 
 export const seedBots = (
   app: FastifyInstance,
   published: { id: number }[],
   nonPublished: { id: number }[],
-) => {
-  return Promise.all(
-    published.concat(nonPublished).map(({ id }, index) =>
-      app.prisma.bots.create({
-        data: {
-          org_id: id,
-          name: `bot-${index}`,
-          description: `Bot ${index}`,
-          type: 'webhook',
-          webhook_url: `https://example.com/webhook/${index}`,
-          ...(index < published.length && {
-            homepage: 'https://example.com',
-            published_at: new Date(),
-          }),
-        },
+) =>
+  app.prisma.bots.createManyAndReturn({
+    data: published.concat(nonPublished).map(({ id }, i) => ({
+      org_id: id,
+      name: `bot-${i}`,
+      description: `Bot ${i}`,
+      type: 'webhook',
+      webhook_url: `https://example.com/webhook/${i}`,
+      ...(i < published.length && {
+        homepage: 'https://example.com',
+        published_at: new Date(),
       }),
-    ),
-  );
-};
+    })),
+  });
