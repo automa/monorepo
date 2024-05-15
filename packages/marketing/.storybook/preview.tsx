@@ -17,9 +17,11 @@ const preview: Preview = {
     }),
     (Story) => {
       return (
-        <AppContainer>
-          <Story />
-        </AppContainer>
+        <html lang="en">
+          <AppContainer>
+            <Story />
+          </AppContainer>
+        </html>
       );
     },
   ],
