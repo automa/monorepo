@@ -15,9 +15,11 @@ const httpLink = new HttpLink({
   credentials: 'include',
 });
 
+export const cache = new InMemoryCache();
+
 const client = new ApolloClient({
   link: persistedQueryLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache,
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-and-network',

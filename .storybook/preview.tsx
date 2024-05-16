@@ -1,14 +1,17 @@
 import React from 'react';
 import { Preview } from '@storybook/react';
 import { withThemeByClassName } from '@storybook/addon-themes';
-import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider as StoreProvider } from 'react-redux';
+import { MockedProvider as ApolloProvider } from '@apollo/client/testing';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import * as Toast from '@radix-ui/react-toast';
 
 import '../src/index.css';
 
-import store from '../src/store';
+import { reducer } from '../src/store';
+import { cache } from '../src/client';
 
 import { Container as AppContainer } from '../src/views/App/App.styles';
 
@@ -21,20 +24,31 @@ const preview: Preview = {
       },
       defaultTheme: 'light',
     }),
-    (Story) => {
+    (Story, { parameters }) => {
+      const { requests, cached, state } = parameters;
+
+      cache.restore(cached);
+
+      const store = configureStore({
+        reducer,
+        preloadedState: state,
+      });
+
       return (
-        <Provider store={store}>
-          <BrowserRouter>
-            <Tooltip.Provider delayDuration={500}>
-              <Toast.Provider>
-                <AppContainer>
-                  <Story />
-                </AppContainer>
-                <Toast.Viewport />
-              </Toast.Provider>
-            </Tooltip.Provider>
-          </BrowserRouter>
-        </Provider>
+        <ApolloProvider mocks={requests} cache={cache}>
+          <StoreProvider store={store}>
+            <BrowserRouter>
+              <Tooltip.Provider delayDuration={500}>
+                <Toast.Provider>
+                  <AppContainer>
+                    <Story />
+                  </AppContainer>
+                  <Toast.Viewport />
+                </Toast.Provider>
+              </Tooltip.Provider>
+            </BrowserRouter>
+          </StoreProvider>
+        </ApolloProvider>
       );
     },
   ],

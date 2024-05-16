@@ -1,29 +1,41 @@
 import React, { FC, ReactNode, ReactElement } from 'react';
 import { MemoryRouter, Routes, Route, NavigateProps } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
-import { Provider } from 'react-redux';
+import { Provider as StoreProvider } from 'react-redux';
+import { NormalizedCacheObject } from '@apollo/client';
+import {
+  MockedProvider as ApolloProvider,
+  MockedProviderProps,
+} from '@apollo/client/testing';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { render, RenderOptions } from '@testing-library/react';
 import { vi } from 'vitest';
 import axios from 'axios';
 
 import { reducer, RootState } from 'store';
+import { cache } from 'client';
 
 import { AnalyticsProvider } from 'analytics';
 
 const customRender = (
   ui: ReactElement,
   {
+    cached = {},
     state,
+    requests,
     history,
     path,
     ...options
   }: RenderOptions & {
+    cached?: NormalizedCacheObject;
     state?: Partial<RootState>;
+    requests?: MockedProviderProps['mocks'];
     history?: string[];
     path?: string;
   } = {},
 ) => {
+  cache.restore(cached);
+
   const store = configureStore({
     reducer,
     preloadedState: state,
@@ -32,17 +44,22 @@ const customRender = (
   const AllTheProviders: FC<{ children: ReactNode }> = ({ children }) => {
     return (
       <AnalyticsProvider>
-        <Provider store={store}>
-          <MemoryRouter initialEntries={path && !history ? [path] : history}>
-            <Tooltip.Provider delayDuration={500}>{children}</Tooltip.Provider>
-          </MemoryRouter>
-        </Provider>
+        <ApolloProvider mocks={requests} cache={cache}>
+          <StoreProvider store={store}>
+            <MemoryRouter initialEntries={path && !history ? [path] : history}>
+              <Tooltip.Provider delayDuration={500}>
+                {children}
+              </Tooltip.Provider>
+            </MemoryRouter>
+          </StoreProvider>
+        </ApolloProvider>
       </AnalyticsProvider>
     );
   };
 
   return {
     store,
+    cache,
     ...render(
       path ? (
         <Routes>
