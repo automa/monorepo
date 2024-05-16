@@ -3,8 +3,6 @@ import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 import { tw } from 'theme';
 
-export const Container = tw.div``;
-
 export const Nav = tw(
   NavigationMenu.List,
 )`flex justify-center pb-2 shadow-border text-xs font-medium lg:text-sm bg-white overflow-x-auto scrollbar-none`;

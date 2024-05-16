@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { provider, users, user_providers, orgs, competitor, repos, bot, bots, bot_installations, project_provider, org_project_providers } from '@prisma/client';
+import { provider, users, user_providers, orgs, competitor, repos, bot, bots, bot_installations, project_provider, org_project_providers, tasks } from '@prisma/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -111,6 +111,7 @@ export type Query = {
   project_integration_connections: Array<ProjectIntegrationConnection>;
   repo?: Maybe<Repo>;
   repos: Array<Repo>;
+  tasks: Array<Task>;
 };
 
 
@@ -139,6 +140,11 @@ export type QueryReposArgs = {
   org_id: Scalars['Int']['input'];
 };
 
+
+export type QueryTasksArgs = {
+  org_id: Scalars['Int']['input'];
+};
+
 export type Repo = {
   __typename?: 'Repo';
   created_at: Scalars['DateTime']['output'];
@@ -149,6 +155,15 @@ export type Repo = {
   name: Scalars['String']['output'];
   org: Org;
   provider_id: Scalars['String']['output'];
+};
+
+export type Task = {
+  __typename?: 'Task';
+  author?: Maybe<User>;
+  created_at: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  org: Org;
+  title: Scalars['String']['output'];
 };
 
 export type User = {
@@ -254,6 +269,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   Repo: ResolverTypeWrapper<repos>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Task: ResolverTypeWrapper<tasks>;
   User: ResolverTypeWrapper<users>;
   UserProvider: ResolverTypeWrapper<user_providers>;
 };
@@ -273,6 +289,7 @@ export type ResolversParentTypes = {
   Query: {};
   Repo: repos;
   String: Scalars['String']['output'];
+  Task: tasks;
   User: users;
   UserProvider: user_providers;
 };
@@ -350,6 +367,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   project_integration_connections?: Resolver<Array<ResolversTypes['ProjectIntegrationConnection']>, ParentType, ContextType, RequireFields<QueryProject_Integration_ConnectionsArgs, 'org_id'>>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
+  tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTasksArgs, 'org_id'>>;
 };
 
 export type RepoResolvers<ContextType = any, ParentType extends ResolversParentTypes['Repo'] = ResolversParentTypes['Repo']> = {
@@ -361,6 +379,15 @@ export type RepoResolvers<ContextType = any, ParentType extends ResolversParentT
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
   provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
+  author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -393,6 +420,7 @@ export type Resolvers<ContextType = any> = {
   ProviderType?: ProviderTypeResolvers;
   Query?: QueryResolvers<ContextType>;
   Repo?: RepoResolvers<ContextType>;
+  Task?: TaskResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserProvider?: UserProviderResolvers<ContextType>;
 };

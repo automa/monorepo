@@ -8,9 +8,8 @@ import { Flex } from 'shared';
 import { OrgIntegrationsProps } from './types';
 
 import { INTEGRATION_CONNECTIONS_QUERY } from './OrgIntegrations.queries';
-import { Container } from './OrgIntegrations.styles';
 
-const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org, ...props }) => {
+const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org }) => {
   const { data, loading } = useQuery(INTEGRATION_CONNECTIONS_QUERY, {
     variables: {
       org_id: org.id,
@@ -28,7 +27,7 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org, ...props }) => {
   );
 
   return (
-    <Container {...props}>
+    <>
       <Flex direction="column" alignItems="center" className="gap-2">
         {loading && !data ? (
           <div>Loading</div>
@@ -52,7 +51,7 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org, ...props }) => {
           Connect Linear
         </button>
       </Flex>
-    </Container>
+    </>
   );
 };
 

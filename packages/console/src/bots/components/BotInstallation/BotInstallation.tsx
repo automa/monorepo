@@ -14,10 +14,8 @@ const BotInstallation: React.FC<BotInstallationProps> = ({
   const botInstallation = getFragment(BOT_INSTALLATION_FRAGMENT, data);
 
   return (
-    <Container {...props} asChild>
-      <div>
-        {botInstallation.bot.org.name}/{botInstallation.bot.name}
-      </div>
+    <Container {...props}>
+      {botInstallation.bot.org.name}/{botInstallation.bot.name}
     </Container>
   );
 };

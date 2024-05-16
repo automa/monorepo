@@ -1,5 +1,5 @@
 import { Org } from 'orgs';
 
-export interface BotInstallationsProps {
+export interface TasksProps {
   org: Org;
 }

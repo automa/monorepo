@@ -10,7 +10,7 @@ import { OrgSettingsProps } from './types';
 
 import { Container, Nav, Item, Content } from './OrgSettings.styles';
 
-const OrgSettings: React.FC<OrgSettingsProps> = ({ org, ...props }) => {
+const OrgSettings: React.FC<OrgSettingsProps> = ({ org }) => {
   const tabs = useMemo(() => {
     if (!org) return [];
 
@@ -32,7 +32,7 @@ const OrgSettings: React.FC<OrgSettingsProps> = ({ org, ...props }) => {
   }
 
   return (
-    <Container {...props}>
+    <Container>
       <NavigationMenu.Root orientation="vertical">
         <Nav>
           {tabs.map((tab) => {

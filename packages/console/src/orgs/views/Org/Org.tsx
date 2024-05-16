@@ -10,9 +10,9 @@ import { useOrg, useOrgs } from 'orgs/hooks';
 import routes from './routes';
 import { OrgProps } from './types';
 
-import { Container, Nav, Item, Content } from './Org.styles';
+import { Nav, Item, Content } from './Org.styles';
 
-const Org: React.FC<OrgProps> = ({ ...props }) => {
+const Org: React.FC<OrgProps> = () => {
   const location = useLocation();
 
   const { orgName } = useParams() as {
@@ -74,7 +74,7 @@ const Org: React.FC<OrgProps> = ({ ...props }) => {
   }
 
   return (
-    <Container {...props} asChild>
+    <>
       {!org ? (
         <div>Not found</div>
       ) : (
@@ -101,7 +101,7 @@ const Org: React.FC<OrgProps> = ({ ...props }) => {
           </Content>
         </>
       )}
-    </Container>
+    </>
   );
 };
 

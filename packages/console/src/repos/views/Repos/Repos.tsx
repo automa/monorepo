@@ -2,14 +2,13 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import { Flex, Loader } from 'shared';
-import { RepoCard } from 'repos';
+import { Repo } from 'repos';
 
 import { ReposProps } from './types';
 
 import { REPOS_QUERY } from './Repos.queries';
-import { Container } from './Repos.styles';
 
-const Repos: React.FC<ReposProps> = ({ org, ...props }) => {
+const Repos: React.FC<ReposProps> = ({ org }) => {
   // TODO: Add infinite scroll
   const { data, loading } = useQuery(REPOS_QUERY, {
     variables: {
@@ -18,7 +17,7 @@ const Repos: React.FC<ReposProps> = ({ org, ...props }) => {
   });
 
   return (
-    <Container {...props} asChild>
+    <>
       {loading && !data ? (
         <Flex justifyContent="center">
           <Loader />
@@ -28,11 +27,11 @@ const Repos: React.FC<ReposProps> = ({ org, ...props }) => {
       ) : (
         <Flex className="grid grid-cols-auto gap-4 md:gap-6">
           {data.repos.map((repo) => (
-            <RepoCard key={repo.id} repo={repo} />
+            <Repo key={repo.id} repo={repo} />
           ))}
         </Flex>
       )}
-    </Container>
+    </>
   );
 };
 

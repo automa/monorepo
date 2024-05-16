@@ -9,8 +9,8 @@ const routes = [
     Component: lazy(() => import('views/DeepLink')),
     path: '$/*',
   },
-  ...orgsRoutes,
   ...usersRoutes,
+  ...orgsRoutes,
 ] as Route[];
 
 export default routes;

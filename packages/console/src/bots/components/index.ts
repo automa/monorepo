@@ -1,3 +1,3 @@
-export { default as BotCard } from './BotCard';
-export * from './BotCard';
+export { default as Bot } from './Bot';
+export * from './Bot';
 export { default as BotInstallation } from './BotInstallation';

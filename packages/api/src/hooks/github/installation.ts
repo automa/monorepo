@@ -26,13 +26,14 @@ const created: GithubEventActionHandler<{
     update: {
       has_installation: true,
       github_installation_id: body.installation.id,
+      // TODO: Add a test for an user being converted to an org when app is uninstalled and reinstalled
+      is_user: body.installation.account.type === 'User',
     },
     create: {
       name: body.installation.account.login,
       provider_type: provider.github,
       provider_id: `${body.installation.account.id}`,
       provider_name: body.installation.account.login,
-      is_user: body.installation.account.type === 'User',
       has_installation: true,
       github_installation_id: body.installation.id,
     },

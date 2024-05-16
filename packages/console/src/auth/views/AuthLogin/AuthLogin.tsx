@@ -11,9 +11,9 @@ import GitlabLogo from 'assets/logos/gitlab.svg?react';
 
 import { AuthLoginProps } from './types';
 
-import { Container, LoginButton } from './AuthLogin.styles';
+import { LoginButton } from './AuthLogin.styles';
 
-const AuthLogin: React.FC<AuthLoginProps> = ({ ...props }) => {
+const AuthLogin: React.FC<AuthLoginProps> = () => {
   const user = useUser();
 
   const location = useLocation();
@@ -42,7 +42,7 @@ const AuthLogin: React.FC<AuthLoginProps> = ({ ...props }) => {
   }
 
   return (
-    <Container {...props}>
+    <>
       <div className="border-b-2">
         <Flex
           justifyContent="space-between"
@@ -88,7 +88,7 @@ const AuthLogin: React.FC<AuthLoginProps> = ({ ...props }) => {
           </LoginButton>
         </Tooltip>
       </Flex>
-    </Container>
+    </>
   );
 };
 

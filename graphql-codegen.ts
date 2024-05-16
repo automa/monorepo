@@ -23,6 +23,7 @@ const config: CodegenConfig = {
           BotInstallation: '@prisma/client#bot_installations',
           ProjectProviderType: '@prisma/client#project_provider',
           ProjectIntegrationConnection: '@prisma/client#org_project_providers',
+          Task: '@prisma/client#tasks',
         },
       },
     },

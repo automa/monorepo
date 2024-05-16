@@ -4,16 +4,19 @@ import { ProviderType } from '@automa/common';
 
 import { makeFragmentData } from 'gql';
 
-import UserNavbar from './UserNavbar';
-import { ME_QUERY_FRAGMENT } from './UserNavbar.queries';
+import Task from './Task';
+import { TASK_FRAGMENT } from './Task.queries';
 
 const meta = {
-  title: 'UserNavbar',
-  component: UserNavbar,
+  title: 'Task',
+  component: Task,
   args: {
-    data: makeFragmentData(
+    task: makeFragmentData(
       {
-        me: {
+        id: 1,
+        title: 'Task 1',
+        created_at: '2024-05-15T09:04:04.629Z',
+        author: {
           id: 1,
           name: 'Pavan Kumar Sunkara',
           email: 'pavan.sss1991@gmail.com',
@@ -26,10 +29,10 @@ const meta = {
           ],
         },
       },
-      ME_QUERY_FRAGMENT,
+      TASK_FRAGMENT,
     ),
   },
-} satisfies Meta<typeof UserNavbar>;
+} satisfies Meta<typeof Task>;
 
 export default meta;
 
