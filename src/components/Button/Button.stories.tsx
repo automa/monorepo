@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { expect } from '@storybook/jest';
-import { userEvent, within } from '@storybook/testing-library';
+import { within, userEvent, expect, fn } from '@storybook/test';
 
 import Button from './Button';
 import { ButtonComponentProps } from './types';
@@ -9,12 +8,9 @@ const meta = {
   title: 'Button',
   component: Button,
   args: {
+    href: '#',
     children: 'One',
-  },
-  argTypes: {
-    onClick: {
-      action: true,
-    },
+    onClick: fn(),
   },
 } satisfies Meta<ButtonComponentProps>;
 

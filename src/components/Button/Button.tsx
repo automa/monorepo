@@ -1,12 +1,12 @@
 import React from 'react';
+import Link from 'next/link';
 
 import { ButtonComponentProps } from './types';
 
-import { Container, Anchor } from './Button.styles';
+import { Container } from './Button.styles';
 
 const Button: React.FC<ButtonComponentProps> = ({
   href,
-  anchor,
   variant,
   size,
   fullWidth,
@@ -24,9 +24,7 @@ const Button: React.FC<ButtonComponentProps> = ({
       disabled={disabled}
       {...props}
     >
-      <Anchor $disabled={disabled} href={href} {...anchor}>
-        {children}
-      </Anchor>
+      {disabled ? children : <Link href={href}>{children}</Link>}
     </Container>
   );
 };

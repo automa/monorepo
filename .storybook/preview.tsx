@@ -17,16 +17,13 @@ const preview: Preview = {
     }),
     (Story) => {
       return (
-        <html lang="en">
-          <AppContainer>
-            <Story />
-          </AppContainer>
-        </html>
+        <AppContainer asChild>
+          <Story />
+        </AppContainer>
       );
     },
   ],
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
     backgrounds: {
       disable: true,
     },
