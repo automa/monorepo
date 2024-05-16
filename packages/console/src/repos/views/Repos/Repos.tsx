@@ -9,7 +9,7 @@ import { ReposProps } from './types';
 import { REPOS_QUERY } from './Repos.queries';
 
 const Repos: React.FC<ReposProps> = ({ org }) => {
-  // TODO: Add infinite scroll
+  // TODO: Add infinite scroll (with pagination cache)
   const { data, loading } = useQuery(REPOS_QUERY, {
     variables: {
       org_id: org.id,

@@ -10,7 +10,7 @@ import { TasksProps } from './types';
 import { TASKS_QUERY } from './Tasks.queries';
 
 const Tasks: React.FC<TasksProps> = ({ org }) => {
-  // TODO: Add infinite scroll
+  // TODO: Add infinite scroll (with pagination cache)
   const { data, loading } = useQuery(TASKS_QUERY, {
     variables: {
       org_id: org.id,

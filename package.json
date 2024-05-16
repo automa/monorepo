@@ -18,7 +18,7 @@
     "node": ">=20.12.0"
   },
   "devDependencies": {
-    "@apollo/rover": "~0.23.0",
+    "@apollo/rover": "~0.22.0",
     "@graphql-codegen/cli": "~5.0.0",
     "@graphql-codegen/client-preset": "~4.1.0",
     "@graphql-codegen/schema-ast": "~4.0.2",

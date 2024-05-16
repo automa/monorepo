@@ -28,7 +28,7 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
     },
   });
 
-  // TODO: Handle error & cache eviction
+  // TODO: Handle error
   const [botCreate, { data, loading, error }] = useMutation(
     BOT_CREATE_MUTATION,
     {
@@ -37,13 +37,16 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
 
         cache.modify({
           fields: {
-            org(existingOrg = {}) {
+            bots(existing = {}, details) {
+              if (!details.storeFieldName.includes(`"org_id":${org.id}`))
+                return existing;
+
               const newBotRef = cache.writeFragment({
                 data: getFragment(BOT_FRAGMENT, data.botCreate),
                 fragment: BOT_FRAGMENT,
               });
 
-              return { ...existingOrg, bots: [...existingOrg.bots, newBotRef] };
+              return [...existing, newBotRef];
             },
           },
         });

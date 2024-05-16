@@ -8,7 +8,6 @@ import {
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  // TODO: Add limit and offset as abstract arguments
   tasks: async (root, { org_id }, { user, prisma }) => {
     // Check if the user is a member of the org
     await prisma.orgs.findFirstOrThrow({

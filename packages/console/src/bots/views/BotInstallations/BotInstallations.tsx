@@ -9,7 +9,7 @@ import { BotInstallationsProps } from './types';
 import { BOT_INSTALLATIONS_QUERY } from './BotInstallations.queries';
 
 const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
-  // TODO: Add infinite scroll
+  // TODO: Add infinite scroll (with pagination cache)
   const { data, loading } = useQuery(BOT_INSTALLATIONS_QUERY, {
     variables: {
       org_id: org.id,
