@@ -2,7 +2,7 @@ import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   framework: '@storybook/react-vite',
-  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(ts|tsx)'],
+  stories: ['../src/**/*.docs.mdx', '../src/**/*.stories.@(ts|tsx)'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
@@ -11,8 +11,8 @@ const config: StorybookConfig = {
     '@storybook/addon-coverage',
   ],
   staticDirs: ['../public'],
-  docs: {
-    autodocs: 'tag',
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
   },
 };
 
