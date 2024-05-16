@@ -1,4 +1,9 @@
-import { QueryResolvers, TaskResolvers } from '@automa/common';
+import {
+  MutationResolvers,
+  QueryResolvers,
+  TaskResolvers,
+  taskMessageSchema,
+} from '@automa/common';
 
 import { Context } from '../types';
 
@@ -22,7 +27,33 @@ export const Query: QueryResolvers<Context> = {
         org_id,
       },
       orderBy: {
-        id: 'asc',
+        id: 'desc',
+      },
+    });
+  },
+};
+
+export const Mutation: MutationResolvers<Context> = {
+  taskCreate: async (_, { org_id, input }, { prisma, user }) => {
+    // Check if the user is a member of the org
+    await prisma.orgs.findFirstOrThrow({
+      where: {
+        id: org_id,
+        user_orgs: {
+          some: {
+            user_id: user.id,
+          },
+        },
+      },
+    });
+
+    const data = taskMessageSchema.parse(input);
+
+    return prisma.tasks.create({
+      data: {
+        org_id,
+        title: data.content.slice(0, 255),
+        created_by: user.id,
       },
     });
   },

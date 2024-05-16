@@ -65,7 +65,7 @@ export const seedOrgs = (app: FastifyInstance, count: number) =>
 export const seedBots = (
   app: FastifyInstance,
   published: { id: number }[],
-  nonPublished: { id: number }[],
+  nonPublished: { id: number }[] = [],
 ) =>
   app.prisma.bots.createManyAndReturn({
     data: published.concat(nonPublished).map(({ id }, i) => ({

@@ -2,6 +2,10 @@ type Query {
   tasks(org_id: Int!): [Task!]!
 }
 
+type Mutation {
+  taskCreate(org_id: Int!, input: TaskMessageInput!): Task!
+}
+
 type Task {
   id: Int!
   title: String!
@@ -9,4 +13,8 @@ type Task {
 
   org: Org!
   author: User
+}
+
+input TaskMessageInput {
+  content: String!
 }

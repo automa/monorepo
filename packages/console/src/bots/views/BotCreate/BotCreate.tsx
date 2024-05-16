@@ -28,6 +28,7 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
     },
   });
 
+  // TODO: Handle error & cache eviction
   const [botCreate, { data, loading, error }] = useMutation(
     BOT_CREATE_MUTATION,
     {

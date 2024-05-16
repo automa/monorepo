@@ -61,11 +61,18 @@ export enum CompetitorType {
 export type Mutation = {
   __typename?: 'Mutation';
   botCreate: Bot;
+  taskCreate: Task;
 };
 
 
 export type MutationBotCreateArgs = {
   input: BotCreateInput;
+  org_id: Scalars['Int']['input'];
+};
+
+
+export type MutationTaskCreateArgs = {
+  input: TaskMessageInput;
   org_id: Scalars['Int']['input'];
 };
 
@@ -164,6 +171,10 @@ export type Task = {
   id: Scalars['Int']['output'];
   org: Org;
   title: Scalars['String']['output'];
+};
+
+export type TaskMessageInput = {
+  content: Scalars['String']['input'];
 };
 
 export type User = {
@@ -270,6 +281,7 @@ export type ResolversTypes = {
   Repo: ResolverTypeWrapper<repos>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Task: ResolverTypeWrapper<tasks>;
+  TaskMessageInput: TaskMessageInput;
   User: ResolverTypeWrapper<users>;
   UserProvider: ResolverTypeWrapper<user_providers>;
 };
@@ -290,6 +302,7 @@ export type ResolversParentTypes = {
   Repo: repos;
   String: Scalars['String']['output'];
   Task: tasks;
+  TaskMessageInput: TaskMessageInput;
   User: users;
   UserProvider: user_providers;
 };
@@ -330,6 +343,7 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   botCreate?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<MutationBotCreateArgs, 'input' | 'org_id'>>;
+  taskCreate?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationTaskCreateArgs, 'input' | 'org_id'>>;
 };
 
 export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['Org'] = ResolversParentTypes['Org']> = {

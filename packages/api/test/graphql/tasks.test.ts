@@ -5,7 +5,7 @@ import { orgs, users } from '@automa/prisma';
 
 import { server, graphql, seedUsers, seedOrgs } from '../utils';
 
-suite.only('graphql tasks', () => {
+suite('graphql tasks', () => {
   let app: FastifyInstance,
     user: users,
     org: orgs,
@@ -31,30 +31,6 @@ suite.only('graphql tasks', () => {
       ],
     });
 
-    await app.prisma.tasks.createMany({
-      data: [
-        {
-          title: 'task-0',
-          org_id: org.id,
-          created_by: user.id,
-        },
-        {
-          title: 'task-1',
-          org_id: secondOrg.id,
-          created_by: user.id,
-        },
-        {
-          title: 'task-2',
-          org_id: nonMemberOrg.id,
-          created_by: user.id,
-        },
-        {
-          title: 'task-3',
-          org_id: org.id,
-        },
-      ],
-    });
-
     app.addHook('preHandler', async (request) => {
       request.user = user;
     });
@@ -67,6 +43,32 @@ suite.only('graphql tasks', () => {
   });
 
   suite('query tasks', () => {
+    suiteSetup(async () => {
+      await app.prisma.tasks.createMany({
+        data: [
+          {
+            title: 'task-0',
+            org_id: org.id,
+            created_by: user.id,
+          },
+          {
+            title: 'task-1',
+            org_id: secondOrg.id,
+            created_by: user.id,
+          },
+          {
+            title: 'task-2',
+            org_id: nonMemberOrg.id,
+            created_by: user.id,
+          },
+          {
+            title: 'task-3',
+            org_id: org.id,
+          },
+        ],
+      });
+    });
+
     suite('member org', () => {
       let response: LightMyRequestResponse;
 
@@ -108,14 +110,14 @@ suite.only('graphql tasks', () => {
         assert.lengthOf(tasks, 2);
 
         assert.isNumber(tasks[0].id);
-        assert.equal(tasks[0].title, 'task-0');
+        assert.equal(tasks[0].title, 'task-3');
         assert.isString(tasks[0].created_at);
-        assert.equal(tasks[0].author.id, user.id);
+        assert.isNull(tasks[0].author);
 
         assert.isNumber(tasks[1].id);
-        assert.equal(tasks[1].title, 'task-3');
+        assert.equal(tasks[1].title, 'task-0');
         assert.isString(tasks[1].created_at);
-        assert.isNull(tasks[1].author);
+        assert.equal(tasks[1].author.id, user.id);
       });
     });
 
@@ -149,4 +151,154 @@ suite.only('graphql tasks', () => {
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
     });
   });
+
+  suite('mutation taskCreate', () => {
+    teardown(async () => {
+      await app.prisma.tasks.deleteMany();
+    });
+
+    test('with valid input should succeed', async () => {
+      const response = await taskCreate(app, org.id, {
+        content:
+          'Send an analytic event when user clicks on "Create Task" button',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { taskCreate: task },
+      } = response.json();
+
+      assert.isNumber(task.id);
+      assert.equal(
+        task.title,
+        'Send an analytic event when user clicks on "Create Task" button',
+      );
+      assert.isString(task.created_at);
+    });
+
+    test('non-member org should fail', async () => {
+      const response = await taskCreate(app, nonMemberOrg.id, {
+        content:
+          'Send an analytic event when user clicks on "Create Task" button',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+
+    test('with missing content should fail', async () => {
+      const response = await taskCreate(app, org.id, {});
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Field "content" of required type "String!" was not provided',
+      );
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+    });
+
+    test('with short content should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content: 'abc',
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_small',
+          message: 'String must contain at least 5 character(s)',
+          path: ['content'],
+          type: 'string',
+          inclusive: true,
+          exact: false,
+          minimum: 5,
+        },
+      ]);
+    });
+
+    test('with content containing only spaces should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content: '     ',
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_small',
+          message: 'String must contain at least 5 character(s)',
+          path: ['content'],
+          type: 'string',
+          inclusive: true,
+          exact: false,
+          minimum: 5,
+        },
+      ]);
+    });
+  });
 });
+
+const taskCreate = (app: FastifyInstance, orgId: number, input: any) =>
+  graphql(
+    app,
+    `
+      mutation taskCreate($org_id: Int!, $input: TaskMessageInput!) {
+        taskCreate(org_id: $org_id, input: $input) {
+          id
+          title
+          created_at
+        }
+      }
+    `,
+    {
+      org_id: orgId,
+      input,
+    },
+  );
