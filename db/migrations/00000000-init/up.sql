@@ -149,7 +149,7 @@ CREATE TABLE public.org_project_providers (
 CREATE TABLE public.tasks (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
-  title TEXT NOT NULL,
+  title VARCHAR(255) NOT NULL,
   created_by INTEGER REFERENCES public.users(id) ON DELETE SET NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );

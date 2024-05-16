@@ -47,12 +47,12 @@ export const Mutation: MutationResolvers<Context> = {
       },
     });
 
-    botCreateSchema.parse(input);
+    const data = botCreateSchema.parse(input);
 
     return prisma.bots.create({
       data: {
         org_id,
-        ...input,
+        ...data,
       },
     });
   },

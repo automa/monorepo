@@ -13,7 +13,6 @@ suite('graphql bots', () => {
 
     const [user] = await seedUsers(app, 1);
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
-    await seedBots(app, [org, secondOrg, nonMemberOrg], [org]);
 
     await app.prisma.user_orgs.createMany({
       data: [
@@ -40,6 +39,10 @@ suite('graphql bots', () => {
   });
 
   suite('query bots', () => {
+    suiteSetup(async () => {
+      await seedBots(app, [org, secondOrg, nonMemberOrg], [org]);
+    });
+
     suite('member org', () => {
       let response: LightMyRequestResponse;
 
@@ -137,46 +140,127 @@ suite('graphql bots', () => {
   });
 
   suite('mutation botCreate', () => {
-    suite('with valid input', () => {
-      let response: LightMyRequestResponse;
+    teardown(async () => {
+      await app.prisma.bots.deleteMany();
+    });
 
-      setup(async () => {
-        response = await botCreate(app, org.id, {
-          name: 'bot-5',
-          description: 'Bot 5',
-          type: 'webhook',
-          webhook_url: 'https://example.com/webhook/5',
-        });
+    test('with valid input should succeed', async () => {
+      const response = await botCreate(app, org.id, {
+        name: 'bot-5',
+        description: 'Bot 5',
+        type: 'webhook',
+        webhook_url: 'https://example.com/webhook/5',
       });
 
-      teardown(async () => {
-        await app.prisma.bots.deleteMany();
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { botCreate: bot },
+      } = response.json();
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-5');
+      assert.equal(bot.description, 'Bot 5');
+      assert.equal(bot.type, 'webhook');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+      assert.isString(bot.created_at);
+    });
+
+    test('with no description should succeed', async () => {
+      const response = await botCreate(app, org.id, {
+        name: 'bot-5',
+        type: 'webhook',
+        webhook_url: 'https://example.com/webhook/5',
       });
 
-      test('should be successful', () => {
-        assert.equal(response.statusCode, 200);
+      assert.equal(response.statusCode, 200);
 
-        assert.equal(
-          response.headers['content-type'],
-          'application/json; charset=utf-8',
-        );
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { botCreate: bot },
+      } = response.json();
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-5');
+      assert.isNull(bot.description);
+      assert.equal(bot.type, 'webhook');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+      assert.isString(bot.created_at);
+    });
+
+    test('with null description should succeed', async () => {
+      const response = await botCreate(app, org.id, {
+        name: 'bot-5',
+        description: null,
+        type: 'webhook',
+        webhook_url: 'https://example.com/webhook/5',
       });
 
-      test('should return the created bot', async () => {
-        const {
-          data: { botCreate },
-        } = response.json();
+      assert.equal(response.statusCode, 200);
 
-        assert.isNumber(botCreate.id);
-        assert.equal(botCreate.name, 'bot-5');
-        assert.equal(botCreate.description, 'Bot 5');
-        assert.equal(botCreate.type, 'webhook');
-        assert.equal(botCreate.webhook_url, 'https://example.com/webhook/5');
-        assert.isNull(botCreate.homepage);
-        assert.isNull(botCreate.published_at);
-        assert.isFalse(botCreate.is_published);
-        assert.isString(botCreate.created_at);
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { botCreate: bot },
+      } = response.json();
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-5');
+      assert.isNull(bot.description);
+      assert.equal(bot.type, 'webhook');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+      assert.isString(bot.created_at);
+    });
+
+    test('with empty description should succeed', async () => {
+      const response = await botCreate(app, org.id, {
+        name: 'bot-5',
+        description: '',
+        type: 'webhook',
+        webhook_url: 'https://example.com/webhook/5',
       });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { botCreate: bot },
+      } = response.json();
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-5');
+      assert.equal(bot.description, '');
+      assert.equal(bot.type, 'webhook');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+      assert.isString(bot.created_at);
     });
 
     test('non-member org should fail', async () => {
@@ -259,6 +343,40 @@ suite('graphql bots', () => {
       ]);
     });
 
+    test('with long name should fail', async () => {
+      const response = await botCreate(app, org.id, {
+        name: 'a'.repeat(256),
+        description: 'Bot 6',
+        type: 'webhook',
+        webhook_url: 'https://example.com/webhook/6',
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_big',
+          message: 'String must contain at most 255 character(s)',
+          path: ['name'],
+          type: 'string',
+          inclusive: true,
+          exact: false,
+          maximum: 255,
+        },
+      ]);
+    });
+
     test('with special chars in name should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-@#$%',
@@ -290,7 +408,48 @@ suite('graphql bots', () => {
       ]);
     });
 
+    test('with name containing only spaces should fail', async () => {
+      const response = await botCreate(app, org.id, {
+        name: '     ',
+        description: 'Bot 6',
+        type: 'webhook',
+        webhook_url: 'https://example.com/webhook/6',
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_small',
+          message: 'String must contain at least 3 character(s)',
+          path: ['name'],
+          type: 'string',
+          inclusive: true,
+          exact: false,
+          minimum: 3,
+        },
+        {
+          code: 'invalid_string',
+          message: 'Must only contain alphanumeric characters and dashes',
+          path: ['name'],
+          validation: 'regex',
+        },
+      ]);
+    });
+
     test('with duplicate name should fail', async () => {
+      await seedBots(app, [org]);
+
       const response = await botCreate(app, org.id, {
         name: 'bot-0',
         type: 'webhook',
