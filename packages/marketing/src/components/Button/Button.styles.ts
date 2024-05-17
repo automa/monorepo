@@ -1,5 +1,4 @@
 import { TwcComponentProps } from 'react-twc';
-import Link from 'next/link';
 
 import { tw } from 'theme';
 
@@ -13,7 +12,3 @@ export const Container = tw.button<
   $fullWidth && 'w-full justify-center',
   disabled && 'cursor-default opacity-50',
 ]);
-
-export const Anchor = tw(Link)<
-  TwcComponentProps<'a'> & { $disabled?: boolean }
->(({ $disabled }) => [$disabled && 'pointer-events-none']);

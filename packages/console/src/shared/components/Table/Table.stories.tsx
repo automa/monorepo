@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
 import {
   getCoreRowModel,
   getSortedRowModel,
@@ -25,10 +26,8 @@ const data: Data[] = [
 const meta = {
   title: 'Table',
   component: Table,
-  argTypes: {
-    onRowClick: {
-      action: true,
-    },
+  args: {
+    onRowClick: fn(),
   },
 } satisfies Meta<typeof Table>;
 

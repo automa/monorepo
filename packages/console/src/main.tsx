@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { Provider as StoreProvider } from 'react-redux';
 import { ApolloProvider } from '@apollo/client';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
@@ -30,7 +30,7 @@ loadFonts().then(() => {
     <React.StrictMode>
       <AnalyticsProvider>
         <ApolloProvider client={client}>
-          <Provider store={store}>
+          <StoreProvider store={store}>
             <BrowserRouter>
               <Tooltip.Provider delayDuration={500}>
                 <ErrorBoundary>
@@ -39,7 +39,7 @@ loadFonts().then(() => {
                 <Toasts />
               </Tooltip.Provider>
             </BrowserRouter>
-          </Provider>
+          </StoreProvider>
         </ApolloProvider>
       </AnalyticsProvider>
     </React.StrictMode>,

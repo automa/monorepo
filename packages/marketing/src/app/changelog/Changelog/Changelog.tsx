@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync } from 'fs';
 
 import React from 'react';
 import { MDXRemote } from 'next-mdx-remote/rsc';

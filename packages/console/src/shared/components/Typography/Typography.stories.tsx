@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { expect } from '@storybook/jest';
-import { userEvent, within } from '@storybook/testing-library';
+import { within, userEvent, expect, fn } from '@storybook/test';
 
 import Typography from './Typography';
 import { TypographyComponentProps } from './types';
@@ -10,11 +9,7 @@ const meta = {
   component: Typography,
   args: {
     children: 'One two',
-  },
-  argTypes: {
-    onClick: {
-      action: true,
-    },
+    onClick: fn(),
   },
 } satisfies Meta<TypographyComponentProps>;
 

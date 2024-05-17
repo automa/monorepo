@@ -19,16 +19,13 @@ const preview: Preview = {
     }),
     (Story) => {
       return (
-        <html lang="en" className={fonts}>
-          <AppContainer>
-            <Story />
-          </AppContainer>
-        </html>
+        <AppContainer asChild className={fonts}>
+          <Story />
+        </AppContainer>
       );
     },
   ],
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
     backgrounds: {
       disable: true,
     },

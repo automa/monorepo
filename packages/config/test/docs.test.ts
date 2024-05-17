@@ -12,7 +12,7 @@ const assertDocumented = (schemaFile: string, docsFile: string) => {
   const docs = readFileSync(
     join(
       dirname(dirname(__dirname)),
-      `docs/pages/configuration/${docsFile}.mdx`,
+      `marketing/src/content/docs/configuration/${docsFile}.mdx`,
     ),
     'utf8',
   );
