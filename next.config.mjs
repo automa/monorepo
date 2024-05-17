@@ -1,3 +1,5 @@
+import createMDX from '@next/mdx';
+import remarkGfm from 'remark-gfm';
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
 
 // TODO: Copy from vite.config.ts
@@ -6,6 +8,7 @@ import { StatsWriterPlugin } from 'webpack-stats-plugin';
 const nextConfig = {
   output: 'export',
   distDir: 'build',
+  pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
   reactStrictMode: true,
   images: {
     unoptimized: true,
@@ -28,4 +31,10 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [remarkGfm],
+  },
+});
+
+export default withMDX(nextConfig);
