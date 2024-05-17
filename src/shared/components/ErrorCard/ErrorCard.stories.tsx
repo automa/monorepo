@@ -7,6 +7,7 @@ const meta = {
   component: ErrorCard,
   args: {
     error: new Error('Error message'),
+    resetErrorBoundary: () => {},
   },
 } satisfies Meta<typeof ErrorCard>;
 
