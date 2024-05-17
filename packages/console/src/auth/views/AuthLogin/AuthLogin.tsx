@@ -75,7 +75,7 @@ const AuthLogin: React.FC<AuthLoginProps> = () => {
           className="bg-github text-white hover:bg-github/90"
           onClick={loginWithGithub}
         >
-          <GithubLogo className="h-6 w-6" />
+          <GithubLogo className="size-6" />
           <Flex className="gap-1">Contiue with GitHub</Flex>
         </LoginButton>
         <Tooltip side="bottom" body="Coming soon!">
@@ -83,7 +83,7 @@ const AuthLogin: React.FC<AuthLoginProps> = () => {
             disabled
             className="bg-gitlab text-black hover:bg-gitlab/90"
           >
-            <GitlabLogo className="h-6 w-6" />
+            <GitlabLogo className="size-6" />
             <Flex className="gap-1">Contiue with GitLab</Flex>
           </LoginButton>
         </Tooltip>

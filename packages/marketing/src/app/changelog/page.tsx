@@ -12,6 +12,7 @@ export const metadata = {
 };
 
 const ChangelogPage: React.FC = () => {
+  // TODO: Need pagination
   const changelogs = listChangelogs();
 
   return (

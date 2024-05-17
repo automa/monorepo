@@ -3,6 +3,5 @@ packages:
   - packages/common
   - packages/config
   - packages/console
-  - packages/docs
   - packages/marketing
   - packages/prisma
