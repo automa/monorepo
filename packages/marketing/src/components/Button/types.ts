@@ -1,5 +1,6 @@
 import { VariantProps } from 'class-variance-authority';
-import { AnchorHTMLAttributes, ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes } from 'react';
+import { LinkProps } from 'next/link';
 
 import { $, Component, Styled } from 'theme';
 
@@ -9,10 +10,8 @@ type ButtonProps = $<
   {},
   {
     fullWidth?: boolean;
-    href?: string;
-    anchor?: AnchorHTMLAttributes<HTMLAnchorElement>;
   } & VariantProps<typeof button>,
-  ButtonHTMLAttributes<HTMLButtonElement>
+  Pick<LinkProps, 'href'> & ButtonHTMLAttributes<HTMLButtonElement>
 >;
 
 export type ButtonComponentProps = Component<ButtonProps>;
