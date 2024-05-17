@@ -61,4 +61,5 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_CONSOLE }}
           exitZeroOnChanges: true
           exitOnceUploaded: true
+          onlyChanged: true
           workingDir: packages/console

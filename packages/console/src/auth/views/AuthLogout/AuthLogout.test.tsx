@@ -1,4 +1,4 @@
-import { expect, test, vi } from 'vitest';
+import { beforeEach, expect, test, vi } from 'vitest';
 
 import { render, mockedAxios, mockedNavigate, waitFor } from 'tests';
 

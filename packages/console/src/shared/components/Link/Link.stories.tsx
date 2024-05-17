@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { expect } from '@storybook/jest';
-import { userEvent, within } from '@storybook/testing-library';
+import { within, userEvent, expect, fn } from '@storybook/test';
 
 import Link from './Link';
 import { LinkComponentProps } from './types';
@@ -11,11 +10,7 @@ const meta = {
   args: {
     to: '/path',
     children: 'One',
-  },
-  argTypes: {
-    onClick: {
-      action: true,
-    },
+    onClick: fn(),
   },
 } satisfies Meta<LinkComponentProps>;
 
