@@ -10,7 +10,7 @@ import { BotsProps } from './types';
 import { BOTS_QUERY } from './Bots.queries';
 
 const Bots: React.FC<BotsProps> = ({ org }) => {
-  // TODO: Add infinite scroll
+  // TODO: Add infinite scroll (with pagination cache)
   const { data, loading } = useQuery(BOTS_QUERY, {
     variables: {
       org_id: org.id,

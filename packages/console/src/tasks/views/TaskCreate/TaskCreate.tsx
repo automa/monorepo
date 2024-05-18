@@ -25,7 +25,7 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     resolver: zodResolver(taskMessageSchema),
   });
 
-  // TODO: Handle optimistic UI, error & cache eviction
+  // TODO: Handle error
   const [taskCreate, { data, loading, error }] = useMutation(
     TASK_CREATE_MUTATION,
     {
@@ -34,16 +34,16 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
 
         cache.modify({
           fields: {
-            org(existingOrg = {}) {
+            tasks(existing = {}, details) {
+              if (!details.storeFieldName.includes(`"org_id":${org.id}`))
+                return existing;
+
               const newTaskRef = cache.writeFragment({
                 data: getFragment(TASK_FRAGMENT, data.taskCreate),
                 fragment: TASK_FRAGMENT,
               });
 
-              return {
-                ...existingOrg,
-                tasks: [newTaskRef, ...existingOrg.tasks],
-              };
+              return [newTaskRef, ...existing];
             },
           },
         });

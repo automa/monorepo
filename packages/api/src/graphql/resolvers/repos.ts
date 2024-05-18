@@ -3,7 +3,6 @@ import { QueryResolvers, RepoResolvers } from '@automa/common';
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  // TODO: Add limit and offset as abstract arguments
   repos: async (root, { org_id }, { user, prisma }) => {
     const result = await prisma.user_repos.findMany({
       where: {
