@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { provider, users, user_providers, orgs, competitor, repos, bot, bots, bot_installations, project_provider, org_project_providers, tasks } from '@prisma/client';
+import { provider, users, user_providers, orgs, repos, bot, bots, bot_installations, project_provider, org_project_providers, tasks } from '@prisma/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -51,11 +51,6 @@ export type BotInstallation = {
 
 export enum BotType {
   Webhook = 'webhook'
-}
-
-export enum CompetitorType {
-  Dependabot = 'dependabot',
-  Renovate = 'renovate'
 }
 
 export type Mutation = {
@@ -268,7 +263,6 @@ export type ResolversTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallation: ResolverTypeWrapper<bot_installations>;
   BotType: ResolverTypeWrapper<bot>;
-  CompetitorType: ResolverTypeWrapper<competitor>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
@@ -330,8 +324,6 @@ export type BotInstallationResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type BotTypeResolvers = EnumResolverSignature<{ webhook?: any }, ResolversTypes['BotType']>;
-
-export type CompetitorTypeResolvers = EnumResolverSignature<{ dependabot?: any, renovate?: any }, ResolversTypes['CompetitorType']>;
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
@@ -424,7 +416,6 @@ export type Resolvers<ContextType = any> = {
   Bot?: BotResolvers<ContextType>;
   BotInstallation?: BotInstallationResolvers<ContextType>;
   BotType?: BotTypeResolvers;
-  CompetitorType?: CompetitorTypeResolvers;
   DateTime?: GraphQLScalarType;
   JSON?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;

@@ -11,7 +11,6 @@ DROP TABLE public.user_providers;
 DROP TABLE public.users;
 
 DROP TYPE public.bot;
-DROP TYPE public.competitor;
 DROP TYPE public.provider;
 
 DROP EXTENSION citext;

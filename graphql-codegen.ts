@@ -16,7 +16,6 @@ const config: CodegenConfig = {
           User: '@prisma/client#users',
           UserProvider: '@prisma/client#user_providers',
           Org: '@prisma/client#orgs',
-          CompetitorType: '@prisma/client#competitor',
           Repo: '@prisma/client#repos',
           BotType: '@prisma/client#bot',
           Bot: '@prisma/client#bots',

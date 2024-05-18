@@ -112,15 +112,14 @@ model bots {
 }
 
 model repo_settings {
-  id                String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   repo_id           Int
   cause             Int
-  commit            String      @db.VarChar(40)
+  commit            String   @db.VarChar(40)
   settings          Json?
   validation_errors Json?
-  created_at        DateTime    @default(now()) @db.Timestamp(6)
-  imported_from     competitor?
-  repos             repos       @relation(fields: [repo_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  created_at        DateTime @default(now()) @db.Timestamp(6)
+  repos             repos    @relation(fields: [repo_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([repo_id, created_at(sort: Desc)])
 }
@@ -195,11 +194,6 @@ enum project_provider {
 
 enum bot {
   webhook
-}
-
-enum competitor {
-  dependabot
-  renovate
 }
 
 enum task_item {

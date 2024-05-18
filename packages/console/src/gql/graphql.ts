@@ -51,11 +51,6 @@ export enum BotType {
   Webhook = 'webhook'
 }
 
-export enum CompetitorType {
-  Dependabot = 'dependabot',
-  Renovate = 'renovate'
-}
-
 export type Mutation = {
   __typename?: 'Mutation';
   botCreate: Bot;
