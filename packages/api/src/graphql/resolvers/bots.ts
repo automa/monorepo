@@ -1,8 +1,11 @@
 import {
   BotResolvers,
   MutationResolvers,
+  PublicBotResolvers,
   QueryResolvers,
   botCreateSchema,
+  publicBotFields,
+  publicOrgFields,
 } from '@automa/common';
 
 import { Context } from '../types';
@@ -29,6 +32,17 @@ export const Query: QueryResolvers<Context> = {
       orderBy: {
         id: 'asc',
       },
+    });
+  },
+  publicBots: async (root, {}, { prisma }) => {
+    return prisma.bots.findMany({
+      where: {
+        is_published: true,
+      },
+      orderBy: {
+        id: 'asc',
+      },
+      select: publicBotFields,
     });
   },
 };
@@ -60,11 +74,21 @@ export const Mutation: MutationResolvers<Context> = {
 
 export const Bot: BotResolvers<Context> = {
   org: async ({ org_id }, args, { prisma }) => {
-    // TODO: Restrict what fields can be queried. Add select and specify public org type
     return prisma.orgs.findFirstOrThrow({
       where: {
         id: org_id,
       },
+    });
+  },
+};
+
+export const PublicBot: PublicBotResolvers<Context> = {
+  org: async ({ org_id }, args, { prisma }) => {
+    return prisma.orgs.findFirstOrThrow({
+      where: {
+        id: org_id,
+      },
+      select: publicOrgFields,
     });
   },
 };

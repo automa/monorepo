@@ -1,17 +1,18 @@
 import { assert } from 'chai';
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 
-import { orgs } from '@automa/prisma';
+import { orgs, users } from '@automa/prisma';
 
 import { server, graphql, seedUsers, seedOrgs, seedBots } from '../utils';
 
 suite('graphql bots', () => {
-  let app: FastifyInstance, org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
+  let app: FastifyInstance, sessionUser: users | null;
+  let user: users, org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
 
   suiteSetup(async () => {
     app = await server();
 
-    const [user] = await seedUsers(app, 1);
+    [user] = await seedUsers(app, 1);
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
 
     await app.prisma.user_orgs.createMany({
@@ -28,7 +29,7 @@ suite('graphql bots', () => {
     });
 
     app.addHook('preHandler', async (request) => {
-      request.user = user;
+      request.user = sessionUser;
     });
   });
 
@@ -38,9 +39,17 @@ suite('graphql bots', () => {
     await app.close();
   });
 
+  setup(() => {
+    sessionUser = user;
+  });
+
   suite('query bots', () => {
     suiteSetup(async () => {
       await seedBots(app, [org, secondOrg, nonMemberOrg], [org]);
+    });
+
+    suiteTeardown(async () => {
+      await app.prisma.bots.deleteMany();
     });
 
     suite('member org', () => {
@@ -136,6 +145,132 @@ suite('graphql bots', () => {
       assert.lengthOf(errors, 1);
       assert.equal(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+  });
+
+  suite('query publicBots', () => {
+    suiteSetup(async () => {
+      await seedBots(app, [org, secondOrg, nonMemberOrg], [org]);
+    });
+
+    suiteTeardown(async () => {
+      await app.prisma.bots.deleteMany();
+    });
+
+    setup(() => {
+      sessionUser = null;
+    });
+
+    test('should return published bots from all orgs', async () => {
+      const response = await graphql(
+        app,
+        `
+          query publicBots {
+            publicBots {
+              id
+              name
+              description
+              homepage
+              org {
+                name
+              }
+            }
+          }
+        `,
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { publicBots: bots },
+      } = response.json();
+
+      assert.lengthOf(bots, 3);
+
+      assert.isNumber(bots[0].id);
+      assert.equal(bots[0].name, 'bot-0');
+      assert.equal(bots[0].description, 'Bot 0');
+      assert.equal(bots[0].homepage, 'https://example.com');
+      assert.equal(bots[0].org.name, 'org-0');
+
+      assert.isNumber(bots[1].id);
+      assert.equal(bots[1].name, 'bot-1');
+      assert.equal(bots[1].description, 'Bot 1');
+      assert.equal(bots[1].homepage, 'https://example.com');
+      assert.equal(bots[1].org.name, 'org-1');
+
+      assert.isNumber(bots[2].id);
+      assert.equal(bots[2].name, 'bot-2');
+      assert.equal(bots[2].description, 'Bot 2');
+      assert.equal(bots[2].homepage, 'https://example.com');
+      assert.equal(bots[2].org.name, 'org-2');
+    });
+
+    test('should restrict PublicBot fields', async () => {
+      const response = await graphql(
+        app,
+        `
+          query publicBots {
+            publicBots {
+              id
+              type
+            }
+          }
+        `,
+      );
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Cannot query field "type" on type "PublicBot".',
+      );
+      assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
+    });
+
+    test('should restrict PublicOrg fields', async () => {
+      const response = await graphql(
+        app,
+        `
+          query publicBots {
+            publicBots {
+              id
+              org {
+                provider_name
+              }
+            }
+          }
+        `,
+      );
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Cannot query field "provider_name" on type "PublicOrg".',
+      );
+      assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
     });
   });
 

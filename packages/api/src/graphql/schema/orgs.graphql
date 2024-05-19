@@ -7,11 +7,14 @@ type Query {
   orgs: [Org!]!
 }
 
-type Org {
+type PublicOrg {
   id: Int!
   name: String!
   provider_type: ProviderType!
   provider_id: String!
+}
+
+type Org @inherits(type: "PublicOrg") {
   provider_name: String!
   is_user: Boolean!
   has_installation: Boolean!

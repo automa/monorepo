@@ -9,6 +9,7 @@
     "@prisma/client": "~5.14.0"
   },
   "scripts": {
+    "build": "rm -rf build && tsc -b --force",
     "postinstall": "pnpm prisma-generate",
     "prisma-generate": "prisma generate",
     "prisma-refresh": "prisma db pull && prisma generate"

@@ -7,5 +7,5 @@ type BotInstallation {
   created_at: DateTime!
 
   org: Org!
-  bot: Bot!
+  bot: PublicBot!
 }

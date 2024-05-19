@@ -161,5 +161,41 @@ suite('graphql botInstallations', () => {
       assert.equal(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
     });
+
+    test('should restrict PublicBot fields', async () => {
+      const response = await graphql(
+        app,
+        `
+          query botInstallations($org_id: Int!) {
+            botInstallations(org_id: $org_id) {
+              id
+              bot {
+                id
+                type
+              }
+            }
+          }
+        `,
+        {
+          org_id: org.id,
+        },
+      );
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Cannot query field "type" on type "PublicBot".',
+      );
+      assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
+    });
   });
 });

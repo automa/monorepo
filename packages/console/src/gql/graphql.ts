@@ -41,7 +41,7 @@ export type BotCreateInput = {
 
 export type BotInstallation = {
   __typename?: 'BotInstallation';
-  bot: Bot;
+  bot: PublicBot;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   org: Org;
@@ -102,6 +102,23 @@ export enum ProviderType {
   Gitlab = 'gitlab'
 }
 
+export type PublicBot = {
+  __typename?: 'PublicBot';
+  description?: Maybe<Scalars['String']['output']>;
+  homepage?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  org: PublicOrg;
+};
+
+export type PublicOrg = {
+  __typename?: 'PublicOrg';
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  provider_id: Scalars['String']['output'];
+  provider_type: ProviderType;
+};
+
 export type Query = {
   __typename?: 'Query';
   botInstallations: Array<BotInstallation>;
@@ -109,6 +126,7 @@ export type Query = {
   me: User;
   orgs: Array<Org>;
   project_integration_connections: Array<ProjectIntegrationConnection>;
+  publicBots: Array<PublicBot>;
   repo?: Maybe<Repo>;
   repos: Array<Repo>;
   tasks: Array<Task>;
@@ -187,7 +205,7 @@ export type UserProvider = {
 
 export type BotFragmentFragment = { __typename?: 'Bot', id: number, name: string, description?: string | null, type: BotType, webhook_url?: string | null, homepage?: string | null, published_at?: any | null, is_published: boolean, created_at: any } & { ' $fragmentName'?: 'BotFragmentFragment' };
 
-export type BotInstallationFragmentFragment = { __typename?: 'BotInstallation', id: number, created_at: any, bot: { __typename?: 'Bot', name: string, org: { __typename?: 'Org', provider_type: ProviderType, name: string } } } & { ' $fragmentName'?: 'BotInstallationFragmentFragment' };
+export type BotInstallationFragmentFragment = { __typename?: 'BotInstallation', id: number, created_at: any, bot: { __typename?: 'PublicBot', name: string, org: { __typename?: 'PublicOrg', provider_type: ProviderType, name: string } } } & { ' $fragmentName'?: 'BotInstallationFragmentFragment' };
 
 export type BotCreateMutationVariables = Exact<{
   org_id: Scalars['Int']['input'];

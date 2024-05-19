@@ -1,2 +1,4 @@
+directive @inherits(type: String!) on OBJECT | INPUT_OBJECT
+
 scalar JSON
 scalar DateTime

@@ -1,8 +1,9 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
+  require: ['ts-node/register'],
   overwrite: true,
-  schema: 'packages/api/src/graphql/schema',
+  schema: 'packages/api/src/graphql/schema.ts',
   documents: 'packages/console/src/**/*.queries.ts',
   generates: {
     'schema.graphql': {
@@ -15,9 +16,11 @@ const config: CodegenConfig = {
           ProviderType: '@prisma/client#provider',
           User: '@prisma/client#users',
           UserProvider: '@prisma/client#user_providers',
+          PublicOrg: './public#public_orgs',
           Org: '@prisma/client#orgs',
           Repo: '@prisma/client#repos',
           BotType: '@prisma/client#bot',
+          PublicBot: './public#public_bots',
           Bot: '@prisma/client#bots',
           BotInstallation: '@prisma/client#bot_installations',
           ProjectProviderType: '@prisma/client#project_provider',
