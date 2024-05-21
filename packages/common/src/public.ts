@@ -11,6 +11,7 @@ export const publicBotFields = {
   id: true,
   org_id: true,
   name: true,
+  short_description: true,
   description: true,
   homepage: true,
 };

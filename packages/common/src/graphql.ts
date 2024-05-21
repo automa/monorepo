@@ -31,6 +31,7 @@ export type Bot = {
   name: Scalars['String']['output'];
   org: Org;
   published_at?: Maybe<Scalars['DateTime']['output']>;
+  short_description?: Maybe<Scalars['String']['output']>;
   type: BotType;
   webhook_url?: Maybe<Scalars['String']['output']>;
 };
@@ -112,6 +113,7 @@ export type PublicBot = {
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   org: PublicOrg;
+  short_description?: Maybe<Scalars['String']['output']>;
 };
 
 export type PublicOrg = {
@@ -339,6 +341,7 @@ export type BotResolvers<ContextType = any, ParentType extends ResolversParentTy
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
   published_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  short_description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
   webhook_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -400,6 +403,7 @@ export type PublicBotResolvers<ContextType = any, ParentType extends ResolversPa
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
+  short_description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

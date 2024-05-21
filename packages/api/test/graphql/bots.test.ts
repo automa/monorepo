@@ -63,6 +63,7 @@ suite('graphql bots', () => {
               bots(org_id: $org_id) {
                 id
                 name
+                short_description
                 description
                 type
                 webhook_url
@@ -97,7 +98,8 @@ suite('graphql bots', () => {
 
         assert.isNumber(bots[0].id);
         assert.equal(bots[0].name, 'bot-0');
-        assert.equal(bots[0].description, 'Bot 0');
+        assert.equal(bots[0].short_description, 'Bot 0');
+        assert.equal(bots[0].description, 'Bot 0 long description');
         assert.equal(bots[0].type, 'webhook');
         assert.equal(bots[0].webhook_url, 'https://example.com/webhook/0');
         assert.equal(bots[0].homepage, 'https://example.com');
@@ -107,7 +109,8 @@ suite('graphql bots', () => {
 
         assert.isNumber(bots[1].id);
         assert.equal(bots[1].name, 'bot-3');
-        assert.equal(bots[1].description, 'Bot 3');
+        assert.equal(bots[1].short_description, 'Bot 3');
+        assert.equal(bots[1].description, 'Bot 3 long description');
         assert.equal(bots[1].type, 'webhook');
         assert.equal(bots[1].webhook_url, 'https://example.com/webhook/3');
         assert.isNull(bots[1].homepage);
@@ -169,6 +172,7 @@ suite('graphql bots', () => {
             publicBots {
               id
               name
+              short_description
               description
               homepage
               org {
@@ -194,19 +198,22 @@ suite('graphql bots', () => {
 
       assert.isNumber(bots[0].id);
       assert.equal(bots[0].name, 'bot-0');
-      assert.equal(bots[0].description, 'Bot 0');
+      assert.equal(bots[0].short_description, 'Bot 0');
+      assert.equal(bots[0].description, 'Bot 0 long description');
       assert.equal(bots[0].homepage, 'https://example.com');
       assert.equal(bots[0].org.name, 'org-0');
 
       assert.isNumber(bots[1].id);
       assert.equal(bots[1].name, 'bot-1');
-      assert.equal(bots[1].description, 'Bot 1');
+      assert.equal(bots[1].short_description, 'Bot 1');
+      assert.equal(bots[1].description, 'Bot 1 long description');
       assert.equal(bots[1].homepage, 'https://example.com');
       assert.equal(bots[1].org.name, 'org-1');
 
       assert.isNumber(bots[2].id);
       assert.equal(bots[2].name, 'bot-2');
-      assert.equal(bots[2].description, 'Bot 2');
+      assert.equal(bots[2].short_description, 'Bot 2');
+      assert.equal(bots[2].description, 'Bot 2 long description');
       assert.equal(bots[2].homepage, 'https://example.com');
       assert.equal(bots[2].org.name, 'org-2');
     });

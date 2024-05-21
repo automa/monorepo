@@ -28,6 +28,7 @@ export type Bot = {
   name: Scalars['String']['output'];
   org: Org;
   published_at?: Maybe<Scalars['DateTime']['output']>;
+  short_description?: Maybe<Scalars['String']['output']>;
   type: BotType;
   webhook_url?: Maybe<Scalars['String']['output']>;
 };
@@ -109,6 +110,7 @@ export type PublicBot = {
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   org: PublicOrg;
+  short_description?: Maybe<Scalars['String']['output']>;
 };
 
 export type PublicOrg = {

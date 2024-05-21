@@ -98,9 +98,10 @@ model bots {
   id                Int                 @id @default(autoincrement())
   org_id            Int
   name              String              @db.Citext
-  description       String?
   type              bot
   webhook_url       String?             @db.VarChar(255)
+  short_description String?             @db.VarChar(255)
+  description       String?
   homepage          String?             @db.VarChar(255)
   published_at      DateTime?           @db.Timestamp(6)
   is_published      Boolean?            @default(dbgenerated("(published_at IS NOT NULL)"))

@@ -10,10 +10,10 @@ INSERT INTO public.user_orgs (user_id, org_id)
 VALUES
   (1, 1);
 
-INSERT INTO public.bots (org_id, name, type, webhook_url, homepage, published_at)
+INSERT INTO public.bots (org_id, name, short_description, description, type, webhook_url, homepage, published_at)
 VALUES
-  (1, 'code', 'webhook', 'http://localhost:5000/hooks/automa', 'https://code.automa.app', NOW()),
-  (1, 'copywriting', 'webhook', 'http://localhost:5001/hooks/automa', 'https://copywriting.bot', NOW());
+  (1, 'code', 'Basic bot that codes', '...', 'webhook', 'http://localhost:5000/hooks/automa', 'https://code.automa.app', NOW()),
+  (2, 'copywriting', 'Best copywriter', '...', 'webhook', 'http://copywriting.bot/hooks/automa', 'https://copywriting.bot', NOW());
 
 INSERT INTO public.bot_installations (bot_id, org_id)
 VALUES

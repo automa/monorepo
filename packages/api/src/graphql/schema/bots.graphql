@@ -14,6 +14,7 @@ type Mutation {
 type PublicBot {
   id: Int!
   name: String!
+  short_description: String
   description: String
   homepage: String
 
