@@ -4,6 +4,10 @@ import { Route } from 'shared';
 
 export const routes = [
   {
+    Component: lazy(() => import('bots/views/BotInstallationCreate')),
+    path: '/bots/new',
+  },
+  {
     Component: lazy(() => import('bots/views/BotInstallations')),
     path: '/bots',
   },

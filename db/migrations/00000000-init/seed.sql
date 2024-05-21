@@ -1,3 +1,6 @@
+INSERT INTO public.orgs (name, provider_type, provider_id, provider_name)
+VALUES ('sunkarapk', 'github', '42120332', 'sunkarapk');
+
 INSERT INTO public.users (name, email)
 VALUES
   ('John', 'john@example.com');

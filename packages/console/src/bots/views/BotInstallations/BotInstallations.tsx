@@ -1,8 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { Flex, Loader } from 'shared';
+import { Button, Flex, Loader, Typography } from 'shared';
 import { BotInstallation } from 'bots';
+import { orgUri } from 'utils';
 
 import { BotInstallationsProps } from './types';
 
@@ -18,6 +20,12 @@ const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
 
   return (
     <>
+      <Flex justifyContent="space-between" alignItems="center" className="h-9">
+        <Typography variant="title6">Installed bots</Typography>
+        <Link to={orgUri(org, '/bots/new')}>
+          <Button>Install Bot</Button>
+        </Link>
+      </Flex>
       {loading && !data ? (
         <Flex justifyContent="center">
           <Loader />
