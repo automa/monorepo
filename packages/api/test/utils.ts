@@ -71,7 +71,8 @@ export const seedBots = (
     data: published.concat(nonPublished).map(({ id }, i) => ({
       org_id: id,
       name: `bot-${i}`,
-      description: `Bot ${i}`,
+      short_description: `Bot ${i}`,
+      description: `Bot ${i} long description`,
       type: 'webhook',
       webhook_url: `https://example.com/webhook/${i}`,
       ...(i < published.length && {

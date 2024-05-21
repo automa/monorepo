@@ -1,8 +1,3 @@
-enum CompetitorType {
-  dependabot
-  renovate
-}
-
 type Query {
   repos(org_id: Int!): [Repo!]!
   repo(org_name: String!, name: String!): Repo

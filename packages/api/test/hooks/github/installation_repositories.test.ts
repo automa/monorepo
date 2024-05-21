@@ -154,7 +154,6 @@ suite('github hook installation_repositories event', () => {
           cause: CauseType.REPOSITORY_ADDED,
           commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
           validation_errors: null,
-          imported_from: null,
         });
         assert.deepEqual(settings[0].settings, { bots: { dependency: {} } });
       });
@@ -276,7 +275,6 @@ suite('github hook installation_repositories event', () => {
               cause: CauseType.REPOSITORY_ADDED,
               commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
               validation_errors: null,
-              imported_from: null,
             });
             assert.deepEqual(settings[0].settings, {
               bots: { dependency: {} },
@@ -287,7 +285,6 @@ suite('github hook installation_repositories event', () => {
               cause: CauseType.REPOSITORY_ADDED,
               commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
               validation_errors: null,
-              imported_from: null,
             });
             assert.deepEqual(settings[1].settings, {
               bots: { dependency: {} },

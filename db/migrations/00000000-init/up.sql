@@ -57,8 +57,6 @@ CREATE TABLE public.repos (
   UNIQUE (org_id, provider_id)
 );
 
-CREATE TYPE public.competitor AS ENUM ('dependabot', 'renovate');
-
 CREATE TABLE public.repo_settings (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   repo_id INTEGER NOT NULL REFERENCES public.repos(id) ON DELETE CASCADE,
@@ -66,8 +64,7 @@ CREATE TABLE public.repo_settings (
   commit VARCHAR(40) NOT NULL,
   settings JSONB,
   validation_errors JSONB,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  imported_from public.competitor
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX repo_settings_repo_id_created_at_idx
@@ -96,18 +93,24 @@ CREATE TABLE public.bots (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
   name citext NOT NULL,
-  description TEXT,
   type public.bot NOT NULL,
   webhook_url VARCHAR(255),
   -- TODO: webhook_secret (here, check and data below)
   -- TODO: webhook_verification / client_secret
+  short_description VARCHAR(255),
+  description TEXT,
   homepage VARCHAR(255),
   published_at TIMESTAMP,
   is_published BOOLEAN GENERATED ALWAYS AS (published_at IS NOT NULL) STORED,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   UNIQUE (org_id, name),
   -- TODO: CHECK (type = 'webhook' AND webhook_url IS NOT NULL)
-  CHECK (published_at IS NULL OR (published_at IS NOT NULL AND homepage IS NOT NULL))
+  CHECK (published_at IS NULL OR (
+    published_at IS NOT NULL AND
+    short_description IS NOT NULL AND
+    description IS NOT NULL AND
+    homepage IS NOT NULL
+  ))
 );
 
 INSERT INTO public.bots (org_id, name, type, webhook_url, homepage)

@@ -1,5 +1,9 @@
 BEGIN;
 
+DROP TABLE public.org_project_providers;
+DROP TABLE public.task_items;
+DROP TABLE public.tasks;
+DROP TABLE public.bot_installation_repositories;
 DROP TABLE public.bot_installations;
 DROP TABLE public.bots;
 DROP TABLE public.user_repos;
@@ -10,8 +14,8 @@ DROP TABLE public.orgs;
 DROP TABLE public.user_providers;
 DROP TABLE public.users;
 
+DROP TYPE public.project_provider;
 DROP TYPE public.bot;
-DROP TYPE public.competitor;
 DROP TYPE public.provider;
 
 DROP EXTENSION citext;

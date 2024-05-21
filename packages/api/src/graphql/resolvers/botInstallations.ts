@@ -1,4 +1,8 @@
-import { BotInstallationResolvers, QueryResolvers } from '@automa/common';
+import {
+  BotInstallationResolvers,
+  QueryResolvers,
+  publicBotFields,
+} from '@automa/common';
 
 import { Context } from '../types';
 
@@ -36,11 +40,11 @@ export const BotInstallation: BotInstallationResolvers<Context> = {
     });
   },
   bot: async ({ bot_id }, args, { prisma }) => {
-    // TODO: Restrict what fields can be queried. Add select and specify public bot type
     return prisma.bots.findFirstOrThrow({
       where: {
         id: bot_id,
       },
+      select: publicBotFields,
     });
   },
 };

@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { provider, users, user_providers, orgs, competitor, repos, bot, bots, bot_installations, project_provider, org_project_providers, tasks } from '@prisma/client';
+import { provider, users, user_providers, orgs, repos, bot, bots, bot_installations, project_provider, org_project_providers, tasks } from '@prisma/client';
+import { public_orgs, public_bots } from './public';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -30,6 +31,7 @@ export type Bot = {
   name: Scalars['String']['output'];
   org: Org;
   published_at?: Maybe<Scalars['DateTime']['output']>;
+  short_description?: Maybe<Scalars['String']['output']>;
   type: BotType;
   webhook_url?: Maybe<Scalars['String']['output']>;
 };
@@ -43,7 +45,7 @@ export type BotCreateInput = {
 
 export type BotInstallation = {
   __typename?: 'BotInstallation';
-  bot: Bot;
+  bot: PublicBot;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   org: Org;
@@ -51,11 +53,6 @@ export type BotInstallation = {
 
 export enum BotType {
   Webhook = 'webhook'
-}
-
-export enum CompetitorType {
-  Dependabot = 'dependabot',
-  Renovate = 'renovate'
 }
 
 export type Mutation = {
@@ -109,6 +106,24 @@ export enum ProviderType {
   Gitlab = 'gitlab'
 }
 
+export type PublicBot = {
+  __typename?: 'PublicBot';
+  description?: Maybe<Scalars['String']['output']>;
+  homepage?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  org: PublicOrg;
+  short_description?: Maybe<Scalars['String']['output']>;
+};
+
+export type PublicOrg = {
+  __typename?: 'PublicOrg';
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  provider_id: Scalars['String']['output'];
+  provider_type: ProviderType;
+};
+
 export type Query = {
   __typename?: 'Query';
   botInstallations: Array<BotInstallation>;
@@ -116,6 +131,7 @@ export type Query = {
   me: User;
   orgs: Array<Org>;
   project_integration_connections: Array<ProjectIntegrationConnection>;
+  publicBots: Array<PublicBot>;
   repo?: Maybe<Repo>;
   repos: Array<Repo>;
   tasks: Array<Task>;
@@ -268,7 +284,6 @@ export type ResolversTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallation: ResolverTypeWrapper<bot_installations>;
   BotType: ResolverTypeWrapper<bot>;
-  CompetitorType: ResolverTypeWrapper<competitor>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
@@ -277,6 +292,8 @@ export type ResolversTypes = {
   ProjectIntegrationConnection: ResolverTypeWrapper<org_project_providers>;
   ProjectProviderType: ResolverTypeWrapper<project_provider>;
   ProviderType: ResolverTypeWrapper<provider>;
+  PublicBot: ResolverTypeWrapper<public_bots>;
+  PublicOrg: ResolverTypeWrapper<public_orgs>;
   Query: ResolverTypeWrapper<{}>;
   Repo: ResolverTypeWrapper<repos>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -298,6 +315,8 @@ export type ResolversParentTypes = {
   Mutation: {};
   Org: orgs;
   ProjectIntegrationConnection: org_project_providers;
+  PublicBot: public_bots;
+  PublicOrg: public_orgs;
   Query: {};
   Repo: repos;
   String: Scalars['String']['output'];
@@ -306,6 +325,12 @@ export type ResolversParentTypes = {
   User: users;
   UserProvider: user_providers;
 };
+
+export type InheritsDirectiveArgs = {
+  type: Scalars['String']['input'];
+};
+
+export type InheritsDirectiveResolver<Result, Parent, ContextType = any, Args = InheritsDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type BotResolvers<ContextType = any, ParentType extends ResolversParentTypes['Bot'] = ResolversParentTypes['Bot']> = {
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -316,13 +341,14 @@ export type BotResolvers<ContextType = any, ParentType extends ResolversParentTy
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
   published_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  short_description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
   webhook_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type BotInstallationResolvers<ContextType = any, ParentType extends ResolversParentTypes['BotInstallation'] = ResolversParentTypes['BotInstallation']> = {
-  bot?: Resolver<ResolversTypes['Bot'], ParentType, ContextType>;
+  bot?: Resolver<ResolversTypes['PublicBot'], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
@@ -330,8 +356,6 @@ export type BotInstallationResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type BotTypeResolvers = EnumResolverSignature<{ webhook?: any }, ResolversTypes['BotType']>;
-
-export type CompetitorTypeResolvers = EnumResolverSignature<{ dependabot?: any, renovate?: any }, ResolversTypes['CompetitorType']>;
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
@@ -373,12 +397,31 @@ export type ProjectProviderTypeResolvers = EnumResolverSignature<{ github?: any,
 
 export type ProviderTypeResolvers = EnumResolverSignature<{ github?: any, gitlab?: any }, ResolversTypes['ProviderType']>;
 
+export type PublicBotResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublicBot'] = ResolversParentTypes['PublicBot']> = {
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
+  short_description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PublicOrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublicOrg'] = ResolversParentTypes['PublicOrg']> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  provider_type?: Resolver<ResolversTypes['ProviderType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   botInstallations?: Resolver<Array<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<QueryBotInstallationsArgs, 'org_id'>>;
   bots?: Resolver<Array<ResolversTypes['Bot']>, ParentType, ContextType, RequireFields<QueryBotsArgs, 'org_id'>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
   project_integration_connections?: Resolver<Array<ResolversTypes['ProjectIntegrationConnection']>, ParentType, ContextType, RequireFields<QueryProject_Integration_ConnectionsArgs, 'org_id'>>;
+  publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
   tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTasksArgs, 'org_id'>>;
@@ -424,7 +467,6 @@ export type Resolvers<ContextType = any> = {
   Bot?: BotResolvers<ContextType>;
   BotInstallation?: BotInstallationResolvers<ContextType>;
   BotType?: BotTypeResolvers;
-  CompetitorType?: CompetitorTypeResolvers;
   DateTime?: GraphQLScalarType;
   JSON?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
@@ -432,6 +474,8 @@ export type Resolvers<ContextType = any> = {
   ProjectIntegrationConnection?: ProjectIntegrationConnectionResolvers<ContextType>;
   ProjectProviderType?: ProjectProviderTypeResolvers;
   ProviderType?: ProviderTypeResolvers;
+  PublicBot?: PublicBotResolvers<ContextType>;
+  PublicOrg?: PublicOrgResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Repo?: RepoResolvers<ContextType>;
   Task?: TaskResolvers<ContextType>;
@@ -439,3 +483,6 @@ export type Resolvers<ContextType = any> = {
   UserProvider?: UserProviderResolvers<ContextType>;
 };
 
+export type DirectiveResolvers<ContextType = any> = {
+  inherits?: InheritsDirectiveResolver<any, any, ContextType>;
+};

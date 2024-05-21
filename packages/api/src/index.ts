@@ -35,7 +35,9 @@ export const server = async () => {
   await app.register(fastifyHelmet);
 
   await app.register(fastifyCors, {
-    origin: isProduction ? env.CLIENT_URI : true,
+    origin: isProduction
+      ? [env.CLIENT_URI, 'https://studio.apollographql.com']
+      : true,
     credentials: true,
   });
 

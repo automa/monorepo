@@ -1,5 +1,3 @@
-import { join } from 'node:path';
-
 import { ApolloServer } from '@apollo/server';
 import {
   ApolloServerErrorCode,
@@ -8,11 +6,6 @@ import {
 import fastifyApollo, {
   fastifyApolloDrainPlugin,
 } from '@as-integrations/fastify';
-import { loadFiles } from '@graphql-tools/load-files';
-import {
-  ResolversComposition,
-  composeResolvers,
-} from '@graphql-tools/resolvers-composition';
 import { FastifyInstance } from 'fastify';
 import { ZodError } from 'zod';
 import { GraphQLError } from 'graphql';
@@ -21,21 +14,12 @@ import { Prisma } from '@automa/prisma';
 
 import { isProduction } from '../env';
 
+import schema from './schema';
 import { Context } from './types';
 
 export default async function (app: FastifyInstance) {
-  const typeDefs = await loadFiles(join(__dirname, 'schema/*.graphql'));
-  const resolvers = await loadFiles(join(__dirname, 'resolvers/*.{js,ts}'));
-
-  const composedResolvers = resolvers.map((resolver) =>
-    composeResolvers(resolver, {
-      '*.*': [isAuthenticated],
-    }),
-  );
-
   const apollo = new ApolloServer<Context>({
-    typeDefs,
-    resolvers: composedResolvers,
+    schema,
     plugins: [fastifyApolloDrainPlugin(app)],
     status400ForVariableCoercionErrors: true,
     introspection: !isProduction,
@@ -97,17 +81,3 @@ export default async function (app: FastifyInstance) {
     }),
   });
 }
-
-const isAuthenticated: ResolversComposition =
-  (next) => async (root, args, context, info) => {
-    if (!context.user) {
-      throw new GraphQLError('Unauthorized', {
-        extensions: {
-          code: 'UNAUTHORIZED',
-          http: { status: 200 },
-        },
-      });
-    }
-
-    return next(root, args, context, info);
-  };

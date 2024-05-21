@@ -147,7 +147,6 @@ suite('github hook installation event', () => {
           cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
           commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
           validation_errors: null,
-          imported_from: null,
         });
         assert.deepEqual(settings[0].settings, { bots: { dependency: {} } });
       });
@@ -297,7 +296,6 @@ suite('github hook installation event', () => {
               cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
               commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
               validation_errors: null,
-              imported_from: null,
             });
             assert.deepEqual(settings[0].settings, {
               bots: { dependency: {} },
@@ -308,7 +306,6 @@ suite('github hook installation event', () => {
               cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
               commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
               validation_errors: null,
-              imported_from: null,
             });
             assert.deepEqual(settings[1].settings, {
               bots: { dependency: {} },
@@ -535,7 +532,6 @@ suite('github hook installation event', () => {
               cause: CauseType.REPOSITORY_SYNCED_AFTER_UNSUSPENDED,
               commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
               validation_errors: null,
-              imported_from: null,
             });
             assert.deepEqual(settings[0].settings, {
               bots: { dependency: {} },
@@ -546,7 +542,6 @@ suite('github hook installation event', () => {
               cause: CauseType.APP_INSTALLED_WITH_REPOSITORY,
               commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
               validation_errors: null,
-              imported_from: null,
             });
             assert.deepEqual(settings[1].settings, {
               bots: { dependency: {} },
@@ -568,7 +563,6 @@ suite('github hook installation event', () => {
               cause: CauseType.REPOSITORY_SYNCED_AFTER_UNSUSPENDED,
               commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
               validation_errors: null,
-              imported_from: null,
             });
             assert.deepEqual(settings[0].settings, {
               bots: { dependency: {} },
