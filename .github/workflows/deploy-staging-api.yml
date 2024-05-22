@@ -38,6 +38,10 @@ jobs:
             deps-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Compile typescript
+        run: |
+          pnpm --filter @automa/prisma build
+          pnpm --filter @automa/common build
       - name: Publish graphql
         env:
           APOLLO_GRAPH_ID: ${{ secrets.STAGING_APOLLO_GRAPH_ID_API }}

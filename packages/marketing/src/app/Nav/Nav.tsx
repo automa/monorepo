@@ -20,17 +20,17 @@ const Nav: React.FC<NavProps> = ({ ...props }) => {
           </NavigationMenu.Item>
           <NavigationMenu.Item>
             <NavigationMenu.Link asChild>
+              <Link href="/pricing">Pricing</Link>
+            </NavigationMenu.Link>
+          </NavigationMenu.Item>
+          <NavigationMenu.Item>
+            <NavigationMenu.Link asChild>
               <Link href="/docs">Docs</Link>
             </NavigationMenu.Link>
           </NavigationMenu.Item>
           <NavigationMenu.Item>
             <NavigationMenu.Link asChild>
               <Link href="/changelog">Changelog</Link>
-            </NavigationMenu.Link>
-          </NavigationMenu.Item>
-          <NavigationMenu.Item>
-            <NavigationMenu.Link asChild>
-              <Link href="/pricing">Pricing</Link>
             </NavigationMenu.Link>
           </NavigationMenu.Item>
         </List>

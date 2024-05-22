@@ -1,9 +1,13 @@
 import React from 'react';
+import { format } from 'date-fns';
+import Link from 'next/link';
+
+import { Flex } from 'components';
 
 import Changelog from './Changelog';
 
 import { listChangelogs } from './utils';
-import { Container } from './page.styles';
+import { Container, Header, Timestamp } from './page.styles';
 
 export const metadata = {
   title: 'Automa ‒ Changelog',
@@ -13,16 +17,23 @@ export const metadata = {
 
 const ChangelogPage: React.FC = () => {
   // TODO: Need pagination
-  const changelogs = listChangelogs();
+  const changelogs = listChangelogs().slice(0, 10);
 
   return (
     <Container>
-      Changelog
-      {changelogs.map(({ path, slug }) => (
-        <div key={slug}>
-          <Changelog path={path} />
-        </div>
-      ))}
+      <Header>Changelog</Header>
+      <Flex direction="column" className="gap-12 lg:gap-20">
+        {changelogs.map(({ date, path, slug }) => (
+          <Flex key={slug} className="flex-wrap lg:flex-nowrap">
+            <Timestamp>
+              <Link href={`/changelog/${slug}`}>
+                {format(new Date(date), 'MMM dd, yyyy')}
+              </Link>
+            </Timestamp>
+            <Changelog path={path} />
+          </Flex>
+        ))}
+      </Flex>
     </Container>
   );
 };

@@ -4,7 +4,7 @@ export const typography = cva('', {
   variants: {
     variant: {
       large: 'text-base lg:text-lg',
-      medium: 'text-sm font-medium lg:text-base',
+      medium: 'text-sm lg:text-base',
       small: 'text-xs font-medium lg:text-sm',
       title1: 'font-display text-5xl font-bold lg:text-6xl',
       title2: 'font-display text-4xl font-bold lg:text-5xl',
