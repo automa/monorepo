@@ -4,7 +4,7 @@ enum BotType {
 
 type Query {
   bots(org_id: Int!): [Bot!]!
-  publicBots: [PublicBot!]!
+  publicBots(org_id: Int): [PublicBot!]!
 }
 
 type Mutation {
@@ -14,7 +14,7 @@ type Mutation {
 type PublicBot {
   id: Int!
   name: String!
-  short_description: String
+  short_description: String!
   description: String
   homepage: String
 
@@ -33,6 +33,7 @@ type Bot @inherits(type: "PublicBot") {
 
 input BotCreateInput {
   name: String!
+  short_description: String!
   description: String
   type: BotType!
   webhook_url: String

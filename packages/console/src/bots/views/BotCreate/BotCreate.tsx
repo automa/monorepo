@@ -84,10 +84,19 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
             error={errors.name?.message}
             input={{ ...register('name'), placeholder: 'ai-bot' }}
           />
+          <Input
+            label="Very short description"
+            description="This description will be shown as a tagline under your bot to give users a quick idea of what it does."
+            error={errors.short_description?.message}
+            input={{
+              ...register('short_description'),
+              placeholder: 'Uses AI to code.',
+            }}
+          />
           <Textarea
             label="Description"
             optional
-            description="A short description of your bot. This will be displayed to Automa users."
+            description="A full description of your bot. This will be shown on the bot's page."
             error={errors.description?.message}
             textarea={{
               ...register('description'),

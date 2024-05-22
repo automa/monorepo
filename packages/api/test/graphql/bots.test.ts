@@ -181,6 +181,9 @@ suite('graphql bots', () => {
             }
           }
         `,
+        {
+          org_id: org.id,
+        },
       );
 
       assert.equal(response.statusCode, 200);
@@ -229,6 +232,9 @@ suite('graphql bots', () => {
             }
           }
         `,
+        {
+          org_id: org.id,
+        },
       );
 
       assert.equal(response.statusCode, 400);
@@ -261,6 +267,9 @@ suite('graphql bots', () => {
             }
           }
         `,
+        {
+          org_id: org.id,
+        },
       );
 
       assert.equal(response.statusCode, 400);
@@ -289,6 +298,7 @@ suite('graphql bots', () => {
     test('with valid input should succeed', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-5',
+        short_description: 'Bot 5',
         description: 'Bot 5',
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/5',
@@ -307,6 +317,7 @@ suite('graphql bots', () => {
 
       assert.isNumber(bot.id);
       assert.equal(bot.name, 'bot-5');
+      assert.equal(bot.short_description, 'Bot 5');
       assert.equal(bot.description, 'Bot 5');
       assert.equal(bot.type, 'webhook');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
@@ -319,6 +330,7 @@ suite('graphql bots', () => {
     test('with no description should succeed', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-5',
+        short_description: 'Bot 5',
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/5',
       });
@@ -336,6 +348,7 @@ suite('graphql bots', () => {
 
       assert.isNumber(bot.id);
       assert.equal(bot.name, 'bot-5');
+      assert.equal(bot.short_description, 'Bot 5');
       assert.isNull(bot.description);
       assert.equal(bot.type, 'webhook');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
@@ -348,6 +361,7 @@ suite('graphql bots', () => {
     test('with null description should succeed', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-5',
+        short_description: 'Bot 5',
         description: null,
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/5',
@@ -366,6 +380,7 @@ suite('graphql bots', () => {
 
       assert.isNumber(bot.id);
       assert.equal(bot.name, 'bot-5');
+      assert.equal(bot.short_description, 'Bot 5');
       assert.isNull(bot.description);
       assert.equal(bot.type, 'webhook');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
@@ -378,6 +393,7 @@ suite('graphql bots', () => {
     test('with empty description should succeed', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-5',
+        short_description: 'Bot 5',
         description: '',
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/5',
@@ -396,6 +412,7 @@ suite('graphql bots', () => {
 
       assert.isNumber(bot.id);
       assert.equal(bot.name, 'bot-5');
+      assert.equal(bot.short_description, 'Bot 5');
       assert.equal(bot.description, '');
       assert.equal(bot.type, 'webhook');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
@@ -408,6 +425,7 @@ suite('graphql bots', () => {
     test('non-member org should fail', async () => {
       const response = await botCreate(app, nonMemberOrg.id, {
         name: 'bot-6',
+        short_description: 'Bot 6',
         description: 'Bot 6',
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/6',
@@ -429,6 +447,7 @@ suite('graphql bots', () => {
 
     test('with missing name should fail', async () => {
       const response = await botCreate(app, org.id, {
+        short_description: 'Bot 6',
         description: 'Bot 6',
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/6',
@@ -454,6 +473,7 @@ suite('graphql bots', () => {
     test('with short name should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'b',
+        short_description: 'Bot 6',
         description: 'Bot 6',
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/6',
@@ -488,6 +508,7 @@ suite('graphql bots', () => {
     test('with long name should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'a'.repeat(256),
+        short_description: 'Bot 6',
         description: 'Bot 6',
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/6',
@@ -522,6 +543,7 @@ suite('graphql bots', () => {
     test('with special chars in name should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-@#$%',
+        short_description: 'Bot 6',
         description: 'Bot 6',
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/6',
@@ -553,6 +575,7 @@ suite('graphql bots', () => {
     test('with name containing only spaces should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: '     ',
+        short_description: 'Bot 6',
         description: 'Bot 6',
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/6',
@@ -594,6 +617,7 @@ suite('graphql bots', () => {
 
       const response = await botCreate(app, org.id, {
         name: 'bot-0',
+        short_description: 'Bot 0',
         type: 'webhook',
         webhook_url: 'https://example.com/webhook/0',
       });
@@ -614,9 +638,139 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.unique, ['org_id', 'name']);
     });
 
+    test('with missing short_description should fail', async () => {
+      const response = await botCreate(app, org.id, {
+        name: 'bot-6',
+        description: 'Bot 6',
+        type: 'webhook',
+        webhook_url: 'https://example.com/webhook/6',
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Field "short_description" of required type "String!" was not provided',
+      );
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+    });
+
+    test('with short short_description should fail', async () => {
+      const response = await botCreate(app, org.id, {
+        name: 'bot-6',
+        short_description: 'b',
+        description: 'Bot 6',
+        type: 'webhook',
+        webhook_url: 'https://example.com/webhook/6',
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_small',
+          message: 'String must contain at least 3 character(s)',
+          path: ['short_description'],
+          type: 'string',
+          inclusive: true,
+          exact: false,
+          minimum: 3,
+        },
+      ]);
+    });
+
+    test('with long short_description should fail', async () => {
+      const response = await botCreate(app, org.id, {
+        name: 'bot-6',
+        short_description: 'a'.repeat(256),
+        description: 'Bot 6',
+        type: 'webhook',
+        webhook_url: 'https://example.com/webhook/6',
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_big',
+          message: 'String must contain at most 255 character(s)',
+          path: ['short_description'],
+          type: 'string',
+          inclusive: true,
+          exact: false,
+          maximum: 255,
+        },
+      ]);
+    });
+
+    test('with short_description containing only spaces should fail', async () => {
+      const response = await botCreate(app, org.id, {
+        name: 'bot-6',
+        short_description: '     ',
+        description: 'Bot 6',
+        type: 'webhook',
+        webhook_url: 'https://example.com/webhook/6',
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_small',
+          message: 'String must contain at least 3 character(s)',
+          path: ['short_description'],
+          type: 'string',
+          inclusive: true,
+          exact: false,
+          minimum: 3,
+        },
+      ]);
+    });
+
     test('with missing type should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-6',
+        short_description: 'Bot 6',
         description: 'Bot 6',
         webhook_url: 'https://example.com/webhook/6',
       });
@@ -641,6 +795,7 @@ suite('graphql bots', () => {
     test('with invalid type should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-6',
+        short_description: 'Bot 6',
         description: 'Bot 6',
         type: 'invalid',
         webhook_url: 'https://example.com/webhook/6',
@@ -666,6 +821,7 @@ suite('graphql bots', () => {
     test.skip('with missing webhook_url should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-6',
+        short_description: 'Bot 6',
         description: 'Bot 6',
         type: 'webhook',
       });
@@ -690,6 +846,7 @@ suite('graphql bots', () => {
     test('with invalid webhook_url should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-6',
+        short_description: 'Bot 6',
         description: 'Bot 6',
         type: 'webhook',
         webhook_url: 'invalid_url',
@@ -728,6 +885,7 @@ const botCreate = (app: FastifyInstance, orgId: number, input: any) =>
         botCreate(org_id: $org_id, input: $input) {
           id
           name
+          short_description
           description
           type
           webhook_url

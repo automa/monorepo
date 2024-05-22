@@ -34,7 +34,8 @@ export const Query: QueryResolvers<Context> = {
       },
     });
   },
-  publicBots: async (root, {}, { prisma }) => {
+  publicBots: async (root, { org_id }, { prisma }) => {
+    // TODO: Show non-published bots from current org if given
     return prisma.bots.findMany({
       where: {
         is_published: true,
