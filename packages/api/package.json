@@ -46,7 +46,6 @@
     "jsonwebtoken": "~9.0.0",
     "nested-env-schema": "~1.0.2",
     "parse-link-header": "~2.0.0",
-    "random-word-slugs": "~0.1.7",
     "statsig-node": "~5.5.0",
     "zod": "~3.23.0"
   },

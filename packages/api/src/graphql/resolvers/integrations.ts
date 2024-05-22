@@ -1,16 +1,9 @@
-import {
-  ProjectIntegrationConnectionResolvers,
-  QueryResolvers,
-} from '@automa/common';
+import { IntegrationResolvers, QueryResolvers } from '@automa/common';
 
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  project_integration_connections: async (
-    root,
-    { org_id },
-    { user, prisma },
-  ) => {
+  integrations: async (root, { org_id }, { user, prisma }) => {
     // Check if the user is a member of the org
     await prisma.orgs.findFirstOrThrow({
       where: {
@@ -23,7 +16,7 @@ export const Query: QueryResolvers<Context> = {
       },
     });
 
-    return prisma.org_project_providers.findMany({
+    return prisma.integrations.findMany({
       where: {
         org_id,
       },
@@ -31,13 +24,12 @@ export const Query: QueryResolvers<Context> = {
   },
 };
 
-export const ProjectIntegrationConnection: ProjectIntegrationConnectionResolvers<Context> =
-  {
-    author: ({ created_by }, args, { prisma }) => {
-      return prisma.users.findFirstOrThrow({
-        where: {
-          id: created_by,
-        },
-      });
-    },
-  };
+export const Integration: IntegrationResolvers<Context> = {
+  author: ({ created_by }, args, { prisma }) => {
+    return prisma.users.findFirstOrThrow({
+      where: {
+        id: created_by,
+      },
+    });
+  },
+};

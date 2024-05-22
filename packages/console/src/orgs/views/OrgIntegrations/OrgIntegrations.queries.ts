@@ -1,11 +1,10 @@
 import { gql } from 'gql';
 
-export const INTEGRATION_CONNECTIONS_QUERY = gql(`
-  query IntegrationConnections($org_id: Int!) {
-    project_integration_connections(org_id: $org_id) {
+export const INTEGRATIONS_QUERY = gql(`
+  query Integrations($org_id: Int!) {
+    integrations(org_id: $org_id) {
       id
-      name
-      provider_type
+      integration_type
       config
       created_at
       author {

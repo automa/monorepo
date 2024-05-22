@@ -1,18 +1,17 @@
-enum ProjectProviderType {
+enum IntegrationType {
   github
   linear
+  slack
+  jira
 }
 
 type Query {
-  project_integration_connections(
-    org_id: Int!
-  ): [ProjectIntegrationConnection!]!
+  integrations(org_id: Int!): [Integration!]!
 }
 
-type ProjectIntegrationConnection {
+type Integration {
   id: Int!
-  name: String!
-  provider_type: ProjectProviderType!
+  integration_type: IntegrationType!
   config: JSON!
   created_at: DateTime!
 

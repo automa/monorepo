@@ -1,27 +1,27 @@
 import React, { useCallback } from 'react';
 import { useQuery } from '@apollo/client';
 
-import { ProjectProviderType } from '@automa/common';
+import { IntegrationType } from '@automa/common';
 
 import { Flex } from 'shared';
 
 import { OrgIntegrationsProps } from './types';
 
-import { INTEGRATION_CONNECTIONS_QUERY } from './OrgIntegrations.queries';
+import { INTEGRATIONS_QUERY } from './OrgIntegrations.queries';
 
 const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org }) => {
-  const { data, loading } = useQuery(INTEGRATION_CONNECTIONS_QUERY, {
+  const { data, loading } = useQuery(INTEGRATIONS_QUERY, {
     variables: {
       org_id: org.id,
     },
   });
 
   const redirectToConnect = useCallback(
-    (provider: ProjectProviderType) => {
+    (provider: IntegrationType) => {
       // TODO: Convert this into a function
       window.location.href = `${import.meta.env.VITE_API_URI}/api/orgs/${
-        org.provider_type
-      }/${org.name}/integrations/projects/${provider}`;
+        org.name
+      }/integrations/${provider}`;
     },
     [org],
   );
@@ -31,23 +31,21 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org }) => {
       <Flex direction="column" alignItems="center" className="gap-2">
         {loading && !data ? (
           <div>Loading</div>
-        ) : !data?.project_integration_connections?.length ? (
+        ) : !data?.integrations?.length ? (
           <Flex justifyContent="center">No connections</Flex>
         ) : (
-          data.project_integration_connections.map(
-            ({ id, name, provider_type, author }) => (
-              <div key={id}>
-                <div>{provider_type}</div>
-                <div>{name}</div>
-                <div>
-                  <div>Created by</div>
-                  <div>{author.name}</div>
-                </div>
+          data.integrations.map(({ id, name, integration_type, author }) => (
+            <div key={id}>
+              <div>{integration_type}</div>
+              <div>{name}</div>
+              <div>
+                <div>Created by</div>
+                <div>{author.name}</div>
               </div>
-            ),
-          )
+            </div>
+          ))
         )}
-        <button onClick={() => redirectToConnect(ProjectProviderType.Linear)}>
+        <button onClick={() => redirectToConnect(IntegrationType.Linear)}>
           Connect Linear
         </button>
       </Flex>

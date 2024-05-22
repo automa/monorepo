@@ -16,7 +16,7 @@ export default async function (app: FastifyInstance) {
     const state = randomUUID();
 
     request.session.referer = request.query.from;
-    request.session.githubOauthState = state;
+    request.session.integrationOauthState = state;
 
     const params = new URLSearchParams();
 

@@ -1,9 +1,8 @@
 import { FastifyInstance } from 'fastify';
 import axios from 'axios';
-import { generateSlug } from 'random-word-slugs';
 
 import { ErrorType } from '@automa/common';
-import { project_provider } from '@automa/prisma';
+import { integration } from '@automa/prisma';
 
 import { env } from '../../env';
 
@@ -22,9 +21,7 @@ export default async function (app: FastifyInstance) {
       },
     });
 
-    const referer = org
-      ? `${CLIENT_URI}/${org.provider_type}/${org.name}/integrations`
-      : CLIENT_URI;
+    const referer = org ? `${CLIENT_URI}/${org.name}/integrations` : CLIENT_URI;
 
     const replyError = (code: number) =>
       reply.redirect(`${referer}?error=${code}`);
@@ -64,12 +61,11 @@ export default async function (app: FastifyInstance) {
       return replyError(ErrorType.UNABLE_TO_CONNECT_INTEGRATION);
     }
 
-    await app.prisma.org_project_providers.create({
+    await app.prisma.integrations.create({
       data: {
         org_id: org.id,
-        provider_type: project_provider.linear,
-        name: generateSlug(2, { format: 'kebab' }),
-        config: {
+        integration_type: integration.linear,
+        secrets: {
           access_token: accessToken,
         },
         created_by: request.user!.id,

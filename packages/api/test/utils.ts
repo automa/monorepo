@@ -9,7 +9,7 @@ import '../src/plugins/error';
 import '../src/plugins/optimizer';
 import '../src/plugins/prisma';
 import '../src/plugins/redis';
-import '../src/routes/api/orgs/_provider/_org/autohooks';
+import '../src/routes/api/orgs/_org/autohooks';
 
 export const call = (
   app: FastifyInstance,

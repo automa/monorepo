@@ -17,7 +17,7 @@ suite('github auth', () => {
 
     app.addHook('preHandler', async (request) => {
       request.session.referer = '/orgs';
-      request.session.githubOauthState = '1234';
+      request.session.integrationOauthState = '1234';
 
       request.user = sessionUser;
     });

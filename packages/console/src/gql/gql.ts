@@ -21,7 +21,7 @@ const documents = {
     "\n  query BotInstallations($org_id: Int!) {\n    botInstallations(org_id: $org_id) {\n      id\n      ...BotInstallationFragment\n    }\n  }\n": types.BotInstallationsDocument,
     "\n  query Bots($org_id: Int!) {\n    bots(org_id: $org_id) {\n      id\n      ...BotFragment\n    }\n  }\n": types.BotsDocument,
     "\n  fragment OrgsQueryFragment on Query {\n    orgs {\n      id\n      name\n      provider_type\n      provider_id\n      provider_name\n      has_installation\n    }\n  }\n": types.OrgsQueryFragmentFragmentDoc,
-    "\n  query IntegrationConnections($org_id: Int!) {\n    project_integration_connections(org_id: $org_id) {\n      id\n      name\n      provider_type\n      config\n      created_at\n      author {\n        name\n      }\n    }\n  }\n": types.IntegrationConnectionsDocument,
+    "\n  query Integrations($org_id: Int!) {\n    integrations(org_id: $org_id) {\n      id\n      integration_type\n      config\n      created_at\n      author {\n        name\n      }\n    }\n  }\n": types.IntegrationsDocument,
     "\n  fragment RepoFragment on Repo {\n    id\n    name\n    is_private\n    is_archived\n    has_installation\n  }\n": types.RepoFragmentFragmentDoc,
     "\n  query Repo(\n    $org_name: String!\n    $name: String!\n  ) {\n    repo(org_name: $org_name, name: $name) {\n      id\n      name\n      provider_id\n      is_private\n      is_archived\n      has_installation\n      org {\n        id\n        name\n        provider_type\n        github_installation_id\n      }\n    }\n  }\n": types.RepoDocument,
     "\n  query Repos($org_id: Int!) {\n    repos(org_id: $org_id) {\n      id\n      ...RepoFragment\n    }\n  }\n": types.ReposDocument,
@@ -81,7 +81,7 @@ export function gql(source: "\n  fragment OrgsQueryFragment on Query {\n    orgs
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query IntegrationConnections($org_id: Int!) {\n    project_integration_connections(org_id: $org_id) {\n      id\n      name\n      provider_type\n      config\n      created_at\n      author {\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query IntegrationConnections($org_id: Int!) {\n    project_integration_connections(org_id: $org_id) {\n      id\n      name\n      provider_type\n      config\n      created_at\n      author {\n        name\n      }\n    }\n  }\n"];
+export function gql(source: "\n  query Integrations($org_id: Int!) {\n    integrations(org_id: $org_id) {\n      id\n      integration_type\n      config\n      created_at\n      author {\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query Integrations($org_id: Int!) {\n    integrations(org_id: $org_id) {\n      id\n      integration_type\n      config\n      created_at\n      author {\n        name\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
