@@ -31,7 +31,7 @@ export type Bot = {
   name: Scalars['String']['output'];
   org: Org;
   published_at?: Maybe<Scalars['DateTime']['output']>;
-  short_description?: Maybe<Scalars['String']['output']>;
+  short_description: Scalars['String']['output'];
   type: BotType;
   webhook_url?: Maybe<Scalars['String']['output']>;
 };
@@ -39,6 +39,7 @@ export type Bot = {
 export type BotCreateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+  short_description: Scalars['String']['input'];
   type: BotType;
   webhook_url?: InputMaybe<Scalars['String']['input']>;
 };
@@ -113,7 +114,7 @@ export type PublicBot = {
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   org: PublicOrg;
-  short_description?: Maybe<Scalars['String']['output']>;
+  short_description: Scalars['String']['output'];
 };
 
 export type PublicOrg = {
@@ -150,6 +151,11 @@ export type QueryBotsArgs = {
 
 export type QueryProject_Integration_ConnectionsArgs = {
   org_id: Scalars['Int']['input'];
+};
+
+
+export type QueryPublicBotsArgs = {
+  org_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -341,7 +347,7 @@ export type BotResolvers<ContextType = any, ParentType extends ResolversParentTy
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
   published_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  short_description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
   webhook_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -403,7 +409,7 @@ export type PublicBotResolvers<ContextType = any, ParentType extends ResolversPa
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
-  short_description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -421,7 +427,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
   project_integration_connections?: Resolver<Array<ResolversTypes['ProjectIntegrationConnection']>, ParentType, ContextType, RequireFields<QueryProject_Integration_ConnectionsArgs, 'org_id'>>;
-  publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType>;
+  publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType, Partial<QueryPublicBotsArgs>>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
   tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTasksArgs, 'org_id'>>;

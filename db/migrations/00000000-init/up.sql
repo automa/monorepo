@@ -97,7 +97,7 @@ CREATE TABLE public.bots (
   webhook_url VARCHAR(255),
   -- TODO: webhook_secret (here, check and data below)
   -- TODO: webhook_verification / client_secret
-  short_description VARCHAR(255),
+  short_description VARCHAR(255) NOT NULL,
   description TEXT,
   homepage VARCHAR(255),
   published_at TIMESTAMP,
@@ -113,11 +113,11 @@ CREATE TABLE public.bots (
   ))
 );
 
-INSERT INTO public.bots (org_id, name, type, webhook_url, homepage)
+INSERT INTO public.bots (org_id, name, type, webhook_url, short_description, homepage)
 VALUES
-  (1, 'automa', 'webhook', 'https://api.automa.app/hooks/automa', 'https://automa.app'),
-  (1, 'dependency', 'webhook', 'https://api.dependency.bot/hooks/automa', 'https://dependency.bot'),
-  (1, 'refactor', 'webhook', 'https://api.refactor.bot/hooks/automa', 'https://refactor.bot');
+  (1, 'automa', 'webhook', 'https://api.automa.app/hooks/automa', 'Updates & migrates automa settings', 'https://automa.app'),
+  (1, 'dependency', 'webhook', 'https://api.dependency.bot/hooks/automa', 'Upgrade dependencies by updating code', 'https://dependency.bot'),
+  (1, 'refactor', 'webhook', 'https://api.refactor.bot/hooks/automa', 'Refactors your code according to your rules', 'https://refactor.bot');
 
 CREATE TABLE public.bot_installations (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

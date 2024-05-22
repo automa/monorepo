@@ -13,7 +13,7 @@ const meta = {
       {
         id: 1,
         name: 'Bot',
-        description: 'Bot description',
+        short_description: 'Bot description',
         org: {
           name: 'Org',
         },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Loader, Typography } from 'shared';
@@ -18,8 +18,12 @@ const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
     },
   });
 
+  if (!loading && !data?.botInstallations?.length) {
+    return <Navigate to={orgUri(org, '/bots/new?onboarding=true')} />;
+  }
+
   return (
-    <>
+    <Flex direction="column" className="gap-8">
       <Flex justifyContent="space-between" alignItems="center" className="h-9">
         <Typography variant="title6">Installed bots</Typography>
         <Link to={orgUri(org, '/bots/new')}>
@@ -30,11 +34,9 @@ const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
         <Flex justifyContent="center">
           <Loader />
         </Flex>
-      ) : !data?.botInstallations?.length ? (
-        <Flex justifyContent="center">No bots installed</Flex>
       ) : (
         <Flex direction="column" className="gap-2">
-          {data.botInstallations.map((botInstallation) => (
+          {data!.botInstallations.map((botInstallation) => (
             <BotInstallation
               key={botInstallation.id}
               botInstallation={botInstallation}
@@ -42,7 +44,7 @@ const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
           ))}
         </Flex>
       )}
-    </>
+    </Flex>
   );
 };
 

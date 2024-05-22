@@ -36,7 +36,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <Flex alignItems="center" className="gap-6">
               <Nav />
               <Button size="large" href={process.env.NEXT_PUBLIC_CONSOLE_URL!}>
-                Log In
+                Get Started
               </Button>
             </Flex>
           </Flex>
