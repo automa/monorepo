@@ -1,9 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 
 import { IntegrationType } from '@automa/common';
 
-import { Flex } from 'shared';
+import { Flex, Loader } from 'shared';
+import { integrations, IntegrationConnectCard } from 'integrations';
+import { objectKeys } from 'utils';
 
 import { OrgIntegrationsProps } from './types';
 
@@ -16,40 +18,35 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org }) => {
     },
   });
 
-  const redirectToConnect = useCallback(
-    (provider: IntegrationType) => {
-      // TODO: Convert this into a function
-      window.location.href = `${import.meta.env.VITE_API_URI}/api/orgs/${
-        org.name
-      }/integrations/${provider}`;
-    },
-    [org],
+  const connectedIntegrations = useMemo(
+    () =>
+      (data?.integrations || []).reduce(
+        (acc, entry) => ({
+          ...acc,
+          [entry.integration_type]: true,
+        }),
+        {
+          [IntegrationType.Github]: org.has_installation,
+        } as Record<IntegrationType, boolean>,
+      ),
+    [org.has_installation, data?.integrations],
   );
 
   return (
-    <>
-      <Flex direction="column" alignItems="center" className="gap-2">
-        {loading && !data ? (
-          <div>Loading</div>
-        ) : !data?.integrations?.length ? (
-          <Flex justifyContent="center">No connections</Flex>
-        ) : (
-          data.integrations.map(({ id, name, integration_type, author }) => (
-            <div key={id}>
-              <div>{integration_type}</div>
-              <div>{name}</div>
-              <div>
-                <div>Created by</div>
-                <div>{author.name}</div>
-              </div>
-            </div>
-          ))
-        )}
-        <button onClick={() => redirectToConnect(IntegrationType.Linear)}>
-          Connect Linear
-        </button>
-      </Flex>
-    </>
+    <Flex direction="column" alignItems="center" className="gap-8 pt-8">
+      {loading && !data ? (
+        <Loader />
+      ) : (
+        objectKeys(integrations).map((integrationType) => (
+          <IntegrationConnectCard
+            key={integrationType}
+            integration={integrationType}
+            connected={connectedIntegrations[integrationType]}
+            org={org}
+          />
+        ))
+      )}
+    </Flex>
   );
 };
 
