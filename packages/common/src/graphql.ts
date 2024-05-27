@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { provider, users, user_providers, orgs, repos, bot, bots, bot_installations, project_provider, org_project_providers, tasks } from '@prisma/client';
+import { provider, users, user_providers, orgs, repos, bot, bots, bot_installations, integration, integrations, tasks } from '@prisma/client';
 import { public_orgs, public_bots } from './public';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -56,6 +56,22 @@ export enum BotType {
   Webhook = 'webhook'
 }
 
+export type Integration = {
+  __typename?: 'Integration';
+  author: User;
+  config: Scalars['JSON']['output'];
+  created_at: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  integration_type: IntegrationType;
+};
+
+export enum IntegrationType {
+  Github = 'github',
+  Jira = 'jira',
+  Linear = 'linear',
+  Slack = 'slack'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   botCreate: Bot;
@@ -87,21 +103,6 @@ export type Org = {
   provider_type: ProviderType;
 };
 
-export type ProjectIntegrationConnection = {
-  __typename?: 'ProjectIntegrationConnection';
-  author: User;
-  config: Scalars['JSON']['output'];
-  created_at: Scalars['DateTime']['output'];
-  id: Scalars['Int']['output'];
-  name: Scalars['String']['output'];
-  provider_type: ProjectProviderType;
-};
-
-export enum ProjectProviderType {
-  Github = 'github',
-  Linear = 'linear'
-}
-
 export enum ProviderType {
   Github = 'github',
   Gitlab = 'gitlab'
@@ -129,9 +130,9 @@ export type Query = {
   __typename?: 'Query';
   botInstallations: Array<BotInstallation>;
   bots: Array<Bot>;
+  integrations: Array<Integration>;
   me: User;
   orgs: Array<Org>;
-  project_integration_connections: Array<ProjectIntegrationConnection>;
   publicBots: Array<PublicBot>;
   repo?: Maybe<Repo>;
   repos: Array<Repo>;
@@ -149,7 +150,7 @@ export type QueryBotsArgs = {
 };
 
 
-export type QueryProject_Integration_ConnectionsArgs = {
+export type QueryIntegrationsArgs = {
   org_id: Scalars['Int']['input'];
 };
 
@@ -292,11 +293,11 @@ export type ResolversTypes = {
   BotType: ResolverTypeWrapper<bot>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Integration: ResolverTypeWrapper<integrations>;
+  IntegrationType: ResolverTypeWrapper<integration>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Org: ResolverTypeWrapper<orgs>;
-  ProjectIntegrationConnection: ResolverTypeWrapper<org_project_providers>;
-  ProjectProviderType: ResolverTypeWrapper<project_provider>;
   ProviderType: ResolverTypeWrapper<provider>;
   PublicBot: ResolverTypeWrapper<public_bots>;
   PublicOrg: ResolverTypeWrapper<public_orgs>;
@@ -317,10 +318,10 @@ export type ResolversParentTypes = {
   BotInstallation: bot_installations;
   DateTime: Scalars['DateTime']['output'];
   Int: Scalars['Int']['output'];
+  Integration: integrations;
   JSON: Scalars['JSON']['output'];
   Mutation: {};
   Org: orgs;
-  ProjectIntegrationConnection: org_project_providers;
   PublicBot: public_bots;
   PublicOrg: public_orgs;
   Query: {};
@@ -367,6 +368,17 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type IntegrationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Integration'] = ResolversParentTypes['Integration']> = {
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  config?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  integration_type?: Resolver<ResolversTypes['IntegrationType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IntegrationTypeResolvers = EnumResolverSignature<{ github?: any, jira?: any, linear?: any, slack?: any }, ResolversTypes['IntegrationType']>;
+
 export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
   name: 'JSON';
 }
@@ -388,18 +400,6 @@ export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTy
   provider_type?: Resolver<ResolversTypes['ProviderType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
-
-export type ProjectIntegrationConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectIntegrationConnection'] = ResolversParentTypes['ProjectIntegrationConnection']> = {
-  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  config?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
-  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  provider_type?: Resolver<ResolversTypes['ProjectProviderType'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProjectProviderTypeResolvers = EnumResolverSignature<{ github?: any, linear?: any }, ResolversTypes['ProjectProviderType']>;
 
 export type ProviderTypeResolvers = EnumResolverSignature<{ github?: any, gitlab?: any }, ResolversTypes['ProviderType']>;
 
@@ -424,9 +424,9 @@ export type PublicOrgResolvers<ContextType = any, ParentType extends ResolversPa
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   botInstallations?: Resolver<Array<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<QueryBotInstallationsArgs, 'org_id'>>;
   bots?: Resolver<Array<ResolversTypes['Bot']>, ParentType, ContextType, RequireFields<QueryBotsArgs, 'org_id'>>;
+  integrations?: Resolver<Array<ResolversTypes['Integration']>, ParentType, ContextType, RequireFields<QueryIntegrationsArgs, 'org_id'>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
-  project_integration_connections?: Resolver<Array<ResolversTypes['ProjectIntegrationConnection']>, ParentType, ContextType, RequireFields<QueryProject_Integration_ConnectionsArgs, 'org_id'>>;
   publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType, Partial<QueryPublicBotsArgs>>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
@@ -474,11 +474,11 @@ export type Resolvers<ContextType = any> = {
   BotInstallation?: BotInstallationResolvers<ContextType>;
   BotType?: BotTypeResolvers;
   DateTime?: GraphQLScalarType;
+  Integration?: IntegrationResolvers<ContextType>;
+  IntegrationType?: IntegrationTypeResolvers;
   JSON?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Org?: OrgResolvers<ContextType>;
-  ProjectIntegrationConnection?: ProjectIntegrationConnectionResolvers<ContextType>;
-  ProjectProviderType?: ProjectProviderTypeResolvers;
   ProviderType?: ProviderTypeResolvers;
   PublicBot?: PublicBotResolvers<ContextType>;
   PublicOrg?: PublicOrgResolvers<ContextType>;

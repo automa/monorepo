@@ -293,9 +293,6 @@ importers:
       parse-link-header:
         specifier: ~2.0.0
         version: 2.0.0
-      random-word-slugs:
-        specifier: ~0.1.7
-        version: 0.1.7
       statsig-node:
         specifier: ~5.5.0
         version: 5.5.0
@@ -18623,10 +18620,6 @@ packages:
   /ramda@0.29.0:
     resolution: {integrity: sha512-BBea6L67bYLtdbOqfp8f58fPMqEwx0doL+pAi8TZyp2YWz8R9G8z9x75CZI8W+ftqhFHCpEX2cRnUUXK130iKA==}
     dev: true
-
-  /random-word-slugs@0.1.7:
-    resolution: {integrity: sha512-8cyzxOIDeLFvwSPTgCItMXHGT5ZPkjhuFKUTww06Xg1dNMXuGxIKlARvS7upk6JXIm41ZKXmtlKR1iCRWklKmg==}
-    dev: false
 
   /randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}

@@ -27,7 +27,7 @@ export default async function (app: FastifyInstance) {
       return replyError(ErrorType.UNABLE_TO_LOGIN_WITH_PROVIDER);
     }
 
-    if (request.session.githubOauthState !== state) {
+    if (request.session.integrationOauthState !== state) {
       return replyError(ErrorType.UNABLE_TO_LOGIN_WITH_PROVIDER);
     }
 

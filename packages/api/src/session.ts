@@ -10,7 +10,6 @@ declare module 'fastify' {
     userId?: number;
     orgId?: number;
     referer?: string;
-    githubOauthState?: string;
     githubAccessToken?: string;
     integrationOauthState?: string;
   }

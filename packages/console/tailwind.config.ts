@@ -39,6 +39,7 @@ const config: Config = {
       },
       width: {
         '0.25': '0.0625rem',
+        '180': '45rem',
       },
       maxWidth: {
         '8xl': '90rem',
