@@ -7,6 +7,10 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      boxShadow: {
+        tooltip:
+          '0 1px 10px 0 rgba(0, 0, 0, 0.1), 0 2px 15px 0 rgba(0, 0, 0, 0.05)',
+      },
       colors: {
         primary: '#09142F',
         accent: '#DB475E',

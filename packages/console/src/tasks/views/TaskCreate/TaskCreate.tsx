@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 
 import { taskMessageSchema, TaskMessageInput } from '@automa/common';
 
-import { Button, Flex, Textarea, Typography } from 'shared';
+import { Button, Flex, Textarea, Typography, useToast } from 'shared';
 import { getFragment } from 'gql';
 import { orgUri } from 'utils';
 
@@ -17,6 +17,8 @@ import { TaskCreateProps } from './types';
 import { TASK_CREATE_MUTATION } from './TaskCreate.queries';
 
 const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
+  const { toast } = useToast();
+
   const {
     register,
     handleSubmit,
@@ -58,7 +60,11 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
         input: data,
       },
     });
-    // TODO: Show success toast
+
+    toast({
+      variant: 'success',
+      title: 'Task created',
+    });
   };
 
   // TODO: Show toast on error

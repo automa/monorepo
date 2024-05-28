@@ -10,6 +10,8 @@ const config: Config = {
     extend: {
       boxShadow: {
         border: 'inset 0 -1px rgba(0, 0, 0, 0.08)',
+        tooltip:
+          '0 1px 10px 0 rgba(0, 0, 0, 0.1), 0 2px 15px 0 rgba(0, 0, 0, 0.05)',
         card: '0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.04)',
         cardHover:
           '0 0 0 1px rgba(0, 0, 0, 0.08), 0 6px 14px rgba(0, 0, 0, 0.08)',
