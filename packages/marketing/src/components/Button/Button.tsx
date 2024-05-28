@@ -5,8 +5,27 @@ import { ButtonComponentProps } from './types';
 
 import { Container } from './Button.styles';
 
+const Anchor: React.FC<ButtonComponentProps> = ({
+  href,
+  link,
+  type,
+  disabled,
+  children,
+}) => {
+  if (disabled || !href || type !== 'button') {
+    return children;
+  }
+
+  return (
+    <Link href={href} {...link}>
+      {children}
+    </Link>
+  );
+};
+
 const Button: React.FC<ButtonComponentProps> = ({
   href,
+  link,
   variant,
   size,
   fullWidth,
@@ -16,16 +35,18 @@ const Button: React.FC<ButtonComponentProps> = ({
   ...props
 }) => {
   return (
-    <Container
-      $variant={variant}
-      $size={size}
-      $fullWidth={fullWidth}
-      type={type}
-      disabled={disabled}
-      {...props}
-    >
-      {disabled ? children : <Link href={href}>{children}</Link>}
-    </Container>
+    <Anchor href={href} link={link} type={type} disabled={disabled}>
+      <Container
+        $variant={variant}
+        $size={size}
+        $fullWidth={fullWidth}
+        type={type}
+        disabled={disabled}
+        {...props}
+      >
+        {children}
+      </Container>
+    </Anchor>
   );
 };
 

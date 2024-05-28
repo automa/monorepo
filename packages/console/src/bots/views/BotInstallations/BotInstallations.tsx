@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Loader, Typography } from 'shared';
@@ -26,9 +26,7 @@ const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
     <Flex direction="column" className="gap-8">
       <Flex justifyContent="space-between" alignItems="center" className="h-9">
         <Typography variant="title6">Installed bots</Typography>
-        <Link to={orgUri(org, '/bots/new')}>
-          <Button>Install Bot</Button>
-        </Link>
+        <Button to={orgUri(org, '/bots/new')}>Install Bot</Button>
       </Flex>
       {loading && !data ? (
         <Flex justifyContent="center">

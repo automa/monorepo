@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { Button, Flex, Link, Loader, Typography } from 'shared';
+import { Button, Flex, Loader, Typography } from 'shared';
 import { orgUri } from 'utils';
 import { Bot } from 'bots';
 
@@ -21,9 +21,7 @@ const Bots: React.FC<BotsProps> = ({ org }) => {
     <>
       <Flex justifyContent="space-between" alignItems="center" className="h-9">
         <Typography variant="title6">Automa Bots</Typography>
-        <Link to={orgUri(org, '/settings/bots/new')}>
-          <Button>Create Bot</Button>
-        </Link>
+        <Button to={orgUri(org, '/settings/bots/new')}>Create Bot</Button>
       </Flex>
       {loading && !data ? (
         <Flex justifyContent="center">

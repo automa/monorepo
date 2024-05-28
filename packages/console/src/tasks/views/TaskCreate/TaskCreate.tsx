@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 
 import { taskMessageSchema, TaskMessageInput } from '@automa/common';
 
-import { Button, Flex, Input, Textarea, Typography } from 'shared';
+import { Button, Flex, Textarea, Typography } from 'shared';
 import { getFragment } from 'gql';
 import { orgUri } from 'utils';
 
