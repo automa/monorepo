@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 import { Button, Flex, Tooltip, Typography } from 'shared';
@@ -18,10 +18,10 @@ const AuthLogin: React.FC<AuthLoginProps> = () => {
 
   const location = useLocation();
 
-  const loginWithGithub = useCallback(() => {
+  const loginWithGithubURL = useMemo(() => {
     const referer = (location.state as { from?: string })?.from;
 
-    window.location.href = `${import.meta.env.VITE_API_URI}/auth/github${
+    return `${import.meta.env.VITE_API_URI}/auth/github${
       referer ? `?from=${referer}` : ''
     }`;
   }, [location]);
@@ -72,8 +72,8 @@ const AuthLogin: React.FC<AuthLoginProps> = () => {
           {isSignup ? 'Sign up' : 'Log in'} to Automa
         </Typography>
         <LoginButton
+          href={loginWithGithubURL}
           className="bg-github text-white hover:bg-github/90"
-          onClick={loginWithGithub}
         >
           <GithubLogo className="size-6" />
           <Flex className="gap-1">Contiue with GitHub</Flex>

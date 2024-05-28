@@ -1,9 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { IntegrationType } from '@automa/common';
-
 import { Button, Flex, Typography, Tooltip } from 'shared';
-import { appName } from 'utils';
 
 import { integrations } from '../../consts';
 
@@ -18,14 +15,6 @@ const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
   ...props
 }) => {
   const { logo: Logo, name, description, disabled } = integrations[integration];
-
-  const connectGithub = useMemo(
-    () =>
-      `https://github.com/apps/${appName()}/installations/new/permissions?target_id=${
-        org.provider_id
-      }`,
-    [org],
-  );
 
   const connectIntegration = useMemo(
     () =>
@@ -51,16 +40,8 @@ const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
         ) : connected ? (
           <Tag>Connected</Tag>
         ) : (
-          <Button size="small">
-            <a
-              href={
-                integration === IntegrationType.Github
-                  ? connectGithub
-                  : connectIntegration
-              }
-            >
-              Connect
-            </a>
+          <Button href={connectIntegration} size="small">
+            Connect
           </Button>
         )}
       </Flex>

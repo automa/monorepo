@@ -1,5 +1,6 @@
 import { VariantProps } from 'class-variance-authority';
-import { ButtonHTMLAttributes } from 'react';
+import { AnchorHTMLAttributes, ButtonHTMLAttributes } from 'react';
+import { LinkProps } from 'react-router-dom';
 
 import { $, Component, Styled } from 'theme';
 
@@ -10,7 +11,12 @@ type ButtonProps = $<
   {
     fullWidth?: boolean;
   } & VariantProps<typeof button>,
-  ButtonHTMLAttributes<HTMLButtonElement>
+  {
+    href?: string;
+    anchor?: AnchorHTMLAttributes<HTMLAnchorElement>;
+    to?: LinkProps['to'];
+    link?: Omit<LinkProps, 'to'>;
+  } & ButtonHTMLAttributes<HTMLButtonElement>
 >;
 
 export type ButtonComponentProps = Component<ButtonProps>;

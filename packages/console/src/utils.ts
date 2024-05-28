@@ -3,7 +3,7 @@ import { ProviderType } from '@automa/common';
 import { environment } from 'env';
 
 export const appName = (name: string = 'automa') =>
-  `${name}${environment !== 'production' ? `-${environment}` : ''}`;
+  `${name}${environment === 'production' ? '' : `-${environment}`}`;
 
 export const orgUri = (org: { name: string }, path = '') =>
   `/${org.name}${path}`;
