@@ -1,3 +1,3 @@
 import { tw } from 'theme';
 
-export const Container = tw.body`min-h-screen bg-white font-sans text-black antialiased dark:bg-black dark:text-white`;
+export const Container = tw.body`min-h-screen bg-neutral-50 font-sans text-black antialiased dark:bg-neutral-800 dark:text-white`;

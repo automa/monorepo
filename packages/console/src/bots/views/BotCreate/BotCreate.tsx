@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 
 import { BotType, botCreateSchema, BotCreateInput } from '@automa/common';
 
-import { Button, Flex, Input, Textarea, Typography } from 'shared';
+import { Button, Flex, Input, Textarea, Typography, useToast } from 'shared';
 import { getFragment } from 'gql';
 import { orgUri } from 'utils';
 
@@ -17,6 +17,8 @@ import { BotCreateProps } from './types';
 import { BOT_CREATE_MUTATION } from './BotCreate.queries';
 
 const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
+  const { toast } = useToast();
+
   const {
     register,
     handleSubmit,
@@ -61,7 +63,11 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
         input: data,
       },
     });
-    // TODO: Show success toast
+
+    toast({
+      variant: 'success',
+      title: 'Bot created',
+    });
   };
 
   // TODO: Show toast on error
