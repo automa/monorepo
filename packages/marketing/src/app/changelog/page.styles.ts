@@ -7,8 +7,7 @@ export const Container = tw.main``;
 export const Header = tw(Typography).attrs({
   variant: 'title2',
   as: 'header',
-  className: 'my-10 lg:my-16 lg:ml-48',
-})``;
+})`my-10 lg:my-16 lg:ml-48`;
 
 export const Timestamp = tw(
   Typography,
