@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import axios from 'axios';
+import { LinearClient } from '@linear/sdk';
 
 import { ErrorType } from '@automa/common';
 import { integration } from '@automa/prisma';
@@ -61,12 +62,20 @@ export default async function (app: FastifyInstance) {
       return replyError(ErrorType.UNABLE_TO_CONNECT_INTEGRATION);
     }
 
+    const client = new LinearClient({ accessToken });
+    const linearOrg = await client.organization;
+
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,
         integration_type: integration.linear,
         secrets: {
           access_token: accessToken,
+        },
+        config: {
+          id: linearOrg.id,
+          name: linearOrg.name,
+          slug: linearOrg.urlKey,
         },
         created_by: request.user!.id,
       },

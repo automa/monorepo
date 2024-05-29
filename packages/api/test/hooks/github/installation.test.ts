@@ -10,11 +10,8 @@ import { server } from '../../utils';
 import { callWithFixture, encodeSettings } from './utils';
 
 suite('github hook installation event', () => {
-  let app: FastifyInstance,
-    sandbox: SinonSandbox,
-    response: LightMyRequestResponse,
-    postStub: SinonStub,
-    getStub: SinonStub;
+  let app: FastifyInstance, response: LightMyRequestResponse;
+  let sandbox: SinonSandbox, postStub: SinonStub, getStub: SinonStub;
 
   suiteSetup(async () => {
     app = await server();

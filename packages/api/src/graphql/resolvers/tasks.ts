@@ -48,6 +48,7 @@ export const Mutation: MutationResolvers<Context> = {
 
     const data = taskMessageSchema.parse(input);
 
+    // TODO: Create task item for the message (blocked testing due to lack of task items in the schema)
     return prisma.tasks.create({
       data: {
         org_id,
@@ -75,4 +76,5 @@ export const Task: TaskResolvers<Context> = {
       },
     });
   },
+  // TODO: Implement task items
 };

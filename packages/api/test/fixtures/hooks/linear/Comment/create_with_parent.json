@@ -1,0 +1,33 @@
+{
+  "action": "create",
+  "actor": {
+    "id": "5611201a-9594-4407-9490-731894376791",
+    "name": "Pavan Kumar Sunkara",
+    "type": "user"
+  },
+  "createdAt": "2024-05-29T00:27:32.802Z",
+  "data": {
+    "id": "9ab4e3ef-0728-4972-a7a8-01775a9a51b6",
+    "createdAt": "2024-05-29T00:27:32.802Z",
+    "updatedAt": "2024-05-29T00:27:32.802Z",
+    "body": "/automa",
+    "issueId": "f2f72e62-b1a4-46c3-b605-0962d24792d8",
+    "parentId": "a41c315a-3130-4c8e-a9ca-6e9219c156b7",
+    "userId": "5611201a-9594-4407-9490-731894376791",
+    "reactionData": [],
+    "user": {
+      "id": "5611201a-9594-4407-9490-731894376791",
+      "name": "Pavan Kumar Sunkara"
+    },
+    "issue": {
+      "id": "f2f72e62-b1a4-46c3-b605-0962d24792d8",
+      "title": "Handle when user revokes Github App",
+      "teamId": "b7e7eb03-9d67-41b3-a268-84c14a6757d6"
+    }
+  },
+  "url": "https://linear.app/automa/issue/PRO-93/handle-when-user-revokes-github-app#comment-9ab4e3ef",
+  "type": "Comment",
+  "organizationId": "da7cb595-897e-4c55-8e68-54f807dc3b87",
+  "webhookTimestamp": 1716942452888,
+  "webhookId": "c948ac8e-0c20-4292-a0f5-c84aac0efa64"
+}
