@@ -49,26 +49,45 @@ suite('github auth', () => {
   });
 
   suite('and callback', () => {
-    let requestStub: SinonStub, postStub: SinonStub, getStub: SinonStub;
+    let postStub: SinonStub, installationsStub: SinonStub, userStub: SinonStub;
 
     setup(() => {
-      requestStub = sandbox.stub(axios, 'request').resolves({
-        data: {
-          installations: [{ id: 1234 }, { id: 5678 }],
-        },
-      });
+      installationsStub = sandbox
+        .stub()
+        .onFirstCall()
+        .resolves({
+          data: {
+            installations: [{ id: 1234 }],
+          },
+          headers: {
+            link: '</user/installations?per_page=100&page=2>; rel="next"',
+          },
+        })
+        .onSecondCall()
+        .resolves({
+          data: {
+            installations: [{ id: 5678 }],
+          },
+          headers: {},
+        });
 
       postStub = sandbox.stub(axios, 'post').resolves({
         data: { access_token: 'abcdef', refresh_token: '123456' },
       });
 
-      getStub = sandbox.stub(axios, 'get').resolves({
+      userStub = sandbox.stub(axios, 'get').resolves({
         data: {
           id: 123,
           email: 'pavan@example.com',
           name: 'Pavan Kumar Sunkara',
           login: 'pksunkara',
         },
+      });
+
+      // @ts-ignore
+      sandbox.stub(axios, 'create').returns({
+        get: installationsStub,
+        request: userStub,
       });
     });
 
@@ -197,9 +216,10 @@ suite('github auth', () => {
       });
 
       test('should retrieve user information', async () => {
-        assert.equal(getStub.callCount, 1);
-        assert.equal(getStub.firstCall.args[0], 'https://api.github.com/user');
-        assert.deepEqual(getStub.firstCall.args[1], {
+        assert.equal(userStub.callCount, 1);
+        assert.lengthOf(userStub.firstCall.args, 2);
+        assert.equal(userStub.firstCall.args[0], 'https://api.github.com/user');
+        assert.deepEqual(userStub.firstCall.args[1], {
           headers: {
             Authorization: 'Bearer abcdef',
           },
@@ -248,18 +268,17 @@ suite('github auth', () => {
         });
 
         test('should have their orgs retrieved', async () => {
-          assert.isAtLeast(requestStub.callCount, 1);
-          assert.deepEqual(requestStub.firstCall.args[0], {
-            url: 'https://api.github.com/user/installations?per_page=100',
-            method: 'GET',
-            data: undefined,
-            headers: {
-              Accept: 'application/vnd.github+json',
-              Authorization: 'Bearer abcdef',
-              'User-Agent': 'Automa App',
-              'X-GitHub-Api-Version': '2022-11-28',
-            },
-          });
+          assert.isAtLeast(installationsStub.callCount, 2);
+          assert.lengthOf(installationsStub.firstCall.args, 1);
+          assert.deepEqual(
+            installationsStub.firstCall.args[0],
+            '/user/installations?per_page=100',
+          );
+          assert.lengthOf(installationsStub.secondCall.args, 1);
+          assert.deepEqual(
+            installationsStub.secondCall.args[0],
+            '/user/installations?per_page=100&page=2',
+          );
         });
 
         test('should be added to orgs', async () => {
@@ -337,9 +356,10 @@ suite('github auth', () => {
       });
 
       test('should retrieve user information', async () => {
-        assert.equal(getStub.callCount, 1);
-        assert.equal(getStub.firstCall.args[0], 'https://api.github.com/user');
-        assert.deepEqual(getStub.firstCall.args[1], {
+        assert.equal(userStub.callCount, 1);
+        assert.lengthOf(userStub.firstCall.args, 2);
+        assert.equal(userStub.firstCall.args[0], 'https://api.github.com/user');
+        assert.deepEqual(userStub.firstCall.args[1], {
           headers: {
             Authorization: 'Bearer abcdef',
           },
@@ -388,18 +408,17 @@ suite('github auth', () => {
         });
 
         test('should have their orgs retrieved', async () => {
-          assert.isAtLeast(requestStub.callCount, 1);
-          assert.deepEqual(requestStub.firstCall.args[0], {
-            url: 'https://api.github.com/user/installations?per_page=100',
-            method: 'GET',
-            data: undefined,
-            headers: {
-              Accept: 'application/vnd.github+json',
-              Authorization: 'Bearer abcdef',
-              'User-Agent': 'Automa App',
-              'X-GitHub-Api-Version': '2022-11-28',
-            },
-          });
+          assert.isAtLeast(installationsStub.callCount, 2);
+          assert.lengthOf(installationsStub.firstCall.args, 1);
+          assert.deepEqual(
+            installationsStub.firstCall.args[0],
+            '/user/installations?per_page=100',
+          );
+          assert.lengthOf(installationsStub.secondCall.args, 1);
+          assert.deepEqual(
+            installationsStub.secondCall.args[0],
+            '/user/installations?per_page=100&page=2',
+          );
         });
       });
     });
@@ -435,12 +454,13 @@ suite('github auth', () => {
         });
 
         test('should retrieve user information', async () => {
-          assert.equal(getStub.callCount, 1);
+          assert.equal(userStub.callCount, 1);
+          assert.lengthOf(userStub.firstCall.args, 2);
           assert.equal(
-            getStub.firstCall.args[0],
+            userStub.firstCall.args[0],
             'https://api.github.com/user',
           );
-          assert.deepEqual(getStub.firstCall.args[1], {
+          assert.deepEqual(userStub.firstCall.args[1], {
             headers: {
               Authorization: 'Bearer abcdef',
             },
@@ -494,18 +514,17 @@ suite('github auth', () => {
           });
 
           test('should have their orgs retrieved', async () => {
-            assert.isAtLeast(requestStub.callCount, 1);
-            assert.deepEqual(requestStub.firstCall.args[0], {
-              url: 'https://api.github.com/user/installations?per_page=100',
-              method: 'GET',
-              data: undefined,
-              headers: {
-                Accept: 'application/vnd.github+json',
-                Authorization: 'Bearer abcdef',
-                'User-Agent': 'Automa App',
-                'X-GitHub-Api-Version': '2022-11-28',
-              },
-            });
+            assert.isAtLeast(installationsStub.callCount, 2);
+            assert.lengthOf(installationsStub.firstCall.args, 1);
+            assert.deepEqual(
+              installationsStub.firstCall.args[0],
+              '/user/installations?per_page=100',
+            );
+            assert.lengthOf(installationsStub.secondCall.args, 1);
+            assert.deepEqual(
+              installationsStub.secondCall.args[0],
+              '/user/installations?per_page=100&page=2',
+            );
           });
         });
       },
@@ -546,12 +565,13 @@ suite('github auth', () => {
         });
 
         test('should retrieve user information', async () => {
-          assert.equal(getStub.callCount, 1);
+          assert.equal(userStub.callCount, 1);
+          assert.lengthOf(userStub.firstCall.args, 2);
           assert.equal(
-            getStub.firstCall.args[0],
+            userStub.firstCall.args[0],
             'https://api.github.com/user',
           );
-          assert.deepEqual(getStub.firstCall.args[1], {
+          assert.deepEqual(userStub.firstCall.args[1], {
             headers: {
               Authorization: 'Bearer abcdef',
             },
@@ -600,18 +620,17 @@ suite('github auth', () => {
           });
 
           test('should have their orgs retrieved', async () => {
-            assert.isAtLeast(requestStub.callCount, 1);
-            assert.deepEqual(requestStub.firstCall.args[0], {
-              url: 'https://api.github.com/user/installations?per_page=100',
-              method: 'GET',
-              data: undefined,
-              headers: {
-                Accept: 'application/vnd.github+json',
-                Authorization: 'Bearer abcdef',
-                'User-Agent': 'Automa App',
-                'X-GitHub-Api-Version': '2022-11-28',
-              },
-            });
+            assert.isAtLeast(installationsStub.callCount, 2);
+            assert.lengthOf(installationsStub.firstCall.args, 1);
+            assert.deepEqual(
+              installationsStub.firstCall.args[0],
+              '/user/installations?per_page=100',
+            );
+            assert.lengthOf(installationsStub.secondCall.args, 1);
+            assert.deepEqual(
+              installationsStub.secondCall.args[0],
+              '/user/installations?per_page=100&page=2',
+            );
           });
         });
       },
@@ -655,9 +674,10 @@ suite('github auth', () => {
       });
 
       test('should retrieve user information', async () => {
-        assert.equal(getStub.callCount, 1);
-        assert.equal(getStub.firstCall.args[0], 'https://api.github.com/user');
-        assert.deepEqual(getStub.firstCall.args[1], {
+        assert.equal(userStub.callCount, 1);
+        assert.lengthOf(userStub.firstCall.args, 2);
+        assert.equal(userStub.firstCall.args[0], 'https://api.github.com/user');
+        assert.deepEqual(userStub.firstCall.args[1], {
           headers: {
             Authorization: 'Bearer abcdef',
           },
@@ -706,18 +726,17 @@ suite('github auth', () => {
         });
 
         test('should have their orgs retrieved', async () => {
-          assert.isAtLeast(requestStub.callCount, 1);
-          assert.deepEqual(requestStub.firstCall.args[0], {
-            url: 'https://api.github.com/user/installations?per_page=100',
-            method: 'GET',
-            data: undefined,
-            headers: {
-              Accept: 'application/vnd.github+json',
-              Authorization: 'Bearer abcdef',
-              'User-Agent': 'Automa App',
-              'X-GitHub-Api-Version': '2022-11-28',
-            },
-          });
+          assert.isAtLeast(installationsStub.callCount, 2);
+          assert.lengthOf(installationsStub.firstCall.args, 1);
+          assert.deepEqual(
+            installationsStub.firstCall.args[0],
+            '/user/installations?per_page=100',
+          );
+          assert.lengthOf(installationsStub.secondCall.args, 1);
+          assert.deepEqual(
+            installationsStub.secondCall.args[0],
+            '/user/installations?per_page=100&page=2',
+          );
         });
       });
     });
@@ -762,12 +781,13 @@ suite('github auth', () => {
         });
 
         test('should retrieve user information', async () => {
-          assert.equal(getStub.callCount, 1);
+          assert.equal(userStub.callCount, 1);
+          assert.lengthOf(userStub.firstCall.args, 2);
           assert.equal(
-            getStub.firstCall.args[0],
+            userStub.firstCall.args[0],
             'https://api.github.com/user',
           );
-          assert.deepEqual(getStub.firstCall.args[1], {
+          assert.deepEqual(userStub.firstCall.args[1], {
             headers: {
               Authorization: 'Bearer abcdef',
             },
@@ -816,18 +836,17 @@ suite('github auth', () => {
           });
 
           test('should have their orgs retrieved', async () => {
-            assert.isAtLeast(requestStub.callCount, 1);
-            assert.deepEqual(requestStub.firstCall.args[0], {
-              url: 'https://api.github.com/user/installations?per_page=100',
-              method: 'GET',
-              data: undefined,
-              headers: {
-                Accept: 'application/vnd.github+json',
-                Authorization: 'Bearer abcdef',
-                'User-Agent': 'Automa App',
-                'X-GitHub-Api-Version': '2022-11-28',
-              },
-            });
+            assert.isAtLeast(installationsStub.callCount, 2);
+            assert.lengthOf(installationsStub.firstCall.args, 1);
+            assert.deepEqual(
+              installationsStub.firstCall.args[0],
+              '/user/installations?per_page=100',
+            );
+            assert.lengthOf(installationsStub.secondCall.args, 1);
+            assert.deepEqual(
+              installationsStub.secondCall.args[0],
+              '/user/installations?per_page=100&page=2',
+            );
           });
         });
       },
@@ -872,12 +891,13 @@ suite('github auth', () => {
         });
 
         test('should retrieve user information', async () => {
-          assert.equal(getStub.callCount, 1);
+          assert.equal(userStub.callCount, 1);
+          assert.lengthOf(userStub.firstCall.args, 2);
           assert.equal(
-            getStub.firstCall.args[0],
+            userStub.firstCall.args[0],
             'https://api.github.com/user',
           );
-          assert.deepEqual(getStub.firstCall.args[1], {
+          assert.deepEqual(userStub.firstCall.args[1], {
             headers: {
               Authorization: 'Bearer abcdef',
             },
@@ -926,7 +946,7 @@ suite('github auth', () => {
           });
 
           test('should not have their orgs retrieved', async () => {
-            assert.equal(requestStub.callCount, 0);
+            assert.equal(installationsStub.callCount, 0);
           });
         });
       },
@@ -972,12 +992,13 @@ suite('github auth', () => {
         });
 
         test('should retrieve user information', async () => {
-          assert.equal(getStub.callCount, 1);
+          assert.equal(userStub.callCount, 1);
+          assert.lengthOf(userStub.firstCall.args, 2);
           assert.equal(
-            getStub.firstCall.args[0],
+            userStub.firstCall.args[0],
             'https://api.github.com/user',
           );
-          assert.deepEqual(getStub.firstCall.args[1], {
+          assert.deepEqual(userStub.firstCall.args[1], {
             headers: {
               Authorization: 'Bearer abcdef',
             },
@@ -1031,18 +1052,17 @@ suite('github auth', () => {
           });
 
           test('should have their orgs retrieved', async () => {
-            assert.isAtLeast(requestStub.callCount, 1);
-            assert.deepEqual(requestStub.firstCall.args[0], {
-              url: 'https://api.github.com/user/installations?per_page=100',
-              method: 'GET',
-              data: undefined,
-              headers: {
-                Accept: 'application/vnd.github+json',
-                Authorization: 'Bearer abcdef',
-                'User-Agent': 'Automa App',
-                'X-GitHub-Api-Version': '2022-11-28',
-              },
-            });
+            assert.isAtLeast(installationsStub.callCount, 2);
+            assert.lengthOf(installationsStub.firstCall.args, 1);
+            assert.deepEqual(
+              installationsStub.firstCall.args[0],
+              '/user/installations?per_page=100',
+            );
+            assert.lengthOf(installationsStub.secondCall.args, 1);
+            assert.deepEqual(
+              installationsStub.secondCall.args[0],
+              '/user/installations?per_page=100&page=2',
+            );
           });
         });
       },

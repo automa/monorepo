@@ -8,6 +8,7 @@ import { caller } from '../../clients/github';
 import {
   GithubEventActionHandler,
   GithubInstallation,
+  GithubRepository,
   GithubRepositoryMinimal,
 } from './types';
 import { addRepo, updateRepo } from './installationRepositories';
@@ -39,7 +40,7 @@ const created: GithubEventActionHandler<{
     },
   });
 
-  const { axios } = await caller(app, body.installation.id);
+  const { axios } = await caller(body.installation.id);
 
   for (const repository of body.repositories) {
     await addRepo(
@@ -77,9 +78,11 @@ const unsuspend: GithubEventActionHandler<{
     },
   });
 
-  const { axios, paginate } = await caller(app, body.installation.id);
+  const { axios, paginate } = await caller(body.installation.id);
 
-  const pages = paginate('/installation/repositories');
+  const pages = paginate<{ repositories: GithubRepository[] }>(
+    '/installation/repositories',
+  );
 
   for await (const data of pages) {
     for (const repository of data.repositories) {

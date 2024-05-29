@@ -1,41 +1,31 @@
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
-import axios, { AxiosError, Method } from 'axios';
+import axios, { AxiosError, AxiosResponse, Method } from 'axios';
 
 import { provider } from '@automa/prisma';
 
 import { env } from '../env';
+import { nextLinkHeader } from '../clients/utils';
+import { createCallers, headers } from '../clients/github';
 
 declare module 'fastify' {
   interface FastifyRequest {
-    github: <ReponseBody>(options: {
-      path: string;
-      method?: Method;
-      data?: any;
-    }) => Promise<ReponseBody>;
+    github: {
+      axios: <ReponseBody>(options: {
+        path: string;
+        method?: Method;
+        data?: any;
+      }) => Promise<ReponseBody>;
+      paginate: <ResponseBody>(
+        path: string,
+      ) => AsyncGenerator<ResponseBody, void, unknown>;
+    };
   }
 }
 
-const headers = {
-  Accept: 'application/vnd.github+json',
-  'User-Agent': 'Automa App',
-  'X-GitHub-Api-Version': '2022-11-28',
-};
-
 const githubPlugin: FastifyPluginAsync = async (app) => {
   app.addHook('preHandler', async (request, reply) => {
-    request.github = async ({ path, method = 'GET', data = undefined }) => {
-      const call = (accessToken: string) =>
-        axios.request({
-          url: `${env.GITHUB_APP.API_URI}${path}`,
-          method,
-          data,
-          headers: {
-            ...headers,
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
+    const runWithToken = async <T>(fn: (accessToken: string) => Promise<T>) => {
       const { githubAccessToken } = request.session;
 
       if (!request.session.userId || !githubAccessToken) {
@@ -43,9 +33,7 @@ const githubPlugin: FastifyPluginAsync = async (app) => {
       }
 
       try {
-        const result = await call(githubAccessToken);
-
-        return result.data;
+        return fn(githubAccessToken);
       } catch (err) {
         if (
           !(err instanceof AxiosError) ||
@@ -92,11 +80,45 @@ const githubPlugin: FastifyPluginAsync = async (app) => {
       });
 
       const accessToken = tokens.data.access_token;
-      const result = await call(accessToken);
+      const result = await fn(accessToken);
 
       request.session.githubAccessToken = accessToken;
 
-      return result.data;
+      return result;
+    };
+
+    request.github = {
+      axios: async ({ path, method = 'GET', data = undefined }) => {
+        const result = await runWithToken<AxiosResponse<any>>(
+          (accessToken: string) =>
+            createCallers(accessToken).axios.request({
+              url: path,
+              method,
+              data,
+            }),
+        );
+
+        if (result) {
+          return result.data;
+        }
+      },
+      paginate: async function* (path: string) {
+        let requestUrl: string | null = path;
+
+        while (requestUrl) {
+          const response = await runWithToken<AxiosResponse<any>>(
+            (accessToken: string) =>
+              createCallers(accessToken).axios.get(requestUrl!),
+          );
+
+          requestUrl = null;
+
+          if (response) {
+            yield response.data;
+            requestUrl = nextLinkHeader(response);
+          }
+        }
+      },
     };
   });
 };

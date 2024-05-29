@@ -30,7 +30,7 @@ const added: GithubEventActionHandler<{
     return;
   }
 
-  const { axios } = await caller(app, body.installation.id);
+  const { axios } = await caller(body.installation.id);
 
   for (const repository of body.repositories_added) {
     await addRepo(app, axios, org, repository, CauseType.REPOSITORY_ADDED);

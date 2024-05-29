@@ -40,7 +40,7 @@ const run = async (
 ) => {
   const startTime = Date.now();
 
-  const { accessToken, axios } = await caller(app, installationId);
+  const { accessToken, axios } = await caller(installationId);
 
   const { data: repo } = await axios.get(`/repos/${uri}`);
 
