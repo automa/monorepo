@@ -1,8 +1,8 @@
 BEGIN;
 
-DROP TABLE public.integrations;
 DROP TABLE public.task_items;
 DROP TABLE public.tasks;
+DROP TABLE public.integrations;
 DROP TABLE public.bot_installation_repositories;
 DROP TABLE public.bot_installations;
 DROP TABLE public.bots;

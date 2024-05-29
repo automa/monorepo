@@ -80,6 +80,9 @@ const schema = Type.Object({
     CLIENT_SECRET: Type.String({
       default: '439b86ac5f88f138985666467f59c04c',
     }),
+    WEBHOOK_SECRET: Type.String({
+      default: 'lin_wh_073JxTDXBOn7rWoCkd2v1vbM4eWqqoUpA1y3aBWScWKx',
+    }),
   }),
   OTEL: Type.Object({
     TRACES: Type.Object({
