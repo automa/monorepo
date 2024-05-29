@@ -1,18 +1,21 @@
-import { readFileSync } from 'fs';
-
 import React from 'react';
-import { MDXRemote } from 'next-mdx-remote/rsc';
 
-import { common } from 'mdx-components';
+import { Typography } from 'components';
+import { parseContent } from 'utils';
+
+import { ChangelogMatter } from '../types';
 
 import { ChangelogProps } from './types';
 
 import { Container } from './Changelog.styles';
 
-const Changelog: React.FC<ChangelogProps> = ({ path, ...props }) => {
+const Changelog: React.FC<ChangelogProps> = async ({ path, ...props }) => {
+  const { content, frontmatter } = await parseContent<ChangelogMatter>(path);
+
   return (
     <Container {...props}>
-      <MDXRemote source={readFileSync(path)} components={common} />
+      <Typography variant="title3">{frontmatter.title}</Typography>
+      {content}
     </Container>
   );
 };

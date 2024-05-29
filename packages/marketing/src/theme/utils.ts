@@ -46,7 +46,7 @@ export const twp = (strings: TemplateStringsArray) => strings[0];
 // All the styled props are available under `Styled<Type>`.
 //
 //   ```
-//   const ButtonContainer = styled.button<Styled<ButtonProps>>``;
+//   const ButtonContainer = tw.button<Styled<ButtonProps>>``;
 //   ```
 export type $<SR, SO, C> = {
   componentDirect: SR & C;
