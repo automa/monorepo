@@ -47,15 +47,8 @@ const getInstallationAccessToken = async (
   return data.token as string;
 };
 
-export const caller = async (installationId: number) => {
+export const createCallers = (accessToken: string) => {
   const { GITHUB_APP } = env;
-
-  const accessToken = await getInstallationAccessToken(
-    installationId,
-    GITHUB_APP.API_URI,
-    GITHUB_APP.CLIENT_ID,
-    GITHUB_APP.PEM,
-  );
 
   const { axiosInstance, paginate } = createAxiosInstance({
     baseURL: GITHUB_APP.API_URI,
@@ -66,8 +59,23 @@ export const caller = async (installationId: number) => {
   });
 
   return {
-    accessToken,
     axios: axiosInstance,
     paginate,
+  };
+};
+
+export const caller = async (installationId: number) => {
+  const { GITHUB_APP } = env;
+
+  const accessToken = await getInstallationAccessToken(
+    installationId,
+    GITHUB_APP.API_URI,
+    GITHUB_APP.CLIENT_ID,
+    GITHUB_APP.PEM,
+  );
+
+  return {
+    accessToken,
+    ...createCallers(accessToken),
   };
 };

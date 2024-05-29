@@ -5,7 +5,7 @@ import axios, {
 } from 'axios';
 import parseLinkHeader from 'parse-link-header';
 
-const nextLinkHeader = (response: AxiosResponse) => {
+export const nextLinkHeader = (response: AxiosResponse) => {
   const links = parseLinkHeader(response.headers.link);
 
   if (!links || !links.next) {
@@ -13,7 +13,7 @@ const nextLinkHeader = (response: AxiosResponse) => {
   }
 
   // Defend against APIs that continue sending the same next link
-  if (links.next.url === response.config.url) {
+  if (links.next.url === response.config?.url) {
     return null;
   }
 
