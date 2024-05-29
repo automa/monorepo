@@ -5,6 +5,7 @@ import axios, { AxiosError, Method } from 'axios';
 import { provider } from '@automa/prisma';
 
 import { env } from '../env';
+import { headers } from '../clients/github';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -15,12 +16,6 @@ declare module 'fastify' {
     }) => Promise<ReponseBody>;
   }
 }
-
-const headers = {
-  Accept: 'application/vnd.github+json',
-  'User-Agent': 'Automa App',
-  'X-GitHub-Api-Version': '2022-11-28',
-};
 
 const githubPlugin: FastifyPluginAsync = async (app) => {
   app.addHook('preHandler', async (request, reply) => {

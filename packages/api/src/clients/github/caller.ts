@@ -1,11 +1,16 @@
 import { createPrivateKey } from 'node:crypto';
 
-import { FastifyInstance } from 'fastify';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
 import { env } from '../../env';
 import { createAxiosInstance } from '../utils';
+
+export const headers = {
+  Accept: 'application/vnd.github+json',
+  'User-Agent': 'Automa App',
+  'X-GitHub-Api-Version': '2022-11-28',
+};
 
 const generateAppToken = (id: string, pem: string) => {
   const claims = {
@@ -42,7 +47,7 @@ const getInstallationAccessToken = async (
   return data.token as string;
 };
 
-export const caller = async (app: FastifyInstance, installationId: number) => {
+export const caller = async (installationId: number) => {
   const { GITHUB_APP } = env;
 
   const accessToken = await getInstallationAccessToken(
@@ -55,9 +60,7 @@ export const caller = async (app: FastifyInstance, installationId: number) => {
   const { axiosInstance, paginate } = createAxiosInstance({
     baseURL: GITHUB_APP.API_URI,
     headers: {
-      Accept: 'application/vnd.github+json',
-      'User-Agent': 'Automa App',
-      'X-GitHub-Api-Version': '2022-11-28',
+      ...headers,
       Authorization: `Bearer ${accessToken}`,
     },
   });

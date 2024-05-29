@@ -39,7 +39,7 @@ const created: GithubEventActionHandler<{
     },
   });
 
-  const { axios } = await caller(app, body.installation.id);
+  const { axios } = await caller(body.installation.id);
 
   for (const repository of body.repositories) {
     await addRepo(
@@ -77,7 +77,7 @@ const unsuspend: GithubEventActionHandler<{
     },
   });
 
-  const { axios, paginate } = await caller(app, body.installation.id);
+  const { axios, paginate } = await caller(body.installation.id);
 
   const pages = paginate('/installation/repositories');
 

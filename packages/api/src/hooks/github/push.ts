@@ -42,7 +42,7 @@ const push: GithubEventActionHandler<{
   }
 
   const sync = async (cause: CauseType) => {
-    const { axios } = await caller(app, repo.orgs.github_installation_id!);
+    const { axios } = await caller(repo.orgs.github_installation_id!);
     return syncSettings(app, axios, repo, body.repository, cause, body.after);
   };
 

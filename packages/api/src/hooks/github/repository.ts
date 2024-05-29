@@ -63,7 +63,7 @@ const edited: GithubEventActionHandler<{
     return;
   }
 
-  const { axios } = await caller(app, body.installation.id);
+  const { axios } = await caller(body.installation.id);
 
   return syncSettings(
     app,
