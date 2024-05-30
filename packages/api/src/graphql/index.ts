@@ -67,6 +67,10 @@ export default async function (app: FastifyInstance) {
         };
       }
 
+      if (formattedErr.extensions?.code === 'INTERNAL_SERVER_ERROR') {
+        app.error.capture(innerErr, { path: formattedErr.path });
+      }
+
       return formattedErr;
     },
   });

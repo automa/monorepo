@@ -113,6 +113,9 @@ CREATE TABLE public.bots (
   ))
 );
 
+CREATE INDEX bots_is_published_idx
+ON public.bots (is_published);
+
 INSERT INTO public.bots (org_id, name, type, webhook_url, short_description, homepage)
 VALUES
   (1, 'automa', 'webhook', 'https://api.automa.app/hooks/automa', 'Updates & migrates automa settings', 'https://automa.app'),
@@ -157,6 +160,9 @@ CREATE TABLE public.tasks (
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+CREATE INDEX tasks_org_id_created_at_idx
+ON public.tasks (org_id, created_at DESC);
+
 CREATE TYPE public.task_item AS ENUM ('message', 'integration');
 
 CREATE TABLE public.task_items (
@@ -172,5 +178,8 @@ CREATE TABLE public.task_items (
     OR (type = 'integration' AND content IS NULL AND integration_type IS NOT NULL AND integration_config IS NOT NULL)
   )
 );
+
+CREATE INDEX task_items_task_id_created_at_idx
+ON public.task_items (task_id, created_at ASC);
 
 COMMIT;
