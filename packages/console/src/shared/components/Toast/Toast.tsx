@@ -1,7 +1,7 @@
 import React from 'react';
 import * as ToastPrimitive from '@radix-ui/react-toast';
 
-import { useToast } from 'shared/hooks';
+import { useToast } from './utils';
 
 import { ToastComponentProps } from './types';
 
@@ -14,7 +14,7 @@ import {
   Viewport,
 } from './Toast.styles';
 
-const Toast: React.FC<ToastComponentProps> = ({
+export const Toast: React.FC<ToastComponentProps> = ({
   type,
   duration,
   variant,
@@ -43,9 +43,7 @@ const Toast: React.FC<ToastComponentProps> = ({
   );
 };
 
-export default Toast;
-
-export const Toasts = () => {
+const Toasts = () => {
   const { toasts } = useToast();
 
   return (
@@ -57,3 +55,5 @@ export const Toasts = () => {
     </ToastPrimitive.Provider>
   );
 };
+
+export default Toasts;

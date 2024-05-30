@@ -479,7 +479,7 @@ suite('graphql bots', () => {
         webhook_url: 'https://example.com/webhook/6',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],
@@ -514,7 +514,7 @@ suite('graphql bots', () => {
         webhook_url: 'https://example.com/webhook/6',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],
@@ -549,7 +549,7 @@ suite('graphql bots', () => {
         webhook_url: 'https://example.com/webhook/6',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],
@@ -581,7 +581,7 @@ suite('graphql bots', () => {
         webhook_url: 'https://example.com/webhook/6',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],
@@ -622,7 +622,7 @@ suite('graphql bots', () => {
         webhook_url: 'https://example.com/webhook/0',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],
@@ -672,7 +672,7 @@ suite('graphql bots', () => {
         webhook_url: 'https://example.com/webhook/6',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],
@@ -707,7 +707,7 @@ suite('graphql bots', () => {
         webhook_url: 'https://example.com/webhook/6',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],
@@ -742,7 +742,7 @@ suite('graphql bots', () => {
         webhook_url: 'https://example.com/webhook/6',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],
@@ -852,7 +852,7 @@ suite('graphql bots', () => {
         webhook_url: 'invalid_url',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],

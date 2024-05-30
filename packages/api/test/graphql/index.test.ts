@@ -32,7 +32,7 @@ suite('graphql', () => {
       `,
     );
 
-    assert.equal(response.statusCode, 200);
+    assert.equal(response.statusCode, 401);
 
     assert.equal(
       response.headers['content-type'],

@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 
 import { BotType, botCreateSchema, BotCreateInput } from '@automa/common';
 
-import { Button, Flex, Input, Textarea, Typography, useToast } from 'shared';
+import { Button, Flex, Input, Textarea, Typography, toast } from 'shared';
 import { getFragment } from 'gql';
 import { orgUri } from 'utils';
 
@@ -17,8 +17,6 @@ import { BotCreateProps } from './types';
 import { BOT_CREATE_MUTATION } from './BotCreate.queries';
 
 const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
-  const { toast } = useToast();
-
   const {
     register,
     handleSubmit,

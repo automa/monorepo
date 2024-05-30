@@ -227,7 +227,7 @@ suite('graphql tasks', () => {
         content: 'abc',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],
@@ -258,7 +258,7 @@ suite('graphql tasks', () => {
         content: '     ',
       });
 
-      assert.equal(response.statusCode, 400);
+      assert.equal(response.statusCode, 200);
 
       assert.equal(
         response.headers['content-type'],

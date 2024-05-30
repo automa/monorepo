@@ -18,7 +18,7 @@ const isAuthenticated: ResolversComposition =
       throw new GraphQLError('Unauthorized', {
         extensions: {
           code: 'UNAUTHORIZED',
-          http: { status: 200 },
+          http: { status: 401 },
         },
       });
     }

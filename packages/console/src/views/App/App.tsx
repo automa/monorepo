@@ -16,7 +16,7 @@ import { Container } from './App.styles';
 const App: React.FC<{}> = () => {
   const { anonymousId, identify } = useAnalytics();
 
-  const { setAuth, unsetAuth, setAuthLoading, authLoading } = useAuth();
+  const { setAuth, setAuthLoading, authLoading } = useAuth();
 
   const user = useUser();
 
@@ -24,25 +24,10 @@ const App: React.FC<{}> = () => {
 
   const location = useLocation();
 
-  useEffect(() => {
-    const interceptor = axios.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response.status === 401) {
-          unsetAuth();
-        }
-
-        return Promise.reject(error);
-      },
-    );
-
-    return axios.interceptors.request.eject(interceptor);
-  }, [unsetAuth]);
-
   useAsyncEffect(async () => {
     try {
       // TODO: Use graphql (maybe dashboard query) here
-      const { data } = await axios('/api/session');
+      const { data } = await axios.create().get('/api/session');
 
       if (data) {
         setAuth({
