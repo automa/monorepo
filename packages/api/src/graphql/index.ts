@@ -8,7 +8,6 @@ import fastifyApollo, {
 } from '@as-integrations/fastify';
 import { FastifyInstance } from 'fastify';
 import { ZodError } from 'zod';
-import { GraphQLError } from 'graphql';
 
 import { Prisma } from '@automa/prisma';
 
@@ -31,13 +30,15 @@ export default async function (app: FastifyInstance) {
       if (innerErr instanceof Prisma.PrismaClientKnownRequestError) {
         switch (innerErr.code) {
           case 'P2002':
-            throw new GraphQLError('Unprocessable Entity', {
+            return {
+              ...formattedErr,
+              message: 'Unprocessable Entity',
               extensions: {
+                ...formattedErr.extensions,
                 code: ApolloServerErrorCode.BAD_USER_INPUT,
                 unique: innerErr.meta?.target,
-                http: { status: 400 },
               },
-            });
+            };
 
           case 'P2025':
             return {
@@ -55,13 +56,15 @@ export default async function (app: FastifyInstance) {
       }
 
       if (innerErr instanceof ZodError) {
-        throw new GraphQLError('Unprocessable Entity', {
+        return {
+          ...formattedErr,
+          message: 'Unprocessable Entity',
           extensions: {
+            ...formattedErr.extensions,
             code: ApolloServerErrorCode.BAD_USER_INPUT,
             errors: innerErr.errors,
-            http: { status: 400 },
           },
-        });
+        };
       }
 
       return formattedErr;

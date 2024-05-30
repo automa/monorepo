@@ -27,7 +27,7 @@ const App: React.FC<{}> = () => {
   useAsyncEffect(async () => {
     try {
       // TODO: Use graphql (maybe dashboard query) here
-      const { data } = await axios('/api/session');
+      const { data } = await axios.create().get('/api/session');
 
       if (data) {
         setAuth({
