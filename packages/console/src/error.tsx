@@ -27,7 +27,7 @@ export const errorCapture = (
       captureException(error);
     });
   } else {
-    console.error(error);
+    console.error(error, context);
   }
 };
 

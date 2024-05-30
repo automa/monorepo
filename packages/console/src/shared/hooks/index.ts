@@ -7,4 +7,3 @@ export * from './useKeybindings';
 export * from './useMediaQueries';
 export * from './useOptimizer';
 export { default as usePersistentState } from './usePersistentState';
-export * from './useToast';

@@ -1,19 +1,20 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import axios from 'axios';
 
 import { useOrgs } from 'orgs';
 import { useAsyncEffect } from 'shared';
 
 import { useUser, useAuth } from 'auth/hooks';
 
+import { logout } from '../../utils';
+
 import { AuthLogoutProps } from './types';
 
 const AuthLogout: React.FC<AuthLogoutProps> = () => {
   const user = useUser();
 
-  const { unsetAuth, setAuthLoading } = useAuth();
-  const { unsetOrgs, setOrgsLoading } = useOrgs();
+  const { setAuthLoading } = useAuth();
+  const { setOrgsLoading } = useOrgs();
 
   useAsyncEffect(async () => {
     if (!user) {
@@ -24,9 +25,7 @@ const AuthLogout: React.FC<AuthLogoutProps> = () => {
     setOrgsLoading(true);
 
     try {
-      await axios('/auth/logout');
-      unsetAuth();
-      unsetOrgs();
+      await logout();
     } catch (_) {}
 
     setAuthLoading(false);

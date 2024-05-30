@@ -1,6 +1,5 @@
 import React, { FC, ReactNode, ReactElement } from 'react';
 import { MemoryRouter, Routes, Route, NavigateProps } from 'react-router-dom';
-import { configureStore } from '@reduxjs/toolkit';
 import { Provider as StoreProvider } from 'react-redux';
 import { NormalizedCacheObject } from '@apollo/client';
 import {
@@ -12,7 +11,7 @@ import { render, RenderOptions } from '@testing-library/react';
 import { vi } from 'vitest';
 import axios from 'axios';
 
-import { reducer, RootState } from 'store';
+import store, { reducer, RootState } from 'store';
 import { cache } from 'client';
 
 import { AnalyticsProvider } from 'analytics';
@@ -36,10 +35,9 @@ const customRender = (
 ) => {
   cache.restore(cached);
 
-  const store = configureStore({
-    reducer,
-    preloadedState: state,
-  });
+  store.replaceReducer((_, { payload }) => payload as RootState);
+  store.dispatch({ type: 'REPLACE', payload: state });
+  store.replaceReducer(reducer);
 
   const AllTheProviders: FC<{ children: ReactNode }> = ({ children }) => {
     return (
