@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { ToastComponentProps } from 'shared/components';
+import { ToastComponentProps } from './types';
 
 const TOAST_REMOVE_DELAY = 5000;
 
@@ -174,10 +174,7 @@ const useToast = () => {
     };
   }, [state]);
 
-  return {
-    ...state,
-    toast,
-  };
+  return state;
 };
 
 export { useToast, toast };
