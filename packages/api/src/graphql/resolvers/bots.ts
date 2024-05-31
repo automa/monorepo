@@ -14,14 +14,10 @@ export const Query: QueryResolvers<Context> = {
   bots: async (root, { org_id }, { user, prisma }) => {
     // TODO: Convert the org check into a directive and/or use resolver composition
     // Check if the user is a member of the org
-    await prisma.orgs.findFirstOrThrow({
+    await prisma.user_orgs.findFirstOrThrow({
       where: {
-        id: org_id,
-        user_orgs: {
-          some: {
-            user_id: user.id,
-          },
-        },
+        user_id: user.id,
+        org_id,
       },
     });
 
@@ -59,14 +55,10 @@ export const Query: QueryResolvers<Context> = {
 export const Mutation: MutationResolvers<Context> = {
   botCreate: async (_, { org_id, input }, { prisma, user }) => {
     // Check if the user is a member of the org
-    await prisma.orgs.findFirstOrThrow({
+    await prisma.user_orgs.findFirstOrThrow({
       where: {
-        id: org_id,
-        user_orgs: {
-          some: {
-            user_id: user.id,
-          },
-        },
+        user_id: user.id,
+        org_id,
       },
     });
 
