@@ -36,27 +36,6 @@ suite('graphql botInstallations', () => {
       ],
     });
 
-    await app.prisma.bot_installations.createMany({
-      data: [
-        {
-          bot_id: bot.id,
-          org_id: org.id,
-        },
-        {
-          bot_id: secondOrgBot.id,
-          org_id: org.id,
-        },
-        {
-          bot_id: nonMemberOrgBot.id,
-          org_id: org.id,
-        },
-        {
-          bot_id: nonPublishedBot.id,
-          org_id: org.id,
-        },
-      ],
-    });
-
     app.addHook('preHandler', async (request) => {
       request.user = user;
     });
@@ -69,6 +48,33 @@ suite('graphql botInstallations', () => {
   });
 
   suite('query botInstallations', () => {
+    suiteSetup(async () => {
+      await app.prisma.bot_installations.createMany({
+        data: [
+          {
+            bot_id: bot.id,
+            org_id: org.id,
+          },
+          {
+            bot_id: secondOrgBot.id,
+            org_id: org.id,
+          },
+          {
+            bot_id: nonMemberOrgBot.id,
+            org_id: org.id,
+          },
+          {
+            bot_id: nonPublishedBot.id,
+            org_id: org.id,
+          },
+        ],
+      });
+    });
+
+    suiteTeardown(async () => {
+      await app.prisma.bot_installations.deleteMany();
+    });
+
     suite('member org', () => {
       let response: LightMyRequestResponse;
 
@@ -198,4 +204,115 @@ suite('graphql botInstallations', () => {
       assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
     });
   });
+
+  suite('mutation botInstall', () => {
+    teardown(async () => {
+      await app.prisma.bot_installations.deleteMany();
+    });
+
+    test('with valid input should succeed', async () => {
+      const response = await botInstall(app, org.id, {
+        bot_id: bot.id,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { botInstall: botInstallation },
+      } = response.json();
+
+      assert.isNumber(botInstallation.id);
+      assert.isString(botInstallation.created_at);
+      assert.equal(botInstallation.bot.name, bot.name);
+      assert.equal(botInstallation.bot.org.name, org.name);
+    });
+
+    test('non-published bot on org should succeed', async () => {
+      const response = await botInstall(app, org.id, {
+        bot_id: nonPublishedBot.id,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { botInstall: botInstallation },
+      } = response.json();
+
+      assert.isNumber(botInstallation.id);
+      assert.isString(botInstallation.created_at);
+      assert.equal(botInstallation.bot.name, nonPublishedBot.name);
+      assert.equal(botInstallation.bot.org.name, org.name);
+    });
+
+    test('non-member org should fail', async () => {
+      const response = await botInstall(app, nonMemberOrg.id, {
+        bot_id: bot.id,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+
+    test('non-published bot on different org should fail', async () => {
+      const response = await botInstall(app, secondOrg.id, {
+        bot_id: nonPublishedBot.id,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+  });
 });
+
+const botInstall = (app: FastifyInstance, orgId: number, input: any) =>
+  graphql(
+    app,
+    `
+      mutation botInstall($org_id: Int!, $input: BotInstallInput!) {
+        botInstall(org_id: $org_id, input: $input) {
+          id
+          created_at
+          bot {
+            name
+            org {
+              name
+            }
+          }
+        }
+      }
+    `,
+    {
+      org_id: orgId,
+      input,
+    },
+  );

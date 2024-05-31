@@ -44,6 +44,10 @@ export type BotCreateInput = {
   webhook_url?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type BotInstallInput = {
+  bot_id: Scalars['Int']['input'];
+};
+
 export type BotInstallation = {
   __typename?: 'BotInstallation';
   bot: PublicBot;
@@ -75,12 +79,19 @@ export enum IntegrationType {
 export type Mutation = {
   __typename?: 'Mutation';
   botCreate: Bot;
+  botInstall: BotInstallation;
   taskCreate: Task;
 };
 
 
 export type MutationBotCreateArgs = {
   input: BotCreateInput;
+  org_id: Scalars['Int']['input'];
+};
+
+
+export type MutationBotInstallArgs = {
+  input: BotInstallInput;
   org_id: Scalars['Int']['input'];
 };
 
@@ -152,6 +163,11 @@ export type QueryBotsArgs = {
 
 export type QueryIntegrationsArgs = {
   org_id: Scalars['Int']['input'];
+};
+
+
+export type QueryPublicBotArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -289,6 +305,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Bot: ResolverTypeWrapper<bots>;
   BotCreateInput: BotCreateInput;
+  BotInstallInput: BotInstallInput;
   BotInstallation: ResolverTypeWrapper<bot_installations>;
   BotType: ResolverTypeWrapper<bot>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -315,6 +332,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Bot: bots;
   BotCreateInput: BotCreateInput;
+  BotInstallInput: BotInstallInput;
   BotInstallation: bot_installations;
   DateTime: Scalars['DateTime']['output'];
   Int: Scalars['Int']['output'];
@@ -385,6 +403,7 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   botCreate?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<MutationBotCreateArgs, 'input' | 'org_id'>>;
+  botInstall?: Resolver<ResolversTypes['BotInstallation'], ParentType, ContextType, RequireFields<MutationBotInstallArgs, 'input' | 'org_id'>>;
   taskCreate?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationTaskCreateArgs, 'input' | 'org_id'>>;
 };
 

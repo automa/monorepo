@@ -41,6 +41,10 @@ export type BotCreateInput = {
   webhook_url?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type BotInstallInput = {
+  bot_id: Scalars['Int']['input'];
+};
+
 export type BotInstallation = {
   __typename?: 'BotInstallation';
   bot: PublicBot;
@@ -72,12 +76,19 @@ export enum IntegrationType {
 export type Mutation = {
   __typename?: 'Mutation';
   botCreate: Bot;
+  botInstall: BotInstallation;
   taskCreate: Task;
 };
 
 
 export type MutationBotCreateArgs = {
   input: BotCreateInput;
+  org_id: Scalars['Int']['input'];
+};
+
+
+export type MutationBotInstallArgs = {
+  input: BotInstallInput;
   org_id: Scalars['Int']['input'];
 };
 
