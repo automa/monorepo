@@ -2,10 +2,18 @@ type Query {
   botInstallations(org_id: Int!): [BotInstallation!]!
 }
 
+type Mutation {
+  botInstall(org_id: Int!, input: BotInstallInput!): BotInstallation!
+}
+
 type BotInstallation {
   id: Int!
   created_at: DateTime!
 
   org: Org!
   bot: PublicBot!
+}
+
+input BotInstallInput {
+  bot_id: Int!
 }

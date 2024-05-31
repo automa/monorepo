@@ -46,6 +46,16 @@ export const Query: QueryResolvers<Context> = {
       select: publicBotFields,
     });
   },
+  publicBot: async (root, { id }, { prisma }) => {
+    // TODO: Show non-published bots from current org if logged in
+    return prisma.bots.findFirstOrThrow({
+      where: {
+        id,
+        is_published: true,
+      },
+      select: publicBotFields,
+    });
+  },
 };
 
 export const Mutation: MutationResolvers<Context> = {

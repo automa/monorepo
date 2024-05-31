@@ -43,5 +43,8 @@ test('with orgs redirects to first org', async () => {
   });
 
   expect(mockedNavigate).toHaveBeenCalledTimes(1);
-  expect(mockedNavigate).toHaveBeenCalledWith({ to: '/one/settings/bots/new' });
+  expect(mockedNavigate).toHaveBeenCalledWith({
+    to: '/one/settings/bots/new',
+    replace: true,
+  });
 });

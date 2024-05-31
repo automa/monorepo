@@ -13,11 +13,11 @@ import { OrgProps } from './types';
 import { Nav, Item, Content } from './Org.styles';
 
 const Org: React.FC<OrgProps> = () => {
-  const location = useLocation();
-
   const { orgName } = useParams() as {
-    orgName?: string;
+    orgName: string;
   };
+
+  const location = useLocation();
 
   const { orgsLoading } = useOrgs();
   const { org, setOrg } = useOrg();
@@ -70,7 +70,7 @@ const Org: React.FC<OrgProps> = () => {
 
   // Redirect to first tab if on org page
   if (org && location.pathname === orgUri(org)) {
-    return <Navigate to={orgUri(org, tabs[0].path)} />;
+    return <Navigate to={orgUri(org, tabs[0].path)} replace />;
   }
 
   return (

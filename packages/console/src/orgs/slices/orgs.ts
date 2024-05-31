@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ProviderType } from '@automa/common';
-
 import { Org } from 'orgs/types';
 
 interface OrgsState {

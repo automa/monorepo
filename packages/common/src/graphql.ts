@@ -44,6 +44,10 @@ export type BotCreateInput = {
   webhook_url?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type BotInstallInput = {
+  bot_id: Scalars['Int']['input'];
+};
+
 export type BotInstallation = {
   __typename?: 'BotInstallation';
   bot: PublicBot;
@@ -75,12 +79,19 @@ export enum IntegrationType {
 export type Mutation = {
   __typename?: 'Mutation';
   botCreate: Bot;
+  botInstall: BotInstallation;
   taskCreate: Task;
 };
 
 
 export type MutationBotCreateArgs = {
   input: BotCreateInput;
+  org_id: Scalars['Int']['input'];
+};
+
+
+export type MutationBotInstallArgs = {
+  input: BotInstallInput;
   org_id: Scalars['Int']['input'];
 };
 
@@ -133,6 +144,7 @@ export type Query = {
   integrations: Array<Integration>;
   me: User;
   orgs: Array<Org>;
+  publicBot: PublicBot;
   publicBots: Array<PublicBot>;
   repo?: Maybe<Repo>;
   repos: Array<Repo>;
@@ -152,6 +164,11 @@ export type QueryBotsArgs = {
 
 export type QueryIntegrationsArgs = {
   org_id: Scalars['Int']['input'];
+};
+
+
+export type QueryPublicBotArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -289,6 +306,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Bot: ResolverTypeWrapper<bots>;
   BotCreateInput: BotCreateInput;
+  BotInstallInput: BotInstallInput;
   BotInstallation: ResolverTypeWrapper<bot_installations>;
   BotType: ResolverTypeWrapper<bot>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -315,6 +333,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Bot: bots;
   BotCreateInput: BotCreateInput;
+  BotInstallInput: BotInstallInput;
   BotInstallation: bot_installations;
   DateTime: Scalars['DateTime']['output'];
   Int: Scalars['Int']['output'];
@@ -385,6 +404,7 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   botCreate?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<MutationBotCreateArgs, 'input' | 'org_id'>>;
+  botInstall?: Resolver<ResolversTypes['BotInstallation'], ParentType, ContextType, RequireFields<MutationBotInstallArgs, 'input' | 'org_id'>>;
   taskCreate?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationTaskCreateArgs, 'input' | 'org_id'>>;
 };
 
@@ -427,6 +447,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   integrations?: Resolver<Array<ResolversTypes['Integration']>, ParentType, ContextType, RequireFields<QueryIntegrationsArgs, 'org_id'>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
+  publicBot?: Resolver<ResolversTypes['PublicBot'], ParentType, ContextType, RequireFields<QueryPublicBotArgs, 'id'>>;
   publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType, Partial<QueryPublicBotsArgs>>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
