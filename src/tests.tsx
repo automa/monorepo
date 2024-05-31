@@ -19,16 +19,16 @@ import { AnalyticsProvider } from 'analytics';
 const customRender = (
   ui: ReactElement,
   {
+    requests,
     cached = {},
     state,
-    requests,
     history,
     path,
     ...options
   }: RenderOptions & {
+    requests?: MockedProviderProps['mocks'];
     cached?: NormalizedCacheObject;
     state?: Partial<RootState>;
-    requests?: MockedProviderProps['mocks'];
     history?: string[];
     path?: string;
   } = {},

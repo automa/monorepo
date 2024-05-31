@@ -2,7 +2,6 @@ import React from 'react';
 import { Preview } from '@storybook/react';
 import { withThemeByClassName } from '@storybook/addon-themes';
 import { BrowserRouter } from 'react-router-dom';
-import { configureStore } from '@reduxjs/toolkit';
 import { Provider as StoreProvider } from 'react-redux';
 import { MockedProvider as ApolloProvider } from '@apollo/client/testing';
 import * as Tooltip from '@radix-ui/react-tooltip';
@@ -10,7 +9,7 @@ import * as Toast from '@radix-ui/react-toast';
 
 import '../src/index.css';
 
-import { reducer } from '../src/store';
+import store, { reducer, RootState } from '../src/store';
 import { cache } from '../src/client';
 
 import { Container as AppContainer } from '../src/views/App/App.styles';
@@ -29,10 +28,9 @@ const preview: Preview = {
 
       cache.restore(cached);
 
-      const store = configureStore({
-        reducer,
-        preloadedState: state,
-      });
+      store.replaceReducer((_, { payload }) => payload as RootState);
+      store.dispatch({ type: 'REPLACE', payload: state });
+      store.replaceReducer(reducer);
 
       return (
         <ApolloProvider mocks={requests} cache={cache}>
