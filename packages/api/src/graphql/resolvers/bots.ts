@@ -73,16 +73,6 @@ export const Mutation: MutationResolvers<Context> = {
   },
 };
 
-export const Bot: BotResolvers<Context> = {
-  org: async ({ org_id }, args, { prisma }) => {
-    return prisma.orgs.findFirstOrThrow({
-      where: {
-        id: org_id,
-      },
-    });
-  },
-};
-
 export const PublicBot: PublicBotResolvers<Context> = {
   org: async ({ org_id }, args, { prisma }) => {
     return prisma.orgs.findFirstOrThrow({
@@ -90,6 +80,38 @@ export const PublicBot: PublicBotResolvers<Context> = {
         id: org_id,
       },
       select: publicOrgFields,
+    });
+  },
+  installation: async (
+    { id, org_id: botOrgId },
+    { org_id },
+    { prisma, user },
+  ) => {
+    // Check if the user is a member of the given org or the bot's org
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: user.id,
+        org_id: {
+          in: [org_id, botOrgId],
+        },
+      },
+    });
+
+    return prisma.bot_installations.findFirst({
+      where: {
+        bot_id: id,
+        org_id,
+      },
+    });
+  },
+};
+
+export const Bot: BotResolvers<Context> = {
+  org: async ({ org_id }, args, { prisma }) => {
+    return prisma.orgs.findFirstOrThrow({
+      where: {
+        id: org_id,
+      },
     });
   },
 };

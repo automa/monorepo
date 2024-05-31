@@ -24,6 +24,7 @@ export type Bot = {
   description?: Maybe<Scalars['String']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
+  installation?: Maybe<BotInstallation>;
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   org: Org;
@@ -31,6 +32,11 @@ export type Bot = {
   short_description: Scalars['String']['output'];
   type: BotType;
   webhook_url?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type BotInstallationArgs = {
+  org_id: Scalars['Int']['input'];
 };
 
 export type BotCreateInput = {
@@ -50,7 +56,7 @@ export type BotInstallation = {
   bot: PublicBot;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
-  org: Org;
+  org: PublicOrg;
 };
 
 export enum BotType {
@@ -121,9 +127,15 @@ export type PublicBot = {
   description?: Maybe<Scalars['String']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
+  installation?: Maybe<BotInstallation>;
   name: Scalars['String']['output'];
   org: PublicOrg;
   short_description: Scalars['String']['output'];
+};
+
+
+export type PublicBotInstallationArgs = {
+  org_id: Scalars['Int']['input'];
 };
 
 export type PublicOrg = {

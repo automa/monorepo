@@ -110,6 +110,12 @@ suite('graphql botInstallations', () => {
         );
       });
 
+      test('should have no errors', async () => {
+        const { errors } = response.json();
+
+        assert.isUndefined(errors);
+      });
+
       test('should return installed bots only', async () => {
         const {
           data: { botInstallations },
@@ -168,6 +174,41 @@ suite('graphql botInstallations', () => {
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
     });
 
+    test('should restrict PublicOrg fields', async () => {
+      const response = await graphql(
+        app,
+        `
+          query botInstallations($org_id: Int!) {
+            botInstallations(org_id: $org_id) {
+              id
+              org {
+                provider_name
+              }
+            }
+          }
+        `,
+        {
+          id: bot.id,
+        },
+      );
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Cannot query field "provider_name" on type "PublicOrg".',
+      );
+      assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
+    });
+
     test('should restrict PublicBot fields', async () => {
       const response = await graphql(
         app,
@@ -176,7 +217,6 @@ suite('graphql botInstallations', () => {
             botInstallations(org_id: $org_id) {
               id
               bot {
-                id
                 type
               }
             }
@@ -223,8 +263,11 @@ suite('graphql botInstallations', () => {
       );
 
       const {
+        errors,
         data: { botInstall: botInstallation },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(botInstallation.id);
       assert.isString(botInstallation.created_at);
@@ -245,8 +288,11 @@ suite('graphql botInstallations', () => {
       );
 
       const {
+        errors,
         data: { botInstall: botInstallation },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(botInstallation.id);
       assert.isString(botInstallation.created_at);

@@ -8,8 +8,8 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-export type EnumResolverSignature<T, AllowedValues = any> = { [key in keyof T]?: AllowedValues };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
+export type EnumResolverSignature<T, AllowedValues = any> = { [key in keyof T]?: AllowedValues };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -27,6 +27,7 @@ export type Bot = {
   description?: Maybe<Scalars['String']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
+  installation?: Maybe<BotInstallation>;
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   org: Org;
@@ -34,6 +35,11 @@ export type Bot = {
   short_description: Scalars['String']['output'];
   type: BotType;
   webhook_url?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type BotInstallationArgs = {
+  org_id: Scalars['Int']['input'];
 };
 
 export type BotCreateInput = {
@@ -53,7 +59,7 @@ export type BotInstallation = {
   bot: PublicBot;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
-  org: Org;
+  org: PublicOrg;
 };
 
 export enum BotType {
@@ -124,9 +130,15 @@ export type PublicBot = {
   description?: Maybe<Scalars['String']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
+  installation?: Maybe<BotInstallation>;
   name: Scalars['String']['output'];
   org: PublicOrg;
   short_description: Scalars['String']['output'];
+};
+
+
+export type PublicBotInstallationArgs = {
+  org_id: Scalars['Int']['input'];
 };
 
 export type PublicOrg = {
@@ -358,6 +370,7 @@ export type BotResolvers<ContextType = any, ParentType extends ResolversParentTy
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  installation?: Resolver<Maybe<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<BotInstallationArgs, 'org_id'>>;
   is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
@@ -372,7 +385,7 @@ export type BotInstallationResolvers<ContextType = any, ParentType extends Resol
   bot?: Resolver<ResolversTypes['PublicBot'], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
+  org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -422,6 +435,7 @@ export type PublicBotResolvers<ContextType = any, ParentType extends ResolversPa
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  installation?: Resolver<Maybe<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<PublicBotInstallationArgs, 'org_id'>>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
   short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

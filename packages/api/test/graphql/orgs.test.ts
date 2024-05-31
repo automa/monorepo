@@ -98,6 +98,12 @@ suite('graphql orgs', () => {
       );
     });
 
+    test('should have no errors', async () => {
+      const { errors } = response.json();
+
+      assert.isUndefined(errors);
+    });
+
     test("should return user's orgs only", async () => {
       const {
         data: { orgs },

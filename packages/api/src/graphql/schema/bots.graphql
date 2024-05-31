@@ -20,6 +20,7 @@ type PublicBot {
   homepage: String
 
   org: PublicOrg!
+  installation(org_id: Int!): BotInstallation
 }
 
 type Bot @inherits(type: "PublicBot") {

@@ -10,7 +10,7 @@ type BotInstallation {
   id: Int!
   created_at: DateTime!
 
-  org: Org!
+  org: PublicOrg!
   bot: PublicBot!
 }
 

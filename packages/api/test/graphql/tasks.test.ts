@@ -102,6 +102,12 @@ suite('graphql tasks', () => {
         );
       });
 
+      test('should have no errors', async () => {
+        const { errors } = response.json();
+
+        assert.isUndefined(errors);
+      });
+
       test("should return requested org's tasks", async () => {
         const {
           data: { tasks },
@@ -171,8 +177,11 @@ suite('graphql tasks', () => {
       );
 
       const {
+        errors,
         data: { taskCreate: task },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(task.id);
       assert.equal(

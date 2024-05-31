@@ -3,6 +3,7 @@ import {
   MutationResolvers,
   QueryResolvers,
   publicBotFields,
+  publicOrgFields,
 } from '@automa/common';
 
 import { Context } from '../types';
@@ -68,6 +69,7 @@ export const BotInstallation: BotInstallationResolvers<Context> = {
       where: {
         id: org_id,
       },
+      select: publicOrgFields,
     });
   },
   bot: async ({ bot_id }, args, { prisma }) => {
