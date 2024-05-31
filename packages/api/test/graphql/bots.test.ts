@@ -181,9 +181,6 @@ suite('graphql bots', () => {
             }
           }
         `,
-        {
-          org_id: org.id,
-        },
       );
 
       assert.equal(response.statusCode, 200);
@@ -232,9 +229,6 @@ suite('graphql bots', () => {
             }
           }
         `,
-        {
-          org_id: org.id,
-        },
       );
 
       assert.equal(response.statusCode, 400);
@@ -267,9 +261,6 @@ suite('graphql bots', () => {
             }
           }
         `,
-        {
-          org_id: org.id,
-        },
       );
 
       assert.equal(response.statusCode, 400);
