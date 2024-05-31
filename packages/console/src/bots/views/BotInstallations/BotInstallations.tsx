@@ -19,7 +19,7 @@ const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
   });
 
   if (!loading && !data?.botInstallations?.length) {
-    return <Navigate to={orgUri(org, '/bots/new?onboarding=true')} />;
+    return <Navigate to={orgUri(org, '/bots/new?onboarding=true')} replace />;
   }
 
   return (

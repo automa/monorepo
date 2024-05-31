@@ -54,7 +54,7 @@ const OrgList: React.FC<OrgListProps> = ({
 
   // Redirect to first org if on home page
   if (data.orgs.length && location.pathname === '/') {
-    return <Navigate to={orgUri(data.orgs[0])} />;
+    return <Navigate to={orgUri(data.orgs[0])} replace />;
   }
 
   if (!org) {

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 import { Loader, RoutesLoader } from 'shared';
@@ -11,6 +11,8 @@ import { OrgSettingsProps } from './types';
 import { Container, Nav, Item, Content } from './OrgSettings.styles';
 
 const OrgSettings: React.FC<OrgSettingsProps> = ({ org }) => {
+  const location = useLocation();
+
   const tabs = useMemo(() => {
     if (!org) return [];
 
@@ -28,7 +30,7 @@ const OrgSettings: React.FC<OrgSettingsProps> = ({ org }) => {
 
   // Redirect to first tab if on settings page
   if (location.pathname === orgUri(org, '/settings')) {
-    return <Navigate to={orgUri(org, `/settings${tabs[0].path}`)} />;
+    return <Navigate to={orgUri(org, `/settings${tabs[0].path}`)} replace />;
   }
 
   return (
