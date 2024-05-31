@@ -14,7 +14,7 @@ import { Nav, Item, Content } from './Org.styles';
 
 const Org: React.FC<OrgProps> = () => {
   const { orgName } = useParams() as {
-    orgName?: string;
+    orgName: string;
   };
 
   const location = useLocation();

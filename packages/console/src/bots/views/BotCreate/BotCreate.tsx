@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client';
 
@@ -32,6 +32,12 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
   const [botCreate, { data, loading, error }] = useMutation(
     BOT_CREATE_MUTATION,
     {
+      onCompleted() {
+        toast({
+          title: 'Bot created',
+          variant: 'success',
+        });
+      },
       update(cache, { data }) {
         if (!data) return;
 
@@ -54,20 +60,6 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
     },
   );
 
-  const onSubmit: SubmitHandler<BotCreateInput> = async (data) => {
-    await botCreate({
-      variables: {
-        org_id: org.id,
-        input: data,
-      },
-    });
-
-    toast({
-      variant: 'success',
-      title: 'Bot created',
-    });
-  };
-
   if (!loading && data) {
     // TODO: Go to the bot view
     return <Navigate to={orgUri(org, '/settings/bots')} />;
@@ -78,7 +70,17 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
       <Flex justifyContent="space-between" alignItems="center" className="h-9">
         <Typography variant="title6">Create bot</Typography>
       </Flex>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+      <form
+        onSubmit={handleSubmit((data) =>
+          botCreate({
+            variables: {
+              org_id: org.id,
+              input: data,
+            },
+          }),
+        )}
+        className="w-full"
+      >
         <Flex fullWidth direction="column" className="mb-8 gap-6">
           <Input
             label="Bot name"

@@ -1,5 +1,6 @@
-export { default as Bot } from './Bot';
-export * from './Bot';
-export { default as BotInstallation } from './BotInstallation';
+export { default as Bot, BOT_FRAGMENT } from './Bot';
+export {
+  default as BotInstallation,
+  BOT_INSTALLATION_FRAGMENT,
+} from './BotInstallation';
 export { default as PublicBot } from './PublicBot';
-export * from './PublicBot';

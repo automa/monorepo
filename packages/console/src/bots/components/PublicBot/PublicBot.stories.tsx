@@ -1,5 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
+import { ProviderType } from '@automa/common';
+
 import { makeFragmentData } from 'gql';
 
 import PublicBot from './PublicBot';
@@ -20,6 +22,31 @@ const meta = {
       },
       PUBLIC_BOT_FRAGMENT,
     ),
+  },
+  parameters: {
+    state: {
+      orgs: {
+        orgs: [
+          {
+            id: 1,
+            name: 'org',
+            provider_type: ProviderType.Github,
+            provider_id: '1',
+            provider_name: 'org',
+            has_installation: true,
+          },
+        ],
+        org: {
+          id: 1,
+          name: 'org',
+          provider_type: ProviderType.Github,
+          provider_id: '1',
+          provider_name: 'org',
+          has_installation: true,
+        },
+        loading: false,
+      },
+    },
   },
 } satisfies Meta<typeof PublicBot>;
 
