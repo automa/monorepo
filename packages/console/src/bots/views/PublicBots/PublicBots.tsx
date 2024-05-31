@@ -5,14 +5,12 @@ import { useQuery } from '@apollo/client';
 import { Flex, Loader } from 'shared';
 import { PublicBot } from 'bots';
 
-import { BotInstallationCreateProps } from './types';
+import { PublicBotsProps } from './types';
 
-import { PUBLIC_BOTS_QUERY } from './BotInstallationCreate.queries';
-import { Banner } from './BotInstallationCreate.styles';
+import { PUBLIC_BOTS_QUERY } from './PublicBots.queries';
+import { Banner } from './PublicBots.styles';
 
-const BotInstallationCreate: React.FC<BotInstallationCreateProps> = ({
-  org,
-}) => {
+const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
   const [searchParams] = useSearchParams();
 
   // TODO: Add infinite scroll (with pagination cache)
@@ -46,4 +44,4 @@ const BotInstallationCreate: React.FC<BotInstallationCreateProps> = ({
   );
 };
 
-export default BotInstallationCreate;
+export default PublicBots;

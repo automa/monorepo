@@ -68,8 +68,6 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
     });
   };
 
-  // TODO: Show toast on error
-
   if (!loading && data) {
     // TODO: Go to the bot view
     return <Navigate to={orgUri(org, '/settings/bots')} />;
