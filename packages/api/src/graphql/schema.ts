@@ -28,7 +28,7 @@ const isAuthenticated: ResolversComposition =
 
 const composedResolvers = resolvers.map((resolver) =>
   composeResolvers(resolver, {
-    '!PublicBot.!publicBots': [isAuthenticated],
+    '!PublicBot.!{publicBot,publicBots}': [isAuthenticated],
   }),
 );
 

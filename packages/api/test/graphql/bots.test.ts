@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 
-import { orgs, users } from '@automa/prisma';
+import { bots, orgs, users } from '@automa/prisma';
 
 import { server, graphql, seedUsers, seedOrgs, seedBots } from '../utils';
 
@@ -287,6 +287,161 @@ suite('graphql bots', () => {
         'Cannot query field "provider_name" on type "PublicOrg".',
       );
       assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
+    });
+  });
+
+  suite('query publicBot', () => {
+    let bot: bots, nonPublishedBot: bots;
+
+    suiteSetup(async () => {
+      [bot, nonPublishedBot] = await seedBots(app, [org], [org]);
+    });
+
+    suiteTeardown(async () => {
+      await app.prisma.bots.deleteMany();
+    });
+
+    setup(() => {
+      sessionUser = null;
+    });
+
+    test('should return published bot', async () => {
+      const response = await graphql(
+        app,
+        `
+          query publicBot($id: Int!) {
+            publicBot(id: $id) {
+              id
+              name
+              short_description
+              description
+              homepage
+              org {
+                name
+              }
+            }
+          }
+        `,
+        {
+          id: bot.id,
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { publicBot },
+      } = response.json();
+
+      assert.isNumber(publicBot.id);
+      assert.equal(publicBot.name, 'bot-0');
+      assert.equal(publicBot.short_description, 'Bot 0');
+      assert.equal(publicBot.description, 'Bot 0 long description');
+      assert.equal(publicBot.homepage, 'https://example.com');
+      assert.equal(publicBot.org.name, 'org-0');
+    });
+
+    test('should restrict PublicBot fields', async () => {
+      const response = await graphql(
+        app,
+        `
+          query publicBot($id: Int!) {
+            publicBot(id: $id) {
+              id
+              type
+            }
+          }
+        `,
+        {
+          id: bot.id,
+        },
+      );
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Cannot query field "type" on type "PublicBot".',
+      );
+      assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
+    });
+
+    test('should restrict PublicOrg fields', async () => {
+      const response = await graphql(
+        app,
+        `
+          query publicBot($id: Int!) {
+            publicBot(id: $id) {
+              id
+              org {
+                provider_name
+              }
+            }
+          }
+        `,
+        {
+          id: bot.id,
+        },
+      );
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Cannot query field "provider_name" on type "PublicOrg".',
+      );
+      assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
+    });
+
+    test('should not return non-published bot', async () => {
+      const response = await graphql(
+        app,
+        `
+          query publicBot($id: Int!) {
+            publicBot(id: $id) {
+              id
+              name
+            }
+          }
+        `,
+        {
+          id: nonPublishedBot.id,
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
     });
   });
 

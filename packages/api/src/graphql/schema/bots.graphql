@@ -5,6 +5,7 @@ enum BotType {
 type Query {
   bots(org_id: Int!): [Bot!]!
   publicBots(org_id: Int): [PublicBot!]!
+  publicBot(id: Int!): PublicBot!
 }
 
 type Mutation {

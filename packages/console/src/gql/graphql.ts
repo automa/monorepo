@@ -141,6 +141,7 @@ export type Query = {
   integrations: Array<Integration>;
   me: User;
   orgs: Array<Org>;
+  publicBot: PublicBot;
   publicBots: Array<PublicBot>;
   repo?: Maybe<Repo>;
   repos: Array<Repo>;
@@ -160,6 +161,11 @@ export type QueryBotsArgs = {
 
 export type QueryIntegrationsArgs = {
   org_id: Scalars['Int']['input'];
+};
+
+
+export type QueryPublicBotArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
