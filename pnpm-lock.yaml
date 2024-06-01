@@ -215,6 +215,9 @@ importers:
       '@graphql-tools/load-files':
         specifier: ~6.6.1
         version: 6.6.1(graphql@16.7.1)
+      '@graphql-tools/merge':
+        specifier: ~9.0.4
+        version: 9.0.4(graphql@16.7.1)
       '@graphql-tools/resolvers-composition':
         specifier: ~6.5.18
         version: 6.5.18(graphql@16.7.1)
