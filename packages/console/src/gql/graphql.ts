@@ -83,6 +83,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   botCreate: Bot;
   botInstall: BotInstallation;
+  botUninstall: Scalars['Boolean']['output'];
   taskCreate: Task;
 };
 
@@ -95,6 +96,12 @@ export type MutationBotCreateArgs = {
 
 export type MutationBotInstallArgs = {
   input: BotInstallInput;
+  org_id: Scalars['Int']['input'];
+};
+
+
+export type MutationBotUninstallArgs = {
+  bot_id: Scalars['Int']['input'];
   org_id: Scalars['Int']['input'];
 };
 

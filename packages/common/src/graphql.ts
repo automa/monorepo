@@ -86,6 +86,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   botCreate: Bot;
   botInstall: BotInstallation;
+  botUninstall: Scalars['Boolean']['output'];
   taskCreate: Task;
 };
 
@@ -98,6 +99,12 @@ export type MutationBotCreateArgs = {
 
 export type MutationBotInstallArgs = {
   input: BotInstallInput;
+  org_id: Scalars['Int']['input'];
+};
+
+
+export type MutationBotUninstallArgs = {
+  bot_id: Scalars['Int']['input'];
   org_id: Scalars['Int']['input'];
 };
 
@@ -413,6 +420,7 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   botCreate?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<MutationBotCreateArgs, 'input' | 'org_id'>>;
   botInstall?: Resolver<ResolversTypes['BotInstallation'], ParentType, ContextType, RequireFields<MutationBotInstallArgs, 'input' | 'org_id'>>;
+  botUninstall?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationBotUninstallArgs, 'bot_id' | 'org_id'>>;
   taskCreate?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationTaskCreateArgs, 'input' | 'org_id'>>;
 };
 

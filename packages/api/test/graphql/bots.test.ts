@@ -787,6 +787,10 @@ suite('graphql bots', () => {
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
       assert.isString(bot.created_at);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 1);
     });
 
     test('with no description should succeed', async () => {
@@ -821,6 +825,10 @@ suite('graphql bots', () => {
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
       assert.isString(bot.created_at);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 1);
     });
 
     test('with null description should succeed', async () => {
@@ -856,6 +864,10 @@ suite('graphql bots', () => {
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
       assert.isString(bot.created_at);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 1);
     });
 
     test('with empty description should succeed', async () => {
@@ -891,6 +903,10 @@ suite('graphql bots', () => {
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
       assert.isString(bot.created_at);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 1);
     });
 
     test('non-member org should fail', async () => {
@@ -914,6 +930,10 @@ suite('graphql bots', () => {
       assert.lengthOf(errors, 1);
       assert.equal(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with missing name should fail', async () => {
@@ -939,6 +959,10 @@ suite('graphql bots', () => {
         'Field "name" of required type "String!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with short name should fail', async () => {
@@ -974,6 +998,10 @@ suite('graphql bots', () => {
           minimum: 3,
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with long name should fail', async () => {
@@ -1009,6 +1037,10 @@ suite('graphql bots', () => {
           maximum: 255,
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with special chars in name should fail', async () => {
@@ -1041,6 +1073,10 @@ suite('graphql bots', () => {
           validation: 'regex',
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with name containing only spaces should fail', async () => {
@@ -1081,6 +1117,10 @@ suite('graphql bots', () => {
           validation: 'regex',
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with duplicate name should fail', async () => {
@@ -1107,6 +1147,10 @@ suite('graphql bots', () => {
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
 
       assert.deepEqual(errors[0].extensions.unique, ['org_id', 'name']);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 1);
     });
 
     test('with missing short_description should fail', async () => {
@@ -1132,6 +1176,10 @@ suite('graphql bots', () => {
         'Field "short_description" of required type "String!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with short short_description should fail', async () => {
@@ -1167,6 +1215,10 @@ suite('graphql bots', () => {
           minimum: 3,
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with long short_description should fail', async () => {
@@ -1202,6 +1254,10 @@ suite('graphql bots', () => {
           maximum: 255,
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with short_description containing only spaces should fail', async () => {
@@ -1236,6 +1292,10 @@ suite('graphql bots', () => {
           minimum: 3,
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with missing type should fail', async () => {
@@ -1261,6 +1321,10 @@ suite('graphql bots', () => {
         'Field "type" of required type "BotType!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with invalid type should fail', async () => {
@@ -1287,6 +1351,10 @@ suite('graphql bots', () => {
         'Value "invalid" does not exist in "BotType" enum',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test.skip('with missing webhook_url should fail', async () => {
@@ -1312,6 +1380,10 @@ suite('graphql bots', () => {
         'Field "type" of required type "String!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with invalid webhook_url should fail', async () => {
@@ -1344,6 +1416,10 @@ suite('graphql bots', () => {
           validation: 'url',
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
   });
 });

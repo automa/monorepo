@@ -61,6 +61,24 @@ export const Mutation: MutationResolvers<Context> = {
       },
     });
   },
+  botUninstall: async (_, { org_id, bot_id }, { prisma, user }) => {
+    // Check if the user is a member of the org
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: user.id,
+        org_id,
+      },
+    });
+
+    const { count } = await prisma.bot_installations.deleteMany({
+      where: {
+        org_id,
+        bot_id,
+      },
+    });
+
+    return count > 0;
+  },
 };
 
 export const BotInstallation: BotInstallationResolvers<Context> = {
