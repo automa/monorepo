@@ -1,7 +1,7 @@
 import { gql } from 'gql';
 
 export const PUBLIC_BOT_QUERY = gql(`
-  query PublicBot($id: Int!) {
+  query PublicBot($id: Int!, $org_id: Int!) {
     publicBot(id: $id) {
       id
       name
@@ -10,6 +10,9 @@ export const PUBLIC_BOT_QUERY = gql(`
       homepage
       org {
         name
+      }
+      installation(org_id: $org_id) {
+        id
       }
     }
   }
@@ -20,5 +23,11 @@ export const BOT_INSTALL_MUTATION = gql(`
     botInstall(org_id: $org_id, input: $input) {
       ...BotInstallationFragment
     }
+  }
+`);
+
+export const BOT_UNINSTALL_MUTATION = gql(`
+  mutation BotUninstall($org_id: Int!, $bot_id: Int!) {
+    botUninstall(org_id: $org_id, bot_id: $bot_id)
   }
 `);
