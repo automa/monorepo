@@ -9,7 +9,7 @@ export const routes = [
   },
   {
     Component: lazy(() => import('bots/views/PublicBot')),
-    path: '/bots/:botId',
+    path: '/bots/:botOrgName/:botName',
   },
   {
     Component: lazy(() => import('bots/views/BotInstallations')),

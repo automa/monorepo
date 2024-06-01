@@ -23,20 +23,17 @@ import {
 } from './PublicBot.styles';
 
 const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
-  const { botId } = useParams() as {
-    botId: string;
-  };
-
-  const id = parseInt(botId, 10);
+  const { botOrgName, botName } = useParams();
 
   const navigate = useNavigate();
 
   const { data, loading } = useQuery(PUBLIC_BOT_QUERY, {
     variables: {
-      id,
+      org_name: botOrgName!,
+      name: botName!,
       org_id: org.id,
     },
-    skip: !id,
+    skip: !botOrgName || !botName,
   });
 
   const bot = data?.publicBot;

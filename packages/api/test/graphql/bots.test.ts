@@ -313,8 +313,8 @@ suite('graphql bots', () => {
       const response = await graphql(
         app,
         `
-          query publicBot($id: Int!) {
-            publicBot(id: $id) {
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
               id
               name
               short_description
@@ -327,7 +327,8 @@ suite('graphql bots', () => {
           }
         `,
         {
-          id: bot.id,
+          org_name: org.name,
+          name: bot.name,
         },
       );
 
@@ -357,15 +358,16 @@ suite('graphql bots', () => {
       const response = await graphql(
         app,
         `
-          query publicBot($id: Int!) {
-            publicBot(id: $id) {
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
               id
               type
             }
           }
         `,
         {
-          id: bot.id,
+          org_name: org.name,
+          name: bot.name,
         },
       );
 
@@ -390,8 +392,8 @@ suite('graphql bots', () => {
       const response = await graphql(
         app,
         `
-          query publicBot($id: Int!) {
-            publicBot(id: $id) {
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
               id
               org {
                 provider_name
@@ -400,7 +402,8 @@ suite('graphql bots', () => {
           }
         `,
         {
-          id: bot.id,
+          org_name: org.name,
+          name: bot.name,
         },
       );
 
@@ -425,15 +428,16 @@ suite('graphql bots', () => {
       const response = await graphql(
         app,
         `
-          query publicBot($id: Int!) {
-            publicBot(id: $id) {
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
               id
               name
             }
           }
         `,
         {
-          id: nonPublishedBot.id,
+          org_name: org.name,
+          name: nonPublishedBot.name,
         },
       );
 
@@ -484,8 +488,12 @@ suite('graphql bots', () => {
           response = await graphql(
             app,
             `
-              query publicBot($id: Int!, $org_id: Int!) {
-                publicBot(id: $id) {
+              query publicBot(
+                $org_name: String!
+                $name: String!
+                $org_id: Int!
+              ) {
+                publicBot(org_name: $org_name, name: $name) {
                   id
                   installation(org_id: $org_id) {
                     id
@@ -498,7 +506,8 @@ suite('graphql bots', () => {
               }
             `,
             {
-              id: nonMemberOrgBot.id,
+              org_name: nonMemberOrg.name,
+              name: nonMemberOrgBot.name,
               org_id: org.id,
             },
           );
@@ -537,8 +546,12 @@ suite('graphql bots', () => {
           response = await graphql(
             app,
             `
-              query publicBot($id: Int!, $org_id: Int!) {
-                publicBot(id: $id) {
+              query publicBot(
+                $org_name: String!
+                $name: String!
+                $org_id: Int!
+              ) {
+                publicBot(org_name: $org_name, name: $name) {
                   id
                   installation(org_id: $org_id) {
                     id
@@ -551,7 +564,8 @@ suite('graphql bots', () => {
               }
             `,
             {
-              id: nonMemberOrgBot.id,
+              org_name: nonMemberOrg.name,
+              name: nonMemberOrgBot.name,
               org_id: secondOrg.id,
             },
           );
@@ -588,8 +602,12 @@ suite('graphql bots', () => {
           response = await graphql(
             app,
             `
-              query publicBot($id: Int!, $org_id: Int!) {
-                publicBot(id: $id) {
+              query publicBot(
+                $org_name: String!
+                $name: String!
+                $org_id: Int!
+              ) {
+                publicBot(org_name: $org_name, name: $name) {
                   id
                   installation(org_id: $org_id) {
                     id
@@ -602,7 +620,8 @@ suite('graphql bots', () => {
               }
             `,
             {
-              id: bot.id,
+              org_name: org.name,
+              name: bot.name,
               org_id: nonMemberOrg.id,
             },
           );
@@ -640,8 +659,8 @@ suite('graphql bots', () => {
         const response = await graphql(
           app,
           `
-            query publicBot($id: Int!, $org_id: Int!) {
-              publicBot(id: $id) {
+            query publicBot($org_name: String!, $name: String!, $org_id: Int!) {
+              publicBot(org_name: $org_name, name: $name) {
                 id
                 installation(org_id: $org_id) {
                   id
@@ -650,7 +669,8 @@ suite('graphql bots', () => {
             }
           `,
           {
-            id: nonMemberOrgBot.id,
+            org_name: nonMemberOrg.name,
+            name: nonMemberOrgBot.name,
             org_id: nonMemberOrg.id,
           },
         );
@@ -673,8 +693,8 @@ suite('graphql bots', () => {
         const response = await graphql(
           app,
           `
-            query publicBot($id: Int!, $org_id: Int!) {
-              publicBot(id: $id) {
+            query publicBot($org_name: String!, $name: String!, $org_id: Int!) {
+              publicBot(org_name: $org_name, name: $name) {
                 id
                 installation(org_id: $org_id) {
                   id
@@ -686,7 +706,8 @@ suite('graphql bots', () => {
             }
           `,
           {
-            id: nonMemberOrgBot.id,
+            org_name: nonMemberOrg.name,
+            name: nonMemberOrgBot.name,
             org_id: org.id,
           },
         );
@@ -712,8 +733,8 @@ suite('graphql bots', () => {
         const response = await graphql(
           app,
           `
-            query publicBot($id: Int!, $org_id: Int!) {
-              publicBot(id: $id) {
+            query publicBot($org_name: String!, $name: String!, $org_id: Int!) {
+              publicBot(org_name: $org_name, name: $name) {
                 id
                 installation(org_id: $org_id) {
                   id
@@ -725,7 +746,8 @@ suite('graphql bots', () => {
             }
           `,
           {
-            id: nonMemberOrgBot.id,
+            org_name: nonMemberOrg.name,
+            name: nonMemberOrgBot.name,
             org_id: org.id,
           },
         );

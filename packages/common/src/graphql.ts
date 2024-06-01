@@ -187,7 +187,8 @@ export type QueryIntegrationsArgs = {
 
 
 export type QueryPublicBotArgs = {
-  id: Scalars['Int']['input'];
+  name: Scalars['String']['input'];
+  org_name: Scalars['String']['input'];
 };
 
 
@@ -464,7 +465,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   integrations?: Resolver<Array<ResolversTypes['Integration']>, ParentType, ContextType, RequireFields<QueryIntegrationsArgs, 'org_id'>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
-  publicBot?: Resolver<ResolversTypes['PublicBot'], ParentType, ContextType, RequireFields<QueryPublicBotArgs, 'id'>>;
+  publicBot?: Resolver<ResolversTypes['PublicBot'], ParentType, ContextType, RequireFields<QueryPublicBotArgs, 'name' | 'org_name'>>;
   publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;

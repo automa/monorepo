@@ -22,7 +22,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ publicBot: data, ...props }) => {
   }
 
   return (
-    <Link to={orgUri(org, `/bots/${publicBot.id}`)}>
+    <Link to={orgUri(org, `/bots/${publicBot.org.name}/${publicBot.name}`)}>
       <Container {...props}>
         <Flex direction="column" className="gap-2">
           <Flex justifyContent="space-between" className="gap-2">
