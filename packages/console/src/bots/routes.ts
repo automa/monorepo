@@ -8,8 +8,8 @@ export const routes = [
     path: '/bots/new',
   },
   {
-    Component: lazy(() => import('bots/views/BotInstallationCreate')),
-    path: '/bots/:botId',
+    Component: lazy(() => import('bots/views/PublicBot')),
+    path: '/bots/:botOrgName/:botName',
   },
   {
     Component: lazy(() => import('bots/views/BotInstallations')),

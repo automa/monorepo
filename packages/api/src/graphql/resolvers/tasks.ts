@@ -10,14 +10,10 @@ import { Context } from '../types';
 export const Query: QueryResolvers<Context> = {
   tasks: async (root, { org_id }, { user, prisma }) => {
     // Check if the user is a member of the org
-    await prisma.orgs.findFirstOrThrow({
+    await prisma.user_orgs.findFirstOrThrow({
       where: {
-        id: org_id,
-        user_orgs: {
-          some: {
-            user_id: user.id,
-          },
-        },
+        user_id: user.id,
+        org_id,
       },
     });
 
@@ -35,14 +31,10 @@ export const Query: QueryResolvers<Context> = {
 export const Mutation: MutationResolvers<Context> = {
   taskCreate: async (_, { org_id, input }, { prisma, user }) => {
     // Check if the user is a member of the org
-    await prisma.orgs.findFirstOrThrow({
+    await prisma.user_orgs.findFirstOrThrow({
       where: {
-        id: org_id,
-        user_orgs: {
-          some: {
-            user_id: user.id,
-          },
-        },
+        user_id: user.id,
+        org_id,
       },
     });
 

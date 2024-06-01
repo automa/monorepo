@@ -14,14 +14,10 @@ export const Query: QueryResolvers<Context> = {
   bots: async (root, { org_id }, { user, prisma }) => {
     // TODO: Convert the org check into a directive and/or use resolver composition
     // Check if the user is a member of the org
-    await prisma.orgs.findFirstOrThrow({
+    await prisma.user_orgs.findFirstOrThrow({
       where: {
-        id: org_id,
-        user_orgs: {
-          some: {
-            user_id: user.id,
-          },
-        },
+        user_id: user.id,
+        org_id,
       },
     });
 
@@ -34,8 +30,7 @@ export const Query: QueryResolvers<Context> = {
       },
     });
   },
-  publicBots: async (root, { org_id }, { prisma }) => {
-    // TODO: Show non-published bots from current org if given
+  publicBots: async (root, args, { prisma }) => {
     return prisma.bots.findMany({
       where: {
         is_published: true,
@@ -46,12 +41,14 @@ export const Query: QueryResolvers<Context> = {
       select: publicBotFields,
     });
   },
-  publicBot: async (root, { id }, { prisma }) => {
-    // TODO: Show non-published bots from current org if logged in
+  publicBot: async (root, { org_name, name }, { prisma }) => {
     return prisma.bots.findFirstOrThrow({
       where: {
-        id,
+        name,
         is_published: true,
+        orgs: {
+          name: org_name,
+        },
       },
       select: publicBotFields,
     });
@@ -61,14 +58,10 @@ export const Query: QueryResolvers<Context> = {
 export const Mutation: MutationResolvers<Context> = {
   botCreate: async (_, { org_id, input }, { prisma, user }) => {
     // Check if the user is a member of the org
-    await prisma.orgs.findFirstOrThrow({
+    await prisma.user_orgs.findFirstOrThrow({
       where: {
-        id: org_id,
-        user_orgs: {
-          some: {
-            user_id: user.id,
-          },
-        },
+        user_id: user.id,
+        org_id,
       },
     });
 
@@ -83,16 +76,6 @@ export const Mutation: MutationResolvers<Context> = {
   },
 };
 
-export const Bot: BotResolvers<Context> = {
-  org: async ({ org_id }, args, { prisma }) => {
-    return prisma.orgs.findFirstOrThrow({
-      where: {
-        id: org_id,
-      },
-    });
-  },
-};
-
 export const PublicBot: PublicBotResolvers<Context> = {
   org: async ({ org_id }, args, { prisma }) => {
     return prisma.orgs.findFirstOrThrow({
@@ -100,6 +83,38 @@ export const PublicBot: PublicBotResolvers<Context> = {
         id: org_id,
       },
       select: publicOrgFields,
+    });
+  },
+  installation: async (
+    { id, org_id: botOrgId },
+    { org_id },
+    { prisma, user },
+  ) => {
+    // Check if the user is a member of the given org or the bot's org
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: user.id,
+        org_id: {
+          in: [org_id, botOrgId],
+        },
+      },
+    });
+
+    return prisma.bot_installations.findFirst({
+      where: {
+        bot_id: id,
+        org_id,
+      },
+    });
+  },
+};
+
+export const Bot: BotResolvers<Context> = {
+  org: async ({ org_id }, args, { prisma }) => {
+    return prisma.orgs.findFirstOrThrow({
+      where: {
+        id: org_id,
+      },
     });
   },
 };

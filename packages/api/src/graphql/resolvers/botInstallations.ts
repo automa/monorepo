@@ -3,6 +3,7 @@ import {
   MutationResolvers,
   QueryResolvers,
   publicBotFields,
+  publicOrgFields,
 } from '@automa/common';
 
 import { Context } from '../types';
@@ -10,14 +11,10 @@ import { Context } from '../types';
 export const Query: QueryResolvers<Context> = {
   botInstallations: async (root, { org_id }, { user, prisma }) => {
     // Check if the user is a member of the org
-    await prisma.orgs.findFirstOrThrow({
+    await prisma.user_orgs.findFirstOrThrow({
       where: {
-        id: org_id,
-        user_orgs: {
-          some: {
-            user_id: user.id,
-          },
-        },
+        user_id: user.id,
+        org_id,
       },
     });
 
@@ -35,14 +32,10 @@ export const Query: QueryResolvers<Context> = {
 export const Mutation: MutationResolvers<Context> = {
   botInstall: async (_, { org_id, input: { bot_id } }, { prisma, user }) => {
     // Check if the user is a member of the org
-    await prisma.orgs.findFirstOrThrow({
+    await prisma.user_orgs.findFirstOrThrow({
       where: {
-        id: org_id,
-        user_orgs: {
-          some: {
-            user_id: user.id,
-          },
-        },
+        user_id: user.id,
+        org_id,
       },
     });
 
@@ -68,6 +61,24 @@ export const Mutation: MutationResolvers<Context> = {
       },
     });
   },
+  botUninstall: async (_, { org_id, bot_id }, { prisma, user }) => {
+    // Check if the user is a member of the org
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: user.id,
+        org_id,
+      },
+    });
+
+    const { count } = await prisma.bot_installations.deleteMany({
+      where: {
+        org_id,
+        bot_id,
+      },
+    });
+
+    return count > 0;
+  },
 };
 
 export const BotInstallation: BotInstallationResolvers<Context> = {
@@ -76,6 +87,7 @@ export const BotInstallation: BotInstallationResolvers<Context> = {
       where: {
         id: org_id,
       },
+      select: publicOrgFields,
     });
   },
   bot: async ({ bot_id }, args, { prisma }) => {

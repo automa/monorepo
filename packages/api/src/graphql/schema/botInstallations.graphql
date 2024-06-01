@@ -4,13 +4,14 @@ type Query {
 
 type Mutation {
   botInstall(org_id: Int!, input: BotInstallInput!): BotInstallation!
+  botUninstall(org_id: Int!, bot_id: Int!): Boolean!
 }
 
 type BotInstallation {
   id: Int!
   created_at: DateTime!
 
-  org: Org!
+  org: PublicOrg!
   bot: PublicBot!
 }
 

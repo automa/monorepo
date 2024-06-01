@@ -5,14 +5,10 @@ import { Context } from '../types';
 export const Query: QueryResolvers<Context> = {
   integrations: async (root, { org_id }, { user, prisma }) => {
     // Check if the user is a member of the org
-    await prisma.orgs.findFirstOrThrow({
+    await prisma.user_orgs.findFirstOrThrow({
       where: {
-        id: org_id,
-        user_orgs: {
-          some: {
-            user_id: user.id,
-          },
-        },
+        user_id: user.id,
+        org_id,
       },
     });
 

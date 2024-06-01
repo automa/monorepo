@@ -8,5 +8,8 @@ export const PUBLIC_BOT_FRAGMENT = gql(`
     org {
       name
     }
+    installation(org_id: $org_id) {
+      id
+    }
   }
 `);

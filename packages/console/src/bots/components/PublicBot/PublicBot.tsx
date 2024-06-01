@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Check } from '@phosphor-icons/react';
 
 import { getFragment } from 'gql';
-import { Flex, Typography } from 'shared';
+import { Flex, Tooltip, Typography } from 'shared';
 import { useOrg } from 'orgs';
 import { orgUri } from 'utils';
 
@@ -21,12 +22,19 @@ const PublicBot: React.FC<PublicBotProps> = ({ publicBot: data, ...props }) => {
   }
 
   return (
-    <Link to={orgUri(org, `/bots/${publicBot.id}`)}>
+    <Link to={orgUri(org, `/bots/${publicBot.org.name}/${publicBot.name}`)}>
       <Container {...props}>
         <Flex direction="column" className="gap-2">
-          <Typography variant="large">
-            {publicBot.org.name} / {publicBot.name}
-          </Typography>
+          <Flex justifyContent="space-between" className="gap-2">
+            <Typography variant="large" className="break-all">
+              {publicBot.org.name} / {publicBot.name}
+            </Typography>
+            {publicBot.installation && (
+              <Tooltip body="Bot installed on this org">
+                <Check height={20} width={20} className="text-green-500" />
+              </Tooltip>
+            )}
+          </Flex>
           <Description>{publicBot.short_description}</Description>
         </Flex>
       </Container>

@@ -110,6 +110,12 @@ suite('graphql botInstallations', () => {
         );
       });
 
+      test('should have no errors', async () => {
+        const { errors } = response.json();
+
+        assert.isUndefined(errors);
+      });
+
       test('should return installed bots only', async () => {
         const {
           data: { botInstallations },
@@ -168,6 +174,41 @@ suite('graphql botInstallations', () => {
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
     });
 
+    test('should restrict PublicOrg fields', async () => {
+      const response = await graphql(
+        app,
+        `
+          query botInstallations($org_id: Int!) {
+            botInstallations(org_id: $org_id) {
+              id
+              org {
+                provider_name
+              }
+            }
+          }
+        `,
+        {
+          id: bot.id,
+        },
+      );
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Cannot query field "provider_name" on type "PublicOrg".',
+      );
+      assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
+    });
+
     test('should restrict PublicBot fields', async () => {
       const response = await graphql(
         app,
@@ -176,7 +217,6 @@ suite('graphql botInstallations', () => {
             botInstallations(org_id: $org_id) {
               id
               bot {
-                id
                 type
               }
             }
@@ -223,13 +263,20 @@ suite('graphql botInstallations', () => {
       );
 
       const {
+        errors,
         data: { botInstall: botInstallation },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(botInstallation.id);
       assert.isString(botInstallation.created_at);
       assert.equal(botInstallation.bot.name, bot.name);
       assert.equal(botInstallation.bot.org.name, org.name);
+
+      const count = await app.prisma.bot_installations.count();
+
+      assert.equal(count, 1);
     });
 
     test('non-published bot on org should succeed', async () => {
@@ -245,13 +292,20 @@ suite('graphql botInstallations', () => {
       );
 
       const {
+        errors,
         data: { botInstall: botInstallation },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(botInstallation.id);
       assert.isString(botInstallation.created_at);
       assert.equal(botInstallation.bot.name, nonPublishedBot.name);
       assert.equal(botInstallation.bot.org.name, org.name);
+
+      const count = await app.prisma.bot_installations.count();
+
+      assert.equal(count, 1);
     });
 
     test('non-member org should fail', async () => {
@@ -271,6 +325,10 @@ suite('graphql botInstallations', () => {
       assert.lengthOf(errors, 1);
       assert.equal(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+
+      const count = await app.prisma.bot_installations.count();
+
+      assert.equal(count, 0);
     });
 
     test('non-published bot on different org should fail', async () => {
@@ -290,6 +348,88 @@ suite('graphql botInstallations', () => {
       assert.lengthOf(errors, 1);
       assert.include(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+
+      const count = await app.prisma.bot_installations.count();
+
+      assert.equal(count, 0);
+    });
+  });
+
+  suite('mutation botUninstall', () => {
+    setup(async () => {
+      await app.prisma.bot_installations.create({
+        data: {
+          bot_id: bot.id,
+          org_id: org.id,
+        },
+      });
+    });
+
+    teardown(async () => {
+      await app.prisma.bot_installations.deleteMany();
+    });
+
+    test('with installed bot should succeed', async () => {
+      const response = await botUninstall(app, org.id, bot.id);
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors, data } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isTrue(data.botUninstall);
+
+      const count = await app.prisma.bot_installations.count();
+
+      assert.equal(count, 0);
+    });
+
+    test('with non-installed bot should succeed but return false', async () => {
+      const response = await botUninstall(app, org.id, nonMemberOrgBot.id);
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors, data } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isFalse(data.botUninstall);
+
+      const count = await app.prisma.bot_installations.count();
+
+      assert.equal(count, 1);
+    });
+
+    test('non-member org should fail', async () => {
+      const response = await botUninstall(app, nonMemberOrg.id, bot.id);
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+
+      const count = await app.prisma.bot_installations.count();
+
+      assert.equal(count, 1);
     });
   });
 });
@@ -314,5 +454,19 @@ const botInstall = (app: FastifyInstance, orgId: number, input: any) =>
     {
       org_id: orgId,
       input,
+    },
+  );
+
+const botUninstall = (app: FastifyInstance, orgId: number, botId: number) =>
+  graphql(
+    app,
+    `
+      mutation botUninstall($org_id: Int!, $bot_id: Int!) {
+        botUninstall(org_id: $org_id, bot_id: $bot_id)
+      }
+    `,
+    {
+      org_id: orgId,
+      bot_id: botId,
     },
   );

@@ -69,6 +69,10 @@ suite('graphql tasks', () => {
       });
     });
 
+    suiteTeardown(async () => {
+      await app.prisma.tasks.deleteMany();
+    });
+
     suite('member org', () => {
       let response: LightMyRequestResponse;
 
@@ -100,6 +104,12 @@ suite('graphql tasks', () => {
           response.headers['content-type'],
           'application/json; charset=utf-8',
         );
+      });
+
+      test('should have no errors', async () => {
+        const { errors } = response.json();
+
+        assert.isUndefined(errors);
       });
 
       test("should return requested org's tasks", async () => {
@@ -171,8 +181,11 @@ suite('graphql tasks', () => {
       );
 
       const {
+        errors,
         data: { taskCreate: task },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(task.id);
       assert.equal(
@@ -180,6 +193,10 @@ suite('graphql tasks', () => {
         'Send an analytic event when user clicks on "Create Task" button',
       );
       assert.isString(task.created_at);
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 1);
     });
 
     test('non-member org should fail', async () => {
@@ -200,6 +217,10 @@ suite('graphql tasks', () => {
       assert.lengthOf(errors, 1);
       assert.equal(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
     });
 
     test('with missing content should fail', async () => {
@@ -220,6 +241,10 @@ suite('graphql tasks', () => {
         'Field "content" of required type "String!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
     });
 
     test('with short content should fail', async () => {
@@ -251,6 +276,10 @@ suite('graphql tasks', () => {
           minimum: 5,
         },
       ]);
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
     });
 
     test('with content containing only spaces should fail', async () => {
@@ -281,6 +310,10 @@ suite('graphql tasks', () => {
           minimum: 5,
         },
       ]);
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
     });
   });
 });

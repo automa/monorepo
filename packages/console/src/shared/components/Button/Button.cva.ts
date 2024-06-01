@@ -9,6 +9,7 @@ export const button = cva(
         secondary: 'border-2 border-primary text-primary hover:bg-primary/10',
         tertiary: 'bg-primary/10 text-primary hover:bg-primary/20',
         ghost: 'text-primary shadow-none hover:bg-primary/10',
+        danger: 'bg-accent text-white hover:bg-accent/80',
       },
       size: {
         small: 'h-8 px-3 text-xs font-bold',

@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 
-import { bots, orgs, users } from '@automa/prisma';
+import { bot_installations, bots, orgs, users } from '@automa/prisma';
 
 import { server, graphql, seedUsers, seedOrgs, seedBots } from '../utils';
 
@@ -87,6 +87,12 @@ suite('graphql bots', () => {
           response.headers['content-type'],
           'application/json; charset=utf-8',
         );
+      });
+
+      test('should have no errors', async () => {
+        const { errors } = response.json();
+
+        assert.isUndefined(errors);
       });
 
       test("should return requested org's published and non-published bots", async () => {
@@ -181,9 +187,6 @@ suite('graphql bots', () => {
             }
           }
         `,
-        {
-          org_id: org.id,
-        },
       );
 
       assert.equal(response.statusCode, 200);
@@ -194,8 +197,11 @@ suite('graphql bots', () => {
       );
 
       const {
+        errors,
         data: { publicBots: bots },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.lengthOf(bots, 3);
 
@@ -232,9 +238,6 @@ suite('graphql bots', () => {
             }
           }
         `,
-        {
-          org_id: org.id,
-        },
       );
 
       assert.equal(response.statusCode, 400);
@@ -267,9 +270,6 @@ suite('graphql bots', () => {
             }
           }
         `,
-        {
-          org_id: org.id,
-        },
       );
 
       assert.equal(response.statusCode, 400);
@@ -291,10 +291,14 @@ suite('graphql bots', () => {
   });
 
   suite('query publicBot', () => {
-    let bot: bots, nonPublishedBot: bots;
+    let bot: bots, nonMemberOrgBot: bots, nonPublishedBot: bots;
 
     suiteSetup(async () => {
-      [bot, nonPublishedBot] = await seedBots(app, [org], [org]);
+      [bot, nonMemberOrgBot, nonPublishedBot] = await seedBots(
+        app,
+        [org, nonMemberOrg],
+        [org],
+      );
     });
 
     suiteTeardown(async () => {
@@ -309,8 +313,8 @@ suite('graphql bots', () => {
       const response = await graphql(
         app,
         `
-          query publicBot($id: Int!) {
-            publicBot(id: $id) {
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
               id
               name
               short_description
@@ -323,7 +327,8 @@ suite('graphql bots', () => {
           }
         `,
         {
-          id: bot.id,
+          org_name: org.name,
+          name: bot.name,
         },
       );
 
@@ -335,8 +340,11 @@ suite('graphql bots', () => {
       );
 
       const {
+        errors,
         data: { publicBot },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(publicBot.id);
       assert.equal(publicBot.name, 'bot-0');
@@ -350,15 +358,16 @@ suite('graphql bots', () => {
       const response = await graphql(
         app,
         `
-          query publicBot($id: Int!) {
-            publicBot(id: $id) {
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
               id
               type
             }
           }
         `,
         {
-          id: bot.id,
+          org_name: org.name,
+          name: bot.name,
         },
       );
 
@@ -383,8 +392,8 @@ suite('graphql bots', () => {
       const response = await graphql(
         app,
         `
-          query publicBot($id: Int!) {
-            publicBot(id: $id) {
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
               id
               org {
                 provider_name
@@ -393,7 +402,8 @@ suite('graphql bots', () => {
           }
         `,
         {
-          id: bot.id,
+          org_name: org.name,
+          name: bot.name,
         },
       );
 
@@ -418,15 +428,16 @@ suite('graphql bots', () => {
       const response = await graphql(
         app,
         `
-          query publicBot($id: Int!) {
-            publicBot(id: $id) {
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
               id
               name
             }
           }
         `,
         {
-          id: nonPublishedBot.id,
+          org_name: org.name,
+          name: nonPublishedBot.name,
         },
       );
 
@@ -442,6 +453,321 @@ suite('graphql bots', () => {
       assert.lengthOf(errors, 1);
       assert.equal(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+
+    suite('installation', () => {
+      let response: LightMyRequestResponse,
+        botInstallations: bot_installations[];
+
+      suiteSetup(async () => {
+        botInstallations =
+          await app.prisma.bot_installations.createManyAndReturn({
+            data: [
+              {
+                bot_id: nonMemberOrgBot.id,
+                org_id: org.id,
+              },
+              {
+                bot_id: bot.id,
+                org_id: nonMemberOrg.id,
+              },
+              {
+                bot_id: nonMemberOrgBot.id,
+                org_id: nonMemberOrg.id,
+              },
+            ],
+          });
+      });
+
+      setup(async () => {
+        sessionUser = user;
+      });
+
+      suite('member org', () => {
+        setup(async () => {
+          response = await graphql(
+            app,
+            `
+              query publicBot(
+                $org_name: String!
+                $name: String!
+                $org_id: Int!
+              ) {
+                publicBot(org_name: $org_name, name: $name) {
+                  id
+                  installation(org_id: $org_id) {
+                    id
+                    created_at
+                    org {
+                      name
+                    }
+                  }
+                }
+              }
+            `,
+            {
+              org_name: nonMemberOrg.name,
+              name: nonMemberOrgBot.name,
+              org_id: org.id,
+            },
+          );
+        });
+
+        test('should be successful', () => {
+          assert.equal(response.statusCode, 200);
+
+          assert.equal(
+            response.headers['content-type'],
+            'application/json; charset=utf-8',
+          );
+        });
+
+        test('should have no errors', async () => {
+          const { errors } = response.json();
+
+          assert.isUndefined(errors);
+        });
+
+        test('should return bot installation', async () => {
+          const {
+            data: {
+              publicBot: { installation },
+            },
+          } = response.json();
+
+          assert.equal(installation.id, botInstallations[0].id);
+          assert.isString(installation.created_at);
+          assert.equal(installation.org.name, 'org-0');
+        });
+      });
+
+      suite('member org when not installed', () => {
+        setup(async () => {
+          response = await graphql(
+            app,
+            `
+              query publicBot(
+                $org_name: String!
+                $name: String!
+                $org_id: Int!
+              ) {
+                publicBot(org_name: $org_name, name: $name) {
+                  id
+                  installation(org_id: $org_id) {
+                    id
+                    created_at
+                    org {
+                      name
+                    }
+                  }
+                }
+              }
+            `,
+            {
+              org_name: nonMemberOrg.name,
+              name: nonMemberOrgBot.name,
+              org_id: secondOrg.id,
+            },
+          );
+        });
+
+        test('should be successful', () => {
+          assert.equal(response.statusCode, 200);
+
+          assert.equal(
+            response.headers['content-type'],
+            'application/json; charset=utf-8',
+          );
+        });
+
+        test('should have no errors', async () => {
+          const { errors } = response.json();
+
+          assert.isUndefined(errors);
+        });
+
+        test('should return null', async () => {
+          const {
+            data: {
+              publicBot: { installation },
+            },
+          } = response.json();
+
+          assert.isNull(installation);
+        });
+      });
+
+      suite('bot owner org', () => {
+        setup(async () => {
+          response = await graphql(
+            app,
+            `
+              query publicBot(
+                $org_name: String!
+                $name: String!
+                $org_id: Int!
+              ) {
+                publicBot(org_name: $org_name, name: $name) {
+                  id
+                  installation(org_id: $org_id) {
+                    id
+                    created_at
+                    org {
+                      name
+                    }
+                  }
+                }
+              }
+            `,
+            {
+              org_name: org.name,
+              name: bot.name,
+              org_id: nonMemberOrg.id,
+            },
+          );
+        });
+
+        test('should be successful', () => {
+          assert.equal(response.statusCode, 200);
+
+          assert.equal(
+            response.headers['content-type'],
+            'application/json; charset=utf-8',
+          );
+        });
+
+        test('should have no errors', async () => {
+          const { errors } = response.json();
+
+          assert.isUndefined(errors);
+        });
+
+        test('should return bot installation', async () => {
+          const {
+            data: {
+              publicBot: { installation },
+            },
+          } = response.json();
+
+          assert.equal(installation.id, botInstallations[1].id);
+          assert.isString(installation.created_at);
+          assert.equal(installation.org.name, 'org-2');
+        });
+      });
+
+      test('for non-member org should fail', async () => {
+        const response = await graphql(
+          app,
+          `
+            query publicBot($org_name: String!, $name: String!, $org_id: Int!) {
+              publicBot(org_name: $org_name, name: $name) {
+                id
+                installation(org_id: $org_id) {
+                  id
+                }
+              }
+            }
+          `,
+          {
+            org_name: nonMemberOrg.name,
+            name: nonMemberOrgBot.name,
+            org_id: nonMemberOrg.id,
+          },
+        );
+
+        assert.equal(response.statusCode, 200);
+
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+
+        const { errors } = response.json();
+
+        assert.lengthOf(errors, 1);
+        assert.equal(errors[0].message, 'Not Found');
+        assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+      });
+
+      test('should restrict PublicOrg fields', async () => {
+        const response = await graphql(
+          app,
+          `
+            query publicBot($org_name: String!, $name: String!, $org_id: Int!) {
+              publicBot(org_name: $org_name, name: $name) {
+                id
+                installation(org_id: $org_id) {
+                  id
+                  org {
+                    provider_name
+                  }
+                }
+              }
+            }
+          `,
+          {
+            org_name: nonMemberOrg.name,
+            name: nonMemberOrgBot.name,
+            org_id: org.id,
+          },
+        );
+
+        assert.equal(response.statusCode, 400);
+
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+
+        const { errors } = response.json();
+
+        assert.lengthOf(errors, 1);
+        assert.include(
+          errors[0].message,
+          'Cannot query field "provider_name" on type "PublicOrg".',
+        );
+        assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
+      });
+
+      test('should restrict PublicBot fields', async () => {
+        const response = await graphql(
+          app,
+          `
+            query publicBot($org_name: String!, $name: String!, $org_id: Int!) {
+              publicBot(org_name: $org_name, name: $name) {
+                id
+                installation(org_id: $org_id) {
+                  id
+                  bot {
+                    type
+                  }
+                }
+              }
+            }
+          `,
+          {
+            org_name: nonMemberOrg.name,
+            name: nonMemberOrgBot.name,
+            org_id: org.id,
+          },
+        );
+
+        assert.equal(response.statusCode, 400);
+
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+
+        const { errors } = response.json();
+
+        assert.lengthOf(errors, 1);
+        assert.include(
+          errors[0].message,
+          'Cannot query field "type" on type "PublicBot".',
+        );
+        assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
+      });
     });
   });
 
@@ -467,8 +793,11 @@ suite('graphql bots', () => {
       );
 
       const {
+        errors,
         data: { botCreate: bot },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(bot.id);
       assert.equal(bot.name, 'bot-5');
@@ -480,6 +809,10 @@ suite('graphql bots', () => {
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
       assert.isString(bot.created_at);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 1);
     });
 
     test('with no description should succeed', async () => {
@@ -498,8 +831,11 @@ suite('graphql bots', () => {
       );
 
       const {
+        errors,
         data: { botCreate: bot },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(bot.id);
       assert.equal(bot.name, 'bot-5');
@@ -511,6 +847,10 @@ suite('graphql bots', () => {
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
       assert.isString(bot.created_at);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 1);
     });
 
     test('with null description should succeed', async () => {
@@ -530,8 +870,11 @@ suite('graphql bots', () => {
       );
 
       const {
+        errors,
         data: { botCreate: bot },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(bot.id);
       assert.equal(bot.name, 'bot-5');
@@ -543,6 +886,10 @@ suite('graphql bots', () => {
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
       assert.isString(bot.created_at);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 1);
     });
 
     test('with empty description should succeed', async () => {
@@ -562,8 +909,11 @@ suite('graphql bots', () => {
       );
 
       const {
+        errors,
         data: { botCreate: bot },
       } = response.json();
+
+      assert.isUndefined(errors);
 
       assert.isNumber(bot.id);
       assert.equal(bot.name, 'bot-5');
@@ -575,6 +925,10 @@ suite('graphql bots', () => {
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
       assert.isString(bot.created_at);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 1);
     });
 
     test('non-member org should fail', async () => {
@@ -598,6 +952,10 @@ suite('graphql bots', () => {
       assert.lengthOf(errors, 1);
       assert.equal(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with missing name should fail', async () => {
@@ -623,6 +981,10 @@ suite('graphql bots', () => {
         'Field "name" of required type "String!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with short name should fail', async () => {
@@ -658,6 +1020,10 @@ suite('graphql bots', () => {
           minimum: 3,
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with long name should fail', async () => {
@@ -693,6 +1059,10 @@ suite('graphql bots', () => {
           maximum: 255,
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with special chars in name should fail', async () => {
@@ -725,6 +1095,10 @@ suite('graphql bots', () => {
           validation: 'regex',
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with name containing only spaces should fail', async () => {
@@ -765,6 +1139,10 @@ suite('graphql bots', () => {
           validation: 'regex',
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with duplicate name should fail', async () => {
@@ -791,6 +1169,10 @@ suite('graphql bots', () => {
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
 
       assert.deepEqual(errors[0].extensions.unique, ['org_id', 'name']);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 1);
     });
 
     test('with missing short_description should fail', async () => {
@@ -816,6 +1198,10 @@ suite('graphql bots', () => {
         'Field "short_description" of required type "String!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with short short_description should fail', async () => {
@@ -851,6 +1237,10 @@ suite('graphql bots', () => {
           minimum: 3,
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with long short_description should fail', async () => {
@@ -886,6 +1276,10 @@ suite('graphql bots', () => {
           maximum: 255,
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with short_description containing only spaces should fail', async () => {
@@ -920,6 +1314,10 @@ suite('graphql bots', () => {
           minimum: 3,
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with missing type should fail', async () => {
@@ -945,6 +1343,10 @@ suite('graphql bots', () => {
         'Field "type" of required type "BotType!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with invalid type should fail', async () => {
@@ -971,6 +1373,10 @@ suite('graphql bots', () => {
         'Value "invalid" does not exist in "BotType" enum',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test.skip('with missing webhook_url should fail', async () => {
@@ -996,6 +1402,10 @@ suite('graphql bots', () => {
         'Field "type" of required type "String!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
 
     test('with invalid webhook_url should fail', async () => {
@@ -1028,6 +1438,10 @@ suite('graphql bots', () => {
           validation: 'url',
         },
       ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
     });
   });
 });

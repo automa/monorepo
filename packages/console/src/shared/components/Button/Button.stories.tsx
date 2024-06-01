@@ -76,6 +76,19 @@ export const GhostDisabled = {
   },
 } satisfies Story;
 
+export const Danger = {
+  args: {
+    variant: 'danger',
+  },
+} satisfies Story;
+
+export const DangerDisabled = {
+  args: {
+    ...Danger.args,
+    ...Disabled.args,
+  },
+} satisfies Story;
+
 export const Small = {
   args: {
     size: 'small',
@@ -103,6 +116,13 @@ export const SmallGhost = {
   },
 } satisfies Story;
 
+export const SmallDanger = {
+  args: {
+    ...Small.args,
+    ...Danger.args,
+  },
+} satisfies Story;
+
 export const Large = {
   args: {
     size: 'large',
@@ -127,6 +147,13 @@ export const LargeGhost = {
   args: {
     ...Large.args,
     ...Ghost.args,
+  },
+} satisfies Story;
+
+export const LargeDanger = {
+  args: {
+    ...Large.args,
+    ...Danger.args,
   },
 } satisfies Story;
 

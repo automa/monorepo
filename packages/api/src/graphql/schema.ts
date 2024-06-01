@@ -26,6 +26,7 @@ const isAuthenticated: ResolversComposition =
     return next(root, args, context, info);
   };
 
+// TODO: Need to move resolvers into index.ts to avoid errors during development
 const composedResolvers = resolvers.map((resolver) =>
   composeResolvers(resolver, {
     '!PublicBot.!{publicBot,publicBots}': [isAuthenticated],
