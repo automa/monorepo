@@ -8,29 +8,23 @@ import { orgUri } from 'utils';
 
 import { BOT_INSTALLATION_FRAGMENT } from 'bots/components';
 
-import { BotInstallationCreateProps } from './types';
+import { PublicBotProps } from './types';
 
-import {
-  BOT_INSTALL_MUTATION,
-  PUBLIC_BOT_QUERY,
-} from './BotInstallationCreate.queries';
+import { BOT_INSTALL_MUTATION, PUBLIC_BOT_QUERY } from './PublicBot.queries';
 import {
   Container,
   Description,
   Details,
   DetailsTitle,
-} from './BotInstallationCreate.styles';
+} from './PublicBot.styles';
 
-const BotInstallationCreate: React.FC<BotInstallationCreateProps> = ({
-  org,
-}) => {
+const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
   const { botId } = useParams() as {
     botId: string;
   };
 
   const id = parseInt(botId, 10);
 
-  // TODO: Add infinite scroll (with pagination cache)
   const { data, loading } = useQuery(PUBLIC_BOT_QUERY, {
     variables: {
       id,
@@ -125,4 +119,4 @@ const BotInstallationCreate: React.FC<BotInstallationCreateProps> = ({
   );
 };
 
-export default BotInstallationCreate;
+export default PublicBot;

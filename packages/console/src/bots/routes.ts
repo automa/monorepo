@@ -8,7 +8,7 @@ export const routes = [
     path: '/bots/new',
   },
   {
-    Component: lazy(() => import('bots/views/BotInstallationCreate')),
+    Component: lazy(() => import('bots/views/PublicBot')),
     path: '/bots/:botId',
   },
   {

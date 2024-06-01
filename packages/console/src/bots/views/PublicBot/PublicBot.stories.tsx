@@ -2,11 +2,11 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { ProviderType } from '@automa/common';
 
-import BotInstallationCreate from './BotInstallationCreate';
+import PublicBot from './PublicBot';
 
 const meta = {
-  title: 'BotInstallationCreate',
-  component: BotInstallationCreate,
+  title: 'PublicBot',
+  component: PublicBot,
   args: {
     org: {
       id: 1,
@@ -17,7 +17,7 @@ const meta = {
       has_installation: true,
     },
   },
-} satisfies Meta<typeof BotInstallationCreate>;
+} satisfies Meta<typeof PublicBot>;
 
 export default meta;
 
