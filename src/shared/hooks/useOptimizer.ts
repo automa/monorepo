@@ -1,7 +1,7 @@
 import {
-  useGate as useStatsigGate,
   useConfig as useStatsigConfig,
   useExperiment as useStatsigExperiment,
+  useGate as useStatsigGate,
 } from 'statsig-react';
 
 export const useGate = (gate: string) => {

@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { StatsigProvider } from 'statsig-react';
 import axios from 'axios';
+import { StatsigProvider } from 'statsig-react';
 
 import { environment, isTest } from 'env';
 
-import { Loader, RoutesLoader, useAsyncEffect } from 'shared';
 import { useAnalytics } from 'analytics';
+import { Loader, RoutesLoader, useAsyncEffect } from 'shared';
+
 import { useAuth, useUser } from 'auth';
 
 import routes from './routes';

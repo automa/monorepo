@@ -1,16 +1,15 @@
 import React from 'react';
 import * as ToastPrimitive from '@radix-ui/react-toast';
 
+import { ToastComponentProps } from './types';
 import { useToast } from './utils';
 
-import { ToastComponentProps } from './types';
-
 import {
-  Container,
-  Title,
-  Description,
   Action,
   Close,
+  Container,
+  Description,
+  Title,
   Viewport,
 } from './Toast.styles';
 

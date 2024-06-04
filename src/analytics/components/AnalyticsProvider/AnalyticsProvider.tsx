@@ -4,6 +4,7 @@ import { AnalyticsBrowser, ID } from '@segment/analytics-next';
 import { isProduction } from 'env';
 
 import { useAsyncEffect } from 'shared';
+
 import AnalyticsContext from 'analytics/context';
 
 import { AnalyticsProviderProps } from './types';

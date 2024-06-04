@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useMemo } from 'react';
 
 import { tw } from 'theme';
 
-import { Tooltip, Flex } from 'shared/components';
+import { Flex, Tooltip } from 'shared/components';
 
 export type Keybinding = (
   | {

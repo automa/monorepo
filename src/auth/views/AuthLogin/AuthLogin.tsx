@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { useUser } from 'auth/hooks';
+import { useUser } from 'auth';
 
 import { AuthLoginProps } from './types';
 

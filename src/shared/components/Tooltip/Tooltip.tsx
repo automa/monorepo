@@ -3,7 +3,7 @@ import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
 import { TooltipComponentProps } from './types';
 
-import { Container, Content, Arrow } from './Tooltip.styles';
+import { Arrow, Container, Content } from './Tooltip.styles';
 
 const TooltipTriggerWrapper = React.forwardRef<
   HTMLDivElement,

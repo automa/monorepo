@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from '@phosphor-icons/react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 import Typography from '../Typography';
 
 import { DialogComponentProps } from './types';
 
 import {
-  Container,
-  Overlay,
-  Content,
-  Title,
-  Description,
   Close,
+  Container,
+  Content,
+  Description,
+  Overlay,
+  Title,
 } from './Dialog.styles';
 
 const Dialog: React.FC<DialogComponentProps> = ({
