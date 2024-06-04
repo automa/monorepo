@@ -12,7 +12,7 @@ import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
   bots: async (root, { org_id }, { user, prisma }) => {
-    // TODO: Convert the org check into a directive and/or use resolver composition
+    // TODO: Convert the org check into a directive and/or use resolver composition, and cache this in session
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
@@ -77,19 +77,23 @@ export const Mutation: MutationResolvers<Context> = {
 };
 
 export const PublicBot: PublicBotResolvers<Context> = {
-  org: async ({ org_id }, args, { prisma }) => {
-    return prisma.orgs.findFirstOrThrow({
-      where: {
-        id: org_id,
-      },
-      select: publicOrgFields,
-    });
+  org: ({ id }, args, { prisma }) => {
+    return prisma.bots
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .orgs({
+        select: publicOrgFields,
+      });
   },
   installation: async (
     { id, org_id: botOrgId },
     { org_id },
     { prisma, user },
   ) => {
+    // TODO: This is blocking prisma from optimizing N+1 queries, caching orgs in session would fix this
     // Check if the user is a member of the given org or the bot's org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
@@ -100,21 +104,31 @@ export const PublicBot: PublicBotResolvers<Context> = {
       },
     });
 
-    return prisma.bot_installations.findFirst({
-      where: {
-        bot_id: id,
-        org_id,
-      },
-    });
+    const installations = await prisma.bots
+      .findUnique({
+        where: {
+          id,
+        },
+      })
+      .bot_installations({
+        where: {
+          org_id,
+        },
+        take: 1,
+      });
+
+    return installations?.[0] ?? null;
   },
 };
 
 export const Bot: BotResolvers<Context> = {
-  org: async ({ org_id }, args, { prisma }) => {
-    return prisma.orgs.findFirstOrThrow({
-      where: {
-        id: org_id,
-      },
-    });
+  org: ({ id }, args, { prisma }) => {
+    return prisma.bots
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .orgs();
   },
 };

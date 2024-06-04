@@ -21,11 +21,13 @@ export const Query: QueryResolvers<Context> = {
 };
 
 export const Integration: IntegrationResolvers<Context> = {
-  author: ({ created_by }, args, { prisma }) => {
-    return prisma.users.findFirstOrThrow({
-      where: {
-        id: created_by,
-      },
-    });
+  author: ({ id }, args, { prisma }) => {
+    return prisma.integrations
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .users();
   },
 };
