@@ -59,14 +59,14 @@ export const Task: TaskResolvers<Context> = {
       },
     });
   },
-  author: ({ created_by }, args, { prisma }) => {
-    if (!created_by) return null;
-
-    return prisma.users.findUniqueOrThrow({
-      where: {
-        id: created_by,
-      },
-    });
+  author: ({ id }, args, { prisma }) => {
+    return prisma.tasks
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .users();
   },
   // TODO: Implement task items
 };

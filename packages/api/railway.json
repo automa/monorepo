@@ -4,5 +4,8 @@
     "builder": "DOCKERFILE",
     "dockerfilePath": "packages/api/Dockerfile",
     "watchPatterns": ["packages/prisma", "packages/common", "packages/api"]
+  },
+  "deploy": {
+    "restartPolicyType": "ALWAYS"
   }
 }

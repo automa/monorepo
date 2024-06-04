@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { ApolloServer } from '@apollo/server';
 import {
   ApolloServerErrorCode,
@@ -6,6 +8,14 @@ import {
 import fastifyApollo, {
   fastifyApolloDrainPlugin,
 } from '@as-integrations/fastify';
+import { loadFilesSync } from '@graphql-tools/load-files';
+import { mergeResolvers } from '@graphql-tools/merge';
+import { addResolversToSchema } from '@graphql-tools/schema';
+import {
+  ResolversComposition,
+  composeResolvers,
+} from '@graphql-tools/resolvers-composition';
+import { GraphQLError } from 'graphql';
 import { FastifyInstance } from 'fastify';
 import { ZodError } from 'zod';
 
@@ -16,9 +26,34 @@ import { isProduction } from '../env';
 import schema from './schema';
 import { Context } from './types';
 
+const resolvers = loadFilesSync(join(__dirname, 'resolvers/*.{js,ts}'));
+
+const isAuthenticated: ResolversComposition =
+  (next) => async (root, args, context, info) => {
+    if (!context.user) {
+      throw new GraphQLError('Unauthorized', {
+        extensions: {
+          code: 'UNAUTHORIZED',
+          http: { status: 401 },
+        },
+      });
+    }
+
+    return next(root, args, context, info);
+  };
+
+const composedResolvers = resolvers.map((resolver) =>
+  composeResolvers(resolver, {
+    '!PublicBot.!{publicBot,publicBots}': [isAuthenticated],
+  }),
+);
+
 export default async function (app: FastifyInstance) {
   const apollo = new ApolloServer<Context>({
-    schema,
+    schema: addResolversToSchema({
+      schema,
+      resolvers: mergeResolvers(composedResolvers),
+    }),
     plugins: [fastifyApolloDrainPlugin(app)],
     status400ForVariableCoercionErrors: true,
     introspection: !isProduction,

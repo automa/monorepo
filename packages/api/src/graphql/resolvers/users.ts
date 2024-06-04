@@ -10,10 +10,12 @@ export const Query: QueryResolvers<Context> = {
 
 export const User: UserResolvers<Context> = {
   providers: ({ id }, args, { prisma }) => {
-    return prisma.user_providers.findMany({
-      where: {
-        user_id: id,
-      },
-    });
+    return prisma.users
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .user_providers();
   },
 };

@@ -82,20 +82,26 @@ export const Mutation: MutationResolvers<Context> = {
 };
 
 export const BotInstallation: BotInstallationResolvers<Context> = {
-  org: async ({ org_id }, args, { prisma }) => {
-    return prisma.orgs.findFirstOrThrow({
-      where: {
-        id: org_id,
-      },
-      select: publicOrgFields,
-    });
+  org: ({ id }, args, { prisma }) => {
+    return prisma.bot_installations
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .orgs({
+        select: publicOrgFields,
+      });
   },
-  bot: async ({ bot_id }, args, { prisma }) => {
-    return prisma.bots.findFirstOrThrow({
-      where: {
-        id: bot_id,
-      },
-      select: publicBotFields,
-    });
+  bot: ({ id }, args, { prisma }) => {
+    return prisma.bot_installations
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .bots({
+        select: publicBotFields,
+      });
   },
 };
