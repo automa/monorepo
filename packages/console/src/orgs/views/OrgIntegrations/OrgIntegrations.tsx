@@ -4,8 +4,9 @@ import { useQuery } from '@apollo/client';
 import { IntegrationType } from '@automa/common';
 
 import { Flex, Loader } from 'shared';
-import { integrations, IntegrationConnectCard } from 'integrations';
 import { objectKeys } from 'utils';
+
+import { integrations, IntegrationConnectCard } from 'integrations';
 
 import { OrgIntegrationsProps } from './types';
 

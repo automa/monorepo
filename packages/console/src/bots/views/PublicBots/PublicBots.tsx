@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { Flex, Loader } from 'shared';
+
 import { PublicBot } from 'bots';
 
 import { PublicBotsProps } from './types';

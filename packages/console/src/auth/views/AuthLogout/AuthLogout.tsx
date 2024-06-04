@@ -1,12 +1,10 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { useOrgs } from 'orgs';
 import { useAsyncEffect } from 'shared';
 
-import { useUser, useAuth } from 'auth/hooks';
-
-import { logout } from '../../utils';
+import { useUser, useAuth, logout } from 'auth';
+import { useOrgs } from 'orgs';
 
 import { AuthLogoutProps } from './types';
 

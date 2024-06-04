@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Loader } from 'shared';
 import { orgUri } from 'utils';
+
 import { Task } from 'tasks';
 
 import { TasksProps } from './types';

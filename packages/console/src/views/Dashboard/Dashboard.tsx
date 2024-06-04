@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import Logo from 'assets/logo.svg?react';
-
 import { Flex, Loader, RoutesLoader } from 'shared';
+
 import { OrgList } from 'orgs';
 import { UserNavbar } from 'users';
+
+import Logo from 'assets/logo.svg?react';
 
 import routes from './routes';
 import { DashboardProps } from './types';

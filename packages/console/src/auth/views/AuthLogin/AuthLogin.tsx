@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 
 import { Button, Flex, Tooltip, Typography } from 'shared';
 
-import { useUser } from 'auth/hooks';
+import { useUser } from 'auth';
 
 import Logo from 'assets/logo.svg?react';
 import GithubLogo from 'assets/logos/github.svg?react';
