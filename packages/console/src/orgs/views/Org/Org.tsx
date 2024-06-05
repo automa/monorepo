@@ -2,10 +2,10 @@ import React, { useEffect, useMemo } from 'react';
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import { Loader, RoutesLoader } from 'shared';
+import { Flex, Loader, RoutesLoader } from 'shared';
 import { orgUri } from 'utils';
 
-import { useOrg, useOrgs } from 'orgs/hooks';
+import { useOrg, useOrgs, OrgOnboarding } from 'orgs';
 
 import routes from './routes';
 import { OrgProps } from './types';
@@ -68,6 +68,11 @@ const Org: React.FC<OrgProps> = () => {
     ];
   }, [org]);
 
+  const shouldShowOrgOnboarding = useMemo(
+    () => org && !org.has_installation,
+    [org],
+  );
+
   // Redirect to first tab if on org page
   if (org && location.pathname === orgUri(org)) {
     return <Navigate to={orgUri(org, tabs[0].path)} replace />;
@@ -76,7 +81,13 @@ const Org: React.FC<OrgProps> = () => {
   return (
     <>
       {!org ? (
-        <div>Not found</div>
+        <Content>
+          <Flex justifyContent="center">Not found</Flex>
+        </Content>
+      ) : shouldShowOrgOnboarding ? (
+        <Content>
+          <OrgOnboarding org={org} />
+        </Content>
       ) : (
         <>
           <NavigationMenu.Root>
