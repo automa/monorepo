@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 
 import { Button, Flex, Tooltip, Typography } from 'shared';
 
@@ -48,14 +48,14 @@ const AuthLogin: React.FC<AuthLoginProps> = () => {
           justifyContent="space-between"
           className="mx-auto w-screen max-w-8xl px-6 py-4"
         >
-          <a href="/">
+          <Link to="/">
             <Flex className="gap-2">
               <Logo className="size-8" />
               <Typography className="text-2xl font-bold lg:text-2xl">
                 Automa
               </Typography>
             </Flex>
-          </a>
+          </Link>
           <Flex className="hidden gap-2 md:block">
             <Button
               size="small"

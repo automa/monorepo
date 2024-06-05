@@ -16,5 +16,5 @@ export const Fallback = tw(Avatar.Fallback)<
   TwcComponentProps<typeof Avatar.Fallback> & AvatarStyledProps
 >(({ $size }) => [
   avatar({ size: $size }),
-  'rounded-full flex font-semibold items-center justify-center bg-gray-300 text-gray-800',
+  'rounded-full flex font-semibold items-center justify-center bg-neutral-300 text-neutral-800',
 ]);

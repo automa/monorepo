@@ -161,9 +161,13 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
             <Details>
               <DetailsTitle>About</DetailsTitle>
               {bot.homepage && (
-                <Link to={bot.homepage}>
+                <a
+                  href={bot.homepage}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   <Typography variant="small">{bot.homepage}</Typography>
-                </Link>
+                </a>
               )}
             </Details>
             <Description>{bot.description}</Description>
