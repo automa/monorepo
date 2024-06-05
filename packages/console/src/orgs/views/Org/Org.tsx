@@ -5,7 +5,8 @@ import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Flex, Loader, RoutesLoader } from 'shared';
 import { orgUri } from 'utils';
 
-import { useOrg, useOrgs, OrgOnboarding } from 'orgs';
+import { useOrg, useOrgs } from 'orgs';
+import { RepoOnboarding } from 'repos';
 
 import routes from './routes';
 import { OrgProps } from './types';
@@ -68,9 +69,13 @@ const Org: React.FC<OrgProps> = () => {
     ];
   }, [org]);
 
-  const shouldShowOrgOnboarding = useMemo(
-    () => org && !org.has_installation,
-    [org],
+  const shouldShowRepoOnboarding = useMemo(
+    () =>
+      org &&
+      !org.has_installation &&
+      (location.pathname.startsWith(`${orgUri(org)}/tasks`) ||
+        location.pathname.startsWith(`${orgUri(org)}/repos`)),
+    [org, location.pathname],
   );
 
   // Redirect to first tab if on org page
@@ -83,10 +88,6 @@ const Org: React.FC<OrgProps> = () => {
       {!org ? (
         <Content>
           <Flex justifyContent="center">Not found</Flex>
-        </Content>
-      ) : shouldShowOrgOnboarding ? (
-        <Content>
-          <OrgOnboarding org={org} />
         </Content>
       ) : (
         <>
@@ -108,7 +109,11 @@ const Org: React.FC<OrgProps> = () => {
             </Nav>
           </NavigationMenu.Root>
           <Content>
-            <RoutesLoader fallback={<Loader />} routes={routes} org={org} />
+            {shouldShowRepoOnboarding ? (
+              <RepoOnboarding org={org} />
+            ) : (
+              <RoutesLoader fallback={<Loader />} routes={routes} org={org} />
+            )}
           </Content>
         </>
       )}

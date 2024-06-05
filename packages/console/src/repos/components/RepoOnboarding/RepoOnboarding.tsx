@@ -5,13 +5,12 @@ import { ProviderType } from '@automa/common';
 import { Flex, Tooltip, Typography } from 'shared';
 
 import GithubLogo from 'assets/logos/github.svg?react';
-import GitlabLogo from 'assets/logos/gitlab.svg?react';
 
-import { OrgOnboardingProps } from './types';
+import { RepoOnboardingProps } from './types';
 
-import { Container, Card } from './OrgOnboarding.styles';
+import { Container, Card } from './RepoOnboarding.styles';
 
-const OrgOnboarding: React.FC<OrgOnboardingProps> = ({ org, ...props }) => {
+const RepoOnboarding: React.FC<RepoOnboardingProps> = ({ org, ...props }) => {
   const connectIntegration = useCallback(
     (integration: string) =>
       `${import.meta.env.VITE_API_URI}/api/orgs/${
@@ -30,7 +29,7 @@ const OrgOnboarding: React.FC<OrgOnboardingProps> = ({ org, ...props }) => {
           We need to be able to access your repositories to read code and
           propose changes.{' '}
           {org.provider_type
-            ? 'Please connect you provider by clicking the button below.'
+            ? 'Please connect your provider by clicking the button below.'
             : 'Please choose a provider to connect to by clicking one of the buttons below.'}
         </Typography>
       </Flex>
@@ -56,4 +55,4 @@ const OrgOnboarding: React.FC<OrgOnboardingProps> = ({ org, ...props }) => {
   );
 };
 
-export default OrgOnboarding;
+export default RepoOnboarding;
