@@ -2,11 +2,11 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { ProviderType } from '@automa/common';
 
-import OrgOnboarding from './OrgOnboarding';
+import RepoOnboarding from './RepoOnboarding';
 
 const meta = {
-  title: 'OrgOnboarding',
-  component: OrgOnboarding,
+  title: 'RepoOnboarding',
+  component: RepoOnboarding,
   args: {
     org: {
       id: 1,
@@ -17,7 +17,7 @@ const meta = {
       has_installation: true,
     },
   },
-} satisfies Meta<typeof OrgOnboarding>;
+} satisfies Meta<typeof RepoOnboarding>;
 
 export default meta;
 
