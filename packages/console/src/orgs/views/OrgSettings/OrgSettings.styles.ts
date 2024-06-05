@@ -16,8 +16,8 @@ export const Nav = tw(
 export const Item = tw(NavigationMenu.Item)<
   TwcComponentProps<typeof NavigationMenu.Item> & { $active?: boolean }
 >(({ $active }) => [
-  'rounded-md px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-black',
-  $active && 'bg-gray-200 hover:bg-gray-200 text-black',
+  'rounded-md px-3 py-2 text-neutral-600 hover:bg-neutral-100 hover:text-black',
+  $active && 'bg-neutral-200 hover:bg-neutral-200 text-black',
 ]);
 
 export const Content = tw(Flex)`pt-1 gap-8`;

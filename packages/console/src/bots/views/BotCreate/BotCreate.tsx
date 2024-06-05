@@ -6,11 +6,11 @@ import { useMutation } from '@apollo/client';
 
 import { BotType, botCreateSchema, BotCreateInput } from '@automa/common';
 
-import { Button, Flex, Input, Textarea, Typography, toast } from 'shared';
 import { getFragment } from 'gql';
+import { Button, Flex, Input, Textarea, Typography, toast } from 'shared';
 import { orgUri } from 'utils';
 
-import { BOT_FRAGMENT } from 'bots/components';
+import { BOT_FRAGMENT } from 'bots';
 
 import { BotCreateProps } from './types';
 

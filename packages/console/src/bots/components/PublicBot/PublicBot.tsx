@@ -4,8 +4,9 @@ import { Check } from '@phosphor-icons/react';
 
 import { getFragment } from 'gql';
 import { Flex, Tooltip, Typography } from 'shared';
-import { useOrg } from 'orgs';
 import { orgUri } from 'utils';
+
+import { useOrg } from 'orgs';
 
 import { PublicBotProps } from './types';
 

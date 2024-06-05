@@ -5,8 +5,9 @@ import axios from 'axios';
 
 import { environment, isTest } from 'env';
 
-import { Loader, RoutesLoader, useAsyncEffect } from 'shared';
 import { useAnalytics } from 'analytics';
+import { Loader, RoutesLoader, useAsyncEffect } from 'shared';
+
 import { useAuth, useUser } from 'auth';
 
 import routes from './routes';

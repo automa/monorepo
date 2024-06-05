@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
+import { getFragment } from 'gql';
 import {
   Avatar,
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuLabel,
 } from 'shared';
-import { getFragment } from 'gql';
 import { getOrgAvatarUrl } from 'utils';
 
 import { UserNavbarProps } from './types';

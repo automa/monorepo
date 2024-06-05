@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import { Flex, Loader } from 'shared';
+
 import { Repo } from 'repos';
 
 import { ReposProps } from './types';

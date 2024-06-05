@@ -3,8 +3,9 @@ import { Navigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Loader, Typography } from 'shared';
-import { BotInstallation } from 'bots';
 import { orgUri } from 'utils';
+
+import { BotInstallation } from 'bots';
 
 import { BotInstallationsProps } from './types';
 

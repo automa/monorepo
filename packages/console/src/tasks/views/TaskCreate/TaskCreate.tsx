@@ -6,11 +6,11 @@ import { useMutation } from '@apollo/client';
 
 import { taskMessageSchema, TaskMessageInput } from '@automa/common';
 
-import { Button, Flex, Textarea, Typography, toast } from 'shared';
 import { getFragment } from 'gql';
+import { Button, Flex, Textarea, Typography, toast } from 'shared';
 import { orgUri } from 'utils';
 
-import { TASK_FRAGMENT } from 'tasks/components';
+import { TASK_FRAGMENT } from 'tasks';
 
 import { TaskCreateProps } from './types';
 

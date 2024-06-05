@@ -8,6 +8,7 @@ import {
 } from '@phosphor-icons/react';
 import axios from 'axios';
 
+import { getFragment } from 'gql';
 import {
   Avatar,
   DropdownMenu,
@@ -16,10 +17,9 @@ import {
   Flex,
   Typography,
 } from 'shared';
-import { getFragment } from 'gql';
 import { appName, getOrgAvatarUrl, orgUri } from 'utils';
 
-import { useOrg, useOrgs } from 'orgs/hooks';
+import { useOrg, useOrgs } from '../../hooks';
 
 import { OrgListProps } from './types';
 

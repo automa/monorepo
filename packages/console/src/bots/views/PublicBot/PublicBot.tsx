@@ -2,11 +2,11 @@ import React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { Button, Flex, Loader, Typography, toast } from 'shared';
 import { getFragment } from 'gql';
+import { Button, Flex, Loader, Typography, toast } from 'shared';
 import { orgUri } from 'utils';
 
-import { BOT_INSTALLATION_FRAGMENT } from 'bots/components';
+import { BOT_INSTALLATION_FRAGMENT } from 'bots';
 
 import { PublicBotProps } from './types';
 
@@ -161,9 +161,13 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
             <Details>
               <DetailsTitle>About</DetailsTitle>
               {bot.homepage && (
-                <Link to={bot.homepage}>
+                <a
+                  href={bot.homepage}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   <Typography variant="small">{bot.homepage}</Typography>
-                </Link>
+                </a>
               )}
             </Details>
             <Description>{bot.description}</Description>

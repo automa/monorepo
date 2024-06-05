@@ -10,6 +10,6 @@ export const Details = tw(Flex).attrs({
   direction: 'column',
 })`w-60`;
 
-export const DetailsTitle = tw(Typography)`pb-2 font-bold text-neutral-700`;
+export const DetailsTitle = tw(Typography)`pb-2 font-bold text-neutral-600`;
 
 export const Description = tw.div`px-4`;
