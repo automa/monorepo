@@ -20,7 +20,7 @@ CREATE TABLE public.user_providers (
   provider_type public.provider NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
   provider_email citext NOT NULL,
-  refresh_token VARCHAR(255) NOT NULL,
+  refresh_token VARCHAR(255),
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   UNIQUE (provider_type, provider_id),
   UNIQUE (user_id, provider_type)

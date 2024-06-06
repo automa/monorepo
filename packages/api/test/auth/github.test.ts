@@ -171,7 +171,7 @@ suite('github auth', () => {
       );
     });
 
-    suite('with no user', () => {
+    suite('with no user and no provider', () => {
       let response: LightMyRequestResponse;
 
       setup(async () => {

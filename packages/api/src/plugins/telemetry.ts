@@ -53,7 +53,6 @@ const telemetryPlugin: FastifyPluginAsync = async (app) => {
       body: 'Request errored',
       attributes: {
         reqId: request.id,
-        responseStatusCode: reply.statusCode,
         errStack: error.stack,
       },
     });

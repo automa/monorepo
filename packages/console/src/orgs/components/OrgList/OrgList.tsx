@@ -96,6 +96,7 @@ const OrgList: React.FC<OrgListProps> = ({
                 fullWidth
                 justifyContent="space-between"
                 alignItems="center"
+                className="gap-2"
               >
                 <Flex alignItems="center" className="gap-2">
                   <Avatar
