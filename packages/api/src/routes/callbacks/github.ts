@@ -137,20 +137,17 @@ export default async function (app: FastifyInstance) {
       return replyError(ErrorType.PROVIDER_ALREADY_LINKED);
     }
 
-    // Create a provider
-    if (!userProvider) {
-      userProvider = await app.prisma.user_providers.create({
-        data: {
-          user_id: user.id,
-          provider_type: provider.github,
-          provider_id: `${id}`,
-          provider_email: email,
-          refresh_token: refreshToken,
-        },
-      });
-    } else {
-      await updateProvider(userProvider.id);
-    }
+    // Create a provider since it won't exist at this point because
+    // if it did, we would have already returned at the `existingProvider` check
+    userProvider = await app.prisma.user_providers.create({
+      data: {
+        user_id: user.id,
+        provider_type: provider.github,
+        provider_id: `${id}`,
+        provider_email: email,
+        refresh_token: refreshToken,
+      },
+    });
 
     return finish(user.id);
   });

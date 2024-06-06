@@ -1,8 +1,11 @@
 import React, { useCallback } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowUpRight } from '@phosphor-icons/react';
 
 import { ProviderType } from '@automa/common';
 
 import { Flex, Tooltip, Typography } from 'shared';
+import { orgUri } from 'utils';
 
 import GithubLogo from 'assets/logos/github.svg?react';
 
@@ -51,6 +54,14 @@ const RepoOnboarding: React.FC<RepoOnboardingProps> = ({ org, ...props }) => {
           </Flex>
         </Card>
       </Tooltip>
+      <Link to={orgUri(org, '/bots/new')}>
+        <Flex alignItems="center" className="relative left-2 gap-1">
+          <Typography align="center" link>
+            Or explore bots to install
+          </Typography>
+          <ArrowUpRight className="size-4" />
+        </Flex>
+      </Link>
     </Container>
   );
 };

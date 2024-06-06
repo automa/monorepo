@@ -28,12 +28,14 @@ const githubPlugin: FastifyPluginAsync = async (app) => {
     const runWithToken = async <T>(fn: (accessToken: string) => Promise<T>) => {
       const { githubAccessToken } = request.session;
 
+      // TODO: Need to fix this when supporting other providers
       if (!request.session.userId || !githubAccessToken) {
         return reply.unauthorized();
       }
 
       try {
-        return fn(githubAccessToken);
+        // We need to call the function first to catch the error before we return the result
+        return await fn(githubAccessToken);
       } catch (err) {
         if (
           !(err instanceof AxiosError) ||
@@ -52,6 +54,11 @@ const githubPlugin: FastifyPluginAsync = async (app) => {
         },
       });
 
+      // If no refresh token, return unauthorized
+      if (!userProvider.refresh_token) {
+        return reply.unauthorized();
+      }
+
       // Get new access token
       const tokens = await axios.post(
         env.GITHUB_APP.ACCESS_TOKEN_URL,
@@ -65,6 +72,11 @@ const githubPlugin: FastifyPluginAsync = async (app) => {
           headers,
         },
       );
+
+      // If either the app has been revoked or if the refresh token is expired
+      if (tokens.data.error === 'bad_refresh_token') {
+        return reply.unauthorized();
+      }
 
       if (!tokens.data.access_token) {
         throw new Error(`No access token. ${JSON.stringify(tokens.data)}`);
