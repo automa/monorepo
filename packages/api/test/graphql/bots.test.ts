@@ -29,7 +29,7 @@ suite('graphql bots', () => {
     });
 
     app.addHook('preHandler', async (request) => {
-      request.user = sessionUser;
+      request.userId = sessionUser?.id ?? null;
     });
   });
 

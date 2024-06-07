@@ -21,7 +21,7 @@ export default async function (app: FastifyInstance) {
         name,
         user_orgs: {
           some: {
-            user_id: request.user!.id,
+            user_id: request.userId!,
           },
         },
       },

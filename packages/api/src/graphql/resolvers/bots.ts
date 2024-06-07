@@ -11,12 +11,12 @@ import {
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  bots: async (root, { org_id }, { user, prisma }) => {
+  bots: async (root, { org_id }, { userId, prisma }) => {
     // TODO: Convert the org check into a directive and/or use resolver composition, and cache this in session
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
-        user_id: user.id,
+        user_id: userId,
         org_id,
       },
     });
@@ -56,11 +56,11 @@ export const Query: QueryResolvers<Context> = {
 };
 
 export const Mutation: MutationResolvers<Context> = {
-  botCreate: async (_, { org_id, input }, { prisma, user }) => {
+  botCreate: async (_, { org_id, input }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
-        user_id: user.id,
+        user_id: userId,
         org_id,
       },
     });
@@ -91,13 +91,13 @@ export const PublicBot: PublicBotResolvers<Context> = {
   installation: async (
     { id, org_id: botOrgId },
     { org_id },
-    { prisma, user },
+    { userId, prisma },
   ) => {
     // TODO: This is blocking prisma from optimizing N+1 queries, caching orgs in session would fix this
     // Check if the user is a member of the given org or the bot's org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
-        user_id: user.id,
+        user_id: userId,
         org_id: {
           in: [org_id, botOrgId],
         },

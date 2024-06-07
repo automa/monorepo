@@ -8,11 +8,11 @@ import {
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  tasks: async (root, { org_id }, { user, prisma }) => {
+  tasks: async (root, { org_id }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
-        user_id: user.id,
+        user_id: userId,
         org_id,
       },
     });
@@ -29,11 +29,11 @@ export const Query: QueryResolvers<Context> = {
 };
 
 export const Mutation: MutationResolvers<Context> = {
-  taskCreate: async (_, { org_id, input }, { prisma, user }) => {
+  taskCreate: async (_, { org_id, input }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
-        user_id: user.id,
+        user_id: userId,
         org_id,
       },
     });
@@ -45,7 +45,7 @@ export const Mutation: MutationResolvers<Context> = {
       data: {
         org_id,
         title: data.content.slice(0, 255),
-        created_by: user.id,
+        created_by: userId,
       },
     });
   },

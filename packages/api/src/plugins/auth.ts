@@ -5,24 +5,13 @@ import { users } from '@automa/prisma';
 
 declare module 'fastify' {
   interface FastifyRequest {
-    user: users | null;
+    userId: users['id'] | null;
   }
 }
 
 const authPlugin: FastifyPluginAsync = async (app) => {
   app.addHook('preHandler', async (request) => {
-    const { userId } = request.session;
-
-    if (!userId) {
-      request.user = null;
-      return;
-    }
-
-    request.user = await app.prisma.users.findUnique({
-      where: {
-        id: userId,
-      },
-    });
+    request.userId = request.session.userId ?? null;
   });
 };
 

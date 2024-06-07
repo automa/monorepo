@@ -3,8 +3,12 @@ import { QueryResolvers, UserResolvers } from '@automa/common';
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  me: (root, args, { user }) => {
-    return user;
+  me: (root, args, { userId, prisma }) => {
+    return prisma.users.findUniqueOrThrow({
+      where: {
+        id: userId,
+      },
+    });
   },
 };
 

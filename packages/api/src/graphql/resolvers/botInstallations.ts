@@ -9,11 +9,11 @@ import {
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  botInstallations: async (root, { org_id }, { user, prisma }) => {
+  botInstallations: async (root, { org_id }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
-        user_id: user.id,
+        user_id: userId,
         org_id,
       },
     });
@@ -30,11 +30,11 @@ export const Query: QueryResolvers<Context> = {
 };
 
 export const Mutation: MutationResolvers<Context> = {
-  botInstall: async (_, { org_id, input: { bot_id } }, { prisma, user }) => {
+  botInstall: async (_, { org_id, input: { bot_id } }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
-        user_id: user.id,
+        user_id: userId,
         org_id,
       },
     });
@@ -61,11 +61,11 @@ export const Mutation: MutationResolvers<Context> = {
       },
     });
   },
-  botUninstall: async (_, { org_id, bot_id }, { prisma, user }) => {
+  botUninstall: async (_, { org_id, bot_id }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
-        user_id: user.id,
+        user_id: userId,
         org_id,
       },
     });

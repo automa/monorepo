@@ -12,7 +12,7 @@ suite('graphql', () => {
     app = await server();
 
     app.addHook('preHandler', async (request) => {
-      request.user = sessionUser;
+      request.userId = sessionUser?.id ?? null;
     });
   });
 

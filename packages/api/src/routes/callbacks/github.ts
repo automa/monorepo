@@ -113,8 +113,12 @@ export default async function (app: FastifyInstance) {
     });
 
     if (!user) {
-      if (request.user) {
-        user = request.user;
+      if (request.userId) {
+        user = await app.prisma.users.findUniqueOrThrow({
+          where: {
+            id: request.userId,
+          },
+        });
       } else {
         user = await app.prisma.users.create({
           data: {
