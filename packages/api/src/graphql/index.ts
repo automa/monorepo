@@ -29,8 +29,8 @@ import { Context } from './types';
 const resolvers = loadFilesSync(join(__dirname, 'resolvers/*.{js,ts}'));
 
 const isAuthenticated: ResolversComposition =
-  (next) => async (root, args, context, info) => {
-    if (!context.user) {
+  (next) => async (root, args, context: Context, info) => {
+    if (!context.userId) {
       throw new GraphQLError('Unauthorized', {
         extensions: {
           code: 'UNAUTHORIZED',
@@ -116,7 +116,7 @@ export default async function (app: FastifyInstance) {
     method: ['GET', 'POST'],
     path: '/graphql',
     context: async (request) => ({
-      user: request.user!,
+      userId: request.userId!,
       prisma: app.prisma,
       analytics: app.analytics,
       optimizer: app.optimizer,

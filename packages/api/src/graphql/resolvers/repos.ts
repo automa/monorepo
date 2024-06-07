@@ -3,10 +3,10 @@ import { QueryResolvers, RepoResolvers } from '@automa/common';
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  repos: async (root, { org_id }, { user, prisma }) => {
+  repos: async (root, { org_id }, { userId, prisma }) => {
     const result = await prisma.user_repos.findMany({
       where: {
-        user_id: user.id,
+        user_id: userId,
         repos: {
           org_id,
         },
@@ -19,7 +19,7 @@ export const Query: QueryResolvers<Context> = {
     return result.map((r) => r.repos);
   },
   // TODO: Look into removing the below query or correcting it
-  repo: (root, { org_name, name }, { user, prisma }) => {
+  repo: (root, { org_name, name }, { userId, prisma }) => {
     return prisma.repos.findFirst({
       where: {
         name,
@@ -28,7 +28,7 @@ export const Query: QueryResolvers<Context> = {
         },
         user_repos: {
           some: {
-            user_id: user.id,
+            user_id: userId,
           },
         },
       },

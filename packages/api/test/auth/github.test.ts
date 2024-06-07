@@ -19,7 +19,7 @@ suite('github auth', () => {
       request.session.referer = '/orgs';
       request.session.integrationOauthState = '1234';
 
-      request.user = sessionUser;
+      request.userId = sessionUser?.id ?? null;
     });
   });
 

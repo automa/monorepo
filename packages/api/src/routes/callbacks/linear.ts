@@ -77,7 +77,7 @@ export default async function (app: FastifyInstance) {
           name: linearOrg.name,
           slug: linearOrg.urlKey,
         },
-        created_by: request.user!.id,
+        created_by: request.userId!,
       },
     });
 

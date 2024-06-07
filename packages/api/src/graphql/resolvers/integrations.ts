@@ -3,11 +3,11 @@ import { IntegrationResolvers, QueryResolvers } from '@automa/common';
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  integrations: async (root, { org_id }, { user, prisma }) => {
+  integrations: async (root, { org_id }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
-        user_id: user.id,
+        user_id: userId,
         org_id,
       },
     });
