@@ -113,6 +113,7 @@ export type MutationTaskCreateArgs = {
 
 export type Org = {
   __typename?: 'Org';
+  botInstallationsCount: Scalars['Int']['output'];
   created_at: Scalars['DateTime']['output'];
   github_installation_id?: Maybe<Scalars['Int']['output']>;
   has_installation: Scalars['Boolean']['output'];

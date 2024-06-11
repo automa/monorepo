@@ -116,6 +116,7 @@ export type MutationTaskCreateArgs = {
 
 export type Org = {
   __typename?: 'Org';
+  botInstallationsCount: Scalars['Int']['output'];
   created_at: Scalars['DateTime']['output'];
   github_installation_id?: Maybe<Scalars['Int']['output']>;
   has_installation: Scalars['Boolean']['output'];
@@ -426,6 +427,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['Org'] = ResolversParentTypes['Org']> = {
+  botInstallationsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   github_installation_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   has_installation?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
