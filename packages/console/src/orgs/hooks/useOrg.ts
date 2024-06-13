@@ -1,6 +1,10 @@
 import { useAppDispatch, useAppSelector } from 'store';
 
-import { setOrg as set, selectOrg } from 'orgs/slices';
+import {
+  setOrg as set,
+  setOrgBotInstallationsCount as setBotInstallationsCount,
+  selectOrg,
+} from 'orgs/slices';
 
 const useOrg = () => {
   const dispatch = useAppDispatch();
@@ -11,8 +15,13 @@ const useOrg = () => {
     dispatch(set(name));
   };
 
+  const setOrgBotInstallationsCount = (name: string, count: number) => {
+    dispatch(setBotInstallationsCount({ name, count }));
+  };
+
   return {
     setOrg,
+    setOrgBotInstallationsCount,
     org,
   };
 };

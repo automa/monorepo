@@ -15,6 +15,7 @@ const meta = {
       provider_id: '1',
       provider_name: 'org',
       has_installation: true,
+      botInstallationsCount: 1,
     },
   },
 } satisfies Meta<typeof RepoOnboarding>;

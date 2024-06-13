@@ -25,6 +25,20 @@ export const orgsSlice = createSlice({
         state.org = org;
       }
     },
+    setOrgBotInstallationsCount: (
+      state,
+      action: PayloadAction<{ name: string; count: number }>,
+    ) => {
+      const org = state.orgs?.find((o) => o.name === action.payload.name);
+
+      if (org) {
+        org.botInstallationsCount = action.payload.count;
+      }
+
+      if (state.org?.name === action.payload.name) {
+        state.org.botInstallationsCount = action.payload.count;
+      }
+    },
     setOrgs: (state, action: PayloadAction<Org[]>) => {
       state.orgs = action.payload;
       state.loading = false;
@@ -45,7 +59,13 @@ export const orgsSlice = createSlice({
   },
 });
 
-export const { setOrg, setOrgs, unsetOrgs, setOrgsLoading } = orgsSlice.actions;
+export const {
+  setOrg,
+  setOrgBotInstallationsCount,
+  setOrgs,
+  unsetOrgs,
+  setOrgsLoading,
+} = orgsSlice.actions;
 export const { selectOrg, selectOrgs, selectOrgsLoading } = orgsSlice.selectors;
 
 export default orgsSlice.reducer;
