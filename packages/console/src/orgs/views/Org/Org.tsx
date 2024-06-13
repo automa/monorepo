@@ -12,6 +12,7 @@ import routes from './routes';
 import { OrgProps } from './types';
 
 import { Nav, Item, Content } from './Org.styles';
+import BotOnboarding from 'bots/components/BotOnboarding';
 
 const Org: React.FC<OrgProps> = () => {
   const { orgName } = useParams() as {
@@ -78,6 +79,14 @@ const Org: React.FC<OrgProps> = () => {
     [org, location.pathname],
   );
 
+  const shouldShowBotOnboarding = useMemo(
+    () =>
+      org &&
+      !org.botInstallationsCount &&
+      location.pathname.startsWith(`${orgUri(org)}/tasks`),
+    [org, location.pathname],
+  );
+
   // Redirect to first tab if on org page
   if (org && location.pathname === orgUri(org)) {
     return <Navigate to={orgUri(org, tabs[0].path)} replace />;
@@ -111,6 +120,8 @@ const Org: React.FC<OrgProps> = () => {
           <Content>
             {shouldShowRepoOnboarding ? (
               <RepoOnboarding org={org} />
+            ) : shouldShowBotOnboarding ? (
+              <BotOnboarding org={org} />
             ) : (
               <RoutesLoader fallback={<Loader />} routes={routes} org={org} />
             )}

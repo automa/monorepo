@@ -7,6 +7,7 @@ import { Button, Flex, Loader, Typography, toast } from 'shared';
 import { orgUri } from 'utils';
 
 import { BOT_INSTALLATION_FRAGMENT } from 'bots';
+import { useOrg } from 'orgs';
 
 import { PublicBotProps } from './types';
 
@@ -26,6 +27,8 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
   const { botOrgName, botName } = useParams();
 
   const navigate = useNavigate();
+
+  const { setOrgBotInstallationsCount } = useOrg();
 
   const { data, loading } = useQuery(PUBLIC_BOT_QUERY, {
     variables: {
@@ -52,6 +55,8 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
     update(cache, { data }) {
       if (!bot || !data) return;
 
+      setOrgBotInstallationsCount(org.name, org.botInstallationsCount + 1);
+
       const newBotInstallationRef = cache.writeFragment({
         data: getFragment(BOT_INSTALLATION_FRAGMENT, data.botInstall),
         fragment: BOT_INSTALLATION_FRAGMENT,
@@ -64,6 +69,15 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
               return existing;
 
             return [...existing, newBotInstallationRef];
+          },
+        },
+      });
+
+      cache.modify({
+        id: `Org:${org.id}`,
+        fields: {
+          botInstallationsCount(existing) {
+            return existing + 1;
           },
         },
       });
@@ -93,7 +107,18 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
     update(cache) {
       if (!bot?.installation) return;
 
+      setOrgBotInstallationsCount(org.name, org.botInstallationsCount - 1);
+
       cache.evict({ id: `BotInstallation:${bot.installation.id}` });
+
+      cache.modify({
+        id: `Org:${org.id}`,
+        fields: {
+          botInstallationsCount(existing) {
+            return existing - 1;
+          },
+        },
+      });
 
       cache.modify({
         id: `PublicBot:${bot.id}`,

@@ -21,6 +21,7 @@ const meta = {
             provider_id: '65730741',
             provider_name: 'automa',
             has_installation: true,
+            botInstallationsCount: 1,
           },
           {
             id: 2,
@@ -29,6 +30,7 @@ const meta = {
             provider_id: '174703',
             provider_name: 'pksunkara',
             has_installation: false,
+            botInstallationsCount: 1,
           },
         ],
       },

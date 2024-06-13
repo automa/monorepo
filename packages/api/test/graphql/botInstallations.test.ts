@@ -47,6 +47,69 @@ suite('graphql botInstallations', () => {
     await app.close();
   });
 
+  suite('org botInstallationsCount', () => {
+    let response: LightMyRequestResponse;
+
+    suiteSetup(async () => {
+      await app.prisma.bot_installations.createMany({
+        data: [
+          {
+            bot_id: bot.id,
+            org_id: org.id,
+          },
+          {
+            bot_id: nonMemberOrgBot.id,
+            org_id: org.id,
+          },
+        ],
+      });
+    });
+
+    suiteTeardown(async () => {
+      await app.prisma.bot_installations.deleteMany();
+    });
+
+    setup(async () => {
+      response = await graphql(
+        app,
+        `
+          query orgs {
+            orgs {
+              id
+              botInstallationsCount
+            }
+          }
+        `,
+      );
+    });
+
+    test('should be successful', () => {
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+    });
+
+    test('should have no errors', async () => {
+      const { errors } = response.json();
+
+      assert.isUndefined(errors);
+    });
+
+    test('should return botInstallationsCount', async () => {
+      const {
+        data: { orgs },
+      } = response.json();
+
+      assert.lengthOf(orgs, 2);
+
+      assert.equal(orgs[0].botInstallationsCount, 2);
+      assert.equal(orgs[1].botInstallationsCount, 0);
+    });
+  });
+
   suite('query botInstallations', () => {
     suiteSetup(async () => {
       await app.prisma.bot_installations.createMany({

@@ -9,6 +9,8 @@ export const ORGS_QUERY_FRAGMENT = gql(`
       provider_id
       provider_name
       has_installation
+
+      botInstallationsCount
     }
   }
 `);

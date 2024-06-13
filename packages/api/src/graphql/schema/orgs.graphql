@@ -20,4 +20,6 @@ type Org @inherits(type: "PublicOrg") {
   has_installation: Boolean!
   github_installation_id: Int
   created_at: DateTime!
+
+  botInstallationsCount: Int!
 }
