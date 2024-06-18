@@ -4,7 +4,6 @@ import { defineConfig } from 'vite';
 
 import react from '@vitejs/plugin-react';
 import { webpackStats } from 'rollup-plugin-webpack-stats';
-import macros from 'vite-plugin-babel-macros';
 import checker from 'vite-plugin-checker';
 import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimizer';
 import svgr from 'vite-plugin-svgr';
@@ -21,7 +20,6 @@ export default defineConfig({
   },
   plugins: [
     imageOptimizer(),
-    macros(),
     react({
       babel: {
         plugins: [
