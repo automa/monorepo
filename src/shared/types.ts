@@ -1,8 +1,8 @@
-import { LazyExoticComponent, ReactElement } from 'react';
+import { FC, LazyExoticComponent } from 'react';
 
 export interface Route {
-  Component: LazyExoticComponent<() => ReactElement>;
+  Component: LazyExoticComponent<FC<any>>;
   path: string;
-  props: any;
+  props?: any;
   gate?: string;
 }

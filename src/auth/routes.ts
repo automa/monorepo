@@ -11,4 +11,4 @@ export const routes = [
     Component: lazy(() => import('auth/views/AuthLogout')),
     path: '/auth/logout',
   },
-] as Route[];
+] satisfies Route[];

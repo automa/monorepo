@@ -1,14 +1,15 @@
 import { lazy } from 'react';
 
-import { routes as authRoutes } from 'auth';
 import type { Route } from 'shared';
 
+import { routes as authRoutes } from 'auth';
+
 const routes = [
+  ...authRoutes,
   {
     Component: lazy(() => import('views/Home')),
     path: '',
   },
-  ...authRoutes,
-] as Route[];
+] satisfies Route[];
 
 export default routes;
