@@ -1,7 +1,3 @@
-import { FastifyInstance, InjectOptions } from 'fastify';
-
-export { server } from '../src';
-
 // Import the modules to use their typings
 import '../src/plugins/analytics';
 import '../src/plugins/auth';
@@ -10,6 +6,10 @@ import '../src/plugins/optimizer';
 import '../src/plugins/prisma';
 import '../src/plugins/redis';
 import '../src/routes/api/orgs/_org/autohooks';
+
+import { FastifyInstance, InjectOptions } from 'fastify';
+
+export { server } from '../src';
 
 export const call = (
   app: FastifyInstance,

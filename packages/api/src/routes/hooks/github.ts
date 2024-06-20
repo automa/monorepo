@@ -4,7 +4,8 @@ import { FastifyInstance } from 'fastify';
 
 import { env } from '../../env';
 import { logger, SeverityNumber } from '../../telemetry';
-import { GithubEventType, github } from '../../hooks';
+
+import { github, GithubEventType } from '../../hooks';
 
 export default async function (app: FastifyInstance) {
   app.post<{

@@ -12,6 +12,7 @@ import {
   GithubRepository,
   GithubRepositoryMinimal,
 } from './types';
+
 import { syncSettings } from './settings';
 
 const added: GithubEventActionHandler<{

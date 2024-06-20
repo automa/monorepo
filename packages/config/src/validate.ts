@@ -1,5 +1,5 @@
-import { readFileSync, readdirSync } from 'fs';
-import { join, dirname } from 'path';
+import { readdirSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 
 import Ajv from 'ajv/dist/2019';
 

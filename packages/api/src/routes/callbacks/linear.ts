@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import axios from 'axios';
 import { LinearClient } from '@linear/sdk';
+import axios from 'axios';
 
 import { ErrorType } from '@automa/common';
 import { integration } from '@automa/prisma';

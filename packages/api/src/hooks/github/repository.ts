@@ -8,6 +8,7 @@ import {
   GithubInstallationMinimal,
   GithubRepository,
 } from './types';
+
 import { syncSettings } from './settings';
 
 // NOTE: User's repositories does not contain organization information.

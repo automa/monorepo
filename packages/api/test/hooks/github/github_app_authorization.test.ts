@@ -1,7 +1,8 @@
-import { assert } from 'chai';
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
+import { assert } from 'chai';
 
 import { seedUsers, server } from '../../utils';
+
 import { callWithFixture } from './utils';
 
 suite('github hook github_app_authorization event', () => {

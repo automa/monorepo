@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { BotCreateInput, BotType } from '../graphql';
+
 import { ZodInferSchema } from './utils';
 
 export const botCreateSchema = z.object<ZodInferSchema<BotCreateInput>>({

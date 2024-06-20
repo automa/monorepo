@@ -1,6 +1,6 @@
 import { LinearClient } from '@linear/sdk';
 
-import { task_item, integration } from '@automa/prisma';
+import { integration, task_item } from '@automa/prisma';
 
 import { env } from '../../env';
 

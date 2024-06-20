@@ -7,7 +7,6 @@ import Flex from '../Flex';
 import { DropdownMenuComponentProps } from './types';
 
 import {
-  Arrow,
   Container,
   Content,
   Group,

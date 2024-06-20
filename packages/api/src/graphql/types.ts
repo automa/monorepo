@@ -1,6 +1,7 @@
-import { BaseContext } from '@apollo/server';
-import { PrismaClient, users } from '@automa/prisma';
 import { FastifyInstance } from 'fastify';
+import { BaseContext } from '@apollo/server';
+
+import { PrismaClient, users } from '@automa/prisma';
 
 export interface Context extends BaseContext {
   userId: users['id'];

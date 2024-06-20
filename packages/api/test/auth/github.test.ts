@@ -1,12 +1,11 @@
-import { assert } from 'chai';
-import axios from 'axios';
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
-import { SinonSandbox, SinonStub, createSandbox } from 'sinon';
-import '@fastify/session';
+import { assert } from 'chai';
+import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
+import axios from 'axios';
 
 import { users } from '@automa/prisma';
 
-import { server, call } from '../utils';
+import { call, server } from '../utils';
 
 suite('github auth', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, sessionUser: users | null;

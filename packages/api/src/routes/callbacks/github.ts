@@ -5,6 +5,7 @@ import { ErrorType } from '@automa/common';
 import { provider } from '@automa/prisma';
 
 import { env } from '../../env';
+
 import { sync } from '../../clients/github';
 
 export default async function (app: FastifyInstance) {

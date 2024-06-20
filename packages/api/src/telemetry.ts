@@ -1,29 +1,39 @@
 import process from 'node:process';
 
 import {
-  NodeSDK,
   api,
-  resources,
-  tracing,
   logs,
   metrics,
+  NodeSDK,
+  resources,
+  tracing,
 } from '@opentelemetry/sdk-node';
-import { logs as logsAPI } from '@opentelemetry/api-logs';
 import {
   SEMRESATTRS_DEPLOYMENT_ENVIRONMENT,
   SEMRESATTRS_SERVICE_NAME,
   SEMRESATTRS_SERVICE_NAMESPACE,
   SEMRESATTRS_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-import { TraceExporter as GCPTraceExporter } from '@google-cloud/opentelemetry-cloud-trace-exporter';
-import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
 import { MetricExporter as GCPMetricExporter } from '@google-cloud/opentelemetry-cloud-monitoring-exporter';
-import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
+import { TraceExporter as GCPTraceExporter } from '@google-cloud/opentelemetry-cloud-trace-exporter';
+import { logs as logsAPI } from '@opentelemetry/api-logs';
+import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { FastifyInstrumentation } from '@opentelemetry/instrumentation-fastify';
 import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
-import { PrismaInstrumentation } from '@prisma/instrumentation';
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { IORedisInstrumentation } from '@opentelemetry/instrumentation-ioredis';
+import { PrismaInstrumentation } from '@prisma/instrumentation';
+
+import {
+  env,
+  environment,
+  isProduction,
+  isTest,
+  product,
+  service,
+  version,
+} from './env';
 
 export { SeverityNumber } from '@opentelemetry/api-logs';
 
@@ -41,16 +51,6 @@ const {
   SimpleLogRecordProcessor,
   ConsoleLogRecordExporter,
 } = logs;
-
-import {
-  environment,
-  isTest,
-  isProduction,
-  env,
-  product,
-  service,
-  version,
-} from './env';
 
 const sdk = new NodeSDK({
   resource: new resources.Resource({

@@ -1,7 +1,7 @@
-import { assert } from 'chai';
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
+import { assert } from 'chai';
 
-import { server, graphql, seedUsers } from '../utils';
+import { graphql, seedUsers, server } from '../utils';
 
 suite('graphql users', () => {
   let app: FastifyInstance;

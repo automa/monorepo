@@ -1,5 +1,6 @@
 import { join } from 'node:path';
 
+import { FastifyInstance } from 'fastify';
 import { ApolloServer } from '@apollo/server';
 import {
   ApolloServerErrorCode,
@@ -10,21 +11,21 @@ import fastifyApollo, {
 } from '@as-integrations/fastify';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { mergeResolvers } from '@graphql-tools/merge';
-import { addResolversToSchema } from '@graphql-tools/schema';
 import {
-  ResolversComposition,
   composeResolvers,
+  ResolversComposition,
 } from '@graphql-tools/resolvers-composition';
+import { addResolversToSchema } from '@graphql-tools/schema';
 import { GraphQLError } from 'graphql';
-import { FastifyInstance } from 'fastify';
 import { ZodError } from 'zod';
 
 import { Prisma } from '@automa/prisma';
 
 import { isProduction } from '../env';
 
-import schema from './schema';
 import { Context } from './types';
+
+import schema from './schema';
 
 const resolvers = loadFilesSync(join(__dirname, 'resolvers/*.{js,ts}'));
 

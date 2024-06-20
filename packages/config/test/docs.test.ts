@@ -1,5 +1,5 @@
-import { readFileSync } from 'fs';
-import { dirname, join } from 'path';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 
 const assertDocumented = (schemaFile: string, docsFile: string) => {
   const schema = JSON.parse(

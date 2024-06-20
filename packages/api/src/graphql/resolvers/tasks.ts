@@ -1,8 +1,8 @@
 import {
   MutationResolvers,
   QueryResolvers,
-  TaskResolvers,
   taskMessageSchema,
+  TaskResolvers,
 } from '@automa/common';
 
 import { Context } from '../types';

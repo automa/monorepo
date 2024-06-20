@@ -1,5 +1,5 @@
-import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 import { Analytics, TrackParams } from '@segment/analytics-node';
 
 import { orgs, users } from '@automa/prisma';

@@ -1,7 +1,7 @@
-import { assert } from 'chai';
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
+import { assert } from 'chai';
+import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
 import { CommentPayload, Issue, LinearClient } from '@linear/sdk';
-import { SinonSandbox, SinonStub, createSandbox } from 'sinon';
 
 import { orgs, users } from '@automa/prisma';
 
