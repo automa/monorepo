@@ -15,7 +15,7 @@
     "stop": "bash ./scripts/stop.sh"
   },
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.3.0"
   },
   "devDependencies": {
     "@apollo/rover": "~0.22.0",

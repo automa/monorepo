@@ -30,7 +30,7 @@
     "update-boilerplate": "git pull --no-rebase -s subtree -X subtree=packages/marketing https://git.sr.ht/~pksunkara/marketing-next master"
   },
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.3.0"
   },
   "browserslist": {
     "production": [
