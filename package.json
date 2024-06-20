@@ -28,7 +28,7 @@
     "update-boilerplate": "git pull --no-rebase https://git.sr.ht/~pksunkara/marketing-next master"
   },
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.3.0"
   },
   "browserslist": {
     "production": [
