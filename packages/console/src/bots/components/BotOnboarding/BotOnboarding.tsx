@@ -7,7 +7,7 @@ import { orgUri } from 'utils';
 
 import { BotOnboardingProps } from './types';
 
-import { Container, Card } from './BotOnboarding.styles';
+import { Card, Container } from './BotOnboarding.styles';
 
 const DEFAULT_BOTS = [
   {

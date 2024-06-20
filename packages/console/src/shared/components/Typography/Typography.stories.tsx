@@ -1,8 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { within, userEvent, expect, fn } from '@storybook/test';
+import { expect, fn, userEvent, within } from '@storybook/test';
+
+import { TypographyComponentProps } from './types';
 
 import Typography from './Typography';
-import { TypographyComponentProps } from './types';
 
 const meta = {
   title: 'Typography',

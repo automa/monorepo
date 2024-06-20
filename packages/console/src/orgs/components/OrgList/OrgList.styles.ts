@@ -2,7 +2,7 @@ import { TwcComponentProps } from 'react-twc';
 
 import { tw } from 'theme';
 
-import { Flex, DropdownMenuItem } from 'shared';
+import { DropdownMenuItem, Flex } from 'shared';
 
 export const Container = tw.div``;
 

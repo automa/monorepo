@@ -11,7 +11,7 @@ import GithubLogo from 'assets/logos/github.svg?react';
 
 import { RepoOnboardingProps } from './types';
 
-import { Container, Card } from './RepoOnboarding.styles';
+import { Card, Container } from './RepoOnboarding.styles';
 
 const RepoOnboarding: React.FC<RepoOnboardingProps> = ({ org, ...props }) => {
   const connectIntegration = useCallback(

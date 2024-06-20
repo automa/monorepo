@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from 'store';
 
 import {
-  setAuth as set,
-  unsetAuth as unset,
-  setAuthLoading as setLoading,
   selectAuthLoading,
+  setAuth as set,
+  setAuthLoading as setLoading,
+  unsetAuth as unset,
 } from 'auth/slices';
 import { User } from 'auth/types';
 

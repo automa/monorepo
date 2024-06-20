@@ -1,5 +1,5 @@
 import { MouseEvent, TableHTMLAttributes } from 'react';
-import { Table, Row } from '@tanstack/react-table';
+import { Row, Table } from '@tanstack/react-table';
 
 import { $, Component, Styled } from 'theme';
 

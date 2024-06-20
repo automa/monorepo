@@ -1,8 +1,9 @@
 import { lazy } from 'react';
 
+import { Route } from 'shared';
+
 import { routes as orgsRoutes } from 'orgs';
 import { routes as usersRoutes } from 'users';
-import type { Route } from 'shared';
 
 const routes = [
   {
@@ -11,6 +12,6 @@ const routes = [
   },
   ...usersRoutes,
   ...orgsRoutes,
-] as Route[];
+] satisfies Route[];
 
 export default routes;

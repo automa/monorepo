@@ -4,12 +4,13 @@ import * as Toast from '@radix-ui/react-toast';
 import { tw } from 'theme';
 
 import { ToastStyledProps } from './types';
+
 import {
   toast,
-  toastTitle,
-  toastDescription,
   toastAction,
   toastClose,
+  toastDescription,
+  toastTitle,
 } from './Toast.cva';
 
 export const Container = tw(Toast.Root)<

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider as StoreProvider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
@@ -13,8 +13,8 @@ import 'index.css';
 import 'env';
 import 'telemetry';
 
-import { ErrorBoundary } from 'error';
 import client from 'client';
+import { ErrorBoundary } from 'error';
 import store from 'store';
 import { loadFonts } from 'theme';
 

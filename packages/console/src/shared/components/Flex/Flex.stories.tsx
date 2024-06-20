@@ -1,8 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { within, userEvent, expect, fn } from '@storybook/test';
+import { expect, fn, userEvent, within } from '@storybook/test';
+
+import { FlexComponentProps } from './types';
 
 import Flex from './Flex';
-import { FlexComponentProps } from './types';
 
 const meta = {
   title: 'Flex',

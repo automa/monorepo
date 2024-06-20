@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-import type { Route } from 'shared';
+import { Route } from 'shared';
 
 export const routes = [
   {
@@ -11,4 +11,4 @@ export const routes = [
     Component: lazy(() => import('auth/views/AuthLogout')),
     path: '/auth/logout',
   },
-] as Route[];
+] satisfies Route[];

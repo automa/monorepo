@@ -1,13 +1,13 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { taskMessageSchema, TaskMessageInput } from '@automa/common';
+import { TaskMessageInput, taskMessageSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
-import { Button, Flex, Textarea, Typography, toast } from 'shared';
+import { Button, Flex, Textarea, toast, Typography } from 'shared';
 import { orgUri } from 'utils';
 
 import { TASK_FRAGMENT } from 'tasks';

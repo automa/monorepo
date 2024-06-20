@@ -7,4 +7,4 @@ export const routes = [
     Component: lazy(() => import('orgs/views/Org')),
     path: ':orgName/*',
   },
-] as Route[];
+] satisfies Route[];

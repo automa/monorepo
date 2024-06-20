@@ -1,6 +1,6 @@
 import useLocalStorageState, {
-  LocalStorageState,
   LocalStorageOptions,
+  LocalStorageState,
 } from 'use-local-storage-state';
 
 const usePersistentState = <T>(

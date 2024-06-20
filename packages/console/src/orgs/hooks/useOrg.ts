@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from 'store';
 
 import {
+  selectOrg,
   setOrg as set,
   setOrgBotInstallationsCount as setBotInstallationsCount,
-  selectOrg,
 } from 'orgs/slices';
 
 const useOrg = () => {

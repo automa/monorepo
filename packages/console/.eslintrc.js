@@ -1,3 +1,15 @@
+const product = 'automa';
+const modules = ['analytics', 'shared', 'utils'];
+const features = [
+  'auth',
+  'bots',
+  'integrations',
+  'orgs',
+  'repos',
+  'tasks',
+  'users',
+];
+
 module.exports = {
   root: true,
   extends: [
@@ -11,6 +23,7 @@ module.exports = {
     'plugin:storybook/recommended',
     'plugin:tailwindcss/recommended',
   ],
+  plugins: ['simple-import-sort'],
   rules: {
     'no-empty': [
       'error',
@@ -32,6 +45,41 @@ module.exports = {
       },
     ],
     'react/react-in-jsx-scope': 'off',
+    'simple-import-sort/imports': [
+      'error',
+      {
+        groups: [
+          ['^\u0000'],
+          ['^node:'],
+          [
+            '^(react|react-dom/client|react-router-dom|react-redux|react-twc|vite|vitest)$',
+            '^(@apollo/client|@reduxjs/toolkit|@storybook|@testing-library|tailwindcss|class-variance-authority)(/.*)?$',
+            '^@?\\w',
+          ],
+          [`^@${product}/`],
+          ['^'],
+          ['^\u0000(@fontsource-.*|cal-sans)$'],
+          ['^.*\\.css$'],
+          ['^\u0000?(env|telemetry)$'],
+          ['^(client|error|store|theme|tests)$'],
+          [`^(gql(/.*)?|${modules.join('|')})$`],
+          [`^(${features.join('|')})$`],
+          ['^(assets|views)/.*'],
+          [`^(${modules.concat(features).join('|')})/.*$`],
+          ['^\\.\\.'],
+          ['^\\./(routes|types|utils)$'],
+          ['^\\.'],
+        ],
+      },
+    ],
+    'import/no-empty-named-blocks': 'error',
+    'import/no-absolute-path': 'error',
+    'import/no-relative-packages': 'error',
+    'import/no-self-import': 'error',
+    'import/no-useless-path-segments': 'error',
+    'import/first': 'error',
+    'import/newline-after-import': 'error',
+    'import/no-duplicates': 'error',
     'import/no-cycle': [
       'error',
       {
@@ -88,6 +136,6 @@ module.exports = {
         project: 'packages/console',
       },
     },
-    'import/internal-regex': '^@automa/',
+    'import/internal-regex': `^@${product}/`,
   },
 };

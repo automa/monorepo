@@ -1,12 +1,12 @@
 import React from 'react';
 
 import {
-  useIsScreenSize,
-  useIsExtraSmallOnly,
-  useIsSmallOnly,
-  useIsMediumOnly,
-  useIsLargeOnly,
   useIsExtraLargeOnly,
+  useIsExtraSmallOnly,
+  useIsLargeOnly,
+  useIsMediumOnly,
+  useIsScreenSize,
+  useIsSmallOnly,
 } from 'shared';
 
 import { ScreenSizeHelperProps, ScreenSizeProps } from './types';

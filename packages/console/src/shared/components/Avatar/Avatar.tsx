@@ -3,7 +3,7 @@ import * as AvatarPrimitive from '@radix-ui/react-avatar';
 
 import { AvatarComponentProps } from './types';
 
-import { Container, Image, Fallback } from './Avatar.styles';
+import { Container, Fallback, Image } from './Avatar.styles';
 
 const Avatar: React.FC<AvatarComponentProps> = ({
   size,

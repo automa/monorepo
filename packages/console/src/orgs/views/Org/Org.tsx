@@ -5,14 +5,14 @@ import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Flex, Loader, RoutesLoader } from 'shared';
 import { orgUri } from 'utils';
 
+import { BotOnboarding } from 'bots';
 import { useOrg, useOrgs } from 'orgs';
 import { RepoOnboarding } from 'repos';
 
 import routes from './routes';
 import { OrgProps } from './types';
 
-import { Nav, Item, Content } from './Org.styles';
-import BotOnboarding from 'bots/components/BotOnboarding';
+import { Content, Item, Nav } from './Org.styles';
 
 const Org: React.FC<OrgProps> = () => {
   const { orgName } = useParams() as {

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Button, Flex, Typography, Tooltip } from 'shared';
+import { Button, Flex, Tooltip, Typography } from 'shared';
 
 import { integrations } from '../../consts';
 

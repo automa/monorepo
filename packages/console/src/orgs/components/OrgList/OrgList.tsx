@@ -24,7 +24,7 @@ import { useOrg, useOrgs } from '../../hooks';
 import { OrgListProps } from './types';
 
 import { ORGS_QUERY_FRAGMENT } from './OrgList.queries';
-import { Container, Switcher, Icon, Item } from './OrgList.styles';
+import { Container, Icon, Item, Switcher } from './OrgList.styles';
 
 const OrgList: React.FC<OrgListProps> = ({
   data: fullData,
