@@ -1,5 +1,5 @@
+import { createTwc, cx } from 'react-twc';
 import { twMerge } from 'tailwind-merge';
-import { cx, createTwc } from 'react-twc';
 
 export const tw = createTwc({
   compose: (...inputs) => twMerge(cx(inputs)),

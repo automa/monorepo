@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { fonts } from 'theme';
-
 import './globals.css';
+
+import { fonts } from 'theme';
 
 import { Container } from './layout.styles';
 
