@@ -1,9 +1,10 @@
 import { lazy } from 'react';
 
-import { routes as taskRoutes } from 'tasks';
-import { routes as repoRoutes } from 'repos';
-import { routes as botRoutes } from 'bots';
 import { Route } from 'shared';
+
+import { routes as botRoutes } from 'bots';
+import { routes as repoRoutes } from 'repos';
+import { routes as taskRoutes } from 'tasks';
 
 const routes = [
   {
@@ -17,6 +18,6 @@ const routes = [
   ...taskRoutes,
   ...repoRoutes,
   ...botRoutes,
-] as Route[];
+] satisfies Route[];
 
 export default routes;

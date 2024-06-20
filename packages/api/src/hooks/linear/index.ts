@@ -1,4 +1,4 @@
-import { LinearEventType, LinearEventHandler } from './types';
+import { LinearEventHandler, LinearEventType } from './types';
 
 import comment from './comment';
 

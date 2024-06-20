@@ -1,7 +1,7 @@
-import { assert } from 'chai';
 import { FastifyInstance } from 'fastify';
+import { assert } from 'chai';
 
-import { server, call } from '../../utils';
+import { call, server } from '../../utils';
 
 suite('linear hook', () => {
   let app: FastifyInstance;

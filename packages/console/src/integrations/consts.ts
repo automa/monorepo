@@ -3,9 +3,9 @@ import { FC, SVGProps } from 'react';
 import { IntegrationType } from '@automa/common';
 
 import GithubLogo from 'assets/logos/github.svg?react';
+import JiraLogo from 'assets/logos/jira.svg?react';
 import LinearLogo from 'assets/logos/linear.svg?react';
 import SlackLogo from 'assets/logos/slack.svg?react';
-import JiraLogo from 'assets/logos/jira.svg?react';
 
 type Integration = {
   logo: FC<SVGProps<SVGSVGElement>>;

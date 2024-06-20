@@ -1,5 +1,5 @@
-import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 
 import { logger, meter, SeverityNumber } from '../telemetry';
 

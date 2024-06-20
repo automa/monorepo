@@ -1,9 +1,10 @@
 import { expect } from 'vitest';
 
-import { render, mockedNavigate } from 'tests';
+import { ProviderType } from '@automa/common';
+
+import { mockedNavigate, render } from 'tests';
 
 import DeepLink from './DeepLink';
-import { ProviderType } from '@automa/common';
 
 test('with no orgs does nothing', async () => {
   render(<DeepLink />);

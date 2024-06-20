@@ -1,9 +1,9 @@
 import {
   BotInstallationResolvers,
   MutationResolvers,
-  QueryResolvers,
   publicBotFields,
   publicOrgFields,
+  QueryResolvers,
 } from '@automa/common';
 
 import { Context } from '../types';

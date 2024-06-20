@@ -1,4 +1,4 @@
-import { init, captureException, withScope } from '@sentry/browser';
+import { captureException, init, withScope } from '@sentry/browser';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 
 import { environment, product, service, version } from 'env';

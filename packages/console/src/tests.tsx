@@ -1,34 +1,34 @@
-import React, { FC, ReactNode, ReactElement } from 'react';
-import { MemoryRouter, Routes, Route, NavigateProps } from 'react-router-dom';
+import React, { FC, ReactElement, ReactNode } from 'react';
 import { Provider as StoreProvider } from 'react-redux';
+import { MemoryRouter, NavigateProps, Route, Routes } from 'react-router-dom';
+import { vi } from 'vitest';
 import { NormalizedCacheObject } from '@apollo/client';
 import {
   MockedProvider as ApolloProvider,
   MockedProviderProps,
 } from '@apollo/client/testing';
-import * as Tooltip from '@radix-ui/react-tooltip';
 import { render, RenderOptions } from '@testing-library/react';
-import { vi } from 'vitest';
+import * as Tooltip from '@radix-ui/react-tooltip';
 import axios from 'axios';
 
-import store, { reducer, RootState } from 'store';
 import { cache } from 'client';
+import store, { reducer, RootState } from 'store';
 
 import { AnalyticsProvider } from 'analytics';
 
 const customRender = (
   ui: ReactElement,
   {
+    requests,
     cached = {},
     state,
-    requests,
     history,
     path,
     ...options
   }: RenderOptions & {
+    requests?: MockedProviderProps['mocks'];
     cached?: NormalizedCacheObject;
     state?: Partial<RootState>;
-    requests?: MockedProviderProps['mocks'];
     history?: string[];
     path?: string;
   } = {},

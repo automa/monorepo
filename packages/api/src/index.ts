@@ -1,19 +1,19 @@
 import { join } from 'node:path';
 
-// Always setup the environment first
-import { env, isProduction, version } from './env';
-import { logger, SeverityNumber } from './telemetry';
-
 import fastify from 'fastify';
-import fastifySensible from '@fastify/sensible';
+import fastifyAutoload from '@fastify/autoload';
 import fastifyCors from '@fastify/cors';
 import fastifyHelmet from '@fastify/helmet';
-import fastifyAutoload from '@fastify/autoload';
+import fastifySensible from '@fastify/sensible';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import httpErrors from 'http-errors';
 
 import { Prisma } from '@automa/prisma';
+
+// Always setup the environment first
+import { env, isProduction, version } from './env';
+import { logger, SeverityNumber } from './telemetry';
 
 import graphql from './graphql';
 import session from './session';

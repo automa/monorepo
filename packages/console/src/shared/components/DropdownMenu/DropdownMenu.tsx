@@ -1,6 +1,6 @@
 import React from 'react';
-import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { CaretRight } from '@phosphor-icons/react';
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 
 import Flex from '../Flex';
 

@@ -7,6 +7,6 @@ const routes = [
     Component: lazy(() => import('repos/views/RepoOverview')),
     path: '/',
   },
-] as Route[];
+] satisfies Route[];
 
 export default routes;

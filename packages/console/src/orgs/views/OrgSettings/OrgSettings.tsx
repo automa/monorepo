@@ -8,7 +8,7 @@ import { orgUri } from 'utils';
 import routes from './routes';
 import { OrgSettingsProps } from './types';
 
-import { Container, Nav, Item, Content } from './OrgSettings.styles';
+import { Container, Content, Item, Nav } from './OrgSettings.styles';
 
 const OrgSettings: React.FC<OrgSettingsProps> = ({ org }) => {
   const location = useLocation();

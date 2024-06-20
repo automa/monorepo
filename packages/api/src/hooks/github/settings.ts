@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { AxiosInstance } from 'axios';
 
-import { CONFIG_FILES, CauseType } from '@automa/common';
+import { CauseType, CONFIG_FILES } from '@automa/common';
 import { validate } from '@automa/config';
 import { Prisma, repos } from '@automa/prisma';
 

@@ -1,4 +1,4 @@
-import { GithubEventType, GithubEventHandler } from './types';
+import { GithubEventHandler, GithubEventType } from './types';
 
 import githubAppAuthorization from './githubAppAuthorization';
 import installation from './installation';

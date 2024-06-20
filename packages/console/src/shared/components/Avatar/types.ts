@@ -1,5 +1,5 @@
-import { VariantProps } from 'class-variance-authority';
 import { ImgHTMLAttributes } from 'react';
+import { VariantProps } from 'class-variance-authority';
 
 import { $, Component, Styled } from 'theme';
 

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import {
@@ -6,7 +7,6 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { useState } from 'react';
 
 import Table from './Table';
 

@@ -1,12 +1,13 @@
-import { assert } from 'chai';
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
+import { assert } from 'chai';
+import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
 import axios from 'axios';
-import { SinonSandbox, SinonStub, createSandbox } from 'sinon';
 
 import { CauseType } from '@automa/common';
 import { orgs, repos } from '@automa/prisma';
 
 import { server } from '../../utils';
+
 import { callWithFixture, encodeSettings } from './utils';
 
 suite('github hook installation event', () => {

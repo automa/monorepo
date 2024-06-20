@@ -1,8 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { within, userEvent, expect, fn } from '@storybook/test';
+import { expect, fn, userEvent, within } from '@storybook/test';
+
+import { ButtonComponentProps } from './types';
 
 import Button from './Button';
-import { ButtonComponentProps } from './types';
 
 const meta = {
   title: 'Button',

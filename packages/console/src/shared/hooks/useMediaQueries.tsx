@@ -1,6 +1,6 @@
 import { useMediaQuery } from 'react-responsive';
 
-import { checkScreenSize, ScreenSize, breakpoints } from 'theme';
+import { breakpoints, checkScreenSize, ScreenSize } from 'theme';
 
 export const useIsScreenSize = (size: ScreenSize) => {
   const { min, max } = checkScreenSize(size);

@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 
 import { useAsyncEffect } from 'shared';
 
-import { useUser, useAuth, logout } from 'auth';
+import { logout, useAuth, useUser } from 'auth';
 import { useOrgs } from 'orgs';
 
 import { AuthLogoutProps } from './types';

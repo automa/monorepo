@@ -1,12 +1,13 @@
-import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 import axios, { AxiosError, AxiosResponse, Method } from 'axios';
 
 import { provider } from '@automa/prisma';
 
 import { env } from '../env';
-import { nextLinkHeader } from '../clients/utils';
+
 import { createCallers, headers } from '../clients/github';
+import { nextLinkHeader } from '../clients/utils';
 
 declare module 'fastify' {
   interface FastifyRequest {

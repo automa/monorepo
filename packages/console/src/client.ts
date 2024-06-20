@@ -4,17 +4,19 @@ import {
   HttpLink,
   InMemoryCache,
 } from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { RetryLink } from '@apollo/client/link/retry';
-import { onError } from '@apollo/client/link/error';
-import { print } from 'graphql';
-import { sha256 } from 'crypto-hash';
 import axios from 'axios';
+import { sha256 } from 'crypto-hash';
+import { print } from 'graphql';
 
 import { isProduction } from 'env';
+
 import { errorCapture } from 'error';
 
 import { toast } from 'shared';
+
 import { logout } from 'auth';
 
 const logoutOn401 = async () => {

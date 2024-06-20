@@ -1,7 +1,7 @@
-import type { Config } from 'tailwindcss';
+import { Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme';
-import animate from 'tailwindcss-animate';
 import scrollbar from 'tailwind-scrollbar';
+import animate from 'tailwindcss-animate';
 
 const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],

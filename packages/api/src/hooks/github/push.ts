@@ -1,9 +1,10 @@
-import { CONFIG_FILES, CauseType } from '@automa/common';
+import { CauseType, CONFIG_FILES } from '@automa/common';
 import { provider } from '@automa/prisma';
 
 import { caller } from '../../clients/github';
 
 import { GithubEventActionHandler, GithubRepository } from './types';
+
 import { syncSettings } from './settings';
 
 const push: GithubEventActionHandler<{

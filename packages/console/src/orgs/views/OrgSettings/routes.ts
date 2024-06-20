@@ -15,6 +15,6 @@ const routes = [
     Component: lazy(() => import('bots/views/Bots')),
     path: '/bots',
   },
-] as Route[];
+] satisfies Route[];
 
 export default routes;

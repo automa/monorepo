@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { StatsigProvider } from 'statsig-react';
 import axios from 'axios';
+import { StatsigProvider } from 'statsig-react';
 
 import { environment, isTest } from 'env';
 

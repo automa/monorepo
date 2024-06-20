@@ -11,4 +11,4 @@ export const routes = [
     Component: lazy(() => import('tasks/views/Tasks')),
     path: '/tasks',
   },
-] as Route[];
+] satisfies Route[];

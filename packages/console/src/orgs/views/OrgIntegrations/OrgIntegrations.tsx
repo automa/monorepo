@@ -6,7 +6,7 @@ import { IntegrationType } from '@automa/common';
 import { Flex, Loader } from 'shared';
 import { objectKeys } from 'utils';
 
-import { integrations, IntegrationConnectCard } from 'integrations';
+import { IntegrationConnectCard, integrations } from 'integrations';
 
 import { OrgIntegrationsProps } from './types';
 

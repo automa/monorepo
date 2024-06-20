@@ -1,11 +1,11 @@
 import {
+  botCreateSchema,
   BotResolvers,
   MutationResolvers,
-  PublicBotResolvers,
-  QueryResolvers,
-  botCreateSchema,
   publicBotFields,
+  PublicBotResolvers,
   publicOrgFields,
+  QueryResolvers,
 } from '@automa/common';
 
 import { Context } from '../types';

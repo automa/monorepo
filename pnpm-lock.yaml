@@ -110,6 +110,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ~4.6.0
         version: 4.6.2(eslint@8.38.0)
+      eslint-plugin-simple-import-sort:
+        specifier: ~12.1.0
+        version: 12.1.0(eslint@8.38.0)
       eslint-plugin-storybook:
         specifier: ~0.8.0
         version: 0.8.0(eslint@8.38.0)(typescript@5.2.2)
@@ -433,8 +436,8 @@ importers:
         specifier: ~9.0.2
         version: 9.0.2(react@18.2.0)
       react-router-dom:
-        specifier: ~6.0.2
-        version: 6.0.2(react-dom@18.2.0)(react@18.2.0)
+        specifier: ~6.23.1
+        version: 6.23.1(react-dom@18.2.0)(react@18.2.0)
       react-twc:
         specifier: ~1.4.1
         version: 1.4.1(@types/react@18.2.79)(react@18.2.0)
@@ -496,9 +499,6 @@ importers:
       vite:
         specifier: ~5.0.11
         version: 5.0.13(@types/node@20.12.12)
-      vite-plugin-babel-macros:
-        specifier: ~1.0.6
-        version: 1.0.6(vite@5.0.13)
       vite-plugin-checker:
         specifier: ~0.6.2
         version: 0.6.4(eslint@8.38.0)(typescript@5.2.2)(vite@5.0.13)
@@ -5913,6 +5913,11 @@ packages:
       reselect: 5.1.0
     dev: false
 
+  /@remix-run/router@1.16.1:
+    resolution: {integrity: sha512-es2g3dq6Nb07iFxGk5GuHN20RwBZOsuDQN7izWIisUcv9r+d2C5jQxqmgkdebXgReWfiyUabcki6Fg77mSNrig==}
+    engines: {node: '>=14.0.0'}
+    dev: false
+
   /@repeaterjs/repeater@3.0.6:
     resolution: {integrity: sha512-Javneu5lsuhwNCryN+pXH93VPQ8g0dBX7wItHFgYiwQmzE1sVdg5tWHiOgHywzL2W21XQopa7IwIEnNbmeUJYA==}
     dev: true
@@ -10377,15 +10382,6 @@ packages:
       '@types/babel__traverse': 7.20.5
     dev: true
 
-  /babel-plugin-macros@3.1.0:
-    resolution: {integrity: sha512-Cg7TFGpIr01vOQNODXOOaGz2NpCU5gl8x1qJFbb6hbZxR7XrcE2vtbAsTAbJ7/xwJtUuJEw8K8Zr/AE0LHlesg==}
-    engines: {node: '>=10', npm: '>=6'}
-    dependencies:
-      '@babel/runtime': 7.24.5
-      cosmiconfig: 7.1.0
-      resolve: 1.22.8
-    dev: true
-
   /babel-plugin-polyfill-corejs2@0.4.11(@babel/core@7.24.5):
     resolution: {integrity: sha512-sMEJ27L0gRHShOh5G54uAAPaiCOygY/5ratXuiyb2G46FmlSpc9eFCzYVyDiPxfNbwzA7mYahmjQc5q+CZQ09Q==}
     peerDependencies:
@@ -12762,6 +12758,14 @@ packages:
       string.prototype.matchall: 4.0.11
     dev: true
 
+  /eslint-plugin-simple-import-sort@12.1.0(eslint@8.38.0):
+    resolution: {integrity: sha512-Y2fqAfC11TcG/WP3TrI1Gi3p3nc8XJyEOJYHyEPEGI/UAgNx6akxxlX74p7SbAQdLcgASKhj8M0GKvH3vq/+ig==}
+    peerDependencies:
+      eslint: '>=5.0.0'
+    dependencies:
+      eslint: 8.38.0
+    dev: true
+
   /eslint-plugin-storybook@0.8.0(eslint@8.38.0)(typescript@5.2.2):
     resolution: {integrity: sha512-CZeVO5EzmPY7qghO2t64oaFM+8FTaD4uzOEjHKp516exyTKo+skKAL9GI3QALS2BXhyALJjNtwbmr1XinGE8bA==}
     engines: {node: '>= 18'}
@@ -14285,12 +14289,6 @@ packages:
   /helmet@7.1.0:
     resolution: {integrity: sha512-g+HZqgfbpXdCkme/Cd/mZkV0aV3BZZZSugecH03kl38m/Kmdx8jKjBikpDj2cr+Iynv4KpYEviojNdTJActJAg==}
     engines: {node: '>=16.0.0'}
-    dev: false
-
-  /history@5.3.0:
-    resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
-    dependencies:
-      '@babel/runtime': 7.24.5
     dev: false
 
   /hmac-drbg@1.0.1:
@@ -18887,24 +18885,26 @@ packages:
       shallow-equal: 1.2.1
     dev: false
 
-  /react-router-dom@6.0.2(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-cOpJ4B6raFutr0EG8O/M2fEoyQmwvZWomf1c6W2YXBZuFBx8oTk/zqjXghwScyhfrtnt0lANXV2182NQblRxFA==}
+  /react-router-dom@6.23.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-utP+K+aSTtEdbWpC+4gxhdlPFwuEfDKq8ZrPFU65bbRJY+l706qjR7yaidBpo3MSeA/fzwbXWbKBI6ftOnP3OQ==}
+    engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
       react-dom: '>=16.8'
     dependencies:
-      history: 5.3.0
+      '@remix-run/router': 1.16.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      react-router: 6.0.2(react@18.2.0)
+      react-router: 6.23.1(react@18.2.0)
     dev: false
 
-  /react-router@6.0.2(react@18.2.0):
-    resolution: {integrity: sha512-8/Wm3Ed8t7TuedXjAvV39+c8j0vwrI5qVsYqjFr5WkJjsJpEvNSoLRUbtqSEYzqaTUj1IV+sbPJxvO+accvU0Q==}
+  /react-router@6.23.1(react@18.2.0):
+    resolution: {integrity: sha512-fzcOaRF69uvqbbM7OhvQyBTFDVrrGlsFdS3AL+1KfIBtGETibHzi3FkoTRyiDJnWNc2VxrfvR+657ROHjaNjqQ==}
+    engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
     dependencies:
-      history: 5.3.0
+      '@remix-run/router': 1.16.1
       react: 18.2.0
     dev: false
 
@@ -21395,22 +21395,6 @@ packages:
       - sugarss
       - supports-color
       - terser
-    dev: true
-
-  /vite-plugin-babel-macros@1.0.6(vite@5.0.13):
-    resolution: {integrity: sha512-7cCT8jtu5UjpE46pH7RyVltWw5FbhDAtQliZ6QGqRNR5RUZKdAsB0CDjuF+VBoDpnl0KuESPu22SoNqXRYYWyQ==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      vite: '>=2'
-    dependencies:
-      '@babel/core': 7.24.5
-      '@babel/plugin-syntax-jsx': 7.24.1(@babel/core@7.24.5)
-      '@babel/plugin-syntax-typescript': 7.24.1(@babel/core@7.24.5)
-      '@types/babel__core': 7.20.5
-      babel-plugin-macros: 3.1.0
-      vite: 5.0.13(@types/node@20.12.12)
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /vite-plugin-checker@0.6.4(eslint@8.38.0)(typescript@5.2.2)(vite@5.0.13):

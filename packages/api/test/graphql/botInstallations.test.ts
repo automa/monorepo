@@ -1,9 +1,9 @@
-import { assert } from 'chai';
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
+import { assert } from 'chai';
 
-import { orgs, bots } from '@automa/prisma';
+import { bots, orgs } from '@automa/prisma';
 
-import { server, graphql, seedUsers, seedOrgs, seedBots } from '../utils';
+import { graphql, seedBots, seedOrgs, seedUsers, server } from '../utils';
 
 suite('graphql botInstallations', () => {
   let app: FastifyInstance, org: orgs, secondOrg: orgs, nonMemberOrg: orgs;

@@ -4,13 +4,13 @@ import { flexRender } from '@tanstack/react-table';
 import { TableComponentProps } from './types';
 
 import {
+  Body,
+  Cell,
   Container,
   Header,
-  HeaderRow,
   HeaderCell,
-  Body,
+  HeaderRow,
   Row,
-  Cell,
 } from './Table.styles';
 
 const Table = <T,>({ table, onRowClick, ...props }: TableComponentProps<T>) => {

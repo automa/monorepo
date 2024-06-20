@@ -15,4 +15,4 @@ export const routes = [
     Component: lazy(() => import('bots/views/BotInstallations')),
     path: '/bots',
   },
-] as Route[];
+] satisfies Route[];

@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { getFragment } from 'gql';
-import { Button, Flex, Loader, Typography, toast } from 'shared';
+import { Button, Flex, Loader, toast, Typography } from 'shared';
 import { orgUri } from 'utils';
 
 import { BOT_INSTALLATION_FRAGMENT } from 'bots';

@@ -1,6 +1,6 @@
-import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
-import { init, captureException, withScope } from '@sentry/node';
+import fp from 'fastify-plugin';
+import { captureException, init, withScope } from '@sentry/node';
 
 import { env, environment, product, service, version } from '../env';
 import { tracer } from '../telemetry';

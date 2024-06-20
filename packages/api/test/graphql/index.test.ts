@@ -1,9 +1,9 @@
-import { assert } from 'chai';
 import { FastifyInstance } from 'fastify';
+import { assert } from 'chai';
 
 import { users } from '@automa/prisma';
 
-import { server, graphql } from '../utils';
+import { graphql, server } from '../utils';
 
 suite('graphql', () => {
   let app: FastifyInstance, sessionUser: users | null;

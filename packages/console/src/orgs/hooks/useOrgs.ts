@@ -1,11 +1,11 @@
 import { useAppDispatch, useAppSelector } from 'store';
 
 import {
-  setOrgs as set,
-  unsetOrgs as unset,
-  setOrgsLoading as setLoading,
   selectOrgs,
   selectOrgsLoading,
+  setOrgs as set,
+  setOrgsLoading as setLoading,
+  unsetOrgs as unset,
 } from 'orgs/slices';
 import { Org } from 'orgs/types';
 

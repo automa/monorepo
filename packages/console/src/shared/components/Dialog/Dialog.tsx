@@ -9,11 +9,11 @@ import { DialogComponentProps } from './types';
 
 import {
   Container,
-  Overlay,
   Content,
-  Title,
   Description,
   Footer,
+  Overlay,
+  Title,
 } from './Dialog.styles';
 
 const Dialog: React.FC<DialogComponentProps> = ({

@@ -11,6 +11,7 @@ import {
   GithubRepository,
   GithubRepositoryMinimal,
 } from './types';
+
 import { addRepo, updateRepo } from './installationRepositories';
 
 const created: GithubEventActionHandler<{

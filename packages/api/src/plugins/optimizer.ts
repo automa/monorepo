@@ -1,7 +1,7 @@
-import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
-import Statsig, { DynamicConfig } from 'statsig-node';
+import fp from 'fastify-plugin';
 import { api } from '@opentelemetry/sdk-node';
+import Statsig, { DynamicConfig } from 'statsig-node';
 
 import { orgs, users } from '@automa/prisma';
 

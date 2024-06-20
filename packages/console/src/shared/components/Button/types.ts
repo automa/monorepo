@@ -1,6 +1,6 @@
-import { VariantProps } from 'class-variance-authority';
 import { AnchorHTMLAttributes, ButtonHTMLAttributes } from 'react';
 import { LinkProps } from 'react-router-dom';
+import { VariantProps } from 'class-variance-authority';
 
 import { $, Component, Styled } from 'theme';
 

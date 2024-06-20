@@ -2,4 +2,4 @@ import { lazy } from 'react';
 
 import { Route } from 'shared';
 
-export const routes = [] as Route[];
+export const routes = [] satisfies Route[];
