@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -36,7 +36,7 @@ RUN rm -rf node_modules
 RUN pnpm install --frozen-lockfile --prod --ignore-scripts
 RUN pnpm --filter @automa/prisma prisma-generate
 
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 

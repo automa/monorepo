@@ -15,7 +15,7 @@
     "prisma-refresh": "prisma db pull && prisma generate"
   },
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.3.0"
   },
   "devDependencies": {
     "prettier-plugin-prisma": "~5.0.0",

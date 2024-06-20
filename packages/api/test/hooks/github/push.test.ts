@@ -519,7 +519,7 @@ suite('github hook push event', () => {
       assert.deepEqual(settings[0].settings, null);
       assert.deepEqual(settings[0].validation_errors, {
         deserialize:
-          "Expected ',' or '}' after property value in JSON at position 11",
+          "Expected ',' or '}' after property value in JSON at position 11 (line 2 column 1)",
       });
 
       assert.deepOwnInclude(settings[1], {
