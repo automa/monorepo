@@ -38,7 +38,7 @@ module.exports = {
     ],
     'react/react-in-jsx-scope': 'off',
     'simple-import-sort/imports': [
-      'error',
+      'warn',
       {
         groups: [
           ['^\u0000'],
@@ -50,6 +50,7 @@ module.exports = {
           ],
           [`^@${product}/`],
           ['^'],
+          ['^\u0000(@fontsource-.*)$'],
           ['^.*\\.css$'],
           ['^\u0000?(env|telemetry)$'],
           ['^(client|error|store|theme|tests)$'],
@@ -60,6 +61,7 @@ module.exports = {
           ['^\\.\\.'],
           ['^\\./(routes|types|utils)$'],
           ['^\\.'],
+          ['^\\./.*\\.(queries|styles)$'],
         ],
       },
     ],
