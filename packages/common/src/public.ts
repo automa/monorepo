@@ -14,6 +14,7 @@ export const publicBotFields = {
   short_description: true,
   description: true,
   homepage: true,
+  is_published: true,
 };
 
 export type public_orgs = Pick<orgs, keyof typeof publicOrgFields>;

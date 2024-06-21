@@ -18,6 +18,7 @@ type PublicBot {
   short_description: String!
   description: String
   homepage: String
+  is_published: Boolean!
 
   org: PublicOrg!
   installation(org_id: Int!): BotInstallation
@@ -27,7 +28,6 @@ type Bot @inherits(type: "PublicBot") {
   type: BotType!
   webhook_url: String
   published_at: DateTime
-  is_published: Boolean!
   created_at: DateTime!
 
   org: Org!

@@ -5,6 +5,7 @@ export const PUBLIC_BOT_FRAGMENT = gql(`
     id
     name
     short_description
+    is_published
     org {
       name
     }

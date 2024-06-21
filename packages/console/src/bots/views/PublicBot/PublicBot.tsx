@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { getFragment } from 'gql';
-import { Button, Flex, Loader, toast, Typography } from 'shared';
+import { Badge, Button, Flex, Loader, toast, Typography } from 'shared';
 import { orgUri } from 'utils';
 
 import { BOT_INSTALLATION_FRAGMENT } from 'bots';
@@ -169,9 +169,16 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
         <Container>
           <Flex justifyContent="space-between">
             <Flex direction="column" className="gap-2">
-              <Typography variant="title4">
-                {bot.org.name}/{bot.name}
-              </Typography>
+              <Flex alignItems="center" className="gap-4">
+                <Typography variant="title4">
+                  {bot.org.name}/{bot.name}
+                </Typography>
+                {!bot.is_published && (
+                  <Badge variant="warning" size="large">
+                    Private
+                  </Badge>
+                )}
+              </Flex>
               <Typography variant="large">{bot.short_description}</Typography>
             </Flex>
             <Button

@@ -139,6 +139,7 @@ export type PublicBot = {
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   installation?: Maybe<BotInstallation>;
+  is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   org: PublicOrg;
   short_description: Scalars['String']['output'];
@@ -447,6 +448,7 @@ export type PublicBotResolvers<ContextType = any, ParentType extends ResolversPa
   homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   installation?: Resolver<Maybe<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<PublicBotInstallationArgs, 'org_id'>>;
+  is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
   short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

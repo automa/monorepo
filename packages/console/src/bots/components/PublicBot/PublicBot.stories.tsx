@@ -8,21 +8,22 @@ import PublicBot from './PublicBot';
 
 import { PUBLIC_BOT_FRAGMENT } from './PublicBot.queries';
 
+const publicBot = {
+  id: 1,
+  name: 'Bot',
+  short_description: 'Bot description',
+  is_published: true,
+  org: {
+    name: 'Org',
+  },
+  installation: null,
+};
+
 const meta = {
   title: 'PublicBot',
   component: PublicBot,
   args: {
-    publicBot: makeFragmentData(
-      {
-        id: 1,
-        name: 'Bot',
-        short_description: 'Bot description',
-        org: {
-          name: 'Org',
-        },
-      },
-      PUBLIC_BOT_FRAGMENT,
-    ),
+    publicBot: makeFragmentData(publicBot, PUBLIC_BOT_FRAGMENT),
   },
   parameters: {
     state: {
@@ -56,3 +57,44 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default = {} satisfies Story;
+
+export const Installed = {
+  args: {
+    publicBot: makeFragmentData(
+      {
+        ...publicBot,
+        installation: {
+          id: 1,
+        },
+      },
+      PUBLIC_BOT_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const NonPublished = {
+  args: {
+    publicBot: makeFragmentData(
+      {
+        ...publicBot,
+        is_published: false,
+      },
+      PUBLIC_BOT_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const NonPublishedInstalled = {
+  args: {
+    publicBot: makeFragmentData(
+      {
+        ...publicBot,
+        is_published: false,
+        installation: {
+          id: 1,
+        },
+      },
+      PUBLIC_BOT_FRAGMENT,
+    ),
+  },
+} satisfies Story;

@@ -30,6 +30,7 @@ export const Query: QueryResolvers<Context> = {
       },
     });
   },
+  // TODO: Allow taking an org_id as parameter in order to not return cross-org non-published bots
   publicBots: async (root, args, { userId, prisma }) => {
     return prisma.bots.findMany({
       where: {
