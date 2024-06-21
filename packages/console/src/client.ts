@@ -52,7 +52,7 @@ const badErrorCodes = [
   'OPERATION_RESOLUTION_FAILURE',
 ];
 
-const ignoredErrorCodes = ['PERSISTED_QUERY_NOT_FOUND'];
+const ignoredErrorCodes = ['PERSISTED_QUERY_NOT_FOUND', 'NOT_FOUND'];
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation: { query, variables } }) => {
