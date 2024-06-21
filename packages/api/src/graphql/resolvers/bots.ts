@@ -30,10 +30,27 @@ export const Query: QueryResolvers<Context> = {
       },
     });
   },
-  publicBots: async (root, args, { prisma }) => {
+  publicBots: async (root, args, { userId, prisma }) => {
     return prisma.bots.findMany({
       where: {
-        is_published: true,
+        OR: [
+          {
+            is_published: true,
+          },
+          ...(!!userId
+            ? [
+                {
+                  orgs: {
+                    user_orgs: {
+                      some: {
+                        user_id: userId,
+                      },
+                    },
+                  },
+                },
+              ]
+            : []),
+        ],
       },
       orderBy: {
         id: 'asc',
