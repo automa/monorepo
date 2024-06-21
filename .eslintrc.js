@@ -39,7 +39,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-no-target-blank': 'off',
     'simple-import-sort/imports': [
-      'error',
+      'warn',
       {
         groups: [
           ['^\u0000'],
