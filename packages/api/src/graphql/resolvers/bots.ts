@@ -41,14 +41,31 @@ export const Query: QueryResolvers<Context> = {
       select: publicBotFields,
     });
   },
-  publicBot: async (root, { org_name, name }, { prisma }) => {
+  publicBot: async (root, { org_name, name }, { userId, prisma }) => {
     return prisma.bots.findFirstOrThrow({
       where: {
         name,
-        is_published: true,
         orgs: {
           name: org_name,
         },
+        OR: [
+          {
+            is_published: true,
+          },
+          ...(!!userId
+            ? [
+                {
+                  orgs: {
+                    user_orgs: {
+                      some: {
+                        user_id: userId,
+                      },
+                    },
+                  },
+                },
+              ]
+            : []),
+        ],
       },
       select: publicBotFields,
     });
