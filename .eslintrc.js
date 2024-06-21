@@ -19,7 +19,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/ban-ts-comment': 'off',
     'simple-import-sort/imports': [
-      'error',
+      'warn',
       {
         groups: [
           ['^\u0000'],

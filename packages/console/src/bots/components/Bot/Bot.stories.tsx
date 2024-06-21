@@ -5,6 +5,7 @@ import { BotType } from '@automa/common';
 import { makeFragmentData } from 'gql';
 
 import Bot from './Bot';
+
 import { BOT_FRAGMENT } from './Bot.queries';
 
 const meta = {

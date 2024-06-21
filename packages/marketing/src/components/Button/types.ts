@@ -1,5 +1,5 @@
-import { VariantProps } from 'class-variance-authority';
 import { ButtonHTMLAttributes, ComponentProps } from 'react';
+import { VariantProps } from 'class-variance-authority';
 import Link from 'next/link';
 
 import { $, Component, Styled } from 'theme';

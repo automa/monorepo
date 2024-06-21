@@ -4,6 +4,7 @@ import { parseContent } from 'utils';
 
 import { ChangelogMatter } from '../types';
 import { listChangelogs } from '../utils';
+
 import Changelog from '../Changelog';
 
 export const generateStaticParams = listChangelogs;

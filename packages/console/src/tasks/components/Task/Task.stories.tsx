@@ -5,6 +5,7 @@ import { ProviderType } from '@automa/common';
 import { makeFragmentData } from 'gql';
 
 import Task from './Task';
+
 import { TASK_FRAGMENT } from './Task.queries';
 
 const meta = {

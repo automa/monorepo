@@ -5,6 +5,7 @@ import { ProviderType } from '@automa/common';
 import { makeFragmentData } from 'gql';
 
 import OrgList from './OrgList';
+
 import { ORGS_QUERY_FRAGMENT } from './OrgList.queries';
 
 const meta = {
