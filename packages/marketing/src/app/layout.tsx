@@ -2,12 +2,13 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Logo from 'assets/logo.svg';
+import './globals.css';
 
-import { Button, Flex, Typography } from 'components';
 import { fonts } from 'theme';
 
-import './globals.css';
+import { Button, Flex, Typography } from 'components';
+
+import Logo from 'assets/logo.svg';
 
 import Nav from './Nav';
 

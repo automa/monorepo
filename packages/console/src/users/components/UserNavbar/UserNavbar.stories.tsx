@@ -5,6 +5,7 @@ import { ProviderType } from '@automa/common';
 import { makeFragmentData } from 'gql';
 
 import UserNavbar from './UserNavbar';
+
 import { ME_QUERY_FRAGMENT } from './UserNavbar.queries';
 
 const meta = {

@@ -5,6 +5,7 @@ import { ProviderType } from '@automa/common';
 import { makeFragmentData } from 'gql';
 
 import BotInstallation from './BotInstallation';
+
 import { BOT_INSTALLATION_FRAGMENT } from './BotInstallation.queries';
 
 const meta = {

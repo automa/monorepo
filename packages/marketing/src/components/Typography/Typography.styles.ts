@@ -3,6 +3,7 @@ import { TwcComponentProps } from 'react-twc';
 import { tw } from 'theme';
 
 import { TypographyStyledProps } from './types';
+
 import { typography } from './Typography.cva';
 
 export const Container = tw.div<

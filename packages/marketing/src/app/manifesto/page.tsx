@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Manifesto from './manifesto.mdx';
+
 import { Container, Title } from './page.styles';
 
 const title = "Developers don't have to do grunt work";

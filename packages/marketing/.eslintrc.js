@@ -1,3 +1,6 @@
+const product = 'automa';
+const modules = ['components', 'utils'];
+
 module.exports = {
   root: true,
   extends: [
@@ -12,6 +15,7 @@ module.exports = {
     'plugin:storybook/recommended',
     'plugin:tailwindcss/recommended',
   ],
+  plugins: ['simple-import-sort'],
   rules: {
     'no-empty': [
       'error',
@@ -34,6 +38,41 @@ module.exports = {
     ],
     'react/react-in-jsx-scope': 'off',
     'react/jsx-no-target-blank': 'off',
+    'simple-import-sort/imports': [
+      'warn',
+      {
+        groups: [
+          ['^\u0000'],
+          ['^node:', '^(fs|path)$'],
+          [
+            '^(react|react-twc)$',
+            '^(next|@storybook|tailwindcss|class-variance-authority)(/.*)?$',
+            '^@?\\w',
+          ],
+          [`^@${product}/`],
+          ['^'],
+          ['^.*\\.css$'],
+          ['^\u0000?(env)$'],
+          ['^(.*/)?(mdx-components|theme)$'],
+          [`^(${modules.join('|')})$`],
+          ['^(assets)/.*'],
+          [`^(${modules.join('|')})/.*$`],
+          ['^(\\.\\./)+(types|utils)$'],
+          ['^\\.\\.'],
+          ['^\\./(types|utils)$'],
+          ['^\\.'],
+          ['^\\./.*\\.(styles)$'],
+        ],
+      },
+    ],
+    'import/no-empty-named-blocks': 'error',
+    'import/no-absolute-path': 'error',
+    'import/no-relative-packages': 'error',
+    'import/no-self-import': 'error',
+    'import/no-useless-path-segments': 'error',
+    'import/first': 'error',
+    'import/newline-after-import': 'error',
+    'import/no-duplicates': 'error',
     'import/no-cycle': [
       'error',
       {
@@ -90,6 +129,6 @@ module.exports = {
         project: 'packages/marketing',
       },
     },
-    'import/internal-regex': '^@automa/',
+    'import/internal-regex': `^@${product}/`,
   },
 };

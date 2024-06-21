@@ -5,6 +5,7 @@ import { ProviderType } from '@automa/common';
 import { makeFragmentData } from 'gql';
 
 import PublicBot from './PublicBot';
+
 import { PUBLIC_BOT_FRAGMENT } from './PublicBot.queries';
 
 const meta = {

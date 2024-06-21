@@ -1,10 +1,10 @@
 import React from 'react';
-import { Preview } from '@storybook/react';
 import { withThemeByClassName } from '@storybook/addon-themes';
-
-import { fonts } from '../src/theme';
+import { Preview } from '@storybook/react';
 
 import '../src/app/globals.css';
+
+import { fonts } from '../src/theme';
 
 import { Container as AppContainer } from '../src/app/layout.styles';
 

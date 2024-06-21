@@ -1,12 +1,13 @@
 import React from 'react';
-import { format } from 'date-fns';
 import Link from 'next/link';
+import { format } from 'date-fns';
 
 import { Flex } from 'components';
 
+import { listChangelogs } from './utils';
+
 import Changelog from './Changelog';
 
-import { listChangelogs } from './utils';
 import { Container, Header, Timestamp } from './page.styles';
 
 export const metadata = {
