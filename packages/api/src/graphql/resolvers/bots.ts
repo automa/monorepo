@@ -30,10 +30,28 @@ export const Query: QueryResolvers<Context> = {
       },
     });
   },
-  publicBots: async (root, args, { prisma }) => {
+  // TODO: Allow taking an org_id as parameter in order to not return cross-org non-published bots
+  publicBots: async (root, args, { userId, prisma }) => {
     return prisma.bots.findMany({
       where: {
-        is_published: true,
+        OR: [
+          {
+            is_published: true,
+          },
+          ...(!!userId
+            ? [
+                {
+                  orgs: {
+                    user_orgs: {
+                      some: {
+                        user_id: userId,
+                      },
+                    },
+                  },
+                },
+              ]
+            : []),
+        ],
       },
       orderBy: {
         id: 'asc',
@@ -41,14 +59,31 @@ export const Query: QueryResolvers<Context> = {
       select: publicBotFields,
     });
   },
-  publicBot: async (root, { org_name, name }, { prisma }) => {
+  publicBot: async (root, { org_name, name }, { userId, prisma }) => {
     return prisma.bots.findFirstOrThrow({
       where: {
         name,
-        is_published: true,
         orgs: {
           name: org_name,
         },
+        OR: [
+          {
+            is_published: true,
+          },
+          ...(!!userId
+            ? [
+                {
+                  orgs: {
+                    user_orgs: {
+                      some: {
+                        user_id: userId,
+                      },
+                    },
+                  },
+                },
+              ]
+            : []),
+        ],
       },
       select: publicBotFields,
     });

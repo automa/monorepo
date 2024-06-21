@@ -159,7 +159,11 @@ suite('graphql bots', () => {
 
   suite('query publicBots', () => {
     suiteSetup(async () => {
-      await seedBots(app, [org, secondOrg, nonMemberOrg], [org]);
+      await seedBots(
+        app,
+        [org, secondOrg, nonMemberOrg],
+        [org, secondOrg, nonMemberOrg],
+      );
     });
 
     suiteTeardown(async () => {
@@ -170,7 +174,7 @@ suite('graphql bots', () => {
       sessionUser = null;
     });
 
-    test('should return published bots from all orgs', async () => {
+    test('should return only published bots from all orgs', async () => {
       const response = await graphql(
         app,
         `
@@ -288,17 +292,64 @@ suite('graphql bots', () => {
       );
       assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
     });
+
+    test('should return all published and orgs non-published bots for user', async () => {
+      sessionUser = user;
+
+      const response = await graphql(
+        app,
+        `
+          query publicBots {
+            publicBots {
+              id
+              name
+            }
+          }
+        `,
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { publicBots: bots },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.lengthOf(bots, 5);
+
+      assert.isNumber(bots[0].id);
+      assert.equal(bots[0].name, 'bot-0');
+
+      assert.isNumber(bots[1].id);
+      assert.equal(bots[1].name, 'bot-1');
+
+      assert.isNumber(bots[2].id);
+      assert.equal(bots[2].name, 'bot-2');
+
+      assert.isNumber(bots[3].id);
+      assert.equal(bots[3].name, 'bot-3');
+
+      assert.isNumber(bots[4].id);
+      assert.equal(bots[4].name, 'bot-4');
+    });
   });
 
   suite('query publicBot', () => {
-    let bot: bots, nonMemberOrgBot: bots, nonPublishedBot: bots;
+    let bot: bots,
+      nonMemberOrgBot: bots,
+      nonPublishedBot: bots,
+      nonPublishedNonMemberOrgBot: bots;
 
     suiteSetup(async () => {
-      [bot, nonMemberOrgBot, nonPublishedBot] = await seedBots(
-        app,
-        [org, nonMemberOrg],
-        [org],
-      );
+      [bot, nonMemberOrgBot, nonPublishedBot, nonPublishedNonMemberOrgBot] =
+        await seedBots(app, [org, nonMemberOrg], [org, nonMemberOrg]);
     });
 
     suiteTeardown(async () => {
@@ -451,6 +502,151 @@ suite('graphql bots', () => {
       const { errors } = response.json();
 
       assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+
+    test('should return published bot for user', async () => {
+      sessionUser = user;
+
+      const response = await graphql(
+        app,
+        `
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
+              id
+              name
+            }
+          }
+        `,
+        {
+          org_name: org.name,
+          name: bot.name,
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { publicBot },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(publicBot.id);
+      assert.equal(publicBot.name, 'bot-0');
+    });
+
+    test('should return non-member org published bot for user', async () => {
+      sessionUser = user;
+
+      const response = await graphql(
+        app,
+        `
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
+              id
+              name
+            }
+          }
+        `,
+        {
+          org_name: nonMemberOrg.name,
+          name: nonMemberOrgBot.name,
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { publicBot },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(publicBot.id);
+      assert.equal(publicBot.name, 'bot-1');
+    });
+
+    test('should return non-published bot for user', async () => {
+      sessionUser = user;
+
+      const response = await graphql(
+        app,
+        `
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
+              id
+              name
+            }
+          }
+        `,
+        {
+          org_name: org.name,
+          name: nonPublishedBot.name,
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { publicBot },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(publicBot.id);
+      assert.equal(publicBot.name, 'bot-2');
+    });
+
+    test('should not return non-member org non-published bot for user', async () => {
+      sessionUser = user;
+
+      const response = await graphql(
+        app,
+        `
+          query publicBot($org_name: String!, $name: String!) {
+            publicBot(org_name: $org_name, name: $name) {
+              id
+              name
+            }
+          }
+        `,
+        {
+          org_name: nonMemberOrg.name,
+          name: nonPublishedNonMemberOrgBot.name,
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+
       assert.equal(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
     });

@@ -7,5 +7,5 @@ import { BadgeStyledProps } from './types';
 import { badge } from './Badge.cva';
 
 export const Container = tw.div<TwcComponentProps<'div'> & BadgeStyledProps>(
-  ({ $variant }) => [badge({ variant: $variant })],
+  ({ $variant, $size }) => [badge({ variant: $variant, size: $size })],
 );

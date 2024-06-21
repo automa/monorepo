@@ -33,3 +33,9 @@ export const Error = {
     variant: 'error',
   },
 } satisfies Story;
+
+export const Large = {
+  args: {
+    size: 'large',
+  },
+} satisfies Story;
