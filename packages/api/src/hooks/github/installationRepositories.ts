@@ -19,17 +19,19 @@ const added: GithubEventActionHandler<{
   installation: GithubInstallation;
   repositories_added: GithubRepositoryMinimal[];
 }> = async (app, body) => {
-  const org = await app.prisma.orgs.findFirst({
+  const existingOrg = await app.prisma.orgs.findFirst({
     where: {
       provider_type: provider.github,
       provider_id: `${body.installation.account.id}`,
-      has_installation: true,
     },
   });
 
-  if (!org) {
+  // If the org is suspended, we don't want to add the repositories
+  if (existingOrg && !existingOrg.has_installation) {
     return;
   }
+
+  const org = await addOrg(app, body.installation);
 
   const { axios } = await caller(body.installation.id);
 
@@ -54,6 +56,34 @@ const removed: GithubEventActionHandler<{
     },
     data: {
       has_installation: false,
+    },
+  });
+};
+
+export const addOrg = async (
+  app: FastifyInstance,
+  installation: GithubInstallation,
+) => {
+  return app.prisma.orgs.upsert({
+    where: {
+      provider_type_provider_id: {
+        provider_type: provider.github,
+        provider_id: `${installation.account.id}`,
+      },
+    },
+    update: {
+      has_installation: true,
+      github_installation_id: installation.id,
+      // TODO: Add a test for an user being converted to an org when app is uninstalled and reinstalled
+      is_user: installation.account.type === 'User',
+    },
+    create: {
+      name: installation.account.login,
+      provider_type: provider.github,
+      provider_id: `${installation.account.id}`,
+      provider_name: installation.account.login,
+      has_installation: true,
+      github_installation_id: installation.id,
     },
   });
 };
