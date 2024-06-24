@@ -17,7 +17,13 @@ suite('github hook installation_repositories event', () => {
   suiteSetup(async () => {
     app = await server();
     sandbox = createSandbox();
+  });
 
+  suiteTeardown(async () => {
+    await app.close();
+  });
+
+  setup(async () => {
     await app.prisma.orgs.create({
       data: {
         name: 'automa',
@@ -29,14 +35,7 @@ suite('github hook installation_repositories event', () => {
         github_installation_id: 40335964,
       },
     });
-  });
 
-  suiteTeardown(async () => {
-    await app.prisma.orgs.deleteMany();
-    await app.close();
-  });
-
-  setup(() => {
     postStub = sandbox
       .stub(axios, 'post')
       .resolves({ data: { token: 'abcdef' } });
@@ -69,12 +68,7 @@ suite('github hook installation_repositories event', () => {
 
   teardown(async () => {
     sandbox.restore();
-    await app.prisma.orgs.updateMany({
-      data: {
-        has_installation: true,
-      },
-    });
-    await app.prisma.repos.deleteMany();
+    await app.prisma.orgs.deleteMany();
   });
 
   suite('added', () => {
@@ -356,6 +350,103 @@ suite('github hook installation_repositories event', () => {
           is_archived: false,
           has_installation: false,
         });
+      });
+    });
+  });
+
+  suite('added with no org', () => {
+    setup(async () => {
+      await app.prisma.orgs.deleteMany();
+      response = await callWithFixture(
+        app,
+        'installation_repositories',
+        'added',
+      );
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should create organization', async () => {
+      const orgs = await app.prisma.orgs.findMany({});
+
+      assert.equal(orgs.length, 1);
+      assert.deepOwnInclude(orgs[0], {
+        name: 'automa',
+        provider_type: 'github',
+        provider_id: '65730741',
+        provider_name: 'automa',
+        is_user: false,
+        has_installation: true,
+        github_installation_id: 40335964,
+      });
+    });
+
+    test('should get information about repository and settings', async () => {
+      assert.equal(postStub.callCount, 1);
+      assert.equal(
+        postStub.firstCall.args[0],
+        'https://api.github.com/app/installations/40335964/access_tokens',
+      );
+
+      assert.equal(getStub.callCount, 3);
+      assert.equal(getStub.withArgs('/repos/automa/tmp').callCount, 1);
+      assert.equal(
+        getStub.withArgs('/repos/automa/tmp/branches/master').callCount,
+        1,
+      );
+      assert.equal(
+        getStub.withArgs('/repos/automa/tmp/contents/automa.json').callCount,
+        1,
+      );
+    });
+
+    suite('and repository', () => {
+      let repos: repos[];
+
+      setup(async () => {
+        repos = await app.prisma.repos.findMany({
+          where: {
+            orgs: {
+              provider_type: 'github',
+              provider_id: '65730741',
+            },
+          },
+        });
+      });
+
+      test('should be created', async () => {
+        assert.equal(repos.length, 1);
+        assert.deepOwnInclude(repos[0], {
+          name: 'tmp',
+          provider_id: '674157076',
+          is_private: true,
+          is_archived: false,
+          has_installation: true,
+          last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+        });
+      });
+
+      test('and settings should be created', async () => {
+        const settings = await app.prisma.repo_settings.findMany({
+          where: {
+            repo_id: repos[0].id,
+          },
+          orderBy: {
+            created_at: 'desc',
+          },
+        });
+
+        assert.equal(settings.length, 1);
+
+        assert.deepOwnInclude(settings[0], {
+          repo_id: repos[0].id,
+          cause: CauseType.REPOSITORY_ADDED,
+          commit: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
+          validation_errors: null,
+        });
+        assert.deepEqual(settings[0].settings, { bots: { dependency: {} } });
       });
     });
   });

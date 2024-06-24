@@ -12,34 +12,13 @@ import {
   GithubRepositoryMinimal,
 } from './types';
 
-import { addRepo, updateRepo } from './installationRepositories';
+import { addOrg, addRepo, updateRepo } from './installationRepositories';
 
 const created: GithubEventActionHandler<{
   installation: GithubInstallation;
   repositories: GithubRepositoryMinimal[];
 }> = async (app, body) => {
-  const org = await app.prisma.orgs.upsert({
-    where: {
-      provider_type_provider_id: {
-        provider_type: provider.github,
-        provider_id: `${body.installation.account.id}`,
-      },
-    },
-    update: {
-      has_installation: true,
-      github_installation_id: body.installation.id,
-      // TODO: Add a test for an user being converted to an org when app is uninstalled and reinstalled
-      is_user: body.installation.account.type === 'User',
-    },
-    create: {
-      name: body.installation.account.login,
-      provider_type: provider.github,
-      provider_id: `${body.installation.account.id}`,
-      provider_name: body.installation.account.login,
-      has_installation: true,
-      github_installation_id: body.installation.id,
-    },
-  });
+  const org = await addOrg(app, body.installation);
 
   const { axios } = await caller(body.installation.id);
 
@@ -115,18 +94,14 @@ const inactive = async (
       ...(deleted && {
         github_installation_id: null,
       }),
-    },
-  });
-
-  await app.prisma.repos.updateMany({
-    where: {
-      orgs: {
-        provider_type: provider.github,
-        provider_id: `${providerId}`,
+      repos: {
+        updateMany: {
+          where: {},
+          data: {
+            has_installation: false,
+          },
+        },
       },
-    },
-    data: {
-      has_installation: false,
     },
   });
 };
