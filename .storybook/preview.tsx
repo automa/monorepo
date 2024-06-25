@@ -20,9 +20,7 @@ const preview: Preview = {
     (Story) => {
       return (
         <AppContainer asChild className={fonts}>
-          <div>
-            <Story />
-          </div>
+          <div>{Story()}</div>
         </AppContainer>
       );
     },

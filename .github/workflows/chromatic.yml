@@ -4,6 +4,7 @@ on:
     branches: [master]
     paths:
       - .github/workflows/chromatic.yml
+      - .storybook/**
       - public/**
       - src/**
       - next.config.mjs
@@ -13,6 +14,7 @@ on:
     branches: [master]
     paths:
       - .github/workflows/chromatic.yml
+      - .storybook/**
       - public/**
       - src/**
       - next.config.mjs
