@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/chromatic-console.yml
       - packages/common/src/**
+      - packages/console/.storybook/**
       - packages/console/public/**
       - packages/console/src/**
       - packages/console/index.html
@@ -16,6 +17,7 @@ on:
     paths:
       - .github/workflows/chromatic-console.yml
       - packages/common/src/**
+      - packages/console/.storybook/**
       - packages/console/public/**
       - packages/console/src/**
       - packages/console/index.html

@@ -12,6 +12,7 @@ import 'cal-sans';
 
 import '../src/index.css';
 
+import { AnalyticsProvider } from '../src/analytics';
 import { cache } from '../src/client';
 import store, { reducer, RootState } from '../src/store';
 import { Container as AppContainer } from '../src/views/App/App.styles';
@@ -35,20 +36,20 @@ const preview: Preview = {
       store.replaceReducer(reducer);
 
       return (
-        <ApolloProvider mocks={requests} cache={cache}>
-          <StoreProvider store={store}>
-            <BrowserRouter>
-              <Tooltip.Provider delayDuration={500}>
-                <Toast.Provider>
-                  <AppContainer>
-                    <Story />
-                  </AppContainer>
-                  <Toast.Viewport />
-                </Toast.Provider>
-              </Tooltip.Provider>
-            </BrowserRouter>
-          </StoreProvider>
-        </ApolloProvider>
+        <AnalyticsProvider>
+          <ApolloProvider mocks={requests} cache={cache}>
+            <StoreProvider store={store}>
+              <BrowserRouter>
+                <Tooltip.Provider delayDuration={500}>
+                  <Toast.Provider>
+                    <AppContainer>{Story()}</AppContainer>
+                    <Toast.Viewport />
+                  </Toast.Provider>
+                </Tooltip.Provider>
+              </BrowserRouter>
+            </StoreProvider>
+          </ApolloProvider>
+        </AnalyticsProvider>
       );
     },
   ],
