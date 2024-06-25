@@ -16,6 +16,11 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    setUserOrg: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.org_id = action.payload;
+      }
+    },
     setAuth: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
       state.loading = false;
@@ -34,7 +39,8 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setAuth, unsetAuth, setAuthLoading } = authSlice.actions;
+export const { setUserOrg, setAuth, unsetAuth, setAuthLoading } =
+  authSlice.actions;
 export const { selectUser, selectAuthLoading } = authSlice.selectors;
 
 export default authSlice.reducer;

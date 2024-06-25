@@ -4,6 +4,7 @@ import {
   selectAuthLoading,
   setAuth as set,
   setAuthLoading as setLoading,
+  setUserOrg as setOrg,
   unsetAuth as unset,
 } from 'auth/slices';
 import { User } from 'auth/types';
@@ -12,6 +13,10 @@ const useAuth = () => {
   const dispatch = useAppDispatch();
 
   const authLoading = useAppSelector(selectAuthLoading);
+
+  const setUserOrg = (id: number) => {
+    dispatch(setOrg(`${id}`));
+  };
 
   const setAuth = (user: User) => {
     dispatch(set(user));
@@ -26,6 +31,7 @@ const useAuth = () => {
   };
 
   return {
+    setUserOrg,
     setAuth,
     unsetAuth,
     setAuthLoading,

@@ -1,12 +1,19 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
+import { useAnalyticsPage } from 'analytics';
+
 import { useOrg, useOrgs } from 'orgs';
 
 import { DeepLinkProps } from './types';
 
 const DeepLink: React.FC<DeepLinkProps> = () => {
   const location = useLocation();
+
+  useAnalyticsPage('Convenience', 'Deep Link', {
+    path: location.pathname,
+    url: `${window.location.origin}${location.pathname}`,
+  });
 
   const { orgs } = useOrgs();
   const { org } = useOrg();

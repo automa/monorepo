@@ -5,6 +5,7 @@ import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Flex, Loader, RoutesLoader } from 'shared';
 import { orgUri } from 'utils';
 
+import { useAuth } from 'auth';
 import { BotOnboarding } from 'bots';
 import { useOrg, useOrgs } from 'orgs';
 import { RepoOnboarding } from 'repos';
@@ -21,6 +22,8 @@ const Org: React.FC<OrgProps> = () => {
 
   const location = useLocation();
 
+  const { setUserOrg } = useAuth();
+
   const { orgsLoading } = useOrgs();
   const { org, setOrg } = useOrg();
 
@@ -35,9 +38,9 @@ const Org: React.FC<OrgProps> = () => {
   // Set user.org_id to current org
   useEffect(() => {
     if (org) {
-      // TODO: Set user.org_id to current org
+      setUserOrg(org.id);
     }
-  }, [org]);
+  }, [org, setUserOrg]);
 
   const tabs = useMemo(() => {
     if (!org) return [];

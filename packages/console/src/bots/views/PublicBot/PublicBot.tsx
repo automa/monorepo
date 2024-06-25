@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
+import { useAnalyticsPage } from 'analytics';
 import { getFragment } from 'gql';
 import { Badge, Button, Flex, Loader, toast, Typography } from 'shared';
 import { orgUri } from 'utils';
@@ -27,6 +28,8 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
   const { botOrgName, botName } = useParams();
 
   const navigate = useNavigate();
+
+  useAnalyticsPage('Product', 'Public Bot Overview');
 
   const { setOrgBotInstallationsCount } = useOrg();
 
