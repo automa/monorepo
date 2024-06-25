@@ -11,9 +11,14 @@ import { Card, Container } from './BotOnboarding.styles';
 
 const DEFAULT_BOTS = [
   {
-    botOrgName: 'plandex',
-    botName: 'plandex',
-    logo: 'https://avatars.githubusercontent.com/u/148917357?s=64&v=4',
+    botOrgName: 'automa',
+    botName: 'aider',
+    logo: 'https://aider.chat/assets/icons/apple-touch-icon.png',
+  },
+  {
+    botOrgName: 'automa',
+    botName: 'posthog',
+    logo: 'https://posthog.com/brand/posthog-logomark.svg',
   },
 ];
 
@@ -34,7 +39,7 @@ const BotOnboarding: React.FC<BotOnboardingProps> = ({ org, ...props }) => {
             <Flex
               direction="column"
               alignItems="center"
-              className="gap-2 lg:gap-4"
+              className="w-32 gap-2 lg:gap-4"
             >
               <img src={logo} alt={`${botName} logo`} className="size-16" />
               <Typography variant="small">

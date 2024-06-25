@@ -15,8 +15,8 @@ VALUES
 
 INSERT INTO public.bots (org_id, name, short_description, description, type, webhook_url, homepage, published_at)
 VALUES
-  (1, 'code', 'Basic bot that codes', '...', 'webhook', 'http://localhost:5000/hooks/automa', 'https://code.automa.app', NOW()),
-  (2, 'copywriting', 'Best copywriter', '...', 'webhook', 'http://copywriting.bot/hooks/automa', 'https://copywriting.bot', NOW());
+  (1, 'aider', 'Basic bot that codes', '...', 'webhook', 'https://localhost:5000/hooks/automa', 'https://aider.chat', NOW()),
+  (1, 'posthog', 'Adds code to track a new analytics event using Posthog', '...', 'webhook', 'http://localhost:5001/hooks/automa', 'https://posthog.com', NOW());
 
 INSERT INTO public.bot_installations (bot_id, org_id)
 VALUES
