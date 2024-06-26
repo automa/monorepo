@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
-import { Link, Navigate, useLocation } from 'react-router-dom';
+import { Link, Navigate, NavLink, useLocation } from 'react-router-dom';
+import { CreditCard, Robot } from '@phosphor-icons/react';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import { Loader, RoutesLoader } from 'shared';
+import { Flex, Loader, RoutesLoader } from 'shared';
 import { orgUri } from 'utils';
 
 import routes from './routes';
@@ -20,36 +21,37 @@ const OrgSettings: React.FC<OrgSettingsProps> = ({ org }) => {
       {
         name: 'Billing',
         path: '/billing',
+        icon: CreditCard,
       },
       {
         name: 'Bots',
         path: '/bots',
+        icon: Robot,
       },
     ];
   }, [org]);
 
   // Redirect to first tab if on settings page
   if (location.pathname === orgUri(org, '/settings')) {
-    return <Navigate to={orgUri(org, `/settings${tabs[0].path}`)} replace />;
+    return <Navigate to={`.${tabs[0].path}`} replace />;
   }
 
   return (
     <Container>
       <NavigationMenu.Root orientation="vertical">
         <Nav>
-          {tabs.map((tab) => {
-            const uri = orgUri(org, `/settings${tab.path}`);
-
-            return (
-              <Item
-                key={tab.name}
-                $active={location.pathname.startsWith(uri)}
-                asChild
-              >
-                <Link to={uri}>{tab.name}</Link>
-              </Item>
-            );
-          })}
+          {tabs.map((tab) => (
+            <NavLink key={tab.name} to={orgUri(org, `/settings${tab.path}`)}>
+              {({ isActive }) => (
+                <Item $active={isActive} asChild>
+                  <Flex alignItems="center" className="gap-2">
+                    <tab.icon className="size-4" />
+                    {tab.name}
+                  </Flex>
+                </Item>
+              )}
+            </NavLink>
+          ))}
         </Nav>
       </NavigationMenu.Root>
       <Content direction="column" fullWidth>

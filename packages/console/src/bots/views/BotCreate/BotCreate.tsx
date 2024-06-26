@@ -66,10 +66,8 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
   }
 
   return (
-    <Flex fullWidth direction="column" className="gap-8">
-      <Flex justifyContent="space-between" alignItems="center" className="h-9">
-        <Typography variant="title6">Create bot</Typography>
-      </Flex>
+    <>
+      <Typography variant="title6">Create bot</Typography>
       <form
         onSubmit={handleSubmit((data) =>
           botCreate({
@@ -112,7 +110,7 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
           Create
         </Button>
       </form>
-    </Flex>
+    </>
   );
 };
 

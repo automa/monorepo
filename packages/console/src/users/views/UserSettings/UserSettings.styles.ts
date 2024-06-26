@@ -7,7 +7,9 @@ import { Flex } from 'shared';
 
 export const Container = tw(
   Flex,
-)`gap-8 lg:gap-10 xl:gap-12 flex-wrap md:flex-nowrap`;
+)`gap-8 lg:gap-10 xl:gap-12 flex-wrap md:flex-nowrap mx-auto max-w-8xl p-6 xl:px-10`;
+
+export const EmptyTopNav = tw.div`h-11 w-full bg-white shadow-border`;
 
 export const Nav = tw(
   NavigationMenu.List,
