@@ -1,14 +1,10 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { getFragment } from 'gql';
-import {
-  Avatar,
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-} from 'shared';
-import { getOrgAvatarUrl } from 'utils';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuLabel } from 'shared';
+
+import UserAvatar from '../UserAvatar';
 
 import { UserNavbarProps } from './types';
 
@@ -21,17 +17,11 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
 }) => {
   const data = getFragment(ME_QUERY_FRAGMENT, fullData);
 
-  const avatarUrl = useMemo(() => {
-    const { provider_type, provider_id } = data.me.providers[0];
-
-    return getOrgAvatarUrl(provider_type, provider_id);
-  }, [data]);
-
   return (
     <Container {...props} asChild>
       <DropdownMenu
         align="end"
-        trigger={<Avatar size="large" src={avatarUrl} alt={data.me.name} />}
+        trigger={<UserAvatar user={data.me} size="large" />}
       >
         <DropdownMenuLabel>{data.me.email}</DropdownMenuLabel>
         <Link to="/account">

@@ -8,7 +8,7 @@ import { UserUpdateInput, userUpdateSchema } from '@automa/common';
 import { getFragment } from 'gql';
 import { Button, Flex, Input, toast, Typography } from 'shared';
 
-import { ME_QUERY, ME_QUERY_FRAGMENT } from 'users';
+import { ME_QUERY, ME_QUERY_FRAGMENT, USER_AVATAR_FRAGMENT } from 'users';
 
 import { UserSettingsGeneralProps } from './types';
 
@@ -17,7 +17,8 @@ import { USER_UPDATE_MUTATION } from './UserSettingsGeneral.queries';
 const UserSettingsGeneral: React.FC<UserSettingsGeneralProps> = () => {
   const { data: fullData } = useQuery(ME_QUERY);
 
-  const data = getFragment(ME_QUERY_FRAGMENT, fullData);
+  const meData = getFragment(ME_QUERY_FRAGMENT, fullData)?.me;
+  const data = getFragment(USER_AVATAR_FRAGMENT, meData);
 
   const {
     register,
@@ -26,8 +27,8 @@ const UserSettingsGeneral: React.FC<UserSettingsGeneralProps> = () => {
   } = useForm<UserUpdateInput>({
     resolver: zodResolver(userUpdateSchema),
     defaultValues: {
-      name: data?.me?.name,
-      email: data?.me?.email,
+      name: data?.name,
+      email: meData?.email,
     },
   });
 

@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { getFragment } from 'gql';
 import { Button, Flex, Tooltip, Typography } from 'shared';
 
-import { ME_QUERY, ME_QUERY_FRAGMENT } from 'users';
+import { ME_QUERY, ME_QUERY_FRAGMENT, USER_AVATAR_FRAGMENT } from 'users';
 
 import { UserSettingsConnectionsProps } from './types';
 import { providers } from './utils';
@@ -14,7 +14,10 @@ import { Card, Tag } from './UserSettingsConnections.styles';
 const UserSettingsConnections: React.FC<UserSettingsConnectionsProps> = () => {
   const { data: fullData } = useQuery(ME_QUERY);
 
-  const data = getFragment(ME_QUERY_FRAGMENT, fullData);
+  const data = getFragment(
+    USER_AVATAR_FRAGMENT,
+    getFragment(ME_QUERY_FRAGMENT, fullData)?.me,
+  );
 
   if (!data) return null;
 
@@ -23,7 +26,7 @@ const UserSettingsConnections: React.FC<UserSettingsConnectionsProps> = () => {
       <Typography variant="title6">Connections</Typography>
       {Object.entries(providers).map(
         ([type, { name, logo: Logo, disabled }]) => {
-          const connected = data.me.providers.find(
+          const connected = data.providers.find(
             ({ provider_type }) => provider_type === type,
           );
 
