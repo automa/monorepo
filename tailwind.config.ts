@@ -6,6 +6,10 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      data: {
+        on: 'state="on"',
+        off: 'state="off"',
+      },
       fontSize: {
         '2xs': '0.625rem',
       },

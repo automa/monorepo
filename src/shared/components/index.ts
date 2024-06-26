@@ -17,5 +17,6 @@ export { default as Table } from './Table';
 export { default as Textarea } from './Textarea';
 export { default as Toasts } from './Toast';
 export * from './Toast';
+export { default as ToggleGroup } from './ToggleGroup';
 export { default as Tooltip } from './Tooltip';
 export { default as Typography } from './Typography';
