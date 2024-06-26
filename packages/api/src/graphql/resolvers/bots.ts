@@ -31,7 +31,7 @@ export const Query: QueryResolvers<Context> = {
     });
   },
   // TODO: Allow taking an org_id as parameter in order to not return cross-org non-published bots
-  publicBots: async (root, args, { userId, prisma }) => {
+  publicBots: async (root, { filter }, { userId, prisma }) => {
     return prisma.bots.findMany({
       where: {
         OR: [
@@ -52,6 +52,7 @@ export const Query: QueryResolvers<Context> = {
               ]
             : []),
         ],
+        is_deterministic: filter?.is_deterministic ?? undefined,
       },
       orderBy: {
         id: 'asc',

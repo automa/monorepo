@@ -46,6 +46,16 @@ suite('graphql bots', () => {
   suite('query bots', () => {
     suiteSetup(async () => {
       await seedBots(app, [org, secondOrg, nonMemberOrg], [org]);
+
+      await app.prisma.bots.updateMany({
+        data: {
+          is_preview: true,
+          is_deterministic: true,
+        },
+        where: {
+          name: 'bot-3',
+        },
+      });
     });
 
     suiteTeardown(async () => {
@@ -64,12 +74,15 @@ suite('graphql bots', () => {
                 id
                 name
                 short_description
+                image_url
                 description
                 type
                 webhook_url
                 homepage
                 published_at
                 is_published
+                is_preview
+                is_deterministic
                 created_at
               }
             }
@@ -105,23 +118,29 @@ suite('graphql bots', () => {
         assert.isNumber(bots[0].id);
         assert.equal(bots[0].name, 'bot-0');
         assert.equal(bots[0].short_description, 'Bot 0');
+        assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
         assert.equal(bots[0].description, 'Bot 0 long description');
         assert.equal(bots[0].type, 'webhook');
         assert.equal(bots[0].webhook_url, 'https://example.com/webhook/0');
         assert.equal(bots[0].homepage, 'https://example.com');
         assert.isString(bots[0].published_at);
         assert.isTrue(bots[0].is_published);
+        assert.isFalse(bots[0].is_preview);
+        assert.isFalse(bots[0].is_deterministic);
         assert.isString(bots[0].created_at);
 
         assert.isNumber(bots[1].id);
         assert.equal(bots[1].name, 'bot-3');
         assert.equal(bots[1].short_description, 'Bot 3');
+        assert.equal(bots[1].image_url, 'https://example.com/image/3.png');
         assert.equal(bots[1].description, 'Bot 3 long description');
         assert.equal(bots[1].type, 'webhook');
         assert.equal(bots[1].webhook_url, 'https://example.com/webhook/3');
         assert.isNull(bots[1].homepage);
         assert.isNull(bots[1].published_at);
         assert.isFalse(bots[1].is_published);
+        assert.isTrue(bots[1].is_preview);
+        assert.isTrue(bots[1].is_deterministic);
         assert.isString(bots[1].created_at);
       });
     });
@@ -164,6 +183,24 @@ suite('graphql bots', () => {
         [org, secondOrg, nonMemberOrg],
         [org, secondOrg, nonMemberOrg],
       );
+
+      await app.prisma.bots.updateMany({
+        data: {
+          is_deterministic: true,
+        },
+        where: {
+          org_id: org.id,
+        },
+      });
+
+      await app.prisma.bots.updateMany({
+        data: {
+          is_preview: true,
+        },
+        where: {
+          name: 'bot-2',
+        },
+      });
     });
 
     suiteTeardown(async () => {
@@ -183,8 +220,12 @@ suite('graphql bots', () => {
               id
               name
               short_description
+              image_url
               description
               homepage
+              is_published
+              is_preview
+              is_deterministic
               org {
                 name
               }
@@ -212,23 +253,148 @@ suite('graphql bots', () => {
       assert.isNumber(bots[0].id);
       assert.equal(bots[0].name, 'bot-0');
       assert.equal(bots[0].short_description, 'Bot 0');
+      assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
       assert.equal(bots[0].description, 'Bot 0 long description');
       assert.equal(bots[0].homepage, 'https://example.com');
+      assert.isTrue(bots[0].is_published);
+      assert.isFalse(bots[0].is_preview);
+      assert.isTrue(bots[0].is_deterministic);
       assert.equal(bots[0].org.name, 'org-0');
 
       assert.isNumber(bots[1].id);
       assert.equal(bots[1].name, 'bot-1');
       assert.equal(bots[1].short_description, 'Bot 1');
+      assert.equal(bots[1].image_url, 'https://example.com/image/1.png');
       assert.equal(bots[1].description, 'Bot 1 long description');
       assert.equal(bots[1].homepage, 'https://example.com');
+      assert.isTrue(bots[1].is_published);
+      assert.isFalse(bots[1].is_preview);
+      assert.isFalse(bots[1].is_deterministic);
       assert.equal(bots[1].org.name, 'org-1');
 
       assert.isNumber(bots[2].id);
       assert.equal(bots[2].name, 'bot-2');
       assert.equal(bots[2].short_description, 'Bot 2');
+      assert.equal(bots[2].image_url, 'https://example.com/image/2.png');
       assert.equal(bots[2].description, 'Bot 2 long description');
       assert.equal(bots[2].homepage, 'https://example.com');
+      assert.isTrue(bots[2].is_published);
+      assert.isTrue(bots[2].is_preview);
+      assert.isFalse(bots[2].is_deterministic);
       assert.equal(bots[2].org.name, 'org-2');
+    });
+
+    test('should return only published non-deterministic bots from all orgs with filter.is_deterministic = false', async () => {
+      const response = await graphql(
+        app,
+        `
+          query publicBots {
+            publicBots(filter: { is_deterministic: false }) {
+              id
+              name
+              short_description
+              image_url
+              description
+              homepage
+              is_published
+              is_preview
+              is_deterministic
+              org {
+                name
+              }
+            }
+          }
+        `,
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { publicBots: bots },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.lengthOf(bots, 2);
+
+      assert.isNumber(bots[0].id);
+      assert.equal(bots[0].name, 'bot-1');
+      assert.equal(bots[0].short_description, 'Bot 1');
+      assert.equal(bots[0].image_url, 'https://example.com/image/1.png');
+      assert.equal(bots[0].description, 'Bot 1 long description');
+      assert.equal(bots[0].homepage, 'https://example.com');
+      assert.isTrue(bots[0].is_published);
+      assert.isFalse(bots[0].is_preview);
+      assert.isFalse(bots[0].is_deterministic);
+      assert.equal(bots[0].org.name, 'org-1');
+
+      assert.isNumber(bots[1].id);
+      assert.equal(bots[1].name, 'bot-2');
+      assert.equal(bots[1].short_description, 'Bot 2');
+      assert.equal(bots[1].image_url, 'https://example.com/image/2.png');
+      assert.equal(bots[1].description, 'Bot 2 long description');
+      assert.equal(bots[1].homepage, 'https://example.com');
+      assert.isTrue(bots[1].is_published);
+      assert.isTrue(bots[1].is_preview);
+      assert.isFalse(bots[1].is_deterministic);
+      assert.equal(bots[1].org.name, 'org-2');
+    });
+
+    test('should return only published deterministic bots from all orgs with filter.is_deterministic = true', async () => {
+      const response = await graphql(
+        app,
+        `
+          query publicBots {
+            publicBots(filter: { is_deterministic: true }) {
+              id
+              name
+              short_description
+              image_url
+              description
+              homepage
+              is_published
+              is_preview
+              is_deterministic
+              org {
+                name
+              }
+            }
+          }
+        `,
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { publicBots: bots },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.lengthOf(bots, 1);
+
+      assert.isNumber(bots[0].id);
+      assert.equal(bots[0].name, 'bot-0');
+      assert.equal(bots[0].short_description, 'Bot 0');
+      assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
+      assert.equal(bots[0].description, 'Bot 0 long description');
+      assert.equal(bots[0].homepage, 'https://example.com');
+      assert.isTrue(bots[0].is_published);
+      assert.isFalse(bots[0].is_preview);
+      assert.isTrue(bots[0].is_deterministic);
+      assert.equal(bots[0].org.name, 'org-0');
     });
 
     test('should restrict PublicBot fields', async () => {
@@ -369,8 +535,12 @@ suite('graphql bots', () => {
               id
               name
               short_description
+              image_url
               description
               homepage
+              is_published
+              is_preview
+              is_deterministic
               org {
                 name
               }
@@ -400,8 +570,12 @@ suite('graphql bots', () => {
       assert.isNumber(publicBot.id);
       assert.equal(publicBot.name, 'bot-0');
       assert.equal(publicBot.short_description, 'Bot 0');
+      assert.equal(publicBot.image_url, 'https://example.com/image/0.png');
       assert.equal(publicBot.description, 'Bot 0 long description');
       assert.equal(publicBot.homepage, 'https://example.com');
+      assert.isTrue(publicBot.is_published);
+      assert.isFalse(publicBot.is_preview);
+      assert.isFalse(publicBot.is_deterministic);
       assert.equal(publicBot.org.name, 'org-0');
     });
 
