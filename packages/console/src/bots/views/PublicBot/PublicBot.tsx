@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { Robot } from '@phosphor-icons/react';
 
@@ -238,9 +238,11 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
               </Flex>
               <Flex direction="column" className="gap-2">
                 <DetailsTitle>Category</DetailsTitle>
-                <Badge variant="tag">
-                  {bot.is_deterministic ? 'Deterministic' : 'Uses AI'}
-                </Badge>
+                <Link to={`../bots/new?ai=${!bot.is_deterministic}`}>
+                  <Badge variant="tag">
+                    {bot.is_deterministic ? 'Deterministic' : 'Uses AI'}
+                  </Badge>
+                </Link>
               </Flex>
             </Details>
             <Description>{bot.description}</Description>

@@ -22,7 +22,7 @@ const documents = {
     "\n  query PublicBot(\n    $org_name: String!\n    $name: String!\n    $org_id: Int!\n  ) {\n    publicBot(org_name: $org_name, name: $name) {\n      id\n      name\n      short_description\n      image_url\n      description\n      homepage\n      is_published\n      is_preview\n      is_deterministic\n      org {\n        name\n      }\n      installation(org_id: $org_id) {\n        id\n      }\n    }\n  }\n": types.PublicBotDocument,
     "\n  mutation BotInstall($org_id: Int!, $input: BotInstallInput!) {\n    botInstall(org_id: $org_id, input: $input) {\n      ...BotInstallationFragment\n    }\n  }\n": types.BotInstallDocument,
     "\n  mutation BotUninstall($org_id: Int!, $bot_id: Int!) {\n    botUninstall(org_id: $org_id, bot_id: $bot_id)\n  }\n": types.BotUninstallDocument,
-    "\n  query PublicBots($org_id: Int!) {\n    publicBots {\n      id\n      ...PublicBotFragment\n    }\n  }\n": types.PublicBotsDocument,
+    "\n  query PublicBots($org_id: Int!, $filter: PublicBotsFilter) {\n    publicBots(filter: $filter) {\n      id\n      ...PublicBotFragment\n    }\n  }\n": types.PublicBotsDocument,
     "\n  fragment OrgsQueryFragment on Query {\n    orgs {\n      id\n      name\n      provider_type\n      provider_id\n      provider_name\n      has_installation\n\n      botInstallationsCount\n    }\n  }\n": types.OrgsQueryFragmentFragmentDoc,
     "\n  query Integrations($org_id: Int!) {\n    integrations(org_id: $org_id) {\n      id\n      integration_type\n      config\n      created_at\n      author {\n        name\n      }\n    }\n  }\n": types.IntegrationsDocument,
     "\n  fragment RepoFragment on Repo {\n    id\n    name\n    is_private\n    is_archived\n    has_installation\n  }\n": types.RepoFragmentFragmentDoc,
@@ -90,7 +90,7 @@ export function gql(source: "\n  mutation BotUninstall($org_id: Int!, $bot_id: I
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query PublicBots($org_id: Int!) {\n    publicBots {\n      id\n      ...PublicBotFragment\n    }\n  }\n"): (typeof documents)["\n  query PublicBots($org_id: Int!) {\n    publicBots {\n      id\n      ...PublicBotFragment\n    }\n  }\n"];
+export function gql(source: "\n  query PublicBots($org_id: Int!, $filter: PublicBotsFilter) {\n    publicBots(filter: $filter) {\n      id\n      ...PublicBotFragment\n    }\n  }\n"): (typeof documents)["\n  query PublicBots($org_id: Int!, $filter: PublicBotsFilter) {\n    publicBots(filter: $filter) {\n      id\n      ...PublicBotFragment\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

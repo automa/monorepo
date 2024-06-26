@@ -162,6 +162,10 @@ export type PublicBotInstallationArgs = {
   org_id: Scalars['Int']['input'];
 };
 
+export type PublicBotsFilter = {
+  is_deterministic?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type PublicOrg = {
   __typename?: 'PublicOrg';
   id: Scalars['Int']['output'];
@@ -203,6 +207,11 @@ export type QueryIntegrationsArgs = {
 export type QueryPublicBotArgs = {
   name: Scalars['String']['input'];
   org_name: Scalars['String']['input'];
+};
+
+
+export type QueryPublicBotsArgs = {
+  filter?: InputMaybe<PublicBotsFilter>;
 };
 
 
@@ -352,6 +361,7 @@ export type ResolversTypes = {
   Org: ResolverTypeWrapper<orgs>;
   ProviderType: ResolverTypeWrapper<provider>;
   PublicBot: ResolverTypeWrapper<public_bots>;
+  PublicBotsFilter: PublicBotsFilter;
   PublicOrg: ResolverTypeWrapper<public_orgs>;
   Query: ResolverTypeWrapper<{}>;
   Repo: ResolverTypeWrapper<repos>;
@@ -377,6 +387,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   Org: orgs;
   PublicBot: public_bots;
+  PublicBotsFilter: PublicBotsFilter;
   PublicOrg: public_orgs;
   Query: {};
   Repo: repos;
@@ -496,7 +507,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
   publicBot?: Resolver<ResolversTypes['PublicBot'], ParentType, ContextType, RequireFields<QueryPublicBotArgs, 'name' | 'org_name'>>;
-  publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType>;
+  publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType, Partial<QueryPublicBotsArgs>>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
   tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTasksArgs, 'org_id'>>;

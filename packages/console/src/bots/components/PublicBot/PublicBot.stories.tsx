@@ -86,15 +86,37 @@ export const NonPublished = {
   },
 } satisfies Story;
 
-export const NonPublishedInstalled = {
+export const NonDeterministic = {
+  args: {
+    publicBot: makeFragmentData(
+      {
+        ...publicBot,
+        is_deterministic: true,
+      },
+      PUBLIC_BOT_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const Preview = {
+  args: {
+    publicBot: makeFragmentData(
+      {
+        ...publicBot,
+        is_preview: true,
+      },
+      PUBLIC_BOT_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const NonPublishedPreview = {
   args: {
     publicBot: makeFragmentData(
       {
         ...publicBot,
         is_published: false,
-        installation: {
-          id: 1,
-        },
+        is_preview: true,
       },
       PUBLIC_BOT_FRAGMENT,
     ),

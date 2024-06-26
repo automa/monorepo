@@ -2,9 +2,9 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { Flex, Loader } from 'shared';
+import { Flex, Loader, ToggleGroup, useFilters } from 'shared';
 
-import { PublicBot } from 'bots';
+import { PublicBot, publicBotsfilters } from 'bots';
 
 import { PublicBotsProps } from './types';
 
@@ -14,10 +14,14 @@ import { Banner } from './PublicBots.styles';
 const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
   const [searchParams] = useSearchParams();
 
+  const { filterValues, filterParams, filterOptions, filterChangeFns } =
+    useFilters(publicBotsfilters);
+
   // TODO: Add infinite scroll (with pagination cache)
   const { data, loading } = useQuery(PUBLIC_BOTS_QUERY, {
     variables: {
       org_id: org.id,
+      filter: filterParams,
     },
   });
 
@@ -28,19 +32,29 @@ const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
           You have no bots installed. Please select one below to install.
         </Banner>
       )}
-      {loading && !data ? (
-        <Flex justifyContent="center">
-          <Loader />
+      <Flex direction="column" className="gap-8">
+        <Flex justifyContent="flex-end">
+          <ToggleGroup
+            optional
+            defaultValue={filterValues.ai}
+            options={filterOptions.ai}
+            onValueChange={filterChangeFns.ai}
+          />
         </Flex>
-      ) : !data?.publicBots?.length ? (
-        <Flex justifyContent="center">No bots</Flex>
-      ) : (
-        <Flex className="grid grid-cols-2 gap-4 md:gap-6">
-          {data.publicBots.map((bot) => (
-            <PublicBot key={bot.id} publicBot={bot} />
-          ))}
-        </Flex>
-      )}
+        {loading && !data ? (
+          <Flex justifyContent="center">
+            <Loader />
+          </Flex>
+        ) : !data?.publicBots?.length ? (
+          <Flex justifyContent="center">No bots</Flex>
+        ) : (
+          <Flex className="grid grid-cols-2 gap-4 md:gap-6">
+            {data.publicBots.map((bot) => (
+              <PublicBot key={bot.id} publicBot={bot} />
+            ))}
+          </Flex>
+        )}
+      </Flex>
     </>
   );
 };
