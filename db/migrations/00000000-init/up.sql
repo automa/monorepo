@@ -98,11 +98,14 @@ CREATE TABLE public.bots (
   -- TODO: webhook_secret (here, check and data below)
   -- TODO: webhook_verification / client_secret
   short_description VARCHAR(255) NOT NULL,
+  image_url VARCHAR(255),
   description TEXT,
   homepage VARCHAR(255),
   published_at TIMESTAMP,
   is_published BOOLEAN GENERATED ALWAYS AS (published_at IS NOT NULL) STORED,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  is_preview BOOLEAN NOT NULL DEFAULT FALSE,
+  is_deterministic BOOLEAN NOT NULL DEFAULT FALSE,
   UNIQUE (org_id, name),
   -- TODO: CHECK (type = 'webhook' AND webhook_url IS NOT NULL)
   CHECK (published_at IS NULL OR (
@@ -116,11 +119,11 @@ CREATE TABLE public.bots (
 CREATE INDEX bots_is_published_idx
 ON public.bots (is_published);
 
-INSERT INTO public.bots (org_id, name, type, webhook_url, short_description, homepage)
+INSERT INTO public.bots (org_id, name, type, webhook_url, short_description, homepage, is_preview, is_deterministic)
 VALUES
-  (1, 'automa', 'webhook', 'https://api.automa.app/hooks/automa', 'Updates & migrates automa settings', 'https://automa.app'),
-  (1, 'dependency', 'webhook', 'https://api.dependency.bot/hooks/automa', 'Upgrade dependencies by updating code', 'https://dependency.bot'),
-  (1, 'refactor', 'webhook', 'https://api.refactor.bot/hooks/automa', 'Refactors your code according to your rules', 'https://refactor.bot');
+  (1, 'automa', 'webhook', 'https://api.automa.app/hooks/automa', 'Updates & migrates automa settings', 'https://automa.app', FALSE, TRUE),
+  (1, 'dependency', 'webhook', 'https://api.dependency.bot/hooks/automa', 'Upgrade dependencies by updating code', 'https://dependency.bot', TRUE, TRUE),
+  (1, 'refactor', 'webhook', 'https://api.refactor.bot/hooks/automa', 'Refactors your code according to your rules', 'https://refactor.bot', TRUE, TRUE);
 
 CREATE TABLE public.bot_installations (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

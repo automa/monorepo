@@ -13,6 +13,8 @@ const publicBot = {
   name: 'Bot',
   short_description: 'Bot description',
   is_published: true,
+  is_preview: false,
+  is_deterministic: false,
   org: {
     name: 'Org',
   },

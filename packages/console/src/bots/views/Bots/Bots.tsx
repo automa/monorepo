@@ -30,7 +30,7 @@ const Bots: React.FC<BotsProps> = ({ org }) => {
       ) : !data?.bots?.length ? (
         <Flex justifyContent="center">No bots</Flex>
       ) : (
-        <Flex className="grid grid-cols-auto gap-4 md:gap-6">
+        <Flex className="grid grid-cols-2 gap-4 md:gap-6">
           {data.bots.map((bot) => (
             <Bot key={bot.id} bot={bot} />
           ))}

@@ -121,14 +121,14 @@ const OrgList: React.FC<OrgListProps> = ({
         >
           <Item>
             <Flex alignItems="center" className="gap-2">
-              <PlusCircle height={20} width={20} />
+              <PlusCircle className="size-5" />
               <Typography variant="small">Create org</Typography>
             </Flex>
           </Item>
         </a>
         <Item onSelect={sync}>
           <Flex alignItems="center" className="gap-2">
-            <ArrowsClockwise height={20} width={20} />
+            <ArrowsClockwise className="size-5" />
             <Typography variant="small">Sync all your orgs</Typography>
           </Flex>
         </Item>

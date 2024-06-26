@@ -16,9 +16,12 @@ type PublicBot {
   id: Int!
   name: String!
   short_description: String!
+  image_url: String
   description: String
   homepage: String
   is_published: Boolean!
+  is_preview: Boolean!
+  is_deterministic: Boolean!
 
   org: PublicOrg!
   installation(org_id: Int!): BotInstallation

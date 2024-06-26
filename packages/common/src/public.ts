@@ -12,9 +12,12 @@ export const publicBotFields = {
   org_id: true,
   name: true,
   short_description: true,
+  image_url: true,
   description: true,
   homepage: true,
   is_published: true,
+  is_preview: true,
+  is_deterministic: true,
 };
 
 export type public_orgs = Pick<orgs, keyof typeof publicOrgFields>;

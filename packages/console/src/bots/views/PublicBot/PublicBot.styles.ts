@@ -8,8 +8,8 @@ export const Container = tw(Flex).attrs({
 
 export const Details = tw(Flex).attrs({
   direction: 'column',
-})`w-60`;
+})`w-60 gap-8`;
 
-export const DetailsTitle = tw(Typography)`pb-2 font-bold text-neutral-600`;
+export const DetailsTitle = tw(Typography)`font-bold text-neutral-600`;
 
 export const Description = tw.div`px-4`;

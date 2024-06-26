@@ -27,7 +27,10 @@ export type Bot = {
   description?: Maybe<Scalars['String']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
+  image_url?: Maybe<Scalars['String']['output']>;
   installation?: Maybe<BotInstallation>;
+  is_deterministic: Scalars['Boolean']['output'];
+  is_preview: Scalars['Boolean']['output'];
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   org: Org;
@@ -144,7 +147,10 @@ export type PublicBot = {
   description?: Maybe<Scalars['String']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
+  image_url?: Maybe<Scalars['String']['output']>;
   installation?: Maybe<BotInstallation>;
+  is_deterministic: Scalars['Boolean']['output'];
+  is_preview: Scalars['Boolean']['output'];
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   org: PublicOrg;
@@ -393,7 +399,10 @@ export type BotResolvers<ContextType = any, ParentType extends ResolversParentTy
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  image_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   installation?: Resolver<Maybe<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<BotInstallationArgs, 'org_id'>>;
+  is_deterministic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  is_preview?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
@@ -461,7 +470,10 @@ export type PublicBotResolvers<ContextType = any, ParentType extends ResolversPa
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  image_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   installation?: Resolver<Maybe<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<PublicBotInstallationArgs, 'org_id'>>;
+  is_deterministic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  is_preview?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
