@@ -1,1 +1,5 @@
-export { default as UserNavbar } from './UserNavbar';
+export {
+  default as UserNavbar,
+  ME_QUERY,
+  ME_QUERY_FRAGMENT,
+} from './UserNavbar';
