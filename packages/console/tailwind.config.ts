@@ -8,6 +8,9 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      borderWidth: {
+        '1': '1px',
+      },
       boxShadow: {
         border: 'inset 0 -1px rgba(0, 0, 0, 0.08)',
         tooltip:
@@ -25,6 +28,10 @@ const config: Config = {
         bitbucket: '#0052CC',
         primary: '#09142F',
         accent: '#DB475E',
+      },
+      data: {
+        on: 'state="on"',
+        off: 'state="off"',
       },
       fontFamily: {
         sans: ['Manrope Variable', ...defaultTheme.fontFamily.sans],
