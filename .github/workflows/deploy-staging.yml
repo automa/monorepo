@@ -1,9 +1,9 @@
-name: Deploy Production
+name: Deploy Staging
 on:
   push:
-    branches: [production]
+    branches: [master]
     paths:
-      - .github/workflows/deploy-production.yml
+      - .github/workflows/deploy-staging.yml
       - public/**
       - src/**
       - next.config.mjs
@@ -13,7 +13,7 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
 jobs:
-  deploy-production:
+  deploy-staging:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -38,16 +38,16 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build site
         env:
-          NEXT_PUBLIC_NODE_ENV: production
+          NEXT_PUBLIC_NODE_ENV: staging
         run: pnpm build
       - name: Upload to S3
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.PRODUCTION_AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.STAGING_AWS_REGION }}
         run: |
-          aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET }} \
+          aws s3 sync build s3://${{ secrets.STAGING_AWS_S3_BUCKET }} \
             --exclude '*.html' \
             --cache-control max-age=31536000
-          aws s3 sync build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET }} \
+          aws s3 sync build s3://${{ secrets.STAGING_AWS_S3_BUCKET }} \
             --exclude '*' --include '*.html'
