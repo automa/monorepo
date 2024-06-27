@@ -3,7 +3,6 @@ import { Navigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Loader, Typography } from 'shared';
-import { orgUri } from 'utils';
 
 import { BotInstallation } from 'bots';
 
@@ -20,14 +19,14 @@ const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
   });
 
   if (!loading && !data?.botInstallations?.length) {
-    return <Navigate to={orgUri(org, '/bots/new?onboarding=true')} replace />;
+    return <Navigate to="../bots/new?onboarding=true" replace />;
   }
 
   return (
     <Flex direction="column" className="gap-8">
       <Flex justifyContent="space-between" alignItems="center" className="h-9">
         <Typography variant="title6">Installed bots</Typography>
-        <Button to={orgUri(org, '/bots/new')}>Install Bot</Button>
+        <Button to="../bots/new">Install Bot</Button>
       </Flex>
       {loading && !data ? (
         <Flex justifyContent="center">

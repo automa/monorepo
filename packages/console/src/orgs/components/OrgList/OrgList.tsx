@@ -16,8 +16,9 @@ import {
   DropdownMenuSeparator,
   Flex,
   Typography,
+  useRelativeMatch,
 } from 'shared';
-import { appName, getOrgAvatarUrl, orgUri } from 'utils';
+import { appName, getOrgAvatarUrl } from 'utils';
 
 import { useOrg, useOrgs } from '../../hooks';
 
@@ -31,10 +32,11 @@ const OrgList: React.FC<OrgListProps> = ({
   refetch,
   ...props
 }) => {
-  const location = useLocation();
-
   const { setOrgs } = useOrgs();
   const { org } = useOrg();
+
+  const isDashboardView = useRelativeMatch('.');
+  const isOrgView = useRelativeMatch(org?.name ?? '.', false);
 
   const data = getFragment(ORGS_QUERY_FRAGMENT, fullData);
 
@@ -53,8 +55,8 @@ const OrgList: React.FC<OrgListProps> = ({
   };
 
   // Redirect to first org if on home page
-  if (data.orgs.length && location.pathname === '/') {
-    return <Navigate to={orgUri(data.orgs[0])} replace />;
+  if (data.orgs.length && isDashboardView) {
+    return <Navigate to={data.orgs[0].name} replace />;
   }
 
   if (!org) {
@@ -62,7 +64,7 @@ const OrgList: React.FC<OrgListProps> = ({
   }
 
   // Don't show org list on non-org pages
-  if (!location.pathname.startsWith(orgUri(org))) {
+  if (!isOrgView) {
     return null;
   }
 
@@ -90,7 +92,7 @@ const OrgList: React.FC<OrgListProps> = ({
         {data.orgs.map((o) => (
           // TODO: Switch the org part of the URL only and not the whole URL
           // (can use location.pathname.replace())
-          <Link key={o.id} to={orgUri(o)}>
+          <Link key={o.id} to={o.name}>
             <Item $active={org.id === o.id} disabled={org.id === o.id}>
               <Flex
                 fullWidth

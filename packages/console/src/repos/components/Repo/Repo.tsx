@@ -10,7 +10,7 @@ import { Container } from './Repo.styles';
 const Repo: React.FC<RepoProps> = ({ repo: data, ...props }) => {
   const repo = getFragment(REPO_FRAGMENT, data);
 
-  // TODO: Link to orgUri(org, `/${repo.name}`)
+  // TODO: Link to `../${repo.name}`
   return (
     <Container {...props} asChild>
       <div>{repo.name}</div>

@@ -3,7 +3,7 @@ import { Navigate, NavLink } from 'react-router-dom';
 import { Gear, Plugs } from '@phosphor-icons/react';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import { Flex, Loader, RoutesLoader } from 'shared';
+import { Flex, Loader, RoutesLoader, useRelativeMatch } from 'shared';
 
 import routes from './routes';
 import { UserSettingsProps } from './types';
@@ -17,24 +17,26 @@ import {
 } from './UserSettings.styles';
 
 const UserSettings: React.FC<UserSettingsProps> = () => {
+  const isUserSettingsView = useRelativeMatch('.');
+
   const tabs = useMemo(() => {
     return [
       {
         name: 'General',
-        path: '/general',
+        path: 'general',
         icon: Gear,
       },
       {
         name: 'Connections',
-        path: '/connections',
+        path: 'connections',
         icon: Plugs,
       },
     ];
   }, []);
 
   // Redirect to first tab if on org page
-  if (location.pathname === '/account') {
-    return <Navigate to={`.${tabs[0].path}`} replace />;
+  if (isUserSettingsView) {
+    return <Navigate to={tabs[0].path} replace />;
   }
 
   return (
@@ -44,7 +46,7 @@ const UserSettings: React.FC<UserSettingsProps> = () => {
         <NavigationMenu.Root orientation="vertical">
           <Nav>
             {tabs.map((tab) => (
-              <NavLink key={tab.name} to={`/account${tab.path}`}>
+              <NavLink key={tab.name} to={tab.path}>
                 {({ isActive }) => (
                   <Item $active={isActive} asChild>
                     <Flex alignItems="center" className="gap-2">

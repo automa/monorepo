@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight } from '@phosphor-icons/react';
 
 import { Flex, Typography } from 'shared';
-import { orgUri } from 'utils';
 
 import { BotOnboardingProps } from './types';
 
@@ -22,7 +21,7 @@ const DEFAULT_BOTS = [
   },
 ];
 
-const BotOnboarding: React.FC<BotOnboardingProps> = ({ org, ...props }) => {
+const BotOnboarding: React.FC<BotOnboardingProps> = ({ ...props }) => {
   return (
     <Container {...props}>
       <Flex direction="column" alignItems="center" className="gap-2 lg:gap-4">
@@ -35,7 +34,7 @@ const BotOnboarding: React.FC<BotOnboardingProps> = ({ org, ...props }) => {
       </Flex>
       <Flex className="gap-2 lg:gap-4">
         {DEFAULT_BOTS.map(({ botOrgName, botName, logo }, index) => (
-          <Card key={index} to={orgUri(org, `/bots/${botOrgName}/${botName}`)}>
+          <Card key={index} to={`bots/${botOrgName}/${botName}`}>
             <Flex
               direction="column"
               alignItems="center"
@@ -49,7 +48,7 @@ const BotOnboarding: React.FC<BotOnboardingProps> = ({ org, ...props }) => {
           </Card>
         ))}
       </Flex>
-      <Link to={orgUri(org, '/bots/new')}>
+      <Link to="bots/new">
         <Flex alignItems="center" className="relative left-2 gap-1">
           <Typography align="center" link>
             Or explore bots to install

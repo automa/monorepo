@@ -8,7 +8,6 @@ import { BotCreateInput, botCreateSchema, BotType } from '@automa/common';
 
 import { getFragment } from 'gql';
 import { Button, Flex, Input, Textarea, toast, Typography } from 'shared';
-import { orgUri } from 'utils';
 
 import { BOT_FRAGMENT } from 'bots';
 
@@ -62,7 +61,7 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
 
   if (!loading && data) {
     // TODO: Go to the bot view
-    return <Navigate to={orgUri(org, '/settings/bots')} />;
+    return <Navigate to="../bots" />;
   }
 
   return (

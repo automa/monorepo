@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { Flex, Loader, RoutesLoader } from 'shared';
+import { Flex, Loader, RoutesLoader, useRelativeMatch } from 'shared';
 
 import { OrgList } from 'orgs';
 import { UserNavbar } from 'users';
@@ -13,9 +13,11 @@ import routes from './routes';
 import { DashboardProps } from './types';
 
 import { DASHBOARD_QUERY } from './Dashboard.queries';
-import { Header } from './Dashboard.styles';
+import { EmptyTopNav, Header } from './Dashboard.styles';
 
 const Dashboard: React.FC<DashboardProps> = () => {
+  const isDashboardView = useRelativeMatch('.');
+
   const { data, loading, refetch } = useQuery(DASHBOARD_QUERY);
 
   return (
@@ -40,6 +42,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
           </Flex>
         )}
       </Header>
+      {isDashboardView && <EmptyTopNav />}
       {data && <RoutesLoader fallback={<Loader />} routes={routes} />}
     </>
   );

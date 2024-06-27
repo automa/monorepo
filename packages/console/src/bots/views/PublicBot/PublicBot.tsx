@@ -5,7 +5,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useAnalyticsPage } from 'analytics';
 import { getFragment } from 'gql';
 import { Badge, Button, Flex, Loader, toast, Typography } from 'shared';
-import { orgUri } from 'utils';
 
 import { BOT_INSTALLATION_FRAGMENT } from 'bots';
 import { useOrg } from 'orgs';
@@ -53,7 +52,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
       });
 
       // TODO: Redirect to bot installation page
-      navigate(orgUri(org, '/bots'));
+      navigate('../bots');
     },
     update(cache, { data }) {
       if (!bot || !data) return;

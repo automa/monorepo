@@ -7,3 +7,4 @@ export * from './useKeybindings';
 export * from './useMediaQueries';
 export * from './useOptimizer';
 export { default as usePersistentState } from './usePersistentState';
+export { default as useRelativeMatch } from './useRelativeMatch';

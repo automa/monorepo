@@ -2,7 +2,6 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Loader } from 'shared';
-import { orgUri } from 'utils';
 
 import { Task } from 'tasks';
 
@@ -21,7 +20,7 @@ const Tasks: React.FC<TasksProps> = ({ org }) => {
   return (
     <Flex direction="column" className="gap-8">
       <Flex justifyContent="flex-end" alignItems="center" className="h-9">
-        <Button to={orgUri(org, '/tasks/new')}>Create Task</Button>
+        <Button to="../tasks/new">Create Task</Button>
       </Flex>
       {loading && !data ? (
         <Flex justifyContent="center">
