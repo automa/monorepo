@@ -7,7 +7,7 @@ import { useUser } from 'auth';
 
 import Logo from 'assets/logo.svg?react';
 import GithubLogo from 'assets/logos/github.svg?react';
-import GitlabLogo from 'assets/logos/gitlab.svg?react';
+import GitlabLogo from 'assets/logos/gitlab_black.svg?react';
 
 import { AuthLoginProps } from './types';
 
