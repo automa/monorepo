@@ -85,6 +85,7 @@ export type Mutation = {
   botInstall: BotInstallation;
   botUninstall: Scalars['Boolean']['output'];
   taskCreate: Task;
+  userUpdate: User;
 };
 
 
@@ -109,6 +110,11 @@ export type MutationBotUninstallArgs = {
 export type MutationTaskCreateArgs = {
   input: TaskMessageInput;
   org_id: Scalars['Int']['input'];
+};
+
+
+export type MutationUserUpdateArgs = {
+  input: UserUpdateInput;
 };
 
 export type Org = {
@@ -244,6 +250,11 @@ export type UserProvider = {
   id: Scalars['Int']['output'];
   provider_id: Scalars['String']['output'];
   provider_type: ProviderType;
+};
+
+export type UserUpdateInput = {
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type BotFragmentFragment = { __typename?: 'Bot', id: number, name: string, short_description: string, type: BotType, published_at?: any | null } & { ' $fragmentName'?: 'BotFragmentFragment' };

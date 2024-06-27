@@ -88,6 +88,7 @@ export type Mutation = {
   botInstall: BotInstallation;
   botUninstall: Scalars['Boolean']['output'];
   taskCreate: Task;
+  userUpdate: User;
 };
 
 
@@ -112,6 +113,11 @@ export type MutationBotUninstallArgs = {
 export type MutationTaskCreateArgs = {
   input: TaskMessageInput;
   org_id: Scalars['Int']['input'];
+};
+
+
+export type MutationUserUpdateArgs = {
+  input: UserUpdateInput;
 };
 
 export type Org = {
@@ -249,6 +255,11 @@ export type UserProvider = {
   provider_type: ProviderType;
 };
 
+export type UserUpdateInput = {
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -343,6 +354,7 @@ export type ResolversTypes = {
   TaskMessageInput: TaskMessageInput;
   User: ResolverTypeWrapper<users>;
   UserProvider: ResolverTypeWrapper<user_providers>;
+  UserUpdateInput: UserUpdateInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -367,6 +379,7 @@ export type ResolversParentTypes = {
   TaskMessageInput: TaskMessageInput;
   User: users;
   UserProvider: user_providers;
+  UserUpdateInput: UserUpdateInput;
 };
 
 export type InheritsDirectiveArgs = {
@@ -425,6 +438,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   botInstall?: Resolver<ResolversTypes['BotInstallation'], ParentType, ContextType, RequireFields<MutationBotInstallArgs, 'input' | 'org_id'>>;
   botUninstall?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationBotUninstallArgs, 'bot_id' | 'org_id'>>;
   taskCreate?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationTaskCreateArgs, 'input' | 'org_id'>>;
+  userUpdate?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUserUpdateArgs, 'input'>>;
 };
 
 export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['Org'] = ResolversParentTypes['Org']> = {
