@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
-import { Link, Navigate, useLocation, useParams } from 'react-router-dom';
+import { Navigate, NavLink, useParams } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import { Flex, Loader, RoutesLoader } from 'shared';
-import { orgUri } from 'utils';
+import { Flex, Loader, RoutesLoader, useRelativeMatch } from 'shared';
 
 import { useAuth } from 'auth';
 import { BotOnboarding } from 'bots';
@@ -20,7 +19,9 @@ const Org: React.FC<OrgProps> = () => {
     orgName: string;
   };
 
-  const location = useLocation();
+  const isOrgIndexView = useRelativeMatch('.');
+  const isOrgTasksView = useRelativeMatch('tasks');
+  const isOrgReposView = useRelativeMatch('repos');
 
   const { setUserOrg } = useAuth();
 
@@ -48,51 +49,44 @@ const Org: React.FC<OrgProps> = () => {
     return [
       {
         name: 'Tasks',
-        path: '/tasks',
+        path: 'tasks',
       },
       {
         name: 'Repositories',
-        path: '/repos',
+        path: 'repos',
       },
       {
         name: 'Bots',
-        path: '/bots',
+        path: 'bots',
       },
       {
         name: 'Integrations',
-        path: '/integrations',
+        path: 'integrations',
       },
       {
         name: 'Insights',
-        path: '/insights',
+        path: 'insights',
       },
       {
         name: 'Settings',
-        path: '/settings',
+        path: 'settings',
       },
     ];
   }, [org]);
 
   const shouldShowRepoOnboarding = useMemo(
-    () =>
-      org &&
-      !org.has_installation &&
-      (location.pathname.startsWith(`${orgUri(org)}/tasks`) ||
-        location.pathname.startsWith(`${orgUri(org)}/repos`)),
-    [org, location.pathname],
+    () => org && !org.has_installation && (isOrgTasksView || isOrgReposView),
+    [org, isOrgTasksView, isOrgReposView],
   );
 
   const shouldShowBotOnboarding = useMemo(
-    () =>
-      org &&
-      !org.botInstallationsCount &&
-      location.pathname.startsWith(`${orgUri(org)}/tasks`),
-    [org, location.pathname],
+    () => org && !org.botInstallationsCount && isOrgTasksView,
+    [org, isOrgTasksView],
   );
 
   // Redirect to first tab if on org page
-  if (org && location.pathname === orgUri(org)) {
-    return <Navigate to={`.${tabs[0].path}`} replace />;
+  if (org && isOrgIndexView) {
+    return <Navigate to={tabs[0].path} replace />;
   }
 
   return (
@@ -105,19 +99,11 @@ const Org: React.FC<OrgProps> = () => {
         <>
           <NavigationMenu.Root>
             <Nav>
-              {tabs.map((tab) => {
-                const uri = orgUri(org, tab.path);
-
-                return (
-                  <Item
-                    key={tab.name}
-                    $active={location.pathname.startsWith(uri)}
-                    asChild
-                  >
-                    <Link to={uri}>{tab.name}</Link>
-                  </Item>
-                );
-              })}
+              {tabs.map((tab) => (
+                <NavLink key={tab.name} to={tab.path}>
+                  {({ isActive }) => <Item $active={isActive}>{tab.name}</Item>}
+                </NavLink>
+              ))}
             </Nav>
           </NavigationMenu.Root>
           <Content>

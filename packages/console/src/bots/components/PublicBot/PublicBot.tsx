@@ -4,7 +4,6 @@ import { Check } from '@phosphor-icons/react';
 
 import { getFragment } from 'gql';
 import { Badge, Flex, Tooltip, Typography } from 'shared';
-import { orgUri } from 'utils';
 
 import { useOrg } from 'orgs';
 
@@ -23,7 +22,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ publicBot: data, ...props }) => {
   }
 
   return (
-    <Link to={orgUri(org, `/bots/${publicBot.org.name}/${publicBot.name}`)}>
+    <Link to={`../bots/${publicBot.org.name}/${publicBot.name}`}>
       <Container {...props}>
         <Flex direction="column" className="gap-2">
           <Flex justifyContent="space-between" alignItems="center">

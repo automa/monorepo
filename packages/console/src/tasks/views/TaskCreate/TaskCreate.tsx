@@ -8,7 +8,6 @@ import { TaskMessageInput, taskMessageSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
 import { Button, Flex, Textarea, toast, Typography } from 'shared';
-import { orgUri } from 'utils';
 
 import { TASK_FRAGMENT } from 'tasks';
 
@@ -69,7 +68,7 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
 
   if (!loading && data) {
     // TODO: Go to the task view
-    return <Navigate to={orgUri(org, '/tasks')} />;
+    return <Navigate to="../tasks" />;
   }
 
   return (
