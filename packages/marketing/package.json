@@ -4,14 +4,14 @@
   "private": true,
   "dependencies": {
     "@phosphor-icons/react": "~2.1.5",
-    "@radix-ui/react-navigation-menu": "~1.1.4",
-    "@radix-ui/react-tooltip": "~1.0.2",
+    "@radix-ui/react-navigation-menu": "~1.2.0",
+    "@radix-ui/react-tooltip": "~1.1.1",
     "class-variance-authority": "~0.7.0",
     "date-fns": "~3.6.0",
     "next": "~14.2.3",
     "next-mdx-remote": "~5.0.0",
-    "react": "~18.2.0",
-    "react-dom": "~18.2.0",
+    "react": "~18.3.1",
+    "react-dom": "~18.3.1",
     "react-twc": "~1.4.1",
     "tailwind-merge": "~2.2.1"
   },
@@ -50,8 +50,8 @@
   "devDependencies": {
     "@mdx-js/loader": "~3.0.1",
     "@next/mdx": "~14.2.3",
-    "@storybook/nextjs": "~8.1.1",
-    "@storybook/react": "~8.1.1",
+    "@storybook/nextjs": "~8.1.11",
+    "@storybook/react": "~8.1.11",
     "@types/mdx": "~2.0.13",
     "remark-gfm": "~4.0.0"
   }
