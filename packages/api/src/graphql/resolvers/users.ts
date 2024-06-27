@@ -1,4 +1,9 @@
-import { QueryResolvers, UserResolvers } from '@automa/common';
+import {
+  MutationResolvers,
+  QueryResolvers,
+  UserResolvers,
+  userUpdateSchema,
+} from '@automa/common';
 
 import { Context } from '../types';
 
@@ -8,6 +13,19 @@ export const Query: QueryResolvers<Context> = {
       where: {
         id: userId,
       },
+    });
+  },
+};
+
+export const Mutation: MutationResolvers<Context> = {
+  userUpdate: async (_, { input }, { userId, prisma }) => {
+    const data = userUpdateSchema.parse(input);
+
+    return prisma.users.update({
+      where: {
+        id: userId,
+      },
+      data,
     });
   },
 };

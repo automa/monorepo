@@ -92,7 +92,7 @@ const Org: React.FC<OrgProps> = () => {
 
   // Redirect to first tab if on org page
   if (org && location.pathname === orgUri(org)) {
-    return <Navigate to={orgUri(org, tabs[0].path)} replace />;
+    return <Navigate to={`.${tabs[0].path}`} replace />;
   }
 
   return (

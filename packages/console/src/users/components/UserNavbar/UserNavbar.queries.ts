@@ -14,3 +14,9 @@ export const ME_QUERY_FRAGMENT = gql(`
     }
   }
 `);
+
+export const ME_QUERY = gql(`
+  query Me {
+    ...MeQueryFragment
+  }
+`);

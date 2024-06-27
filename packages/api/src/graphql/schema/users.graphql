@@ -2,6 +2,10 @@ type Query {
   me: User!
 }
 
+type Mutation {
+  userUpdate(input: UserUpdateInput!): User!
+}
+
 type User {
   id: Int!
   name: String!
@@ -14,4 +18,9 @@ type UserProvider {
   id: Int!
   provider_type: ProviderType!
   provider_id: String!
+}
+
+input UserUpdateInput {
+  name: String!
+  email: String!
 }

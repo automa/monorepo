@@ -77,7 +77,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
       });
 
       cache.modify({
-        id: `Org:${org.id}`,
+        id: cache.identify(org),
         fields: {
           botInstallationsCount(existing) {
             return existing + 1;
@@ -86,7 +86,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
       });
 
       cache.modify({
-        id: `PublicBot:${bot.id}`,
+        id: cache.identify(bot),
         fields: {
           installation(existing, details) {
             if (!details.storeFieldName.includes(`"org_id":${org.id}`))
@@ -115,7 +115,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
       cache.evict({ id: `BotInstallation:${bot.installation.id}` });
 
       cache.modify({
-        id: `Org:${org.id}`,
+        id: cache.identify(org),
         fields: {
           botInstallationsCount(existing) {
             return existing - 1;
@@ -124,7 +124,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
       });
 
       cache.modify({
-        id: `PublicBot:${bot.id}`,
+        id: cache.identify(bot),
         fields: {
           installation(existing, details) {
             if (!details.storeFieldName.includes(`"org_id":${org.id}`))
