@@ -1,10 +1,19 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
+import { Robot } from '@phosphor-icons/react';
 
 import { useAnalyticsPage } from 'analytics';
 import { getFragment } from 'gql';
-import { Badge, Button, Flex, Loader, toast, Typography } from 'shared';
+import {
+  Badge,
+  Button,
+  Flex,
+  Loader,
+  toast,
+  Tooltip,
+  Typography,
+} from 'shared';
 
 import { BOT_INSTALLATION_FRAGMENT } from 'bots';
 import { useOrg } from 'orgs';
@@ -170,39 +179,71 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
       ) : (
         <Container>
           <Flex justifyContent="space-between">
-            <Flex direction="column" className="gap-2">
-              <Flex alignItems="center" className="gap-4">
-                <Typography variant="title4">
-                  {bot.org.name}/{bot.name}
-                </Typography>
-                {!bot.is_published && (
-                  <Badge variant="warning" size="large">
-                    Private
-                  </Badge>
-                )}
+            <Flex alignItems="center" className="gap-4">
+              {bot.image_url ? (
+                <img src={bot.image_url} alt={bot.name} className="size-16" />
+              ) : (
+                <Robot className="size-16 text-neutral-400" />
+              )}
+              <Flex direction="column" className="gap-2">
+                <Flex alignItems="center" className="gap-4">
+                  <Typography variant="title4">
+                    {bot.org.name}/{bot.name}
+                  </Typography>
+                  <Flex className="gap-2">
+                    {!bot.is_published && (
+                      <Badge variant="warning" size="large">
+                        Private
+                      </Badge>
+                    )}
+                    {bot.is_preview && (
+                      <Badge variant="success" size="large">
+                        Beta
+                      </Badge>
+                    )}
+                  </Flex>
+                </Flex>
+                <Typography variant="large">{bot.short_description}</Typography>
               </Flex>
-              <Typography variant="large">{bot.short_description}</Typography>
             </Flex>
-            <Button
-              size="large"
-              variant={!bot.installation ? 'primary' : 'danger'}
-              onClick={click}
-            >
-              {!bot.installation ? 'Install' : 'Uninstall'}
-            </Button>
+            {bot.is_preview ? (
+              <Tooltip body="Coming soon!">
+                <Button size="large" disabled>
+                  Install
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button
+                size="large"
+                variant={!bot.installation ? 'primary' : 'danger'}
+                onClick={click}
+              >
+                {!bot.installation ? 'Install' : 'Uninstall'}
+              </Button>
+            )}
           </Flex>
           <Flex>
             <Details>
-              <DetailsTitle>About</DetailsTitle>
-              {bot.homepage && (
-                <a
-                  href={bot.homepage}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <Typography variant="small">{bot.homepage}</Typography>
-                </a>
-              )}
+              <Flex direction="column" className="gap-2">
+                <DetailsTitle>About</DetailsTitle>
+                {bot.homepage && (
+                  <a
+                    href={bot.homepage}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <Typography variant="small">{bot.homepage}</Typography>
+                  </a>
+                )}
+              </Flex>
+              <Flex direction="column" className="gap-2">
+                <DetailsTitle>Category</DetailsTitle>
+                <Link to={`../bots/new?ai=${!bot.is_deterministic}`}>
+                  <Badge variant="tag">
+                    {bot.is_deterministic ? 'Deterministic' : 'Uses AI'}
+                  </Badge>
+                </Link>
+              </Flex>
             </Details>
             <Description>{bot.description}</Description>
           </Flex>

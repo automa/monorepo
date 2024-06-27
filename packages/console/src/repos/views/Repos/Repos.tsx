@@ -26,7 +26,7 @@ const Repos: React.FC<ReposProps> = ({ org }) => {
       ) : !data?.repos?.length ? (
         <Flex justifyContent="center">No repos</Flex>
       ) : (
-        <Flex className="grid grid-cols-auto gap-4 md:gap-6">
+        <Flex className="grid grid-cols-3 gap-4 md:gap-6">
           {data.repos.map((repo) => (
             <Repo key={repo.id} repo={repo} />
           ))}

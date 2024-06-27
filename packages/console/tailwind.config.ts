@@ -8,6 +8,9 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      borderWidth: {
+        '1': '1px',
+      },
       boxShadow: {
         border: 'inset 0 -1px rgba(0, 0, 0, 0.08)',
         tooltip:
@@ -26,6 +29,10 @@ const config: Config = {
         primary: '#09142F',
         accent: '#DB475E',
       },
+      data: {
+        on: 'state="on"',
+        off: 'state="off"',
+      },
       fontFamily: {
         sans: ['Manrope Variable', ...defaultTheme.fontFamily.sans],
         display: ['Cal sans', ...defaultTheme.fontFamily.sans],
@@ -34,7 +41,8 @@ const config: Config = {
         '2xs': '0.625rem',
       },
       gridTemplateColumns: {
-        auto: 'repeat(auto-fill, minmax(21rem, 1fr))',
+        '2': 'repeat(auto-fill, minmax(29rem, 1fr))',
+        '3': 'repeat(auto-fill, minmax(17rem, 1fr))',
       },
       height: {
         '0.25': '0.0625rem',

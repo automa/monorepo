@@ -5,7 +5,10 @@ export const BOT_FRAGMENT = gql(`
     id
     name
     short_description
+    image_url
     type
-    published_at
+    is_published
+    is_preview
+    is_deterministic
   }
 `);

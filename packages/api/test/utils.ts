@@ -72,6 +72,7 @@ export const seedBots = (
       org_id: id,
       name: `bot-${i}`,
       short_description: `Bot ${i}`,
+      image_url: `https://example.com/image/${i}.png`,
       description: `Bot ${i} long description`,
       type: 'webhook',
       webhook_url: `https://example.com/webhook/${i}`,
