@@ -31,7 +31,8 @@ const documents = {
     "\n  fragment TaskFragment on Task {\n    id\n    title\n    created_at\n    # TODO: User fragment for avatar component\n    author {\n      id\n      name\n      providers {\n        id\n        provider_type\n        provider_id\n      }\n    }\n  }\n": types.TaskFragmentFragmentDoc,
     "\n  mutation TaskCreate($org_id: Int!, $input: TaskMessageInput!) {\n    taskCreate(org_id: $org_id, input: $input) {\n      ...TaskFragment\n    }\n  }\n": types.TaskCreateDocument,
     "\n  query Tasks($org_id: Int!) {\n    tasks(org_id: $org_id) {\n      id\n      ...TaskFragment\n    }\n  }\n": types.TasksDocument,
-    "\n  fragment MeQueryFragment on Query {\n    me {\n      id\n      name\n      email\n      providers {\n        id\n        provider_type\n        provider_id\n      }\n    }\n  }\n": types.MeQueryFragmentFragmentDoc,
+    "\n  fragment UserAvatarFragment on User {\n    id\n    name\n    providers {\n      id\n      provider_type\n      provider_id\n    }\n  }\n": types.UserAvatarFragmentFragmentDoc,
+    "\n  fragment MeQueryFragment on Query {\n    me {\n      email\n      ...UserAvatarFragment\n    }\n  }\n": types.MeQueryFragmentFragmentDoc,
     "\n  query Me {\n    ...MeQueryFragment\n  }\n": types.MeDocument,
     "\n  mutation UserUpdate($input: UserUpdateInput!) {\n    userUpdate(input: $input) {\n      id\n      name\n      email\n    }\n  }\n": types.UserUpdateDocument,
     "\n  query Dashboard {\n    ...MeQueryFragment\n    ...OrgsQueryFragment\n  }\n": types.DashboardDocument,
@@ -126,7 +127,11 @@ export function gql(source: "\n  query Tasks($org_id: Int!) {\n    tasks(org_id:
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment MeQueryFragment on Query {\n    me {\n      id\n      name\n      email\n      providers {\n        id\n        provider_type\n        provider_id\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment MeQueryFragment on Query {\n    me {\n      id\n      name\n      email\n      providers {\n        id\n        provider_type\n        provider_id\n      }\n    }\n  }\n"];
+export function gql(source: "\n  fragment UserAvatarFragment on User {\n    id\n    name\n    providers {\n      id\n      provider_type\n      provider_id\n    }\n  }\n"): (typeof documents)["\n  fragment UserAvatarFragment on User {\n    id\n    name\n    providers {\n      id\n      provider_type\n      provider_id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment MeQueryFragment on Query {\n    me {\n      email\n      ...UserAvatarFragment\n    }\n  }\n"): (typeof documents)["\n  fragment MeQueryFragment on Query {\n    me {\n      email\n      ...UserAvatarFragment\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

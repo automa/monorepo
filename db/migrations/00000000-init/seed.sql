@@ -1,5 +1,4 @@
-INSERT INTO public.orgs (name, provider_type, provider_id, provider_name)
-VALUES ('sunkarapk', 'github', '42120332', 'sunkarapk');
+UPDATE public.orgs SET has_installation = TRUE;
 
 INSERT INTO public.users (name, email)
 VALUES
@@ -13,10 +12,11 @@ INSERT INTO public.user_orgs (user_id, org_id)
 VALUES
   (1, 1);
 
-INSERT INTO public.bots (org_id, name, short_description, image_url, description, type, webhook_url, homepage, published_at)
+INSERT INTO public.bots (org_id, name, short_description, image_url, description, type, webhook_url, homepage, published_at, is_deterministic)
 VALUES
-  (1, 'aider', 'Basic bot that codes', 'https://aider.chat/assets/icons/apple-touch-icon.png', '...', 'webhook', 'https://localhost:5000/hooks/automa', 'https://aider.chat', NOW()),
-  (1, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', '...', 'webhook', 'http://localhost:5001/hooks/automa', 'https://posthog.com', NOW());
+  (1, 'aider', 'Basic bot that codes', 'https://aider.chat/assets/icons/apple-touch-icon.png', '...', 'webhook', 'https://localhost:5000/hooks/automa', 'https://aider.chat', NOW(), FALSE),
+  (1, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', '...', 'webhook', 'http://localhost:5001/hooks/automa', 'https://posthog.com', NOW(), FALSE),
+  (1, 'github-runners', 'Changes GitHub CI configuration to use Depot runners', 'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg', '...', 'webhook', 'http://localhost:5002/hooks/automa', 'https://depot.dev', NOW(), TRUE);
 
 INSERT INTO public.bot_installations (bot_id, org_id)
 VALUES
