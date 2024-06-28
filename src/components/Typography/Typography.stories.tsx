@@ -20,6 +20,18 @@ type Story = StoryObj<typeof meta>;
 
 export const Default = {} satisfies Story;
 
+export const Link = {
+  args: {
+    href: 'https://google.com',
+  },
+} satisfies Story;
+
+export const Disabled = {
+  args: {
+    disabled: true,
+  },
+} satisfies Story;
+
 export const Title1 = {
   args: {
     variant: 'title1',
@@ -116,12 +128,6 @@ export const Whitespace = {
     style: {
       width: '50px',
     },
-  },
-} satisfies Story;
-
-export const Link = {
-  args: {
-    link: true,
   },
 } satisfies Story;
 

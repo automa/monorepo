@@ -1,22 +1,19 @@
-import { ButtonHTMLAttributes, ComponentProps } from 'react';
+import { ButtonHTMLAttributes } from 'react';
 import { VariantProps } from 'class-variance-authority';
-import Link from 'next/link';
 
 import { $, Component, Styled } from 'theme';
 
-import { button } from './Button.cva';
+import { AnchorProps } from '../Anchor';
 
-type LinkProps = ComponentProps<typeof Link>;
+import { button } from './Button.cva';
 
 type ButtonProps = $<
   {},
   {
     fullWidth?: boolean;
   } & VariantProps<typeof button>,
-  {
-    href?: LinkProps['href'];
-    link?: Omit<LinkProps, 'href'>;
-  } & ButtonHTMLAttributes<HTMLButtonElement>
+  Omit<AnchorProps, 'disabled' | 'children'> &
+    ButtonHTMLAttributes<HTMLButtonElement>
 >;
 
 export type ButtonComponentProps = Component<ButtonProps>;
