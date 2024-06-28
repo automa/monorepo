@@ -30,8 +30,8 @@ importers:
         specifier: ~14.2.3
         version: 14.2.3
       '@storybook/addon-coverage':
-        specifier: ~0.0.9
-        version: 0.0.9
+        specifier: ~1.0.3
+        version: 1.0.4
       '@storybook/addon-essentials':
         specifier: ~8.1.11
         version: 8.1.11(@types/react-dom@18.3.0)(@types/react@18.3.3)(prettier@3.0.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -118,7 +118,7 @@ importers:
         version: 0.8.0(eslint@8.38.0)(typescript@5.2.2)
       eslint-plugin-tailwindcss:
         specifier: ~3.14.2
-        version: 3.14.3(tailwindcss@3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2)))
+        version: 3.14.3(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2)))
       husky:
         specifier: ~8.0.2
         version: 8.0.3
@@ -151,13 +151,13 @@ importers:
         version: 8.1.11(@babel/preset-env@7.24.5(@babel/core@7.24.5))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwind-scrollbar:
         specifier: ~3.1.0
-        version: 3.1.0(tailwindcss@3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2)))
+        version: 3.1.0(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2)))
       tailwindcss:
-        specifier: ~3.4.3
-        version: 3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))
+        specifier: ~3.4.4
+        version: 3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))
       tailwindcss-animate:
         specifier: ~1.0.7
-        version: 1.0.7(tailwindcss@3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2)))
+        version: 1.0.7(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2)))
       ts-node:
         specifier: ~10.9.2
         version: 10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2)
@@ -2368,6 +2368,9 @@ packages:
   '@js-sdsl/ordered-map@4.4.2':
     resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
 
+  '@jsdevtools/coverage-istanbul-loader@3.0.5':
+    resolution: {integrity: sha512-EUCPEkaRPvmHjWAAZkWMT7JDzpw7FKB00WTISaiXsbNOd5hCHg77XLA8sLYLFDo1zepYLo2w7GstN8YBqRXZfA==}
+
   '@kamilkisiela/fast-url-parser@1.1.4':
     resolution: {integrity: sha512-gbkePEBupNydxCelHCESvFSFM8XPh1Zs/OAVRW/rKpEqPAl5PbOM90Si8mv9bvnR53uPD2s/FiRxdvSejpRJew==}
 
@@ -3947,8 +3950,8 @@ packages:
   '@storybook/addon-controls@8.1.11':
     resolution: {integrity: sha512-q/Vt4meNVlFlBWIMCJhx6r+bqiiYocCta2RoUK5nyIZUiLzHncKHX6JnCU36EmJzRyah9zkwjfCb2G1r9cjnoQ==}
 
-  '@storybook/addon-coverage@0.0.9':
-    resolution: {integrity: sha512-+GrNBVRsdc80L9BvKEbMr5HZsK2U/qB4+YfaWfDIpLP7Xa5volBuPdpVh72Ox2ouz2ptyimTIDkJxYXPSgq98A==}
+  '@storybook/addon-coverage@1.0.4':
+    resolution: {integrity: sha512-+qwsKTg6c0IrGnVAQjt1NxDyTqCOcudz9+56kFDmGApaPSby4uibYgJnnzua3sRVTe1zYZUfxwpeAuK9Ysf4Ig==}
 
   '@storybook/addon-docs@8.1.11':
     resolution: {integrity: sha512-69dv+CE4R5wFU7xnJmhuyEbLN2PEVDV3N/BbgJqeucIYPmm6zDV83Q66teCHKYtRln3BFUqPH5mxsjiHobxfJQ==}
@@ -8353,6 +8356,9 @@ packages:
   merge-descriptors@1.0.1:
     resolution: {integrity: sha512-cCi6g3/Zr1iqQi6ySbseM1Xvooa98N0w31jzUYrXPX2xqObmFGHJ0tQ5u74H3mVh7wLouTseZyYIq39g8cNp1w==}
 
+  merge-source-map@1.1.0:
+    resolution: {integrity: sha512-Qkcp7P2ygktpMPh2mCQZaf3jhN6D3Z/qVZHSdWvQ+2Ef5HgRAPBO57A77+ENm0CPx2+1Ce/MYKi3ymqdfuqibw==}
+
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
 
@@ -9902,6 +9908,10 @@ packages:
   scheduler@0.23.2:
     resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
 
+  schema-utils@2.7.1:
+    resolution: {integrity: sha512-SHiNtMOUGWBQJwzISiVYKu82GiV4QYGePp3odlY1tuKO7gPtphAT5R/py0fA6xtbgLL/RvtJZnU9b8s0F1q0Xg==}
+    engines: {node: '>= 8.9.0'}
+
   schema-utils@3.3.0:
     resolution: {integrity: sha512-pN/yOAvcC+5rQ5nERGuwrjLlYvLTbCibnZ1I7B1LaiAz9BRBlE9GMgE/eqV30P7aJQUf7Ddimy/RsbYO/GrVGg==}
     engines: {node: '>= 10.13.0'}
@@ -10379,8 +10389,8 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
 
-  tailwindcss@3.4.3:
-    resolution: {integrity: sha512-U7sxQk/n397Bmx4JHbJx/iSOOv5G+II3f1kpLpY2QeUv5DcPdcTsYLlusZfq1NthHS1c1cZoyFmmkex1rzke0A==}
+  tailwindcss@3.4.4:
+    resolution: {integrity: sha512-ZoyXOdJjISB7/BcLTR6SEsLgKtDStYyYZVLsUtWChO4Ps20CBad7lfJKVDiejocV4ME1hLmyY0WJE3hSDcmQ2A==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -13610,6 +13620,16 @@ snapshots:
 
   '@js-sdsl/ordered-map@4.4.2': {}
 
+  '@jsdevtools/coverage-istanbul-loader@3.0.5':
+    dependencies:
+      convert-source-map: 1.9.0
+      istanbul-lib-instrument: 4.0.3
+      loader-utils: 2.0.4
+      merge-source-map: 1.1.0
+      schema-utils: 2.7.1
+    transitivePeerDependencies:
+      - supports-color
+
   '@kamilkisiela/fast-url-parser@1.1.4': {}
 
   '@linear/sdk@22.0.0':
@@ -15424,11 +15444,15 @@ snapshots:
       - react-dom
       - supports-color
 
-  '@storybook/addon-coverage@0.0.9':
+  '@storybook/addon-coverage@1.0.4':
     dependencies:
-      '@types/babel__core': 7.20.5
+      '@istanbuljs/load-nyc-config': 1.1.0
+      '@jsdevtools/coverage-istanbul-loader': 3.0.5
       '@types/istanbul-lib-coverage': 2.0.6
-      babel-plugin-istanbul: 6.1.1
+      convert-source-map: 2.0.0
+      espree: 9.6.1
+      istanbul-lib-instrument: 6.0.2
+      test-exclude: 6.0.0
       vite-plugin-istanbul: 3.0.4
     transitivePeerDependencies:
       - supports-color
@@ -18930,11 +18954,11 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-tailwindcss@3.14.3(tailwindcss@3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))):
+  eslint-plugin-tailwindcss@3.14.3(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))):
     dependencies:
       fast-glob: 3.3.2
       postcss: 8.4.38
-      tailwindcss: 3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))
+      tailwindcss: 3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))
 
   eslint-scope@5.1.1:
     dependencies:
@@ -21435,6 +21459,10 @@ snapshots:
 
   merge-descriptors@1.0.1: {}
 
+  merge-source-map@1.1.0:
+    dependencies:
+      source-map: 0.6.1
+
   merge-stream@2.0.0: {}
 
   merge2@1.4.1: {}
@@ -23311,6 +23339,12 @@ snapshots:
     dependencies:
       loose-envify: 1.4.0
 
+  schema-utils@2.7.1:
+    dependencies:
+      '@types/json-schema': 7.0.15
+      ajv: 6.12.6
+      ajv-keywords: 3.5.2(ajv@6.12.6)
+
   schema-utils@3.3.0:
     dependencies:
       '@types/json-schema': 7.0.15
@@ -23880,15 +23914,15 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.24.5
 
-  tailwind-scrollbar@3.1.0(tailwindcss@3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))):
+  tailwind-scrollbar@3.1.0(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))):
     dependencies:
-      tailwindcss: 3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))
+      tailwindcss: 3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))
 
-  tailwindcss-animate@1.0.7(tailwindcss@3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))):
+  tailwindcss-animate@1.0.7(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))):
     dependencies:
-      tailwindcss: 3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))
+      tailwindcss: 3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2))
 
-  tailwindcss@3.4.3(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2)):
+  tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.5))(@types/node@20.14.9)(typescript@5.2.2)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2

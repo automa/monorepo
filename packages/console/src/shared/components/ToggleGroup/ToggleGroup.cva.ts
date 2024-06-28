@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const toggleGroup = cva(
-  'inline-flex w-fit cursor-pointer items-center border-y-1 border-r-1 border-primary font-medium first:rounded-l first:border-l-1 last:rounded-r disabled:cursor-default',
+  'inline-flex w-fit cursor-pointer items-center border-y border-r border-primary font-medium first:rounded-l first:border-l last:rounded-r disabled:cursor-default',
   {
     variants: {
       variant: {

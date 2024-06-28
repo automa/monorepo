@@ -8,9 +8,6 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
-      borderWidth: {
-        '1': '1px',
-      },
       boxShadow: {
         border: 'inset 0 -1px rgba(0, 0, 0, 0.08)',
         tooltip:
