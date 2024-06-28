@@ -14,7 +14,8 @@ export const typography = cva('', {
       title4: 'font-display text-2xl font-semibold tracking-wide lg:text-3xl',
       title5:
         'pt-0.5 font-display text-xl font-semibold !leading-6 tracking-wide lg:pt-1 lg:text-2xl lg:!leading-7',
-      title6: 'font-display text-lg font-semibold tracking-wide lg:text-xl',
+      title6:
+        'pt-0.5 font-display text-lg font-semibold tracking-wide lg:text-xl',
     },
     transform: {
       none: 'normal-case',

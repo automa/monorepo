@@ -2,9 +2,9 @@ import { PrismaClient } from '@prisma/client';
 
 export * from '@prisma/client';
 
-const prisma = (isProduction: boolean, url: string) =>
+const prisma = (url: string, debug = false) =>
   new PrismaClient({
-    log: isProduction ? [] : ['query'],
+    log: !debug ? [] : ['query'],
     datasources: {
       db: {
         url,

@@ -8,16 +8,22 @@ import { BotOnboardingProps } from './types';
 
 import { Card, Container } from './BotOnboarding.styles';
 
+// TODO: Add description as tooltip after loading these from DB
 const DEFAULT_BOTS = [
-  {
-    botOrgName: 'automa',
-    botName: 'aider',
-    logo: 'https://aider.chat/assets/icons/apple-touch-icon.png',
-  },
   {
     botOrgName: 'automa',
     botName: 'posthog',
     logo: 'https://posthog.com/brand/posthog-logomark.svg',
+  },
+  {
+    botOrgName: 'automa',
+    botName: 'github-runners',
+    logo: 'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg',
+  },
+  {
+    botOrgName: 'automa',
+    botName: 'aider',
+    logo: 'https://aider.chat/assets/icons/apple-touch-icon.png',
   },
 ];
 
@@ -41,9 +47,12 @@ const BotOnboarding: React.FC<BotOnboardingProps> = ({ ...props }) => {
               className="w-32 gap-2 lg:gap-4"
             >
               <img src={logo} alt={`${botName} logo`} className="size-16" />
-              <Typography variant="small">
-                {botOrgName} / {botName}
-              </Typography>
+              <Flex direction="column" className="gap-2">
+                <Typography>{botName}</Typography>
+                <Typography variant="xsmall" className="text-neutral-600">
+                  by {botOrgName}
+                </Typography>
+              </Flex>
             </Flex>
           </Card>
         ))}

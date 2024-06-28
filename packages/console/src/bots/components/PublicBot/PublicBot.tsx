@@ -5,21 +5,13 @@ import { Check, Robot } from '@phosphor-icons/react';
 import { getFragment } from 'gql';
 import { Badge, Flex, Tooltip, Typography } from 'shared';
 
-import { useOrg } from 'orgs';
-
 import { PublicBotProps } from './types';
 
 import { PUBLIC_BOT_FRAGMENT } from './PublicBot.queries';
 import { Container, Description } from './PublicBot.styles';
 
 const PublicBot: React.FC<PublicBotProps> = ({ publicBot: data, ...props }) => {
-  const { org } = useOrg();
-
   const publicBot = getFragment(PUBLIC_BOT_FRAGMENT, data);
-
-  if (!org) {
-    return null;
-  }
 
   return (
     <Link to={`../bots/${publicBot.org.name}/${publicBot.name}`}>

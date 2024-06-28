@@ -86,7 +86,6 @@ CREATE TABLE public.user_repos (
   UNIQUE (user_id, repo_id)
 );
 
--- TODO: Add 'prompt', 'function'
 CREATE TYPE public.bot AS ENUM ('webhook');
 
 CREATE TABLE public.bots (
