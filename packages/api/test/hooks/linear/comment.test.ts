@@ -39,7 +39,7 @@ suite('linear hook Comment event', () => {
           access_token: 'abcdef',
         },
         config: {
-          id: 'da7cb595-897e-4c55-8e68-54f807dc3b87',
+          id: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
           name: 'Automa',
           slug: 'automa',
         },
