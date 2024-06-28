@@ -163,46 +163,69 @@ suite('graphql tasks', () => {
   });
 
   suite('mutation taskCreate', () => {
-    teardown(async () => {
-      await app.prisma.tasks.deleteMany();
-    });
+    suite('with valid input', () => {
+      let response: LightMyRequestResponse;
 
-    test('with valid input should succeed', async () => {
-      const response = await taskCreate(app, org.id, {
-        content:
-          'Send an analytic event when user clicks on "Create Task" button',
+      setup(async () => {
+        response = await taskCreate(app, org.id, {
+          content:
+            'Send an analytics event when user clicks on "Create Task" button',
+        });
       });
 
-      assert.equal(response.statusCode, 200);
+      teardown(async () => {
+        await app.prisma.tasks.deleteMany();
+      });
 
-      assert.equal(
-        response.headers['content-type'],
-        'application/json; charset=utf-8',
-      );
+      test('should succeed', async () => {
+        assert.equal(response.statusCode, 200);
 
-      const {
-        errors,
-        data: { taskCreate: task },
-      } = response.json();
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+      });
 
-      assert.isUndefined(errors);
+      test('should return task', async () => {
+        const {
+          errors,
+          data: { taskCreate: task },
+        } = response.json();
 
-      assert.isNumber(task.id);
-      assert.equal(
-        task.title,
-        'Send an analytic event when user clicks on "Create Task" button',
-      );
-      assert.isString(task.created_at);
+        assert.isUndefined(errors);
 
-      const count = await app.prisma.tasks.count();
+        assert.isNumber(task.id);
+        assert.equal(
+          task.title,
+          'Send an analytics event when user clicks on "Create Task" button',
+        );
+        assert.isString(task.created_at);
+      });
 
-      assert.equal(count, 1);
+      test('should create task', async () => {
+        const [task] = await app.prisma.tasks.findMany();
+
+        assert.equal(
+          task.title,
+          'Send an analytics event when user clicks on "Create Task" button',
+        );
+      });
+
+      test('should create task item', async () => {
+        const [taskItem] = await app.prisma.task_items.findMany();
+
+        assert.equal(taskItem.type, 'message');
+        assert.equal(
+          taskItem.content,
+          'Send an analytics event when user clicks on "Create Task" button',
+        );
+      });
     });
 
     test('non-member org should fail', async () => {
       const response = await taskCreate(app, nonMemberOrg.id, {
         content:
-          'Send an analytic event when user clicks on "Create Task" button',
+          'Send an analytics event when user clicks on "Create Task" button',
       });
 
       assert.equal(response.statusCode, 200);
