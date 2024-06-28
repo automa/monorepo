@@ -1,3 +1,4 @@
+export { default as Anchor } from './Anchor';
 export { default as Avatar } from './Avatar';
 export { default as Badge } from './Badge';
 export { default as Button } from './Button';
@@ -8,7 +9,6 @@ export * from './DropdownMenu';
 export { default as ErrorCard } from './ErrorCard';
 export { default as Flex } from './Flex';
 export { default as Input } from './Input';
-export { default as Link } from './Link';
 export { default as Loader } from './Loader';
 export { default as RoutesLoader } from './RoutesLoader';
 export { default as ScreenSize } from './ScreenSize';

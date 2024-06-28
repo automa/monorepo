@@ -1,45 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+
+import Anchor from '../Anchor';
 
 import { ButtonComponentProps } from './types';
 
 import { Container } from './Button.styles';
 
-const Anchor: React.FC<ButtonComponentProps> = ({
-  href,
-  anchor,
-  to,
-  link,
-  type,
-  disabled,
-  children,
-}) => {
-  if (disabled || (!href && !to) || type !== 'button') {
-    return children;
-  }
-
-  if (href) {
-    return (
-      <a href={href} {...anchor}>
-        {children}
-      </a>
-    );
-  }
-
-  if (to) {
-    return (
-      <Link to={to} {...link}>
-        {children}
-      </Link>
-    );
-  }
-
-  return null;
-};
-
 // TODO: Add loading spinner state and use it instead of disabled state
 const Button: React.FC<ButtonComponentProps> = ({
   href,
+  blank,
   anchor,
   to,
   link,
@@ -54,11 +24,11 @@ const Button: React.FC<ButtonComponentProps> = ({
   return (
     <Anchor
       href={href}
+      blank={blank}
       anchor={anchor}
       to={to}
       link={link}
-      type={type}
-      disabled={disabled}
+      disabled={disabled || type !== 'button'}
     >
       <Container
         $variant={variant}

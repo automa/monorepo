@@ -55,9 +55,7 @@ const RepoOnboarding: React.FC<RepoOnboardingProps> = ({ org, ...props }) => {
       </Tooltip>
       <Link to="bots/new">
         <Flex alignItems="center" className="relative left-2 gap-1">
-          <Typography align="center" link>
-            Or explore bots to install
-          </Typography>
+          <Typography align="center">Or explore bots to install</Typography>
           <ArrowUpRight className="size-4" />
         </Flex>
       </Link>

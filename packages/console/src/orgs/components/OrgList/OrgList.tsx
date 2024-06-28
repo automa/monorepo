@@ -10,6 +10,7 @@ import axios from 'axios';
 
 import { getFragment } from 'gql';
 import {
+  Anchor,
   Avatar,
   DropdownMenu,
   DropdownMenuLabel,
@@ -114,10 +115,9 @@ const OrgList: React.FC<OrgListProps> = ({
           </Link>
         ))}
         <DropdownMenuSeparator />
-        <a
+        <Anchor
           href={`https://github.com/apps/${appName()}/installations/select_target`}
-          rel="noopener noreferrer"
-          target="_blank"
+          blank
         >
           <Item>
             <Flex alignItems="center" className="gap-2">
@@ -125,7 +125,7 @@ const OrgList: React.FC<OrgListProps> = ({
               <Typography variant="small">Create org</Typography>
             </Flex>
           </Item>
-        </a>
+        </Anchor>
         <Item onSelect={sync}>
           <Flex alignItems="center" className="gap-2">
             <ArrowsClockwise className="size-5" />

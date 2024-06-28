@@ -3,16 +3,17 @@ import { VariantProps } from 'class-variance-authority';
 
 import { $, Component, Styled } from 'theme';
 
+import { AnchorProps } from '../Anchor';
+
 import { typography } from './Typography.cva';
 
 type TypographyProps = $<
   {},
-  {
-    link?: boolean;
-  } & VariantProps<typeof typography>,
+  VariantProps<typeof typography>,
   {
     element?: ElementType;
-  } & HTMLAttributes<HTMLDivElement>
+  } & Omit<AnchorProps, 'onClick'> &
+    HTMLAttributes<HTMLDivElement>
 >;
 
 export type TypographyComponentProps = Component<TypographyProps>;
