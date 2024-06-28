@@ -1,16 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { ElementType, useMemo } from 'react';
+
+import Anchor from '../Anchor';
 
 import { TypographyComponentProps } from './types';
 
 import { Container } from './Typography.styles';
 
 const Typography: React.FC<TypographyComponentProps> = ({
+  href,
+  blank,
+  anchor,
+  to,
+  link,
+  disabled,
   element = 'div',
   variant,
   transform,
   align,
   whitespace,
-  link,
   children,
   ...props
 }) => {
@@ -37,20 +44,28 @@ const Typography: React.FC<TypographyComponentProps> = ({
       default:
         return element;
     }
-  }, [element, variant]);
+  }, [element, variant]) as ElementType;
 
   return (
-    <Container
-      asChild
-      $variant={variant}
-      $transform={transform}
-      $align={align}
-      $whitespace={whitespace}
-      $link={link || element === 'a'}
-      {...props}
+    <Anchor
+      href={href}
+      blank={blank}
+      anchor={anchor}
+      to={to}
+      link={link}
+      disabled={disabled}
     >
-      <As>{children}</As>
-    </Container>
+      <Container
+        asChild
+        $variant={variant}
+        $transform={transform}
+        $align={align}
+        $whitespace={whitespace}
+        {...props}
+      >
+        <As>{children}</As>
+      </Container>
+    </Anchor>
   );
 };
 
