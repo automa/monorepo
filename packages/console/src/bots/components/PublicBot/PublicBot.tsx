@@ -8,7 +8,7 @@ import { Badge, Flex, Tooltip, Typography } from 'shared';
 import { PublicBotProps } from './types';
 
 import { PUBLIC_BOT_FRAGMENT } from './PublicBot.queries';
-import { Container, Description } from './PublicBot.styles';
+import { Container } from './PublicBot.styles';
 
 const PublicBot: React.FC<PublicBotProps> = ({ publicBot: data, ...props }) => {
   const publicBot = getFragment(PUBLIC_BOT_FRAGMENT, data);
@@ -40,7 +40,9 @@ const PublicBot: React.FC<PublicBotProps> = ({ publicBot: data, ...props }) => {
                   {publicBot.is_deterministic ? 'Deterministic' : 'Uses AI'}
                 </Badge>
               </Flex>
-              <Description>{publicBot.short_description}</Description>
+              <Typography variant="small" className="text-neutral-600">
+                {publicBot.short_description}
+              </Typography>
             </Flex>
           </Flex>
           {publicBot.installation && (

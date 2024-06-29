@@ -5,7 +5,7 @@ import { tw } from 'theme';
 
 export const Nav = tw(
   NavigationMenu.List,
-)`flex justify-center pb-0.5 shadow-border text-xs font-medium lg:text-sm bg-white overflow-x-auto scrollbar-none`;
+)`flex justify-center pb-0.5 shadow-border bg-white overflow-x-auto scrollbar-none`;
 
 export const Item = tw(NavigationMenu.Item)<
   TwcComponentProps<typeof NavigationMenu.Item> & { $active?: boolean }

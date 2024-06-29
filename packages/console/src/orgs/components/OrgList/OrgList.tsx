@@ -107,7 +107,7 @@ const OrgList: React.FC<OrgListProps> = ({
                     src={getOrgAvatarUrl(o.provider_type, o.provider_id)}
                     alt={o.name}
                   />
-                  {o.name}
+                  <Typography>{o.name}</Typography>
                 </Flex>
                 {org.id === o.id && <Check className="font-medium" />}
               </Flex>

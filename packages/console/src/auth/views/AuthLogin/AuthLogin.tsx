@@ -51,7 +51,7 @@ const AuthLogin: React.FC<AuthLoginProps> = () => {
           <Link to="/">
             <Flex className="gap-2">
               <Logo className="size-8" />
-              <Typography className="text-2xl font-bold lg:text-2xl">
+              <Typography className="text-2xl font-bold lg:text-2xl lg:font-bold">
                 Automa
               </Typography>
             </Flex>

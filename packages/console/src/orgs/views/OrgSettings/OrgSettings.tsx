@@ -3,7 +3,13 @@ import { Navigate, NavLink } from 'react-router-dom';
 import { CreditCard, Robot } from '@phosphor-icons/react';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import { Flex, Loader, RoutesLoader, useRelativeMatch } from 'shared';
+import {
+  Flex,
+  Loader,
+  RoutesLoader,
+  Typography,
+  useRelativeMatch,
+} from 'shared';
 
 import routes from './routes';
 import { OrgSettingsProps } from './types';
@@ -45,7 +51,7 @@ const OrgSettings: React.FC<OrgSettingsProps> = ({ org }) => {
                 <Item $active={isActive} asChild>
                   <Flex alignItems="center" className="gap-2">
                     <tab.icon className="size-4" />
-                    {tab.name}
+                    <Typography variant="small">{tab.name}</Typography>
                   </Flex>
                 </Item>
               )}

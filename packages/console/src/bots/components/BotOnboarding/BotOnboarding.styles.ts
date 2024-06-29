@@ -1,6 +1,6 @@
 import { tw } from 'theme';
 
-import { Button, Flex } from 'shared';
+import { Button, Flex, Typography } from 'shared';
 
 export const Container = tw(Flex).attrs({
   direction: 'column',
@@ -11,3 +11,10 @@ export const Container = tw(Flex).attrs({
 export const Card = tw(Button).attrs({
   variant: 'secondary',
 })`py-3 px-4 lg:py-4 lg:px-6 h-full rounded-lg`;
+
+export const Content = tw(Flex).attrs({
+  direction: 'column',
+  alignItems: 'center',
+})`w-32 gap-3 lg:gap-4`;
+
+export const BotName = tw(Typography)`lg:font-medium`;

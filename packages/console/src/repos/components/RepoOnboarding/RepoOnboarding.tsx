@@ -40,13 +40,7 @@ const RepoOnboarding: React.FC<RepoOnboardingProps> = ({ org, ...props }) => {
         side="bottom"
         sideOffset={12}
       >
-        <Card
-          href={connectIntegration(ProviderType.Github)}
-          anchor={{
-            rel: 'noopener noreferrer',
-            target: '_blank',
-          }}
-        >
+        <Card href={connectIntegration(ProviderType.Github)} blank>
           <Flex direction="column" alignItems="center" className="gap-6">
             <GithubLogo className="size-16" />
             <Typography variant="large">GitHub</Typography>

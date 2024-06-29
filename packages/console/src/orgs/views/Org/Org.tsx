@@ -2,7 +2,13 @@ import React, { useEffect, useMemo } from 'react';
 import { Navigate, NavLink, useParams } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import { Flex, Loader, RoutesLoader, useRelativeMatch } from 'shared';
+import {
+  Flex,
+  Loader,
+  RoutesLoader,
+  Typography,
+  useRelativeMatch,
+} from 'shared';
 
 import { useAuth } from 'auth';
 import { BotOnboarding } from 'bots';
@@ -101,7 +107,11 @@ const Org: React.FC<OrgProps> = () => {
             <Nav>
               {tabs.map((tab) => (
                 <NavLink key={tab.name} to={tab.path}>
-                  {({ isActive }) => <Item $active={isActive}>{tab.name}</Item>}
+                  {({ isActive }) => (
+                    <Item $active={isActive}>
+                      <Typography variant="small">{tab.name}</Typography>
+                    </Item>
+                  )}
                 </NavLink>
               ))}
             </Nav>

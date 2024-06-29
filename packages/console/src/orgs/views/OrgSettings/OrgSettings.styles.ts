@@ -11,7 +11,7 @@ export const Container = tw(
 
 export const Nav = tw(
   NavigationMenu.List,
-)`flex flex-col w-48 p-1 text-xs font-medium lg:text-sm bg-white rounded-lg overflow-y-auto scrollbar-none shadow-card`;
+)`flex flex-col w-48 p-1 bg-white rounded-lg overflow-y-auto scrollbar-none shadow-card`;
 
 export const Item = tw(NavigationMenu.Item)<
   TwcComponentProps<typeof NavigationMenu.Item> & { $active?: boolean }

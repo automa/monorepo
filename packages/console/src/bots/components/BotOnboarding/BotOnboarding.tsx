@@ -6,7 +6,7 @@ import { Flex, Typography } from 'shared';
 
 import { BotOnboardingProps } from './types';
 
-import { Card, Container } from './BotOnboarding.styles';
+import { BotName, Card, Container, Content } from './BotOnboarding.styles';
 
 // TODO: Add description as tooltip after loading these from DB
 const DEFAULT_BOTS = [
@@ -41,19 +41,15 @@ const BotOnboarding: React.FC<BotOnboardingProps> = ({ ...props }) => {
       <Flex className="gap-2 lg:gap-4">
         {DEFAULT_BOTS.map(({ botOrgName, botName, logo }, index) => (
           <Card key={index} to={`bots/${botOrgName}/${botName}`}>
-            <Flex
-              direction="column"
-              alignItems="center"
-              className="w-32 gap-2 lg:gap-4"
-            >
+            <Content>
               <img src={logo} alt={`${botName} logo`} className="size-16" />
-              <Flex direction="column" className="gap-2">
-                <Typography>{botName}</Typography>
+              <Flex direction="column" className="gap-1 lg:gap-2">
+                <BotName>{botName}</BotName>
                 <Typography variant="xsmall" className="text-neutral-600">
                   by {botOrgName}
                 </Typography>
               </Flex>
-            </Flex>
+            </Content>
           </Card>
         ))}
       </Flex>
