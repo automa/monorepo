@@ -9,6 +9,7 @@ export { default as DropdownMenu } from './DropdownMenu';
 export * from './DropdownMenu';
 export { default as ErrorCard } from './ErrorCard';
 export { default as Flex } from './Flex';
+export { default as HoverCard } from './HoverCard';
 export { default as Input } from './Input';
 export { default as Loader } from './Loader';
 export { default as RoutesLoader } from './RoutesLoader';
