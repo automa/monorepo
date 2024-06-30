@@ -26,6 +26,22 @@ export const Query: QueryResolvers<Context> = {
       },
     });
   },
+  task: async (root, { org_id, id }, { userId, prisma }) => {
+    // Check if the user is a member of the org the task belongs to
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: userId,
+        org_id,
+      },
+    });
+
+    return prisma.tasks.findUniqueOrThrow({
+      where: {
+        id,
+        org_id,
+      },
+    });
+  },
 };
 
 export const Mutation: MutationResolvers<Context> = {
@@ -59,12 +75,14 @@ export const Mutation: MutationResolvers<Context> = {
 };
 
 export const Task: TaskResolvers<Context> = {
-  org: ({ org_id }, args, { prisma }) => {
-    return prisma.orgs.findUniqueOrThrow({
-      where: {
-        id: org_id,
-      },
-    });
+  org: ({ id }, args, { prisma }) => {
+    return prisma.tasks
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .orgs();
   },
   author: ({ id }, args, { prisma }) => {
     return prisma.tasks
@@ -75,5 +93,17 @@ export const Task: TaskResolvers<Context> = {
       })
       .users();
   },
-  // TODO: Implement task items
+  items: ({ id }, args, { prisma }) => {
+    return prisma.tasks
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .task_items({
+        orderBy: {
+          id: 'asc',
+        },
+      });
+  },
 };

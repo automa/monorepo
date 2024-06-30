@@ -21,7 +21,7 @@
     },
     "issue": {
       "id": "f2f72e62-b1a4-46c3-b605-0962d24792d8",
-      "title": "Handle when user revokes Github App",
+      "title": "Delete tokens when user revokes Github App",
       "teamId": "b7e7eb03-9d67-41b3-a268-84c14a6757d6"
     }
   },

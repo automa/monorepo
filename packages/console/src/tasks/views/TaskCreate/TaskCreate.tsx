@@ -64,11 +64,10 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     });
   };
 
-  // TODO: Show toast on error
-
   if (!loading && data) {
-    // TODO: Go to the task view
-    return <Navigate to="../tasks" />;
+    const task = getFragment(TASK_FRAGMENT, data.taskCreate);
+
+    return <Navigate to={`../tasks/${task.id}`} />;
   }
 
   return (

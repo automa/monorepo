@@ -414,6 +414,9 @@ importers:
       crypto-hash:
         specifier: ~3.0.0
         version: 3.0.0
+      date-fns:
+        specifier: ~3.6.0
+        version: 3.6.0
       fontfaceobserver:
         specifier: ~2.3.0
         version: 2.3.0

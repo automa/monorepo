@@ -11,7 +11,8 @@ export const typography = cva('', {
       title1: 'font-display text-5xl font-bold lg:text-6xl',
       title2: 'font-display text-4xl font-bold lg:text-5xl',
       title3: 'font-display text-3xl font-bold lg:text-4xl',
-      title4: 'font-display text-2xl font-semibold tracking-wide lg:text-3xl',
+      title4:
+        'pt-1 font-display text-2xl font-semibold tracking-wide lg:text-3xl',
       title5:
         'pt-0.5 font-display text-xl font-semibold !leading-6 tracking-wide lg:pt-1 lg:text-2xl lg:!leading-7',
       title6:
