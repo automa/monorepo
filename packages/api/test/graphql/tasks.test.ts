@@ -1,7 +1,7 @@
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { assert } from 'chai';
 
-import { orgs, users } from '@automa/prisma';
+import { orgs, tasks, users } from '@automa/prisma';
 
 import { graphql, seedOrgs, seedUsers, server } from '../utils';
 
@@ -262,6 +262,111 @@ suite('graphql tasks', () => {
         });
         assert.isNull(items[1].pull_request);
       });
+    });
+  });
+
+  suite('query task', () => {
+    let task: tasks;
+
+    suiteSetup(async () => {
+      task = await app.prisma.tasks.create({
+        data: {
+          title: 'task-0',
+          org_id: org.id,
+          created_by: user.id,
+        },
+      });
+    });
+
+    suiteTeardown(async () => {
+      await app.prisma.tasks.deleteMany();
+    });
+
+    suite('member org', () => {
+      let response: LightMyRequestResponse;
+
+      setup(async () => {
+        response = await graphql(
+          app,
+          `
+            query task($org_id: Int!, $id: Int!) {
+              task(org_id: $org_id, id: $id) {
+                id
+                title
+                created_at
+                completed_at
+                is_completed
+                author {
+                  id
+                }
+              }
+            }
+          `,
+          {
+            org_id: org.id,
+            id: task.id,
+          },
+        );
+      });
+
+      test('should be successful', () => {
+        assert.equal(response.statusCode, 200);
+
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+      });
+
+      test('should have no errors', async () => {
+        const { errors } = response.json();
+
+        assert.isUndefined(errors);
+      });
+
+      test('should return requested task', async () => {
+        const {
+          data: { task },
+        } = response.json();
+
+        assert.isNumber(task.id);
+        assert.equal(task.title, 'task-0');
+        assert.isString(task.created_at);
+        assert.isNull(task.completed_at);
+        assert.isFalse(task.is_completed);
+        assert.equal(task.author.id, user.id);
+      });
+    });
+
+    test('for non-member org should fail', async () => {
+      const response = await graphql(
+        app,
+        `
+          query task($org_id: Int!, $id: Int!) {
+            task(org_id: $org_id, id: $id) {
+              id
+              title
+            }
+          }
+        `,
+        {
+          org_id: nonMemberOrg.id,
+          id: task.id,
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
     });
   });
 

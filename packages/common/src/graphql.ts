@@ -185,6 +185,7 @@ export type Query = {
   publicBots: Array<PublicBot>;
   repo?: Maybe<Repo>;
   repos: Array<Repo>;
+  task: Task;
   tasks: Array<Task>;
 };
 
@@ -222,6 +223,12 @@ export type QueryRepoArgs = {
 
 
 export type QueryReposArgs = {
+  org_id: Scalars['Int']['input'];
+};
+
+
+export type QueryTaskArgs = {
+  id: Scalars['Int']['input'];
   org_id: Scalars['Int']['input'];
 };
 
@@ -532,6 +539,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType, Partial<QueryPublicBotsArgs>>;
   repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
+  task?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<QueryTaskArgs, 'id' | 'org_id'>>;
   tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTasksArgs, 'org_id'>>;
 };
 

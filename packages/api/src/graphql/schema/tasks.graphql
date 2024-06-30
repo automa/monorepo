@@ -1,5 +1,6 @@
 type Query {
   tasks(org_id: Int!): [Task!]!
+  task(org_id: Int!, id: Int!): Task!
 }
 
 type Mutation {

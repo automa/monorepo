@@ -8,6 +8,10 @@ export const routes = [
     path: '/tasks/new',
   },
   {
+    Component: lazy(() => import('tasks/views/Task')),
+    path: '/tasks/:id',
+  },
+  {
     Component: lazy(() => import('tasks/views/Tasks')),
     path: '/tasks',
   },

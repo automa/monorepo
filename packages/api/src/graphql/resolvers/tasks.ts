@@ -26,6 +26,22 @@ export const Query: QueryResolvers<Context> = {
       },
     });
   },
+  task: async (root, { org_id, id }, { userId, prisma }) => {
+    // Check if the user is a member of the org the task belongs to
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: userId,
+        org_id,
+      },
+    });
+
+    return prisma.tasks.findUniqueOrThrow({
+      where: {
+        id,
+        org_id,
+      },
+    });
+  },
 };
 
 export const Mutation: MutationResolvers<Context> = {
