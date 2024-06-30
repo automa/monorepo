@@ -19,7 +19,7 @@ const Input: React.FC<InputComponentProps> = ({
   return (
     <Flex {...props} fullWidth direction="column" className="gap-2">
       <Label.Root htmlFor={input.name}>
-        <Typography className="font-semibold">
+        <Typography className="font-semibold lg:font-semibold">
           {label}
           {!optional && <span className="text-red-600">&nbsp;*</span>}
         </Typography>

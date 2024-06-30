@@ -7,7 +7,7 @@ import { Badge, Flex, Typography } from 'shared';
 import { BotProps } from './types';
 
 import { BOT_FRAGMENT } from './Bot.queries';
-import { Container, Description } from './Bot.styles';
+import { Container } from './Bot.styles';
 
 const Bot: React.FC<BotProps> = ({ bot: data, ...props }) => {
   const bot = getFragment(BOT_FRAGMENT, data);
@@ -31,7 +31,9 @@ const Bot: React.FC<BotProps> = ({ bot: data, ...props }) => {
               {bot.is_deterministic ? 'Deterministic' : 'Uses AI'}
             </Badge>
           </Flex>
-          <Description>{bot.short_description}</Description>
+          <Typography variant="small" className="text-neutral-600">
+            {bot.short_description}
+          </Typography>
         </Flex>
       </Flex>
     </Container>

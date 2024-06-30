@@ -29,7 +29,7 @@ const Tasks: React.FC<TasksProps> = ({ org }) => {
       ) : !data?.tasks?.length ? (
         <Flex justifyContent="center">No tasks</Flex>
       ) : (
-        <Flex direction="column" className="gap-2">
+        <Flex direction="column" className="gap-4">
           {data.tasks.map((task) => (
             <Task key={task.id} task={task} />
           ))}
