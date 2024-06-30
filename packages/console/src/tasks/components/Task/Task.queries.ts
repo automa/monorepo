@@ -5,15 +5,18 @@ export const TASK_FRAGMENT = gql(`
     id
     title
     created_at
-    # TODO: User fragment for avatar component
+    completed_at
+    is_completed
     author {
+      ...UserAvatarFragment
+    }
+    items {
       id
-      name
-      providers {
-        id
-        provider_type
-        provider_id
-      }
+      type
+      created_at
+      content
+      origin
+      pull_request
     }
   }
 `);

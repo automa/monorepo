@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { provider, users, user_providers, orgs, repos, bot, bots, bot_installations, integration, integrations, tasks } from '@prisma/client';
+import { provider, users, user_providers, orgs, repos, bot, bots, bot_installations, integration, integrations, tasks, task_item, task_items } from '@prisma/client';
 import { public_orgs, public_bots } from './public';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -245,11 +245,30 @@ export type Repo = {
 export type Task = {
   __typename?: 'Task';
   author?: Maybe<User>;
+  completed_at?: Maybe<Scalars['DateTime']['output']>;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
+  is_completed: Scalars['Boolean']['output'];
+  items: Array<TaskItem>;
   org: Org;
   title: Scalars['String']['output'];
 };
+
+export type TaskItem = {
+  __typename?: 'TaskItem';
+  content?: Maybe<Scalars['String']['output']>;
+  created_at: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  origin?: Maybe<Scalars['JSON']['output']>;
+  pull_request?: Maybe<Scalars['JSON']['output']>;
+  type: TaskItemType;
+};
+
+export enum TaskItemType {
+  Message = 'message',
+  Origin = 'origin',
+  PullRequest = 'pull_request'
+}
 
 export type TaskMessageInput = {
   content: Scalars['String']['input'];
@@ -367,6 +386,8 @@ export type ResolversTypes = {
   Repo: ResolverTypeWrapper<repos>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Task: ResolverTypeWrapper<tasks>;
+  TaskItem: ResolverTypeWrapper<task_items>;
+  TaskItemType: ResolverTypeWrapper<task_item>;
   TaskMessageInput: TaskMessageInput;
   User: ResolverTypeWrapper<users>;
   UserProvider: ResolverTypeWrapper<user_providers>;
@@ -393,6 +414,7 @@ export type ResolversParentTypes = {
   Repo: repos;
   String: Scalars['String']['output'];
   Task: tasks;
+  TaskItem: task_items;
   TaskMessageInput: TaskMessageInput;
   User: users;
   UserProvider: user_providers;
@@ -527,12 +549,27 @@ export type RepoResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
   author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  completed_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  is_completed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['TaskItem']>, ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export type TaskItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['TaskItem'] = ResolversParentTypes['TaskItem']> = {
+  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  origin?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  pull_request?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['TaskItemType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TaskItemTypeResolvers = EnumResolverSignature<{ message?: any, origin?: any, pull_request?: any }, ResolversTypes['TaskItemType']>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -565,6 +602,8 @@ export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   Repo?: RepoResolvers<ContextType>;
   Task?: TaskResolvers<ContextType>;
+  TaskItem?: TaskItemResolvers<ContextType>;
+  TaskItemType?: TaskItemTypeResolvers;
   User?: UserResolvers<ContextType>;
   UserProvider?: UserProviderResolvers<ContextType>;
 };

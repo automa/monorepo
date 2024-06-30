@@ -59,12 +59,14 @@ export const Mutation: MutationResolvers<Context> = {
 };
 
 export const Task: TaskResolvers<Context> = {
-  org: ({ org_id }, args, { prisma }) => {
-    return prisma.orgs.findUniqueOrThrow({
-      where: {
-        id: org_id,
-      },
-    });
+  org: ({ id }, args, { prisma }) => {
+    return prisma.tasks
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .orgs();
   },
   author: ({ id }, args, { prisma }) => {
     return prisma.tasks
@@ -75,5 +77,17 @@ export const Task: TaskResolvers<Context> = {
       })
       .users();
   },
-  // TODO: Implement task items
+  items: ({ id }, args, { prisma }) => {
+    return prisma.tasks
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .task_items({
+        orderBy: {
+          id: 'asc',
+        },
+      });
+  },
 };

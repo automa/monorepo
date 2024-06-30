@@ -69,22 +69,29 @@ const create: LinearEventActionHandler<{
       title: issue.title.slice(0, 255),
       task_items: {
         create: [
+          ...(issue.description
+            ? [
+                {
+                  type: task_item.message,
+                  content: issue.description,
+                },
+              ]
+            : []),
           {
-            type: task_item.message,
-            content: [issue.title, issue.description].join('\n\n'),
+            type: task_item.origin,
+            origin: {
+              integration: integration.linear,
+              organizationId: body.organizationId,
+              teamId: body.data.issue.teamId,
+              userId: body.actor.id,
+              issueId: issue.id,
+              issueIdentifier: issue.identifier,
+              issueTitle: issue.title,
+              commentId: body.data.id,
+              parentId: body.data.parentId,
+              url: body.url,
+            },
           },
-          // TODO: Figure out how to link integration entities to tasks
-          // {
-          //   type: task_item.integration,
-          //   integration_type: integration.linear,
-          //   integration_config: {
-          //     organizationId: body.organizationId,
-          //     issueId: body.data.issue.id,
-          //     teamId: body.data.issue.teamId,
-          //     commentId: body.data.id,
-          //     url: body.url,
-          //   },
-          // },
         ],
       },
     },

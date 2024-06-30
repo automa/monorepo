@@ -26,6 +26,8 @@ const config: CodegenConfig = {
           IntegrationType: '@prisma/client#integration',
           Integration: '@prisma/client#integrations',
           Task: '@prisma/client#tasks',
+          TaskItemType: '@prisma/client#task_item',
+          TaskItem: '@prisma/client#task_items',
         },
       },
     },

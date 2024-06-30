@@ -49,6 +49,7 @@ suite('linear hook Comment event', () => {
 
     issueStub = sandbox.stub(LinearClient.prototype, 'issue').resolves({
       id: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+      identifier: 'PRO-93',
       title: 'Delete tokens when user revokes Github App',
       description:
         '- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
@@ -90,11 +91,25 @@ suite('linear hook Comment event', () => {
         },
       });
 
-      assert.equal(taskItems.length, 1);
+      assert.equal(taskItems.length, 2);
       assert.deepOwnInclude(taskItems[0], {
         type: 'message',
         content:
-          'Delete tokens when user revokes Github App\n\n- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
+          '- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
+      });
+      assert.deepOwnInclude(taskItems[1], {
+        type: 'origin',
+        origin: {
+          integration: 'linear',
+          organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+          teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+          userId: '5611201a-9594-4407-9490-731894376791',
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          issueIdentifier: 'PRO-93',
+          issueTitle: 'Delete tokens when user revokes Github App',
+          commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+          url: 'https://linear.app/automa/issue/PRO-93/handle-when-user-revokes-github-app#comment-a41c315a',
+        },
       });
     });
 
@@ -143,11 +158,26 @@ suite('linear hook Comment event', () => {
         },
       });
 
-      assert.equal(taskItems.length, 1);
+      assert.equal(taskItems.length, 2);
       assert.deepOwnInclude(taskItems[0], {
         type: 'message',
         content:
-          'Delete tokens when user revokes Github App\n\n- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
+          '- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
+      });
+      assert.deepOwnInclude(taskItems[1], {
+        type: 'origin',
+        origin: {
+          integration: 'linear',
+          organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+          teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+          userId: '5611201a-9594-4407-9490-731894376791',
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          issueIdentifier: 'PRO-93',
+          issueTitle: 'Delete tokens when user revokes Github App',
+          commentId: '9ab4e3ef-0728-4972-a7a8-01775a9a51b6',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+          url: 'https://linear.app/automa/issue/PRO-93/handle-when-user-revokes-github-app#comment-9ab4e3ef',
+        },
       });
     });
 

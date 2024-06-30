@@ -10,9 +10,29 @@ type Task {
   id: Int!
   title: String!
   created_at: DateTime!
+  completed_at: DateTime
+  is_completed: Boolean!
 
   org: Org!
   author: User
+
+  items: [TaskItem!]!
+}
+
+enum TaskItemType {
+  message
+  origin
+  pull_request
+}
+
+type TaskItem {
+  id: Int!
+  type: TaskItemType!
+  created_at: DateTime!
+
+  content: String
+  origin: JSON
+  pull_request: JSON
 }
 
 input TaskMessageInput {
