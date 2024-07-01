@@ -4,8 +4,11 @@ import {
   taskMessageSchema,
   TaskResolvers,
 } from '@automa/common';
+import { task_item } from '@automa/prisma';
 
 import { Context } from '../types';
+
+import { taskCreate } from '../../db';
 
 export const Query: QueryResolvers<Context> = {
   tasks: async (root, { org_id }, { userId, prisma }) => {
@@ -56,21 +59,22 @@ export const Mutation: MutationResolvers<Context> = {
 
     const data = taskMessageSchema.parse(input);
 
-    return prisma.tasks.create({
-      data: {
+    return taskCreate(
+      { prisma },
+      {
         org_id,
         title: data.content.slice(0, 255),
         created_by: userId,
         task_items: {
           create: [
             {
-              type: 'message',
-              content: data.content,
+              type: task_item.message,
+              data: { content: data.content },
             },
           ],
         },
       },
-    });
+    );
   },
 };
 

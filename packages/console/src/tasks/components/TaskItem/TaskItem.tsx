@@ -12,12 +12,12 @@ import { ActivityLink } from './TaskItem.styles';
 
 const TaskItem: React.FC<TaskItemProps> = ({ taskItem }) => {
   if (taskItem.type === TaskItemType.Message) {
-    return <div className="px-1 py-2">{taskItem.content}</div>;
+    return <div className="px-1 py-2">{taskItem.data.content}</div>;
   }
 
   if (taskItem.type === TaskItemType.Origin) {
     const definition =
-      originDefinitions[taskItem.origin.integration as IntegrationType];
+      originDefinitions[taskItem.data.integration as IntegrationType];
 
     if (!definition) {
       return null;
@@ -27,8 +27,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem }) => {
       <Flex alignItems="center" className="gap-2 text-neutral-500">
         <PlusCircle className="size-4" />
         <Typography variant="small">Task created from</Typography>
-        <Anchor href={definition.link(taskItem.origin)}>
-          <ActivityLink>{definition.title(taskItem.origin)}</ActivityLink>
+        <Anchor href={definition.link(taskItem.data)}>
+          <ActivityLink>{definition.title(taskItem.data)}</ActivityLink>
         </Anchor>
       </Flex>
     );

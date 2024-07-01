@@ -29,7 +29,7 @@ VALUES
   (1, 'Update the homepage headline', 1, NOW(), NULL),
   (1, 'Track "User Login Attempted" event', NULL, NOW(), NULL);
 
-INSERT INTO public.task_items (task_id, created_at, type, content, origin, pull_request)
+INSERT INTO public.task_items (task_id, created_at, type, data)
 VALUES
-  (3, NOW(), 'message', 'In `AuthLogin` component, when the user clicks on any of the login buttons, we want to send the "User Login Attempted" analytic event to track that the user has attempted a login.', NULL, NULL),
-  (3, NOW(), 'origin', NULL, '{"url": "https://linear.app/automa-demo/issue/DEMO-11/track-user-login-attempted-event#comment-661237eb", "teamId": "7b9f50fa-75b4-43bd-9a0a-0e0994f0ccd9", "userId": "db18fe9b-d550-44c5-816a-49ac71fccce9", "issueId": "cfb003a0-5c42-48da-b34e-ebbacb9282bb", "commentId": "661237eb-3f3d-4bb8-ad22-9245aff0a5d9", "issueTitle": "Track \"User Logged In\" event", "integration": "linear", "organizationId": "aa0479aa-f603-4508-8669-e283bca5a17f", "issueIdentifier": "DEMO-11"}', NULL);
+  (3, NOW(), 'message', '{"content":"In `AuthLogin` component, when the user clicks on any of the login buttons, we want to send the \"User Login Attempted\" analytic event to track that the user has attempted a login."}'),
+  (3, NOW(), 'origin', '{"integration": "linear", "url": "https://linear.app/automa-demo/issue/DEMO-11/track-user-login-attempted-event#comment-661237eb", "teamId": "7b9f50fa-75b4-43bd-9a0a-0e0994f0ccd9", "userId": "db18fe9b-d550-44c5-816a-49ac71fccce9", "issueId": "cfb003a0-5c42-48da-b34e-ebbacb9282bb", "commentId": "661237eb-3f3d-4bb8-ad22-9245aff0a5d9", "issueTitle": "Track \"User Logged In\" event", "organizationId": "aa0479aa-f603-4508-8669-e283bca5a17f", "organizationName": "Automa", "issueIdentifier": "DEMO-11"}');

@@ -4,6 +4,8 @@ import { integration, task_item } from '@automa/prisma';
 
 import { env } from '../../env';
 
+import { taskCreate } from '../../db';
+
 import { LinearEventActionHandler } from './types';
 
 const automaRegex = /^\/automa\s?/;
@@ -61,39 +63,41 @@ const create: LinearEventActionHandler<{
   });
 
   // Retrieve the issue
-  const issue = await client.issue(body.data.issue.id);
+  const [issue, org] = await Promise.all([
+    client.issue(body.data.issue.id),
+    client.organization,
+  ]);
 
-  const task = await app.prisma.tasks.create({
-    data: {
-      org_id: connection.org_id,
-      title: issue.title.slice(0, 255),
-      task_items: {
-        create: [
-          ...(issue.description
-            ? [
-                {
-                  type: task_item.message,
-                  content: issue.description,
-                },
-              ]
-            : []),
-          {
-            type: task_item.origin,
-            origin: {
-              integration: integration.linear,
-              organizationId: body.organizationId,
-              teamId: body.data.issue.teamId,
-              userId: body.actor.id,
-              issueId: issue.id,
-              issueIdentifier: issue.identifier,
-              issueTitle: issue.title,
-              commentId: body.data.id,
-              parentId: body.data.parentId,
-              url: body.url,
-            },
+  const task = await taskCreate(app, {
+    org_id: connection.org_id,
+    title: issue.title.slice(0, 255),
+    task_items: {
+      create: [
+        ...(issue.description
+          ? [
+              {
+                type: task_item.message,
+                data: { content: issue.description },
+              },
+            ]
+          : []),
+        {
+          type: task_item.origin,
+          data: {
+            integration: integration.linear,
+            organizationId: body.organizationId,
+            organizationName: org.name,
+            teamId: body.data.issue.teamId,
+            userId: body.actor.id,
+            issueId: issue.id,
+            issueIdentifier: issue.identifier,
+            issueTitle: issue.title,
+            commentId: body.data.id,
+            parentId: body.data.parentId,
+            url: body.url,
           },
-        ],
-      },
+        },
+      ],
     },
   });
 

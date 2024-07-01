@@ -12,7 +12,7 @@ const meta = {
       id: 1,
       type: TaskItemType.Message,
       created_at: '2024-05-16T09:04:04.629Z',
-      content: 'Hello, world!',
+      data: { content: 'Hello, world!' },
     },
   },
 } satisfies Meta<typeof TaskItem>;

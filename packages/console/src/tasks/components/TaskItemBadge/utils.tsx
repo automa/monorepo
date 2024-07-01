@@ -28,7 +28,7 @@ export const definitions: Partial<
         <Flex alignItems="center" className="gap-1">
           <LinearLogo className="size-3" />
           <Typography variant="xsmall" className="text-neutral-800">
-            {data.issueIdentifier}
+            {data.organizationName}
           </Typography>
         </Flex>
         <Typography variant="xsmall" className="text-neutral-600">

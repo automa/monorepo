@@ -183,12 +183,12 @@ suite('graphql tasks', () => {
             {
               task_id: task.id,
               type: 'message',
-              content: 'task-3',
+              data: { content: 'task-3' },
             },
             {
               task_id: task.id,
               type: 'origin',
-              origin: {
+              data: {
                 integration: 'linear',
                 issueIdentifier: 'DEMO-123',
                 issueTitle: 'Demo Issue',
@@ -206,10 +206,8 @@ suite('graphql tasks', () => {
                 title
                 items {
                   type
+                  data
                   created_at
-                  content
-                  origin
-                  pull_request
                 }
               }
             }
@@ -248,19 +246,15 @@ suite('graphql tasks', () => {
 
         assert.equal(items[0].type, 'message');
         assert.isString(items[0].created_at);
-        assert.equal(items[0].content, 'task-3');
-        assert.isNull(items[0].origin);
-        assert.isNull(items[0].pull_request);
+        assert.deepEqual(items[0].data, { content: 'task-3' });
 
         assert.equal(items[1].type, 'origin');
         assert.isString(items[1].created_at);
-        assert.isNull(items[1].content);
-        assert.deepEqual(items[1].origin, {
+        assert.deepEqual(items[1].data, {
           integration: 'linear',
           issueIdentifier: 'DEMO-123',
           issueTitle: 'Demo Issue',
         });
-        assert.isNull(items[1].pull_request);
       });
     });
   });
@@ -423,10 +417,10 @@ suite('graphql tasks', () => {
         const [taskItem] = await app.prisma.task_items.findMany();
 
         assert.equal(taskItem.type, 'message');
-        assert.equal(
-          taskItem.content,
-          'Send an analytics event when user clicks on "Create Task" button',
-        );
+        assert.deepEqual(taskItem.data, {
+          content:
+            'Send an analytics event when user clicks on "Create Task" button',
+        });
       });
     });
 

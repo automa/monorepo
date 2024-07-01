@@ -263,11 +263,9 @@ export type Task = {
 
 export type TaskItem = {
   __typename?: 'TaskItem';
-  content?: Maybe<Scalars['String']['output']>;
   created_at: Scalars['DateTime']['output'];
+  data?: Maybe<Scalars['JSON']['output']>;
   id: Scalars['Int']['output'];
-  origin?: Maybe<Scalars['JSON']['output']>;
-  pull_request?: Maybe<Scalars['JSON']['output']>;
   type: TaskItemType;
 };
 
@@ -568,11 +566,9 @@ export type TaskResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type TaskItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['TaskItem'] = ResolversParentTypes['TaskItem']> = {
-  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  data?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  origin?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
-  pull_request?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['TaskItemType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
