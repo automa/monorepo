@@ -41,19 +41,18 @@ model orgs {
 }
 
 model repos {
-  id                            Int                             @id @default(autoincrement())
-  org_id                        Int
-  name                          String                          @db.Citext
-  provider_id                   String                          @db.VarChar(255)
-  is_private                    Boolean                         @default(false)
-  is_archived                   Boolean                         @default(false)
-  has_installation              Boolean                         @default(false)
-  created_at                    DateTime                        @default(now()) @db.Timestamp(6)
-  last_commit_synced            String?                         @db.VarChar(40)
-  bot_installation_repositories bot_installation_repositories[]
-  repo_settings                 repo_settings[]
-  orgs                          orgs                            @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  user_repos                    user_repos[]
+  id                 Int             @id @default(autoincrement())
+  org_id             Int
+  name               String          @db.Citext
+  provider_id        String          @db.VarChar(255)
+  is_private         Boolean         @default(false)
+  is_archived        Boolean         @default(false)
+  has_installation   Boolean         @default(false)
+  created_at         DateTime        @default(now()) @db.Timestamp(6)
+  last_commit_synced String?         @db.VarChar(40)
+  repo_settings      repo_settings[]
+  orgs               orgs            @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_repos         user_repos[]
 
   @@unique([org_id, provider_id])
 }
@@ -130,38 +129,23 @@ model repo_settings {
 }
 
 model bot_installations {
-  id                            Int                             @id @default(autoincrement())
-  bot_id                        Int
-  org_id                        Int
-  on_all_repos                  Boolean                         @default(true)
-  created_at                    DateTime                        @default(now()) @db.Timestamp(6)
-  bot_installation_repositories bot_installation_repositories[]
-  bots                          bots                            @relation(fields: [bot_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  orgs                          orgs                            @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id         Int      @id @default(autoincrement())
+  bot_id     Int
+  org_id     Int
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  bots       bots     @relation(fields: [bot_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  orgs       orgs     @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([bot_id, org_id])
 }
 
-model bot_installation_repositories {
-  id                  Int               @id @default(autoincrement())
-  bot_installation_id Int
-  repo_id             Int
-  created_at          DateTime          @default(now()) @db.Timestamp(6)
-  bot_installations   bot_installations @relation(fields: [bot_installation_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  repos               repos             @relation(fields: [repo_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@unique([bot_installation_id, repo_id])
-}
-
 model task_items {
-  id           Int       @id @default(autoincrement())
-  task_id      Int
-  type         task_item
-  created_at   DateTime  @default(now()) @db.Timestamp(6)
-  content      String?
-  origin       Json?
-  pull_request Json?
-  tasks        tasks     @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id         Int       @id @default(autoincrement())
+  task_id    Int
+  type       task_item
+  data       Json
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  tasks      tasks     @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([task_id, created_at])
 }

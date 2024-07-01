@@ -6,4 +6,4 @@ export const Container = tw.div`z-10`;
 
 export const Content = tw(Flex).attrs({
   alignItems: 'center',
-})`gap-1 rounded-lg border border-neutral-400 px-2 py-1 hover:border-neutral-700 *:hover:!text-neutral-800`;
+})`gap-1 rounded-lg ring-1 ring-inset ring-neutral-400 px-2 py-1 hover:ring-neutral-600 *:hover:!text-neutral-800`;

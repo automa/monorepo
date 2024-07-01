@@ -109,7 +109,6 @@ CREATE TABLE public.bots (
   -- TODO: CHECK (type = 'webhook' AND webhook_url IS NOT NULL)
   CHECK (published_at IS NULL OR (
     published_at IS NOT NULL AND
-    short_description IS NOT NULL AND
     description IS NOT NULL AND
     homepage IS NOT NULL
   ))
@@ -128,17 +127,8 @@ CREATE TABLE public.bot_installations (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   bot_id INTEGER NOT NULL REFERENCES public.bots(id) ON DELETE CASCADE,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
-  on_all_repos BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   UNIQUE (bot_id, org_id)
-);
-
-CREATE TABLE public.bot_installation_repositories (
-  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  bot_installation_id INTEGER NOT NULL REFERENCES public.bot_installations(id) ON DELETE CASCADE,
-  repo_id INTEGER NOT NULL REFERENCES public.repos(id) ON DELETE CASCADE,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  UNIQUE (bot_installation_id, repo_id)
 );
 
 CREATE TYPE public.integration AS ENUM ('github', 'linear', 'slack', 'jira');
@@ -173,15 +163,8 @@ CREATE TABLE public.task_items (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   task_id INTEGER NOT NULL REFERENCES public.tasks(id) ON DELETE CASCADE,
   type public.task_item NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  content TEXT,
-  origin JSONB,
-  pull_request JSONB,
-  CHECK (
-    (type = 'message' AND content IS NOT NULL AND origin IS NULL AND pull_request IS NULL)
-    OR (type = 'origin' AND content IS NULL AND origin IS NOT NULL AND pull_request IS NULL)
-    OR (type = 'pull_request' AND content IS NULL AND origin IS NULL AND pull_request IS NOT NULL)
-  )
+  data JSONB NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX task_items_task_id_created_at_idx

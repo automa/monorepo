@@ -29,11 +29,8 @@ enum TaskItemType {
 type TaskItem {
   id: Int!
   type: TaskItemType!
+  data: JSON
   created_at: DateTime!
-
-  content: String
-  origin: JSON
-  pull_request: JSON
 }
 
 input TaskMessageInput {

@@ -13,10 +13,8 @@ export const TASK_FRAGMENT = gql(`
     items {
       id
       type
+      data
       created_at
-      content
-      origin
-      pull_request
     }
   }
 `);

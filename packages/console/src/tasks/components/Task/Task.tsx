@@ -38,8 +38,8 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
         <Flex alignItems="center" className="gap-2">
           {task.items
             .filter(({ type }) => type === 'origin')
-            .map(({ id, origin }) => (
-              <TaskItemBadge key={id} data={origin} />
+            .map(({ id, data }) => (
+              <TaskItemBadge key={id} data={data} />
             ))}
           <Tooltip
             body={`Created at ${format(
