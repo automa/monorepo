@@ -1,5 +1,5 @@
-import { combineSlices, configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
+import { combineSlices, configureStore } from '@reduxjs/toolkit';
 
 import { isProduction } from 'env';
 
