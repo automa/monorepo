@@ -4,7 +4,7 @@ import Manifesto from './manifesto.mdx';
 
 import { Container, Title } from './page.styles';
 
-const title = "Developers don't have to do grunt work";
+const title = 'Less grunt work, more great work';
 
 export const metadata = {
   title: 'Automa ‒ Manifesto',

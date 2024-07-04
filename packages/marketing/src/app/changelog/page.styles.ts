@@ -11,4 +11,4 @@ export const Header = tw(Typography).attrs({
 
 export const Timestamp = tw(
   Typography,
-)`w-full lg:w-48 min-w-48 text-gray-700 mb-4 lg:mb-0 lg:mt-1 hover:underline`;
+)`w-full lg:w-48 min-w-48 text-gray-700 mb-4 lg:mb-0 lg:mt-2 hover:underline`;
