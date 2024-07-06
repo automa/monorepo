@@ -1,76 +1,69 @@
-import { ReactNode, useEffect, useMemo } from 'react';
+import { DependencyList, ReactNode, useMemo } from 'react';
+import { HotkeyCallback, Options, useHotkeys } from 'react-hotkeys-hook';
 
 import { tw } from 'theme';
 
 import { Flex, Tooltip } from 'shared/components';
 
-export type Keybinding = (
-  | {
-      key: string;
-      mod?: boolean;
-      alt?: boolean;
-      shift?: boolean;
-    }
-  | {
-      key: string[];
-      mod?: never;
-      alt?: never;
-      shift?: never;
-    }
-) & {
+export type Keybinding = {
+  key: string;
+  mod?: boolean;
+  alt?: boolean;
+  shift?: boolean;
   description: string;
-  action: (e: KeyboardEvent) => void;
-  preventDefault?: boolean;
+  action: HotkeyCallback;
 };
 
 const KeySymbol = tw.kbd`min-w-4 rounded p-0.5 text-center`;
 
-const useKeybindings = (bindings: Keybinding[]) => {
-  useEffect(() => {
-    const handle = (event: KeyboardEvent) => {
-      for (const binding of bindings) {
-        const {
-          key,
-          mod = false,
-          alt = false,
-          shift = false,
-          action,
-          preventDefault = false,
-        } = binding;
+const useKeybindings = (
+  bindings: Keybinding[],
+  options: Options | DependencyList = {},
+  dependencies: DependencyList = [],
+) => {
+  if (Array.isArray(options)) {
+    dependencies = options;
+    options = {};
+  }
 
-        if (Array.isArray(key)) {
-          continue;
-        }
+  const keybindings = useMemo(
+    () => (Array.isArray(bindings) ? bindings : [bindings]),
+    [bindings],
+  );
 
-        const modPressed = event.ctrlKey || event.metaKey;
+  const shortcuts = useMemo(
+    () =>
+      keybindings.map(({ mod, alt, shift, key }) =>
+        [mod && 'mod', alt && 'alt', shift && 'shift', key]
+          .filter(Boolean)
+          .join('+'),
+      ),
+    [keybindings],
+  );
 
-        if (
-          key.toLowerCase() === event.key.toLowerCase() &&
-          mod === modPressed &&
-          alt === event.altKey &&
-          shift === event.shiftKey
-        ) {
-          if (preventDefault) {
-            event.preventDefault();
-          }
+  const ref = useHotkeys(
+    shortcuts,
+    (event, handler) => {
+      const shortcut = keybindings.find(
+        ({ mod = false, alt = false, shift = false, key }) =>
+          handler.mod === mod &&
+          handler.alt === alt &&
+          handler.shift === shift &&
+          handler.keys?.join('') === key,
+      );
 
-          event.stopPropagation();
-
-          action(event);
-          return;
-        }
+      if (shortcut) {
+        shortcut.action(event, handler);
       }
-    };
+    },
+    options,
+    [shortcuts, ...dependencies],
+  );
 
-    window.addEventListener('keydown', handle);
-
-    return () => window.removeEventListener('keydown', handle);
-  }, [bindings]);
-
-  const tooltips = useMemo(() => {
+  const tooltip = useMemo(() => {
     const isMac = navigator.platform.toLowerCase().includes('mac');
 
-    return bindings.map((binding) => {
+    const contents = bindings.map((binding, index) => {
       const {
         key,
         mod = false,
@@ -78,10 +71,6 @@ const useKeybindings = (bindings: Keybinding[]) => {
         shift = false,
         description,
       } = binding;
-
-      if (Array.isArray(key)) {
-        return () => null;
-      }
 
       const modSymbol = mod ? (
         <KeySymbol>{isMac ? '⌘' : 'Ctrl'}</KeySymbol>
@@ -96,7 +85,7 @@ const useKeybindings = (bindings: Keybinding[]) => {
       const keyText = key.toLowerCase();
       let keyLabel: string;
 
-      if (keyText === ' ') {
+      if (keyText === 'space') {
         keyLabel = '␣';
       } else if (keyText === 'enter') {
         keyLabel = '⏎';
@@ -104,13 +93,13 @@ const useKeybindings = (bindings: Keybinding[]) => {
         keyLabel = '⌫';
       } else if (keyText === 'tab') {
         keyLabel = '⇥';
-      } else if (keyText === 'arrowup') {
+      } else if (keyText === 'up') {
         keyLabel = '↑';
-      } else if (keyText === 'arrowdown') {
+      } else if (keyText === 'down') {
         keyLabel = '↓';
-      } else if (keyText === 'arrowleft') {
+      } else if (keyText === 'left') {
         keyLabel = '←';
-      } else if (keyText === 'arrowright') {
+      } else if (keyText === 'right') {
         keyLabel = '→';
       } else if (keyText === 'delete') {
         keyLabel = 'Del';
@@ -120,30 +109,37 @@ const useKeybindings = (bindings: Keybinding[]) => {
         keyLabel = keyText.toUpperCase();
       }
 
-      const KeyTooltip = ({ children }: { children: ReactNode }) => (
-        <Tooltip
-          body={
-            <Flex alignItems="center">
-              <Flex className="mr-1 gap-1">
-                {modSymbol}
-                {altSymbol}
-                {shiftSymbol}
-                <KeySymbol>{keyLabel}</KeySymbol>
-              </Flex>
-              to {description}
-            </Flex>
-          }
-        >
-          {children}
-        </Tooltip>
+      return (
+        <Flex key={index} alignItems="center">
+          <Flex className="mr-1 gap-1">
+            {modSymbol}
+            {altSymbol}
+            {shiftSymbol}
+            <KeySymbol>{keyLabel}</KeySymbol>
+          </Flex>
+          to {description}
+        </Flex>
       );
-
-      return KeyTooltip;
     });
+
+    const KeyTooltip = ({ children }: { children: ReactNode }) => (
+      <Tooltip
+        body={
+          <Flex direction="column" className="gap-2">
+            {contents}
+          </Flex>
+        }
+      >
+        {children}
+      </Tooltip>
+    );
+
+    return KeyTooltip;
   }, [bindings]);
 
   return {
-    tooltips,
+    Tooltip: tooltip,
+    ref,
   };
 };
 
