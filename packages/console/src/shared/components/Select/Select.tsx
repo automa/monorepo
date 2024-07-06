@@ -4,11 +4,11 @@ import * as Label from '@radix-ui/react-label';
 import * as SelectPrimitive from '@radix-ui/react-select';
 
 import Flex from '../Flex';
+import Typography from '../Typography';
 
 import { SelectComponentProps } from './types';
 
 import {
-  Container,
   Content,
   Group,
   GroupLabel,
@@ -35,10 +35,12 @@ const Select: React.FC<SelectComponentProps> = ({
   ...props
 }) => {
   return (
-    <Container {...props}>
+    <Flex {...props} fullWidth direction="column" className="gap-2">
       <Label.Root htmlFor={select.name}>
-        {label}
-        {!optional && '*'}
+        <Typography className="font-semibold lg:font-semibold">
+          {label}
+          {!optional && <span className="text-red-600">&nbsp;*</span>}
+        </Typography>
       </Label.Root>
       <SelectPrimitive.Root
         name={select.name}
@@ -51,7 +53,7 @@ const Select: React.FC<SelectComponentProps> = ({
           })
         }
       >
-        <Trigger>
+        <Trigger $error={error} disabled={select.disabled}>
           <Flex
             inline
             fullWidth
@@ -66,23 +68,29 @@ const Select: React.FC<SelectComponentProps> = ({
         </Trigger>
         <SelectPrimitive.Portal>
           <Content
+            $error={error}
             position="popper"
+            collisionPadding={0}
             {...{ side, sideOffset, align, alignOffset }}
           >
             <ScrollUpButton>
               <CaretUp />
             </ScrollUpButton>
-            <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+            <SelectPrimitive.Viewport>
+              <Flex direction="column" className="gap-1">
+                {children}
+              </Flex>
+            </SelectPrimitive.Viewport>
             <ScrollDownButton>
               <CaretDown />
             </ScrollDownButton>
           </Content>
         </SelectPrimitive.Portal>
       </SelectPrimitive.Root>
-      <Text variant="small" $error={error}>
+      <Text variant="xsmall" $error={error}>
         {error ? error : description}
       </Text>
-    </Container>
+    </Flex>
   );
 };
 
@@ -100,10 +108,12 @@ export const SelectItem: React.FC<SelectPrimitive.SelectItemProps> = ({
 }) => {
   return (
     <Item {...props}>
-      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-      <SelectPrimitive.ItemIndicator>
-        <Check />
-      </SelectPrimitive.ItemIndicator>
+      <Flex alignItems="center" justifyContent="space-between" fullWidth>
+        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+        <SelectPrimitive.ItemIndicator>
+          <Check />
+        </SelectPrimitive.ItemIndicator>
+      </Flex>
     </Item>
   );
 };
