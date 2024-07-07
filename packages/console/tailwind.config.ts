@@ -44,6 +44,9 @@ const config: Config = {
       height: {
         '0.25': '0.0625rem',
       },
+      padding: {
+        'cal-sans': '0.1em',
+      },
       width: {
         '0.25': '0.0625rem',
         '180': '45rem',

@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const button = cva(
-  'inline-flex cursor-pointer items-center whitespace-nowrap rounded-md text-sm font-semibold shadow transition-colors focus-visible:outline-none',
+  'inline-flex cursor-pointer items-center whitespace-nowrap rounded-md shadow transition-colors focus-visible:outline-none',
   {
     variants: {
       variant: {
@@ -11,9 +11,9 @@ export const button = cva(
         ghost: 'text-primary shadow-none hover:bg-primary/10',
       },
       size: {
-        small: 'h-8 px-3 text-xs font-bold',
+        small: 'h-8 px-3',
         medium: 'h-9 px-4 py-2',
-        large: 'h-10 px-4 text-base font-normal',
+        large: 'h-10 px-4',
       },
     },
     defaultVariants: {

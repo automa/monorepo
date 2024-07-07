@@ -29,7 +29,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <Link href="/">
               <Flex className="gap-2 py-4">
                 <Image src={Logo} alt="logo" className="size-8" />
-                <Typography className="text-2xl font-bold lg:text-2xl">
+                <Typography className="text-2xl !font-bold lg:text-2xl">
                   Automa
                 </Typography>
               </Flex>

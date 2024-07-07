@@ -16,7 +16,7 @@ const config: Config = {
         accent: '#DB475E',
       },
       fontFamily: {
-        sans: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
+        sans: ['var(--font-manrope)', ...defaultTheme.fontFamily.sans],
         display: ['var(--font-cal-sans)', ...defaultTheme.fontFamily.sans],
       },
       fontSize: {
@@ -24,6 +24,9 @@ const config: Config = {
       },
       height: {
         '0.25': '0.0625rem',
+      },
+      padding: {
+        'cal-sans': '0.1em',
       },
       width: {
         '0.25': '0.0625rem',
