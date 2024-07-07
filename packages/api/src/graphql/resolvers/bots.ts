@@ -52,6 +52,7 @@ export const Query: QueryResolvers<Context> = {
               ]
             : []),
         ],
+        type: filter?.type ?? undefined,
         is_deterministic: filter?.is_deterministic ?? undefined,
       },
       orderBy: {
