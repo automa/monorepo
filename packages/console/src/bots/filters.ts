@@ -1,6 +1,24 @@
+import { BotType } from '@automa/common';
+
 import { FiltersDefinition, FilterType } from 'shared';
 
 export const publicBotsfilters: FiltersDefinition = {
+  type: {
+    // TODO: Convert to enum filter
+    type: FilterType.Boolean,
+    false: {
+      label: 'Event',
+      params: {
+        type: BotType.Event,
+      },
+    },
+    true: {
+      label: 'Scheduled',
+      params: {
+        type: BotType.Scheduled,
+      },
+    },
+  },
   ai: {
     type: FilterType.Boolean,
     false: {

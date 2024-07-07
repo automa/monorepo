@@ -32,6 +32,7 @@ type PublicBot implements BotBase @inherits(type: "BotBase") {
 }
 
 input PublicBotsFilter {
+  type: BotType
   is_deterministic: Boolean
 }
 

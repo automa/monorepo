@@ -173,6 +173,7 @@ export type PublicBotInstallationArgs = {
 
 export type PublicBotsFilter = {
   is_deterministic?: InputMaybe<Scalars['Boolean']['input']>;
+  type?: InputMaybe<BotType>;
 };
 
 export type PublicOrg = {

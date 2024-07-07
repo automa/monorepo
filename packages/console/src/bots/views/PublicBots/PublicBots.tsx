@@ -33,7 +33,13 @@ const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
         </Banner>
       )}
       <Flex direction="column" className="gap-8">
-        <Flex justifyContent="flex-end">
+        <Flex justifyContent="flex-end" className="gap-4">
+          <ToggleGroup
+            optional
+            defaultValue={filterValues.type}
+            options={filterOptions.type}
+            onValueChange={filterChangeFns.type}
+          />
           <ToggleGroup
             optional
             defaultValue={filterValues.ai}
