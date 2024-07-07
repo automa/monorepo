@@ -224,13 +224,19 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
           </Flex>
           <Flex>
             <Details>
-              <Flex direction="column" className="gap-2">
-                <DetailsTitle>About</DetailsTitle>
-                {bot.homepage && (
+              {bot.homepage && (
+                <Flex direction="column" className="gap-2">
+                  <DetailsTitle>About</DetailsTitle>
                   <Typography href={bot.homepage} blank variant="small">
                     {bot.homepage}
                   </Typography>
-                )}
+                </Flex>
+              )}
+              <Flex direction="column" className="gap-2">
+                <DetailsTitle>Type</DetailsTitle>
+                <Typography variant="small">
+                  {bot.type.charAt(0).toUpperCase() + bot.type.slice(1)}
+                </Typography>
               </Flex>
               <Flex direction="column" className="gap-2">
                 <DetailsTitle>Category</DetailsTitle>

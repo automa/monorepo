@@ -280,7 +280,7 @@ suite('graphql botInstallations', () => {
             botInstallations(org_id: $org_id) {
               id
               bot {
-                type
+                webhook_url
               }
             }
           }
@@ -302,7 +302,7 @@ suite('graphql botInstallations', () => {
       assert.lengthOf(errors, 1);
       assert.include(
         errors[0].message,
-        'Cannot query field "type" on type "PublicBot".',
+        'Cannot query field "webhook_url" on type "PublicBot".',
       );
       assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
     });

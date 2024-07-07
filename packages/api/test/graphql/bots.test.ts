@@ -120,7 +120,7 @@ suite('graphql bots', () => {
         assert.equal(bots[0].short_description, 'Bot 0');
         assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
         assert.equal(bots[0].description, 'Bot 0 long description');
-        assert.equal(bots[0].type, 'webhook');
+        assert.equal(bots[0].type, 'event');
         assert.equal(bots[0].webhook_url, 'https://example.com/webhook/0');
         assert.equal(bots[0].homepage, 'https://example.com');
         assert.isString(bots[0].published_at);
@@ -134,7 +134,7 @@ suite('graphql bots', () => {
         assert.equal(bots[1].short_description, 'Bot 3');
         assert.equal(bots[1].image_url, 'https://example.com/image/3.png');
         assert.equal(bots[1].description, 'Bot 3 long description');
-        assert.equal(bots[1].type, 'webhook');
+        assert.equal(bots[1].type, 'event');
         assert.equal(bots[1].webhook_url, 'https://example.com/webhook/3');
         assert.isNull(bots[1].homepage);
         assert.isNull(bots[1].published_at);
@@ -404,7 +404,7 @@ suite('graphql bots', () => {
           query publicBots {
             publicBots {
               id
-              type
+              webhook_url
             }
           }
         `,
@@ -422,7 +422,7 @@ suite('graphql bots', () => {
       assert.lengthOf(errors, 1);
       assert.include(
         errors[0].message,
-        'Cannot query field "type" on type "PublicBot".',
+        'Cannot query field "webhook_url" on type "PublicBot".',
       );
       assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
     });
@@ -586,7 +586,7 @@ suite('graphql bots', () => {
           query publicBot($org_name: String!, $name: String!) {
             publicBot(org_name: $org_name, name: $name) {
               id
-              type
+              webhook_url
             }
           }
         `,
@@ -608,7 +608,7 @@ suite('graphql bots', () => {
       assert.lengthOf(errors, 1);
       assert.include(
         errors[0].message,
-        'Cannot query field "type" on type "PublicBot".',
+        'Cannot query field "webhook_url" on type "PublicBot".',
       );
       assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
     });
@@ -1109,7 +1109,7 @@ suite('graphql bots', () => {
                 installation(org_id: $org_id) {
                   id
                   bot {
-                    type
+                    webhook_url
                   }
                 }
               }
@@ -1134,7 +1134,7 @@ suite('graphql bots', () => {
         assert.lengthOf(errors, 1);
         assert.include(
           errors[0].message,
-          'Cannot query field "type" on type "PublicBot".',
+          'Cannot query field "webhook_url" on type "PublicBot".',
         );
         assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
       });
@@ -1151,7 +1151,7 @@ suite('graphql bots', () => {
         name: 'bot-5',
         short_description: 'Bot 5',
         description: 'Bot 5',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/5',
       });
 
@@ -1173,7 +1173,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-5');
       assert.equal(bot.short_description, 'Bot 5');
       assert.equal(bot.description, 'Bot 5');
-      assert.equal(bot.type, 'webhook');
+      assert.equal(bot.type, 'event');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
@@ -1189,7 +1189,7 @@ suite('graphql bots', () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-5',
         short_description: 'Bot 5',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/5',
       });
 
@@ -1211,7 +1211,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-5');
       assert.equal(bot.short_description, 'Bot 5');
       assert.isNull(bot.description);
-      assert.equal(bot.type, 'webhook');
+      assert.equal(bot.type, 'event');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
@@ -1228,7 +1228,7 @@ suite('graphql bots', () => {
         name: 'bot-5',
         short_description: 'Bot 5',
         description: null,
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/5',
       });
 
@@ -1250,7 +1250,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-5');
       assert.equal(bot.short_description, 'Bot 5');
       assert.isNull(bot.description);
-      assert.equal(bot.type, 'webhook');
+      assert.equal(bot.type, 'event');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
@@ -1267,7 +1267,7 @@ suite('graphql bots', () => {
         name: 'bot-5',
         short_description: 'Bot 5',
         description: '',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/5',
       });
 
@@ -1289,7 +1289,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-5');
       assert.equal(bot.short_description, 'Bot 5');
       assert.equal(bot.description, '');
-      assert.equal(bot.type, 'webhook');
+      assert.equal(bot.type, 'event');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
@@ -1306,7 +1306,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1332,7 +1332,7 @@ suite('graphql bots', () => {
       const response = await botCreate(app, org.id, {
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1362,7 +1362,7 @@ suite('graphql bots', () => {
         name: 'b',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1401,7 +1401,7 @@ suite('graphql bots', () => {
         name: 'a'.repeat(256),
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1440,7 +1440,7 @@ suite('graphql bots', () => {
         name: 'bot-@#$%',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1476,7 +1476,7 @@ suite('graphql bots', () => {
         name: '     ',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1521,7 +1521,7 @@ suite('graphql bots', () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-0',
         short_description: 'Bot 0',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/0',
       });
 
@@ -1549,7 +1549,7 @@ suite('graphql bots', () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-6',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1579,7 +1579,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: 'b',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1618,7 +1618,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: 'a'.repeat(256),
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1657,7 +1657,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: '     ',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1749,12 +1749,12 @@ suite('graphql bots', () => {
       assert.equal(count, 0);
     });
 
-    test.skip('with missing webhook_url should fail', async () => {
+    test('with missing webhook_url should fail', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-6',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
       });
 
       assert.equal(response.statusCode, 400);
@@ -1769,7 +1769,7 @@ suite('graphql bots', () => {
       assert.lengthOf(errors, 1);
       assert.include(
         errors[0].message,
-        'Field "type" of required type "String!" was not provided',
+        'Field "webhook_url" of required type "String!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
 
@@ -1783,7 +1783,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'webhook',
+        type: 'event',
         webhook_url: 'invalid_url',
       });
 

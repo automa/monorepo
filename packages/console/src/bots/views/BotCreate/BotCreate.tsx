@@ -2,12 +2,21 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import { BotCreateInput, botCreateSchema, BotType } from '@automa/common';
 
 import { getFragment } from 'gql';
-import { Button, Flex, Input, Textarea, toast, Typography } from 'shared';
+import {
+  Button,
+  Flex,
+  Input,
+  Select,
+  SelectItem,
+  Textarea,
+  toast,
+  Typography,
+} from 'shared';
 
 import { BOT_FRAGMENT } from 'bots';
 
@@ -18,12 +27,13 @@ import { BOT_CREATE_MUTATION } from './BotCreate.queries';
 const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<BotCreateInput>({
     resolver: zodResolver(botCreateSchema),
     defaultValues: {
-      type: BotType.Webhook,
+      type: BotType.Event,
     },
   });
 
@@ -102,6 +112,33 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
             textarea={{
               ...register('description'),
               placeholder: 'This bot uses AI to do the given task.',
+            }}
+          />
+          <Controller
+            control={control}
+            name="type"
+            render={({ field: { value, onChange } }) => (
+              <Select
+                label="Bot type"
+                description="The type of bot you want to create. Event bots are triggered by events, while scheduled bots run on a schedule."
+                error={errors.type?.message}
+                select={{
+                  ...register('type'),
+                  value,
+                  onChange,
+                }}
+              >
+                <SelectItem value={BotType.Event}>Event</SelectItem>
+                <SelectItem value={BotType.Scheduled}>Scheduled</SelectItem>
+              </Select>
+            )}
+          />
+          <Input
+            label="Webhook URL"
+            error={errors.webhook_url?.message}
+            input={{
+              ...register('webhook_url'),
+              placeholder: 'https://example.com/hook',
             }}
           />
         </Flex>

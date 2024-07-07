@@ -1,5 +1,6 @@
 enum BotType {
-  webhook
+  event
+  scheduled
 }
 
 type Query {
@@ -12,17 +13,20 @@ type Mutation {
   botCreate(org_id: Int!, input: BotCreateInput!): Bot!
 }
 
-type PublicBot {
+interface BotBase {
   id: Int!
   name: String!
   short_description: String!
   image_url: String
+  type: BotType!
   description: String
   homepage: String
   is_published: Boolean!
   is_preview: Boolean!
   is_deterministic: Boolean!
+}
 
+type PublicBot implements BotBase @inherits(type: "BotBase") {
   org: PublicOrg!
   installation(org_id: Int!): BotInstallation
 }
@@ -31,9 +35,8 @@ input PublicBotsFilter {
   is_deterministic: Boolean
 }
 
-type Bot @inherits(type: "PublicBot") {
-  type: BotType!
-  webhook_url: String
+type Bot implements BotBase @inherits(type: "BotBase") {
+  webhook_url: String!
   published_at: DateTime
   created_at: DateTime!
 
@@ -45,5 +48,5 @@ input BotCreateInput {
   short_description: String!
   description: String
   type: BotType!
-  webhook_url: String
+  webhook_url: String!
 }

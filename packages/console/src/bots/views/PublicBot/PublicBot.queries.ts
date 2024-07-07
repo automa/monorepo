@@ -11,6 +11,7 @@ export const PUBLIC_BOT_QUERY = gql(`
       name
       short_description
       image_url
+      type
       description
       homepage
       is_published

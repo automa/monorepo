@@ -98,7 +98,7 @@ model bots {
   org_id            Int
   name              String              @db.Citext
   type              bot
-  webhook_url       String?             @db.VarChar(255)
+  webhook_url       String              @db.VarChar(255)
   short_description String              @db.VarChar(255)
   image_url         String?             @db.VarChar(255)
   description       String?
@@ -185,7 +185,8 @@ enum provider {
 }
 
 enum bot {
-  webhook
+  event
+  scheduled
 }
 
 enum task_item {

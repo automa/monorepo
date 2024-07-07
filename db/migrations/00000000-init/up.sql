@@ -86,14 +86,14 @@ CREATE TABLE public.user_repos (
   UNIQUE (user_id, repo_id)
 );
 
-CREATE TYPE public.bot AS ENUM ('webhook');
+CREATE TYPE public.bot AS ENUM ('event', 'scheduled');
 
 CREATE TABLE public.bots (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
   name citext NOT NULL,
   type public.bot NOT NULL,
-  webhook_url VARCHAR(255),
+  webhook_url VARCHAR(255) NOT NULL,
   -- TODO: webhook_secret (here, check and data below)
   -- TODO: webhook_verification / client_secret
   short_description VARCHAR(255) NOT NULL,
@@ -106,7 +106,6 @@ CREATE TABLE public.bots (
   is_preview BOOLEAN NOT NULL DEFAULT FALSE,
   is_deterministic BOOLEAN NOT NULL DEFAULT FALSE,
   UNIQUE (org_id, name),
-  -- TODO: CHECK (type = 'webhook' AND webhook_url IS NOT NULL)
   CHECK (published_at IS NULL OR (
     published_at IS NOT NULL AND
     description IS NOT NULL AND
@@ -119,9 +118,9 @@ ON public.bots (is_published);
 
 INSERT INTO public.bots (org_id, name, type, webhook_url, short_description, homepage, is_preview, is_deterministic)
 VALUES
-  (1, 'automa', 'webhook', 'https://api.automa.app/hooks/automa', 'Updates & migrates automa settings', 'https://automa.app', FALSE, TRUE),
-  (1, 'dependency', 'webhook', 'https://api.dependency.bot/hooks/automa', 'Upgrade dependencies by updating code', 'https://dependency.bot', TRUE, TRUE),
-  (1, 'refactor', 'webhook', 'https://api.refactor.bot/hooks/automa', 'Refactors your code according to your rules', 'https://refactor.bot', TRUE, TRUE);
+  (1, 'automa', 'event', 'https://api.automa.app/hooks/automa', 'Updates & migrates automa settings', 'https://automa.app', FALSE, TRUE),
+  (1, 'dependency', 'event', 'https://api.dependency.bot/hooks/automa', 'Upgrade dependencies by updating code', 'https://dependency.bot', TRUE, TRUE),
+  (1, 'refactor', 'event', 'https://api.refactor.bot/hooks/automa', 'Refactors your code according to your rules', 'https://refactor.bot', TRUE, TRUE);
 
 CREATE TABLE public.bot_installations (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

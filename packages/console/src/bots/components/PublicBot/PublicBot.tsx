@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Check, Robot } from '@phosphor-icons/react';
+import { Check } from '@phosphor-icons/react';
 
 import { getFragment } from 'gql';
-import { Badge, Flex, Tooltip, Typography } from 'shared';
+import { Flex, Tooltip } from 'shared';
+
+import BotBase, { BOT_BASE_FRAGMENT } from '../BotBase';
 
 import { PublicBotProps } from './types';
 
@@ -12,39 +14,13 @@ import { Container } from './PublicBot.styles';
 
 const PublicBot: React.FC<PublicBotProps> = ({ publicBot: data, ...props }) => {
   const publicBot = getFragment(PUBLIC_BOT_FRAGMENT, data);
+  const botBase = getFragment(BOT_BASE_FRAGMENT, publicBot);
 
   return (
-    <Link to={`../bots/${publicBot.org.name}/${publicBot.name}`}>
+    <Link to={`../bots/${publicBot.org.name}/${botBase.name}`}>
       <Container {...props}>
         <Flex justifyContent="space-between" alignItems="center">
-          <Flex alignItems="center" className="gap-4">
-            {publicBot.image_url ? (
-              <img
-                src={publicBot.image_url}
-                alt={publicBot.name}
-                className="size-16"
-              />
-            ) : (
-              <Robot className="size-16 text-neutral-400" />
-            )}
-            <Flex direction="column" className="gap-2">
-              <Flex alignItems="center" className="gap-2">
-                <Typography variant="large" className="break-all">
-                  {publicBot.org.name} / {publicBot.name}
-                </Typography>
-                {!publicBot.is_published && (
-                  <Badge variant="warning">Private</Badge>
-                )}
-                {publicBot.is_preview && <Badge variant="success">Beta</Badge>}
-                <Badge variant="tag">
-                  {publicBot.is_deterministic ? 'Deterministic' : 'Uses AI'}
-                </Badge>
-              </Flex>
-              <Typography variant="small" className="text-neutral-600">
-                {publicBot.short_description}
-              </Typography>
-            </Flex>
-          </Flex>
+          <BotBase bot={publicBot} namePrefix={`${publicBot.org.name} / `} />
           {publicBot.installation && (
             <Tooltip body="Bot installed on this org">
               <Check className="size-5 text-green-500" />
