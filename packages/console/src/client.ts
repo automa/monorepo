@@ -15,6 +15,7 @@ import { isProduction } from 'env';
 
 import { errorCapture } from 'error';
 
+import { possibleTypes } from 'gql/possibleTypes.json';
 import { toast } from 'shared';
 
 import { logout } from 'auth';
@@ -89,7 +90,9 @@ const errorLink = onError(
   },
 );
 
-export const cache = new InMemoryCache();
+export const cache = new InMemoryCache({
+  possibleTypes,
+});
 
 const client = new ApolloClient({
   link: ApolloLink.from([persistedQueryLink, errorLink, retryLink, httpLink]),

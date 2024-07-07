@@ -8,8 +8,8 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 export type EnumResolverSignature<T, AllowedValues = any> = { [key in keyof T]?: AllowedValues };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -21,14 +21,13 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
-export type Bot = {
+export type Bot = BotBase & {
   __typename?: 'Bot';
   created_at: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   image_url?: Maybe<Scalars['String']['output']>;
-  installation?: Maybe<BotInstallation>;
   is_deterministic: Scalars['Boolean']['output'];
   is_preview: Scalars['Boolean']['output'];
   is_published: Scalars['Boolean']['output'];
@@ -37,12 +36,20 @@ export type Bot = {
   published_at?: Maybe<Scalars['DateTime']['output']>;
   short_description: Scalars['String']['output'];
   type: BotType;
-  webhook_url?: Maybe<Scalars['String']['output']>;
+  webhook_url: Scalars['String']['output'];
 };
 
-
-export type BotInstallationArgs = {
-  org_id: Scalars['Int']['input'];
+export type BotBase = {
+  description?: Maybe<Scalars['String']['output']>;
+  homepage?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  image_url?: Maybe<Scalars['String']['output']>;
+  is_deterministic: Scalars['Boolean']['output'];
+  is_preview: Scalars['Boolean']['output'];
+  is_published: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  short_description: Scalars['String']['output'];
+  type: BotType;
 };
 
 export type BotCreateInput = {
@@ -50,7 +57,7 @@ export type BotCreateInput = {
   name: Scalars['String']['input'];
   short_description: Scalars['String']['input'];
   type: BotType;
-  webhook_url?: InputMaybe<Scalars['String']['input']>;
+  webhook_url: Scalars['String']['input'];
 };
 
 export type BotInstallInput = {
@@ -66,7 +73,8 @@ export type BotInstallation = {
 };
 
 export enum BotType {
-  Webhook = 'webhook'
+  Event = 'event',
+  Scheduled = 'scheduled'
 }
 
 export type Integration = {
@@ -142,7 +150,7 @@ export enum ProviderType {
   Gitlab = 'gitlab'
 }
 
-export type PublicBot = {
+export type PublicBot = BotBase & {
   __typename?: 'PublicBot';
   description?: Maybe<Scalars['String']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
@@ -155,6 +163,7 @@ export type PublicBot = {
   name: Scalars['String']['output'];
   org: PublicOrg;
   short_description: Scalars['String']['output'];
+  type: BotType;
 };
 
 
@@ -367,11 +376,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 ) => TResult | Promise<TResult>;
 
 
+/** Mapping of interface types */
+export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
+  BotBase: ( bots ) | ( public_bots );
+};
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Bot: ResolverTypeWrapper<bots>;
+  BotBase: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['BotBase']>;
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: ResolverTypeWrapper<bot_installations>;
@@ -403,6 +417,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Bot: bots;
+  BotBase: ResolversInterfaceTypes<ResolversParentTypes>['BotBase'];
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: bot_installations;
@@ -438,7 +453,6 @@ export type BotResolvers<ContextType = any, ParentType extends ResolversParentTy
   homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   image_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  installation?: Resolver<Maybe<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<BotInstallationArgs, 'org_id'>>;
   is_deterministic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   is_preview?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -447,8 +461,22 @@ export type BotResolvers<ContextType = any, ParentType extends ResolversParentTy
   published_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
-  webhook_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  webhook_url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BotBaseResolvers<ContextType = any, ParentType extends ResolversParentTypes['BotBase'] = ResolversParentTypes['BotBase']> = {
+  __resolveType: TypeResolveFn<'Bot' | 'PublicBot', ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  image_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  is_deterministic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  is_preview?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
 };
 
 export type BotInstallationResolvers<ContextType = any, ParentType extends ResolversParentTypes['BotInstallation'] = ResolversParentTypes['BotInstallation']> = {
@@ -459,7 +487,7 @@ export type BotInstallationResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type BotTypeResolvers = EnumResolverSignature<{ webhook?: any }, ResolversTypes['BotType']>;
+export type BotTypeResolvers = EnumResolverSignature<{ event?: any, scheduled?: any }, ResolversTypes['BotType']>;
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
@@ -516,6 +544,7 @@ export type PublicBotResolvers<ContextType = any, ParentType extends ResolversPa
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
   short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -592,6 +621,7 @@ export type UserProviderResolvers<ContextType = any, ParentType extends Resolver
 
 export type Resolvers<ContextType = any> = {
   Bot?: BotResolvers<ContextType>;
+  BotBase?: BotBaseResolvers<ContextType>;
   BotInstallation?: BotInstallationResolvers<ContextType>;
   BotType?: BotTypeResolvers;
   DateTime?: GraphQLScalarType;

@@ -74,7 +74,7 @@ export const seedBots = (
       short_description: `Bot ${i}`,
       image_url: `https://example.com/image/${i}.png`,
       description: `Bot ${i} long description`,
-      type: 'webhook',
+      type: 'event',
       webhook_url: `https://example.com/webhook/${i}`,
       ...(i < published.length && {
         homepage: 'https://example.com',

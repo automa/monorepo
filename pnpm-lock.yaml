@@ -17,6 +17,9 @@ importers:
       '@graphql-codegen/client-preset':
         specifier: ~4.1.0
         version: 4.1.0(graphql@16.7.1)
+      '@graphql-codegen/fragment-matcher':
+        specifier: ~5.0.2
+        version: 5.0.2(graphql@16.7.1)
       '@graphql-codegen/schema-ast':
         specifier: ~4.0.2
         version: 4.0.2(graphql@16.7.1)
@@ -1871,6 +1874,11 @@ packages:
 
   '@graphql-codegen/core@4.0.2':
     resolution: {integrity: sha512-IZbpkhwVqgizcjNiaVzNAzm/xbWT6YnGgeOLwVjm4KbJn3V2jchVtuzHH09G5/WkkLSk2wgbXNdwjM41JxO6Eg==}
+    peerDependencies:
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+
+  '@graphql-codegen/fragment-matcher@5.0.2':
+    resolution: {integrity: sha512-AeazT6Arv7LvpkvPYTajfUO6g1FeGLqyt6VaxDhMIRCuJN21PAvSWsh3wayc+K5L5VtYFZXYczC7Lw1bMb8C2Q==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
@@ -12864,6 +12872,12 @@ snapshots:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.7.1)
       '@graphql-tools/schema': 10.0.3(graphql@16.7.1)
       '@graphql-tools/utils': 10.2.0(graphql@16.7.1)
+      graphql: 16.7.1
+      tslib: 2.6.2
+
+  '@graphql-codegen/fragment-matcher@5.0.2(graphql@16.7.1)':
+    dependencies:
+      '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.7.1)
       graphql: 16.7.1
       tslib: 2.6.2
 
