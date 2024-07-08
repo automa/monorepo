@@ -1,6 +1,7 @@
 import {
   MutationResolvers,
   QueryResolvers,
+  TaskItemResolvers,
   taskMessageSchema,
   TaskResolvers,
 } from '@automa/common';
@@ -64,12 +65,19 @@ export const Mutation: MutationResolvers<Context> = {
       {
         org_id,
         title: data.content.slice(0, 255),
-        created_by: userId,
         task_items: {
           create: [
             {
+              actor_user_id: userId,
               type: task_item.message,
               data: { content: data.content },
+            },
+            {
+              actor_user_id: userId,
+              type: task_item.origin,
+              data: {
+                orgId: org_id,
+              },
             },
           ],
         },
@@ -88,15 +96,6 @@ export const Task: TaskResolvers<Context> = {
       })
       .orgs();
   },
-  author: ({ id }, args, { prisma }) => {
-    return prisma.tasks
-      .findUniqueOrThrow({
-        where: {
-          id,
-        },
-      })
-      .users();
-  },
   items: ({ id }, args, { prisma }) => {
     return prisma.tasks
       .findUniqueOrThrow({
@@ -109,5 +108,17 @@ export const Task: TaskResolvers<Context> = {
           id: 'asc',
         },
       });
+  },
+};
+
+export const TaskItem: TaskItemResolvers<Context> = {
+  actor_user: ({ id }, args, { prisma }) => {
+    return prisma.task_items
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .users();
   },
 };

@@ -261,7 +261,6 @@ export type Repo = {
 
 export type Task = {
   __typename?: 'Task';
-  author?: Maybe<User>;
   completed_at?: Maybe<Scalars['DateTime']['output']>;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
@@ -273,6 +272,7 @@ export type Task = {
 
 export type TaskItem = {
   __typename?: 'TaskItem';
+  actor_user?: Maybe<User>;
   created_at: Scalars['DateTime']['output'];
   data?: Maybe<Scalars['JSON']['output']>;
   id: Scalars['Int']['output'];
@@ -584,7 +584,6 @@ export type RepoResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
-  author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   completed_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -596,6 +595,7 @@ export type TaskResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type TaskItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['TaskItem'] = ResolversParentTypes['TaskItem']> = {
+  actor_user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;

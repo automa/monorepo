@@ -15,7 +15,6 @@ type Task {
   is_completed: Boolean!
 
   org: Org!
-  author: User
 
   items: [TaskItem!]!
 }
@@ -31,6 +30,8 @@ type TaskItem {
   type: TaskItemType!
   data: JSON
   created_at: DateTime!
+
+  actor_user: User
 }
 
 input TaskMessageInput {

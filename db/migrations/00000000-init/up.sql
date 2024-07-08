@@ -147,7 +147,6 @@ CREATE TABLE public.tasks (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
-  created_by INTEGER REFERENCES public.users(id) ON DELETE SET NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   completed_at TIMESTAMP,
   is_completed BOOLEAN GENERATED ALWAYS AS (completed_at IS NOT NULL) STORED
@@ -163,6 +162,7 @@ CREATE TABLE public.task_items (
   task_id INTEGER NOT NULL REFERENCES public.tasks(id) ON DELETE CASCADE,
   type public.task_item NOT NULL,
   data JSONB NOT NULL,
+  actor_user_id INTEGER REFERENCES public.users(id) ON DELETE SET NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 

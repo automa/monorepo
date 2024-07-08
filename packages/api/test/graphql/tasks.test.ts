@@ -49,17 +49,14 @@ suite('graphql tasks', () => {
           {
             title: 'task-0',
             org_id: org.id,
-            created_by: user.id,
           },
           {
             title: 'task-1',
             org_id: secondOrg.id,
-            created_by: user.id,
           },
           {
             title: 'task-2',
             org_id: nonMemberOrg.id,
-            created_by: user.id,
           },
           {
             title: 'task-3',
@@ -88,9 +85,6 @@ suite('graphql tasks', () => {
                 created_at
                 completed_at
                 is_completed
-                author {
-                  id
-                }
               }
             }
           `,
@@ -127,14 +121,12 @@ suite('graphql tasks', () => {
         assert.isString(tasks[0].created_at);
         assert.isString(tasks[0].completed_at);
         assert.isTrue(tasks[0].is_completed);
-        assert.isNull(tasks[0].author);
 
         assert.isNumber(tasks[1].id);
         assert.equal(tasks[1].title, 'task-0');
         assert.isString(tasks[1].created_at);
         assert.isNull(tasks[1].completed_at);
         assert.isFalse(tasks[1].is_completed);
-        assert.equal(tasks[1].author.id, user.id);
       });
     });
 
@@ -193,6 +185,7 @@ suite('graphql tasks', () => {
                 issueIdentifier: 'DEMO-123',
                 issueTitle: 'Demo Issue',
               },
+              actor_user_id: user.id,
             },
           ],
         });
@@ -208,6 +201,9 @@ suite('graphql tasks', () => {
                   type
                   data
                   created_at
+                  actor_user {
+                    id
+                  }
                 }
               }
             }
@@ -247,6 +243,7 @@ suite('graphql tasks', () => {
         assert.equal(items[0].type, 'message');
         assert.isString(items[0].created_at);
         assert.deepEqual(items[0].data, { content: 'task-3' });
+        assert.isNull(items[0].actor_user);
 
         assert.equal(items[1].type, 'origin');
         assert.isString(items[1].created_at);
@@ -255,6 +252,7 @@ suite('graphql tasks', () => {
           issueIdentifier: 'DEMO-123',
           issueTitle: 'Demo Issue',
         });
+        assert.equal(items[1].actor_user.id, user.id);
       });
     });
   });
@@ -267,7 +265,6 @@ suite('graphql tasks', () => {
         data: {
           title: 'task-0',
           org_id: org.id,
-          created_by: user.id,
         },
       });
     });
@@ -290,9 +287,6 @@ suite('graphql tasks', () => {
                 created_at
                 completed_at
                 is_completed
-                author {
-                  id
-                }
               }
             }
           `,
@@ -328,7 +322,6 @@ suite('graphql tasks', () => {
         assert.isString(task.created_at);
         assert.isNull(task.completed_at);
         assert.isFalse(task.is_completed);
-        assert.equal(task.author.id, user.id);
       });
     });
 
@@ -421,6 +414,7 @@ suite('graphql tasks', () => {
           content:
             'Send an analytics event when user clicks on "Create Task" button',
         });
+        assert.equal(taskItem.actor_user_id, user.id);
       });
     });
 
