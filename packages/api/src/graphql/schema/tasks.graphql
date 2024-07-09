@@ -23,6 +23,8 @@ enum TaskItemType {
   message
   origin
   pull_request
+  bot
+  repo
 }
 
 type TaskItem {

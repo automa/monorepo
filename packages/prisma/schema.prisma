@@ -193,6 +193,8 @@ enum task_item {
   message
   origin
   pull_request
+  bot
+  repo
 }
 
 enum integration {

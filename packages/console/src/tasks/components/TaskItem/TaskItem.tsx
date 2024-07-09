@@ -1,18 +1,39 @@
-import React from 'react';
-import { PlusCircle } from '@phosphor-icons/react';
+import React, { ReactNode } from 'react';
+import { Code, Icon, PlusCircle, Robot } from '@phosphor-icons/react';
+import { format, formatDistanceToNow } from 'date-fns';
 
-import { IntegrationType, TaskItemType } from '@automa/common';
+import { IntegrationType, ProviderType, TaskItemType } from '@automa/common';
 
 import { getFragment } from 'gql';
-import { Anchor, Typography } from 'shared';
+import { Anchor, Flex, Tooltip, Typography } from 'shared';
 
 import { USER_AVATAR_FRAGMENT, UserAvatar } from 'users';
 
 import { TaskItemProps } from './types';
-import { originDefinitions } from './utils';
+import { originDefinitions, repoDefinitions } from './utils';
 
 import { TASK_ITEM_FRAGMENT } from './TaskItem.queries';
-import { Line, LineIcon, Subject } from './TaskItem.styles';
+import { Line, Subject } from './TaskItem.styles';
+
+const TaskItemContainer: React.FC<{
+  icon: Icon;
+  timestamp: string;
+  children: ReactNode;
+}> = ({ icon: Icon, timestamp, children }) => {
+  // TODO: Link to the task item
+  return (
+    <Line>
+      <Icon className="mr-1 size-4" />
+      {children}
+      <Typography variant="small">·</Typography>
+      <Tooltip body={format(timestamp, 'MMM d, yyyy, h:mm:ss a')}>
+        <Typography variant="xsmall">
+          {formatDistanceToNow(timestamp, { addSuffix: true })}
+        </Typography>
+      </Tooltip>
+    </Line>
+  );
+};
 
 const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
   const taskItem = getFragment(TASK_ITEM_FRAGMENT, data);
@@ -27,10 +48,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
       originDefinitions[taskItem.data.integration as IntegrationType];
 
     return (
-      <Line>
-        <LineIcon>
-          <PlusCircle />
-        </LineIcon>
+      <TaskItemContainer icon={PlusCircle} timestamp={taskItem.created_at}>
         {taskItem.actor_user ? (
           <Subject>
             <UserAvatar user={taskItem.actor_user} size="small" />
@@ -49,7 +67,69 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
             <Typography variant="small">UI</Typography>
           </Subject>
         )}
-      </Line>
+      </TaskItemContainer>
+    );
+  }
+
+  if (taskItem.type === TaskItemType.Bot) {
+    const name = `${taskItem.data.botOrgName}/${taskItem.data.botName}`;
+
+    return (
+      <TaskItemContainer icon={Robot} timestamp={taskItem.created_at}>
+        <Subject>
+          {taskItem.actor_user ? (
+            <>
+              <UserAvatar user={taskItem.actor_user} size="small" />
+              <Typography variant="small">{user!.name}</Typography>
+            </>
+          ) : (
+            <Typography variant="small">AI</Typography>
+          )}
+        </Subject>
+        <Typography variant="small">assigned the task to</Typography>
+        <Anchor href={`../bots/${name}`}>
+          <Subject>
+            <Typography variant="small">{name}</Typography>
+          </Subject>
+        </Anchor>
+      </TaskItemContainer>
+    );
+  }
+
+  if (taskItem.type === TaskItemType.Repo) {
+    const definition =
+      repoDefinitions[taskItem.data.repoOrgProviderType as ProviderType];
+
+    if (!definition) {
+      return null;
+    }
+
+    return (
+      <TaskItemContainer icon={Code} timestamp={taskItem.created_at}>
+        <Subject>
+          {taskItem.actor_user ? (
+            <>
+              <UserAvatar user={taskItem.actor_user} size="small" />
+              <Typography variant="small">{user!.name}</Typography>
+            </>
+          ) : (
+            <Typography variant="small">AI</Typography>
+          )}
+        </Subject>
+        <Typography variant="small">
+          decided to implement the task in
+        </Typography>
+        <Anchor href={`../repos`}>
+          <Flex alignItems="center" className="gap-1">
+            <definition.icon className="ml-0.5 size-3" />
+            <Subject>
+              <Typography variant="small">
+                {taskItem.data.repoOrgName}/{taskItem.data.repoName}
+              </Typography>
+            </Subject>
+          </Flex>
+        </Anchor>
+      </TaskItemContainer>
     );
   }
 

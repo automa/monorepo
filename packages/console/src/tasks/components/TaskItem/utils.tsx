@@ -1,9 +1,10 @@
-import React, { ReactNode } from 'react';
+import React, { FC, ReactNode, SVGProps } from 'react';
 
-import { IntegrationType } from '@automa/common';
+import { IntegrationType, ProviderType } from '@automa/common';
 
 import { Typography } from 'shared';
 
+import GithubLogo from 'assets/logos/github.svg?react';
 import LinearLogo from 'assets/logos/linear.svg?react';
 
 type OriginDefinition = {
@@ -23,5 +24,18 @@ export const originDefinitions: Partial<
       </>
     ),
     link: (data) => data.url,
+  },
+};
+
+export const repoDefinitions: Partial<
+  Record<
+    ProviderType,
+    {
+      icon: FC<SVGProps<SVGSVGElement>>;
+    }
+  >
+> = {
+  [ProviderType.Github]: {
+    icon: GithubLogo,
   },
 };

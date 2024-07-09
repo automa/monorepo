@@ -103,3 +103,87 @@ export const OriginLinear = {
     ),
   },
 } satisfies Story;
+
+export const Bot = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Bot,
+        created_at,
+        data: {
+          botId: 4,
+          botName: 'aider',
+          botOrgId: 1,
+          botOrgName: 'automa',
+        },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const BotAuthor = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Bot,
+        created_at,
+        data: {
+          botId: 4,
+          botName: 'aider',
+          botOrgId: 1,
+          botOrgName: 'automa',
+        },
+        actor_user,
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const Repo = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Repo,
+        created_at,
+        data: {
+          repoId: 1,
+          repoName: 'monorepo',
+          repoOrgId: 1,
+          repoOrgName: 'automa',
+          repoOrgProviderType: 'github',
+          repoOrgProviderId: '65730741',
+          repoProviderId: '245484486',
+        },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const RepoAuthor = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Repo,
+        created_at,
+        data: {
+          repoId: 1,
+          repoName: 'monorepo',
+          repoOrgId: 1,
+          repoOrgName: 'automa',
+          repoOrgProviderType: 'github',
+          repoOrgProviderId: '65730741',
+          repoProviderId: '245484486',
+        },
+        actor_user,
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
