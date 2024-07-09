@@ -7,14 +7,8 @@ export const TASK_FRAGMENT = gql(`
     created_at
     completed_at
     is_completed
-    author {
-      ...UserAvatarFragment
-    }
     items {
-      id
-      type
-      data
-      created_at
+      ...TaskItemFragment
     }
   }
 `);

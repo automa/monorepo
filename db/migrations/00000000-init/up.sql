@@ -147,7 +147,6 @@ CREATE TABLE public.tasks (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
-  created_by INTEGER REFERENCES public.users(id) ON DELETE SET NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   completed_at TIMESTAMP,
   is_completed BOOLEAN GENERATED ALWAYS AS (completed_at IS NOT NULL) STORED
@@ -156,13 +155,14 @@ CREATE TABLE public.tasks (
 CREATE INDEX tasks_org_id_created_at_idx
 ON public.tasks (org_id, created_at DESC);
 
-CREATE TYPE public.task_item AS ENUM ('message', 'origin', 'pull_request');
+CREATE TYPE public.task_item AS ENUM ('message', 'origin', 'pull_request', 'bot', 'repo');
 
 CREATE TABLE public.task_items (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   task_id INTEGER NOT NULL REFERENCES public.tasks(id) ON DELETE CASCADE,
   type public.task_item NOT NULL,
   data JSONB NOT NULL,
+  actor_user_id INTEGER REFERENCES public.users(id) ON DELETE SET NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 

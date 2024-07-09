@@ -7,6 +7,7 @@ import { Flex, Tooltip, Typography } from 'shared';
 
 import { UserAvatar } from 'users';
 
+import { TASK_ITEM_FRAGMENT } from '../TaskItem';
 import TaskItemBadge from '../TaskItemBadge';
 
 import { TaskProps } from './types';
@@ -16,6 +17,9 @@ import { Container, Title } from './Task.styles';
 
 const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
   const task = getFragment(TASK_FRAGMENT, data);
+  const items = task.items.map((item) => getFragment(TASK_ITEM_FRAGMENT, item));
+
+  const user = items.find(({ type }) => type === 'origin')?.actor_user;
 
   return (
     <Container {...props}>
@@ -36,7 +40,7 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
           <Title to={`../tasks/${task.id}`}>{task.title}</Title>
         </Flex>
         <Flex alignItems="center" className="gap-2">
-          {task.items
+          {items
             .filter(({ type }) => type === 'origin')
             .map(({ id, data }) => (
               <TaskItemBadge key={id} data={data} />
@@ -51,8 +55,8 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
               {format(task.created_at, 'MMM d')}
             </Typography>
           </Tooltip>
-          {task.author ? (
-            <UserAvatar user={task.author} size="small" />
+          {user ? (
+            <UserAvatar user={user} size="small" />
           ) : (
             <UserCircle className="size-5 text-neutral-400" />
           )}

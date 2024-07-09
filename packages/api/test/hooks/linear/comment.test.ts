@@ -92,7 +92,6 @@ suite('linear hook Comment event', () => {
       assert.deepOwnInclude(tasks[0], {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
-        created_by: null,
       });
 
       const taskItems = await app.prisma.task_items.findMany({
@@ -108,6 +107,7 @@ suite('linear hook Comment event', () => {
           content:
             '- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
         },
+        actor_user_id: null,
       });
       assert.deepOwnInclude(taskItems[1], {
         type: 'origin',
@@ -123,6 +123,7 @@ suite('linear hook Comment event', () => {
           commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
           url: 'https://linear.app/automa/issue/PRO-93/handle-when-user-revokes-github-app#comment-a41c315a',
         },
+        actor_user_id: null,
       });
     });
 
@@ -167,7 +168,6 @@ suite('linear hook Comment event', () => {
       assert.deepOwnInclude(tasks[0], {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
-        created_by: null,
       });
 
       const taskItems = await app.prisma.task_items.findMany({

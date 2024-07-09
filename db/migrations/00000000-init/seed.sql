@@ -12,6 +12,10 @@ INSERT INTO public.user_orgs (user_id, org_id)
 VALUES
   (1, 1);
 
+INSERT INTO public.repos (org_id, name, provider_id, is_private, is_archived, has_installation)
+VALUES
+  (1, 'monorepo', '245484486', TRUE, FALSE, TRUE);
+
 INSERT INTO public.bots (org_id, name, short_description, image_url, description, type, webhook_url, homepage, published_at, is_deterministic)
 VALUES
   (1, 'aider', 'Basic bot that codes', 'https://aider.chat/assets/icons/apple-touch-icon.png', '...', 'event', 'https://localhost:5000/hooks/automa', 'https://aider.chat', NOW(), FALSE),
@@ -23,13 +27,19 @@ VALUES
   (4, 1),
   (5, 1);
 
-INSERT INTO public.tasks (org_id, title, created_by, created_at, completed_at)
+INSERT INTO public.tasks (org_id, title, created_at, completed_at)
 VALUES
-  (1, 'Provision the cli repo', NULL, NOW(), NOW()),
-  (1, 'Update the homepage headline', 1, NOW(), NULL),
-  (1, 'Track "User Login Attempted" event', NULL, NOW(), NULL);
+  (1, 'Provision the cli repo', NOW(), NOW()),
+  (1, 'Update the homepage headline',  NOW(), NULL),
+  (1, 'Track "User Login Attempted" event', NOW(), NULL);
 
-INSERT INTO public.task_items (task_id, created_at, type, data)
+INSERT INTO public.task_items (task_id, created_at, actor_user_id, type, data)
 VALUES
-  (3, NOW(), 'message', '{"content":"In `AuthLogin` component, when the user clicks on any of the login buttons, we want to send the \"User Login Attempted\" analytic event to track that the user has attempted a login."}'),
-  (3, NOW(), 'origin', '{"integration": "linear", "url": "https://linear.app/automa-demo/issue/DEMO-11/track-user-login-attempted-event#comment-661237eb", "teamId": "7b9f50fa-75b4-43bd-9a0a-0e0994f0ccd9", "userId": "db18fe9b-d550-44c5-816a-49ac71fccce9", "issueId": "cfb003a0-5c42-48da-b34e-ebbacb9282bb", "commentId": "661237eb-3f3d-4bb8-ad22-9245aff0a5d9", "issueTitle": "Track \"User Logged In\" event", "organizationId": "aa0479aa-f603-4508-8669-e283bca5a17f", "organizationName": "Automa", "issueIdentifier": "DEMO-11"}');
+  (2, NOW(), 1, 'message', '{ "content": "Update the homepage headline" }'),
+  (2, NOW(), 1, 'origin', '{ "orgId": 1 }'),
+  (2, NOW(), 1, 'bot', '{ "botId": 4, "botName": "aider", "botOrgId": 1, "botOrgName": "automa" }'),
+  (2, NOW(), 1, 'repo', '{ "repoId": 1, "repoName": "monorepo", "repoOrgId": 1, "repoOrgName": "automa", "repoOrgProviderType": "github", "repoOrgProviderId": "65730741", "repoProviderId": "245484486" }'),
+  (3, NOW(), NULL, 'message', '{ "content": "In `AuthLogin` component, when the user clicks on any of the login buttons, we want to send the \"User Login Attempted\" analytic event to track that the user has attempted a login." }'),
+  (3, NOW(), NULL, 'origin', '{ "integration": "linear", "url": "https://linear.app/automa-demo/issue/DEMO-11/track-user-login-attempted-event#comment-661237eb", "teamId": "7b9f50fa-75b4-43bd-9a0a-0e0994f0ccd9", "userId": "db18fe9b-d550-44c5-816a-49ac71fccce9", "issueId": "cfb003a0-5c42-48da-b34e-ebbacb9282bb", "commentId": "661237eb-3f3d-4bb8-ad22-9245aff0a5d9", "issueTitle": "Track \"User Logged In\" event", "organizationId": "aa0479aa-f603-4508-8669-e283bca5a17f", "organizationName": "Automa", "issueIdentifier": "DEMO-11" }'),
+  (3, NOW(), NULL, 'bot', '{ "botId": 5, "botName": "posthog", "botOrgId": 1, "botOrgName": "automa" }'),
+  (3, NOW(), NULL, 'repo', '{ "repoId": 1, "repoName": "monorepo", "repoOrgId": 1, "repoOrgName": "automa", "repoOrgProviderType": "github", "repoOrgProviderId": "65730741", "repoProviderId": "245484486" }');

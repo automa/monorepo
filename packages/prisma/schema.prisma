@@ -14,7 +14,7 @@ model users {
   email          String           @unique @db.Citext
   created_at     DateTime         @default(now()) @db.Timestamp(6)
   integrations   integrations[]
-  tasks          tasks[]
+  task_items     task_items[]
   user_orgs      user_orgs[]
   user_providers user_providers[]
   user_repos     user_repos[]
@@ -140,12 +140,14 @@ model bot_installations {
 }
 
 model task_items {
-  id         Int       @id @default(autoincrement())
-  task_id    Int
-  type       task_item
-  data       Json
-  created_at DateTime  @default(now()) @db.Timestamp(6)
-  tasks      tasks     @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id            Int       @id @default(autoincrement())
+  task_id       Int
+  type          task_item
+  data          Json
+  actor_user_id Int?
+  created_at    DateTime  @default(now()) @db.Timestamp(6)
+  users         users?    @relation(fields: [actor_user_id], references: [id], onUpdate: NoAction)
+  tasks         tasks     @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([task_id, created_at])
 }
@@ -154,12 +156,10 @@ model tasks {
   id           Int          @id @default(autoincrement())
   org_id       Int
   title        String       @db.VarChar(255)
-  created_by   Int?
   created_at   DateTime     @default(now()) @db.Timestamp(6)
   completed_at DateTime?    @db.Timestamp(6)
   is_completed Boolean?     @default(dbgenerated("(completed_at IS NOT NULL)"))
   task_items   task_items[]
-  users        users?       @relation(fields: [created_by], references: [id], onUpdate: NoAction)
   orgs         orgs         @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([org_id, created_at(sort: Desc)])
@@ -193,6 +193,8 @@ enum task_item {
   message
   origin
   pull_request
+  bot
+  repo
 }
 
 enum integration {
