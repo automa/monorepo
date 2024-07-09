@@ -15,6 +15,7 @@ import { Prisma } from '@automa/prisma';
 import { env, isProduction, version } from './env';
 import { logger, SeverityNumber } from './telemetry';
 
+import eventsPlugin from './events';
 import graphql from './graphql';
 import session from './session';
 
@@ -40,6 +41,8 @@ export const server = async () => {
       : true,
     credentials: true,
   });
+
+  await app.register(eventsPlugin);
 
   app.setErrorHandler((error, request, reply) => {
     if (error instanceof httpErrors.HttpError) {

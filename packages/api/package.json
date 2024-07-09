@@ -19,6 +19,7 @@
     "@fastify/swagger-ui": "~1.9.3",
     "@google-cloud/opentelemetry-cloud-monitoring-exporter": "~0.17.0",
     "@google-cloud/opentelemetry-cloud-trace-exporter": "~2.1.0",
+    "@google-cloud/pubsub": "~4.3.3",
     "@graphql-tools/load-files": "~7.0.0",
     "@graphql-tools/merge": "~9.0.4",
     "@graphql-tools/resolvers-composition": "~7.0.1",
