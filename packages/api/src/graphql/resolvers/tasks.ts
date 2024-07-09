@@ -49,7 +49,7 @@ export const Query: QueryResolvers<Context> = {
 };
 
 export const Mutation: MutationResolvers<Context> = {
-  taskCreate: async (_, { org_id, input }, { userId, prisma }) => {
+  taskCreate: async (_, { org_id, input }, { userId, prisma, events }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
@@ -61,7 +61,7 @@ export const Mutation: MutationResolvers<Context> = {
     const data = taskMessageSchema.parse(input);
 
     return taskCreate(
-      { prisma },
+      { prisma, events },
       {
         org_id,
         title: data.content.slice(0, 255),

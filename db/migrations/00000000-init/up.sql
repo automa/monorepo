@@ -155,7 +155,7 @@ CREATE TABLE public.tasks (
 CREATE INDEX tasks_org_id_created_at_idx
 ON public.tasks (org_id, created_at DESC);
 
-CREATE TYPE public.task_item AS ENUM ('message', 'origin', 'pull_request', 'bot', 'repo');
+CREATE TYPE public.task_item AS ENUM ('message', 'origin', 'pull_request', 'repo', 'bot');
 
 CREATE TABLE public.task_items (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

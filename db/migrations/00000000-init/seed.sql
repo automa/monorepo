@@ -37,9 +37,9 @@ INSERT INTO public.task_items (task_id, created_at, actor_user_id, type, data)
 VALUES
   (2, NOW(), 1, 'message', '{ "content": "Update the homepage headline" }'),
   (2, NOW(), 1, 'origin', '{ "orgId": 1 }'),
-  (2, NOW(), 1, 'bot', '{ "botId": 4, "botName": "aider", "botOrgId": 1, "botOrgName": "automa" }'),
   (2, NOW(), 1, 'repo', '{ "repoId": 1, "repoName": "monorepo", "repoOrgId": 1, "repoOrgName": "automa", "repoOrgProviderType": "github", "repoOrgProviderId": "65730741", "repoProviderId": "245484486" }'),
+  (2, NOW(), 1, 'bot', '{ "botId": 4, "botName": "aider", "botOrgId": 1, "botOrgName": "automa" }'),
   (3, NOW(), NULL, 'message', '{ "content": "In `AuthLogin` component, when the user clicks on any of the login buttons, we want to send the \"User Login Attempted\" analytic event to track that the user has attempted a login." }'),
   (3, NOW(), NULL, 'origin', '{ "integration": "linear", "url": "https://linear.app/automa-demo/issue/DEMO-11/track-user-login-attempted-event#comment-661237eb", "teamId": "7b9f50fa-75b4-43bd-9a0a-0e0994f0ccd9", "userId": "db18fe9b-d550-44c5-816a-49ac71fccce9", "issueId": "cfb003a0-5c42-48da-b34e-ebbacb9282bb", "commentId": "661237eb-3f3d-4bb8-ad22-9245aff0a5d9", "issueTitle": "Track \"User Logged In\" event", "organizationId": "aa0479aa-f603-4508-8669-e283bca5a17f", "organizationName": "Automa", "issueIdentifier": "DEMO-11" }'),
-  (3, NOW(), NULL, 'bot', '{ "botId": 5, "botName": "posthog", "botOrgId": 1, "botOrgName": "automa" }'),
-  (3, NOW(), NULL, 'repo', '{ "repoId": 1, "repoName": "monorepo", "repoOrgId": 1, "repoOrgName": "automa", "repoOrgProviderType": "github", "repoOrgProviderId": "65730741", "repoProviderId": "245484486" }');
+  (3, NOW(), NULL, 'repo', '{ "repoId": 1, "repoName": "monorepo", "repoOrgId": 1, "repoOrgName": "automa", "repoOrgProviderType": "github", "repoOrgProviderId": "65730741", "repoProviderId": "245484486" }'),
+  (3, NOW(), NULL, 'bot', '{ "botId": 5, "botName": "posthog", "botOrgId": 1, "botOrgName": "automa" }');
