@@ -24,6 +24,7 @@ module.exports = {
     'plugin:tailwindcss/recommended',
   ],
   plugins: ['simple-import-sort'],
+  processor: '@graphql-eslint/graphql',
   rules: {
     'no-empty': [
       'error',
@@ -103,6 +104,33 @@ module.exports = {
     'src/gql',
   ],
   overrides: [
+    {
+      files: ['**/*.graphql'],
+      extends: ['plugin:@graphql-eslint/operations-recommended'],
+      rules: {
+        '@graphql-eslint/naming-convention': [
+          'error',
+          {
+            VariableDefinition: 'snake_case',
+            OperationDefinition: {
+              style: 'PascalCase',
+              forbiddenPrefixes: ['Query', 'Mutation', 'Subscription', 'Get'],
+              forbiddenSuffixes: ['Query', 'Mutation', 'Subscription'],
+            },
+            FragmentDefinition: {
+              style: 'PascalCase',
+              forbiddenPrefixes: ['Fragment'],
+              forbiddenSuffixes: ['Fragment'],
+            },
+          },
+        ],
+        '@graphql-eslint/require-id-when-available': 'off',
+      },
+      parserOptions: {
+        operations: '**/*.queries.ts',
+        schema: '**/*.graphql',
+      },
+    },
     {
       files: ['**/*.stories.*'],
       rules: {

@@ -60,7 +60,68 @@ module.exports = {
     '!.prettierrc.js',
     'build',
     'coverage',
+    'schema.graphql',
     'packages/common/src/graphql.ts',
+  ],
+  overrides: [
+    {
+      files: ['**/*.graphql'],
+      extends: ['plugin:@graphql-eslint/schema-recommended'],
+      rules: {
+        '@graphql-eslint/naming-convention': [
+          'error',
+          {
+            types: 'PascalCase',
+            InputValueDefinition: 'snake_case',
+            Argument: 'snake_case',
+            DirectiveDefinition: 'camelCase',
+            EnumValueDefinition: 'snake_case',
+            'FieldDefinition[parent.name.value!=Query][parent.name.value!=Mutation][parent.name.value!=Subscription]':
+              {
+                style: 'snake_case',
+              },
+            'FieldDefinition[parent.name.value=Query]': {
+              style: 'camelCase',
+              forbiddenPrefixes: ['query', 'get'],
+              forbiddenSuffixes: ['Query'],
+            },
+            'FieldDefinition[parent.name.value=Mutation]': {
+              style: 'camelCase',
+              forbiddenPrefixes: ['mutation'],
+              forbiddenSuffixes: ['Mutation'],
+            },
+            'FieldDefinition[parent.name.value=Subscription]': {
+              style: 'camelCase',
+              forbiddenPrefixes: ['subscription'],
+              forbiddenSuffixes: ['Subscription'],
+            },
+            'EnumTypeDefinition,EnumTypeExtension': {
+              forbiddenPrefixes: ['Enum'],
+              forbiddenSuffixes: ['Enum'],
+            },
+            'InterfaceTypeDefinition,InterfaceTypeExtension': {
+              forbiddenPrefixes: ['Interface'],
+              forbiddenSuffixes: ['Interface'],
+            },
+            'UnionTypeDefinition,UnionTypeExtension': {
+              forbiddenPrefixes: ['Union'],
+              forbiddenSuffixes: ['Union'],
+            },
+            'ObjectTypeDefinition,ObjectTypeExtension': {
+              forbiddenPrefixes: ['Type'],
+              forbiddenSuffixes: ['Type'],
+            },
+          },
+        ],
+        '@graphql-eslint/no-typename-prefix': 'warn',
+        '@graphql-eslint/strict-id-in-types': 'off',
+        '@graphql-eslint/require-description': 'off',
+      },
+      parserOptions: {
+        operations: '**/*.queries.ts',
+        schema: '**/*.graphql',
+      },
+    },
   ],
   settings: {
     'import/resolver': {

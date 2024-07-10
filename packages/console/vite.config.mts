@@ -37,12 +37,14 @@ export default defineConfig({
     tsconfigPaths(),
     checker({
       typescript: true,
-      eslint: {
-        lintCommand: 'eslint .',
-        dev: {
-          logLevel: ['error'],
-        },
-      },
+      eslint: !process.env.NO_LINT
+        ? {
+            lintCommand: 'eslint .',
+            dev: {
+              logLevel: ['error'],
+            },
+          }
+        : undefined,
     }),
     process.env.BUILD_STATS ? webpackStats() : undefined,
   ],

@@ -1,9 +1,9 @@
 import { gql } from 'gql';
 
 export const PUBLIC_BOT_FRAGMENT = gql(`
-  fragment PublicBotFragment on PublicBot {
+  fragment PublicBot on PublicBot {
     id
-    ...BotBaseFragment
+    ...BotBase
     org {
       name
     }

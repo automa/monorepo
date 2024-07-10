@@ -1,7 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import Flex from '../Flex';
-
 import Select, { SelectItem } from './Select';
 
 const meta = {

@@ -1,7 +1,7 @@
 import { gql } from 'gql';
 
 export const USER_AVATAR_FRAGMENT = gql(`
-  fragment UserAvatarFragment on User {
+  fragment UserAvatar on User {
     id
     name
     providers {

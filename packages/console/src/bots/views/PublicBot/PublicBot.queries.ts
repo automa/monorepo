@@ -30,7 +30,7 @@ export const PUBLIC_BOT_QUERY = gql(`
 export const BOT_INSTALL_MUTATION = gql(`
   mutation BotInstall($org_id: Int!, $input: BotInstallInput!) {
     botInstall(org_id: $org_id, input: $input) {
-      ...BotInstallationFragment
+      ...BotInstallation
     }
   }
 `);
