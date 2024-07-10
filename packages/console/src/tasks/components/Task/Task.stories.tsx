@@ -38,7 +38,7 @@ const meta = {
             provider_id: '1',
             provider_name: 'org',
             has_installation: true,
-            botInstallationsCount: 1,
+            bot_installations_count: 1,
           },
         ],
         org: {
@@ -48,7 +48,7 @@ const meta = {
           provider_id: '1',
           provider_name: 'org',
           has_installation: true,
-          botInstallationsCount: 1,
+          bot_installations_count: 1,
         },
         loading: false,
       },

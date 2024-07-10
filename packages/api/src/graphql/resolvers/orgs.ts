@@ -18,7 +18,7 @@ export const Query: QueryResolvers<Context> = {
 };
 
 export const Org: OrgResolvers<Context> = {
-  botInstallationsCount: async ({ id }, args, { prisma }) => {
+  bot_installations_count: async ({ id }, args, { prisma }) => {
     const {
       _count: { bot_installations: count },
     } = await prisma.orgs.findUniqueOrThrow({

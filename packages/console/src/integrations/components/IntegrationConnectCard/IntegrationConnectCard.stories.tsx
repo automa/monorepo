@@ -17,7 +17,7 @@ const meta = {
       provider_id: '1',
       provider_name: 'org',
       has_installation: true,
-      botInstallationsCount: 1,
+      bot_installations_count: 1,
     },
   },
 } satisfies Meta<typeof IntegrationConnectCard>;

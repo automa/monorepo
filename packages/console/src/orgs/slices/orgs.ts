@@ -32,11 +32,11 @@ export const orgsSlice = createSlice({
       const org = state.orgs?.find((o) => o.name === action.payload.name);
 
       if (org) {
-        org.botInstallationsCount = action.payload.count;
+        org.bot_installations_count = action.payload.count;
       }
 
       if (state.org?.name === action.payload.name) {
-        state.org.botInstallationsCount = action.payload.count;
+        state.org.bot_installations_count = action.payload.count;
       }
     },
     setOrgs: (state, action: PayloadAction<Org[]>) => {

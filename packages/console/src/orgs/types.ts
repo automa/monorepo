@@ -8,5 +8,5 @@ export type Org = {
   provider_name: string;
   has_installation: boolean;
 
-  botInstallationsCount: number;
+  bot_installations_count: number;
 };
