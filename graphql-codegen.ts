@@ -12,6 +12,9 @@ const config: CodegenConfig = {
         fragmentMasking: { unmaskFunctionName: 'getFragment' },
       },
     },
+    'src/gql/possibleTypes.json': {
+      plugins: ['fragment-matcher'],
+    },
   },
 };
 
