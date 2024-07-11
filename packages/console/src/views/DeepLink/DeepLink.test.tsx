@@ -21,7 +21,7 @@ test('with orgs redirects to first org', async () => {
       provider_id: '1',
       provider_name: 'one',
       has_installation: true,
-      botInstallationsCount: 1,
+      bot_installations_count: 1,
     },
     {
       id: 2,
@@ -30,7 +30,7 @@ test('with orgs redirects to first org', async () => {
       provider_id: '2',
       provider_name: 'two',
       has_installation: true,
-      botInstallationsCount: 1,
+      bot_installations_count: 1,
     },
   ];
 

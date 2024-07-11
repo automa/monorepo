@@ -86,7 +86,7 @@ const Org: React.FC<OrgProps> = () => {
   );
 
   const shouldShowBotOnboarding = useMemo(
-    () => org && !org.botInstallationsCount && isOrgTasksView,
+    () => org && !org.bot_installations_count && isOrgTasksView,
     [org, isOrgTasksView],
   );
 

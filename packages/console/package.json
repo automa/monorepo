@@ -48,10 +48,10 @@
   "scripts": {
     "build": "vite build",
     "build-analyze": "BUILD_SOURCEMAP=1 pnpm build && source-map-explorer 'build/assets/*.js'",
-    "build-stats": "BUILD_STATS=1 pnpm build",
+    "build-stats": "NO_LINT=1 BUILD_STATS=1 pnpm build",
     "start": "vite",
     "storybook": "NODE_ENV=test storybook dev -p 6006",
-    "storybook-build": "NODE_ENV=test storybook build",
+    "storybook-build": "NODE_ENV=test NO_LINT=1 storybook build",
     "test": "NODE_ENV=test vitest run",
     "test-cover": "NODE_ENV=test vitest run --coverage",
     "test-watch": "NODE_ENV=test vitest watch",

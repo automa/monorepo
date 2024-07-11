@@ -1,7 +1,7 @@
 import { gql } from 'gql';
 
 export const ORGS_QUERY_FRAGMENT = gql(`
-  fragment OrgsQueryFragment on Query {
+  fragment OrgsQuery on Query {
     orgs {
       id
       name
@@ -10,7 +10,7 @@ export const ORGS_QUERY_FRAGMENT = gql(`
       provider_name
       has_installation
 
-      botInstallationsCount
+      bot_installations_count
     }
   }
 `);

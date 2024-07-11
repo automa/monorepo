@@ -66,7 +66,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
     update(cache, { data }) {
       if (!bot || !data) return;
 
-      setOrgBotInstallationsCount(org.name, org.botInstallationsCount + 1);
+      setOrgBotInstallationsCount(org.name, org.bot_installations_count + 1);
 
       const newBotInstallationRef = cache.writeFragment({
         data: getFragment(BOT_INSTALLATION_FRAGMENT, data.botInstall),
@@ -118,7 +118,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
     update(cache) {
       if (!bot?.installation) return;
 
-      setOrgBotInstallationsCount(org.name, org.botInstallationsCount - 1);
+      setOrgBotInstallationsCount(org.name, org.bot_installations_count - 1);
 
       cache.evict({ id: `BotInstallation:${bot.installation.id}` });
 

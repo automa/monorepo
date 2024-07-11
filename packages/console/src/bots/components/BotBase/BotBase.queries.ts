@@ -1,7 +1,7 @@
 import { gql } from 'gql';
 
 export const BOT_BASE_FRAGMENT = gql(`
-  fragment BotBaseFragment on BotBase {
+  fragment BotBase on BotBase {
     name
     short_description
     image_url

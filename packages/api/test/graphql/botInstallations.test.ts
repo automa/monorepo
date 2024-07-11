@@ -47,7 +47,7 @@ suite('graphql botInstallations', () => {
     await app.close();
   });
 
-  suite('org botInstallationsCount', () => {
+  suite('org bot_installations_count', () => {
     let response: LightMyRequestResponse;
 
     suiteSetup(async () => {
@@ -76,7 +76,7 @@ suite('graphql botInstallations', () => {
           query orgs {
             orgs {
               id
-              botInstallationsCount
+              bot_installations_count
             }
           }
         `,
@@ -98,15 +98,15 @@ suite('graphql botInstallations', () => {
       assert.isUndefined(errors);
     });
 
-    test('should return botInstallationsCount', async () => {
+    test('should return bot_installations_count', async () => {
       const {
         data: { orgs },
       } = response.json();
 
       assert.lengthOf(orgs, 2);
 
-      assert.equal(orgs[0].botInstallationsCount, 2);
-      assert.equal(orgs[1].botInstallationsCount, 0);
+      assert.equal(orgs[0].bot_installations_count, 2);
+      assert.equal(orgs[1].bot_installations_count, 0);
     });
   });
 
