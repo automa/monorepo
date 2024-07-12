@@ -119,6 +119,7 @@ export default async function (app: FastifyInstance) {
     context: async (request) => ({
       userId: request.userId!,
       prisma: app.prisma,
+      events: app.events,
       analytics: app.analytics,
       optimizer: app.optimizer,
     }),

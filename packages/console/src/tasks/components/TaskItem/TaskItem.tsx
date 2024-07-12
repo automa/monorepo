@@ -71,31 +71,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
     );
   }
 
-  if (taskItem.type === TaskItemType.Bot) {
-    const name = `${taskItem.data.botOrgName}/${taskItem.data.botName}`;
-
-    return (
-      <TaskItemContainer icon={Robot} timestamp={taskItem.created_at}>
-        <Subject>
-          {taskItem.actor_user ? (
-            <>
-              <UserAvatar user={taskItem.actor_user} size="small" />
-              <Typography variant="small">{user!.name}</Typography>
-            </>
-          ) : (
-            <Typography variant="small">AI</Typography>
-          )}
-        </Subject>
-        <Typography variant="small">assigned the task to</Typography>
-        <Anchor href={`../bots/${name}`}>
-          <Subject>
-            <Typography variant="small">{name}</Typography>
-          </Subject>
-        </Anchor>
-      </TaskItemContainer>
-    );
-  }
-
   if (taskItem.type === TaskItemType.Repo) {
     const definition =
       repoDefinitions[taskItem.data.repoOrgProviderType as ProviderType];
@@ -128,6 +103,31 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
               </Typography>
             </Subject>
           </Flex>
+        </Anchor>
+      </TaskItemContainer>
+    );
+  }
+
+  if (taskItem.type === TaskItemType.Bot) {
+    const name = `${taskItem.data.botOrgName}/${taskItem.data.botName}`;
+
+    return (
+      <TaskItemContainer icon={Robot} timestamp={taskItem.created_at}>
+        <Subject>
+          {taskItem.actor_user ? (
+            <>
+              <UserAvatar user={taskItem.actor_user} size="small" />
+              <Typography variant="small">{user!.name}</Typography>
+            </>
+          ) : (
+            <Typography variant="small">AI</Typography>
+          )}
+        </Subject>
+        <Typography variant="small">assigned the task to</Typography>
+        <Anchor href={`../bots/${name}`}>
+          <Subject>
+            <Typography variant="small">{name}</Typography>
+          </Subject>
         </Anchor>
       </TaskItemContainer>
     );

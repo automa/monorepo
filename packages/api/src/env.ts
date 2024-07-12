@@ -33,6 +33,9 @@ const schema = Type.Object({
     PROJECT_ID: Type.String({
       default: 'automa',
     }),
+    PUBSUB_URL: Type.String({
+      default: 'http://localhost:8681',
+    }),
   }),
   GITHUB_APP: Type.Object({
     ACCESS_TOKEN_URL: Type.String({

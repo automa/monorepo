@@ -82,3 +82,19 @@ export const seedBots = (
       }),
     })),
   });
+
+export const seedRepos = (
+  app: FastifyInstance,
+  installed: { id: number }[],
+  nonInstalled: { id: number }[],
+) =>
+  app.prisma.repos.createManyAndReturn({
+    data: installed.concat(nonInstalled).map(({ id }, i) => ({
+      org_id: id,
+      name: `repo-${i}`,
+      provider_id: `${i}`,
+      ...(i < installed.length && {
+        has_installation: true,
+      }),
+    })),
+  });

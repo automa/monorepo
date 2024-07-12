@@ -16,6 +16,13 @@ services:
     image: redis:alpine
     ports:
       - 6379:6379
+  pubsub:
+    container_name: automa-pubsub
+    image: thekevjames/gcloud-pubsub-emulator
+    ports:
+      - 8681:8681
+    environment:
+      PUBSUB_PROJECT1: automa,task-created:task-created
   jaeger:
     container_name: automa-jaeger
     image: jaegertracing/all-in-one
