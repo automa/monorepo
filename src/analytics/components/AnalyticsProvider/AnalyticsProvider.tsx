@@ -3,7 +3,7 @@ import { AnalyticsBrowser, ID } from '@segment/analytics-next';
 
 import { isProduction, isTest } from 'env';
 
-import { useAsyncEffect } from 'shared';
+import { Loader, useAsyncEffect } from 'shared';
 
 import AnalyticsContext from 'analytics/context';
 
@@ -49,7 +49,7 @@ const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }) => {
   }, []);
 
   if (!isInitialized) {
-    return null;
+    return <Loader />;
   }
 
   return (
