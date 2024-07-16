@@ -51,10 +51,7 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
           span.setAttribute('gate', gate);
 
           try {
-            const value = await Statsig.checkGate(
-              marshallUser(user, org),
-              gate,
-            );
+            const value = Statsig.checkGateSync(marshallUser(user, org), gate);
 
             span.end();
 
@@ -71,10 +68,7 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
           span.setAttribute('key', key);
 
           try {
-            const config = await Statsig.getConfig(
-              marshallUser(user, org),
-              key,
-            );
+            const config = Statsig.getConfigSync(marshallUser(user, org), key);
 
             span.end();
 
@@ -91,7 +85,7 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
           span.setAttribute('experiment', experiment);
 
           try {
-            const config = await Statsig.getExperiment(
+            const config = Statsig.getExperimentSync(
               marshallUser(user, org),
               experiment,
             );
