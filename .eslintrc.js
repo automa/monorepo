@@ -50,6 +50,7 @@ module.exports = {
     'import/newline-after-import': 'error',
     'import/no-duplicates': 'error',
     'mocha/no-mocha-arrows': 'off',
+    'mocha/no-exclusive-tests': 'error',
   },
   env: {
     node: true,
