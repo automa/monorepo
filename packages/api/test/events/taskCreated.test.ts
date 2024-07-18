@@ -9,7 +9,7 @@ import { seedBots, seedOrgs, seedRepos, seedUsers, server } from '../utils';
 
 import taskCreated from '../../src/events/queues/taskCreated';
 
-suite.only('events/taskCreated', () => {
+suite('events/taskCreated', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, user: users;
   let org: orgs, nonMemberOrg: orgs;
   let repo: repos, bot: bots;
