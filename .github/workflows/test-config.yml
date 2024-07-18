@@ -4,7 +4,9 @@ on:
     branches: [master]
     paths:
       - .github/workflows/test-config.yml
-      - packages/config/**
+      - packages/config/src/**
+      - packages/config/test/**
+      - packages/config/schemas/**
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

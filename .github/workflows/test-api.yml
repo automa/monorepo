@@ -5,8 +5,10 @@ on:
     paths:
       - .github/workflows/test-api.yml
       - packages/common/src/**
-      - packages/prisma/**
-      - packages/api/**
+      - packages/prisma/src/**
+      - packages/prisma/schema.prisma
+      - packages/api/src/**
+      - packages/api/test/**
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
