@@ -73,7 +73,8 @@ const create: LinearEventActionHandler<{
   ]);
 
   // TODO: Check if the issue is already linked to a task
-  // TODO: If there are any problems, we should notify the user
+
+  const problems = [];
 
   // Get the options
   const options = getOptions(comment);
@@ -95,6 +96,7 @@ const create: LinearEventActionHandler<{
           select: {
             id: true,
             name: true,
+            image_url: true,
             orgs: {
               select: {
                 id: true,
@@ -112,6 +114,12 @@ const create: LinearEventActionHandler<{
         `${botInstallation.bots.orgs.name}/${botInstallation.bots.name}`,
       ].includes(options.bot),
     );
+
+    if (!selectedBot) {
+      problems.push(
+        `Bot \`${options.bot}\` not found. Using AI to select bot.`,
+      );
+    }
   }
 
   // Find and use the repo if selected
@@ -131,6 +139,12 @@ const create: LinearEventActionHandler<{
     });
 
     selectedRepo = repos.find((repo) => [repo.name].includes(options.repo));
+
+    if (!selectedRepo) {
+      problems.push(
+        `Repo \`${options.repo}\` not found. Using AI to select repo.`,
+      );
+    }
   }
 
   // Create the task
@@ -186,6 +200,7 @@ const create: LinearEventActionHandler<{
                 data: {
                   botId: selectedBot.bots.id,
                   botName: selectedBot.bots.name,
+                  botImageUrl: selectedBot.bots.image_url,
                   botOrgId: selectedBot.bots.orgs.id,
                   botOrgName: selectedBot.bots.orgs.name,
                 },
@@ -196,9 +211,19 @@ const create: LinearEventActionHandler<{
     },
   });
 
+  let reponseComment = `Created task: ${env.CLIENT_URI}/${connection.orgs.name}/tasks/${task.id}`;
+
+  if (problems.length) {
+    const problemsMessage = problems
+      .map((problem) => `- ${problem}`)
+      .join('\n');
+
+    reponseComment = `${reponseComment}\n\nWe encountered the following issues while creating the task:\n${problemsMessage}`;
+  }
+
   // Create a comment to notify the user
   await client.createComment({
-    body: `Created task: ${env.CLIENT_URI}/${connection.orgs.name}/tasks/${task.id}`,
+    body: reponseComment,
     issueId: body.data.issue.id,
     parentId: body.data.parentId || body.data.id,
   });

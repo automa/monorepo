@@ -281,6 +281,7 @@ suite('linear hook Comment event', () => {
         data: {
           botId: secondBot.id,
           botName: 'bot-1',
+          botImageUrl: 'https://example.com/image/1.png',
           botOrgId: org.id,
           botOrgName: 'org-0',
         },
@@ -307,6 +308,60 @@ suite('linear hook Comment event', () => {
       assert.equal(createCommentStub.callCount, 1);
       assert.deepEqual(createCommentStub.firstCall.args[0], {
         body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+        issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+        parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+      });
+    });
+  });
+
+  suite('create with wrong bot specified', () => {
+    setup(async () => {
+      response = await callWithFixture(app, 'Comment', 'create_bot_bad');
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 1);
+      assert.deepOwnInclude(tasks[0], {
+        org_id: org.id,
+        title: 'Delete tokens when user revokes Github App',
+      });
+    });
+
+    test('should not assign task to bot', async () => {
+      const taskItems = await app.prisma.task_items.findMany({
+        where: {
+          type: 'bot',
+        },
+      });
+
+      assert.isEmpty(taskItems);
+    });
+
+    test('should get information about issue', async () => {
+      assert.equal(issueStub.callCount, 1);
+      assert.equal(
+        issueStub.firstCall.args[0],
+        'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+      );
+    });
+
+    test('should get information about organization', async () => {
+      assert.equal(organizationStub.callCount, 1);
+      assert.lengthOf(organizationStub.firstCall.args, 0);
+    });
+
+    test('should create comment about the task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(createCommentStub.callCount, 1);
+      assert.deepEqual(createCommentStub.firstCall.args[0], {
+        body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}\n\nWe encountered the following issues while creating the task:\n- Bot \`bot-2\` not found. Using AI to select bot.`,
         issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
         parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
       });
@@ -375,6 +430,60 @@ suite('linear hook Comment event', () => {
       assert.equal(createCommentStub.callCount, 1);
       assert.deepEqual(createCommentStub.firstCall.args[0], {
         body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+        issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+        parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+      });
+    });
+  });
+
+  suite('create with wrong repo specified', () => {
+    setup(async () => {
+      response = await callWithFixture(app, 'Comment', 'create_repo_bad');
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 1);
+      assert.deepOwnInclude(tasks[0], {
+        org_id: org.id,
+        title: 'Delete tokens when user revokes Github App',
+      });
+    });
+
+    test('should not select repo for the task', async () => {
+      const taskItems = await app.prisma.task_items.findMany({
+        where: {
+          type: 'repo',
+        },
+      });
+
+      assert.isEmpty(taskItems);
+    });
+
+    test('should get information about issue', async () => {
+      assert.equal(issueStub.callCount, 1);
+      assert.equal(
+        issueStub.firstCall.args[0],
+        'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+      );
+    });
+
+    test('should get information about organization', async () => {
+      assert.equal(organizationStub.callCount, 1);
+      assert.lengthOf(organizationStub.firstCall.args, 0);
+    });
+
+    test('should create comment about the task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(createCommentStub.callCount, 1);
+      assert.deepEqual(createCommentStub.firstCall.args[0], {
+        body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}\n\nWe encountered the following issues while creating the task:\n- Repo \`repo-2\` not found. Using AI to select repo.`,
         issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
         parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
       });
