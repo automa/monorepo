@@ -3,17 +3,15 @@ import { assert } from 'chai';
 import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
 import { CommentPayload, Issue, LinearClient } from '@linear/sdk';
 
-import { orgs, users } from '@automa/prisma';
+import { bots, orgs, repos, users } from '@automa/prisma';
 
-import { seedOrgs, seedUsers, server } from '../../utils';
+import { seedBots, seedOrgs, seedRepos, seedUsers, server } from '../../utils';
 
 import { callWithFixture } from './utils';
 
 suite('linear hook Comment event', () => {
-  let app: FastifyInstance,
-    user: users,
-    org: orgs,
-    response: LightMyRequestResponse;
+  let app: FastifyInstance, response: LightMyRequestResponse;
+  let user: users, org: orgs, repo: repos, bot: bots, secondBot: bots;
   let sandbox: SinonSandbox,
     issueStub: SinonStub,
     organizationStub: SinonStub,
@@ -25,6 +23,21 @@ suite('linear hook Comment event', () => {
 
     [user] = await seedUsers(app, 1);
     [org] = await seedOrgs(app, 1);
+    [, repo] = await seedRepos(app, [org, org]);
+    [bot, secondBot] = await seedBots(app, [org, org]);
+
+    await app.prisma.bot_installations.createMany({
+      data: [
+        {
+          bot_id: bot.id,
+          org_id: org.id,
+        },
+        {
+          bot_id: secondBot.id,
+          org_id: org.id,
+        },
+      ],
+    });
   });
 
   suiteTeardown(async () => {
@@ -34,6 +47,8 @@ suite('linear hook Comment event', () => {
   });
 
   setup(async () => {
+    sandbox.stub(app.events.taskCreated, 'publish').resolves();
+
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,
@@ -205,6 +220,139 @@ suite('linear hook Comment event', () => {
           parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
           url: 'https://linear.app/automa/issue/PRO-93/handle-when-user-revokes-github-app#comment-9ab4e3ef',
         },
+      });
+    });
+
+    test('should get information about issue', async () => {
+      assert.equal(issueStub.callCount, 1);
+      assert.equal(
+        issueStub.firstCall.args[0],
+        'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+      );
+    });
+
+    test('should get information about organization', async () => {
+      assert.equal(organizationStub.callCount, 1);
+      assert.lengthOf(organizationStub.firstCall.args, 0);
+    });
+
+    test('should create comment about the task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(createCommentStub.callCount, 1);
+      assert.deepEqual(createCommentStub.firstCall.args[0], {
+        body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+        issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+        parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+      });
+    });
+  });
+
+  suite('create with bot specified', () => {
+    setup(async () => {
+      response = await callWithFixture(app, 'Comment', 'create_bot');
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 1);
+      assert.deepOwnInclude(tasks[0], {
+        org_id: org.id,
+        title: 'Delete tokens when user revokes Github App',
+      });
+    });
+
+    test('should assign task to bot', async () => {
+      const taskItems = await app.prisma.task_items.findMany({
+        where: {
+          type: 'bot',
+        },
+      });
+
+      assert.equal(taskItems.length, 1);
+
+      assert.deepOwnInclude(taskItems[0], {
+        type: 'bot',
+        data: {
+          botId: secondBot.id,
+          botName: 'bot-1',
+          botOrgId: org.id,
+          botOrgName: 'org-0',
+        },
+        actor_user_id: null,
+      });
+    });
+
+    test('should get information about issue', async () => {
+      assert.equal(issueStub.callCount, 1);
+      assert.equal(
+        issueStub.firstCall.args[0],
+        'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+      );
+    });
+
+    test('should get information about organization', async () => {
+      assert.equal(organizationStub.callCount, 1);
+      assert.lengthOf(organizationStub.firstCall.args, 0);
+    });
+
+    test('should create comment about the task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(createCommentStub.callCount, 1);
+      assert.deepEqual(createCommentStub.firstCall.args[0], {
+        body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+        issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+        parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+      });
+    });
+  });
+
+  suite('create with repo specified', () => {
+    setup(async () => {
+      response = await callWithFixture(app, 'Comment', 'create_repo');
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 1);
+      assert.deepOwnInclude(tasks[0], {
+        org_id: org.id,
+        title: 'Delete tokens when user revokes Github App',
+      });
+    });
+
+    test('should select repo for the task', async () => {
+      const taskItems = await app.prisma.task_items.findMany({
+        where: {
+          type: 'repo',
+        },
+      });
+
+      assert.equal(taskItems.length, 1);
+
+      assert.deepOwnInclude(taskItems[0], {
+        type: 'repo',
+        data: {
+          repoId: repo.id,
+          repoName: 'repo-1',
+          repoOrgId: org.id,
+          repoOrgName: 'org-0',
+          repoOrgProviderType: 'github',
+          repoOrgProviderId: '0',
+          repoProviderId: '1',
+        },
+        actor_user_id: null,
       });
     });
 

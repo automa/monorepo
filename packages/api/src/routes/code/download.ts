@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { c as createTar } from 'tar';
 import { $ } from 'zx';
 
-import { TaskItemType } from '@automa/common';
+import { task_item } from '@automa/prisma';
 
 import { logger, SeverityNumber } from '../../telemetry';
 
@@ -50,7 +50,7 @@ export default async function (app: FastifyInstance) {
 
     // Get repository task item
     const repoTaskItem = task.task_items.find(
-      (item) => item.type === TaskItemType.Repo,
+      (item) => item.type === task_item.repo,
     );
 
     if (!repoTaskItem) {
@@ -101,7 +101,7 @@ export default async function (app: FastifyInstance) {
 
     // Get bot task item
     const botTaskItem = task.task_items.find(
-      (item) => item.type === TaskItemType.Bot,
+      (item) => item.type === task_item.bot,
     );
 
     if (!botTaskItem) {
