@@ -20,8 +20,8 @@ suite('events/taskCreated', () => {
 
     [user] = await seedUsers(app, 1);
     [org, nonMemberOrg] = await seedOrgs(app, 2);
-    [repo] = await seedRepos(app, [org], []);
-    [bot] = await seedBots(app, [nonMemberOrg], []);
+    [repo] = await seedRepos(app, [org]);
+    [bot] = await seedBots(app, [nonMemberOrg]);
 
     await app.prisma.bot_installations.createMany({
       data: [

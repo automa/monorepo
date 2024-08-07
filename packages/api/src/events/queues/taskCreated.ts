@@ -1,7 +1,13 @@
 import axios from 'axios';
 
-import { TaskItemType } from '@automa/common';
-import { bot_installations, bots, orgs, Prisma, repos } from '@automa/prisma';
+import {
+  bot_installations,
+  bots,
+  orgs,
+  Prisma,
+  repos,
+  task_item,
+} from '@automa/prisma';
 
 import { logger, SeverityNumber } from '../../telemetry';
 
@@ -14,7 +20,7 @@ const taskCreated: QueueDefinition<{
   handler: async (app, { id }) => {
     logger.emit({
       severityNumber: SeverityNumber.INFO,
-      body: 'Processing task created event',
+      body: `Processing task created event`,
       attributes: {
         id,
       },
@@ -42,10 +48,10 @@ const taskCreated: QueueDefinition<{
     }
 
     const repoTaskItem = task.task_items.find(
-      (item) => item.type === TaskItemType.Repo,
+      (item) => item.type === task_item.repo,
     );
     const botTaskItem = task.task_items.find(
-      (item) => item.type === TaskItemType.Bot,
+      (item) => item.type === task_item.bot,
     );
 
     let repo: repos & { orgs: orgs },
@@ -72,6 +78,18 @@ const taskCreated: QueueDefinition<{
       });
 
       // TODO: Handle gracefully if no active repos are found
+      if (!repos.length) {
+        logger.emit({
+          severityNumber: SeverityNumber.WARN,
+          body: 'No active repos found for task',
+          attributes: {
+            id,
+          },
+        });
+
+        return;
+      }
+
       // TODO: Use AI to select the best repo
       repo = repos[0];
 
@@ -127,6 +145,18 @@ const taskCreated: QueueDefinition<{
       });
 
       // TODO: Handle gracefully if no bot installations are found
+      if (!botInstallations.length) {
+        logger.emit({
+          severityNumber: SeverityNumber.WARN,
+          body: 'No active bots found for task',
+          attributes: {
+            id,
+          },
+        });
+
+        return;
+      }
+
       // TODO: Use AI to select the best bot
       botInstallation = botInstallations[0];
 

@@ -19,13 +19,14 @@ VALUES
 INSERT INTO public.bots (org_id, name, short_description, image_url, description, type, webhook_url, homepage, published_at, is_deterministic)
 VALUES
   (1, 'aider', 'Basic bot that codes', 'https://aider.chat/assets/icons/apple-touch-icon.png', '...', 'event', 'https://localhost:5000/hooks/automa', 'https://aider.chat', NOW(), FALSE),
-  (1, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', '...', 'event', 'http://localhost:5001/hooks/automa', 'https://posthog.com', NOW(), FALSE),
-  (1, 'github-runners', 'Changes GitHub CI configuration to use Depot runners', 'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg', '...', 'scheduled', 'http://localhost:5002/hooks/automa', 'https://depot.dev', NOW(), TRUE);
+  (1, 'github-runners', 'Changes GitHub CI configuration to use Depot runners', 'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg', '...', 'scheduled', 'http://localhost:5001/hooks/automa', 'https://depot.dev', NOW(), TRUE),
+  (1, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', '...', 'event', 'http://localhost:5002/hooks/automa', 'https://posthog.com', NOW(), FALSE);
 
 INSERT INTO public.bot_installations (bot_id, org_id)
 VALUES
   (4, 1),
-  (5, 1);
+  (5, 1),
+  (6, 1);
 
 INSERT INTO public.tasks (org_id, title, created_at, completed_at)
 VALUES
