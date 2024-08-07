@@ -116,6 +116,9 @@ CREATE TABLE public.bots (
 CREATE INDEX bots_is_published_idx
 ON public.bots (is_published);
 
+CREATE INDEX bots_type_idx
+ON public.bots (type);
+
 INSERT INTO public.bots (org_id, name, type, webhook_url, short_description, homepage, is_preview, is_deterministic)
 VALUES
   (1, 'automa', 'event', 'https://api.automa.app/hooks/automa', 'Updates & migrates automa settings', 'https://automa.app', FALSE, TRUE),
@@ -129,6 +132,9 @@ CREATE TABLE public.bot_installations (
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   UNIQUE (bot_id, org_id)
 );
+
+CREATE INDEX bot_installations_org_id_created_at_idx
+ON public.bot_installations (org_id, created_at ASC);
 
 CREATE TYPE public.integration AS ENUM ('github', 'linear', 'slack', 'jira');
 

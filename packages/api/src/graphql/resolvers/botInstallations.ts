@@ -23,7 +23,7 @@ export const Query: QueryResolvers<Context> = {
         org_id,
       },
       orderBy: {
-        id: 'asc',
+        created_at: 'asc',
       },
     });
   },
