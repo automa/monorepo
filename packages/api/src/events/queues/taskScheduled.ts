@@ -64,6 +64,7 @@ const taskScheduled: QueueDefinition<{
             data: {
               botId: bot.id,
               botName: bot.name,
+              botImageUrl: bot.image_url,
               botOrgId: bot.orgs.id,
               botOrgName: bot.orgs.name,
             },

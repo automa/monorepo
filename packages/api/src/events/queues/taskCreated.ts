@@ -168,6 +168,7 @@ const taskCreated: QueueDefinition<{
           data: {
             botId: botInstallation.bots.id,
             botName: botInstallation.bots.name,
+            botImageUrl: botInstallation.bots.image_url,
             botOrgId: botInstallation.bots.orgs.id,
             botOrgName: botInstallation.bots.orgs.name,
           },

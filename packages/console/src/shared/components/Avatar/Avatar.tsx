@@ -6,6 +6,7 @@ import { AvatarComponentProps } from './types';
 import { Container, Fallback, Image } from './Avatar.styles';
 
 const Avatar: React.FC<AvatarComponentProps> = ({
+  variant,
   size,
   src,
   alt,
@@ -14,8 +15,10 @@ const Avatar: React.FC<AvatarComponentProps> = ({
   return (
     <Container {...props} asChild>
       <AvatarPrimitive.Root>
-        {src && <Image $size={size} src={src} alt={alt} />}
-        <Fallback $size={size}>{alt[0].toUpperCase()}</Fallback>
+        {src && <Image $variant={variant} $size={size} src={src} alt={alt} />}
+        <Fallback $variant={variant} $size={size}>
+          {alt[0].toUpperCase()}
+        </Fallback>
       </AvatarPrimitive.Root>
     </Container>
   );
