@@ -9,6 +9,8 @@ import { Anchor, Avatar, Flex, Tooltip, Typography } from 'shared';
 
 import { USER_AVATAR_FRAGMENT, UserAvatar } from 'users';
 
+import Logo from 'assets/logo.svg?react';
+
 import { TaskItemProps } from './types';
 import { originDefinitions, repoDefinitions } from './utils';
 
@@ -35,7 +37,7 @@ const TaskItemContainer: React.FC<{
   );
 };
 
-const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
+const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
   const taskItem = getFragment(TASK_ITEM_FRAGMENT, data);
   const user = getFragment(USER_AVATAR_FRAGMENT, taskItem.actor_user);
 
@@ -82,7 +84,12 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
     return (
       <TaskItemContainer icon={Code} timestamp={taskItem.created_at}>
         <Subject>
-          {taskItem.actor_user ? (
+          {scheduled ? (
+            <>
+              <Logo className="size-4" />
+              <Typography variant="small">Automa</Typography>
+            </>
+          ) : taskItem.actor_user ? (
             <>
               <UserAvatar user={taskItem.actor_user} size="small" />
               <Typography variant="small">{user!.name}</Typography>
@@ -94,7 +101,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
         <Typography variant="small">
           decided to implement the task in
         </Typography>
-        <Anchor href={`../repos`}>
+        {/* TODO: Fix link */}
+        <Anchor to={`../repos`}>
           <Flex alignItems="center" className="gap-1">
             <definition.icon className="ml-0.5 size-3" />
             <Subject>
@@ -114,7 +122,12 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
     return (
       <TaskItemContainer icon={Robot} timestamp={taskItem.created_at}>
         <Subject>
-          {taskItem.actor_user ? (
+          {scheduled ? (
+            <>
+              <Logo className="size-4" />
+              <Typography variant="small">Automa</Typography>
+            </>
+          ) : taskItem.actor_user ? (
             <>
               <UserAvatar user={taskItem.actor_user} size="small" />
               <Typography variant="small">{user!.name}</Typography>
@@ -124,7 +137,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
           )}
         </Subject>
         <Typography variant="small">assigned the task to</Typography>
-        <Anchor href={`../bots/${name}`}>
+        <Anchor to={`../bots/${name}`}>
           <Flex alignItems="center" className="gap-1">
             <Avatar
               src={taskItem.data.botImageUrl}

@@ -38,7 +38,11 @@ const Task: React.FC<TaskProps> = ({ org }) => {
             <Typography variant="title4">{task.title}</Typography>
             <Flex direction="column" className="gap-6">
               {task.items.map((item, index) => (
-                <TaskItem key={index} taskItem={item} />
+                <TaskItem
+                  key={index}
+                  taskItem={item}
+                  scheduled={task.is_scheduled}
+                />
               ))}
             </Flex>
           </Flex>

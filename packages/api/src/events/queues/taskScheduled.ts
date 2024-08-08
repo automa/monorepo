@@ -45,6 +45,7 @@ const taskScheduled: QueueDefinition<{
     await taskCreate(app, {
       org_id: orgId,
       title: `Running ${bot.orgs.name}/${bot.name} on ${repo.name}`,
+      is_scheduled: true,
       task_items: {
         create: [
           {

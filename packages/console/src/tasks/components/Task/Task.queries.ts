@@ -4,6 +4,7 @@ export const TASK_FRAGMENT = gql(`
   fragment Task on Task {
     id
     title
+    is_scheduled
     created_at
     completed_at
     is_completed

@@ -71,6 +71,7 @@ module.exports = {
           ['^\\./(routes|types|utils)$'],
           ['^\\.'],
           ['^\\./.*\\.(queries|styles)$'],
+          ['^.*\\.stories'],
         ],
       },
     ],

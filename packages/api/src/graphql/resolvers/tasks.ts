@@ -12,7 +12,7 @@ import { Context } from '../types';
 import { taskCreate } from '../../db';
 
 export const Query: QueryResolvers<Context> = {
-  tasks: async (root, { org_id }, { userId, prisma }) => {
+  tasks: async (root, { org_id, filter }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
@@ -24,6 +24,7 @@ export const Query: QueryResolvers<Context> = {
     return prisma.tasks.findMany({
       where: {
         org_id,
+        is_scheduled: filter?.is_scheduled ?? undefined,
       },
       orderBy: {
         id: 'desc',

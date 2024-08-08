@@ -12,9 +12,12 @@ import Task from './Task';
 
 import { TASK_FRAGMENT } from './Task.queries';
 
+import TaskItemBadgeStory from '../TaskItemBadge/TaskItemBadge.stories';
+
 const task = {
   id: 1,
   title: 'Task 1',
+  is_scheduled: false,
   created_at: '2024-05-15T09:04:04.629Z',
   completed_at: null,
   is_completed: false,
@@ -101,6 +104,29 @@ export const OriginAuthor = {
                 },
                 USER_AVATAR_FRAGMENT,
               ),
+            },
+            TASK_ITEM_FRAGMENT,
+          ),
+        ],
+      },
+      TASK_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const Origin = {
+  args: {
+    task: makeFragmentData(
+      {
+        ...task,
+        items: [
+          makeFragmentData(
+            {
+              ...TaskItemBadgeStory.args,
+              id: 1,
+              type: TaskItemType.Origin,
+              created_at: '2024-05-15T09:04:04.629Z',
+              actor_user: null,
             },
             TASK_ITEM_FRAGMENT,
           ),

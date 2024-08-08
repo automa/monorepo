@@ -60,6 +60,7 @@ suite('graphql tasks', () => {
           },
           {
             title: 'task-3',
+            is_scheduled: true,
             org_id: org.id,
             completed_at: new Date(),
           },
@@ -158,6 +159,43 @@ suite('graphql tasks', () => {
       assert.lengthOf(errors, 1);
       assert.equal(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+
+    test('should return only non-scheduled tasks with filter.is_scheduled = false', async () => {
+      const response = await graphql(
+        app,
+        `
+          query tasks($org_id: Int!, $filter: TasksFilter) {
+            tasks(org_id: $org_id, filter: $filter) {
+              id
+              title
+              is_scheduled
+            }
+          }
+        `,
+        {
+          org_id: org.id,
+          filter: {
+            is_scheduled: false,
+          },
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { tasks },
+      } = response.json();
+
+      assert.lengthOf(tasks, 1);
+
+      assert.equal(tasks[0].title, 'task-0');
+      assert.isFalse(tasks[0].is_scheduled);
     });
 
     suite('items', () => {

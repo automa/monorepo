@@ -48,6 +48,7 @@ suite('events/taskScheduled', () => {
     assert.deepOwnInclude(tasks[0], {
       org_id: org.id,
       title: 'Running org-0/bot-0 on repo-0',
+      is_scheduled: true,
       completed_at: null,
     });
 

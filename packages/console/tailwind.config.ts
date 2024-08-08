@@ -39,7 +39,8 @@ const config: Config = {
       },
       gridTemplateColumns: {
         '2': 'repeat(auto-fill, minmax(29rem, 1fr))',
-        '3': 'repeat(auto-fill, minmax(17rem, 1fr))',
+        '3': 'repeat(auto-fill, minmax(23rem, 1fr))',
+        '4': 'repeat(auto-fill, minmax(17rem, 1fr))',
       },
       height: {
         '0.25': '0.0625rem',

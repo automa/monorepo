@@ -2,7 +2,7 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import { Flex, Loader, ToggleGroup, useFilters } from 'shared';
+import { Button, Flex, Loader, ToggleGroup, useFilters } from 'shared';
 
 import { PublicBot, publicBotsfilters } from 'bots';
 
@@ -33,19 +33,26 @@ const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
         </Banner>
       )}
       <Flex direction="column" className="gap-8">
-        <Flex justifyContent="flex-end" className="gap-4">
-          <ToggleGroup
-            optional
-            defaultValue={filterValues.type}
-            options={filterOptions.type}
-            onValueChange={filterChangeFns.type}
-          />
-          <ToggleGroup
-            optional
-            defaultValue={filterValues.ai}
-            options={filterOptions.ai}
-            onValueChange={filterChangeFns.ai}
-          />
+        <Flex
+          justifyContent="flex-end"
+          alignItems="center"
+          className="h-9 gap-6"
+        >
+          <Flex className="gap-4">
+            <ToggleGroup
+              optional
+              defaultValue={filterValues.type}
+              options={filterOptions.type}
+              onValueChange={filterChangeFns.type}
+            />
+            <ToggleGroup
+              optional
+              defaultValue={filterValues.ai}
+              options={filterOptions.ai}
+              onValueChange={filterChangeFns.ai}
+            />
+          </Flex>
+          <Button to="../settings/bots/new">Create Bot</Button>
         </Flex>
         {loading && !data ? (
           <Flex justifyContent="center">
