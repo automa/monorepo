@@ -80,6 +80,7 @@ suite('events/taskScheduled', () => {
       data: {
         botId: bot.id,
         botName: 'bot-0',
+        botImageUrl: 'https://example.com/image/0.png',
         botOrgId: bot.org_id,
         botOrgName: 'org-0',
       },

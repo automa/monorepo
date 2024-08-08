@@ -5,7 +5,7 @@ import { format, formatDistanceToNow } from 'date-fns';
 import { IntegrationType, ProviderType, TaskItemType } from '@automa/common';
 
 import { getFragment } from 'gql';
-import { Anchor, Flex, Tooltip, Typography } from 'shared';
+import { Anchor, Avatar, Flex, Tooltip, Typography } from 'shared';
 
 import { USER_AVATAR_FRAGMENT, UserAvatar } from 'users';
 
@@ -125,9 +125,18 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
         </Subject>
         <Typography variant="small">assigned the task to</Typography>
         <Anchor href={`../bots/${name}`}>
-          <Subject>
-            <Typography variant="small">{name}</Typography>
-          </Subject>
+          <Flex alignItems="center" className="gap-1">
+            <Avatar
+              src={taskItem.data.botImageUrl}
+              alt={taskItem.data.botName}
+              variant="square"
+              size="xsmall"
+              className="ml-0.5"
+            />
+            <Subject>
+              <Typography variant="small">{name}</Typography>
+            </Subject>
+          </Flex>
         </Anchor>
       </TaskItemContainer>
     );

@@ -17,6 +17,18 @@ type Story = StoryObj<typeof meta>;
 
 export const Default = {} satisfies Story;
 
+export const Square = {
+  args: {
+    variant: 'square',
+  },
+} satisfies Story;
+
+export const ExtraSmall = {
+  args: {
+    size: 'xsmall',
+  },
+} satisfies Story;
+
 export const Small = {
   args: {
     size: 'small',
@@ -32,6 +44,20 @@ export const Large = {
 export const Fallback = {
   args: {
     src: null,
+  },
+} satisfies Story;
+
+export const FallbackSquare = {
+  args: {
+    ...Fallback.args,
+    ...Square.args,
+  },
+} satisfies Story;
+
+export const FallbackExtraSmall = {
+  args: {
+    ...Fallback.args,
+    ...ExtraSmall.args,
   },
 } satisfies Story;
 

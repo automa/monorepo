@@ -114,6 +114,7 @@ export const Bot = {
         data: {
           botId: 4,
           botName: 'aider',
+          botImageUrl: 'https://aider.chat/assets/icons/apple-touch-icon.png',
           botOrgId: 1,
           botOrgName: 'automa',
         },
@@ -133,6 +134,7 @@ export const BotAuthor = {
         data: {
           botId: 4,
           botName: 'aider',
+          botImageUrl: 'https://aider.chat/assets/icons/apple-touch-icon.png',
           botOrgId: 1,
           botOrgName: 'automa',
         },

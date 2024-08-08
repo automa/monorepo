@@ -80,6 +80,7 @@ suite('events/taskCreated', () => {
                 data: {
                   botId: bot.id,
                   botName: bot.name,
+                  botImageUrl: bot.image_url,
                   botOrgId: nonMemberOrg.id,
                   botOrgName: nonMemberOrg.name,
                 },
@@ -150,12 +151,12 @@ suite('events/taskCreated', () => {
 
       assert.deepEqual(taskItems[0].data, {
         repoId: repo.id,
-        repoName: repo.name,
+        repoName: 'repo-0',
         repoOrgId: org.id,
-        repoOrgName: org.name,
-        repoOrgProviderType: org.provider_type,
-        repoOrgProviderId: org.provider_id,
-        repoProviderId: repo.provider_id,
+        repoOrgName: 'org-0',
+        repoOrgProviderType: 'github',
+        repoOrgProviderId: '0',
+        repoProviderId: '0',
       });
     });
 
@@ -171,9 +172,10 @@ suite('events/taskCreated', () => {
 
       assert.deepEqual(taskItems[0].data, {
         botId: bot.id,
-        botName: bot.name,
+        botName: 'bot-0',
+        botImageUrl: 'https://example.com/image/0.png',
         botOrgId: nonMemberOrg.id,
-        botOrgName: nonMemberOrg.name,
+        botOrgName: 'org-1',
       });
     });
 
