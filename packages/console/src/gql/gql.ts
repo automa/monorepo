@@ -29,11 +29,11 @@ const documents = {
     "\n  fragment Repo on Repo {\n    id\n    name\n    is_private\n    is_archived\n    has_installation\n  }\n": types.RepoFragmentDoc,
     "\n  query Repo(\n    $org_name: String!\n    $name: String!\n  ) {\n    repo(org_name: $org_name, name: $name) {\n      id\n      name\n      provider_id\n      is_private\n      is_archived\n      has_installation\n      org {\n        id\n        name\n        provider_type\n        github_installation_id\n      }\n    }\n  }\n": types.RepoDocument,
     "\n  query Repos($org_id: Int!) {\n    repos(org_id: $org_id) {\n      id\n      ...Repo\n    }\n  }\n": types.ReposDocument,
-    "\n  fragment Task on Task {\n    id\n    title\n    created_at\n    completed_at\n    is_completed\n    items {\n      ...TaskItem\n    }\n  }\n": types.TaskFragmentDoc,
+    "\n  fragment Task on Task {\n    id\n    title\n    is_scheduled\n    created_at\n    completed_at\n    is_completed\n    items {\n      ...TaskItem\n    }\n  }\n": types.TaskFragmentDoc,
     "\n  fragment TaskItem on TaskItem {\n    id\n    type\n    data\n    created_at\n    actor_user {\n      ...UserAvatar\n    }\n  }\n": types.TaskItemFragmentDoc,
     "\n  query Task($org_id: Int!, $id: Int!) {\n    task(org_id: $org_id, id: $id) {\n      id\n      ...Task\n    }\n  }\n": types.TaskDocument,
     "\n  mutation TaskCreate($org_id: Int!, $input: TaskMessageInput!) {\n    taskCreate(org_id: $org_id, input: $input) {\n      ...Task\n    }\n  }\n": types.TaskCreateDocument,
-    "\n  query Tasks($org_id: Int!) {\n    tasks(org_id: $org_id) {\n      id\n      ...Task\n    }\n  }\n": types.TasksDocument,
+    "\n  query Tasks($org_id: Int!, $filter: TasksFilter) {\n    tasks(org_id: $org_id, filter: $filter) {\n      id\n      ...Task\n    }\n  }\n": types.TasksDocument,
     "\n  fragment UserAvatar on User {\n    id\n    name\n    providers {\n      id\n      provider_type\n      provider_id\n    }\n  }\n": types.UserAvatarFragmentDoc,
     "\n  fragment MeQuery on Query {\n    me {\n      email\n      ...UserAvatar\n    }\n  }\n": types.MeQueryFragmentDoc,
     "\n  query Me {\n    ...MeQuery\n  }\n": types.MeDocument,
@@ -122,7 +122,7 @@ export function gql(source: "\n  query Repos($org_id: Int!) {\n    repos(org_id:
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment Task on Task {\n    id\n    title\n    created_at\n    completed_at\n    is_completed\n    items {\n      ...TaskItem\n    }\n  }\n"): (typeof documents)["\n  fragment Task on Task {\n    id\n    title\n    created_at\n    completed_at\n    is_completed\n    items {\n      ...TaskItem\n    }\n  }\n"];
+export function gql(source: "\n  fragment Task on Task {\n    id\n    title\n    is_scheduled\n    created_at\n    completed_at\n    is_completed\n    items {\n      ...TaskItem\n    }\n  }\n"): (typeof documents)["\n  fragment Task on Task {\n    id\n    title\n    is_scheduled\n    created_at\n    completed_at\n    is_completed\n    items {\n      ...TaskItem\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -138,7 +138,7 @@ export function gql(source: "\n  mutation TaskCreate($org_id: Int!, $input: Task
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query Tasks($org_id: Int!) {\n    tasks(org_id: $org_id) {\n      id\n      ...Task\n    }\n  }\n"): (typeof documents)["\n  query Tasks($org_id: Int!) {\n    tasks(org_id: $org_id) {\n      id\n      ...Task\n    }\n  }\n"];
+export function gql(source: "\n  query Tasks($org_id: Int!, $filter: TasksFilter) {\n    tasks(org_id: $org_id, filter: $filter) {\n      id\n      ...Task\n    }\n  }\n"): (typeof documents)["\n  query Tasks($org_id: Int!, $filter: TasksFilter) {\n    tasks(org_id: $org_id, filter: $filter) {\n      id\n      ...Task\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -244,6 +244,7 @@ export type QueryTaskArgs = {
 
 
 export type QueryTasksArgs = {
+  filter?: InputMaybe<TasksFilter>;
   org_id: Scalars['Int']['input'];
 };
 
@@ -265,6 +266,7 @@ export type Task = {
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   is_completed: Scalars['Boolean']['output'];
+  is_scheduled: Scalars['Boolean']['output'];
   items: Array<TaskItem>;
   org: Org;
   title: Scalars['String']['output'];
@@ -289,6 +291,10 @@ export enum TaskItemType {
 
 export type TaskMessageInput = {
   content: Scalars['String']['input'];
+};
+
+export type TasksFilter = {
+  is_scheduled?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type User = {
@@ -411,6 +417,7 @@ export type ResolversTypes = {
   TaskItem: ResolverTypeWrapper<task_items>;
   TaskItemType: ResolverTypeWrapper<task_item>;
   TaskMessageInput: TaskMessageInput;
+  TasksFilter: TasksFilter;
   User: ResolverTypeWrapper<users>;
   UserProvider: ResolverTypeWrapper<user_providers>;
   UserUpdateInput: UserUpdateInput;
@@ -439,6 +446,7 @@ export type ResolversParentTypes = {
   Task: tasks;
   TaskItem: task_items;
   TaskMessageInput: TaskMessageInput;
+  TasksFilter: TasksFilter;
   User: users;
   UserProvider: user_providers;
   UserUpdateInput: UserUpdateInput;
@@ -590,6 +598,7 @@ export type TaskResolvers<ContextType = any, ParentType extends ResolversParentT
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   is_completed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  is_scheduled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   items?: Resolver<Array<ResolversTypes['TaskItem']>, ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

@@ -2,6 +2,8 @@ import React from 'react';
 import { CheckCircle, CircleHalf, UserCircle } from '@phosphor-icons/react';
 import { format } from 'date-fns';
 
+import { TaskItemType } from '@automa/common';
+
 import { getFragment } from 'gql';
 import { Flex, Tooltip, Typography } from 'shared';
 
@@ -21,6 +23,7 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
 
   const user = items.find(({ type }) => type === 'origin')?.actor_user;
 
+  // TODO: PR Badge
   return (
     <Container {...props}>
       <Flex justifyContent="space-between">
@@ -32,7 +35,7 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
                 'MMM dd, yyyy, hh:mm:ss a',
               )}`}
             >
-              <CheckCircle className="size-5 text-green-500" />
+              <CheckCircle className="relative z-10 size-5 text-green-500" />
             </Tooltip>
           ) : (
             <CircleHalf className="size-5 text-yellow-500" />
@@ -41,7 +44,7 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
         </Flex>
         <Flex alignItems="center" className="gap-2">
           {items
-            .filter(({ type }) => type === 'origin')
+            .filter(({ type }) => type === TaskItemType.Origin)
             .map(({ id, data }) => (
               <TaskItemBadge key={id} data={data} />
             ))}
@@ -51,12 +54,15 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
               'MMM dd, yyyy, hh:mm:ss a',
             )}`}
           >
-            <Typography variant="xsmall" className="text-neutral-600">
+            <Typography
+              variant="xsmall"
+              className="relative z-10 text-neutral-600"
+            >
               {format(task.created_at, 'MMM d')}
             </Typography>
           </Tooltip>
           {user ? (
-            <UserAvatar user={user} size="small" />
+            <UserAvatar user={user} size="small" className="relative z-10" />
           ) : (
             <UserCircle className="size-5 text-neutral-400" />
           )}

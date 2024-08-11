@@ -23,7 +23,14 @@ export type FiltersDefinition = {
   [key: string]: Filter;
 };
 
-const useFilters = (definition: FiltersDefinition) => {
+type FilterDefaults = {
+  [key in keyof FiltersDefinition]?: string | string[];
+};
+
+const useFilters = (
+  definition: FiltersDefinition,
+  defaults?: FilterDefaults,
+) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const filterValues: {
@@ -32,7 +39,7 @@ const useFilters = (definition: FiltersDefinition) => {
     () =>
       Object.entries(definition).reduce((acc, [key, filter]) => {
         let value;
-        const searchValue = searchParams.get(key);
+        const searchValue = searchParams.get(key) ?? defaults?.[key];
 
         if (filter.type === FilterType.Boolean) {
           value = searchValue;
@@ -43,14 +50,14 @@ const useFilters = (definition: FiltersDefinition) => {
           [key]: value ?? undefined,
         };
       }, {}),
-    [searchParams, definition],
+    [searchParams, definition, defaults],
   );
 
   const filterParams = useMemo(
     () =>
       Object.entries(definition).reduce((acc, [key, filter]) => {
         let params;
-        const searchValue = searchParams.get(key);
+        const searchValue = searchParams.get(key) ?? defaults?.[key];
 
         if (filter.type === FilterType.Boolean) {
           if (searchValue === 'true') {
@@ -65,7 +72,7 @@ const useFilters = (definition: FiltersDefinition) => {
           ...params,
         };
       }, {}),
-    [searchParams, definition],
+    [searchParams, definition, defaults],
   );
 
   const filterOptions: {
@@ -102,11 +109,15 @@ const useFilters = (definition: FiltersDefinition) => {
     () =>
       Object.entries(definition).reduce((acc, [key, filter]) => {
         let fn;
+        const defaultValue = defaults?.[key];
 
         if (filter.type === FilterType.Boolean) {
           fn = (value: string) =>
             setSearchParams((searchParams) => {
-              if (value === 'true' || value === 'false') {
+              if (
+                value !== defaultValue &&
+                (value === 'true' || value === 'false')
+              ) {
                 searchParams.set(key, value);
               } else {
                 searchParams.delete(key);
@@ -121,7 +132,7 @@ const useFilters = (definition: FiltersDefinition) => {
           [key]: fn,
         };
       }, {}),
-    [setSearchParams, definition],
+    [setSearchParams, definition, defaults],
   );
 
   return {

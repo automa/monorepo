@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { getFragment } from 'gql';
-import { Avatar } from 'shared';
+import { Avatar, Tooltip } from 'shared';
 import { getOrgAvatarUrl } from 'utils';
 
 import { UserAvatarProps } from './types';
@@ -17,7 +17,11 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ user: data, ...props }) => {
     return getOrgAvatarUrl(provider_type, provider_id);
   }, [user]);
 
-  return <Avatar {...props} src={avatarUrl} alt={user.name} />;
+  return (
+    <Tooltip body={user.name}>
+      <Avatar {...props} src={avatarUrl} alt={user.name} />
+    </Tooltip>
+  );
 };
 
 export default UserAvatar;
