@@ -1,7 +1,7 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
-  require: ['ts-node/register'],
+  require: ['@swc-node/register'],
   overwrite: true,
   schema: 'packages/api/src/graphql/schema.ts',
   documents: 'packages/console/src/**/*.queries.ts',

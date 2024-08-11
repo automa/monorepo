@@ -1,5 +1,5 @@
 module.exports = {
-  require: 'ts-node/register',
+  require: '@swc-node/register',
   extension: ['ts'],
   ui: 'tdd',
   reporter: 'spec',
