@@ -33,6 +33,7 @@ export type Bot = BotBase & {
   published_at?: Maybe<Scalars['DateTime']['output']>;
   short_description: Scalars['String']['output'];
   type: BotType;
+  webhook_secret: Scalars['String']['output'];
   webhook_url: Scalars['String']['output'];
 };
 

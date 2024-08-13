@@ -5,7 +5,14 @@ import axios from 'axios';
 
 import { bots, orgs, repos, task_item, tasks, users } from '@automa/prisma';
 
-import { seedBots, seedOrgs, seedRepos, seedUsers, server } from '../utils';
+import {
+  generateSignature,
+  seedBots,
+  seedOrgs,
+  seedRepos,
+  seedUsers,
+  server,
+} from '../utils';
 
 import taskCreated from '../../src/events/queues/taskCreated';
 
@@ -105,7 +112,17 @@ suite('events/taskCreated', () => {
         },
       });
       assert.deepEqual(postStub.firstCall.args[2], {
-        headers: {},
+        headers: {
+          'x-automa-signature': generateSignature(
+            'atma_whsec_0',
+            JSON.stringify({
+              task: {
+                id: task.id,
+                title: task.title,
+              },
+            }),
+          ),
+        },
       });
     });
   });
@@ -189,7 +206,17 @@ suite('events/taskCreated', () => {
         },
       });
       assert.deepEqual(postStub.firstCall.args[2], {
-        headers: {},
+        headers: {
+          'x-automa-signature': generateSignature(
+            'atma_whsec_0',
+            JSON.stringify({
+              task: {
+                id: task.id,
+                title: task.title,
+              },
+            }),
+          ),
+        },
       });
     });
   });

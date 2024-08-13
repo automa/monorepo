@@ -27,14 +27,15 @@ export const callWithFixture = async (
     ),
   );
 
-  let hmac = createHmac('sha256', env.LINEAR_APP.WEBHOOK_SECRET);
-  hmac = hmac.update(JSON.stringify(body));
+  const signature = createHmac('sha256', env.LINEAR_APP.WEBHOOK_SECRET)
+    .update(JSON.stringify(body))
+    .digest('hex');
 
   return call(app, '/hooks/linear', {
     method: 'POST',
     headers: {
       'Linear-Event': event,
-      'Linear-Signature': hmac.digest('hex'),
+      'Linear-Signature': signature,
     },
     payload: body,
   });

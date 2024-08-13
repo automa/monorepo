@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto';
+
 import {
   botCreateSchema,
   BotResolvers,
@@ -104,9 +106,15 @@ export const Mutation: MutationResolvers<Context> = {
 
     const data = botCreateSchema.parse(input);
 
+    // Generate a webhook secret
+    const webhook_secret = `atma_whsec_${randomBytes(32).toString(
+      'base64url',
+    )}`;
+
     return prisma.bots.create({
       data: {
         org_id,
+        webhook_secret,
         ...data,
       },
     });

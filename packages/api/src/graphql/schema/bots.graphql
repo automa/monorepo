@@ -38,6 +38,7 @@ input PublicBotsFilter {
 
 type Bot implements BotBase @inherits(type: "BotBase") {
   webhook_url: String!
+  webhook_secret: String!
   published_at: DateTime
   created_at: DateTime!
 

@@ -36,6 +36,7 @@ export type Bot = BotBase & {
   published_at?: Maybe<Scalars['DateTime']['output']>;
   short_description: Scalars['String']['output'];
   type: BotType;
+  webhook_secret: Scalars['String']['output'];
   webhook_url: Scalars['String']['output'];
 };
 
@@ -472,6 +473,7 @@ export type BotResolvers<ContextType = any, ParentType extends ResolversParentTy
   published_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
+  webhook_secret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   webhook_url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

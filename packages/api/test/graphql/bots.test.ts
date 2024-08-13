@@ -78,6 +78,7 @@ suite('graphql bots', () => {
                 description
                 type
                 webhook_url
+                webhook_secret
                 homepage
                 published_at
                 is_published
@@ -122,6 +123,7 @@ suite('graphql bots', () => {
         assert.equal(bots[0].description, 'Bot 0 long description');
         assert.equal(bots[0].type, 'event');
         assert.equal(bots[0].webhook_url, 'https://example.com/webhook/0');
+        assert.equal(bots[0].webhook_secret, 'atma_whsec_0');
         assert.equal(bots[0].homepage, 'https://example.com');
         assert.isString(bots[0].published_at);
         assert.isTrue(bots[0].is_published);
@@ -136,6 +138,7 @@ suite('graphql bots', () => {
         assert.equal(bots[1].description, 'Bot 3 long description');
         assert.equal(bots[1].type, 'event');
         assert.equal(bots[1].webhook_url, 'https://example.com/webhook/3');
+        assert.equal(bots[1].webhook_secret, 'atma_whsec_3');
         assert.isNull(bots[1].homepage);
         assert.isNull(bots[1].published_at);
         assert.isFalse(bots[1].is_published);
@@ -1175,6 +1178,7 @@ suite('graphql bots', () => {
       assert.equal(bot.description, 'Bot 5');
       assert.equal(bot.type, 'event');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
+      assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -1213,6 +1217,7 @@ suite('graphql bots', () => {
       assert.isNull(bot.description);
       assert.equal(bot.type, 'event');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
+      assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -1252,6 +1257,7 @@ suite('graphql bots', () => {
       assert.isNull(bot.description);
       assert.equal(bot.type, 'event');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
+      assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -1291,6 +1297,7 @@ suite('graphql bots', () => {
       assert.equal(bot.description, '');
       assert.equal(bot.type, 'event');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
+      assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -1828,6 +1835,7 @@ const botCreate = (app: FastifyInstance, orgId: number, input: any) =>
           description
           type
           webhook_url
+          webhook_secret
           homepage
           published_at
           is_published

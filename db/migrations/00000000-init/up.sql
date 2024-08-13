@@ -94,8 +94,7 @@ CREATE TABLE public.bots (
   name citext NOT NULL,
   type public.bot NOT NULL,
   webhook_url VARCHAR(255) NOT NULL,
-  -- TODO: webhook_secret (here, check and data below)
-  -- TODO: webhook_verification / client_secret
+  webhook_secret VARCHAR(255) NOT NULL,
   short_description VARCHAR(255) NOT NULL,
   image_url VARCHAR(255),
   description TEXT,
@@ -119,11 +118,11 @@ ON public.bots (is_published);
 CREATE INDEX bots_type_idx
 ON public.bots (type);
 
-INSERT INTO public.bots (org_id, name, type, webhook_url, short_description, homepage, is_preview, is_deterministic)
+INSERT INTO public.bots (org_id, name, type, webhook_url, webhook_secret, short_description, homepage, is_preview, is_deterministic)
 VALUES
-  (1, 'automa', 'event', 'https://api.automa.app/hooks/automa', 'Updates & migrates automa settings', 'https://automa.app', FALSE, TRUE),
-  (1, 'dependency', 'event', 'https://api.dependency.bot/hooks/automa', 'Upgrade dependencies by updating code', 'https://dependency.bot', TRUE, TRUE),
-  (1, 'refactor', 'event', 'https://api.refactor.bot/hooks/automa', 'Refactors your code according to your rules', 'https://refactor.bot', TRUE, TRUE);
+  (1, 'automa', 'event', 'https://api.automa.app/hooks/automa', 'atma_whsec_automa', 'Updates & migrates automa settings', 'https://automa.app', FALSE, TRUE),
+  (1, 'dependency', 'event', 'https://api.dependency.bot/hooks/automa', 'atma_whsec_dependency', 'Upgrade dependencies by updating code', 'https://dependency.bot', TRUE, TRUE),
+  (1, 'refactor', 'event', 'https://api.refactor.bot/hooks/automa', 'atma_whsec_refactor', 'Refactors your code according to your rules', 'https://refactor.bot', TRUE, TRUE);
 
 CREATE TABLE public.bot_installations (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

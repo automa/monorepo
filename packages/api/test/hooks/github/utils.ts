@@ -27,14 +27,15 @@ export const callWithFixture = async (
     ),
   );
 
-  let hmac = createHmac('sha256', env.GITHUB_APP.WEBHOOK_SECRET);
-  hmac = hmac.update(JSON.stringify(body));
+  const signature = createHmac('sha256', env.GITHUB_APP.WEBHOOK_SECRET)
+    .update(JSON.stringify(body))
+    .digest('hex');
 
   return call(app, '/hooks/github', {
     method: 'POST',
     headers: {
       'x-github-event': event,
-      'x-hub-signature-256': `sha256=${hmac.digest('hex')}`,
+      'x-hub-signature-256': `sha256=${signature}`,
     },
     payload: body,
   });
