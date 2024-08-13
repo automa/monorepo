@@ -1,13 +1,14 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { ProviderType, TaskItemType } from '@automa/common';
+import { ProviderType } from '@automa/common';
 
 import { makeFragmentData } from 'gql';
 
 import { TASK_FRAGMENT } from '../Task';
-import { TASK_ITEM_FRAGMENT } from '../TaskItem';
 
 import TaskScheduled from './TaskScheduled';
+
+import { BotScheduled, RepoScheduled } from '../TaskItem/TaskItem.stories';
 
 const task = {
   id: 1,
@@ -16,43 +17,7 @@ const task = {
   created_at: '2024-05-15T09:04:04.629Z',
   completed_at: null,
   is_completed: false,
-  items: [
-    makeFragmentData(
-      {
-        id: 1,
-        type: TaskItemType.Repo,
-        created_at: '2024-05-15T09:04:04.629Z',
-        data: {
-          repoId: 1,
-          repoName: 'monorepo',
-          repoOrgId: 1,
-          repoOrgName: 'automa',
-          repoOrgProviderType: 'github',
-          repoOrgProviderId: '65730741',
-          repoProviderId: '245484486',
-        },
-        actor_user: null,
-      },
-      TASK_ITEM_FRAGMENT,
-    ),
-    makeFragmentData(
-      {
-        id: 1,
-        type: TaskItemType.Bot,
-        created_at: '2024-05-15T09:04:04.629Z',
-        data: {
-          botId: 5,
-          botName: 'github-runners',
-          botImageUrl:
-            'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg',
-          botOrgId: 1,
-          botOrgName: 'automa',
-        },
-        actor_user: null,
-      },
-      TASK_ITEM_FRAGMENT,
-    ),
-  ],
+  items: [RepoScheduled.args.taskItem, BotScheduled.args.taskItem],
 };
 
 const meta = {
