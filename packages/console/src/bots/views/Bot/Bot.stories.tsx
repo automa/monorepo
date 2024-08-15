@@ -5,7 +5,7 @@ import { ProviderType } from '@automa/common';
 import Bot from './Bot';
 
 const meta = {
-  title: 'Bot',
+  title: 'BotView',
   component: Bot,
   args: {
     org: {
