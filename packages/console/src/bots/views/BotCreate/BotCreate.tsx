@@ -135,6 +135,7 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
           />
           <Input
             label="Webhook URL"
+            description="The URL where your bot will receive events from Automa."
             error={errors.webhook_url?.message}
             input={{
               ...register('webhook_url'),

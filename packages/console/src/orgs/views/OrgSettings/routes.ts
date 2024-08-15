@@ -12,6 +12,10 @@ const routes = [
     path: '/bots/new',
   },
   {
+    Component: lazy(() => import('bots/views/Bot')),
+    path: '/bots/:botName',
+  },
+  {
     Component: lazy(() => import('bots/views/Bots')),
     path: '/bots',
   },

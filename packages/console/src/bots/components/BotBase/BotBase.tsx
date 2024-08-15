@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
-import { Alarm, BellRinging, Robot } from '@phosphor-icons/react';
-
-import { BotType } from '@automa/common';
+import React from 'react';
+import { Robot } from '@phosphor-icons/react';
 
 import { getFragment } from 'gql';
 import { Badge, Flex, Tooltip, Typography } from 'shared';
+
+import { botTypeDefinition } from 'bots/utils';
 
 import { BotBaseProps } from './types';
 
@@ -17,21 +17,8 @@ const BotBase: React.FC<BotBaseProps> = ({
 }) => {
   const bot = getFragment(BOT_BASE_FRAGMENT, data);
 
-  const { tooltipBody, Icon } = useMemo(
-    () =>
-      bot.type === BotType.Event
-        ? {
-            tooltipBody: 'Bot triggered by events or commands',
-            Icon: BellRinging,
-          }
-        : bot.type === BotType.Scheduled
-        ? {
-            tooltipBody: 'Bot triggered by a schedule',
-            Icon: Alarm,
-          }
-        : {},
-    [bot.type],
-  );
+  const { description: botTypeDescription, Icon } =
+    botTypeDefinition[bot.type] ?? {};
 
   return (
     <Flex {...props} alignItems="center" className="gap-4">
@@ -46,8 +33,8 @@ const BotBase: React.FC<BotBaseProps> = ({
             {namePrefix ?? ''}
             {bot.name}
           </Typography>
-          {tooltipBody && (
-            <Tooltip body={tooltipBody}>
+          {botTypeDescription && (
+            <Tooltip body={botTypeDescription}>
               <Icon className="mr-1 size-4" />
             </Tooltip>
           )}
