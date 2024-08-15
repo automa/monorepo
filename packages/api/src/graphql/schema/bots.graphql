@@ -5,6 +5,7 @@ enum BotType {
 
 type Query {
   bots(org_id: Int!): [Bot!]!
+  bot(org_id: Int!, name: String!): Bot!
   publicBots(filter: PublicBotsFilter): [PublicBot!]!
   publicBot(org_name: String!, name: String!): PublicBot!
 }

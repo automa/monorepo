@@ -184,6 +184,7 @@ export type PublicOrg = {
 
 export type Query = {
   __typename?: 'Query';
+  bot: Bot;
   botInstallations: Array<BotInstallation>;
   bots: Array<Bot>;
   integrations: Array<Integration>;
@@ -195,6 +196,12 @@ export type Query = {
   repos: Array<Repo>;
   task: Task;
   tasks: Array<Task>;
+};
+
+
+export type QueryBotArgs = {
+  name: Scalars['String']['input'];
+  org_id: Scalars['Int']['input'];
 };
 
 

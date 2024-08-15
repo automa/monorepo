@@ -32,6 +32,22 @@ export const Query: QueryResolvers<Context> = {
       },
     });
   },
+  bot: async (root, { org_id, name }, { userId, prisma }) => {
+    // Check if the user is a member of the org
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: userId,
+        org_id,
+      },
+    });
+
+    return prisma.bots.findFirstOrThrow({
+      where: {
+        org_id,
+        name,
+      },
+    });
+  },
   // TODO: Allow taking an org_id as parameter in order to not return cross-org non-published bots
   publicBots: async (root, { filter }, { userId, prisma }) => {
     return prisma.bots.findMany({

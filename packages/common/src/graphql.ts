@@ -187,6 +187,7 @@ export type PublicOrg = {
 
 export type Query = {
   __typename?: 'Query';
+  bot: Bot;
   botInstallations: Array<BotInstallation>;
   bots: Array<Bot>;
   integrations: Array<Integration>;
@@ -198,6 +199,12 @@ export type Query = {
   repos: Array<Repo>;
   task: Task;
   tasks: Array<Task>;
+};
+
+
+export type QueryBotArgs = {
+  name: Scalars['String']['input'];
+  org_id: Scalars['Int']['input'];
 };
 
 
@@ -570,6 +577,7 @@ export type PublicOrgResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  bot?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<QueryBotArgs, 'name' | 'org_id'>>;
   botInstallations?: Resolver<Array<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<QueryBotInstallationsArgs, 'org_id'>>;
   bots?: Resolver<Array<ResolversTypes['Bot']>, ParentType, ContextType, RequireFields<QueryBotsArgs, 'org_id'>>;
   integrations?: Resolver<Array<ResolversTypes['Integration']>, ParentType, ContextType, RequireFields<QueryIntegrationsArgs, 'org_id'>>;

@@ -179,6 +179,158 @@ suite('graphql bots', () => {
     });
   });
 
+  suite('query bot', () => {
+    suiteSetup(async () => {
+      await seedBots(app, [org, secondOrg, nonMemberOrg], [org]);
+
+      await app.prisma.bots.updateMany({
+        data: {
+          is_preview: true,
+          is_deterministic: true,
+        },
+        where: {
+          name: 'bot-3',
+        },
+      });
+    });
+
+    suiteTeardown(async () => {
+      await app.prisma.bots.deleteMany();
+    });
+
+    suite('member org', () => {
+      let response: LightMyRequestResponse;
+
+      setup(async () => {
+        response = await graphql(
+          app,
+          `
+            query bot($org_id: Int!, $name: String!) {
+              bot(org_id: $org_id, name: $name) {
+                id
+                name
+                short_description
+                image_url
+                description
+                type
+                webhook_url
+                webhook_secret
+                homepage
+                published_at
+                is_published
+                is_preview
+                is_deterministic
+                created_at
+              }
+            }
+          `,
+          {
+            org_id: org.id,
+            name: 'bot-3',
+          },
+        );
+      });
+
+      test('should be successful', () => {
+        assert.equal(response.statusCode, 200);
+
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+      });
+
+      test('should have no errors', async () => {
+        const { errors } = response.json();
+
+        assert.isUndefined(errors);
+      });
+
+      test('should return requested bot', async () => {
+        const {
+          data: { bot },
+        } = response.json();
+
+        assert.isNumber(bot.id);
+        assert.equal(bot.name, 'bot-3');
+        assert.equal(bot.short_description, 'Bot 3');
+        assert.equal(bot.image_url, 'https://example.com/image/3.png');
+        assert.equal(bot.description, 'Bot 3 long description');
+        assert.equal(bot.type, 'event');
+        assert.equal(bot.webhook_url, 'https://example.com/webhook/3');
+        assert.equal(bot.webhook_secret, 'atma_whsec_3');
+        assert.isNull(bot.homepage);
+        assert.isNull(bot.published_at);
+        assert.isFalse(bot.is_published);
+        assert.isTrue(bot.is_preview);
+        assert.isTrue(bot.is_deterministic);
+        assert.isString(bot.created_at);
+      });
+    });
+
+    test('for member org non-existing bot should fail', async () => {
+      const response = await graphql(
+        app,
+        `
+          query bot($org_id: Int!, $name: String!) {
+            bot(org_id: $org_id, name: $name) {
+              id
+              name
+            }
+          }
+        `,
+        {
+          org_id: org.id,
+          name: 'non-existing-bot',
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+
+    test('for non-member org should fail', async () => {
+      const response = await graphql(
+        app,
+        `
+          query bot($org_id: Int!, $name: String!) {
+            bot(org_id: $org_id, name: $name) {
+              id
+              name
+            }
+          }
+        `,
+        {
+          org_id: nonMemberOrg.id,
+          name: 'bot-0',
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+  });
+
   suite('query publicBots', () => {
     suiteSetup(async () => {
       await seedBots(
