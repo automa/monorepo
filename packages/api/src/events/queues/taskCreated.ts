@@ -1,3 +1,5 @@
+import { createHmac } from 'node:crypto';
+
 import axios from 'axios';
 
 import {
@@ -190,19 +192,24 @@ const taskCreated: QueueDefinition<{
       });
     }
 
+    const payload = {
+      task: {
+        id,
+        title: task.title,
+      },
+    };
+
+    // Create webhook signature
+    const signature = createHmac('sha256', botInstallation.bots.webhook_secret)
+      .update(JSON.stringify(payload))
+      .digest('hex');
+
     // Send webhook to bot
-    return axios.post(
-      botInstallation.bots.webhook_url,
-      {
-        task: {
-          id,
-          title: task.title,
-        },
+    return axios.post(botInstallation.bots.webhook_url, payload, {
+      headers: {
+        'x-automa-signature': signature,
       },
-      {
-        headers: {},
-      },
-    );
+    });
   },
 };
 

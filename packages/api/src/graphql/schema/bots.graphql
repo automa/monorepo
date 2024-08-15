@@ -5,12 +5,14 @@ enum BotType {
 
 type Query {
   bots(org_id: Int!): [Bot!]!
+  bot(org_id: Int!, name: String!): Bot!
   publicBots(filter: PublicBotsFilter): [PublicBot!]!
   publicBot(org_name: String!, name: String!): PublicBot!
 }
 
 type Mutation {
   botCreate(org_id: Int!, input: BotCreateInput!): Bot!
+  botUpdate(org_id: Int!, name: String!, input: BotUpdateInput!): Bot!
 }
 
 interface BotBase {
@@ -38,6 +40,7 @@ input PublicBotsFilter {
 
 type Bot implements BotBase @inherits(type: "BotBase") {
   webhook_url: String!
+  webhook_secret: String!
   published_at: DateTime
   created_at: DateTime!
 
@@ -50,4 +53,10 @@ input BotCreateInput {
   description: String
   type: BotType!
   webhook_url: String!
+}
+
+input BotUpdateInput {
+  short_description: String
+  description: String
+  webhook_url: String
 }

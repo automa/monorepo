@@ -42,21 +42,6 @@ const UserSettingsGeneral: React.FC<UserSettingsGeneralProps> = () => {
           variant: 'success',
         });
       },
-      update(cache, { data }) {
-        if (!data) return;
-
-        cache.modify({
-          id: cache.identify(data.userUpdate),
-          fields: {
-            name() {
-              return data.userUpdate.name;
-            },
-            email() {
-              return data.userUpdate.email;
-            },
-          },
-        });
-      },
     },
   );
 

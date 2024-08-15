@@ -7,6 +7,8 @@ import '../src/plugins/prisma';
 import '../src/plugins/redis';
 import '../src/routes/api/orgs/_org/autohooks';
 
+import { createHmac } from 'node:crypto';
+
 import { FastifyInstance, InjectOptions } from 'fastify';
 
 export { server } from '../src';
@@ -76,6 +78,7 @@ export const seedBots = (
       description: `Bot ${i} long description`,
       type: 'event',
       webhook_url: `https://example.com/webhook/${i}`,
+      webhook_secret: `atma_whsec_${i}`,
       ...(i < published.length && {
         homepage: 'https://example.com',
         published_at: new Date(),
@@ -98,3 +101,6 @@ export const seedRepos = (
       }),
     })),
   });
+
+export const generateSignature = (secret: string, payload: string) =>
+  createHmac('sha256', secret).update(payload).digest('hex');

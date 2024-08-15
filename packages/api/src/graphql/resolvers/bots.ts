@@ -1,12 +1,16 @@
+import { randomBytes } from 'node:crypto';
+
 import {
   botCreateSchema,
   BotResolvers,
+  botUpdateSchema,
   MutationResolvers,
   publicBotFields,
   PublicBotResolvers,
   publicOrgFields,
   QueryResolvers,
 } from '@automa/common';
+import { Prisma } from '@automa/prisma';
 
 import { Context } from '../types';
 
@@ -27,6 +31,22 @@ export const Query: QueryResolvers<Context> = {
       },
       orderBy: {
         id: 'asc',
+      },
+    });
+  },
+  bot: async (root, { org_id, name }, { userId, prisma }) => {
+    // Check if the user is a member of the org
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: userId,
+        org_id,
+      },
+    });
+
+    return prisma.bots.findFirstOrThrow({
+      where: {
+        org_id,
+        name,
       },
     });
   },
@@ -104,11 +124,38 @@ export const Mutation: MutationResolvers<Context> = {
 
     const data = botCreateSchema.parse(input);
 
+    // Generate a webhook secret
+    const webhook_secret = `atma_whsec_${randomBytes(32).toString(
+      'base64url',
+    )}`;
+
     return prisma.bots.create({
       data: {
         org_id,
+        webhook_secret,
         ...data,
       },
+    });
+  },
+  botUpdate: async (_, { org_id, name, input }, { userId, prisma }) => {
+    // Check if the user is a member of the org
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: userId,
+        org_id,
+      },
+    });
+
+    const data = botUpdateSchema.parse(input);
+
+    return prisma.bots.update({
+      where: {
+        org_id_name: {
+          org_id,
+          name,
+        },
+      },
+      data: data as Prisma.botsUpdateInput,
     });
   },
 };

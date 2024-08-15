@@ -13,7 +13,10 @@ export const botCreateSchema = z.object<ZodInferSchema<BotCreateInput>>({
     .regex(
       /^[a-z0-9-]+$/i,
       'Must only contain alphanumeric characters and dashes',
-    ),
+    )
+    .refine((value) => !['new'].includes(value), {
+      message: 'Must not be a reserved name',
+    }),
   short_description: z.string().trim().min(3).max(255),
   description: z.string().trim().nullish(),
   type: z.nativeEnum(BotType),
