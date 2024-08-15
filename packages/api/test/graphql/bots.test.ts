@@ -2007,6 +2007,547 @@ suite('graphql bots', () => {
       assert.equal(count, 0);
     });
   });
+
+  suite('mutation botUpdate', () => {
+    setup(async () => {
+      await seedBots(app, [], [org, nonMemberOrg]);
+    });
+
+    teardown(async () => {
+      await app.prisma.bots.deleteMany();
+    });
+
+    test('with valid input should succeed', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: 'Bot 0 that does something',
+        description: 'Bot 0 that does something',
+        webhook_url: 'https://example.com/webhooks/automa/0',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { botUpdate: bot },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0 that does something');
+      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+      assert.isString(bot.created_at);
+    });
+
+    test('with no short_description should succeed', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        description: 'Bot 0 that does something',
+        webhook_url: 'https://example.com/webhooks/automa/0',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { botUpdate: bot },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0');
+      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+      assert.isString(bot.created_at);
+    });
+
+    test('with null webhook_url should succeed', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: 'Bot 0 that does something',
+        description: 'Bot 0 that does something',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { botUpdate: bot },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0 that does something');
+      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+      assert.isString(bot.created_at);
+    });
+
+    test('with no description should succeed', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: 'Bot 0 that does something',
+        webhook_url: 'https://example.com/webhooks/automa/0',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { botUpdate: bot },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0 that does something');
+      assert.equal(bot.description, 'Bot 0 long description');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+      assert.isString(bot.created_at);
+    });
+
+    test('with null description should succeed', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: 'Bot 0 that does something',
+        description: null,
+        webhook_url: 'https://example.com/webhooks/automa/0',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { botUpdate: bot },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0 that does something');
+      assert.isNull(bot.description);
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+      assert.isString(bot.created_at);
+    });
+
+    test('with empty description should succeed', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: 'Bot 0 that does something',
+        description: '',
+        webhook_url: 'https://example.com/webhooks/automa/0',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { botUpdate: bot },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0 that does something');
+      assert.equal(bot.description, '');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+      assert.isString(bot.created_at);
+    });
+
+    test('non-member org should fail', async () => {
+      const response = await botUpdate(app, nonMemberOrg.id, 'bot-1', {
+        short_description: 'Bot 1 that does something',
+        description: 'Bot 1 that does something',
+        webhook_url: 'https://example.com/webhooks/automa/1',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+
+      const bot = await app.prisma.bots.findFirstOrThrow({
+        where: {
+          name: 'bot-1',
+        },
+      });
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-1');
+      assert.equal(bot.short_description, 'Bot 1');
+      assert.equal(bot.description, 'Bot 1 long description');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/1');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+    });
+
+    test('with null short_description should fail', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: null,
+        description: 'Bot 0 that does something',
+        webhook_url: 'https://example.com/webhooks/automa/0',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'invalid_type',
+          message: 'Expected string, received null',
+          path: ['short_description'],
+          expected: 'string',
+          received: 'null',
+        },
+      ]);
+
+      const bot = await app.prisma.bots.findFirstOrThrow({
+        where: {
+          name: 'bot-0',
+        },
+      });
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0');
+      assert.equal(bot.description, 'Bot 0 long description');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+    });
+
+    test('with short short_description should fail', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: 'b',
+        description: 'Bot 0 that does something',
+        webhook_url: 'https://example.com/webhooks/automa/0',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_small',
+          message: 'String must contain at least 3 character(s)',
+          path: ['short_description'],
+          type: 'string',
+          inclusive: true,
+          exact: false,
+          minimum: 3,
+        },
+      ]);
+
+      const bot = await app.prisma.bots.findFirstOrThrow({
+        where: {
+          name: 'bot-0',
+        },
+      });
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0');
+      assert.equal(bot.description, 'Bot 0 long description');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+    });
+
+    test('with long short_description should fail', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: 'a'.repeat(256),
+        description: 'Bot 0 that does something',
+        webhook_url: 'https://example.com/webhooks/automa/0',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_big',
+          message: 'String must contain at most 255 character(s)',
+          path: ['short_description'],
+          type: 'string',
+          inclusive: true,
+          exact: false,
+          maximum: 255,
+        },
+      ]);
+
+      const bot = await app.prisma.bots.findFirstOrThrow({
+        where: {
+          name: 'bot-0',
+        },
+      });
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0');
+      assert.equal(bot.description, 'Bot 0 long description');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+    });
+
+    test('with short_description containing only spaces should fail', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: '      ',
+        description: 'Bot 0 that does something',
+        webhook_url: 'https://example.com/webhooks/automa/0',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_small',
+          message: 'String must contain at least 3 character(s)',
+          path: ['short_description'],
+          type: 'string',
+          inclusive: true,
+          exact: false,
+          minimum: 3,
+        },
+      ]);
+
+      const bot = await app.prisma.bots.findFirstOrThrow({
+        where: {
+          name: 'bot-0',
+        },
+      });
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0');
+      assert.equal(bot.description, 'Bot 0 long description');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+    });
+
+    test('with null webhook_url should fail', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: 'Bot 0 that does something',
+        description: 'Bot 0 that does something',
+        webhook_url: null,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'invalid_type',
+          message: 'Expected string, received null',
+          path: ['webhook_url'],
+          expected: 'string',
+          received: 'null',
+        },
+      ]);
+
+      const bot = await app.prisma.bots.findFirstOrThrow({
+        where: {
+          name: 'bot-0',
+        },
+      });
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0');
+      assert.equal(bot.description, 'Bot 0 long description');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+    });
+
+    test('with invalid webhook_url should fail', async () => {
+      const response = await botUpdate(app, org.id, 'bot-0', {
+        short_description: 'Bot 0 that does something',
+        description: 'Bot 0 that does something',
+        webhook_url: 'invalid_url',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'invalid_string',
+          message: 'Invalid url',
+          path: ['webhook_url'],
+          validation: 'url',
+        },
+      ]);
+
+      const bot = await app.prisma.bots.findFirstOrThrow({
+        where: {
+          name: 'bot-0',
+        },
+      });
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-0');
+      assert.equal(bot.short_description, 'Bot 0');
+      assert.equal(bot.description, 'Bot 0 long description');
+      assert.equal(bot.type, 'event');
+      assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
+      assert.isDefined(bot.webhook_secret);
+      assert.isNull(bot.homepage);
+      assert.isNull(bot.published_at);
+      assert.isFalse(bot.is_published);
+    });
+  });
 });
 
 const botCreate = (app: FastifyInstance, orgId: number, input: any) =>
@@ -2031,6 +2572,42 @@ const botCreate = (app: FastifyInstance, orgId: number, input: any) =>
     `,
     {
       org_id: orgId,
+      input,
+    },
+  );
+
+const botUpdate = (
+  app: FastifyInstance,
+  orgId: number,
+  name: string,
+  input: any,
+) =>
+  graphql(
+    app,
+    `
+      mutation botUpdate(
+        $org_id: Int!
+        $name: String!
+        $input: BotUpdateInput!
+      ) {
+        botUpdate(org_id: $org_id, name: $name, input: $input) {
+          id
+          name
+          short_description
+          description
+          type
+          webhook_url
+          webhook_secret
+          homepage
+          published_at
+          is_published
+          created_at
+        }
+      }
+    `,
+    {
+      org_id: orgId,
+      name,
       input,
     },
   );

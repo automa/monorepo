@@ -3,12 +3,14 @@ import { randomBytes } from 'node:crypto';
 import {
   botCreateSchema,
   BotResolvers,
+  botUpdateSchema,
   MutationResolvers,
   publicBotFields,
   PublicBotResolvers,
   publicOrgFields,
   QueryResolvers,
 } from '@automa/common';
+import { Prisma } from '@automa/prisma';
 
 import { Context } from '../types';
 
@@ -133,6 +135,27 @@ export const Mutation: MutationResolvers<Context> = {
         webhook_secret,
         ...data,
       },
+    });
+  },
+  botUpdate: async (_, { org_id, name, input }, { userId, prisma }) => {
+    // Check if the user is a member of the org
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: userId,
+        org_id,
+      },
+    });
+
+    const data = botUpdateSchema.parse(input);
+
+    return prisma.bots.update({
+      where: {
+        org_id_name: {
+          org_id,
+          name,
+        },
+      },
+      data: data as Prisma.botsUpdateInput,
     });
   },
 };

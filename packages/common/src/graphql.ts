@@ -78,6 +78,12 @@ export enum BotType {
   Scheduled = 'scheduled'
 }
 
+export type BotUpdateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  short_description?: InputMaybe<Scalars['String']['input']>;
+  webhook_url?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Integration = {
   __typename?: 'Integration';
   author: User;
@@ -99,6 +105,7 @@ export type Mutation = {
   botCreate: Bot;
   botInstall: BotInstallation;
   botUninstall: Scalars['Boolean']['output'];
+  botUpdate: Bot;
   taskCreate: Task;
   userUpdate: User;
 };
@@ -118,6 +125,13 @@ export type MutationBotInstallArgs = {
 
 export type MutationBotUninstallArgs = {
   bot_id: Scalars['Int']['input'];
+  org_id: Scalars['Int']['input'];
+};
+
+
+export type MutationBotUpdateArgs = {
+  input: BotUpdateInput;
+  name: Scalars['String']['input'];
   org_id: Scalars['Int']['input'];
 };
 
@@ -407,6 +421,7 @@ export type ResolversTypes = {
   BotInstallInput: BotInstallInput;
   BotInstallation: ResolverTypeWrapper<bot_installations>;
   BotType: ResolverTypeWrapper<bot>;
+  BotUpdateInput: BotUpdateInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Integration: ResolverTypeWrapper<integrations>;
@@ -439,6 +454,7 @@ export type ResolversParentTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: bot_installations;
+  BotUpdateInput: BotUpdateInput;
   DateTime: Scalars['DateTime']['output'];
   Int: Scalars['Int']['output'];
   Integration: integrations;
@@ -532,6 +548,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   botCreate?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<MutationBotCreateArgs, 'input' | 'org_id'>>;
   botInstall?: Resolver<ResolversTypes['BotInstallation'], ParentType, ContextType, RequireFields<MutationBotInstallArgs, 'input' | 'org_id'>>;
   botUninstall?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationBotUninstallArgs, 'bot_id' | 'org_id'>>;
+  botUpdate?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<MutationBotUpdateArgs, 'input' | 'name' | 'org_id'>>;
   taskCreate?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationTaskCreateArgs, 'input' | 'org_id'>>;
   userUpdate?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUserUpdateArgs, 'input'>>;
 };

@@ -12,6 +12,7 @@ type Query {
 
 type Mutation {
   botCreate(org_id: Int!, input: BotCreateInput!): Bot!
+  botUpdate(org_id: Int!, name: String!, input: BotUpdateInput!): Bot!
 }
 
 interface BotBase {
@@ -52,4 +53,10 @@ input BotCreateInput {
   description: String
   type: BotType!
   webhook_url: String!
+}
+
+input BotUpdateInput {
+  short_description: String
+  description: String
+  webhook_url: String
 }

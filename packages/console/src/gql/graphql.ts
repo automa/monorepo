@@ -75,6 +75,12 @@ export enum BotType {
   Scheduled = 'scheduled'
 }
 
+export type BotUpdateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  short_description?: InputMaybe<Scalars['String']['input']>;
+  webhook_url?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Integration = {
   __typename?: 'Integration';
   author: User;
@@ -96,6 +102,7 @@ export type Mutation = {
   botCreate: Bot;
   botInstall: BotInstallation;
   botUninstall: Scalars['Boolean']['output'];
+  botUpdate: Bot;
   taskCreate: Task;
   userUpdate: User;
 };
@@ -115,6 +122,13 @@ export type MutationBotInstallArgs = {
 
 export type MutationBotUninstallArgs = {
   bot_id: Scalars['Int']['input'];
+  org_id: Scalars['Int']['input'];
+};
+
+
+export type MutationBotUpdateArgs = {
+  input: BotUpdateInput;
+  name: Scalars['String']['input'];
   org_id: Scalars['Int']['input'];
 };
 
