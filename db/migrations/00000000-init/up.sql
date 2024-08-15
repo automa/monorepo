@@ -121,7 +121,7 @@ ON public.bots (type);
 INSERT INTO public.bots (org_id, name, type, webhook_url, webhook_secret, short_description, homepage, is_preview, is_deterministic)
 VALUES
   (1, 'automa', 'event', 'https://api.automa.app/hooks/automa', 'atma_whsec_automa', 'Updates & migrates automa settings', 'https://automa.app', FALSE, TRUE),
-  (1, 'dependency', 'event', 'https://api.dependency.bot/hooks/automa', 'atma_whsec_dependency', 'Upgrade dependencies by updating code', 'https://dependency.bot', TRUE, TRUE),
+  (1, 'dependency', 'scheduled', 'https://api.dependency.bot/hooks/automa', 'atma_whsec_dependency', 'Upgrade dependencies by updating code', 'https://dependency.bot', TRUE, TRUE),
   (1, 'refactor', 'event', 'https://api.refactor.bot/hooks/automa', 'atma_whsec_refactor', 'Refactors your code according to your rules', 'https://refactor.bot', TRUE, TRUE);
 
 CREATE TABLE public.bot_installations (

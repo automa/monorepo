@@ -1522,6 +1522,40 @@ suite('graphql bots', () => {
       assert.equal(count, 0);
     });
 
+    test('with reserved name should fail', async () => {
+      const response = await botCreate(app, org.id, {
+        name: 'new',
+        short_description: 'Bot 6',
+        description: 'Bot 6',
+        type: 'event',
+        webhook_url: 'https://example.com/webhook/6',
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'custom',
+          message: 'Must not be a reserved name',
+          path: ['name'],
+        },
+      ]);
+
+      const count = await app.prisma.bots.count();
+
+      assert.equal(count, 0);
+    });
+
     test('with duplicate name should fail', async () => {
       await seedBots(app, [org]);
 
