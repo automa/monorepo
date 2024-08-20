@@ -26,7 +26,7 @@ module.exports = {
           ['^node:'],
           [
             '^(fastify)$',
-            '^(chai|sinon)$',
+            '^(chai|quibble|sinon)$',
             '^(@prisma/client|fastify-.*|@fastify/.*)(/.*)?$',
             '^(@opentelemetry/(sdk-node|semantic-conventions))$',
             '^@?\\w',

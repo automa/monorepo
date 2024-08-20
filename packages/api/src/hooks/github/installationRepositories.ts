@@ -64,6 +64,7 @@ export const addOrg = async (
   app: FastifyInstance,
   installation: GithubInstallation,
 ) => {
+  // TODO: Sync users and orgs
   return app.prisma.orgs.upsert({
     where: {
       provider_type_provider_id: {
@@ -95,6 +96,7 @@ export const addRepo = async (
   repository: GithubRepositoryMinimal,
   cause: CauseType,
 ) => {
+  // TODO: Sync users and repos
   const { data } = await axios.get(`/repos/${repository.full_name}`);
 
   return updateRepo(app, axios, org, data, cause);

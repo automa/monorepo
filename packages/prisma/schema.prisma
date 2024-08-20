@@ -160,6 +160,7 @@ model tasks {
   org_id       Int
   title        String       @db.VarChar(255)
   is_scheduled Boolean      @default(false)
+  token        String       @db.VarChar(255)
   created_at   DateTime     @default(now()) @db.Timestamp(6)
   completed_at DateTime?    @db.Timestamp(6)
   is_completed Boolean?     @default(dbgenerated("(completed_at IS NOT NULL)"))

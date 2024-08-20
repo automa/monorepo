@@ -92,7 +92,10 @@ suite('linear hook Comment event', () => {
       assert.deepOwnInclude(tasks[0], {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
+        is_scheduled: false,
+        completed_at: null,
       });
+      assert.isDefined(tasks[0].token);
 
       const taskItems = await app.prisma.task_items.findMany({
         where: {
@@ -168,7 +171,10 @@ suite('linear hook Comment event', () => {
       assert.deepOwnInclude(tasks[0], {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
+        is_scheduled: false,
+        completed_at: null,
       });
+      assert.isDefined(tasks[0].token);
 
       const taskItems = await app.prisma.task_items.findMany({
         where: {

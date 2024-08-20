@@ -12,7 +12,7 @@ export default async function (app: FastifyInstance) {
       return reply.unauthorized();
     }
 
-    return reply.status(200).send({
+    return reply.send({
       id: user.id,
       email: user.email,
     });
