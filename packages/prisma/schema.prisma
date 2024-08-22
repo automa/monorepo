@@ -102,6 +102,7 @@ model bots {
   webhook_secret    String              @db.VarChar(255)
   short_description String              @db.VarChar(255)
   image_url         String?             @db.VarChar(255)
+  paths             String[]            @default([])
   description       String?
   homepage          String?             @db.VarChar(255)
   published_at      DateTime?           @db.Timestamp(6)

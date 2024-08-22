@@ -10,6 +10,8 @@ export const Details = tw(Flex).attrs({
   direction: 'column',
 })`w-60 gap-8`;
 
-export const DetailsTitle = tw.div`font-bold text-neutral-600`;
+export const DetailsTitle = tw(Flex).attrs({
+  alignItems: 'center',
+})`font-bold text-neutral-600`;
 
-export const Description = tw.div`px-4`;
+export const Description = tw.div``;

@@ -99,6 +99,36 @@ export default async function (app: FastifyInstance) {
       return reply.notFound('Repository is archived');
     }
 
+    // Get bot task item
+    const botTaskItem = task.task_items.find(
+      (item) => item.type === TaskItemType.Bot,
+    );
+
+    if (!botTaskItem) {
+      logger.emit({
+        severityNumber: SeverityNumber.ERROR,
+        body: 'Unable to find bot task item',
+        attributes: {
+          task_id: id,
+        },
+      });
+
+      throw new Error('Unable to find bot task item when downloading code');
+    }
+
+    const { botId } = botTaskItem.data as { botId: number };
+
+    // Get bot and check if everything is in order
+    const bot = await app.prisma.bots.findFirst({
+      where: {
+        id: botId,
+      },
+    });
+
+    if (!bot) {
+      return reply.notFound('Bot not found');
+    }
+
     // Download the code
     const { accessToken } = await caller(repo.orgs.github_installation_id);
 
@@ -109,6 +139,12 @@ export default async function (app: FastifyInstance) {
     await $`git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:${accessToken}@github.com/${repo.orgs.provider_name}/${repo.name} ${workingDir}`;
 
     // Checkout the specified paths
+    if (bot.paths.length) {
+      await $({
+        cwd: workingDir,
+      })`git sparse-checkout set --no-cone ${bot.paths.join(' ')}`;
+    }
+
     await $({ cwd: workingDir })`git checkout`;
 
     // Remove the .git directory

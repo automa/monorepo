@@ -97,6 +97,7 @@ CREATE TABLE public.bots (
   webhook_secret VARCHAR(255) NOT NULL,
   short_description VARCHAR(255) NOT NULL,
   image_url VARCHAR(255),
+  paths TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
   description TEXT,
   homepage VARCHAR(255),
   published_at TIMESTAMP,
@@ -117,12 +118,6 @@ ON public.bots (is_published);
 
 CREATE INDEX bots_type_idx
 ON public.bots (type);
-
-INSERT INTO public.bots (org_id, name, type, webhook_url, webhook_secret, short_description, homepage, is_preview, is_deterministic)
-VALUES
-  (1, 'automa', 'event', 'https://api.automa.app/hooks/automa', 'atma_whsec_automa', 'Updates & migrates automa settings', 'https://automa.app', FALSE, TRUE),
-  (1, 'dependency', 'scheduled', 'https://api.dependency.bot/hooks/automa', 'atma_whsec_dependency', 'Upgrade dependencies by updating code', 'https://dependency.bot', TRUE, TRUE),
-  (1, 'refactor', 'event', 'https://api.refactor.bot/hooks/automa', 'atma_whsec_refactor', 'Refactors your code according to your rules', 'https://refactor.bot', FALSE, TRUE);
 
 CREATE TABLE public.bot_installations (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

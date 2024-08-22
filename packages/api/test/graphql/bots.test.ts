@@ -49,6 +49,7 @@ suite('graphql bots', () => {
 
       await app.prisma.bots.updateMany({
         data: {
+          paths: ['path-0', 'path-1'],
           is_preview: true,
           is_deterministic: true,
         },
@@ -79,6 +80,7 @@ suite('graphql bots', () => {
                 type
                 webhook_url
                 webhook_secret
+                paths
                 homepage
                 published_at
                 is_published
@@ -124,6 +126,7 @@ suite('graphql bots', () => {
         assert.equal(bots[0].type, 'event');
         assert.equal(bots[0].webhook_url, 'https://example.com/webhook/0');
         assert.equal(bots[0].webhook_secret, 'atma_whsec_0');
+        assert.isEmpty(bots[0].paths);
         assert.equal(bots[0].homepage, 'https://example.com');
         assert.isString(bots[0].published_at);
         assert.isTrue(bots[0].is_published);
@@ -139,6 +142,7 @@ suite('graphql bots', () => {
         assert.equal(bots[1].type, 'event');
         assert.equal(bots[1].webhook_url, 'https://example.com/webhook/3');
         assert.equal(bots[1].webhook_secret, 'atma_whsec_3');
+        assert.deepEqual(bots[1].paths, ['path-0', 'path-1']);
         assert.isNull(bots[1].homepage);
         assert.isNull(bots[1].published_at);
         assert.isFalse(bots[1].is_published);
@@ -185,6 +189,7 @@ suite('graphql bots', () => {
 
       await app.prisma.bots.updateMany({
         data: {
+          paths: ['path-0', 'path-1'],
           is_preview: true,
           is_deterministic: true,
         },
@@ -215,6 +220,7 @@ suite('graphql bots', () => {
                 type
                 webhook_url
                 webhook_secret
+                paths
                 homepage
                 published_at
                 is_published
@@ -259,6 +265,7 @@ suite('graphql bots', () => {
         assert.equal(bot.type, 'event');
         assert.equal(bot.webhook_url, 'https://example.com/webhook/3');
         assert.equal(bot.webhook_secret, 'atma_whsec_3');
+        assert.deepEqual(bot.paths, ['path-0', 'path-1']);
         assert.isNull(bot.homepage);
         assert.isNull(bot.published_at);
         assert.isFalse(bot.is_published);
@@ -350,6 +357,7 @@ suite('graphql bots', () => {
 
       await app.prisma.bots.updateMany({
         data: {
+          paths: ['path-0', 'path-1'],
           is_preview: true,
         },
         where: {
@@ -376,6 +384,7 @@ suite('graphql bots', () => {
               name
               short_description
               image_url
+              paths
               description
               homepage
               is_published
@@ -409,6 +418,7 @@ suite('graphql bots', () => {
       assert.equal(bots[0].name, 'bot-0');
       assert.equal(bots[0].short_description, 'Bot 0');
       assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
+      assert.isEmpty(bots[0].paths);
       assert.equal(bots[0].description, 'Bot 0 long description');
       assert.equal(bots[0].homepage, 'https://example.com');
       assert.isTrue(bots[0].is_published);
@@ -420,6 +430,7 @@ suite('graphql bots', () => {
       assert.equal(bots[1].name, 'bot-1');
       assert.equal(bots[1].short_description, 'Bot 1');
       assert.equal(bots[1].image_url, 'https://example.com/image/1.png');
+      assert.isEmpty(bots[0].paths);
       assert.equal(bots[1].description, 'Bot 1 long description');
       assert.equal(bots[1].homepage, 'https://example.com');
       assert.isTrue(bots[1].is_published);
@@ -431,6 +442,7 @@ suite('graphql bots', () => {
       assert.equal(bots[2].name, 'bot-2');
       assert.equal(bots[2].short_description, 'Bot 2');
       assert.equal(bots[2].image_url, 'https://example.com/image/2.png');
+      assert.deepEqual(bots[2].paths, ['path-0', 'path-1']);
       assert.equal(bots[2].description, 'Bot 2 long description');
       assert.equal(bots[2].homepage, 'https://example.com');
       assert.isTrue(bots[2].is_published);
@@ -449,6 +461,7 @@ suite('graphql bots', () => {
               name
               short_description
               image_url
+              paths
               description
               homepage
               is_published
@@ -482,6 +495,7 @@ suite('graphql bots', () => {
       assert.equal(bots[0].name, 'bot-1');
       assert.equal(bots[0].short_description, 'Bot 1');
       assert.equal(bots[0].image_url, 'https://example.com/image/1.png');
+      assert.isEmpty(bots[0].paths);
       assert.equal(bots[0].description, 'Bot 1 long description');
       assert.equal(bots[0].homepage, 'https://example.com');
       assert.isTrue(bots[0].is_published);
@@ -493,6 +507,7 @@ suite('graphql bots', () => {
       assert.equal(bots[1].name, 'bot-2');
       assert.equal(bots[1].short_description, 'Bot 2');
       assert.equal(bots[1].image_url, 'https://example.com/image/2.png');
+      assert.deepEqual(bots[1].paths, ['path-0', 'path-1']);
       assert.equal(bots[1].description, 'Bot 2 long description');
       assert.equal(bots[1].homepage, 'https://example.com');
       assert.isTrue(bots[1].is_published);
@@ -511,6 +526,7 @@ suite('graphql bots', () => {
               name
               short_description
               image_url
+              paths
               description
               homepage
               is_published
@@ -544,6 +560,7 @@ suite('graphql bots', () => {
       assert.equal(bots[0].name, 'bot-0');
       assert.equal(bots[0].short_description, 'Bot 0');
       assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
+      assert.isEmpty(bots[0].paths);
       assert.equal(bots[0].description, 'Bot 0 long description');
       assert.equal(bots[0].homepage, 'https://example.com');
       assert.isTrue(bots[0].is_published);
@@ -671,6 +688,16 @@ suite('graphql bots', () => {
     suiteSetup(async () => {
       [bot, nonMemberOrgBot, nonPublishedBot, nonPublishedNonMemberOrgBot] =
         await seedBots(app, [org, nonMemberOrg], [org, nonMemberOrg]);
+
+      await app.prisma.bots.updateMany({
+        data: {
+          paths: ['path-0', 'path-1'],
+          is_deterministic: true,
+        },
+        where: {
+          name: 'bot-0',
+        },
+      });
     });
 
     suiteTeardown(async () => {
@@ -691,6 +718,7 @@ suite('graphql bots', () => {
               name
               short_description
               image_url
+              paths
               description
               homepage
               is_published
@@ -726,11 +754,12 @@ suite('graphql bots', () => {
       assert.equal(publicBot.name, 'bot-0');
       assert.equal(publicBot.short_description, 'Bot 0');
       assert.equal(publicBot.image_url, 'https://example.com/image/0.png');
+      assert.deepEqual(publicBot.paths, ['path-0', 'path-1']);
       assert.equal(publicBot.description, 'Bot 0 long description');
       assert.equal(publicBot.homepage, 'https://example.com');
       assert.isTrue(publicBot.is_published);
       assert.isFalse(publicBot.is_preview);
-      assert.isFalse(publicBot.is_deterministic);
+      assert.isTrue(publicBot.is_deterministic);
       assert.equal(publicBot.org.name, 'org-0');
     });
 

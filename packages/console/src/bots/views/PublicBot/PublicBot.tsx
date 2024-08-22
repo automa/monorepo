@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
-import { Robot } from '@phosphor-icons/react';
+import { Question, Robot } from '@phosphor-icons/react';
 
 import { useAnalyticsPage } from 'analytics';
 import { getFragment } from 'gql';
@@ -247,7 +247,24 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
                 </Link>
               </Flex>
             </Details>
-            <Description>{bot.description}</Description>
+            <Flex direction="column" className="gap-4 px-4">
+              {bot.paths.length ? (
+                <Flex className="gap-2">
+                  <DetailsTitle className="gap-1">
+                    <Tooltip body="The files paths of the codebase this bot is restricted to">
+                      <Question />
+                    </Tooltip>
+                    Paths:
+                  </DetailsTitle>
+                  {bot.paths.map((path, index) => (
+                    <Badge key={index} size="large">
+                      {path}
+                    </Badge>
+                  ))}
+                </Flex>
+              ) : null}
+              <Description>{bot.description}</Description>
+            </Flex>
           </Flex>
         </Container>
       )}
