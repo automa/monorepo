@@ -6,15 +6,15 @@ import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
 import axios from 'axios';
 import * as tar from 'tar';
 
-import { orgs, repos, tasks } from '@automa/prisma';
+import { bots, orgs, repos, tasks } from '@automa/prisma';
 
-import { call, seedOrgs, seedRepos, server } from './utils';
+import { call, seedBots, seedOrgs, seedRepos, server } from './utils';
 
 import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from './mocks';
 
 suite('code download', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
-  let org: orgs, repo: repos, task: tasks;
+  let org: orgs, bot: bots, repo: repos, task: tasks;
   let sandbox: SinonSandbox, postStub: SinonStub, tarCreateStub: SinonStub;
 
   suiteSetup(async () => {
@@ -28,6 +28,7 @@ suite('code download', () => {
 
   setup(async () => {
     [org] = await seedOrgs(app, 1);
+    [bot] = await seedBots(app, [org]);
     [repo] = await seedRepos(app, [org]);
 
     await app.prisma.orgs.update({
@@ -46,7 +47,10 @@ suite('code download', () => {
         org_id: org.id,
         token: 'abcdef',
         task_items: {
-          create: [{ type: 'repo', data: { repoId: repo.id } }],
+          create: [
+            { type: 'repo', data: { repoId: repo.id } },
+            { type: 'bot', data: { botId: bot.id } },
+          ],
         },
       },
     });
@@ -377,6 +381,68 @@ suite('code download', () => {
     });
   });
 
+  suite('missing bot task item', () => {
+    setup(async () => {
+      await app.prisma.task_items.deleteMany({
+        where: {
+          type: 'bot',
+        },
+      });
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 500', () => {
+      assert.equal(response.statusCode, 500);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.message, 'Internal Server Error');
+      assert.equal(data.error, 'Internal Server Error');
+      assert.equal(data.statusCode, 500);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
+  suite('missing bot', () => {
+    setup(async () => {
+      await app.prisma.bots.deleteMany();
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 404', () => {
+      assert.equal(response.statusCode, 404);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.message, 'Bot not found');
+      assert.equal(data.error, 'Not Found');
+      assert.equal(data.statusCode, 404);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
   suite('valid task', () => {
     setup(async () => {
       response = await download(app, {
@@ -433,6 +499,92 @@ suite('code download', () => {
 
       assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git checkout']]);
       assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['rm -rf .git']]);
+    });
+
+    test('should compress code', () => {
+      assert.equal(tarCreateStub.callCount, 1);
+      assert.deepEqual(tarCreateStub.firstCall.args, [
+        {
+          gzip: true,
+          cwd: `/tmp/automa/download/tasks/${task.id}`,
+        },
+        ['.'],
+      ]);
+    });
+  });
+
+  suite('with bot paths', () => {
+    setup(async () => {
+      await app.prisma.bots.update({
+        where: {
+          id: bot.id,
+        },
+        data: {
+          paths: ['path-1', 'path-2'],
+        },
+      });
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 200', () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should return code', () => {
+      assert.equal(response.headers['content-type'], 'application/gzip');
+
+      assert.equal(response.body, '1234567890');
+    });
+
+    test('should get token from github', async () => {
+      assert.equal(postStub.callCount, 1);
+      assert.equal(
+        postStub.firstCall.args[0],
+        'https://api.github.com/app/installations/123/access_tokens',
+      );
+    });
+
+    test('should clone and checkout the repo', async () => {
+      assert.equal(zxCmdStub.callCount, 5);
+      assert.equal(zxCmdArgsStub.callCount, 3);
+
+      assert.deepEqual(zxCmdStub.getCall(0).args, [
+        ['rm -rf ', ''],
+        `/tmp/automa/download/tasks/${task.id}`,
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(1).args, [
+        [
+          'git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:',
+          '@github.com/',
+          '/',
+          ' ',
+          '',
+        ],
+        'abcdef',
+        'org-0',
+        'repo-0',
+        `/tmp/automa/download/tasks/${task.id}`,
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(2).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(3).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(4).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [
+        ['git sparse-checkout set --no-cone ', ''],
+        'path-1 path-2',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['git checkout']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['rm -rf .git']]);
     });
 
     test('should compress code', () => {

@@ -19,11 +19,11 @@ VALUES
 INSERT INTO public.bots (org_id, name, short_description, image_url, description, type, webhook_url, webhook_secret, homepage, published_at, is_deterministic, is_preview, paths)
 VALUES
   (1, 'automa', 'Updates & migrates automa settings', NULL, NULL, 'event', 'https://localhost:5000/hooks/automa', 'atma_whsec_automa', 'https://automa.app', NULL, TRUE, FALSE, ARRAY['automa.json', 'automa.json5', '.github/automa.json', '.github/automa.json5']),
-  (1, 'dependency', 'Upgrade dependencies by updating code', NULL, NULL, 'scheduled', 'https://localhost:5001/hooks/automa', 'atma_whsec_dependency', 'https://dependency.bot', NULL, TRUE, TRUE, ARRAY[]),
-  (1, 'refactor', 'Refactors your code according to your rules', NULL, NULL, 'event', 'https://localhost:5002/hooks/automa', 'atma_whsec_refactor', 'https://refactor.bot', NULL, TRUE, FALSE, ARRAY[]),
-  (1, 'aider', 'Basic bot that codes', 'https://aider.chat/assets/icons/apple-touch-icon.png', '...', 'event', 'https://localhost:5003/hooks/automa', 'atma_whsec_aider', 'https://aider.chat', NOW(), FALSE, FALSE, ARRAY[]),
+  (1, 'dependency', 'Upgrade dependencies by updating code', NULL, NULL, 'scheduled', 'https://localhost:5001/hooks/automa', 'atma_whsec_dependency', 'https://dependency.bot', NULL, TRUE, TRUE, DEFAULT),
+  (1, 'refactor', 'Refactors your code according to your rules', NULL, NULL, 'event', 'https://localhost:5002/hooks/automa', 'atma_whsec_refactor', 'https://refactor.bot', NULL, TRUE, FALSE, DEFAULT),
+  (1, 'aider', 'Basic bot that codes', 'https://aider.chat/assets/icons/apple-touch-icon.png', '...', 'event', 'https://localhost:5003/hooks/automa', 'atma_whsec_aider', 'https://aider.chat', NOW(), FALSE, FALSE, DEFAULT),
   (1, 'github-runners', 'Changes GitHub CI configuration to use Depot runners', 'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg', '...', 'scheduled', 'http://localhost:5004/hooks/automa', 'atma_whsec_github-runners', 'https://depot.dev', NOW(), TRUE, FALSE, ARRAY['.github/workflows']),
-  (1, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', '...', 'event', 'http://localhost:5005/hooks/automa', 'atma_whsec_posthog', 'https://posthog.com', NOW(), FALSE, FALSE, ARRAY[]);
+  (1, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', '...', 'event', 'http://localhost:5005/hooks/automa', 'atma_whsec_posthog', 'https://posthog.com', NOW(), FALSE, FALSE, DEFAULT);
 
 INSERT INTO public.bot_installations (bot_id, org_id)
 VALUES

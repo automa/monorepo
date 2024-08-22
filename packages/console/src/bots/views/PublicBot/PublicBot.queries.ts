@@ -12,6 +12,7 @@ export const PUBLIC_BOT_QUERY = gql(`
       short_description
       image_url
       type
+      paths
       description
       homepage
       is_published
