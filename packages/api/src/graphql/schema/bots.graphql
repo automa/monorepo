@@ -21,6 +21,7 @@ interface BotBase {
   short_description: String!
   image_url: String
   type: BotType!
+  paths: [String!]!
   description: String
   homepage: String
   is_published: Boolean!

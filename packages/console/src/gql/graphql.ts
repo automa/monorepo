@@ -30,6 +30,7 @@ export type Bot = BotBase & {
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   org: Org;
+  paths: Array<Scalars['String']['output']>;
   published_at?: Maybe<Scalars['DateTime']['output']>;
   short_description: Scalars['String']['output'];
   type: BotType;
@@ -46,6 +47,7 @@ export type BotBase = {
   is_preview: Scalars['Boolean']['output'];
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
+  paths: Array<Scalars['String']['output']>;
   short_description: Scalars['String']['output'];
   type: BotType;
 };
@@ -174,6 +176,7 @@ export type PublicBot = BotBase & {
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   org: PublicOrg;
+  paths: Array<Scalars['String']['output']>;
   short_description: Scalars['String']['output'];
   type: BotType;
 };

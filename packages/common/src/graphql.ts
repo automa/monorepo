@@ -33,6 +33,7 @@ export type Bot = BotBase & {
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   org: Org;
+  paths: Array<Scalars['String']['output']>;
   published_at?: Maybe<Scalars['DateTime']['output']>;
   short_description: Scalars['String']['output'];
   type: BotType;
@@ -49,6 +50,7 @@ export type BotBase = {
   is_preview: Scalars['Boolean']['output'];
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
+  paths: Array<Scalars['String']['output']>;
   short_description: Scalars['String']['output'];
   type: BotType;
 };
@@ -177,6 +179,7 @@ export type PublicBot = BotBase & {
   is_published: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   org: PublicOrg;
+  paths: Array<Scalars['String']['output']>;
   short_description: Scalars['String']['output'];
   type: BotType;
 };
@@ -493,6 +496,7 @@ export type BotResolvers<ContextType = any, ParentType extends ResolversParentTy
   is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
+  paths?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   published_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
@@ -511,6 +515,7 @@ export type BotBaseResolvers<ContextType = any, ParentType extends ResolversPare
   is_preview?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  paths?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
 };
@@ -580,6 +585,7 @@ export type PublicBotResolvers<ContextType = any, ParentType extends ResolversPa
   is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
+  paths?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

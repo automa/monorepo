@@ -14,6 +14,7 @@ export const publicBotFields = {
   short_description: true,
   image_url: true,
   type: true,
+  paths: true,
   description: true,
   homepage: true,
   is_published: true,

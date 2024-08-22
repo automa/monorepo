@@ -23,7 +23,7 @@ export const sync = async (
   // TODO: During org creation, we should check the following:
   //   - If the org name already exists, we should add a suffix to it.
   //   - If the org name is reserved, we should add a suffix to it.
-  //   - `account` is a reserved name. (we currently get that because it is reserved in github too).
+  //   - Restrict org names using `RESTRICTED_ORG_NAMES` const. (we currently get that because it is reserved in github too).
   const personalOrg = await app.prisma.orgs.upsert({
     where: {
       provider_type_provider_id: {
