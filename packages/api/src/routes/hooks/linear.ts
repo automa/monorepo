@@ -46,7 +46,7 @@ export default async function (app: FastifyInstance) {
       return reply.code(204).send();
     }
 
-    // Get github signature
+    // Get linear signature
     const signature = request.headers['linear-signature'];
 
     if (!signature || typeof signature !== 'string') {
