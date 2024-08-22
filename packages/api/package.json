@@ -50,7 +50,9 @@
     "nested-env-schema": "~1.0.2",
     "parse-link-header": "~2.0.0",
     "statsig-node": "~5.23.1",
-    "zod": "~3.23.0"
+    "tar": "~7.4.3",
+    "zod": "~3.23.0",
+    "zx": "~8.1.4"
   },
   "scripts": {
     "build": "rm -rf build && tsc -b --force",

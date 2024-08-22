@@ -61,6 +61,7 @@ suite('events/taskCreated', () => {
         data: {
           org_id: org.id,
           title: 'Write test for handling "example" event',
+          token: 'example',
           task_items: {
             create: [
               {
@@ -108,7 +109,8 @@ suite('events/taskCreated', () => {
       assert.deepEqual(postStub.firstCall.args[1], {
         task: {
           id: task.id,
-          title: task.title,
+          token: 'example',
+          title: 'Write test for handling "example" event',
         },
       });
       assert.deepEqual(postStub.firstCall.args[2], {
@@ -118,7 +120,8 @@ suite('events/taskCreated', () => {
             JSON.stringify({
               task: {
                 id: task.id,
-                title: task.title,
+                token: 'example',
+                title: 'Write test for handling "example" event',
               },
             }),
           ),
@@ -137,6 +140,7 @@ suite('events/taskCreated', () => {
         data: {
           org_id: org.id,
           title: 'Write test for handling "example" event',
+          token: 'example',
           task_items: {
             create: [
               {
@@ -202,7 +206,8 @@ suite('events/taskCreated', () => {
       assert.deepEqual(postStub.firstCall.args[1], {
         task: {
           id: task.id,
-          title: task.title,
+          token: 'example',
+          title: 'Write test for handling "example" event',
         },
       });
       assert.deepEqual(postStub.firstCall.args[2], {
@@ -212,7 +217,8 @@ suite('events/taskCreated', () => {
             JSON.stringify({
               task: {
                 id: task.id,
-                title: task.title,
+                token: 'example',
+                title: 'Write test for handling "example" event',
               },
             }),
           ),

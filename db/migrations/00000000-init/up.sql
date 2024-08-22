@@ -153,6 +153,7 @@ CREATE TABLE public.tasks (
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
   is_scheduled BOOLEAN NOT NULL DEFAULT FALSE,
+  token VARCHAR(255) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   completed_at TIMESTAMP,
   is_completed BOOLEAN GENERATED ALWAYS AS (completed_at IS NOT NULL) STORED

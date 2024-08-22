@@ -43,7 +43,7 @@ export default async function (app: FastifyInstance) {
         },
       });
 
-      return reply.status(204).send();
+      return reply.code(204).send();
     }
 
     // Get github signature
@@ -80,6 +80,6 @@ export default async function (app: FastifyInstance) {
     // Process event
     await handler(app, request.body);
 
-    reply.status(200).send();
+    return reply.send();
   });
 }

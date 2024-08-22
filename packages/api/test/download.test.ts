@@ -1,0 +1,460 @@
+import { Readable } from 'node:stream';
+
+import { FastifyInstance, LightMyRequestResponse } from 'fastify';
+import { assert } from 'chai';
+import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
+import axios from 'axios';
+import * as tar from 'tar';
+
+import { orgs, repos, tasks } from '@automa/prisma';
+
+import { call, seedOrgs, seedRepos, server } from './utils';
+
+import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from './mocks';
+
+suite('code download', () => {
+  let app: FastifyInstance, response: LightMyRequestResponse;
+  let org: orgs, repo: repos, task: tasks;
+  let sandbox: SinonSandbox, postStub: SinonStub, tarCreateStub: SinonStub;
+
+  suiteSetup(async () => {
+    app = await server();
+    sandbox = createSandbox();
+  });
+
+  suiteTeardown(async () => {
+    await app.close();
+  });
+
+  setup(async () => {
+    [org] = await seedOrgs(app, 1);
+    [repo] = await seedRepos(app, [org]);
+
+    await app.prisma.orgs.update({
+      where: {
+        id: org.id,
+      },
+      data: {
+        github_installation_id: 123,
+        has_installation: true,
+      },
+    });
+
+    task = await app.prisma.tasks.create({
+      data: {
+        title: 'Task 1',
+        org_id: org.id,
+        token: 'abcdef',
+        task_items: {
+          create: [{ type: 'repo', data: { repoId: repo.id } }],
+        },
+      },
+    });
+
+    postStub = sandbox
+      .stub(axios, 'post')
+      .resolves({ data: { token: 'abcdef' } });
+
+    tarCreateStub = sandbox
+      .stub()
+      .returns(Readable.from(Buffer.from('1234567890')));
+
+    sandbox.replaceGetter(tar, 'c', () => tarCreateStub as any);
+  });
+
+  teardown(async () => {
+    quibbleSandbox.resetHistory();
+    sandbox.restore();
+    await app.prisma.orgs.deleteMany();
+  });
+
+  suite('non-existent task', () => {
+    setup(async () => {
+      response = await download(app, {
+        id: 0,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 404', () => {
+      assert.equal(response.statusCode, 404);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.message, 'Task not found');
+      assert.equal(data.error, 'Not Found');
+      assert.equal(data.statusCode, 404);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
+  suite('invalid token', () => {
+    setup(async () => {
+      response = await download(app, {
+        id: task.id,
+        token: 'invalid',
+      });
+    });
+
+    test('should return 404', () => {
+      assert.equal(response.statusCode, 404);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.message, 'Task not found');
+      assert.equal(data.error, 'Not Found');
+      assert.equal(data.statusCode, 404);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
+  suite('old task', () => {
+    setup(async () => {
+      await app.prisma.tasks.update({
+        where: {
+          id: task.id,
+        },
+        data: {
+          created_at: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
+        },
+      });
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 403', () => {
+      assert.equal(response.statusCode, 403);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(
+        data.message,
+        'Task is older than 7 days and thus cannot be worked upon anymore',
+      );
+      assert.equal(data.error, 'Forbidden');
+      assert.equal(data.statusCode, 403);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
+  suite('missing repo task item', () => {
+    setup(async () => {
+      await app.prisma.task_items.deleteMany({
+        where: {
+          type: 'repo',
+        },
+      });
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 500', () => {
+      assert.equal(response.statusCode, 500);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.message, 'Internal Server Error');
+      assert.equal(data.error, 'Internal Server Error');
+      assert.equal(data.statusCode, 500);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
+  suite('missing repo', () => {
+    setup(async () => {
+      await app.prisma.repos.deleteMany();
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 404', () => {
+      assert.equal(response.statusCode, 404);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.message, 'Repository not found');
+      assert.equal(data.error, 'Not Found');
+      assert.equal(data.statusCode, 404);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
+  suite('org without installation', () => {
+    setup(async () => {
+      await app.prisma.orgs.update({
+        where: {
+          id: org.id,
+        },
+        data: {
+          github_installation_id: null,
+          has_installation: false,
+        },
+      });
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 404', () => {
+      assert.equal(response.statusCode, 404);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(
+        data.message,
+        'Automa has not been installed for the organization',
+      );
+      assert.equal(data.error, 'Not Found');
+      assert.equal(data.statusCode, 404);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
+  suite('org with suspended installation', () => {
+    setup(async () => {
+      await app.prisma.orgs.update({
+        where: {
+          id: org.id,
+        },
+        data: {
+          has_installation: false,
+        },
+      });
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 404', () => {
+      assert.equal(response.statusCode, 404);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(
+        data.message,
+        'Automa has been suspended for the organization',
+      );
+      assert.equal(data.error, 'Not Found');
+      assert.equal(data.statusCode, 404);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
+  suite('repo without installation', () => {
+    setup(async () => {
+      await app.prisma.repos.update({
+        where: {
+          id: repo.id,
+        },
+        data: {
+          has_installation: false,
+        },
+      });
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 404', () => {
+      assert.equal(response.statusCode, 404);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(
+        data.message,
+        'Automa has not been installed for the repository',
+      );
+      assert.equal(data.error, 'Not Found');
+      assert.equal(data.statusCode, 404);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
+  suite('archived repo', () => {
+    setup(async () => {
+      await app.prisma.repos.update({
+        where: {
+          id: repo.id,
+        },
+        data: {
+          is_archived: true,
+        },
+      });
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 404', () => {
+      assert.equal(response.statusCode, 404);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.message, 'Repository is archived');
+      assert.equal(data.error, 'Not Found');
+      assert.equal(data.statusCode, 404);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
+  suite('valid task', () => {
+    setup(async () => {
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 200', () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should return code', () => {
+      assert.equal(response.headers['content-type'], 'application/gzip');
+
+      assert.equal(response.body, '1234567890');
+    });
+
+    test('should get token from github', async () => {
+      assert.equal(postStub.callCount, 1);
+      assert.equal(
+        postStub.firstCall.args[0],
+        'https://api.github.com/app/installations/123/access_tokens',
+      );
+    });
+
+    test('should clone and checkout the repo', async () => {
+      assert.equal(zxCmdStub.callCount, 4);
+      assert.equal(zxCmdArgsStub.callCount, 2);
+
+      assert.deepEqual(zxCmdStub.getCall(0).args, [
+        ['rm -rf ', ''],
+        `/tmp/automa/download/tasks/${task.id}`,
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(1).args, [
+        [
+          'git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:',
+          '@github.com/',
+          '/',
+          ' ',
+          '',
+        ],
+        'abcdef',
+        'org-0',
+        'repo-0',
+        `/tmp/automa/download/tasks/${task.id}`,
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(2).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(3).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git checkout']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['rm -rf .git']]);
+    });
+
+    test('should compress code', () => {
+      assert.equal(tarCreateStub.callCount, 1);
+      assert.deepEqual(tarCreateStub.firstCall.args, [
+        {
+          gzip: true,
+          cwd: `/tmp/automa/download/tasks/${task.id}`,
+        },
+        ['.'],
+      ]);
+    });
+  });
+});
+
+const download = async (
+  app: FastifyInstance,
+  task: Pick<tasks, 'id' | 'token'>,
+) =>
+  call(app, '/code/download', {
+    method: 'POST',
+    payload: {
+      task,
+    },
+  });

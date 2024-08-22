@@ -51,6 +51,7 @@ suite('events/taskScheduled', () => {
       is_scheduled: true,
       completed_at: null,
     });
+    assert.isDefined(tasks[0].token);
 
     const taskItems = await app.prisma.task_items.findMany({
       where: {

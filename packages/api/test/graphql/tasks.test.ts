@@ -48,18 +48,22 @@ suite('graphql tasks', () => {
         data: [
           {
             title: 'task-0',
+            token: '0',
             org_id: org.id,
           },
           {
             title: 'task-1',
+            token: '1',
             org_id: secondOrg.id,
           },
           {
             title: 'task-2',
+            token: '2',
             org_id: nonMemberOrg.id,
           },
           {
             title: 'task-3',
+            token: '3',
             is_scheduled: true,
             org_id: org.id,
             completed_at: new Date(),
@@ -302,6 +306,7 @@ suite('graphql tasks', () => {
       task = await app.prisma.tasks.create({
         data: {
           title: 'task-0',
+          token: '0',
           org_id: org.id,
         },
       });
@@ -438,10 +443,14 @@ suite('graphql tasks', () => {
       test('should create task', async () => {
         const [task] = await app.prisma.tasks.findMany();
 
-        assert.equal(
-          task.title,
-          'Send an analytics event when user clicks on "Create Task" button',
-        );
+        assert.deepOwnInclude(task, {
+          org_id: org.id,
+          title:
+            'Send an analytics event when user clicks on "Create Task" button',
+          is_scheduled: false,
+          completed_at: null,
+        });
+        assert.isDefined(task.token);
       });
 
       test('should create task item', async () => {

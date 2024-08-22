@@ -195,6 +195,7 @@ const taskCreated: QueueDefinition<{
     const payload = {
       task: {
         id,
+        token: task.token,
         title: task.title,
       },
     };

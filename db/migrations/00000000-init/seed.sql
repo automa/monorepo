@@ -28,14 +28,14 @@ VALUES
   (5, 1),
   (6, 1);
 
-INSERT INTO public.tasks (org_id, title, is_scheduled, created_at, completed_at)
+INSERT INTO public.tasks (org_id, title, is_scheduled, token, created_at, completed_at)
 VALUES
-  (1, 'Provision the cli repo', FALSE, NOW(), NOW()),
-  (1, 'Update the homepage headline', FALSE,  NOW(), NULL),
-  (1, 'Running automa/github-runners on monorepo', TRUE, NOW(), NOW()),
-  (1, 'Running automa/github-runners on monorepo', TRUE, NOW(), NOW()),
-  (1, 'Running automa/github-runners on monorepo', TRUE, NOW(), NULL),
-  (1, 'Track "User Login Attempted" event', FALSE, NOW(), NULL);
+  (1, 'Provision the cli repo', FALSE, 'a', NOW(), NOW()),
+  (1, 'Update the homepage headline', FALSE, 'b', NOW(), NULL),
+  (1, 'Running automa/github-runners on monorepo', TRUE, 'c', NOW(), NOW()),
+  (1, 'Running automa/github-runners on monorepo', TRUE, 'd', NOW(), NOW()),
+  (1, 'Running automa/github-runners on monorepo', TRUE, 'e', NOW(), NULL),
+  (1, 'Track "User Login Attempted" event', FALSE, 'f', NOW(), NULL);
 
 INSERT INTO public.task_items (task_id, created_at, actor_user_id, type, data)
 VALUES

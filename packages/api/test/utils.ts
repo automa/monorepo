@@ -13,6 +13,8 @@ import { FastifyInstance, InjectOptions } from 'fastify';
 
 export { server } from '../src';
 
+export * from './mocks';
+
 export const call = (
   app: FastifyInstance,
   uri: string,

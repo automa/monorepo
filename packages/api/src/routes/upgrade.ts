@@ -4,6 +4,7 @@ import { FastifyInstance } from 'fastify';
 
 import { caller } from '../clients/github';
 
+// TODO: Use zx
 const command = async (
   command: string,
   args: string[] = [],
