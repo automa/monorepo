@@ -130,6 +130,11 @@ suite('events/taskCreated', () => {
             },
           ],
         },
+        repo: {
+          id: repo.id,
+          name: 'repo-0',
+          is_private: false,
+        },
       };
 
       assert.equal(postStub.callCount, 1);
@@ -151,6 +156,12 @@ suite('events/taskCreated', () => {
 
     setup(async () => {
       postStub = sandbox.stub(axios, 'post').resolves({});
+
+      await app.prisma.repos.updateMany({
+        data: {
+          is_private: true,
+        },
+      });
 
       task = await app.prisma.tasks.create({
         data: {
@@ -266,6 +277,11 @@ suite('events/taskCreated', () => {
               },
             },
           ],
+        },
+        repo: {
+          id: repo.id,
+          name: 'repo-0',
+          is_private: true,
         },
       };
 

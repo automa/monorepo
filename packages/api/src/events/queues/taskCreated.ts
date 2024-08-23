@@ -209,6 +209,11 @@ const taskCreated: QueueDefinition<{
             data,
           })),
       },
+      repo: {
+        id: repo.id,
+        name: repo.name,
+        is_private: repo.is_private,
+      },
     };
 
     // Create webhook signature
