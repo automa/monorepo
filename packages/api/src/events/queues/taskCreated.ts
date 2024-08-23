@@ -197,6 +197,17 @@ const taskCreated: QueueDefinition<{
         id,
         token: task.token,
         title: task.title,
+        items: task.task_items
+          .filter(({ type }) =>
+            ([task_item.message, task_item.origin] as task_item[]).includes(
+              type,
+            ),
+          )
+          .map(({ id, type, data }) => ({
+            id,
+            type,
+            data,
+          })),
       },
     };
 

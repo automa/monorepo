@@ -210,8 +210,8 @@ importers:
         specifier: ~5.2.0
         version: 5.2.0
       '@fastify/session':
-        specifier: ~10.4.0
-        version: 10.4.0
+        specifier: ~10.9.0
+        version: 10.9.0
       '@fastify/swagger':
         specifier: ~8.8.0
         version: 8.8.0
@@ -1804,8 +1804,8 @@ packages:
   '@fastify/sensible@5.2.0':
     resolution: {integrity: sha512-fy5vqJJAMVQctUT+kYfGdaGYeW9d8JaWEqtdWN6UmzQQ3VX0qMXE7Qc/MmfE+Cj3v0g5kbeR+obd3HZr3IMf+w==}
 
-  '@fastify/session@10.4.0':
-    resolution: {integrity: sha512-0lABZ0Rcg0VjiRj5xWeAwC1LBwgclaoAPikaONxTz0LJQTPPWSfSDDXafLkGDAqrl5KF8sC3jqLiZ9CbRHZ0Jg==}
+  '@fastify/session@10.9.0':
+    resolution: {integrity: sha512-u/c42RuAaxCeEuRCAwK2+/SfGqKOd0NSyRzEvDwFBWySQoKUZQyb9OmmJSWJBbOP1OfaU2OsDrjbPbghE1l/YQ==}
 
   '@fastify/static@6.12.0':
     resolution: {integrity: sha512-KK1B84E6QD/FcQWxDI2aiUCwHxMJBI1KeCUzm1BwYpPY1b742+jeKruGHP2uOluuM6OkBPI8CIANrXcCRtC2oQ==}
@@ -12962,7 +12962,7 @@ snapshots:
       type-is: 1.6.18
       vary: 1.1.2
 
-  '@fastify/session@10.4.0':
+  '@fastify/session@10.9.0':
     dependencies:
       fastify-plugin: 4.5.1
       safe-stable-stringify: 2.4.3
