@@ -2,7 +2,14 @@ import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import { captureException, init, withScope } from '@sentry/node';
 
-import { env, environment, product, service, version } from '../env';
+import {
+  env,
+  environment,
+  isProduction,
+  product,
+  service,
+  version,
+} from '../env';
 import { tracer } from '../telemetry';
 
 declare module 'fastify' {
@@ -14,10 +21,10 @@ declare module 'fastify' {
 }
 
 const errorPlugin: FastifyPluginAsync = async (app) => {
-  const isSentryEnabled = !!env.SENTRY_DSN;
+  const isErrorTrackingEnabled = isProduction && !!env.SENTRY_DSN;
 
   await tracer.startActiveSpan('error:initialize', async (span) => {
-    if (isSentryEnabled) {
+    if (isErrorTrackingEnabled) {
       init({
         dsn: env.SENTRY_DSN,
         release: `${product}-${service}@${version}`,
@@ -28,7 +35,7 @@ const errorPlugin: FastifyPluginAsync = async (app) => {
     app.decorate('error', {
       capture: (err: any, context?: Record<string, unknown>) => {
         tracer.startActiveSpan(`error:capture`, (span) => {
-          if (isSentryEnabled) {
+          if (isErrorTrackingEnabled) {
             withScope((scope) => {
               scope.setContext('error', { message: err.message, ...context });
               captureException(err);

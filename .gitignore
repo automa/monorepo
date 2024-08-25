@@ -4,5 +4,6 @@ build
 coverage
 .nyc_output
 *.tsbuildinfo
+.env.keys
 
 schema.graphql
