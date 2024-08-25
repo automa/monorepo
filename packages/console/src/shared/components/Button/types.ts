@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, Ref } from 'react';
 import { VariantProps } from 'class-variance-authority';
 
 import { $, Component, Styled } from 'theme';
@@ -12,7 +12,9 @@ type ButtonProps = $<
   {
     fullWidth?: boolean;
   } & VariantProps<typeof button>,
-  Omit<AnchorProps, 'disabled' | 'children'> &
+  {
+    innerRef?: Ref<HTMLButtonElement>;
+  } & Omit<AnchorProps, 'disabled' | 'children'> &
     ButtonHTMLAttributes<HTMLButtonElement>
 >;
 

@@ -14,6 +14,8 @@ export type Keybinding = {
   action: HotkeyCallback;
 };
 
+const isMac = navigator.platform.toLowerCase().includes('mac');
+
 const KeySymbol = tw.kbd`min-w-4 rounded p-0.5 text-center`;
 
 const useKeybindings = (
@@ -61,8 +63,6 @@ const useKeybindings = (
   );
 
   const tooltip = useMemo(() => {
-    const isMac = navigator.platform.toLowerCase().includes('mac');
-
     const contents = bindings.map((binding, index) => {
       const {
         key,
