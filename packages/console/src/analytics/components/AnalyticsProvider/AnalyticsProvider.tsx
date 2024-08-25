@@ -13,7 +13,7 @@ const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(isTest);
   const [anonymousId, setAnonymousId] = useState<ID | null>(null);
 
-  const isAnalyticsEnabled = isProduction;
+  const isAnalyticsEnabled = isProduction && !!import.meta.env.VITE_SEGMENT_KEY;
 
   const analytics = useMemo(() => {
     const analytics = new AnalyticsBrowser();

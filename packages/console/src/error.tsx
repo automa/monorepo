@@ -1,14 +1,15 @@
 import { captureException, init, withScope } from '@sentry/browser';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 
-import { environment, product, service, version } from 'env';
+import { environment, isProduction, product, service, version } from 'env';
 
 import { ErrorCard } from 'shared';
 
-const isSentryEnabled = !!import.meta.env.VITE_SENTRY_DSN;
+const isErrorTrackingEnabled =
+  isProduction && !!import.meta.env.VITE_SENTRY_DSN;
 const tunnelHost = import.meta.env.VITE_SENTRY_HOST;
 
-if (isSentryEnabled) {
+if (isErrorTrackingEnabled) {
   init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     release: `${product}-${service}@${version}`,
@@ -21,7 +22,7 @@ export const errorCapture = (
   error: Error,
   context?: Record<string, unknown>,
 ) => {
-  if (isSentryEnabled) {
+  if (isErrorTrackingEnabled) {
     withScope((scope) => {
       scope.setContext('error', { message: error.message, ...context });
       captureException(error);
