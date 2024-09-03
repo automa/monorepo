@@ -10,6 +10,7 @@ const meta = {
   args: {
     integration: IntegrationType.Linear,
     connected: false,
+    config: null,
     org: {
       id: 1,
       name: 'org',
@@ -30,6 +31,16 @@ export const Default = {} satisfies Story;
 
 export const Connected = {
   args: {
+    connected: true,
+    config: {
+      slug: 'org',
+    },
+  },
+} satisfies Story;
+
+export const GitHub = {
+  args: {
+    integration: IntegrationType.Github,
     connected: true,
   },
 } satisfies Story;

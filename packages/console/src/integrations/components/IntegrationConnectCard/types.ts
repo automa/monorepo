@@ -8,5 +8,6 @@ export interface IntegrationConnectCardProps
   extends HTMLAttributes<HTMLDivElement> {
   integration: IntegrationType;
   connected: boolean;
+  config: any;
   org: Org;
 }

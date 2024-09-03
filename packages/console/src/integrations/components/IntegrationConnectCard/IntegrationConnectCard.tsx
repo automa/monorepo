@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 
+import { IntegrationType } from '@automa/common';
+
 import { Button, Flex, Tooltip, Typography } from 'shared';
 
 import { integrations } from '../../consts';
@@ -11,10 +13,17 @@ import { Container, Tag } from './IntegrationConnectCard.styles';
 const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
   integration,
   connected,
+  config,
   org,
   ...props
 }) => {
-  const { logo: Logo, name, description, disabled } = integrations[integration];
+  const {
+    logo: Logo,
+    name,
+    description,
+    info,
+    disabled,
+  } = integrations[integration];
 
   const connectIntegration = useMemo(
     () =>
@@ -23,6 +32,16 @@ const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
       }/integrations/${integration}`,
     [org, integration],
   );
+
+  const integrationInfo = useMemo(() => {
+    const infoConfig = integration === IntegrationType.Github ? org : config;
+
+    if (!infoConfig) {
+      return '';
+    }
+
+    return ` to ${info(infoConfig)}`;
+  }, [config, info, org, integration]);
 
   return (
     <Container {...props}>
@@ -38,7 +57,7 @@ const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
             </Button>
           </Tooltip>
         ) : connected ? (
-          <Tag>Connected</Tag>
+          <Tag>Connected{integrationInfo}</Tag>
         ) : (
           <Button href={connectIntegration} size="small">
             Connect
