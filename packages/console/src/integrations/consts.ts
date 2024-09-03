@@ -29,20 +29,19 @@ export const integrations: {
     logo: LinearLogo,
     name: 'Linear',
     description: 'Connect your Linear account to create tasks from issues.',
-    info: (config) => config.slug,
+    info: (config) => config.name,
+  },
+  [IntegrationType.Jira]: {
+    logo: JiraLogo,
+    name: 'Jira',
+    description: 'Connect your Jira account to create tasks from issues.',
+    info: (config) => config.name,
   },
   [IntegrationType.Slack]: {
     logo: SlackLogo,
     name: 'Slack',
     description:
       'Connect your Slack account to receive notifications and create tasks from messages.',
-    info: (config) => '',
-    disabled: true,
-  },
-  [IntegrationType.Jira]: {
-    logo: JiraLogo,
-    name: 'Jira',
-    description: 'Connect your Jira account to create tasks from issues.',
     info: (config) => '',
     disabled: true,
   },

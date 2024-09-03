@@ -57,6 +57,25 @@ const schema = Type.Object({
     PEM: Type.String(),
     WEBHOOK_SECRET: Type.String(),
   }),
+  JIRA_APP: Type.Object({
+    ACCESS_TOKEN_URL: Type.String({
+      default: 'https://auth.atlassian.com/oauth/token',
+    }),
+    ACCESSIBLE_RESOURCES_URL: Type.String({
+      default: 'https://api.atlassian.com/oauth/token/accessible-resources',
+    }),
+    API_URI: Type.String({
+      default: 'https://api.atlassian.com/ex/jira',
+    }),
+    AUTHORIZE_URL: Type.String({
+      default: 'https://auth.atlassian.com/authorize',
+    }),
+    CALLBACK_URI: Type.String({
+      default: '/callbacks/jira',
+    }),
+    CLIENT_ID: Type.String(),
+    CLIENT_SECRET: Type.String(),
+  }),
   LINEAR_APP: Type.Object({
     ACCESS_TOKEN_URL: Type.String({
       default: 'https://api.linear.app/oauth/token',

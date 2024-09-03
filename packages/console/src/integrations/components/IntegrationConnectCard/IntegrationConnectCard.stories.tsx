@@ -33,12 +33,12 @@ export const Connected = {
   args: {
     connected: true,
     config: {
-      slug: 'org',
+      name: 'org',
     },
   },
 } satisfies Story;
 
-export const GitHub = {
+export const Github = {
   args: {
     integration: IntegrationType.Github,
     connected: true,
