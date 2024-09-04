@@ -43,14 +43,19 @@ const marshallEvent = (
 });
 
 const analyticsPlugin: FastifyPluginAsync = async (app) => {
-  await tracer.startActiveSpan('analytics:initialize', async (span) => {
-    const analytics = new Analytics({
-      writeKey: env.SEGMENT.KEY,
-      disable: !env.SEGMENT.ENABLED,
-      ...(!isProduction && { maxEventsInBatch: 1 }),
-    });
+  const isAnalyticsEnabled = isProduction && !!env.SEGMENT_KEY;
 
-    analytics.on('error', (error) => {
+  await tracer.startActiveSpan('analytics:initialize', async (span) => {
+    let analytics: Analytics | undefined;
+
+    if (isAnalyticsEnabled) {
+      analytics = new Analytics({
+        writeKey: env.SEGMENT_KEY,
+        ...(!isProduction && { maxEventsInBatch: 1 }),
+      });
+    }
+
+    analytics?.on('error', (error) => {
       app.error.capture(error);
     });
 
@@ -61,7 +66,7 @@ const analyticsPlugin: FastifyPluginAsync = async (app) => {
       user?: users,
       org?: orgs,
     ) =>
-      analytics.page({
+      analytics?.page({
         ...marshallEvent(properties, user, org),
         category,
         name,
@@ -73,7 +78,7 @@ const analyticsPlugin: FastifyPluginAsync = async (app) => {
       user?: users,
       org?: orgs,
     ) =>
-      analytics.track({
+      analytics?.track({
         ...marshallEvent(properties, user, org),
         event,
       });
@@ -84,7 +89,7 @@ const analyticsPlugin: FastifyPluginAsync = async (app) => {
     });
 
     app.addHook('onClose', async () => {
-      await analytics.closeAndFlush();
+      await analytics?.closeAndFlush();
     });
 
     span.end();

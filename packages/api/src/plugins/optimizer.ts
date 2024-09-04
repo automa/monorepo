@@ -38,12 +38,16 @@ const marshallUser = (user?: users, org?: orgs) =>
       };
 
 const optimizerPlugin: FastifyPluginAsync = async (app) => {
+  const isOptimizerEnabled = !!env.STATSIG_KEY;
+
   await tracer.startActiveSpan('optimizer:initialize', async (span) => {
-    await Statsig.initialize(env.STATSIG_KEY, {
-      environment: {
-        tier: environment,
-      },
-    });
+    if (isOptimizerEnabled) {
+      await Statsig.initialize(env.STATSIG_KEY, {
+        environment: {
+          tier: environment,
+        },
+      });
+    }
 
     app.decorate('optimizer', {
       gate: (gate: string, user?: users, org?: orgs) =>
@@ -51,7 +55,9 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
           span.setAttribute('gate', gate);
 
           try {
-            const value = Statsig.checkGateSync(marshallUser(user, org), gate);
+            const value = isOptimizerEnabled
+              ? Statsig.checkGateSync(marshallUser(user, org), gate)
+              : false;
 
             span.end();
 
@@ -68,7 +74,9 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
           span.setAttribute('key', key);
 
           try {
-            const config = Statsig.getConfigSync(marshallUser(user, org), key);
+            const config = isOptimizerEnabled
+              ? Statsig.getConfigSync(marshallUser(user, org), key)
+              : new DynamicConfig(key);
 
             span.end();
 
@@ -85,10 +93,9 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
           span.setAttribute('experiment', experiment);
 
           try {
-            const config = Statsig.getExperimentSync(
-              marshallUser(user, org),
-              experiment,
-            );
+            const config = isOptimizerEnabled
+              ? Statsig.getExperimentSync(marshallUser(user, org), experiment)
+              : new DynamicConfig(experiment);
 
             span.end();
 
