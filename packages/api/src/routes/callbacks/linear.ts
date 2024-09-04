@@ -38,9 +38,10 @@ export default async function (app: FastifyInstance) {
     }
 
     const {
-      data: { access_token: accessToken },
+      data: { access_token: accessToken, scope },
     } = await axios.post<{
       access_token: string;
+      scope: string;
     }>(
       LINEAR_APP.ACCESS_TOKEN_URL,
       {
@@ -76,6 +77,7 @@ export default async function (app: FastifyInstance) {
           id: linearOrg.id,
           name: linearOrg.name,
           slug: linearOrg.urlKey,
+          scopes: scope.split(' '),
         },
         created_by: request.userId!,
       },
