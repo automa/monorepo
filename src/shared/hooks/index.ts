@@ -5,6 +5,5 @@ export { default as useIsMounted } from './useIsMounted';
 export { default as useKeybindings } from './useKeybindings';
 export * from './useKeybindings';
 export * from './useMediaQueries';
-export * from './useOptimizer';
 export { default as usePersistentState } from './usePersistentState';
 export { default as useRelativeMatch } from './useRelativeMatch';

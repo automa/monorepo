@@ -1,5 +1,5 @@
 const product = 'frontend-react';
-const modules = ['analytics', 'shared', 'utils'];
+const modules = ['analytics', 'optimizer', 'shared', 'utils'];
 const features = ['auth'];
 
 module.exports = {

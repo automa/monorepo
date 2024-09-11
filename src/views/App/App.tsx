@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { StatsigProvider } from 'statsig-react';
-
-import { environment, isTest } from 'env';
 
 import { useAnalytics } from 'analytics';
+import { useOptimizerUser } from 'optimizer';
 import { Loader, RoutesLoader, useAsyncEffect } from 'shared';
 
 import { useAuth, useUser } from 'auth';
@@ -15,7 +12,9 @@ import routes from './routes';
 import { Container } from './App.styles';
 
 const App: React.FC<{}> = () => {
-  const { anonymousId, identify } = useAnalytics();
+  const { identify } = useAnalytics();
+
+  const { updateOptimizerUser } = useOptimizerUser();
 
   const { setAuth, setAuthLoading, authLoading } = useAuth();
 
@@ -51,35 +50,14 @@ const App: React.FC<{}> = () => {
     identify(user);
   }, [identify, user]);
 
+  useEffect(() => {
+    updateOptimizerUser(user);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   return (
     <Container>
-      <StatsigProvider
-        sdkKey={import.meta.env.VITE_STATSIG_KEY}
-        waitForInitialization={isTest ? false : true}
-        initializingComponent={<Loader />}
-        options={{
-          // Checking for undefined because we don't allow loading segment in development
-          overrideStableID: anonymousId ? `${anonymousId}` : undefined,
-          environment: {
-            tier: environment,
-          },
-          disableAutoMetricsLogging: true,
-          disableCurrentPageLogging: true,
-          disableDiagnosticsLogging: true,
-          disableErrorLogging: true,
-        }}
-        user={{
-          userID: user?.id,
-          email: user?.email,
-          customIDs: {
-            ...(user && {
-              orgID: user.org_id,
-            }),
-          },
-        }}
-      >
-        {!authLoading && <RoutesLoader fallback={<Loader />} routes={routes} />}
-      </StatsigProvider>
+      {!authLoading && <RoutesLoader fallback={<Loader />} routes={routes} />}
     </Container>
   );
 };
