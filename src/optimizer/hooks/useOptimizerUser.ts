@@ -4,11 +4,11 @@ import { useStatsigUser } from '@statsig/react-bindings';
 import { User } from 'auth';
 
 const useOptimizerUser = () => {
-  const { user: optimizerUser, updateUserSync } = useStatsigUser();
+  const { user: optimizerUser, updateUserAsync } = useStatsigUser();
 
   const updateOptimizerUser = useCallback(
     (user: User | null) => {
-      updateUserSync({
+      updateUserAsync({
         userID: user?.id,
         email: user?.email,
         customIDs: {
@@ -19,7 +19,7 @@ const useOptimizerUser = () => {
         },
       });
     },
-    [updateUserSync, optimizerUser],
+    [updateUserAsync, optimizerUser],
   );
 
   return { updateOptimizerUser };

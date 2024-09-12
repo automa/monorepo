@@ -45,6 +45,7 @@ jobs:
           VITE_SENTRY_DSN: ${{ secrets.PRODUCTION_SENTRY_DSN }}
           VITE_SENTRY_HOST: ${{ secrets.PRODUCTION_SENTRY_HOST }}
           VITE_STATSIG_KEY: ${{ secrets.PRODUCTION_STATSIG_KEY }}
+          VITE_STATSIG_HOST: ${{ secrets.PRODUCTION_STATSIG_HOST }}
         run: pnpm build
       - name: Upload to S3
         env:

@@ -13,6 +13,8 @@ const OptimizerProvider: React.FC<OptimizerProviderProps> = ({ children }) => {
 
   // const isOptimizerEnabled = !!import.meta.env.VITE_STATSIG_KEY;
 
+  const apiHost = import.meta.env.VITE_STATSIG_HOST;
+
   const { client, isLoading } = useClientAsyncInit(
     import.meta.env.VITE_STATSIG_KEY,
     {
@@ -24,6 +26,9 @@ const OptimizerProvider: React.FC<OptimizerProviderProps> = ({ children }) => {
     {
       environment: {
         tier: environment,
+      },
+      networkConfig: {
+        api: apiHost ? `https://${apiHost}/v1` : undefined,
       },
     },
   );
