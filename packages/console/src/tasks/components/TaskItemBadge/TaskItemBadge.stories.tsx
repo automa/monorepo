@@ -23,3 +23,16 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Linear = {} satisfies Story;
+
+export const Jira = {
+  args: {
+    data: {
+      integration: IntegrationType.Jira,
+      issueKey: 'DEMO-123',
+      issueTitle: 'Demo Issue',
+      organizationName: 'Demo Org',
+      organizationUrl: 'https://demo.atlassian.net',
+      commentId: '123',
+    },
+  },
+} satisfies Story;

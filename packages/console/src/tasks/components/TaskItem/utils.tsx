@@ -5,7 +5,10 @@ import { IntegrationType, ProviderType } from '@automa/common';
 import { Typography } from 'shared';
 
 import GithubLogo from 'assets/logos/github.svg?react';
+import JiraLogo from 'assets/logos/jira.svg?react';
 import LinearLogo from 'assets/logos/linear.svg?react';
+
+import { definitions } from '../TaskItemBadge/utils';
 
 type OriginDefinition = {
   title: (data: any) => ReactNode;
@@ -23,7 +26,17 @@ export const originDefinitions: Partial<
         <Typography variant="small">{data.issueTitle}</Typography>
       </>
     ),
-    link: (data) => data.url,
+    link: definitions[IntegrationType.Linear]!.link,
+  },
+  [IntegrationType.Jira]: {
+    title: (data) => (
+      <>
+        <JiraLogo className="ml-0.5 size-3" />
+        <Typography variant="small">{data.issueKey}</Typography>
+        <Typography variant="small">{data.issueTitle}</Typography>
+      </>
+    ),
+    link: definitions[IntegrationType.Jira]!.link,
   },
 };
 

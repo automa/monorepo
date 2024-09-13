@@ -23,7 +23,7 @@ export default async function (app: FastifyInstance) {
       'scope',
       [
         'read:jira-work',
-        'write:comment:jira',
+        'write:jira-work',
         'manage:jira-webhook',
         'offline_access',
       ].join(' '),

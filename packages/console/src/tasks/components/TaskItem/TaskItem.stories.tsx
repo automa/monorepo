@@ -105,6 +105,27 @@ export const OriginLinear = {
   },
 } satisfies Story;
 
+export const OriginJira = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Origin,
+        created_at,
+        data: {
+          integration: 'jira',
+          issueKey: 'DEMO-123',
+          issueTitle: 'Demo Issue',
+          organizationName: 'Demo Org',
+          organizationUrl: 'https://demo.atlassian.net',
+          commentId: '123',
+        },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
 export const Bot = {
   args: {
     taskItem: makeFragmentData(
