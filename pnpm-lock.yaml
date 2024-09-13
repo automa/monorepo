@@ -423,6 +423,9 @@ importers:
       '@sentry/browser':
         specifier: ~7.63.0
         version: 7.63.0
+      '@statsig/react-bindings':
+        specifier: ~3.0.0
+        version: 3.0.0(react@18.3.1)
       '@tanstack/react-table':
         specifier: ~8.5.22
         version: 8.5.30(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -480,9 +483,6 @@ importers:
       reset-css:
         specifier: ~5.0.1
         version: 5.0.2
-      statsig-react:
-        specifier: ~1.30.1
-        version: 1.30.3(react@18.3.1)
       tailwind-merge:
         specifier: ~2.2.1
         version: 2.2.2
@@ -3611,6 +3611,17 @@ packages:
 
   '@sinonjs/text-encoding@0.7.2':
     resolution: {integrity: sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==}
+
+  '@statsig/client-core@3.0.0':
+    resolution: {integrity: sha512-8PJ1nn61vSTbs1RGYYsIMloGkfRameiCs0ULs+27dq3kkFnWIK7cN7ku2jOK0OUygr6N/Gn4iamQSuFcUQcGQA==}
+
+  '@statsig/js-client@3.0.0':
+    resolution: {integrity: sha512-TbeyDoBqD5FrfHfcgB39o+Ug19ZXQZ8IW59ySU52SyawmdC3CGW53qgt+7akfJCUYJQkUiKKBOhfEVN/wnUaLQ==}
+
+  '@statsig/react-bindings@3.0.0':
+    resolution: {integrity: sha512-quHwPjDv4YKOiPMEaU2sRIIpZqZuZG8U3rC7PZtWf7UXwKpaQ0X6mEffyNcjrXvR4703hGlAGaCsWES22ShrXw==}
+    peerDependencies:
+      react: ^16.6.3 || ^17.0.0 || ^18.0.0
 
   '@stdlib/array-float32@0.0.6':
     resolution: {integrity: sha512-QgKT5UaE92Rv7cxfn7wBKZAlwFFHPla8eXsMFsTGt5BiL4yUy36lwinPUh4hzybZ11rw1vifS3VAPuk6JP413Q==}
@@ -8210,9 +8221,6 @@ packages:
   js-sdsl@4.4.2:
     resolution: {integrity: sha512-dwXFwByc/ajSV6m5bcKAPwe4yDDF6D614pxmIi5odytzxRlwqF6nwoiCek80Ixc7Cvma5awClxrzFtxCQvcM8w==}
 
-  js-sha256@0.11.0:
-    resolution: {integrity: sha512-6xNlKayMZvds9h1Y1VWc0fQHQ82BxTXizWPEtEeGvmOUYpBRy4gbWroHLpzowe6xiQhHpelCQiE7HEdznyBL9Q==}
-
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -10534,16 +10542,8 @@ packages:
   standard-as-callback@2.1.0:
     resolution: {integrity: sha512-qoRRSyROncaz1z0mvYqIE4lCd9p2R90i6GxW3uZv5ucSu8tU7B5HXUP1gG8pVZsYNVaXjk8ClXHPttLyxAL48A==}
 
-  statsig-js@4.53.1:
-    resolution: {integrity: sha512-BEGVrFMCjgq8ow5zUEhnXsmJGx8pRIWUGvw+zYWBbfzjEJi7q9C82w/uw8/2wH7swpzpSnVs075ngbhwAF0e1Q==}
-
   statsig-node@5.23.1:
     resolution: {integrity: sha512-rawn+KsPibyngB6NNFgnOfxz8DZHKaAMRv60COsSvNktIJP/MFeYqvFqaUGaengImXQ3JX91jo7lOvIQ8keb/A==}
-
-  statsig-react@1.30.3:
-    resolution: {integrity: sha512-Ot4U3jr7IOS3QRKszFDndMqN3tO5X7NSJCI33+FFWIk22gaPfH9N539rw34SxJ82v3LPS1Q0lBU6oiwmxt3/xg==}
-    peerDependencies:
-      react: ^16.6.3 || ^17.0.0 || ^18.0.0
 
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
@@ -15465,6 +15465,18 @@ snapshots:
       type-detect: 4.0.8
 
   '@sinonjs/text-encoding@0.7.2': {}
+
+  '@statsig/client-core@3.0.0': {}
+
+  '@statsig/js-client@3.0.0':
+    dependencies:
+      '@statsig/client-core': 3.0.0
+
+  '@statsig/react-bindings@3.0.0(react@18.3.1)':
+    dependencies:
+      '@statsig/client-core': 3.0.0
+      '@statsig/js-client': 3.0.0
+      react: 18.3.1
 
   '@stdlib/array-float32@0.0.6':
     dependencies:
@@ -21693,8 +21705,6 @@ snapshots:
 
   js-sdsl@4.4.2: {}
 
-  js-sha256@0.11.0: {}
-
   js-tokens@4.0.0: {}
 
   js-yaml@3.14.1:
@@ -24582,11 +24592,6 @@ snapshots:
 
   standard-as-callback@2.1.0: {}
 
-  statsig-js@4.53.1:
-    dependencies:
-      js-sha256: 0.11.0
-      uuid: 9.0.1
-
   statsig-node@5.23.1:
     dependencies:
       ip3country: 5.0.0
@@ -24595,11 +24600,6 @@ snapshots:
       uuid: 8.3.2
     transitivePeerDependencies:
       - encoding
-
-  statsig-react@1.30.3(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-      statsig-js: 4.53.1
 
   statuses@2.0.1: {}
 

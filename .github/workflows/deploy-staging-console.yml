@@ -50,6 +50,7 @@ jobs:
           VITE_SENTRY_DSN: ${{ secrets.STAGING_SENTRY_DSN_CONSOLE }}
           VITE_SENTRY_HOST: ${{ secrets.STAGING_SENTRY_HOST_CONSOLE }}
           VITE_STATSIG_KEY: ${{ secrets.STAGING_STATSIG_KEY_CONSOLE }}
+          VITE_STATSIG_HOST: ${{ secrets.STAGING_STATSIG_HOST_CONSOLE }}
         run: pnpm build
         working-directory: packages/console
       - name: Upload to S3

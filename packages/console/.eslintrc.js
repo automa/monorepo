@@ -1,5 +1,5 @@
 const product = 'automa';
-const modules = ['analytics', 'shared', 'utils'];
+const modules = ['analytics', 'optimizer', 'shared', 'utils'];
 const features = [
   'auth',
   'bots',
