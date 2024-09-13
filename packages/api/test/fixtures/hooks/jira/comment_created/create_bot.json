@@ -1,0 +1,95 @@
+{
+  "comment": {
+    "self": "https://automa.atlassian.net/rest/api/2/issue/10281/comment/10237",
+    "id": "10237",
+    "author": {
+      "self": "https://automa.atlassian.net/rest/api/2/user?accountId=712020%3A3dd57004-4041-4aca-ab80-ced34cc711ab",
+      "accountId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab",
+      "avatarUrls": {
+        "48x48": "https://secure.gravatar.com/avatar/01ad49af2236b5a9499f025fe552182d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FPS-1.png",
+        "24x24": "https://secure.gravatar.com/avatar/01ad49af2236b5a9499f025fe552182d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FPS-1.png",
+        "16x16": "https://secure.gravatar.com/avatar/01ad49af2236b5a9499f025fe552182d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FPS-1.png",
+        "32x32": "https://secure.gravatar.com/avatar/01ad49af2236b5a9499f025fe552182d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FPS-1.png"
+      },
+      "displayName": "Pavan Sunkara",
+      "active": true,
+      "timeZone": "Europe/London",
+      "accountType": "atlassian"
+    },
+    "body": "/automa bot=bot-1",
+    "updateAuthor": {
+      "self": "https://automa.atlassian.net/rest/api/2/user?accountId=712020%3A3dd57004-4041-4aca-ab80-ced34cc711ab",
+      "accountId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab",
+      "avatarUrls": {
+        "48x48": "https://secure.gravatar.com/avatar/01ad49af2236b5a9499f025fe552182d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FPS-1.png",
+        "24x24": "https://secure.gravatar.com/avatar/01ad49af2236b5a9499f025fe552182d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FPS-1.png",
+        "16x16": "https://secure.gravatar.com/avatar/01ad49af2236b5a9499f025fe552182d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FPS-1.png",
+        "32x32": "https://secure.gravatar.com/avatar/01ad49af2236b5a9499f025fe552182d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FPS-1.png"
+      },
+      "displayName": "Pavan Sunkara",
+      "active": true,
+      "timeZone": "Europe/London",
+      "accountType": "atlassian"
+    },
+    "created": "2024-09-03T18:38:19.504+0100",
+    "updated": "2024-09-03T18:38:19.504+0100",
+    "jsdPublic": true
+  },
+  "webhookEvent": "comment_created",
+  "eventType": "primaryAction",
+  "issue": {
+    "id": "10281",
+    "self": "https://automa.atlassian.net/rest/api/2/10281",
+    "key": "PRO-93",
+    "fields": {
+      "summary": "Track \"User Logged In\" event",
+      "issuetype": {
+        "self": "https://automa.atlassian.net/rest/api/2/issuetype/10002",
+        "id": "10002",
+        "description": "A small, distinct piece of work.",
+        "iconUrl": "https://automa.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10318?size=medium",
+        "name": "Task",
+        "subtask": false,
+        "avatarId": 10318,
+        "hierarchyLevel": 0
+      },
+      "project": {
+        "self": "https://automa.atlassian.net/rest/api/2/project/10003",
+        "id": "10003",
+        "key": "PRO",
+        "name": "Product",
+        "projectTypeKey": "software",
+        "simplified": false,
+        "avatarUrls": {
+          "48x48": "https://automa.atlassian.net/rest/api/2/universal_avatar/view/type/project/avatar/10411",
+          "24x24": "https://automa.atlassian.net/rest/api/2/universal_avatar/view/type/project/avatar/10411?size=small",
+          "16x16": "https://automa.atlassian.net/rest/api/2/universal_avatar/view/type/project/avatar/10411?size=xsmall",
+          "32x32": "https://automa.atlassian.net/rest/api/2/universal_avatar/view/type/project/avatar/10411?size=medium"
+        }
+      },
+      "assignee": null,
+      "priority": {
+        "self": "https://automa.atlassian.net/rest/api/2/priority/3",
+        "iconUrl": "https://automa.atlassian.net/images/icons/priorities/medium.svg",
+        "name": "Medium",
+        "id": "3"
+      },
+      "status": {
+        "self": "https://automa.atlassian.net/rest/api/2/status/10000",
+        "description": "",
+        "iconUrl": "https://automa.atlassian.net/",
+        "name": "To Do",
+        "id": "10000",
+        "statusCategory": {
+          "self": "https://automa.atlassian.net/rest/api/2/statuscategory/2",
+          "id": 2,
+          "key": "new",
+          "colorName": "blue-gray",
+          "name": "To Do"
+        }
+      }
+    }
+  },
+  "matchedWebhookIds": [2],
+  "timestamp": 1725385099504
+}

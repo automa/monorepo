@@ -4,6 +4,7 @@ import { IntegrationType } from '@automa/common';
 
 import { Flex, Typography } from 'shared';
 
+import JiraLogo from 'assets/logos/jira.svg?react';
 import LinearLogo from 'assets/logos/linear.svg?react';
 
 import { TaskItemBadgeProps } from './types';
@@ -20,13 +21,32 @@ export const definitions: Partial<
   >
 > = {
   [IntegrationType.Linear]: {
-    logo: <LinearLogo />,
+    logo: <LinearLogo className="size-3" />,
     title: (data) => data.issueIdentifier,
     link: (data) => data.url,
     content: (data) => (
       <Flex direction="column" className="gap-2">
         <Flex alignItems="center" className="gap-1">
           <LinearLogo className="size-3" />
+          <Typography variant="xsmall" className="text-neutral-800">
+            {data.organizationName}
+          </Typography>
+        </Flex>
+        <Typography variant="xsmall" className="text-neutral-600">
+          {data.issueTitle}
+        </Typography>
+      </Flex>
+    ),
+  },
+  [IntegrationType.Jira]: {
+    logo: <JiraLogo className="size-3" />,
+    title: (data) => data.issueKey,
+    link: (data) =>
+      `${data.organizationUrl}/browse/${data.issueKey}?focusedCommentId=${data.commentId}`,
+    content: (data) => (
+      <Flex direction="column" className="gap-2">
+        <Flex alignItems="center" className="gap-1">
+          <JiraLogo className="size-3" />
           <Typography variant="xsmall" className="text-neutral-800">
             {data.organizationName}
           </Typography>

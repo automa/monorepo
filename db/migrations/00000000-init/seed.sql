@@ -38,7 +38,8 @@ VALUES
   (1, 'Running automa/github-runners on monorepo', TRUE, 'c', NOW(), NOW()),
   (1, 'Running automa/github-runners on monorepo', TRUE, 'd', NOW(), NOW()),
   (1, 'Running automa/github-runners on monorepo', TRUE, 'e', NOW(), NULL),
-  (1, 'Track "User Login Attempted" event', FALSE, 'f', NOW(), NULL);
+  (1, 'Track "User Login Attempted" event', FALSE, 'f', NOW(), NULL),
+  (1, 'Track "User Logout Attempted" event', FALSE, 'g', NOW(), NULL);
 
 INSERT INTO public.task_items (task_id, created_at, actor_user_id, type, data)
 VALUES
@@ -53,6 +54,10 @@ VALUES
   (5, NOW(), NULL, 'repo', '{ "repoId": 1, "repoName": "monorepo", "repoOrgId": 1, "repoOrgName": "automa", "repoOrgProviderType": "github", "repoOrgProviderId": "65730741", "repoProviderId": "245484486" }'),
   (5, NOW(), NULL, 'bot', '{ "botId": 5, "botName": "github-runners", "botImageUrl": "https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg", "botOrgId": 1, "botOrgName": "automa" }'),
   (6, NOW(), NULL, 'message', '{ "content": "In `AuthLogin` component, when the user clicks on any of the login buttons, we want to send the \"User Login Attempted\" analytic event to track that the user has attempted a login." }'),
-  (6, NOW(), NULL, 'origin', '{ "integration": "linear", "url": "https://linear.app/automa-demo/issue/DEMO-11/track-user-login-attempted-event#comment-661237eb", "teamId": "7b9f50fa-75b4-43bd-9a0a-0e0994f0ccd9", "userId": "db18fe9b-d550-44c5-816a-49ac71fccce9", "issueId": "cfb003a0-5c42-48da-b34e-ebbacb9282bb", "commentId": "661237eb-3f3d-4bb8-ad22-9245aff0a5d9", "issueTitle": "Track \"User Logged In\" event", "organizationId": "aa0479aa-f603-4508-8669-e283bca5a17f", "organizationName": "Automa", "issueIdentifier": "DEMO-11" }'),
+  (6, NOW(), NULL, 'origin', '{ "integration": "linear", "organizationId": "aa0479aa-f603-4508-8669-e283bca5a17f", "organizationName": "Automa", "url": "https://linear.app/automa-demo/issue/DEMO-11/track-user-login-attempted-event#comment-661237eb", "teamId": "7b9f50fa-75b4-43bd-9a0a-0e0994f0ccd9", "teamKey": "DEMO", "teamName": "Demo", "userId": "db18fe9b-d550-44c5-816a-49ac71fccce9", "issueId": "cfb003a0-5c42-48da-b34e-ebbacb9282bb", "issueTitle": "Track \"User Logged In\" event", "issueIdentifier": "DEMO-11", "commentId": "661237eb-3f3d-4bb8-ad22-9245aff0a5d9" }'),
   (6, NOW(), NULL, 'repo', '{ "repoId": 1, "repoName": "monorepo", "repoOrgId": 1, "repoOrgName": "automa", "repoOrgProviderType": "github", "repoOrgProviderId": "65730741", "repoProviderId": "245484486" }'),
-  (6, NOW(), NULL, 'bot', '{ "botId": 5, "botName": "posthog", "botImageUrl": "https://posthog.com/brand/posthog-logomark.svg", "botOrgId": 1, "botOrgName": "automa" }');
+  (6, NOW(), NULL, 'bot', '{ "botId": 5, "botName": "posthog", "botImageUrl": "https://posthog.com/brand/posthog-logomark.svg", "botOrgId": 1, "botOrgName": "automa" }'),
+  (7, NOW(), NULL, 'message', '{ "content": "In `AuthLogout` component, when the user clicks on the logout button, we want to send the \"User Logout Attempted\" analytic event to track that the user has attempted a logout." }'),
+  (7, NOW(), NULL, 'origin', '{ "integration": "jira", "organizationId": "373e3aed-a60d-4a6d-9fd1-d136bc545eaa", "organizationUrl": "https://automa-demo.atlassian.net", "organizationName": "automa-demo", "projectId": "10000", "projectKey": "DEMO", "projectName": "Demo", "issuetypeId": "10002", "issuetypeName": "Task", "userId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab", "issueId": "10000", "issueTitle": "Track \"User Logged Out\" event", "issueKey": "DEMO-1", "commentId": "10040" }'),
+  (7, NOW(), NULL, 'repo', '{ "repoId": 1, "repoName": "monorepo", "repoOrgId": 1, "repoOrgName": "automa", "repoOrgProviderType": "github", "repoOrgProviderId": "65730741", "repoProviderId": "245484486" }'),
+  (7, NOW(), NULL, 'bot', '{ "botId": 5, "botName": "posthog", "botImageUrl": "https://posthog.com/brand/posthog-logomark.svg", "botOrgId": 1, "botOrgName": "automa" }');

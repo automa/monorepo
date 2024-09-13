@@ -1,4 +1,6 @@
-import { LinearClient } from '@linear/sdk';
+// @ts-ignore
+import { convert } from 'adf-to-md';
+import axios from 'axios';
 
 import { bot, integration, task_item } from '@automa/prisma';
 
@@ -8,39 +10,37 @@ import { AUTOMA_REGEX, getOptions } from '../utils';
 
 import { taskCreate } from '../../db';
 
-import { LinearEventActionHandler } from './types';
+import { JiraEventHandler } from './types';
 
-const create: LinearEventActionHandler<{
-  url: string;
-  actor: {
+const commentCreated: JiraEventHandler<{
+  comment: {
     id: string;
-    name: string;
-  };
-  data: {
-    id: string;
-    parentId?: string;
+    self: string;
     body: string;
-    issue: {
-      id: string;
-      title: string;
-      teamId: string;
+    author: {
+      accountId: string;
     };
   };
-  organizationId: string;
+  issue: {
+    id: string;
+  };
 }> = async (app, body) => {
-  const comment = body.data.body.trim();
+  const { JIRA_APP } = env;
 
-  if (!AUTOMA_REGEX.test(comment)) {
+  const comment = body.comment.body.trim();
+  const url = /^(.*)\/rest\/api\//.exec(body.comment.self)?.[1];
+
+  if (!AUTOMA_REGEX.test(comment) || !url) {
     return;
   }
 
   // Find the integration for the organization
   const connection = await app.prisma.integrations.findFirst({
     where: {
-      integration_type: integration.linear,
+      integration_type: integration.jira,
       config: {
-        path: ['id'],
-        equals: body.organizationId,
+        path: ['url'],
+        equals: url,
       },
     },
     include: {
@@ -48,27 +48,49 @@ const create: LinearEventActionHandler<{
     },
   });
 
-  // Check if we have the access token
+  // Check if we have the refresh token
   if (
     !(
       connection?.secrets &&
       typeof connection.secrets === 'object' &&
       !Array.isArray(connection.secrets) &&
-      connection.secrets.access_token
+      connection.secrets.refresh_token
+    ) ||
+    !(
+      connection?.config &&
+      typeof connection.config === 'object' &&
+      !Array.isArray(connection.config)
     )
   ) {
     return;
   }
 
-  const client = new LinearClient({
-    accessToken: connection.secrets.access_token as string,
-  });
-
   // Retrieve the issue
-  const [issue, team, org] = await Promise.all([
-    client.issue(body.data.issue.id),
-    client.team(body.data.issue.teamId),
-    client.organization,
+  const [{ data: issue }] = await Promise.all([
+    axios.get<{
+      id: string;
+      key: string;
+      fields: {
+        summary: string;
+        description: object | null;
+        issuetype: {
+          id: string;
+          name: string;
+        };
+        project: {
+          id: string;
+          name: string;
+          key: string;
+        };
+      };
+    }>(
+      `${JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${body.issue.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${connection.secrets.access_token}`,
+        },
+      },
+    ),
   ]);
 
   // TODO: Check if the issue is already linked to a task
@@ -146,38 +168,36 @@ const create: LinearEventActionHandler<{
     }
   }
 
-  // Create the task
   const task = await taskCreate(app, {
     org_id: connection.org_id,
-    title: issue.title.slice(0, 255),
+    title: issue.fields.summary.slice(0, 255),
     task_items: {
       create: [
-        ...(issue.description
+        ...(issue.fields.description
           ? [
               {
                 type: task_item.message,
-                // Linear returns the description as Markdown
-                data: { content: issue.description },
+                data: { content: convert(issue.fields.description).result },
               },
             ]
           : []),
         {
           type: task_item.origin,
           data: {
-            integration: integration.linear,
-            organizationId: org.id,
-            organizationUrlKey: org.urlKey,
-            organizationName: org.name,
-            teamId: team.id,
-            teamKey: team.key,
-            teamName: team.name,
-            userId: body.actor.id,
+            integration: integration.jira,
+            organizationId: connection.config.id,
+            organizationUrl: connection.config.url,
+            organizationName: connection.config.name,
+            projectId: issue.fields.project.id,
+            projectKey: issue.fields.project.key,
+            projectName: issue.fields.project.name,
+            issuetypeId: issue.fields.issuetype.id,
+            issuetypeName: issue.fields.issuetype.name,
+            userId: body.comment.author.accountId,
             issueId: issue.id,
-            issueIdentifier: issue.identifier,
-            issueTitle: issue.title,
-            commentId: body.data.id,
-            parentId: body.data.parentId,
-            url: body.url,
+            issueKey: issue.key,
+            issueTitle: issue.fields.summary,
+            commentId: body.comment.id,
           },
         },
         ...(selectedRepo
@@ -214,26 +234,77 @@ const create: LinearEventActionHandler<{
     },
   });
 
-  let reponseComment = `Created task: ${env.CLIENT_URI}/${connection.orgs.name}/tasks/${task.id}`;
+  const taskLink = `${env.CLIENT_URI}/${connection.orgs.name}/tasks/${task.id}`;
+
+  const reponseComment: any = {
+    version: 1,
+    type: 'doc',
+    content: [
+      {
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: 'Created task: ' },
+          {
+            type: 'text',
+            text: taskLink,
+            marks: [
+              {
+                type: 'link',
+                attrs: {
+                  href: taskLink,
+                  title: 'Automa Task',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
 
   if (problems.length) {
-    const problemsMessage = problems
-      .map((problem) => `- ${problem}`)
-      .join('\n');
-
-    reponseComment = `${reponseComment}\n\nWe encountered the following issues while creating the task:\n${problemsMessage}`;
+    reponseComment.content.push({
+      type: 'paragraph',
+      content: [
+        {
+          type: 'text',
+          text: 'We encountered the following issues while creating the task:',
+        },
+        {
+          type: 'bulletList',
+          content: problems.map((problem) => ({
+            type: 'listItem',
+            content: [
+              {
+                type: 'paragraph',
+                content: [
+                  {
+                    type: 'text',
+                    text: problem,
+                  },
+                ],
+              },
+            ],
+          })),
+        },
+      ],
+    });
   }
 
   // Create a comment to notify the user
-  await client.createComment({
-    body: reponseComment,
-    issueId: body.data.issue.id,
-    parentId: body.data.parentId || body.data.id,
-  });
+  await axios.post(
+    `${JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${issue.id}/comment`,
+    {
+      body: reponseComment,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${connection.secrets.access_token}`,
+      },
+    },
+  );
 
   return;
 };
 
-export default {
-  create,
-};
+export default commentCreated;
