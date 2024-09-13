@@ -1,22 +1,16 @@
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import { EventProperties } from '@segment/analytics-next';
 
 import { environment } from 'env';
 
 import { User, useUser } from 'auth';
 
-import AnalyticsContext from 'analytics/context';
+import useAnalyticsContext from './useAnalyticsContext';
 
 const useAnalytics = () => {
   const user = useUser();
 
-  const { analytics, anonymousId } = useContext(AnalyticsContext);
-
-  if (!analytics) {
-    throw new Error(
-      '`useAnalytics` must be used within an `AnalyticsProvider`',
-    );
-  }
+  const { analytics, anonymousId } = useAnalyticsContext();
 
   const identify = useCallback(
     (user: User | null) => {
