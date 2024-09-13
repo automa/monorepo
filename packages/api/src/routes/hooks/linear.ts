@@ -58,7 +58,7 @@ export default async function (app: FastifyInstance) {
       return reply.unauthorized();
     }
 
-    // Verify github sha256 signature
+    // Verify linear sha256 signature
     let hmac = createHmac('sha256', env.LINEAR_APP.WEBHOOK_SECRET);
     hmac = hmac.update(JSON.stringify(request.body));
 

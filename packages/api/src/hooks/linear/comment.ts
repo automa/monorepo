@@ -4,13 +4,11 @@ import { bot, integration, task_item } from '@automa/prisma';
 
 import { env } from '../../env';
 
+import { AUTOMA_REGEX, getOptions } from '../utils';
+
 import { taskCreate } from '../../db';
 
 import { LinearEventActionHandler } from './types';
-
-const automaRegex = /^\/automa(\s.*)?$/;
-
-const OPTIONS = ['bot', 'repo'];
 
 const create: LinearEventActionHandler<{
   url: string;
@@ -32,7 +30,7 @@ const create: LinearEventActionHandler<{
 }> = async (app, body) => {
   const comment = body.data.body.trim();
 
-  if (!automaRegex.test(comment)) {
+  if (!AUTOMA_REGEX.test(comment)) {
     return;
   }
 
@@ -67,8 +65,9 @@ const create: LinearEventActionHandler<{
   });
 
   // Retrieve the issue
-  const [issue, org] = await Promise.all([
+  const [issue, team, org] = await Promise.all([
     client.issue(body.data.issue.id),
+    client.team(body.data.issue.teamId),
     client.organization,
   ]);
 
@@ -157,6 +156,7 @@ const create: LinearEventActionHandler<{
           ? [
               {
                 type: task_item.message,
+                // Linear returns the description as Markdown
                 data: { content: issue.description },
               },
             ]
@@ -165,9 +165,12 @@ const create: LinearEventActionHandler<{
           type: task_item.origin,
           data: {
             integration: integration.linear,
-            organizationId: body.organizationId,
+            organizationId: org.id,
+            organizationUrlKey: org.urlKey,
             organizationName: org.name,
-            teamId: body.data.issue.teamId,
+            teamId: team.id,
+            teamKey: team.key,
+            teamName: team.name,
             userId: body.actor.id,
             issueId: issue.id,
             issueIdentifier: issue.identifier,
@@ -229,23 +232,6 @@ const create: LinearEventActionHandler<{
   });
 
   return;
-};
-
-const getOptions = (comment: string) => {
-  const options = comment.match(automaRegex)![1];
-
-  if (!options) {
-    return {};
-  }
-
-  return options
-    .split(' ')
-    .map((option) => option.split('='))
-    .filter(([key, value]) => OPTIONS.includes(key) && value)
-    .reduce(
-      (acc, [key, value]) => ({ ...acc, [key]: value }),
-      {} as Record<string, string>,
-    );
 };
 
 export default {

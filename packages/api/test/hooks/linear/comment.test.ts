@@ -1,7 +1,7 @@
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { assert } from 'chai';
 import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
-import { CommentPayload, Issue, LinearClient } from '@linear/sdk';
+import { CommentPayload, Issue, LinearClient, Team } from '@linear/sdk';
 
 import { bots, orgs, repos, users } from '@automa/prisma';
 
@@ -14,6 +14,7 @@ suite('linear hook Comment event', () => {
   let user: users, org: orgs, repo: repos, bot: bots, secondBot: bots;
   let sandbox: SinonSandbox,
     issueStub: SinonStub,
+    teamStub: SinonStub,
     organizationStub: SinonStub,
     createCommentStub: SinonStub;
 
@@ -70,12 +71,19 @@ suite('linear hook Comment event', () => {
       identifier: 'PRO-93',
       title: 'Delete tokens when user revokes Github App',
       description:
-        '- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
+        '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
     } as Issue);
 
-    organizationStub = sandbox.stub().resolves({
+    teamStub = sandbox.stub(LinearClient.prototype, 'team').resolves({
       id: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+      key: 'PRO',
+      name: 'Product',
+    } as Team);
+
+    organizationStub = sandbox.stub().resolves({
+      id: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
       name: 'Automa',
+      urlKey: 'automa',
     });
 
     sandbox.stub(LinearClient.prototype, 'organization').get(organizationStub);
@@ -123,7 +131,7 @@ suite('linear hook Comment event', () => {
         type: 'message',
         data: {
           content:
-            '- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
+            '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
         },
         actor_user_id: null,
       });
@@ -132,8 +140,11 @@ suite('linear hook Comment event', () => {
         data: {
           integration: 'linear',
           organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+          organizationUrlKey: 'automa',
           organizationName: 'Automa',
           teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+          teamKey: 'PRO',
+          teamName: 'Product',
           userId: '5611201a-9594-4407-9490-731894376791',
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           issueIdentifier: 'PRO-93',
@@ -150,6 +161,14 @@ suite('linear hook Comment event', () => {
       assert.equal(
         issueStub.firstCall.args[0],
         'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+      );
+    });
+
+    test('should get information about team', async () => {
+      assert.equal(teamStub.callCount, 1);
+      assert.equal(
+        teamStub.firstCall.args[0],
+        'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
       );
     });
 
@@ -202,7 +221,7 @@ suite('linear hook Comment event', () => {
         type: 'message',
         data: {
           content:
-            '- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
+            '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
         },
       });
       assert.deepOwnInclude(taskItems[1], {
@@ -210,8 +229,11 @@ suite('linear hook Comment event', () => {
         data: {
           integration: 'linear',
           organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+          organizationUrlKey: 'automa',
           organizationName: 'Automa',
           teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+          teamKey: 'PRO',
+          teamName: 'Product',
           userId: '5611201a-9594-4407-9490-731894376791',
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           issueIdentifier: 'PRO-93',
@@ -228,6 +250,14 @@ suite('linear hook Comment event', () => {
       assert.equal(
         issueStub.firstCall.args[0],
         'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+      );
+    });
+
+    test('should get information about team', async () => {
+      assert.equal(teamStub.callCount, 1);
+      assert.equal(
+        teamStub.firstCall.args[0],
+        'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
       );
     });
 
@@ -297,6 +327,14 @@ suite('linear hook Comment event', () => {
       );
     });
 
+    test('should get information about team', async () => {
+      assert.equal(teamStub.callCount, 1);
+      assert.equal(
+        teamStub.firstCall.args[0],
+        'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+      );
+    });
+
     test('should get information about organization', async () => {
       assert.equal(organizationStub.callCount, 1);
       assert.lengthOf(organizationStub.firstCall.args, 0);
@@ -348,6 +386,14 @@ suite('linear hook Comment event', () => {
       assert.equal(
         issueStub.firstCall.args[0],
         'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+      );
+    });
+
+    test('should get information about team', async () => {
+      assert.equal(teamStub.callCount, 1);
+      assert.equal(
+        teamStub.firstCall.args[0],
+        'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
       );
     });
 
@@ -419,6 +465,14 @@ suite('linear hook Comment event', () => {
       );
     });
 
+    test('should get information about team', async () => {
+      assert.equal(teamStub.callCount, 1);
+      assert.equal(
+        teamStub.firstCall.args[0],
+        'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+      );
+    });
+
     test('should get information about organization', async () => {
       assert.equal(organizationStub.callCount, 1);
       assert.lengthOf(organizationStub.firstCall.args, 0);
@@ -473,6 +527,14 @@ suite('linear hook Comment event', () => {
       );
     });
 
+    test('should get information about team', async () => {
+      assert.equal(teamStub.callCount, 1);
+      assert.equal(
+        teamStub.firstCall.args[0],
+        'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+      );
+    });
+
     test('should get information about organization', async () => {
       assert.equal(organizationStub.callCount, 1);
       assert.lengthOf(organizationStub.firstCall.args, 0);
@@ -507,6 +569,10 @@ suite('linear hook Comment event', () => {
 
     test('should not get information about issue', async () => {
       assert.equal(issueStub.callCount, 0);
+    });
+
+    test('should not get information about team', async () => {
+      assert.equal(teamStub.callCount, 0);
     });
 
     test('should not get information about organization', async () => {
@@ -551,6 +617,10 @@ suite('linear hook Comment event', () => {
 
     test('should not get information about issue', async () => {
       assert.equal(issueStub.callCount, 0);
+    });
+
+    test('should not get information about team', async () => {
+      assert.equal(teamStub.callCount, 0);
     });
 
     test('should not get information about organization', async () => {
