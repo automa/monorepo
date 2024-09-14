@@ -14,6 +14,76 @@ suite('jira hook comment_created event', () => {
   let user: users, org: orgs, repo: repos, bot: bots, secondBot: bots;
   let sandbox: SinonSandbox, issueStub: SinonStub, createCommentStub: SinonStub;
 
+  const issueMock = {
+    data: {
+      id: '10281',
+      key: 'PRO-93',
+      fields: {
+        summary: 'Delete tokens when user revokes Github App',
+        description: {
+          version: 1,
+          type: 'doc',
+          content: [
+            {
+              type: 'bulletList',
+              content: [
+                {
+                  type: 'listItem',
+                  content: [
+                    {
+                      type: 'paragraph',
+                      content: [
+                        {
+                          type: 'text',
+                          text: 'Delete the github refresh token stored in DB',
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: 'listItem',
+                  content: [
+                    {
+                      type: 'paragraph',
+                      content: [
+                        {
+                          type: 'text',
+                          text: 'Clear all sessions for the user',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        issuetype: {
+          id: '10002',
+          name: 'Task',
+        },
+        project: {
+          id: '10003',
+          name: 'Product',
+          key: 'PRO',
+        },
+        comment: {
+          comments: [
+            {
+              id: '10237',
+              author: {
+                accountId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
+                displayName: 'Pavan Kumar Sunkara',
+                emailAddress: 'pavan@example.com',
+              },
+            },
+          ],
+        },
+      },
+    },
+  };
+
   suiteSetup(async () => {
     app = await server();
     sandbox = createSandbox();
@@ -64,75 +134,7 @@ suite('jira hook comment_created event', () => {
       },
     });
 
-    issueStub = sandbox.stub(axios, 'get').resolves({
-      data: {
-        id: '10281',
-        key: 'PRO-93',
-        fields: {
-          summary: 'Delete tokens when user revokes Github App',
-          description: {
-            version: 1,
-            type: 'doc',
-            content: [
-              {
-                type: 'bulletList',
-                content: [
-                  {
-                    type: 'listItem',
-                    content: [
-                      {
-                        type: 'paragraph',
-                        content: [
-                          {
-                            type: 'text',
-                            text: 'Delete the github refresh token stored in DB',
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                  {
-                    type: 'listItem',
-                    content: [
-                      {
-                        type: 'paragraph',
-                        content: [
-                          {
-                            type: 'text',
-                            text: 'Clear all sessions for the user',
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-          issuetype: {
-            id: '10002',
-            name: 'Task',
-          },
-          project: {
-            id: '10003',
-            name: 'Product',
-            key: 'PRO',
-          },
-          comment: {
-            comments: [
-              {
-                id: '10237',
-                author: {
-                  accountId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
-                  displayName: 'Pavan Kumar Sunkara',
-                  emailAddress: 'pavan@example.com',
-                },
-              },
-            ],
-          },
-        },
-      },
-    });
+    issueStub = sandbox.stub(axios, 'get').resolves(issueMock);
 
     createCommentStub = sandbox.stub(axios, 'post').resolves({});
   });
@@ -258,6 +260,185 @@ suite('jira hook comment_created event', () => {
         headers: {
           Authorization: 'Bearer abcdef',
         },
+      });
+    });
+  });
+
+  suite('create with expired token', () => {
+    setup(async () => {
+      issueStub
+        .onFirstCall()
+        .rejects({
+          response: {
+            status: 401,
+          },
+        })
+        .onSecondCall()
+        .resolves(issueMock);
+
+      createCommentStub
+        .onFirstCall()
+        .resolves({
+          data: {
+            access_token: 'new-token',
+            refresh_token: 'new-refresh-token',
+          },
+        })
+        .onSecondCall()
+        .resolves({});
+
+      response = await callWithFixture(app, 'comment_created', 'create');
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 1);
+      assert.deepOwnInclude(tasks[0], {
+        org_id: org.id,
+        title: 'Delete tokens when user revokes Github App',
+        is_scheduled: false,
+        completed_at: null,
+      });
+      assert.isDefined(tasks[0].token);
+
+      const taskItems = await app.prisma.task_items.findMany({
+        where: {
+          task_id: tasks[0].id,
+        },
+      });
+
+      assert.equal(taskItems.length, 2);
+      assert.deepOwnInclude(taskItems[0], {
+        type: 'message',
+        data: {
+          content:
+            '  * Delete the github refresh token stored in DB\n  * Clear all sessions for the user',
+        },
+        actor_user_id: null,
+      });
+      assert.deepOwnInclude(taskItems[1], {
+        type: 'origin',
+        data: {
+          integration: 'jira',
+          organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+          organizationUrl: 'https://automa.atlassian.net',
+          organizationName: 'Automa',
+          projectId: '10003',
+          projectKey: 'PRO',
+          projectName: 'Product',
+          issuetypeId: '10002',
+          issuetypeName: 'Task',
+          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
+          issueId: '10281',
+          issueKey: 'PRO-93',
+          issueTitle: 'Delete tokens when user revokes Github App',
+          commentId: '10237',
+        },
+        actor_user_id: null,
+      });
+    });
+
+    test('should get information about issue', async () => {
+      assert.equal(issueStub.callCount, 2);
+      assert.equal(
+        issueStub.firstCall.args[0],
+        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281',
+      );
+      assert.deepEqual(issueStub.firstCall.args[1], {
+        headers: {
+          Authorization: 'Bearer abcdef',
+        },
+      });
+    });
+
+    test('should get new token', async () => {
+      assert.equal(createCommentStub.callCount, 2);
+      assert.equal(
+        createCommentStub.firstCall.args[0],
+        'https://auth.atlassian.com/oauth/token',
+      );
+      assert.deepInclude(createCommentStub.firstCall.args[1], {
+        grant_type: 'refresh_token',
+        refresh_token: 'zyxwvu',
+      });
+    });
+
+    test('should get information about issue using new token', async () => {
+      assert.equal(issueStub.callCount, 2);
+      assert.equal(
+        issueStub.secondCall.args[0],
+        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281',
+      );
+      assert.deepEqual(issueStub.secondCall.args[1], {
+        headers: {
+          Authorization: 'Bearer new-token',
+        },
+      });
+    });
+
+    test('should create comment about the task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(createCommentStub.callCount, 2);
+      assert.equal(
+        createCommentStub.secondCall.args[0],
+        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281/comment',
+      );
+      assert.deepEqual(createCommentStub.secondCall.args[1], {
+        body: {
+          version: 1,
+          type: 'doc',
+          content: [
+            {
+              content: [
+                {
+                  text: 'Created task: ',
+                  type: 'text',
+                },
+                {
+                  marks: [
+                    {
+                      attrs: {
+                        href: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+                        title: 'Automa Task',
+                      },
+                      type: 'link',
+                    },
+                  ],
+                  text: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+                  type: 'text',
+                },
+              ],
+              type: 'paragraph',
+            },
+          ],
+        },
+      });
+      assert.deepEqual(createCommentStub.secondCall.args[2], {
+        headers: {
+          Authorization: 'Bearer new-token',
+        },
+      });
+    });
+
+    test('should update integration with new tokens', async () => {
+      const integration = await app.prisma.integrations.findFirst({
+        where: {
+          integration_type: 'jira',
+          org_id: org.id,
+        },
+      });
+
+      assert.deepEqual(integration?.secrets, {
+        access_token: 'new-token',
+        refresh_token: 'new-refresh-token',
       });
     });
   });

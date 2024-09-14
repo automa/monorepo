@@ -1,6 +1,6 @@
 // @ts-ignore
 import { convert } from 'adf-to-md';
-import axios from 'axios';
+import axios, { Axios, AxiosError, AxiosRequestConfig } from 'axios';
 
 import { bot, integration, task_item } from '@automa/prisma';
 
@@ -26,8 +26,6 @@ const commentCreated: JiraEventHandler<{
     id: string;
   };
 }> = async (app, body) => {
-  const { JIRA_APP } = env;
-
   const text = body.comment.body.trim();
   const url = /^(.*)\/rest\/api\//.exec(body.comment.self)?.[1];
 
@@ -66,8 +64,12 @@ const commentCreated: JiraEventHandler<{
     return;
   }
 
+  const issueUrl = `${env.JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${body.issue.id}`;
+  let accessToken = connection.secrets.access_token as string;
+  let issue;
+
   // Retrieve the issue
-  const [{ data: issue }] = await Promise.all([
+  const readIssue = () =>
     axios.get<{
       id: string;
       key: string;
@@ -94,15 +96,53 @@ const commentCreated: JiraEventHandler<{
           }[];
         };
       };
-    }>(
-      `${JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${body.issue.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${connection.secrets.access_token}`,
-        },
+    }>(issueUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
       },
-    ),
-  ]);
+    });
+
+  try {
+    ({ data: issue } = await readIssue());
+  } catch (e) {
+    if ((e as AxiosError)?.response?.status !== 401) {
+      throw e;
+    }
+
+    // If the access token is expired, refresh it
+    const { data: tokens } = await axios.post<{
+      access_token: string;
+      refresh_token: string;
+    }>(env.JIRA_APP.ACCESS_TOKEN_URL, {
+      client_id: env.JIRA_APP.CLIENT_ID,
+      client_secret: env.JIRA_APP.CLIENT_SECRET,
+      refresh_token: connection.secrets.refresh_token as string,
+      grant_type: 'refresh_token',
+    });
+
+    if (!tokens.access_token || !tokens.refresh_token) {
+      // TODO: Delete the integration
+      throw e;
+    }
+
+    accessToken = tokens.access_token;
+
+    [{ data: issue }] = await Promise.all([
+      readIssue(),
+      // Update the integration with the new tokens
+      app.prisma.integrations.update({
+        where: {
+          id: connection.id,
+        },
+        data: {
+          secrets: {
+            refresh_token: tokens.refresh_token,
+            access_token: accessToken,
+          },
+        },
+      }),
+    ]);
+  }
 
   // Find comment from list of comments in the issue
   const comment = issue.fields.comment.comments.find(
@@ -317,13 +357,13 @@ const commentCreated: JiraEventHandler<{
 
   // Create a comment to notify the user
   await axios.post(
-    `${JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${issue.id}/comment`,
+    `${env.JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${issue.id}/comment`,
     {
       body: reponseComment,
     },
     {
       headers: {
-        Authorization: `Bearer ${connection.secrets.access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     },
   );
