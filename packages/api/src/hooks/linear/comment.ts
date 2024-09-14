@@ -28,9 +28,9 @@ const create: LinearEventActionHandler<{
   };
   organizationId: string;
 }> = async (app, body) => {
-  const comment = body.data.body.trim();
+  const text = body.data.body.trim();
 
-  if (!AUTOMA_REGEX.test(comment)) {
+  if (!AUTOMA_REGEX.test(text)) {
     return;
   }
 
@@ -65,9 +65,10 @@ const create: LinearEventActionHandler<{
   });
 
   // Retrieve the issue
-  const [issue, team, org] = await Promise.all([
+  const [issue, team, user, org] = await Promise.all([
     client.issue(body.data.issue.id),
     client.team(body.data.issue.teamId),
+    client.user(body.actor.id),
     client.organization,
   ]);
 
@@ -76,7 +77,7 @@ const create: LinearEventActionHandler<{
   const problems = [];
 
   // Get the options
-  const options = getOptions(comment);
+  const options = getOptions(text);
 
   // Find and assign bot if specified
   let selectedBot;
@@ -146,6 +147,13 @@ const create: LinearEventActionHandler<{
     }
   }
 
+  const userData = {
+    integration: integration.linear,
+    userId: user.id,
+    userName: user.name,
+    userEmail: user.email,
+  };
+
   // Create the task
   const task = await taskCreate(app, {
     org_id: connection.org_id,
@@ -164,14 +172,13 @@ const create: LinearEventActionHandler<{
         {
           type: task_item.origin,
           data: {
-            integration: integration.linear,
             organizationId: org.id,
             organizationUrlKey: org.urlKey,
             organizationName: org.name,
             teamId: team.id,
             teamKey: team.key,
             teamName: team.name,
-            userId: body.actor.id,
+            ...userData,
             issueId: issue.id,
             issueIdentifier: issue.identifier,
             issueTitle: issue.title,
@@ -184,6 +191,7 @@ const create: LinearEventActionHandler<{
               {
                 type: task_item.repo,
                 data: {
+                  ...userData,
                   repoId: selectedRepo.id,
                   repoName: selectedRepo.name,
                   repoOrgId: selectedRepo.orgs.id,
@@ -200,6 +208,7 @@ const create: LinearEventActionHandler<{
               {
                 type: task_item.bot,
                 data: {
+                  ...userData,
                   botId: selectedBot.bots.id,
                   botName: selectedBot.bots.name,
                   botImageUrl: selectedBot.bots.image_url,

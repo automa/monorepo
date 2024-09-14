@@ -24,6 +24,21 @@ const task = {
   items: [],
 };
 
+const actor_user = makeFragmentData(
+  {
+    id: 1,
+    name: 'Pavan Kumar Sunkara',
+    providers: [
+      {
+        id: 1,
+        provider_type: ProviderType.Github,
+        provider_id: '174703',
+      },
+    ],
+  },
+  USER_AVATAR_FRAGMENT,
+);
+
 const meta = {
   title: 'Task',
   component: Task,
@@ -90,20 +105,7 @@ export const OriginAuthor = {
               type: TaskItemType.Origin,
               created_at: '2024-05-15T09:04:04.629Z',
               data: {},
-              actor_user: makeFragmentData(
-                {
-                  id: 1,
-                  name: 'Pavan Kumar Sunkara',
-                  providers: [
-                    {
-                      id: 1,
-                      provider_type: ProviderType.Github,
-                      provider_id: '174703',
-                    },
-                  ],
-                },
-                USER_AVATAR_FRAGMENT,
-              ),
+              actor_user,
             },
             TASK_ITEM_FRAGMENT,
           ),
@@ -114,7 +116,7 @@ export const OriginAuthor = {
   },
 } satisfies Story;
 
-export const Origin = {
+export const OriginIntegration = {
   args: {
     task: makeFragmentData(
       {
@@ -123,6 +125,32 @@ export const Origin = {
           makeFragmentData(
             {
               ...TaskItemBadgeStory.args,
+              id: 1,
+              type: TaskItemType.Origin,
+              created_at: '2024-05-15T09:04:04.629Z',
+            },
+            TASK_ITEM_FRAGMENT,
+          ),
+        ],
+      },
+      TASK_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const OriginIntegrationUser = {
+  args: {
+    task: makeFragmentData(
+      {
+        ...task,
+        items: [
+          makeFragmentData(
+            {
+              data: {
+                ...TaskItemBadgeStory.args.data,
+                userName: 'John Doe',
+                userEmail: 'john@example.com',
+              },
               id: 1,
               type: TaskItemType.Origin,
               created_at: '2024-05-15T09:04:04.629Z',

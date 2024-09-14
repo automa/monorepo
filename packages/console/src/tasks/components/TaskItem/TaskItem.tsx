@@ -11,6 +11,8 @@ import { USER_AVATAR_FRAGMENT, UserAvatar } from 'users';
 
 import Logo from 'assets/logo.svg?react';
 
+import { getTaskItemUser } from 'tasks/utils';
+
 import { TaskItemProps } from './types';
 import { originDefinitions, repoDefinitions } from './utils';
 
@@ -48,6 +50,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
   if (taskItem.type === TaskItemType.Origin) {
     const definition =
       originDefinitions[taskItem.data.integration as IntegrationType];
+    const actorUser = getTaskItemUser(taskItem.data);
 
     return (
       <TaskItemContainer icon={PlusCircle} timestamp={taskItem.created_at}>
@@ -55,6 +58,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
           <Subject>
             <UserAvatar user={taskItem.actor_user} size="small" />
             <Typography variant="small">{user!.name}</Typography>
+          </Subject>
+        ) : actorUser.name ? (
+          <Subject>
+            <Avatar size="small" src={null} alt={actorUser.name} />
+            <Typography variant="small">{actorUser.name}</Typography>
           </Subject>
         ) : (
           <Typography variant="small">Someone</Typography>
@@ -76,6 +84,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
   if (taskItem.type === TaskItemType.Repo) {
     const definition =
       repoDefinitions[taskItem.data.repoOrgProviderType as ProviderType];
+    const actorUser = getTaskItemUser(taskItem.data);
 
     if (!definition) {
       return null;
@@ -93,6 +102,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
             <>
               <UserAvatar user={taskItem.actor_user} size="small" />
               <Typography variant="small">{user!.name}</Typography>
+            </>
+          ) : actorUser.name ? (
+            <>
+              <Avatar size="small" src={null} alt={actorUser.name} />
+              <Typography variant="small">{actorUser.name}</Typography>
             </>
           ) : (
             <Typography variant="small">AI</Typography>
@@ -118,6 +132,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
 
   if (taskItem.type === TaskItemType.Bot) {
     const name = `${taskItem.data.botOrgName}/${taskItem.data.botName}`;
+    const actorUser = getTaskItemUser(taskItem.data);
 
     return (
       <TaskItemContainer icon={Robot} timestamp={taskItem.created_at}>
@@ -131,6 +146,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
             <>
               <UserAvatar user={taskItem.actor_user} size="small" />
               <Typography variant="small">{user!.name}</Typography>
+            </>
+          ) : actorUser.name ? (
+            <>
+              <Avatar size="small" src={null} alt={actorUser.name} />
+              <Typography variant="small">{actorUser.name}</Typography>
             </>
           ) : (
             <Typography variant="small">AI</Typography>

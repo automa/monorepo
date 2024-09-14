@@ -1,7 +1,7 @@
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { assert } from 'chai';
 import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
-import { CommentPayload, Issue, LinearClient, Team } from '@linear/sdk';
+import { CommentPayload, Issue, LinearClient, Team, User } from '@linear/sdk';
 
 import { bots, orgs, repos, users } from '@automa/prisma';
 
@@ -15,6 +15,7 @@ suite('linear hook Comment event', () => {
   let sandbox: SinonSandbox,
     issueStub: SinonStub,
     teamStub: SinonStub,
+    userStub: SinonStub,
     organizationStub: SinonStub,
     createCommentStub: SinonStub;
 
@@ -79,6 +80,12 @@ suite('linear hook Comment event', () => {
       key: 'PRO',
       name: 'Product',
     } as Team);
+
+    userStub = sandbox.stub(LinearClient.prototype, 'user').resolves({
+      id: '5611201a-9594-4407-9490-731894376791',
+      name: 'Pavan Kumar Sunkara',
+      email: 'pavan@example.com',
+    } as User);
 
     organizationStub = sandbox.stub().resolves({
       id: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
@@ -146,6 +153,8 @@ suite('linear hook Comment event', () => {
           teamKey: 'PRO',
           teamName: 'Product',
           userId: '5611201a-9594-4407-9490-731894376791',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           issueIdentifier: 'PRO-93',
           issueTitle: 'Delete tokens when user revokes Github App',
@@ -168,6 +177,14 @@ suite('linear hook Comment event', () => {
       assert.equal(
         teamStub.firstCall.args[0],
         'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+      );
+    });
+
+    test('should get information about user', async () => {
+      assert.equal(userStub.callCount, 1);
+      assert.equal(
+        userStub.firstCall.args[0],
+        '5611201a-9594-4407-9490-731894376791',
       );
     });
 
@@ -234,6 +251,8 @@ suite('linear hook Comment event', () => {
           teamKey: 'PRO',
           teamName: 'Product',
           userId: '5611201a-9594-4407-9490-731894376791',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           issueIdentifier: 'PRO-93',
           issueTitle: 'Delete tokens when user revokes Github App',
@@ -256,6 +275,14 @@ suite('linear hook Comment event', () => {
       assert.equal(
         teamStub.firstCall.args[0],
         'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+      );
+    });
+
+    test('should get information about user', async () => {
+      assert.equal(userStub.callCount, 1);
+      assert.equal(
+        userStub.firstCall.args[0],
+        '5611201a-9594-4407-9490-731894376791',
       );
     });
 
@@ -307,6 +334,10 @@ suite('linear hook Comment event', () => {
       assert.deepOwnInclude(taskItems[0], {
         type: 'bot',
         data: {
+          integration: 'linear',
+          userId: '5611201a-9594-4407-9490-731894376791',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
           botId: secondBot.id,
           botName: 'bot-1',
           botImageUrl: 'https://example.com/image/1.png',
@@ -330,6 +361,14 @@ suite('linear hook Comment event', () => {
       assert.equal(
         teamStub.firstCall.args[0],
         'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+      );
+    });
+
+    test('should get information about user', async () => {
+      assert.equal(userStub.callCount, 1);
+      assert.equal(
+        userStub.firstCall.args[0],
+        '5611201a-9594-4407-9490-731894376791',
       );
     });
 
@@ -395,6 +434,14 @@ suite('linear hook Comment event', () => {
       );
     });
 
+    test('should get information about user', async () => {
+      assert.equal(userStub.callCount, 1);
+      assert.equal(
+        userStub.firstCall.args[0],
+        '5611201a-9594-4407-9490-731894376791',
+      );
+    });
+
     test('should get information about organization', async () => {
       assert.equal(organizationStub.callCount, 1);
       assert.lengthOf(organizationStub.firstCall.args, 0);
@@ -443,6 +490,10 @@ suite('linear hook Comment event', () => {
       assert.deepOwnInclude(taskItems[0], {
         type: 'repo',
         data: {
+          integration: 'linear',
+          userId: '5611201a-9594-4407-9490-731894376791',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
           repoId: repo.id,
           repoName: 'repo-1',
           repoOrgId: org.id,
@@ -468,6 +519,14 @@ suite('linear hook Comment event', () => {
       assert.equal(
         teamStub.firstCall.args[0],
         'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+      );
+    });
+
+    test('should get information about user', async () => {
+      assert.equal(userStub.callCount, 1);
+      assert.equal(
+        userStub.firstCall.args[0],
+        '5611201a-9594-4407-9490-731894376791',
       );
     });
 
@@ -533,6 +592,14 @@ suite('linear hook Comment event', () => {
       );
     });
 
+    test('should get information about user', async () => {
+      assert.equal(userStub.callCount, 1);
+      assert.equal(
+        userStub.firstCall.args[0],
+        '5611201a-9594-4407-9490-731894376791',
+      );
+    });
+
     test('should get information about organization', async () => {
       assert.equal(organizationStub.callCount, 1);
       assert.lengthOf(organizationStub.firstCall.args, 0);
@@ -571,6 +638,10 @@ suite('linear hook Comment event', () => {
 
     test('should not get information about team', async () => {
       assert.equal(teamStub.callCount, 0);
+    });
+
+    test('should not get information about user', async () => {
+      assert.equal(userStub.callCount, 0);
     });
 
     test('should not get information about organization', async () => {
@@ -619,6 +690,10 @@ suite('linear hook Comment event', () => {
 
     test('should not get information about team', async () => {
       assert.equal(teamStub.callCount, 0);
+    });
+
+    test('should not get information about user', async () => {
+      assert.equal(userStub.callCount, 0);
     });
 
     test('should not get information about organization', async () => {

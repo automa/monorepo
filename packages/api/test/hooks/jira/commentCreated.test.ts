@@ -118,6 +118,18 @@ suite('jira hook comment_created event', () => {
             name: 'Product',
             key: 'PRO',
           },
+          comment: {
+            comments: [
+              {
+                id: '10237',
+                author: {
+                  accountId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
+                  displayName: 'Pavan Kumar Sunkara',
+                  emailAddress: 'pavan@example.com',
+                },
+              },
+            ],
+          },
         },
       },
     });
@@ -180,6 +192,8 @@ suite('jira hook comment_created event', () => {
           issuetypeId: '10002',
           issuetypeName: 'Task',
           userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
           issueId: '10281',
           issueKey: 'PRO-93',
           issueTitle: 'Delete tokens when user revokes Github App',
@@ -281,6 +295,10 @@ suite('jira hook comment_created event', () => {
       assert.deepOwnInclude(taskItems[0], {
         type: 'bot',
         data: {
+          integration: 'jira',
+          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
           botId: secondBot.id,
           botName: 'bot-1',
           botImageUrl: 'https://example.com/image/1.png',
@@ -501,6 +519,10 @@ suite('jira hook comment_created event', () => {
       assert.deepOwnInclude(taskItems[0], {
         type: 'repo',
         data: {
+          integration: 'jira',
+          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
           repoId: repo.id,
           repoName: 'repo-1',
           repoOrgId: org.id,

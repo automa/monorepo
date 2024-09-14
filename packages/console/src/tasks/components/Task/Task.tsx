@@ -5,9 +5,11 @@ import { format } from 'date-fns';
 import { TaskItemType } from '@automa/common';
 
 import { getFragment } from 'gql';
-import { Flex, Tooltip, Typography } from 'shared';
+import { Avatar, Flex, Tooltip, Typography } from 'shared';
 
 import { UserAvatar } from 'users';
+
+import { getTaskItemUser } from 'tasks/utils';
 
 import { TASK_ITEM_FRAGMENT } from '../TaskItem';
 import TaskItemBadge from '../TaskItemBadge';
@@ -21,7 +23,10 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
   const task = getFragment(TASK_FRAGMENT, data);
   const items = task.items.map((item) => getFragment(TASK_ITEM_FRAGMENT, item));
 
-  const user = items.find(({ type }) => type === 'origin')?.actor_user;
+  const origin = items.find(({ type }) => type === TaskItemType.Origin);
+
+  const user = origin?.actor_user;
+  const originUser = getTaskItemUser(origin?.data);
 
   // TODO: PR Badge
   return (
@@ -63,6 +68,15 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
           </Tooltip>
           {user ? (
             <UserAvatar user={user} size="small" className="relative z-10" />
+          ) : originUser.name ? (
+            <Tooltip body={originUser.name}>
+              <Avatar
+                size="small"
+                src={null}
+                alt={originUser.name}
+                className="relative z-10"
+              />
+            </Tooltip>
           ) : (
             <UserCircle className="size-5 text-neutral-400" />
           )}

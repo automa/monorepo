@@ -19,6 +19,7 @@ const commentCreated: JiraEventHandler<{
     body: string;
     author: {
       accountId: string;
+      displayName: string;
     };
   };
   issue: {
@@ -27,10 +28,10 @@ const commentCreated: JiraEventHandler<{
 }> = async (app, body) => {
   const { JIRA_APP } = env;
 
-  const comment = body.comment.body.trim();
+  const text = body.comment.body.trim();
   const url = /^(.*)\/rest\/api\//.exec(body.comment.self)?.[1];
 
-  if (!AUTOMA_REGEX.test(comment) || !url) {
+  if (!AUTOMA_REGEX.test(text) || !url) {
     return;
   }
 
@@ -82,6 +83,16 @@ const commentCreated: JiraEventHandler<{
           name: string;
           key: string;
         };
+        comment: {
+          comments: {
+            id: string;
+            author: {
+              accountId: string;
+              displayName: string;
+              emailAddress: string;
+            };
+          }[];
+        };
       };
     }>(
       `${JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${body.issue.id}`,
@@ -93,12 +104,17 @@ const commentCreated: JiraEventHandler<{
     ),
   ]);
 
+  // Find comment from list of comments in the issue
+  const comment = issue.fields.comment.comments.find(
+    (comment) => comment.id === body.comment.id,
+  );
+
   // TODO: Check if the issue is already linked to a task
 
   const problems = [];
 
   // Get the options
-  const options = getOptions(comment);
+  const options = getOptions(text);
 
   // Find and assign bot if specified
   let selectedBot;
@@ -168,6 +184,13 @@ const commentCreated: JiraEventHandler<{
     }
   }
 
+  const userData = {
+    integration: integration.jira,
+    userId: comment?.author?.accountId ?? body.comment.author.accountId,
+    userName: comment?.author?.displayName ?? body.comment.author.displayName,
+    userEmail: comment?.author?.emailAddress,
+  };
+
   const task = await taskCreate(app, {
     org_id: connection.org_id,
     title: issue.fields.summary.slice(0, 255),
@@ -184,7 +207,6 @@ const commentCreated: JiraEventHandler<{
         {
           type: task_item.origin,
           data: {
-            integration: integration.jira,
             organizationId: connection.config.id,
             organizationUrl: connection.config.url,
             organizationName: connection.config.name,
@@ -193,7 +215,7 @@ const commentCreated: JiraEventHandler<{
             projectName: issue.fields.project.name,
             issuetypeId: issue.fields.issuetype.id,
             issuetypeName: issue.fields.issuetype.name,
-            userId: body.comment.author.accountId,
+            ...userData,
             issueId: issue.id,
             issueKey: issue.key,
             issueTitle: issue.fields.summary,
@@ -205,6 +227,7 @@ const commentCreated: JiraEventHandler<{
               {
                 type: task_item.repo,
                 data: {
+                  ...userData,
                   repoId: selectedRepo.id,
                   repoName: selectedRepo.name,
                   repoOrgId: selectedRepo.orgs.id,
@@ -221,6 +244,7 @@ const commentCreated: JiraEventHandler<{
               {
                 type: task_item.bot,
                 data: {
+                  ...userData,
                   botId: selectedBot.bots.id,
                   botName: selectedBot.bots.name,
                   botImageUrl: selectedBot.bots.image_url,
