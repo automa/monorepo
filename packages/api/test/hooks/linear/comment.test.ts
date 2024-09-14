@@ -150,7 +150,6 @@ suite('linear hook Comment event', () => {
           issueIdentifier: 'PRO-93',
           issueTitle: 'Delete tokens when user revokes Github App',
           commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
-          url: 'https://linear.app/automa/issue/PRO-93/handle-when-user-revokes-github-app#comment-a41c315a',
         },
         actor_user_id: null,
       });
@@ -240,7 +239,6 @@ suite('linear hook Comment event', () => {
           issueTitle: 'Delete tokens when user revokes Github App',
           commentId: '9ab4e3ef-0728-4972-a7a8-01775a9a51b6',
           parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
-          url: 'https://linear.app/automa/issue/PRO-93/handle-when-user-revokes-github-app#comment-9ab4e3ef',
         },
       });
     });

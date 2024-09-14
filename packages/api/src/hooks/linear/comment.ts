@@ -177,7 +177,6 @@ const create: LinearEventActionHandler<{
             issueTitle: issue.title,
             commentId: body.data.id,
             parentId: body.data.parentId,
-            url: body.url,
           },
         },
         ...(selectedRepo

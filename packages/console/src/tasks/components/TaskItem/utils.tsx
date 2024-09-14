@@ -8,11 +8,12 @@ import GithubLogo from 'assets/logos/github.svg?react';
 import JiraLogo from 'assets/logos/jira.svg?react';
 import LinearLogo from 'assets/logos/linear.svg?react';
 
-import { definitions } from '../TaskItemBadge/utils';
+import { TaskItemData } from 'tasks/types';
+import { originBaseDefinitions } from 'tasks/utils';
 
 type OriginDefinition = {
-  title: (data: any) => ReactNode;
-  link: (data: any) => string;
+  title: (data: TaskItemData) => ReactNode;
+  link: (data: TaskItemData) => string;
 };
 
 export const originDefinitions: Partial<
@@ -26,7 +27,7 @@ export const originDefinitions: Partial<
         <Typography variant="small">{data.issueTitle}</Typography>
       </>
     ),
-    link: definitions[IntegrationType.Linear]!.link,
+    link: originBaseDefinitions[IntegrationType.Linear]!.link,
   },
   [IntegrationType.Jira]: {
     title: (data) => (
@@ -36,7 +37,7 @@ export const originDefinitions: Partial<
         <Typography variant="small">{data.issueTitle}</Typography>
       </>
     ),
-    link: definitions[IntegrationType.Jira]!.link,
+    link: originBaseDefinitions[IntegrationType.Jira]!.link,
   },
 };
 
