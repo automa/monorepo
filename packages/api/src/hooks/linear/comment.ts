@@ -72,6 +72,13 @@ const create: LinearEventActionHandler<{
     client.organization,
   ]);
 
+  // Find automa user using email if they exist
+  const automaUser = await app.prisma.users.findFirst({
+    where: {
+      email: user.email,
+    },
+  });
+
   // TODO: Check if the issue is already linked to a task
 
   const problems = [];
@@ -170,6 +177,7 @@ const create: LinearEventActionHandler<{
             ]
           : []),
         {
+          actor_user_id: automaUser?.id,
           type: task_item.origin,
           data: {
             organizationId: org.id,
@@ -189,6 +197,7 @@ const create: LinearEventActionHandler<{
         ...(selectedRepo
           ? [
               {
+                actor_user_id: automaUser?.id,
                 type: task_item.repo,
                 data: {
                   ...userData,
@@ -206,6 +215,7 @@ const create: LinearEventActionHandler<{
         ...(selectedBot
           ? [
               {
+                actor_user_id: automaUser?.id,
                 type: task_item.bot,
                 data: {
                   ...userData,

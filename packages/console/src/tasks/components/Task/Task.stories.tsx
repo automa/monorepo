@@ -154,7 +154,33 @@ export const OriginIntegrationUser = {
               id: 1,
               type: TaskItemType.Origin,
               created_at: '2024-05-15T09:04:04.629Z',
-              actor_user: null,
+            },
+            TASK_ITEM_FRAGMENT,
+          ),
+        ],
+      },
+      TASK_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const OriginIntegrationUserAuthor = {
+  args: {
+    task: makeFragmentData(
+      {
+        ...task,
+        items: [
+          makeFragmentData(
+            {
+              data: {
+                ...TaskItemBadgeStory.args.data,
+                userName: 'John Doe',
+                userEmail: 'john@example.com',
+              },
+              id: 1,
+              type: TaskItemType.Origin,
+              created_at: '2024-05-15T09:04:04.629Z',
+              actor_user,
             },
             TASK_ITEM_FRAGMENT,
           ),

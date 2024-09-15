@@ -128,6 +128,30 @@ export const OriginLinearUser = {
   },
 } satisfies Story;
 
+export const OriginLinearUserAuthor = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Origin,
+        created_at,
+        data: {
+          integration: 'linear',
+          issueIdentifier: 'DEMO-123',
+          issueTitle: 'Demo Issue',
+          organizationName: 'Demo Org',
+          organizationUrlKey: 'demo',
+          userName: 'John Doe',
+          userEmail: 'john@example.com',
+          commentId: '123',
+        },
+        actor_user,
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
 export const OriginJira = {
   args: {
     taskItem: makeFragmentData(
@@ -166,6 +190,30 @@ export const OriginJiraUser = {
           userEmail: 'john@example.com',
           commentId: '123',
         },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const OriginJiraUserAuthor = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Origin,
+        created_at,
+        data: {
+          integration: 'jira',
+          issueKey: 'DEMO-123',
+          issueTitle: 'Demo Issue',
+          organizationName: 'Demo Org',
+          organizationUrl: 'https://demo.atlassian.net',
+          userName: 'John Doe',
+          userEmail: 'john@example.com',
+          commentId: '123',
+        },
+        actor_user,
       },
       TASK_ITEM_FRAGMENT,
     ),
@@ -251,6 +299,30 @@ export const BotIntegrationUser = {
           botOrgId: 1,
           botOrgName: 'automa',
         },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const BotIntegrationUserAuthor = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Bot,
+        created_at,
+        data: {
+          integration: 'linear',
+          userName: 'John Doe',
+          userEmail: 'john@example.com',
+          botId: 4,
+          botName: 'aider',
+          botImageUrl: 'https://aider.chat/assets/icons/apple-touch-icon.png',
+          botOrgId: 1,
+          botOrgName: 'automa',
+        },
+        actor_user,
       },
       TASK_ITEM_FRAGMENT,
     ),
@@ -344,6 +416,32 @@ export const RepoIntegrationUser = {
           repoOrgProviderId: '65730741',
           repoProviderId: '245484486',
         },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const RepoIntegrationUserAuthor = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Repo,
+        created_at,
+        data: {
+          integration: 'linear',
+          userName: 'John Doe',
+          userEmail: 'john@example.com',
+          repoId: 1,
+          repoName: 'monorepo',
+          repoOrgId: 1,
+          repoOrgName: 'automa',
+          repoOrgProviderType: 'github',
+          repoOrgProviderId: '65730741',
+          repoProviderId: '245484486',
+        },
+        actor_user,
       },
       TASK_ITEM_FRAGMENT,
     ),

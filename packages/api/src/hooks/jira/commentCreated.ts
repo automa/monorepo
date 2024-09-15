@@ -149,6 +149,15 @@ const commentCreated: JiraEventHandler<{
     (comment) => comment.id === body.comment.id,
   );
 
+  // Find automa user using email if they exist
+  const automaUser = comment?.author
+    ? await app.prisma.users.findFirst({
+        where: {
+          email: comment?.author?.emailAddress,
+        },
+      })
+    : null;
+
   // TODO: Check if the issue is already linked to a task
 
   const problems = [];
@@ -245,6 +254,7 @@ const commentCreated: JiraEventHandler<{
             ]
           : []),
         {
+          actor_user_id: automaUser?.id,
           type: task_item.origin,
           data: {
             organizationId: connection.config.id,
@@ -265,6 +275,7 @@ const commentCreated: JiraEventHandler<{
         ...(selectedRepo
           ? [
               {
+                actor_user_id: automaUser?.id,
                 type: task_item.repo,
                 data: {
                   ...userData,
@@ -282,6 +293,7 @@ const commentCreated: JiraEventHandler<{
         ...(selectedBot
           ? [
               {
+                actor_user_id: automaUser?.id,
                 type: task_item.bot,
                 data: {
                   ...userData,
