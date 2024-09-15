@@ -129,6 +129,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 }}
               />
               {/* TODO: Better UX for secret. Click to reveal and copy. */}
+              {/* TODO: Click to regenerate secret. */}
               <Flex direction="column" className="gap-2">
                 <Label>Webhook secret</Label>
                 <Typography>{bot.webhook_secret}</Typography>

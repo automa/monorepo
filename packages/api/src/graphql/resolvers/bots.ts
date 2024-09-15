@@ -129,6 +129,7 @@ export const Mutation: MutationResolvers<Context> = {
       'base64url',
     )}`;
 
+    // TODO: Handle unique bot error
     return prisma.bots.create({
       data: {
         org_id,

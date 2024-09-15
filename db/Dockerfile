@@ -1,12 +1,12 @@
 ARG postgresql_major=15
 ARG postgresql_release=${postgresql_major}.4
 
-ARG pg_jsonschema_release=0.1.4
+ARG pg_jsonschema_release=0.3.1
 
 ####################
 # Postgres
 ####################
-FROM postgres:${postgresql_release} as base
+FROM postgres:${postgresql_release} AS base
 
 # Redeclare args for use in subsequent stages
 ARG TARGETARCH
@@ -15,7 +15,7 @@ ARG postgresql_major
 ####################
 # Extension: pg_jsonschema
 ####################
-FROM base as pg_jsonschema
+FROM base AS pg_jsonschema
 
 # Download package archive
 ARG pg_jsonschema_release
@@ -25,13 +25,13 @@ ADD "https://github.com/supabase/pg_jsonschema/releases/download/v${pg_jsonschem
 ####################
 # Collect extension packages
 ####################
-FROM scratch as extensions
+FROM scratch AS extensions
 COPY --from=pg_jsonschema /tmp/*.deb /tmp/
 
 ####################
 # Build final image
 ####################
-FROM base as production
+FROM base AS production
 
 # Setup extensions
 COPY --from=extensions /tmp /tmp
