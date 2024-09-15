@@ -142,13 +142,16 @@ export default async function (app: FastifyInstance) {
     if (bot.paths.length) {
       await $({
         cwd: workingDir,
-      })`git sparse-checkout set --no-cone ${bot.paths.join(' ')}`;
+      })`git sparse-checkout set --no-cone .gitignore ${bot.paths.join(' ')}`;
     }
 
     await $({ cwd: workingDir })`git checkout`;
 
-    // Remove the .git directory
+    // Refresh the .git directory
     await $({ cwd: workingDir })`rm -rf .git`;
+    await $({ cwd: workingDir })`git init`;
+    await $({ cwd: workingDir })`git add .`;
+    await $({ cwd: workingDir })`git commit --allow-empty -m "Downloaded code"`;
 
     // Create a ZIP archive and stream it as a response
     reply.header('Content-Type', 'application/gzip');
