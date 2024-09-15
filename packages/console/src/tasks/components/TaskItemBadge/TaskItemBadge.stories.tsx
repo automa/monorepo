@@ -13,7 +13,8 @@ const meta = {
       issueIdentifier: 'DEMO-123',
       issueTitle: 'Demo Issue',
       organizationName: 'Demo Org',
-      url: 'https://linear.app/demo/issue/DEMO-123',
+      organizationUrlKey: 'demo',
+      commentId: '123',
     },
   },
 } satisfies Meta<typeof TaskItemBadge>;

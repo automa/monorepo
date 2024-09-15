@@ -7,6 +7,8 @@ import { Flex, Typography } from 'shared';
 import JiraLogo from 'assets/logos/jira.svg?react';
 import LinearLogo from 'assets/logos/linear.svg?react';
 
+import { originBaseDefinitions } from 'tasks/utils';
+
 import { TaskItemBadgeProps } from './types';
 
 export const definitions: Partial<
@@ -22,8 +24,8 @@ export const definitions: Partial<
 > = {
   [IntegrationType.Linear]: {
     logo: <LinearLogo className="size-3" />,
-    title: (data) => data.issueIdentifier,
-    link: (data) => data.url,
+    title: originBaseDefinitions[IntegrationType.Linear]!.title,
+    link: originBaseDefinitions[IntegrationType.Linear]!.link,
     content: (data) => (
       <Flex direction="column" className="gap-2">
         <Flex alignItems="center" className="gap-1">
@@ -40,9 +42,8 @@ export const definitions: Partial<
   },
   [IntegrationType.Jira]: {
     logo: <JiraLogo className="size-3" />,
-    title: (data) => data.issueKey,
-    link: (data) =>
-      `${data.organizationUrl}/browse/${data.issueKey}?focusedCommentId=${data.commentId}`,
+    title: originBaseDefinitions[IntegrationType.Jira]!.title,
+    link: originBaseDefinitions[IntegrationType.Jira]!.link,
     content: (data) => (
       <Flex direction="column" className="gap-2">
         <Flex alignItems="center" className="gap-1">

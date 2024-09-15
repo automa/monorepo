@@ -1,6 +1,6 @@
 // @ts-ignore
 import { convert } from 'adf-to-md';
-import axios from 'axios';
+import axios, { Axios, AxiosError, AxiosRequestConfig } from 'axios';
 
 import { bot, integration, task_item } from '@automa/prisma';
 
@@ -19,18 +19,17 @@ const commentCreated: JiraEventHandler<{
     body: string;
     author: {
       accountId: string;
+      displayName: string;
     };
   };
   issue: {
     id: string;
   };
 }> = async (app, body) => {
-  const { JIRA_APP } = env;
-
-  const comment = body.comment.body.trim();
+  const text = body.comment.body.trim();
   const url = /^(.*)\/rest\/api\//.exec(body.comment.self)?.[1];
 
-  if (!AUTOMA_REGEX.test(comment) || !url) {
+  if (!AUTOMA_REGEX.test(text) || !url) {
     return;
   }
 
@@ -65,8 +64,12 @@ const commentCreated: JiraEventHandler<{
     return;
   }
 
+  const issueUrl = `${env.JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${body.issue.id}`;
+  let accessToken = connection.secrets.access_token as string;
+  let issue;
+
   // Retrieve the issue
-  const [{ data: issue }] = await Promise.all([
+  const readIssue = () =>
     axios.get<{
       id: string;
       key: string;
@@ -82,23 +85,85 @@ const commentCreated: JiraEventHandler<{
           name: string;
           key: string;
         };
+        comment: {
+          comments: {
+            id: string;
+            author: {
+              accountId: string;
+              displayName: string;
+              emailAddress: string;
+            };
+          }[];
+        };
       };
-    }>(
-      `${JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${body.issue.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${connection.secrets.access_token}`,
-        },
+    }>(issueUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
       },
-    ),
-  ]);
+    });
+
+  try {
+    ({ data: issue } = await readIssue());
+  } catch (e) {
+    if ((e as AxiosError)?.response?.status !== 401) {
+      throw e;
+    }
+
+    // If the access token is expired, refresh it
+    const { data: tokens } = await axios.post<{
+      access_token: string;
+      refresh_token: string;
+    }>(env.JIRA_APP.ACCESS_TOKEN_URL, {
+      client_id: env.JIRA_APP.CLIENT_ID,
+      client_secret: env.JIRA_APP.CLIENT_SECRET,
+      refresh_token: connection.secrets.refresh_token as string,
+      grant_type: 'refresh_token',
+    });
+
+    if (!tokens.access_token || !tokens.refresh_token) {
+      // TODO: Delete the integration
+      throw e;
+    }
+
+    accessToken = tokens.access_token;
+
+    [{ data: issue }] = await Promise.all([
+      readIssue(),
+      // Update the integration with the new tokens
+      app.prisma.integrations.update({
+        where: {
+          id: connection.id,
+        },
+        data: {
+          secrets: {
+            refresh_token: tokens.refresh_token,
+            access_token: accessToken,
+          },
+        },
+      }),
+    ]);
+  }
+
+  // Find comment from list of comments in the issue
+  const comment = issue.fields.comment.comments.find(
+    (comment) => comment.id === body.comment.id,
+  );
+
+  // Find automa user using email if they exist
+  const automaUser = comment?.author
+    ? await app.prisma.users.findFirst({
+        where: {
+          email: comment?.author?.emailAddress,
+        },
+      })
+    : null;
 
   // TODO: Check if the issue is already linked to a task
 
   const problems = [];
 
   // Get the options
-  const options = getOptions(comment);
+  const options = getOptions(text);
 
   // Find and assign bot if specified
   let selectedBot;
@@ -168,6 +233,13 @@ const commentCreated: JiraEventHandler<{
     }
   }
 
+  const userData = {
+    integration: integration.jira,
+    userId: comment?.author?.accountId ?? body.comment.author.accountId,
+    userName: comment?.author?.displayName ?? body.comment.author.displayName,
+    userEmail: comment?.author?.emailAddress,
+  };
+
   const task = await taskCreate(app, {
     org_id: connection.org_id,
     title: issue.fields.summary.slice(0, 255),
@@ -182,9 +254,9 @@ const commentCreated: JiraEventHandler<{
             ]
           : []),
         {
+          actor_user_id: automaUser?.id,
           type: task_item.origin,
           data: {
-            integration: integration.jira,
             organizationId: connection.config.id,
             organizationUrl: connection.config.url,
             organizationName: connection.config.name,
@@ -193,7 +265,7 @@ const commentCreated: JiraEventHandler<{
             projectName: issue.fields.project.name,
             issuetypeId: issue.fields.issuetype.id,
             issuetypeName: issue.fields.issuetype.name,
-            userId: body.comment.author.accountId,
+            ...userData,
             issueId: issue.id,
             issueKey: issue.key,
             issueTitle: issue.fields.summary,
@@ -203,8 +275,10 @@ const commentCreated: JiraEventHandler<{
         ...(selectedRepo
           ? [
               {
+                actor_user_id: automaUser?.id,
                 type: task_item.repo,
                 data: {
+                  ...userData,
                   repoId: selectedRepo.id,
                   repoName: selectedRepo.name,
                   repoOrgId: selectedRepo.orgs.id,
@@ -219,8 +293,10 @@ const commentCreated: JiraEventHandler<{
         ...(selectedBot
           ? [
               {
+                actor_user_id: automaUser?.id,
                 type: task_item.bot,
                 data: {
+                  ...userData,
                   botId: selectedBot.bots.id,
                   botName: selectedBot.bots.name,
                   botImageUrl: selectedBot.bots.image_url,
@@ -293,13 +369,13 @@ const commentCreated: JiraEventHandler<{
 
   // Create a comment to notify the user
   await axios.post(
-    `${JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${issue.id}/comment`,
+    `${env.JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${issue.id}/comment`,
     {
       body: reponseComment,
     },
     {
       headers: {
-        Authorization: `Bearer ${connection.secrets.access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     },
   );

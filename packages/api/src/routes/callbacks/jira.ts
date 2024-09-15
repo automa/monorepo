@@ -41,22 +41,13 @@ export default async function (app: FastifyInstance) {
     } = await axios.post<{
       access_token: string;
       refresh_token: string;
-    }>(
-      JIRA_APP.ACCESS_TOKEN_URL,
-      {
-        client_id: JIRA_APP.CLIENT_ID,
-        client_secret: JIRA_APP.CLIENT_SECRET,
-        redirect_uri: `${BASE_URI}${JIRA_APP.CALLBACK_URI}`,
-        code,
-        grant_type: 'authorization_code',
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      },
-    );
+    }>(JIRA_APP.ACCESS_TOKEN_URL, {
+      client_id: JIRA_APP.CLIENT_ID,
+      client_secret: JIRA_APP.CLIENT_SECRET,
+      redirect_uri: `${BASE_URI}${JIRA_APP.CALLBACK_URI}`,
+      code,
+      grant_type: 'authorization_code',
+    });
 
     if (!accessToken || !refreshToken) {
       return replyError(ErrorType.UNABLE_TO_CONNECT_INTEGRATION);
