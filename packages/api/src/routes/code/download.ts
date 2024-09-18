@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto';
+
 import { FastifyInstance } from 'fastify';
 import { c as createTar } from 'tar';
 import { $ } from 'zx';
@@ -49,11 +51,33 @@ export default async function (app: FastifyInstance) {
 
     await $({ cwd: workingDir })`git checkout`;
 
+    // We ask the bots to send this token along with code proposal in order to
+    // prevent race conditions when bots work on the same task at the same time
+    const proposalToken = randomBytes(128).toString('base64url');
+
+    // Get the head commit hash and store it along with the download token
+    const commit = await $({
+      cwd: workingDir,
+    })`git rev-parse HEAD`;
+
+    await app.prisma.tasks.update({
+      where: {
+        id: task.id,
+      },
+      data: {
+        proposal_token: proposalToken,
+        proposal_base_commit: commit.stdout.trim(),
+      },
+    });
+
     // Refresh the .git directory
     await $({ cwd: workingDir })`rm -rf .git`;
     await $({ cwd: workingDir })`git init`;
     await $({ cwd: workingDir })`git add .`;
     await $({ cwd: workingDir })`git commit --allow-empty -m "Downloaded code"`;
+
+    // Attach the download token to the response
+    reply.header('x-automa-proposal-token', proposalToken);
 
     // Create an archive and stream it as a response
     reply.header('Content-Type', 'application/gzip');

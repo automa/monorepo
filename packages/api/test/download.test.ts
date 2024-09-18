@@ -450,6 +450,12 @@ suite('code download', () => {
         id: task.id,
         token: 'abcdef',
       });
+
+      task = await app.prisma.tasks.findFirstOrThrow({
+        where: {
+          id: task.id,
+        },
+      });
     });
 
     test('should return 200', () => {
@@ -460,6 +466,14 @@ suite('code download', () => {
       assert.equal(response.headers['content-type'], 'application/gzip');
 
       assert.equal(response.body, '1234567890');
+    });
+
+    test('should update task with commit hash and proposal token', async () => {
+      assert.lengthOf(task.proposal_token ?? '', 171);
+      assert.equal(
+        task.proposal_base_commit,
+        '353fabbf70ac7a2cad3d9e27889bfc77f419d61b',
+      );
     });
 
     test('should get token from github', async () => {
@@ -470,104 +484,10 @@ suite('code download', () => {
       );
     });
 
-    test('should clone and checkout the repo', async () => {
-      assert.equal(zxCmdStub.callCount, 8);
-      assert.equal(zxCmdArgsStub.callCount, 5);
-
-      assert.deepEqual(zxCmdStub.getCall(0).args, [
-        ['rm -rf ', ''],
-        `/tmp/automa/download/tasks/${task.id}`,
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(1).args, [
-        [
-          'git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:',
-          '@github.com/',
-          '/',
-          ' ',
-          '',
-        ],
-        'abcdef',
-        'org-0',
-        'repo-0',
-        `/tmp/automa/download/tasks/${task.id}`,
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(2).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(3).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(4).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(5).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(6).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(7).args, [
-        ['rm -rf ', ''],
-        `/tmp/automa/download/tasks/${task.id}`,
-      ]);
-
-      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git checkout']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['rm -rf .git']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['git init']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['git add .']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
-        ['git commit --allow-empty -m "Downloaded code"'],
-      ]);
-    });
-
-    test('should compress code', () => {
-      assert.equal(tarCreateStub.callCount, 1);
-      assert.deepEqual(tarCreateStub.firstCall.args, [
-        {
-          gzip: true,
-          cwd: `/tmp/automa/download/tasks/${task.id}`,
-        },
-        ['.'],
-      ]);
-    });
-
-    test('should delete the cloned repo', async () => {
-      assert.isFalse(existsSync(`/tmp/automa/download/tasks/${task.id}`));
-    });
-  });
-
-  suite('with bot paths', () => {
-    setup(async () => {
-      await app.prisma.bots.update({
-        where: {
-          id: bot.id,
-        },
-        data: {
-          paths: ['path-1', 'path-2'],
-        },
-      });
-
-      response = await download(app, {
-        id: task.id,
-        token: 'abcdef',
-      });
-    });
-
-    test('should return 200', () => {
-      assert.equal(response.statusCode, 200);
-    });
-
-    test('should return code', () => {
-      assert.equal(response.headers['content-type'], 'application/gzip');
-
-      assert.equal(response.body, '1234567890');
-    });
-
-    test('should get token from github', async () => {
-      assert.equal(postStub.callCount, 1);
+    test('should return proposal token in response', () => {
       assert.equal(
-        postStub.firstCall.args[0],
-        'https://api.github.com/app/installations/123/access_tokens',
+        response.headers['x-automa-proposal-token'],
+        task.proposal_token,
       );
     });
 
@@ -615,15 +535,145 @@ suite('code download', () => {
         `/tmp/automa/download/tasks/${task.id}`,
       ]);
 
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git checkout']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['git rev-parse HEAD']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['rm -rf .git']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git add .']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
+        ['git commit --allow-empty -m "Downloaded code"'],
+      ]);
+    });
+
+    test('should compress code', () => {
+      assert.equal(tarCreateStub.callCount, 1);
+      assert.deepEqual(tarCreateStub.firstCall.args, [
+        {
+          gzip: true,
+          cwd: `/tmp/automa/download/tasks/${task.id}`,
+        },
+        ['.'],
+      ]);
+    });
+
+    test('should delete the cloned repo', async () => {
+      assert.isFalse(existsSync(`/tmp/automa/download/tasks/${task.id}`));
+    });
+  });
+
+  suite('with bot paths', () => {
+    setup(async () => {
+      await app.prisma.bots.update({
+        where: {
+          id: bot.id,
+        },
+        data: {
+          paths: ['path-1', 'path-2'],
+        },
+      });
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+
+      task = await app.prisma.tasks.findFirstOrThrow({
+        where: {
+          id: task.id,
+        },
+      });
+    });
+
+    test('should return 200', () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should return code', () => {
+      assert.equal(response.headers['content-type'], 'application/gzip');
+
+      assert.equal(response.body, '1234567890');
+    });
+
+    test('should update task with commit hash and proposal token', async () => {
+      assert.lengthOf(task.proposal_token ?? '', 171);
+      assert.equal(
+        task.proposal_base_commit,
+        '353fabbf70ac7a2cad3d9e27889bfc77f419d61b',
+      );
+    });
+
+    test('should return proposal token in response', () => {
+      assert.equal(
+        response.headers['x-automa-proposal-token'],
+        task.proposal_token,
+      );
+    });
+
+    test('should get token from github', async () => {
+      assert.equal(postStub.callCount, 1);
+      assert.equal(
+        postStub.firstCall.args[0],
+        'https://api.github.com/app/installations/123/access_tokens',
+      );
+    });
+
+    test('should clone and checkout the repo', async () => {
+      assert.equal(zxCmdStub.callCount, 10);
+      assert.equal(zxCmdArgsStub.callCount, 7);
+
+      assert.deepEqual(zxCmdStub.getCall(0).args, [
+        ['rm -rf ', ''],
+        `/tmp/automa/download/tasks/${task.id}`,
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(1).args, [
+        [
+          'git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:',
+          '@github.com/',
+          '/',
+          ' ',
+          '',
+        ],
+        'abcdef',
+        'org-0',
+        'repo-0',
+        `/tmp/automa/download/tasks/${task.id}`,
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(2).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(3).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(4).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(5).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(6).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(7).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(8).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(9).args, [
+        ['rm -rf ', ''],
+        `/tmp/automa/download/tasks/${task.id}`,
+      ]);
+
       assert.deepEqual(zxCmdArgsStub.getCall(0).args, [
         ['git sparse-checkout set --no-cone .gitignore ', ''],
         'path-1 path-2',
       ]);
       assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['git checkout']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['rm -rf .git']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['git init']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git add .']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
+      assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['git rev-parse HEAD']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['rm -rf .git']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [['git add .']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
         ['git commit --allow-empty -m "Downloaded code"'],
       ]);
     });
