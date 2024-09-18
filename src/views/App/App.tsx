@@ -48,9 +48,6 @@ const App: React.FC<{}> = () => {
 
   useEffect(() => {
     identify(user);
-  }, [identify, user]);
-
-  useEffect(() => {
     updateOptimizerUser(user);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
