@@ -135,6 +135,11 @@ suite('events/taskCreated', () => {
           name: 'repo-0',
           is_private: false,
         },
+        org: {
+          id: org.id,
+          name: 'org-0',
+          provider_type: 'github',
+        },
       };
 
       assert.equal(postStub.callCount, 1);
@@ -282,6 +287,11 @@ suite('events/taskCreated', () => {
           id: repo.id,
           name: 'repo-0',
           is_private: true,
+        },
+        org: {
+          id: org.id,
+          name: 'org-0',
+          provider_type: 'github',
         },
       };
 

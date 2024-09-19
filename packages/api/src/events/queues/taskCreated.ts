@@ -214,6 +214,11 @@ const taskCreated: QueueDefinition<{
         name: repo.name,
         is_private: repo.is_private,
       },
+      org: {
+        id: repo.orgs.id,
+        name: repo.orgs.name,
+        provider_type: repo.orgs.provider_type,
+      },
     };
 
     // Create webhook signature
