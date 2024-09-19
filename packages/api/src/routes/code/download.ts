@@ -66,6 +66,11 @@ export default async function (app: FastifyInstance) {
       ['.'],
     );
 
+    // Delete the working directory after we finish streaming the tar
+    tar.on('end', () => {
+      $`rm -rf ${workingDir}`;
+    });
+
     return reply.send(tar);
   });
 }

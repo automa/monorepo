@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { Readable } from 'node:stream';
 
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
@@ -470,7 +471,7 @@ suite('code download', () => {
     });
 
     test('should clone and checkout the repo', async () => {
-      assert.equal(zxCmdStub.callCount, 7);
+      assert.equal(zxCmdStub.callCount, 8);
       assert.equal(zxCmdArgsStub.callCount, 5);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
@@ -505,6 +506,10 @@ suite('code download', () => {
       assert.deepEqual(zxCmdStub.getCall(6).args, [
         { cwd: `/tmp/automa/download/tasks/${task.id}` },
       ]);
+      assert.deepEqual(zxCmdStub.getCall(7).args, [
+        ['rm -rf ', ''],
+        `/tmp/automa/download/tasks/${task.id}`,
+      ]);
 
       assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git checkout']]);
       assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['rm -rf .git']]);
@@ -524,6 +529,10 @@ suite('code download', () => {
         },
         ['.'],
       ]);
+    });
+
+    test('should delete the cloned repo', async () => {
+      assert.isFalse(existsSync(`/tmp/automa/download/tasks/${task.id}`));
     });
   });
 
@@ -563,7 +572,7 @@ suite('code download', () => {
     });
 
     test('should clone and checkout the repo', async () => {
-      assert.equal(zxCmdStub.callCount, 8);
+      assert.equal(zxCmdStub.callCount, 9);
       assert.equal(zxCmdArgsStub.callCount, 6);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
@@ -601,6 +610,10 @@ suite('code download', () => {
       assert.deepEqual(zxCmdStub.getCall(7).args, [
         { cwd: `/tmp/automa/download/tasks/${task.id}` },
       ]);
+      assert.deepEqual(zxCmdStub.getCall(8).args, [
+        ['rm -rf ', ''],
+        `/tmp/automa/download/tasks/${task.id}`,
+      ]);
 
       assert.deepEqual(zxCmdArgsStub.getCall(0).args, [
         ['git sparse-checkout set --no-cone .gitignore ', ''],
@@ -624,6 +637,10 @@ suite('code download', () => {
         },
         ['.'],
       ]);
+    });
+
+    test('should delete the cloned repo', async () => {
+      assert.isFalse(existsSync(`/tmp/automa/download/tasks/${task.id}`));
     });
   });
 });
