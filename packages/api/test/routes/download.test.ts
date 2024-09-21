@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, mkdirSync } from 'node:fs';
 import { Readable } from 'node:stream';
 
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
@@ -9,9 +9,9 @@ import * as tar from 'tar';
 
 import { bots, orgs, repos, tasks } from '@automa/prisma';
 
-import { call, seedBots, seedOrgs, seedRepos, server } from './utils';
+import { call, seedBots, seedOrgs, seedRepos, server } from '../utils';
 
-import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from './mocks';
+import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from '../mocks';
 
 suite('code download', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
@@ -55,6 +55,8 @@ suite('code download', () => {
         },
       },
     });
+
+    mkdirSync(`/tmp/automa/download/tasks/${task.id}`, { recursive: true });
 
     postStub = sandbox
       .stub(axios, 'post')
@@ -100,7 +102,7 @@ suite('code download', () => {
     });
   });
 
-  suite('invalid token', () => {
+  suite('invalid task token', () => {
     setup(async () => {
       response = await download(app, {
         id: task.id,
@@ -492,14 +494,10 @@ suite('code download', () => {
     });
 
     test('should clone and checkout the repo', async () => {
-      assert.equal(zxCmdStub.callCount, 9);
+      assert.equal(zxCmdStub.callCount, 7);
       assert.equal(zxCmdArgsStub.callCount, 6);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
-        ['rm -rf ', ''],
-        `/tmp/automa/download/tasks/${task.id}`,
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(1).args, [
         [
           'git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:',
           '@github.com/',
@@ -511,6 +509,9 @@ suite('code download', () => {
         'org-0',
         'repo-0',
         `/tmp/automa/download/tasks/${task.id}`,
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(1).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
       ]);
       assert.deepEqual(zxCmdStub.getCall(2).args, [
         { cwd: `/tmp/automa/download/tasks/${task.id}` },
@@ -526,13 +527,6 @@ suite('code download', () => {
       ]);
       assert.deepEqual(zxCmdStub.getCall(6).args, [
         { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(7).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(8).args, [
-        ['rm -rf ', ''],
-        `/tmp/automa/download/tasks/${task.id}`,
       ]);
 
       assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git checkout']]);
@@ -618,14 +612,10 @@ suite('code download', () => {
     });
 
     test('should clone and checkout the repo', async () => {
-      assert.equal(zxCmdStub.callCount, 10);
+      assert.equal(zxCmdStub.callCount, 8);
       assert.equal(zxCmdArgsStub.callCount, 7);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
-        ['rm -rf ', ''],
-        `/tmp/automa/download/tasks/${task.id}`,
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(1).args, [
         [
           'git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:',
           '@github.com/',
@@ -637,6 +627,9 @@ suite('code download', () => {
         'org-0',
         'repo-0',
         `/tmp/automa/download/tasks/${task.id}`,
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(1).args, [
+        { cwd: `/tmp/automa/download/tasks/${task.id}` },
       ]);
       assert.deepEqual(zxCmdStub.getCall(2).args, [
         { cwd: `/tmp/automa/download/tasks/${task.id}` },
@@ -655,13 +648,6 @@ suite('code download', () => {
       ]);
       assert.deepEqual(zxCmdStub.getCall(7).args, [
         { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(8).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(9).args, [
-        ['rm -rf ', ''],
-        `/tmp/automa/download/tasks/${task.id}`,
       ]);
 
       assert.deepEqual(zxCmdArgsStub.getCall(0).args, [

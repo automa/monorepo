@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto';
+import { rm } from 'node:fs/promises';
 
 import { FastifyInstance } from 'fastify';
 import { c as createTar } from 'tar';
@@ -39,7 +40,7 @@ export default async function (app: FastifyInstance) {
     const workingDir = `/tmp/automa/download/tasks/${task.id}`;
 
     // Clone the repository
-    await $`rm -rf ${workingDir}`;
+    await rm(workingDir, { recursive: true, force: true });
     await $`git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:${accessToken}@github.com/${repo.orgs.provider_name}/${repo.name} ${workingDir}`;
 
     // Checkout the specified paths
@@ -91,9 +92,7 @@ export default async function (app: FastifyInstance) {
     );
 
     // Delete the working directory after we finish streaming the tar
-    tar.on('end', () => {
-      $`rm -rf ${workingDir}`;
-    });
+    tar.on('end', () => rm(workingDir, { recursive: true }));
 
     return reply.send(tar);
   });

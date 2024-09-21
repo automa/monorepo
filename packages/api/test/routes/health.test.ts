@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { assert } from 'chai';
 
-import { call, server } from './utils';
+import { call, server } from '../utils';
 
 suite('health', () => {
   let app: FastifyInstance;

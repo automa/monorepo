@@ -9,8 +9,13 @@ export const getTask = async (
   reply: FastifyReply,
   body: { id: number; token: string },
 ) => {
+  const { id, token } = body;
+
   const task = await app.prisma.tasks.findFirst({
-    where: body,
+    where: {
+      id,
+      token,
+    },
     include: {
       task_items: true,
     },
