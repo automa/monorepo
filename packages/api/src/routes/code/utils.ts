@@ -35,6 +35,7 @@ export const getTask = async (
       },
     });
 
+    // TODO: Check for old tasks in a cron and mark them as failed
     return reply.forbidden(
       'Task is older than 7 days and thus cannot be worked upon anymore',
     );

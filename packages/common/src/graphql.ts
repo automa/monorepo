@@ -310,7 +310,7 @@ export enum TaskItemType {
   Bot = 'bot',
   Message = 'message',
   Origin = 'origin',
-  PullRequest = 'pull_request',
+  Proposal = 'proposal',
   Repo = 'repo'
 }
 
@@ -647,7 +647,7 @@ export type TaskItemResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TaskItemTypeResolvers = EnumResolverSignature<{ bot?: any, message?: any, origin?: any, pull_request?: any, repo?: any }, ResolversTypes['TaskItemType']>;
+export type TaskItemTypeResolvers = EnumResolverSignature<{ bot?: any, message?: any, origin?: any, proposal?: any, repo?: any }, ResolversTypes['TaskItemType']>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

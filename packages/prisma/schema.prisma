@@ -200,9 +200,9 @@ enum bot {
 enum task_item {
   message
   origin
-  pull_request
   repo
   bot
+  proposal
 }
 
 enum integration {
