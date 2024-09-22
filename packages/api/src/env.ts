@@ -93,15 +93,6 @@ const schema = Type.Object({
     CLIENT_SECRET: Type.String(),
     WEBHOOK_SECRET: Type.String(),
   }),
-  OTEL: Type.Object({
-    TRACES: Type.Object({
-      SAMPLER_ARG: Type.Number({
-        default: 1,
-        maximum: 1,
-        minimum: 0,
-      }),
-    }),
-  }),
   PORT: Type.Number({
     default: 8080,
   }),

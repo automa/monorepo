@@ -9,20 +9,22 @@ import {
   tracing,
 } from '@opentelemetry/sdk-node';
 import {
-  SEMRESATTRS_DEPLOYMENT_ENVIRONMENT,
-  SEMRESATTRS_SERVICE_NAME,
-  SEMRESATTRS_SERVICE_NAMESPACE,
-  SEMRESATTRS_SERVICE_VERSION,
+  ATTR_SERVICE_NAME,
+  ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
 import { MetricExporter as GCPMetricExporter } from '@google-cloud/opentelemetry-cloud-monitoring-exporter';
 import { TraceExporter as GCPTraceExporter } from '@google-cloud/opentelemetry-cloud-trace-exporter';
 import { logs as logsAPI } from '@opentelemetry/api-logs';
-import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-grpc';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
 import { FastifyInstrumentation } from '@opentelemetry/instrumentation-fastify';
 import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { IORedisInstrumentation } from '@opentelemetry/instrumentation-ioredis';
+import {
+  ATTR_DEPLOYMENT_ENVIRONMENT_NAME,
+  ATTR_SERVICE_NAMESPACE,
+} from '@opentelemetry/semantic-conventions/incubating';
 import { PrismaInstrumentation } from '@prisma/instrumentation';
 
 import {
@@ -37,12 +39,7 @@ import {
 
 export { SeverityNumber } from '@opentelemetry/api-logs';
 
-const {
-  BatchSpanProcessor,
-  SimpleSpanProcessor,
-  ParentBasedSampler,
-  TraceIdRatioBasedSampler,
-} = tracing;
+const { BatchSpanProcessor, SimpleSpanProcessor } = tracing;
 
 const { PeriodicExportingMetricReader } = metrics;
 
@@ -54,24 +51,23 @@ const {
 
 const sdk = new NodeSDK({
   resource: new resources.Resource({
-    [SEMRESATTRS_SERVICE_NAMESPACE]: product,
-    [SEMRESATTRS_SERVICE_NAME]: service,
-    [SEMRESATTRS_SERVICE_VERSION]: version,
-    [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: environment,
+    [ATTR_SERVICE_NAMESPACE]: product,
+    [ATTR_SERVICE_NAME]: service,
+    [ATTR_SERVICE_VERSION]: version,
+    [ATTR_DEPLOYMENT_ENVIRONMENT_NAME]: environment,
   }),
-  sampler: new ParentBasedSampler({
-    root: new TraceIdRatioBasedSampler(env.OTEL.TRACES.SAMPLER_ARG),
-  }),
-  spanProcessor: !isTest
-    ? isProduction
-      ? new BatchSpanProcessor(
-          new GCPTraceExporter({
-            credentials: JSON.parse(env.GCP.CREDENTIALS),
-            projectId: env.GCP.PROJECT_ID,
-          }),
-        )
-      : new SimpleSpanProcessor(new OTLPTraceExporter())
-    : undefined,
+  spanProcessors: !isTest
+    ? [
+        isProduction
+          ? new BatchSpanProcessor(
+              new GCPTraceExporter({
+                credentials: JSON.parse(env.GCP.CREDENTIALS),
+                projectId: env.GCP.PROJECT_ID,
+              }),
+            )
+          : new SimpleSpanProcessor(new OTLPTraceExporter()),
+      ]
+    : [],
   instrumentations: [
     new PrismaInstrumentation({ middleware: true }),
     new IORedisInstrumentation(),
@@ -79,11 +75,13 @@ const sdk = new NodeSDK({
     new FastifyInstrumentation(),
     new GraphQLInstrumentation(),
   ],
-  logRecordProcessor: !isTest
-    ? isProduction
-      ? new BatchLogRecordProcessor(new ConsoleLogRecordExporter())
-      : new SimpleLogRecordProcessor(new ConsoleLogRecordExporter())
-    : undefined,
+  logRecordProcessors: !isTest
+    ? [
+        isProduction
+          ? new BatchLogRecordProcessor(new ConsoleLogRecordExporter())
+          : new SimpleLogRecordProcessor(new ConsoleLogRecordExporter()),
+      ]
+    : [],
   metricReader: !isTest
     ? isProduction
       ? // new PeriodicExportingMetricReader({
@@ -93,7 +91,9 @@ const sdk = new NodeSDK({
         //   }),
         // })
         undefined
-      : new PrometheusExporter()
+      : new PeriodicExportingMetricReader({
+          exporter: new OTLPMetricExporter(),
+        })
     : undefined,
 });
 
@@ -112,7 +112,5 @@ process.on('SIGTERM', () => {
       () => console.log('Telemetry shut down successfully'),
       () => console.log('Telemetry shut down failed'),
     )
-    .finally(() => {
-      process.exit(0);
-    });
+    .finally(() => process.exit(0));
 });
