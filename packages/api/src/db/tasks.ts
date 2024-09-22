@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 
-import { Prisma } from '@automa/prisma';
+import { Prisma, task_activity, task_item, task_state } from '@automa/prisma';
 
 import { Context } from './types';
 
@@ -21,4 +21,68 @@ export const taskCreate = async (
   await events.taskCreated.publish({ id: task.id });
 
   return task;
+};
+
+export const taskUpdateState = async (
+  { prisma }: Context,
+  taskId: number,
+  state: task_state,
+  actor?: {
+    user_id?: number;
+    bot_id?: number;
+    data?: Prisma.JsonValue;
+  },
+) => {
+  return prisma.$transaction(async (tx) => {
+    // TODO: Probably should do `FOR UPDATE` in order to lock the task
+    const task = await tx.tasks.findUniqueOrThrow({
+      where: {
+        id: taskId,
+      },
+    });
+
+    if (task.state === state) {
+      return;
+    }
+
+    return tx.tasks.update({
+      where: {
+        id: task.id,
+      },
+      data: {
+        state,
+        task_items: {
+          create: [
+            {
+              ...(actor?.user_id && {
+                users: {
+                  connect: {
+                    id: actor.user_id,
+                  },
+                },
+              }),
+              ...(actor?.bot_id && {
+                bots: {
+                  connect: {
+                    id: actor.bot_id,
+                  },
+                },
+              }),
+              ...(actor?.data && {
+                data: actor.data,
+              }),
+              type: task_item.activity,
+              task_activities: {
+                create: {
+                  type: task_activity.state,
+                  from_state: task.state,
+                  to_state: state,
+                },
+              },
+            },
+          ],
+        },
+      },
+    });
+  });
 };

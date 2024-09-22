@@ -3,9 +3,10 @@ import { mkdir, rm, unlink, writeFile } from 'node:fs/promises';
 import { FastifyInstance } from 'fastify';
 import { $ } from 'zx';
 
-import { task_item } from '@automa/prisma';
+import { task_item, task_state } from '@automa/prisma';
 
 import { caller } from '../../clients/github';
+import { taskUpdateState } from '../../db';
 
 import { getBot, getRepo, getTask } from './utils';
 
@@ -63,16 +64,7 @@ export default async function (app: FastifyInstance) {
       typeof proposalItem.data === 'object' &&
       !Array.isArray(proposalItem.data)
     ) {
-      return reply.code(200).send({
-        proposal: {
-          type: repo.orgs.provider_type,
-          id: proposalItem.data.prId,
-          number: proposalItem.data.prNumber,
-          title: proposalItem.data.prTitle,
-          head: proposalItem.data.prHead,
-          base: proposalItem.data.prBase,
-        },
-      });
+      return reply.code(204).send();
     }
 
     const bot = await getBot(app, reply, task);
@@ -114,6 +106,22 @@ export default async function (app: FastifyInstance) {
 
     // Return early and no need to clone the repository if the PR already exists
     const finish = async () => {
+      // Not doing `Promise.all` in order to be fault tolerant
+      // Not using taskUpdateState since we don't want to create an activity
+      await app.prisma.tasks.update({
+        where: {
+          id: task.id,
+        },
+        data: {
+          state:
+            pr.state === 'open'
+              ? task_state.submitted
+              : pr.merged
+              ? task_state.completed
+              : task_state.cancelled,
+        },
+      });
+
       await app.prisma.task_items.create({
         data: {
           task_id: task.id,
@@ -132,16 +140,7 @@ export default async function (app: FastifyInstance) {
         },
       });
 
-      return reply.code(201).send({
-        proposal: {
-          type: repo.orgs.provider_type,
-          id: pr.id,
-          number: pr.number,
-          title: pr.title,
-          head: pr.head.label,
-          base: pr.base.ref,
-        },
-      });
+      return reply.code(204).send();
     };
 
     if (pr) {
@@ -150,14 +149,8 @@ export default async function (app: FastifyInstance) {
 
     // Complete the task if the diff is empty
     if (!proposal.diff) {
-      await app.prisma.tasks.update({
-        where: {
-          id: task.id,
-        },
-        data: {
-          // TODO: Mark the task as skipped when we have a proper status for it
-          completed_at: new Date(),
-        },
+      await taskUpdateState(app, task.id, task_state.skipped, {
+        bot_id: bot.id,
       });
 
       return reply.code(204).send();

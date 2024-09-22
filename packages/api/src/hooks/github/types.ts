@@ -5,6 +5,7 @@ export enum GithubEventType {
   Installation = 'installation',
   InstallationRepositories = 'installation_repositories',
   Organization = 'organization',
+  PullRequest = 'pull_request',
   Push = 'push',
   Repository = 'repository',
 }
@@ -15,6 +16,11 @@ export type GithubEventActionHandler<T = any> = (
 ) => Promise<void>;
 
 export type GithubEventHandler = Record<string, GithubEventActionHandler>;
+
+export type GithubSender = {
+  login: string;
+  id: number;
+};
 
 export type GithubInstallationMinimal = {
   id: number;

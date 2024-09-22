@@ -44,7 +44,7 @@ const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
         <Flex justifyContent="center">
           <Loader />
         </Flex>
-      ) : !data?.publicBots?.length ? (
+      ) : !data?.publicBots.length ? (
         <Flex justifyContent="center">No bots</Flex>
       ) : (
         <Flex className="grid grid-cols-2 gap-4 md:gap-6">

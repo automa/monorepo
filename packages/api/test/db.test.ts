@@ -318,6 +318,69 @@ suite('db', () => {
     });
   });
 
+  suite('task_activities', () => {
+    suite('state_activity', () => {
+      test('missing all', async () => {
+        try {
+          await app.prisma.task_activities.create({
+            data: {
+              type: 'state',
+            },
+          });
+
+          assert.fail('expected to throw');
+        } catch (err) {
+          const error = err as Prisma.PrismaClientUnknownRequestError;
+
+          assert.include(
+            error.message,
+            'new row for relation \\"task_activities\\" violates check constraint \\"state_activity\\"',
+          );
+        }
+      });
+
+      test('missing from_state', async () => {
+        try {
+          await app.prisma.task_activities.create({
+            data: {
+              type: 'state',
+              to_state: 'completed',
+            },
+          });
+
+          assert.fail('expected to throw');
+        } catch (err) {
+          const error = err as Prisma.PrismaClientUnknownRequestError;
+
+          assert.include(
+            error.message,
+            'new row for relation \\"task_activities\\" violates check constraint \\"state_activity\\"',
+          );
+        }
+      });
+
+      test('missing to_state', async () => {
+        try {
+          await app.prisma.task_activities.create({
+            data: {
+              type: 'state',
+              from_state: 'submitted',
+            },
+          });
+
+          assert.fail('expected to throw');
+        } catch (err) {
+          const error = err as Prisma.PrismaClientUnknownRequestError;
+
+          assert.include(
+            error.message,
+            'new row for relation \\"task_activities\\" violates check constraint \\"state_activity\\"',
+          );
+        }
+      });
+    });
+  });
+
   suite('task_items', () => {
     test('repo_item', async () => {
       try {
@@ -421,6 +484,26 @@ suite('db', () => {
           );
         }
       });
+    });
+
+    test('activity_item', async () => {
+      try {
+        await app.prisma.task_items.create({
+          data: {
+            task_id: 1,
+            type: 'activity',
+          },
+        });
+
+        assert.fail('expected to throw');
+      } catch (err) {
+        const error = err as Prisma.PrismaClientUnknownRequestError;
+
+        assert.include(
+          error.message,
+          'new row for relation \\"task_items\\" violates check constraint \\"activity_item\\"',
+        );
+      }
     });
   });
 });

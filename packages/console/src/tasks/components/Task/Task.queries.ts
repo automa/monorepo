@@ -5,9 +5,8 @@ export const TASK_FRAGMENT = gql(`
     id
     title
     is_scheduled
+    state
     created_at
-    completed_at
-    is_completed
     items {
       ...TaskItem
     }

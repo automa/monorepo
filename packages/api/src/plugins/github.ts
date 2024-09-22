@@ -41,7 +41,7 @@ const githubPlugin: FastifyPluginAsync = async (app) => {
         if (
           !(err instanceof AxiosError) ||
           err.response?.status !== 401 ||
-          err.response?.data?.message !== 'Bad credentials'
+          err.response?.data.message !== 'Bad credentials'
         ) {
           throw err;
         }

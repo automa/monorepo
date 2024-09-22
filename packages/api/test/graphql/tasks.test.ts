@@ -1,16 +1,29 @@
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { assert } from 'chai';
 
-import { orgs, tasks, users } from '@automa/prisma';
+import {
+  bots,
+  orgs,
+  repos,
+  task_activities,
+  tasks,
+  users,
+} from '@automa/prisma';
 
-import { graphql, seedOrgs, seedUserOrgs, seedUsers, server } from '../utils';
+import {
+  graphql,
+  seedBots,
+  seedOrgs,
+  seedRepos,
+  seedUserOrgs,
+  seedUsers,
+  server,
+} from '../utils';
 
 suite('graphql tasks', () => {
-  let app: FastifyInstance,
-    user: users,
-    org: orgs,
-    secondOrg: orgs,
-    nonMemberOrg: orgs;
+  let app: FastifyInstance, user: users;
+  let org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
+  let repo: repos, bot: bots;
 
   suiteSetup(async () => {
     app = await server();
@@ -18,6 +31,8 @@ suite('graphql tasks', () => {
     [user] = await seedUsers(app, 1);
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
     await seedUserOrgs(app, user, [org, secondOrg]);
+    [repo] = await seedRepos(app, [org]);
+    [bot] = await seedBots(app, [nonMemberOrg]);
 
     app.addHook('preValidation', async (request) => {
       request.session.userId = user.id;
@@ -54,7 +69,7 @@ suite('graphql tasks', () => {
             token: '3',
             is_scheduled: true,
             org_id: org.id,
-            completed_at: new Date(),
+            state: 'completed',
           },
         ],
       });
@@ -75,9 +90,8 @@ suite('graphql tasks', () => {
               tasks(org_id: $org_id) {
                 id
                 title
+                state
                 created_at
-                completed_at
-                is_completed
               }
             }
           `,
@@ -112,14 +126,12 @@ suite('graphql tasks', () => {
         assert.isNumber(tasks[0].id);
         assert.equal(tasks[0].title, 'task-3');
         assert.isString(tasks[0].created_at);
-        assert.isString(tasks[0].completed_at);
-        assert.isTrue(tasks[0].is_completed);
+        assert.equal(tasks[0].state, 'completed');
 
         assert.isNumber(tasks[1].id);
         assert.equal(tasks[1].title, 'task-0');
         assert.isString(tasks[1].created_at);
-        assert.isNull(tasks[1].completed_at);
-        assert.isFalse(tasks[1].is_completed);
+        assert.equal(tasks[1].state, 'started');
       });
     });
 
@@ -191,12 +203,20 @@ suite('graphql tasks', () => {
     });
 
     suite('items', () => {
-      let response: LightMyRequestResponse;
+      let response: LightMyRequestResponse, activity: task_activities;
 
       suiteSetup(async () => {
         const task = await app.prisma.tasks.findFirstOrThrow({
           where: {
             title: 'task-3',
+          },
+        });
+
+        activity = await app.prisma.task_activities.create({
+          data: {
+            type: 'state',
+            from_state: 'submitted',
+            to_state: 'completed',
           },
         });
 
@@ -217,6 +237,21 @@ suite('graphql tasks', () => {
               },
               actor_user_id: user.id,
             },
+            {
+              task_id: task.id,
+              type: 'repo',
+              repo_id: repo.id,
+            },
+            {
+              task_id: task.id,
+              type: 'bot',
+              bot_id: bot.id,
+            },
+            {
+              task_id: task.id,
+              type: 'activity',
+              task_activity_id: activity.id,
+            },
           ],
         });
 
@@ -233,6 +268,21 @@ suite('graphql tasks', () => {
                   created_at
                   actor_user {
                     id
+                  }
+                  repo {
+                    id
+                  }
+                  bot {
+                    id
+                    org {
+                      id
+                    }
+                  }
+                  activity {
+                    id
+                    type
+                    from_state
+                    to_state
                   }
                 }
               }
@@ -268,12 +318,14 @@ suite('graphql tasks', () => {
 
         const { items } = tasks[0];
 
-        assert.lengthOf(items, 2);
+        assert.lengthOf(items, 5);
 
         assert.equal(items[0].type, 'message');
         assert.isString(items[0].created_at);
         assert.deepEqual(items[0].data, { content: 'task-3' });
         assert.isNull(items[0].actor_user);
+        assert.isNull(items[4].repo);
+        assert.isNull(items[4].bot);
 
         assert.equal(items[1].type, 'origin');
         assert.isString(items[1].created_at);
@@ -283,6 +335,72 @@ suite('graphql tasks', () => {
           issueTitle: 'Demo Issue',
         });
         assert.equal(items[1].actor_user.id, user.id);
+        assert.isNull(items[4].repo);
+        assert.isNull(items[4].bot);
+
+        assert.equal(items[2].type, 'repo');
+        assert.isString(items[2].created_at);
+        assert.deepEqual(items[2].data, {});
+        assert.isNull(items[2].actor_user);
+        assert.equal(items[2].repo.id, repo.id);
+        assert.isNull(items[4].bot);
+
+        assert.equal(items[3].type, 'bot');
+        assert.isString(items[3].created_at);
+        assert.deepEqual(items[3].data, {});
+        assert.isNull(items[3].actor_user);
+        assert.isNull(items[4].repo);
+        assert.equal(items[3].bot.id, bot.id);
+        assert.equal(items[3].bot.org.id, nonMemberOrg.id);
+
+        assert.equal(items[4].type, 'activity');
+        assert.isString(items[4].created_at);
+        assert.deepEqual(items[4].data, {});
+        assert.isNull(items[4].actor_user);
+        assert.isNull(items[4].repo);
+        assert.isNull(items[4].bot);
+        assert.deepEqual(items[4].activity, {
+          id: activity.id,
+          type: 'state',
+          from_state: 'submitted',
+          to_state: 'completed',
+        });
+      });
+
+      test('should restrict PublicBot fields for task item bot', async () => {
+        const response = await graphql(
+          app,
+          `
+            query tasks($org_id: Int!) {
+              tasks(org_id: $org_id) {
+                id
+                title
+                items {
+                  bot {
+                    id
+                    webhook_url
+                  }
+                }
+              }
+            }
+          `,
+        );
+
+        assert.equal(response.statusCode, 400);
+
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+
+        const { errors } = response.json();
+
+        assert.lengthOf(errors, 1);
+        assert.include(
+          errors[0].message,
+          'Cannot query field "webhook_url" on type "PublicBot".',
+        );
+        assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
       });
     });
   });
@@ -315,9 +433,8 @@ suite('graphql tasks', () => {
               task(org_id: $org_id, id: $id) {
                 id
                 title
+                state
                 created_at
-                completed_at
-                is_completed
               }
             }
           `,
@@ -351,8 +468,7 @@ suite('graphql tasks', () => {
         assert.isNumber(task.id);
         assert.equal(task.title, 'task-0');
         assert.isString(task.created_at);
-        assert.isNull(task.completed_at);
-        assert.isFalse(task.is_completed);
+        assert.equal(task.state, 'started');
       });
     });
 
@@ -436,7 +552,7 @@ suite('graphql tasks', () => {
           title:
             'Send an analytics event when user clicks on "Create Task" button',
           is_scheduled: false,
-          completed_at: null,
+          state: 'started',
         });
         assert.isDefined(task.token);
       });

@@ -27,5 +27,11 @@ export const TASK_ITEM_FRAGMENT = gql(`
         provider_name
       }
     }
+    activity {
+      id
+      type
+      from_state
+      to_state
+    }
   }
 `);

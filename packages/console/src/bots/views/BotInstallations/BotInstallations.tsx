@@ -18,7 +18,7 @@ const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
     },
   });
 
-  if (!loading && !data?.botInstallations?.length) {
+  if (!loading && !data?.botInstallations.length) {
     return <Navigate to="../bots/new" replace />;
   }
 
