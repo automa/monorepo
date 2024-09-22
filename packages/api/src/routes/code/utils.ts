@@ -9,8 +9,13 @@ export const getTask = async (
   reply: FastifyReply,
   body: { id: number; token: string },
 ) => {
+  const { id, token } = body;
+
   const task = await app.prisma.tasks.findFirst({
-    where: body,
+    where: {
+      id,
+      token,
+    },
     include: {
       task_items: true,
     },
@@ -30,6 +35,7 @@ export const getTask = async (
       },
     });
 
+    // TODO: Check for old tasks in a cron and mark them as failed
     return reply.forbidden(
       'Task is older than 7 days and thus cannot be worked upon anymore',
     );

@@ -27,9 +27,9 @@ input TasksFilter {
 enum TaskItemType {
   message
   origin
-  pull_request
   repo
   bot
+  proposal
 }
 
 type TaskItem {

@@ -307,7 +307,7 @@ export enum TaskItemType {
   Bot = 'bot',
   Message = 'message',
   Origin = 'origin',
-  PullRequest = 'pull_request',
+  Proposal = 'proposal',
   Repo = 'repo'
 }
 

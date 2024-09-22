@@ -1,3 +1,6 @@
+import { randomBytes } from 'node:crypto';
+import { rm } from 'node:fs/promises';
+
 import { FastifyInstance } from 'fastify';
 import { c as createTar } from 'tar';
 import { $ } from 'zx';
@@ -37,7 +40,7 @@ export default async function (app: FastifyInstance) {
     const workingDir = `/tmp/automa/download/tasks/${task.id}`;
 
     // Clone the repository
-    await $`rm -rf ${workingDir}`;
+    await rm(workingDir, { recursive: true, force: true });
     await $`git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:${accessToken}@github.com/${repo.orgs.provider_name}/${repo.name} ${workingDir}`;
 
     // Checkout the specified paths
@@ -49,11 +52,33 @@ export default async function (app: FastifyInstance) {
 
     await $({ cwd: workingDir })`git checkout`;
 
+    // We ask the bots to send this token along with code proposal in order to
+    // prevent race conditions when bots work on the same task at the same time
+    const proposalToken = randomBytes(128).toString('base64url');
+
+    // Get the head commit hash and store it along with the download token
+    const commit = await $({
+      cwd: workingDir,
+    })`git rev-parse HEAD`;
+
+    await app.prisma.tasks.update({
+      where: {
+        id: task.id,
+      },
+      data: {
+        proposal_token: proposalToken,
+        proposal_base_commit: commit.stdout.trim(),
+      },
+    });
+
     // Refresh the .git directory
     await $({ cwd: workingDir })`rm -rf .git`;
     await $({ cwd: workingDir })`git init`;
     await $({ cwd: workingDir })`git add .`;
     await $({ cwd: workingDir })`git commit --allow-empty -m "Downloaded code"`;
+
+    // Attach the download token to the response
+    reply.header('x-automa-proposal-token', proposalToken);
 
     // Create an archive and stream it as a response
     reply.header('Content-Type', 'application/gzip');
@@ -67,9 +92,7 @@ export default async function (app: FastifyInstance) {
     );
 
     // Delete the working directory after we finish streaming the tar
-    tar.on('end', () => {
-      $`rm -rf ${workingDir}`;
-    });
+    tar.on('end', () => rm(workingDir, { recursive: true }));
 
     return reply.send(tar);
   });

@@ -149,6 +149,8 @@ CREATE TABLE public.tasks (
   title VARCHAR(255) NOT NULL,
   is_scheduled BOOLEAN NOT NULL DEFAULT FALSE,
   token VARCHAR(255) NOT NULL,
+  proposal_token VARCHAR(255),
+  proposal_base_commit VARCHAR(40),
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   completed_at TIMESTAMP,
   is_completed BOOLEAN GENERATED ALWAYS AS (completed_at IS NOT NULL) STORED
@@ -157,7 +159,7 @@ CREATE TABLE public.tasks (
 CREATE INDEX tasks_org_id_created_at_idx
 ON public.tasks (org_id, created_at DESC);
 
-CREATE TYPE public.task_item AS ENUM ('message', 'origin', 'pull_request', 'repo', 'bot');
+CREATE TYPE public.task_item AS ENUM ('message', 'origin', 'repo', 'bot', 'proposal');
 
 CREATE TABLE public.task_items (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
