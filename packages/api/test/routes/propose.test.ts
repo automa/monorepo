@@ -587,10 +587,29 @@ suite('code propose', () => {
       assert.isTrue(task.is_completed);
     });
 
-    test('should not get token from github', async () => {
-      assert.equal(postStub.callCount, 0);
-      assert.equal(getStub.callCount, 0);
+    test('should get token from github', async () => {
+      assert.equal(postStub.callCount, 1);
+      assert.equal(
+        postStub.firstCall.args[0],
+        'https://api.github.com/app/installations/123/access_tokens',
+      );
+    });
+
+    test('should not fetch, commit or push the diff', async () => {
       assert.equal(zxCmdStub.callCount, 0);
+    });
+
+    test('should check for PR', async () => {
+      assert.equal(getStub.callCount, 2);
+
+      assert.equal(getStub.getCall(0).args[0], '/repos/org-0/repo-0');
+      assert.equal(getStub.getCall(1).args[0], '/repos/org-0/repo-0/pulls');
+      assert.deepEqual(getStub.getCall(1).args[1], {
+        params: {
+          head: `org-0:automa/org-0/bot-0/${task.id}`,
+          base: 'default-branch',
+        },
+      });
     });
   });
 

@@ -9,6 +9,7 @@ import { Avatar, Flex, Tooltip, Typography } from 'shared';
 
 import { TASK_FRAGMENT } from '../Task';
 import { repoDefinitions, TASK_ITEM_FRAGMENT } from '../TaskItem';
+import TaskItemBadge from '../TaskItemBadge';
 
 import { TaskProps } from './types';
 
@@ -75,19 +76,33 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
           />
           <Title to={`../bots/${botName}`}>{botName}</Title>
         </Item>
-        <Flex alignItems="center" className="gap-2">
-          <Title
-            to={`../tasks/${task.id}`}
-            variant="xsmall"
-            className="text-neutral-500"
-          >
-            on
-          </Title>
-          <Item alignItems="center" className="gap-1">
-            <definition.icon className="size-4" />
-            {/* TODO: Fix link */}
-            <Title to={`../repos`}>{repo.data.repoName}</Title>
-          </Item>
+        <Flex alignItems="center" justifyContent="space-between">
+          <Flex alignItems="center" className="gap-2">
+            <Title
+              to={`../tasks/${task.id}`}
+              variant="xsmall"
+              className="text-neutral-500"
+            >
+              on
+            </Title>
+            <Item alignItems="center" className="gap-1">
+              <definition.icon className="size-4" />
+              {/* TODO: Fix link */}
+              <Title to={`../repos`}>{repo.data.repoName}</Title>
+            </Item>
+          </Flex>
+          <Flex alignItems="center" className="gap-2">
+            {items
+              .filter(({ type }) => type === TaskItemType.Proposal)
+              .map(({ id, type, data }) => (
+                <TaskItemBadge
+                  key={id}
+                  type={type}
+                  data={data}
+                  variant="secondary"
+                />
+              ))}
+          </Flex>
         </Flex>
       </Flex>
     </Container>

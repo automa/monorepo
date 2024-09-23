@@ -4,14 +4,15 @@ import { Anchor, HoverCard, Typography } from 'shared';
 
 import { TaskItemTypeWithData } from 'tasks/types';
 
-import { TaskItemBadgeProps } from './types';
+import { TaskItemBadgeComponentProps } from './types';
 import { getBadgeDefinition } from './utils';
 
 import { Container, Content } from './TaskItemBadge.styles';
 
-const TaskItemBadge: React.FC<TaskItemBadgeProps> = ({
+const TaskItemBadge: React.FC<TaskItemBadgeComponentProps> = ({
   type,
   data,
+  variant,
   ...props
 }) => {
   const definition = getBadgeDefinition({ type, data } as TaskItemTypeWithData);
@@ -31,7 +32,7 @@ const TaskItemBadge: React.FC<TaskItemBadgeProps> = ({
         side="top"
         trigger={
           <Anchor href={definition.link(data)} blank>
-            <Content>
+            <Content $variant={variant}>
               <div className="size-3">{logo}</div>
               <Typography variant="xsmall" className="text-neutral-600">
                 {definition.title(data)}
