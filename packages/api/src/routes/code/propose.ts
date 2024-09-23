@@ -31,6 +31,7 @@ export default async function (app: FastifyInstance) {
       return;
     }
 
+    // TODO: Allow empty proposal token if no download has happened
     if (task.proposal_token !== proposal.token) {
       return reply.forbidden('Wrong proposal token provided');
     }
@@ -123,6 +124,12 @@ export default async function (app: FastifyInstance) {
           task_id: task.id,
           type: task_item.proposal,
           data: {
+            repoName: repo.name,
+            repoOrgProviderName: repo.orgs.provider_name,
+            repoOrgProviderType: repo.orgs.provider_type,
+            botName: bot.name,
+            botImageUrl: bot.image_url,
+            botOrgName: bot.orgs.name,
             prId: pr.number,
             prTitle: pr.title,
             prState: pr.state,

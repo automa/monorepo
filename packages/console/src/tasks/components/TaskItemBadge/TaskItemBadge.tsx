@@ -2,13 +2,19 @@ import React from 'react';
 
 import { Anchor, HoverCard, Typography } from 'shared';
 
+import { TaskItemTypeWithData } from 'tasks/types';
+
 import { TaskItemBadgeProps } from './types';
-import { definitions } from './utils';
+import { getBadgeDefinition } from './utils';
 
 import { Container, Content } from './TaskItemBadge.styles';
 
-const TaskItemBadge: React.FC<TaskItemBadgeProps> = ({ data, ...props }) => {
-  const definition = definitions[data.integration];
+const TaskItemBadge: React.FC<TaskItemBadgeProps> = ({
+  type,
+  data,
+  ...props
+}) => {
+  const definition = getBadgeDefinition({ type, data } as TaskItemTypeWithData);
 
   if (!definition) {
     return null;

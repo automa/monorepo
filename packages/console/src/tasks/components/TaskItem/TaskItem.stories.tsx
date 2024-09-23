@@ -447,3 +447,28 @@ export const RepoIntegrationUserAuthor = {
     ),
   },
 } satisfies Story;
+
+export const ProposalGithub = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Proposal,
+        created_at,
+        data: {
+          repoName: 'monorepo',
+          repoOrgProviderName: 'automa',
+          repoOrgProviderType: 'github',
+          botName: 'aider',
+          botImageUrl: 'https://aider.chat/assets/icons/apple-touch-icon.png',
+          botOrgName: 'automa',
+          prId: 123,
+          prTitle: 'Demo PR',
+          prState: 'open',
+          prMerged: false,
+        },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
