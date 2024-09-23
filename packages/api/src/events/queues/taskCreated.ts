@@ -11,6 +11,7 @@ import {
   task_item,
 } from '@automa/prisma';
 
+import { env } from '../../env';
 import { logger, SeverityNumber } from '../../telemetry';
 
 import { QueueDefinition } from '../types';
@@ -229,6 +230,7 @@ const taskCreated: QueueDefinition<{
     // Send webhook to bot
     return axios.post(botInstallation.bots.webhook_url, payload, {
       headers: {
+        'x-automa-server-host': env.BASE_URI,
         'x-automa-signature': signature,
       },
     });

@@ -5,10 +5,12 @@ import { ProviderType } from '@automa/common';
 import { makeFragmentData } from 'gql';
 
 import { TASK_FRAGMENT } from '../Task';
+import { TASK_ITEM_FRAGMENT } from '../TaskItem';
 
 import TaskScheduled from './TaskScheduled';
 
 import { BotScheduled, RepoScheduled } from '../TaskItem/TaskItem.stories';
+import { ProposalGithubOpen } from '../TaskItemBadge/TaskItemBadge.stories';
 
 const task = {
   id: 1,
@@ -68,6 +70,28 @@ export const Completed = {
         ...task,
         completed_at: '2024-05-16T09:04:04.629Z',
         is_completed: true,
+      },
+      TASK_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const Proposal = {
+  args: {
+    task: makeFragmentData(
+      {
+        ...task,
+        items: [
+          ...task.items,
+          makeFragmentData(
+            {
+              ...ProposalGithubOpen.args,
+              id: 2,
+              created_at: '2024-05-15T09:04:04.629Z',
+            },
+            TASK_ITEM_FRAGMENT,
+          ),
+        ],
       },
       TASK_FRAGMENT,
     ),

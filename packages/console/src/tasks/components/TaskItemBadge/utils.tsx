@@ -14,13 +14,11 @@ import Open from 'assets/proposals/open.svg?react';
 import { TaskItemTypeWithData } from 'tasks/types';
 import { originBaseDefinitions, proposalBaseDefinitions } from 'tasks/utils';
 
-import { TaskItemBadgeProps } from './types';
-
 type BadgeFunction = {
-  logo: ReactNode | ((data: TaskItemBadgeProps['data']) => ReactNode);
-  title: (data: TaskItemBadgeProps['data']) => ReactNode;
-  link: (data: TaskItemBadgeProps['data']) => string;
-  content: (data: TaskItemBadgeProps['data']) => ReactNode;
+  logo: ReactNode | ((data: TaskItemTypeWithData['data']) => ReactNode);
+  title: (data: TaskItemTypeWithData['data']) => ReactNode;
+  link: (data: TaskItemTypeWithData['data']) => string;
+  content: (data: TaskItemTypeWithData['data']) => ReactNode;
 };
 
 const originDefinitions: Partial<Record<IntegrationType, BadgeFunction>> = {

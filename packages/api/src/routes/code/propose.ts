@@ -64,21 +64,6 @@ export default async function (app: FastifyInstance) {
       });
     }
 
-    // Complete the task if the diff is empty
-    if (!proposal.diff) {
-      await app.prisma.tasks.update({
-        where: {
-          id: task.id,
-        },
-        data: {
-          // TODO: Mark the task as skipped when we have a proper status for it
-          completed_at: new Date(),
-        },
-      });
-
-      return reply.code(204).send();
-    }
-
     const bot = await getBot(app, reply, task);
 
     if (!bot) {
@@ -88,7 +73,6 @@ export default async function (app: FastifyInstance) {
     const { accessToken, axios } = await caller(
       repo.orgs.github_installation_id!,
     );
-    const workingDir = `/tmp/automa/propose/tasks/${task.id}`;
 
     // We remove the org name for bots from the automa org to reduce noise.
     const botName =
@@ -155,11 +139,28 @@ export default async function (app: FastifyInstance) {
       return finish();
     }
 
+    // Complete the task if the diff is empty
+    if (!proposal.diff) {
+      await app.prisma.tasks.update({
+        where: {
+          id: task.id,
+        },
+        data: {
+          // TODO: Mark the task as skipped when we have a proper status for it
+          completed_at: new Date(),
+        },
+      });
+
+      return reply.code(204).send();
+    }
+
     // Calculate the commit title & description for the proposal
     const title =
       proposal.message || `Implemented automa#${task.id} using ${botName} bot`;
 
     // Create a working directory
+    const workingDir = `/tmp/automa/propose/tasks/${task.id}`;
+
     await rm(workingDir, { recursive: true, force: true });
     await mkdir(workingDir, { recursive: true });
 

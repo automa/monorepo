@@ -147,6 +147,7 @@ suite('events/taskCreated', () => {
       assert.deepEqual(postStub.firstCall.args[1], body);
       assert.deepEqual(postStub.firstCall.args[2], {
         headers: {
+          'x-automa-server-host': 'http://localhost:8080',
           'x-automa-signature': generateSignature(
             'atma_whsec_0',
             JSON.stringify(body),
@@ -300,6 +301,7 @@ suite('events/taskCreated', () => {
       assert.deepEqual(postStub.firstCall.args[1], body);
       assert.deepEqual(postStub.firstCall.args[2], {
         headers: {
+          'x-automa-server-host': 'http://localhost:8080',
           'x-automa-signature': generateSignature(
             'atma_whsec_0',
             JSON.stringify(body),
