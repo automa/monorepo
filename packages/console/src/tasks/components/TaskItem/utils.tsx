@@ -9,15 +9,16 @@ import JiraLogo from 'assets/logos/jira.svg?react';
 import LinearLogo from 'assets/logos/linear.svg?react';
 
 import { TaskItemData } from 'tasks/types';
-import { originBaseDefinitions } from 'tasks/utils';
-
-type OriginDefinition = {
-  title: (data: TaskItemData) => ReactNode;
-  link: (data: TaskItemData) => string;
-};
+import { originBaseDefinitions, proposalBaseDefinitions } from 'tasks/utils';
 
 export const originDefinitions: Partial<
-  Record<IntegrationType, OriginDefinition>
+  Record<
+    IntegrationType,
+    {
+      title: (data: TaskItemData) => ReactNode;
+      link: (data: TaskItemData) => string;
+    }
+  >
 > = {
   [IntegrationType.Linear]: {
     title: (data) => (
@@ -51,5 +52,25 @@ export const repoDefinitions: Partial<
 > = {
   [ProviderType.Github]: {
     icon: GithubLogo,
+  },
+};
+
+export const proposalDefinitions: Partial<
+  Record<
+    ProviderType,
+    {
+      title: (data: TaskItemData) => ReactNode;
+      link: (data: TaskItemData) => string;
+    }
+  >
+> = {
+  [ProviderType.Github]: {
+    title: (data) => (
+      <>
+        <GithubLogo className="ml-0.5 size-3" />
+        <Typography variant="small">{data.prTitle}</Typography>
+      </>
+    ),
+    link: proposalBaseDefinitions[ProviderType.Github]!.link,
   },
 };

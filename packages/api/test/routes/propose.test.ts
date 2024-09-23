@@ -295,6 +295,12 @@ suite('code propose', () => {
           task_id: task.id,
           type: 'proposal',
           data: {
+            repoName: 'repo-0',
+            repoOrgProviderName: 'org-0',
+            repoOrgProviderType: 'github',
+            botName: 'bot-0',
+            botImageUrl: 'https://example.com/image/0.png',
+            botOrgName: 'org-0',
             prId: 123,
             prTitle: 'PR Title',
             prHead: 'repo-0:pr-head',
@@ -727,6 +733,12 @@ suite('code propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
+          repoName: 'repo-0',
+          repoOrgProviderName: 'org-0',
+          repoOrgProviderType: 'github',
+          botName: 'bot-0',
+          botImageUrl: 'https://example.com/image/0.png',
+          botOrgName: 'org-0',
           prId: 123,
           prTitle: 'PR Title',
           prState: 'open',
@@ -918,6 +930,12 @@ suite('code propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
+          repoName: 'repo-0',
+          repoOrgProviderName: 'org-0',
+          repoOrgProviderType: 'github',
+          botName: 'bot-0',
+          botImageUrl: 'https://example.com/image/0.png',
+          botOrgName: 'automa',
           prId: 123,
           prTitle: 'PR Title',
           prState: 'open',
@@ -1082,6 +1100,12 @@ suite('code propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
+          repoName: 'repo-0',
+          repoOrgProviderName: 'org-0',
+          repoOrgProviderType: 'github',
+          botName: 'bot-0',
+          botImageUrl: 'https://example.com/image/0.png',
+          botOrgName: 'org-0',
           prId: 123,
           prTitle: 'PR Title',
           prState: 'open',
@@ -1178,6 +1202,12 @@ suite('code propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
+          repoName: 'repo-0',
+          repoOrgProviderName: 'org-0',
+          repoOrgProviderType: 'github',
+          botName: 'bot-0',
+          botImageUrl: 'https://example.com/image/0.png',
+          botOrgName: 'org-0',
           prId: 123,
           prTitle: 'PR Title',
           prState: 'open',

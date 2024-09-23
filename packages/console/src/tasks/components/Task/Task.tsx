@@ -28,7 +28,6 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
   const user = origin?.actor_user;
   const originUser = getTaskItemUser(origin?.data);
 
-  // TODO: PR Badge
   return (
     <Container {...props}>
       <Flex justifyContent="space-between">
@@ -48,11 +47,9 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
           <Title to={`../tasks/${task.id}`}>{task.title}</Title>
         </Flex>
         <Flex alignItems="center" className="gap-2">
-          {items
-            .filter(({ type }) => type === TaskItemType.Origin)
-            .map(({ id, data }) => (
-              <TaskItemBadge key={id} data={data} />
-            ))}
+          {items.map(({ id, type, data }) => (
+            <TaskItemBadge key={id} type={type} data={data} />
+          ))}
           <Tooltip
             body={`Created at ${format(
               task.created_at,

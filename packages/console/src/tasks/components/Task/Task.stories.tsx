@@ -12,7 +12,9 @@ import Task from './Task';
 
 import { TASK_FRAGMENT } from './Task.queries';
 
-import TaskItemBadgeStory from '../TaskItemBadge/TaskItemBadge.stories';
+import TaskItemBadgeStory, {
+  ProposalGithubOpen,
+} from '../TaskItemBadge/TaskItemBadge.stories';
 
 const task = {
   id: 1,
@@ -126,7 +128,6 @@ export const OriginIntegration = {
             {
               ...TaskItemBadgeStory.args,
               id: 1,
-              type: TaskItemType.Origin,
               created_at: '2024-05-15T09:04:04.629Z',
             },
             TASK_ITEM_FRAGMENT,
@@ -181,6 +182,35 @@ export const OriginIntegrationUserAuthor = {
               type: TaskItemType.Origin,
               created_at: '2024-05-15T09:04:04.629Z',
               actor_user,
+            },
+            TASK_ITEM_FRAGMENT,
+          ),
+        ],
+      },
+      TASK_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const Badges = {
+  args: {
+    task: makeFragmentData(
+      {
+        ...task,
+        items: [
+          makeFragmentData(
+            {
+              ...TaskItemBadgeStory.args,
+              id: 1,
+              created_at: '2024-05-15T09:04:04.629Z',
+            },
+            TASK_ITEM_FRAGMENT,
+          ),
+          makeFragmentData(
+            {
+              ...ProposalGithubOpen.args,
+              id: 2,
+              created_at: '2024-05-15T09:04:04.629Z',
             },
             TASK_ITEM_FRAGMENT,
           ),

@@ -1,5 +1,11 @@
 import React, { ReactNode } from 'react';
-import { Code, Icon, PlusCircle, Robot } from '@phosphor-icons/react';
+import {
+  Code,
+  GitPullRequest,
+  Icon,
+  PlusCircle,
+  Robot,
+} from '@phosphor-icons/react';
 import { format, formatDistanceToNow } from 'date-fns';
 
 import { IntegrationType, ProviderType, TaskItemType } from '@automa/common';
@@ -14,7 +20,11 @@ import Logo from 'assets/logo.svg?react';
 import { getTaskItemUser } from 'tasks/utils';
 
 import { TaskItemProps } from './types';
-import { originDefinitions, repoDefinitions } from './utils';
+import {
+  originDefinitions,
+  proposalDefinitions,
+  repoDefinitions,
+} from './utils';
 
 import { TASK_ITEM_FRAGMENT } from './TaskItem.queries';
 import { Line, Subject } from './TaskItem.styles';
@@ -170,6 +180,39 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
               <Typography variant="small">{name}</Typography>
             </Subject>
           </Flex>
+        </Anchor>
+      </TaskItemContainer>
+    );
+  }
+
+  if (taskItem.type === TaskItemType.Proposal) {
+    const definition =
+      proposalDefinitions[taskItem.data.repoOrgProviderType as ProviderType];
+    const botName = `${taskItem.data.botOrgName}/${taskItem.data.botName}`;
+
+    if (!definition) {
+      return null;
+    }
+
+    return (
+      <TaskItemContainer icon={GitPullRequest} timestamp={taskItem.created_at}>
+        <Anchor to={`../bots/${botName}`}>
+          <Flex alignItems="center" className="gap-1">
+            <Avatar
+              src={taskItem.data.botImageUrl}
+              alt={taskItem.data.botName}
+              variant="square"
+              size="xsmall"
+              className="ml-0.5"
+            />
+            <Subject>
+              <Typography variant="small">{botName}</Typography>
+            </Subject>
+          </Flex>
+        </Anchor>
+        <Typography variant="small">proposed changes to code at</Typography>
+        <Anchor href={definition.link(taskItem.data)}>
+          <Subject>{definition.title(taskItem.data)}</Subject>
         </Anchor>
       </TaskItemContainer>
     );
