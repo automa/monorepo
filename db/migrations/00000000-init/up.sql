@@ -22,8 +22,8 @@ CREATE TABLE public.user_providers (
   provider_email citext NOT NULL,
   refresh_token VARCHAR(255),
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  UNIQUE (provider_type, provider_id),
-  UNIQUE (user_id, provider_type)
+  UNIQUE (user_id, provider_type),
+  UNIQUE (provider_type, provider_id)
 );
 
 CREATE TABLE public.orgs (
@@ -106,7 +106,7 @@ CREATE TABLE public.bots (
   is_preview BOOLEAN NOT NULL DEFAULT FALSE,
   is_deterministic BOOLEAN NOT NULL DEFAULT FALSE,
   UNIQUE (org_id, name),
-  CHECK (published_at IS NULL OR (
+  CONSTRAINT publish_details CHECK (published_at IS NULL OR (
     published_at IS NOT NULL AND
     description IS NOT NULL AND
     homepage IS NOT NULL
