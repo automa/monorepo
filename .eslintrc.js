@@ -17,6 +17,7 @@ module.exports = {
   ],
   plugins: ['simple-import-sort'],
   rules: {
+    quotes: ['warn', 'single', { avoidEscape: true }],
     'no-empty': [
       'error',
       {
@@ -37,6 +38,7 @@ module.exports = {
       },
     ],
     'react/react-in-jsx-scope': 'off',
+    'react/jsx-curly-brace-presence': 'warn',
     'react/jsx-no-target-blank': 'off',
     'simple-import-sort/imports': [
       'warn',
@@ -46,7 +48,8 @@ module.exports = {
           ['^node:', '^(fs|path)$'],
           [
             '^(react|react-twc)$',
-            '^(next|@storybook|tailwindcss|class-variance-authority)(/.*)?$',
+            '^(next)(/.*)?$',
+            '^(@storybook|tailwindcss|class-variance-authority)(/.*)?$',
             '^@?\\w',
           ],
           [`^@${product}/`],
@@ -62,6 +65,7 @@ module.exports = {
           ['^\\./(types|utils)$'],
           ['^\\.'],
           ['^\\./.*\\.(styles)$'],
+          ['^.*\\.stories'],
         ],
       },
     ],
