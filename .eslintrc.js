@@ -18,6 +18,7 @@ module.exports = {
   plugins: ['simple-import-sort'],
   processor: '@graphql-eslint/graphql',
   rules: {
+    quotes: ['warn', 'single', { avoidEscape: true }],
     'no-empty': [
       'error',
       {
@@ -38,6 +39,7 @@ module.exports = {
       },
     ],
     'react/react-in-jsx-scope': 'off',
+    'react/jsx-curly-brace-presence': 'warn',
     'simple-import-sort/imports': [
       'warn',
       {
