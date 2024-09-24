@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 
 import { IntegrationType, ProviderType, TaskItemType } from '@automa/common';
 
+import { TaskItemFragment } from 'gql/graphql';
 import { Flex, Typography } from 'shared';
 
 import GithubLogo from 'assets/logos/github.svg?react';
@@ -11,22 +12,21 @@ import Closed from 'assets/proposals/closed.svg?react';
 import Merged from 'assets/proposals/merged.svg?react';
 import Open from 'assets/proposals/open.svg?react';
 
-import { TaskItemTypeWithData } from 'tasks/types';
 import { originBaseDefinitions, proposalBaseDefinitions } from 'tasks/utils';
 
 type BadgeFunction = {
-  logo: ReactNode | ((data: TaskItemTypeWithData['data']) => ReactNode);
-  title: (data: TaskItemTypeWithData['data']) => ReactNode;
-  link: (data: TaskItemTypeWithData['data']) => string;
-  content: (data: TaskItemTypeWithData['data']) => ReactNode;
+  logo: ReactNode | ((item: TaskItemFragment) => ReactNode);
+  title: (item: TaskItemFragment) => ReactNode;
+  link: (item: TaskItemFragment) => string;
+  content: (item: TaskItemFragment) => ReactNode;
 };
 
 const originDefinitions: Partial<Record<IntegrationType, BadgeFunction>> = {
   [IntegrationType.Linear]: {
     logo: <LinearLogo className="size-3" />,
-    title: (data) => data.issueIdentifier,
+    title: ({ data }) => data.issueIdentifier,
     link: originBaseDefinitions[IntegrationType.Linear]!.link,
-    content: (data) => (
+    content: ({ data }) => (
       <Flex direction="column" className="gap-2">
         <Flex alignItems="center" className="gap-1">
           <LinearLogo className="size-3" />
@@ -42,9 +42,9 @@ const originDefinitions: Partial<Record<IntegrationType, BadgeFunction>> = {
   },
   [IntegrationType.Jira]: {
     logo: <JiraLogo className="size-3" />,
-    title: (data) => data.issueKey,
+    title: ({ data }) => data.issueKey,
     link: originBaseDefinitions[IntegrationType.Jira]!.link,
-    content: (data) => (
+    content: ({ data }) => (
       <Flex direction="column" className="gap-2">
         <Flex alignItems="center" className="gap-1">
           <JiraLogo className="size-3" />
@@ -62,7 +62,7 @@ const originDefinitions: Partial<Record<IntegrationType, BadgeFunction>> = {
 
 const proposalDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
   [ProviderType.Github]: {
-    logo: (data) =>
+    logo: ({ data }) =>
       data.prMerged ? (
         <Merged className="size-3" />
       ) : data.prState === 'closed' ? (
@@ -70,14 +70,14 @@ const proposalDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
       ) : (
         <Open className="size-3" />
       ),
-    title: (data) => `#${data.prId}`,
+    title: ({ data }) => `#${data.prId}`,
     link: proposalBaseDefinitions[ProviderType.Github]!.link,
-    content: (data) => (
+    content: ({ data, repo }) => (
       <Flex direction="column" className="gap-2">
         <Flex alignItems="center" className="gap-1">
           <GithubLogo className="size-3" />
           <Typography variant="xsmall" className="text-neutral-800">
-            {data.repoOrgProviderName} / {data.repoName}
+            {repo!.name}
           </Typography>
         </Flex>
         <Typography variant="xsmall" className="text-neutral-600">
@@ -88,13 +88,13 @@ const proposalDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
   },
 };
 
-export const getBadgeDefinition = ({ type, data }: TaskItemTypeWithData) => {
-  if (type === TaskItemType.Origin) {
-    return originDefinitions[data.integration];
+export const getBadgeDefinition = (item: TaskItemFragment) => {
+  if (item.type === TaskItemType.Origin) {
+    return originDefinitions[item.data.integration as IntegrationType];
   }
 
-  if (type === TaskItemType.Proposal) {
-    return proposalDefinitions[data.repoOrgProviderType];
+  if (item.type === TaskItemType.Proposal) {
+    return proposalDefinitions[item.repo!.org.provider_type];
   }
 
   return;

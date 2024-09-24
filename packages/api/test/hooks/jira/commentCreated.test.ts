@@ -480,13 +480,9 @@ suite('jira hook comment_created event', () => {
           userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
           userName: 'Pavan Kumar Sunkara',
           userEmail: 'pavan@example.com',
-          botId: secondBot.id,
-          botName: 'bot-1',
-          botImageUrl: 'https://example.com/image/1.png',
-          botOrgId: org.id,
-          botOrgName: 'org-0',
         },
         actor_user_id: null,
+        bot_id: secondBot.id,
       });
     });
 
@@ -704,15 +700,9 @@ suite('jira hook comment_created event', () => {
           userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
           userName: 'Pavan Kumar Sunkara',
           userEmail: 'pavan@example.com',
-          repoId: repo.id,
-          repoName: 'repo-1',
-          repoOrgId: org.id,
-          repoOrgName: 'org-0',
-          repoOrgProviderType: 'github',
-          repoOrgProviderId: '0',
-          repoProviderId: '1',
         },
         actor_user_id: null,
+        repo_id: repo.id,
       });
     });
 
@@ -984,15 +974,9 @@ suite('jira hook comment_created event', () => {
           userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
           userName: 'Pavan Kumar Sunkara',
           userEmail: 'pavan@example.com',
-          repoId: repo.id,
-          repoName: 'repo-1',
-          repoOrgId: org.id,
-          repoOrgName: 'org-0',
-          repoOrgProviderType: 'github',
-          repoOrgProviderId: '0',
-          repoProviderId: '1',
         },
         actor_user_id: user.id,
+        repo_id: repo.id,
       });
       assert.deepOwnInclude(taskItems[3], {
         type: 'bot',
@@ -1001,13 +985,9 @@ suite('jira hook comment_created event', () => {
           userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
           userName: 'Pavan Kumar Sunkara',
           userEmail: 'pavan@example.com',
-          botId: secondBot.id,
-          botName: 'bot-1',
-          botImageUrl: 'https://example.com/image/1.png',
-          botOrgId: org.id,
-          botOrgName: 'org-0',
         },
         actor_user_id: user.id,
+        bot_id: secondBot.id,
       });
     });
 

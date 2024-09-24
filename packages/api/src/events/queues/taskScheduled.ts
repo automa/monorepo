@@ -50,25 +50,11 @@ const taskScheduled: QueueDefinition<{
         create: [
           {
             type: task_item.repo,
-            data: {
-              repoId: repo.id,
-              repoName: repo.name,
-              repoOrgId: repo.orgs.id,
-              repoOrgName: repo.orgs.name,
-              repoOrgProviderType: repo.orgs.provider_type,
-              repoOrgProviderId: repo.orgs.provider_id,
-              repoProviderId: repo.provider_id,
-            },
+            repo_id: repo.id,
           },
           {
             type: task_item.bot,
-            data: {
-              botId: bot.id,
-              botName: bot.name,
-              botImageUrl: bot.image_url,
-              botOrgId: bot.orgs.id,
-              botOrgName: bot.orgs.name,
-            },
+            bot_id: bot.id,
           },
         ],
       },

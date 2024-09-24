@@ -65,10 +65,14 @@ export const getRepo = async (
     throw new Error('Unable to find repo task item when downloading code');
   }
 
-  const { repoId } = repoTaskItem.data as { repoId: number };
+  const repoId = repoTaskItem.repo_id;
+
+  if (!repoId) {
+    return reply.notFound('Repository not found');
+  }
 
   // Get repository and check if everything is in order
-  const repo = await app.prisma.repos.findFirst({
+  const repo = await app.prisma.repos.findFirstOrThrow({
     where: {
       id: repoId,
     },
@@ -76,10 +80,6 @@ export const getRepo = async (
       orgs: true,
     },
   });
-
-  if (!repo) {
-    return reply.notFound('Repository not found');
-  }
 
   if (!repo.orgs.github_installation_id) {
     return reply.notFound('Automa has not been installed for the organization');
@@ -121,10 +121,14 @@ export const getBot = async (
     throw new Error('Unable to find bot task item when downloading code');
   }
 
-  const { botId } = botTaskItem.data as { botId: number };
+  const botId = botTaskItem.bot_id;
+
+  if (!botId) {
+    return reply.notFound('Bot not found');
+  }
 
   // Get bot and check if everything is in order
-  const bot = await app.prisma.bots.findFirst({
+  const bot = await app.prisma.bots.findFirstOrThrow({
     where: {
       id: botId,
     },
@@ -136,10 +140,6 @@ export const getBot = async (
       },
     },
   });
-
-  if (!bot) {
-    return reply.notFound('Bot not found');
-  }
 
   return bot;
 };

@@ -46,8 +46,8 @@ suite('code/propose', () => {
         token: 'abcdef',
         task_items: {
           create: [
-            { type: 'repo', data: { repoId: repo.id } },
-            { type: 'bot', data: { botId: bot.id } },
+            { type: 'repo', repo_id: repo.id },
+            { type: 'bot', bot_id: bot.id },
           ],
         },
         proposal_token: 'ghijkl',
@@ -96,6 +96,7 @@ suite('code/propose', () => {
   teardown(async () => {
     quibbleSandbox.resetHistory();
     sandbox.restore();
+    await app.prisma.tasks.deleteMany();
     await app.prisma.orgs.deleteMany();
   });
 
@@ -258,35 +259,6 @@ suite('code/propose', () => {
     });
   });
 
-  suite('missing repo', () => {
-    setup(async () => {
-      await app.prisma.repos.deleteMany();
-
-      response = await propose(app, {
-        id: task.id,
-        token: 'abcdef',
-      });
-    });
-
-    test('should return 404', () => {
-      assert.equal(response.statusCode, 404);
-    });
-
-    test('should return error message', () => {
-      const data = response.json();
-
-      assert.equal(data.message, 'Repository not found');
-      assert.equal(data.error, 'Not Found');
-      assert.equal(data.statusCode, 404);
-    });
-
-    test('should not get token from github', async () => {
-      assert.equal(postStub.callCount, 0);
-      assert.equal(getStub.callCount, 0);
-      assert.equal(zxCmdStub.callCount, 0);
-    });
-  });
-
   suite('with existing proposal', () => {
     setup(async () => {
       await app.prisma.task_items.create({
@@ -294,17 +266,13 @@ suite('code/propose', () => {
           task_id: task.id,
           type: 'proposal',
           data: {
-            repoName: 'repo-0',
-            repoOrgProviderName: 'org-0',
-            repoOrgProviderType: 'github',
-            botName: 'bot-0',
-            botImageUrl: 'https://example.com/image/0.png',
-            botOrgName: 'org-0',
             prId: 123,
             prTitle: 'PR Title',
             prHead: 'repo-0:pr-head',
             prBase: 'pr-base',
           },
+          repo_id: repo.id,
+          bot_id: bot.id,
         },
       });
 
@@ -526,35 +494,6 @@ suite('code/propose', () => {
     });
   });
 
-  suite('missing bot', () => {
-    setup(async () => {
-      await app.prisma.bots.deleteMany();
-
-      response = await propose(app, {
-        id: task.id,
-        token: 'abcdef',
-      });
-    });
-
-    test('should return 404', () => {
-      assert.equal(response.statusCode, 404);
-    });
-
-    test('should return error message', () => {
-      const data = response.json();
-
-      assert.equal(data.message, 'Bot not found');
-      assert.equal(data.error, 'Not Found');
-      assert.equal(data.statusCode, 404);
-    });
-
-    test('should not get token from github', async () => {
-      assert.equal(postStub.callCount, 0);
-      assert.equal(getStub.callCount, 0);
-      assert.equal(zxCmdStub.callCount, 0);
-    });
-  });
-
   suite('empty diff', () => {
     setup(async () => {
       response = await propose(
@@ -751,12 +690,6 @@ suite('code/propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
-          repoName: 'repo-0',
-          repoOrgProviderName: 'org-0',
-          repoOrgProviderType: 'github',
-          botName: 'bot-0',
-          botImageUrl: 'https://example.com/image/0.png',
-          botOrgName: 'org-0',
           prId: 123,
           prTitle: 'PR Title',
           prState: 'open',
@@ -764,6 +697,8 @@ suite('code/propose', () => {
           prHead: `org-0:automa/org-0/bot-0/${task.id}`,
           prBase: 'default-branch',
         },
+        repo_id: repo.id,
+        bot_id: bot.id,
       });
     });
 
@@ -948,12 +883,6 @@ suite('code/propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
-          repoName: 'repo-0',
-          repoOrgProviderName: 'org-0',
-          repoOrgProviderType: 'github',
-          botName: 'bot-0',
-          botImageUrl: 'https://example.com/image/0.png',
-          botOrgName: 'automa',
           prId: 123,
           prTitle: 'PR Title',
           prState: 'open',
@@ -961,6 +890,8 @@ suite('code/propose', () => {
           prHead: `org-0:automa/bot-0/${task.id}`,
           prBase: 'default-branch',
         },
+        repo_id: repo.id,
+        bot_id: bot.id,
       });
     });
 
@@ -1118,12 +1049,6 @@ suite('code/propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
-          repoName: 'repo-0',
-          repoOrgProviderName: 'org-0',
-          repoOrgProviderType: 'github',
-          botName: 'bot-0',
-          botImageUrl: 'https://example.com/image/0.png',
-          botOrgName: 'org-0',
           prId: 123,
           prTitle: 'PR Title',
           prState: 'open',
@@ -1131,6 +1056,8 @@ suite('code/propose', () => {
           prHead: `org-0:automa/org-0/bot-0/${task.id}`,
           prBase: 'default-branch',
         },
+        repo_id: repo.id,
+        bot_id: bot.id,
       });
     });
 
@@ -1220,12 +1147,6 @@ suite('code/propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
-          repoName: 'repo-0',
-          repoOrgProviderName: 'org-0',
-          repoOrgProviderType: 'github',
-          botName: 'bot-0',
-          botImageUrl: 'https://example.com/image/0.png',
-          botOrgName: 'org-0',
           prId: 123,
           prTitle: 'PR Title',
           prState: 'open',
@@ -1233,6 +1154,8 @@ suite('code/propose', () => {
           prHead: `org-0:automa/org-0/bot-0/${task.id}`,
           prBase: 'default-branch',
         },
+        repo_id: repo.id,
+        bot_id: bot.id,
       });
     });
 

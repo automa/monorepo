@@ -236,7 +236,7 @@ suite('api/orgs/integrations/connect/jira', () => {
             data: {
               accountId: '90',
               displayName: 'Pavan Sunkara',
-              emailAddress: 'pavan.sunkara@automa.app',
+              emailAddress: 'pavan@example.com',
             },
           });
 
@@ -351,7 +351,7 @@ suite('api/orgs/integrations/connect/jira', () => {
             'offline_access',
           ],
           webhookId: 123,
-          userEmail: 'pavan.sunkara@automa.app',
+          userEmail: 'pavan@example.com',
         });
         assert.equal(integrations[0].created_by, user.id);
       });

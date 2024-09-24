@@ -165,7 +165,7 @@ suite('api/orgs/integrations/connect/linear', () => {
           () => ({
             id: '90',
             name: 'Pavan Kumar Sunkara',
-            email: 'pavan.sunkara@automa.app',
+            email: 'pavan@example.com',
           }),
         );
 
@@ -220,7 +220,7 @@ suite('api/orgs/integrations/connect/linear', () => {
           name: 'Automa',
           slug: 'automa',
           scopes: ['read', 'comments:create'],
-          userEmail: 'pavan.sunkara@automa.app',
+          userEmail: 'pavan@example.com',
         });
         assert.equal(integrations[0].created_by, user.id);
       });

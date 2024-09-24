@@ -300,9 +300,11 @@ export type Task = {
 export type TaskItem = {
   __typename?: 'TaskItem';
   actor_user?: Maybe<User>;
+  bot?: Maybe<PublicBot>;
   created_at: Scalars['DateTime']['output'];
   data?: Maybe<Scalars['JSON']['output']>;
   id: Scalars['Int']['output'];
+  repo?: Maybe<Repo>;
   type: TaskItemType;
 };
 
@@ -640,9 +642,11 @@ export type TaskResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type TaskItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['TaskItem'] = ResolversParentTypes['TaskItem']> = {
   actor_user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  bot?: Resolver<Maybe<ResolversTypes['PublicBot']>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['TaskItemType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

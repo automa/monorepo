@@ -8,7 +8,7 @@ import {
 } from '@phosphor-icons/react';
 import { format, formatDistanceToNow } from 'date-fns';
 
-import { IntegrationType, ProviderType, TaskItemType } from '@automa/common';
+import { IntegrationType, TaskItemType } from '@automa/common';
 
 import { getFragment } from 'gql';
 import { Anchor, Avatar, Flex, Tooltip, Typography } from 'shared';
@@ -79,8 +79,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
         )}
         <Typography variant="small">created the task from</Typography>
         {definition ? (
-          <Anchor href={definition.link(taskItem.data)}>
-            <Subject>{definition.title(taskItem.data)}</Subject>
+          <Anchor href={definition.link(taskItem)}>
+            <Subject>{definition.title(taskItem)}</Subject>
           </Anchor>
         ) : (
           <Subject>
@@ -92,8 +92,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
   }
 
   if (taskItem.type === TaskItemType.Repo) {
-    const definition =
-      repoDefinitions[taskItem.data.repoOrgProviderType as ProviderType];
+    const definition = repoDefinitions[taskItem.repo!.org.provider_type];
     const actorUser = getTaskItemUser(taskItem.data);
 
     if (!definition) {
@@ -130,9 +129,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
           <Flex alignItems="center" className="gap-1">
             <definition.icon className="ml-0.5 size-3" />
             <Subject>
-              <Typography variant="small">
-                {taskItem.data.repoOrgName}/{taskItem.data.repoName}
-              </Typography>
+              <Typography variant="small">{taskItem.repo!.name}</Typography>
             </Subject>
           </Flex>
         </Anchor>
@@ -141,7 +138,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
   }
 
   if (taskItem.type === TaskItemType.Bot) {
-    const name = `${taskItem.data.botOrgName}/${taskItem.data.botName}`;
+    const name = `${taskItem.bot!.org.name}/${taskItem.bot!.name}`;
     const actorUser = getTaskItemUser(taskItem.data);
 
     return (
@@ -170,8 +167,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
         <Anchor to={`../bots/${name}`}>
           <Flex alignItems="center" className="gap-1">
             <Avatar
-              src={taskItem.data.botImageUrl}
-              alt={taskItem.data.botName}
+              src={taskItem.bot!.image_url ?? null}
+              alt={taskItem.bot!.name}
               variant="square"
               size="xsmall"
               className="ml-0.5"
@@ -186,9 +183,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
   }
 
   if (taskItem.type === TaskItemType.Proposal) {
-    const definition =
-      proposalDefinitions[taskItem.data.repoOrgProviderType as ProviderType];
-    const botName = `${taskItem.data.botOrgName}/${taskItem.data.botName}`;
+    const definition = proposalDefinitions[taskItem.repo!.org.provider_type];
+    const botName = `${taskItem.bot!.org.name}/${taskItem.bot!.name}`;
 
     if (!definition) {
       return null;
@@ -199,8 +195,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
         <Anchor to={`../bots/${botName}`}>
           <Flex alignItems="center" className="gap-1">
             <Avatar
-              src={taskItem.data.botImageUrl}
-              alt={taskItem.data.botName}
+              src={taskItem.bot!.image_url ?? null}
+              alt={taskItem.bot!.name}
               variant="square"
               size="xsmall"
               className="ml-0.5"
@@ -211,8 +207,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
           </Flex>
         </Anchor>
         <Typography variant="small">proposed changes to code at</Typography>
-        <Anchor href={definition.link(taskItem.data)}>
-          <Subject>{definition.title(taskItem.data)}</Subject>
+        <Anchor href={definition.link(taskItem)}>
+          <Subject>{definition.title(taskItem)}</Subject>
         </Anchor>
       </TaskItemContainer>
     );

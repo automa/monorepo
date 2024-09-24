@@ -81,25 +81,11 @@ suite('events/taskCreated', () => {
               },
               {
                 type: 'repo',
-                data: {
-                  repoId: repo.id,
-                  repoName: repo.name,
-                  repoOrgId: org.id,
-                  repoOrgName: org.name,
-                  repoOrgProviderType: org.provider_type,
-                  repoOrgProviderId: org.provider_id,
-                  repoProviderId: repo.provider_id,
-                },
+                repo_id: repo.id,
               },
               {
                 type: 'bot',
-                data: {
-                  botId: bot.id,
-                  botName: bot.name,
-                  botImageUrl: bot.image_url,
-                  botOrgId: nonMemberOrg.id,
-                  botOrgName: nonMemberOrg.name,
-                },
+                bot_id: bot.id,
               },
             ],
           },
@@ -221,15 +207,8 @@ suite('events/taskCreated', () => {
 
       assert.lengthOf(taskItems, 1);
 
-      assert.deepEqual(taskItems[0].data, {
-        repoId: repo.id,
-        repoName: 'repo-0',
-        repoOrgId: org.id,
-        repoOrgName: 'org-0',
-        repoOrgProviderType: 'github',
-        repoOrgProviderId: '0',
-        repoProviderId: '0',
-      });
+      assert.deepEqual(taskItems[0].data, {});
+      assert.equal(taskItems[0].repo_id, repo.id);
     });
 
     test('should assign bot to task', async () => {
@@ -242,13 +221,8 @@ suite('events/taskCreated', () => {
 
       assert.lengthOf(taskItems, 1);
 
-      assert.deepEqual(taskItems[0].data, {
-        botId: bot.id,
-        botName: 'bot-0',
-        botImageUrl: 'https://example.com/image/0.png',
-        botOrgId: nonMemberOrg.id,
-        botOrgName: 'org-1',
-      });
+      assert.deepEqual(taskItems[0].data, {});
+      assert.equal(taskItems[0].bot_id, bot.id);
     });
 
     test('should call bot webhook_url', () => {

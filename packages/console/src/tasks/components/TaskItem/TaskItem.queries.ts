@@ -9,5 +9,23 @@ export const TASK_ITEM_FRAGMENT = gql(`
     actor_user {
       ...UserAvatar
     }
+    bot {
+      id
+      name
+      image_url
+      org {
+        id
+        name
+      }
+    }
+    repo {
+      id
+      name
+      org {
+        id
+        provider_type
+        provider_name
+      }
+    }
   }
 `);

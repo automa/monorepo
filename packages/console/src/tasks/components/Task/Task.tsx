@@ -47,8 +47,8 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
           <Title to={`../tasks/${task.id}`}>{task.title}</Title>
         </Flex>
         <Flex alignItems="center" className="gap-2">
-          {items.map(({ id, type, data }) => (
-            <TaskItemBadge key={id} type={type} data={data} />
+          {items.map((taskItem) => (
+            <TaskItemBadge key={taskItem.id} taskItem={taskItem} />
           ))}
           <Tooltip
             body={`Created at ${format(

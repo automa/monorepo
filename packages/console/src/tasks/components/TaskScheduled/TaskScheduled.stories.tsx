@@ -84,11 +84,7 @@ export const Proposal = {
         items: [
           ...task.items,
           makeFragmentData(
-            {
-              ...ProposalGithubOpen.args,
-              id: 2,
-              created_at: '2024-05-15T09:04:04.629Z',
-            },
+            ProposalGithubOpen.args.taskItem,
             TASK_ITEM_FRAGMENT,
           ),
         ],

@@ -66,26 +66,14 @@ suite('events/taskScheduled', () => {
 
     assert.deepOwnInclude(taskItems[0], {
       type: 'repo',
-      data: {
-        repoId: repo.id,
-        repoName: 'repo-0',
-        repoOrgId: repo.org_id,
-        repoOrgName: 'org-0',
-        repoOrgProviderType: 'github',
-        repoOrgProviderId: '0',
-        repoProviderId: '0',
-      },
+      data: {},
+      repo_id: repo.id,
     });
 
     assert.deepOwnInclude(taskItems[1], {
       type: 'bot',
-      data: {
-        botId: bot.id,
-        botName: 'bot-0',
-        botImageUrl: 'https://example.com/image/0.png',
-        botOrgId: bot.org_id,
-        botOrgName: 'org-0',
-      },
+      data: {},
+      bot_id: bot.id,
     });
   });
 

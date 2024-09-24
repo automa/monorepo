@@ -2,7 +2,7 @@ import React from 'react';
 import { CheckCircle, CircleHalf } from '@phosphor-icons/react';
 import { format } from 'date-fns';
 
-import { ProviderType, TaskItemType } from '@automa/common';
+import { TaskItemType } from '@automa/common';
 
 import { getFragment } from 'gql';
 import { Avatar, Flex, Tooltip, Typography } from 'shared';
@@ -26,10 +26,9 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
     return null;
   }
 
-  const botName = `${bot.data.botOrgName}/${bot.data.botName}`;
+  const botName = `${bot.bot!.org.name}/${bot.bot!.name}`;
 
-  const definition =
-    repoDefinitions[repo.data.repoOrgProviderType as ProviderType];
+  const definition = repoDefinitions[repo.repo!.org.provider_type];
 
   if (!definition) {
     return null;
@@ -68,8 +67,8 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
         </Flex>
         <Item alignItems="center">
           <Avatar
-            src={bot.data.botImageUrl}
-            alt={bot.data.botName}
+            src={bot.bot!.image_url ?? null}
+            alt={bot.bot!.name}
             variant="square"
             size="xsmall"
             className="ml-0.5"
@@ -88,17 +87,16 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
             <Item alignItems="center" className="gap-1">
               <definition.icon className="size-4" />
               {/* TODO: Fix link */}
-              <Title to={`../repos`}>{repo.data.repoName}</Title>
+              <Title to={`../repos`}>{repo.repo!.name}</Title>
             </Item>
           </Flex>
           <Flex alignItems="center" className="gap-2">
             {items
               .filter(({ type }) => type === TaskItemType.Proposal)
-              .map(({ id, type, data }) => (
+              .map((taskItem) => (
                 <TaskItemBadge
-                  key={id}
-                  type={type}
-                  data={data}
+                  key={taskItem.id}
+                  taskItem={taskItem}
                   variant="secondary"
                 />
               ))}

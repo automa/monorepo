@@ -48,8 +48,8 @@ suite('code/download', () => {
         token: 'abcdef',
         task_items: {
           create: [
-            { type: 'repo', data: { repoId: repo.id } },
-            { type: 'bot', data: { botId: bot.id } },
+            { type: 'repo', repo_id: repo.id },
+            { type: 'bot', bot_id: bot.id },
           ],
         },
       },
@@ -71,6 +71,7 @@ suite('code/download', () => {
   teardown(async () => {
     quibbleSandbox.resetHistory();
     sandbox.restore();
+    await app.prisma.tasks.deleteMany();
     await app.prisma.orgs.deleteMany();
   });
 
@@ -191,35 +192,6 @@ suite('code/download', () => {
       assert.equal(data.message, 'Internal Server Error');
       assert.equal(data.error, 'Internal Server Error');
       assert.equal(data.statusCode, 500);
-    });
-
-    test('should not get token from github', async () => {
-      assert.equal(postStub.callCount, 0);
-      assert.equal(zxCmdStub.callCount, 0);
-      assert.equal(tarCreateStub.callCount, 0);
-    });
-  });
-
-  suite('missing repo', () => {
-    setup(async () => {
-      await app.prisma.repos.deleteMany();
-
-      response = await download(app, {
-        id: task.id,
-        token: 'abcdef',
-      });
-    });
-
-    test('should return 404', () => {
-      assert.equal(response.statusCode, 404);
-    });
-
-    test('should return error message', () => {
-      const data = response.json();
-
-      assert.equal(data.message, 'Repository not found');
-      assert.equal(data.error, 'Not Found');
-      assert.equal(data.statusCode, 404);
     });
 
     test('should not get token from github', async () => {
@@ -407,35 +379,6 @@ suite('code/download', () => {
       assert.equal(data.message, 'Internal Server Error');
       assert.equal(data.error, 'Internal Server Error');
       assert.equal(data.statusCode, 500);
-    });
-
-    test('should not get token from github', async () => {
-      assert.equal(postStub.callCount, 0);
-      assert.equal(zxCmdStub.callCount, 0);
-      assert.equal(tarCreateStub.callCount, 0);
-    });
-  });
-
-  suite('missing bot', () => {
-    setup(async () => {
-      await app.prisma.bots.deleteMany();
-
-      response = await download(app, {
-        id: task.id,
-        token: 'abcdef',
-      });
-    });
-
-    test('should return 404', () => {
-      assert.equal(response.statusCode, 404);
-    });
-
-    test('should return error message', () => {
-      const data = response.json();
-
-      assert.equal(data.message, 'Bot not found');
-      assert.equal(data.error, 'Not Found');
-      assert.equal(data.statusCode, 404);
     });
 
     test('should not get token from github', async () => {

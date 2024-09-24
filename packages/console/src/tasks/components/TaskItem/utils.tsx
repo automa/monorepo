@@ -2,26 +2,26 @@ import React, { FC, ReactNode, SVGProps } from 'react';
 
 import { IntegrationType, ProviderType } from '@automa/common';
 
+import { TaskItemFragment } from 'gql/graphql';
 import { Typography } from 'shared';
 
 import GithubLogo from 'assets/logos/github.svg?react';
 import JiraLogo from 'assets/logos/jira.svg?react';
 import LinearLogo from 'assets/logos/linear.svg?react';
 
-import { TaskItemData } from 'tasks/types';
 import { originBaseDefinitions, proposalBaseDefinitions } from 'tasks/utils';
 
 export const originDefinitions: Partial<
   Record<
     IntegrationType,
     {
-      title: (data: TaskItemData) => ReactNode;
-      link: (data: TaskItemData) => string;
+      title: (item: TaskItemFragment) => ReactNode;
+      link: (item: TaskItemFragment) => string;
     }
   >
 > = {
   [IntegrationType.Linear]: {
-    title: (data) => (
+    title: ({ data }) => (
       <>
         <LinearLogo className="ml-0.5 size-3" />
         <Typography variant="small">{data.issueIdentifier}</Typography>
@@ -31,7 +31,7 @@ export const originDefinitions: Partial<
     link: originBaseDefinitions[IntegrationType.Linear]!.link,
   },
   [IntegrationType.Jira]: {
-    title: (data) => (
+    title: ({ data }) => (
       <>
         <JiraLogo className="ml-0.5 size-3" />
         <Typography variant="small">{data.issueKey}</Typography>
@@ -59,13 +59,13 @@ export const proposalDefinitions: Partial<
   Record<
     ProviderType,
     {
-      title: (data: TaskItemData) => ReactNode;
-      link: (data: TaskItemData) => string;
+      title: (item: TaskItemFragment) => ReactNode;
+      link: (item: TaskItemFragment) => string;
     }
   >
 > = {
   [ProviderType.Github]: {
-    title: (data) => (
+    title: ({ data }) => (
       <>
         <GithubLogo className="ml-0.5 size-3" />
         <Typography variant="small">{data.prTitle}</Typography>
