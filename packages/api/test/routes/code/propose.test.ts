@@ -7,11 +7,10 @@ import axios from 'axios';
 
 import { bots, orgs, repos, tasks } from '@automa/prisma';
 
-import { call, seedBots, seedOrgs, seedRepos, server } from '../utils';
+import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from '../../mocks';
+import { call, seedBots, seedOrgs, seedRepos, server } from '../../utils';
 
-import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from '../mocks';
-
-suite('code propose', () => {
+suite('code/propose', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
   let org: orgs, bot: bots, repo: repos, task: tasks;
   let sandbox: SinonSandbox, postStub: SinonStub, getStub: SinonStub;

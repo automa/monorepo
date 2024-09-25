@@ -66,6 +66,18 @@ export const seedOrgs = (app: FastifyInstance, count: number) =>
       })),
   });
 
+export const seedUserOrgs = (
+  app: FastifyInstance,
+  user: { id: number },
+  orgs: { id: number }[],
+) =>
+  app.prisma.user_orgs.createManyAndReturn({
+    data: orgs.map(({ id }) => ({
+      org_id: id,
+      user_id: user.id,
+    })),
+  });
+
 export const seedBots = (
   app: FastifyInstance,
   published: { id: number }[],

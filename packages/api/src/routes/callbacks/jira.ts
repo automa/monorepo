@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ErrorType } from '@automa/common';
 import { integration } from '@automa/prisma';
 
-import { env, isProduction } from '../../env';
+import { env, isProduction, isTest } from '../../env';
 
 export default async function (app: FastifyInstance) {
   app.get<{
@@ -54,7 +54,7 @@ export default async function (app: FastifyInstance) {
     }
 
     // Get accessible resources
-    const { data } = await axios.get<
+    const { data: jiraOrgs } = await axios.get<
       {
         id: string;
         url: string;
@@ -67,9 +67,25 @@ export default async function (app: FastifyInstance) {
       },
     });
 
-    if (data.length !== 1) {
+    if (jiraOrgs.length !== 1) {
       // TODO: Need to allow user to select site
       return replyError(ErrorType.MULTIPLE_JIRA_SITES_FOR_USER_NOT_SUPPORTED);
+    }
+
+    const jiraOrg = jiraOrgs[0];
+
+    const { data: jiraUser } = await axios.get<{
+      accountId: string;
+      displayName: string;
+      emailAddress: string;
+    }>(`${JIRA_APP.API_URI}/${jiraOrg.id}/rest/api/3/myself`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!jiraUser?.emailAddress) {
+      return replyError(ErrorType.UNABLE_TO_READ_JIRA_USER);
     }
 
     // TODO: Rotate webhook and refresh token every 30 days
@@ -83,10 +99,10 @@ export default async function (app: FastifyInstance) {
         createdWebhookId: number;
       }[];
     }>(
-      `${JIRA_APP.API_URI}/${data[0].id}/rest/api/3/webhook`,
+      `${JIRA_APP.API_URI}/${jiraOrg.id}/rest/api/3/webhook`,
       {
         url: `${
-          isProduction ? BASE_URI : 'https://automa.eu.ngrok.io'
+          isTest || isProduction ? BASE_URI : 'https://automa.eu.ngrok.io'
         }/hooks/jira`,
         webhooks: [
           {
@@ -102,6 +118,11 @@ export default async function (app: FastifyInstance) {
       },
     );
 
+    // Jira doesn't notify us if the user is deactivated or the app is uninstalled.
+    // But we don't seem to get any webhooks after that happens. Therefore, we don't
+    // need to delete the webhooks ourselves, but we need to constantly check if the
+    // connection is still valid and delete it if invalid.
+    // TODO: Add a job to check the connection and delete if invalid
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,
@@ -111,11 +132,12 @@ export default async function (app: FastifyInstance) {
           refresh_token: refreshToken,
         },
         config: {
-          id: data[0].id,
-          url: data[0].url,
-          name: data[0].name,
-          scopes: data[0].scopes,
-          webhook_id: webhook.createdWebhookId,
+          id: jiraOrg.id,
+          url: jiraOrg.url,
+          name: jiraOrg.name,
+          scopes: jiraOrg.scopes,
+          webhookId: webhook.createdWebhookId,
+          userEmail: jiraUser.emailAddress,
         },
         created_by: request.userId!,
       },

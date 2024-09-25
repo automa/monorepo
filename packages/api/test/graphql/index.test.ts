@@ -11,8 +11,8 @@ suite('graphql', () => {
   suiteSetup(async () => {
     app = await server();
 
-    app.addHook('preHandler', async (request) => {
-      request.userId = sessionUser?.id ?? null;
+    app.addHook('preValidation', async (request) => {
+      request.session.userId = sessionUser?.id ?? undefined;
     });
   });
 

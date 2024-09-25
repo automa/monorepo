@@ -38,6 +38,16 @@ export const Connected = {
   },
 } satisfies Story;
 
+export const ConnectedUser = {
+  args: {
+    connected: true,
+    config: {
+      name: 'org',
+      userEmail: 'user@org.com',
+    },
+  },
+} satisfies Story;
+
 export const Github = {
   args: {
     integration: IntegrationType.Github,

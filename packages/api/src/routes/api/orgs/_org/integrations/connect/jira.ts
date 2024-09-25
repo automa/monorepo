@@ -3,7 +3,7 @@ import { URLSearchParams } from 'node:url';
 
 import { FastifyInstance } from 'fastify';
 
-import { env } from '../../../../../env';
+import { env } from '../../../../../../env';
 
 export default async function (app: FastifyInstance) {
   app.get('/jira', async (request, reply) => {
@@ -22,6 +22,7 @@ export default async function (app: FastifyInstance) {
     params.append(
       'scope',
       [
+        'read:jira-user',
         'read:jira-work',
         'write:jira-work',
         'manage:jira-webhook',

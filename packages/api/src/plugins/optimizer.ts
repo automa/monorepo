@@ -51,7 +51,7 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
 
     app.decorate('optimizer', {
       gate: (gate: string, user?: users, org?: orgs) =>
-        tracer.startActiveSpan(`optimizer:gate`, async (span) => {
+        tracer.startActiveSpan('optimizer:gate', async (span) => {
           span.setAttribute('gate', gate);
 
           try {
@@ -70,7 +70,7 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
           }
         }),
       config: (key: string, user?: users, org?: orgs) =>
-        tracer.startActiveSpan(`optimizer:config`, async (span) => {
+        tracer.startActiveSpan('optimizer:config', async (span) => {
           span.setAttribute('key', key);
 
           try {
@@ -89,7 +89,7 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
           }
         }),
       experiment: (experiment: string, user?: users, org?: orgs) =>
-        tracer.startActiveSpan(`optimizer:experiment`, async (span) => {
+        tracer.startActiveSpan('optimizer:experiment', async (span) => {
           span.setAttribute('experiment', experiment);
 
           try {

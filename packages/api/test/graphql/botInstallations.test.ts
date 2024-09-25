@@ -3,7 +3,14 @@ import { assert } from 'chai';
 
 import { bots, orgs } from '@automa/prisma';
 
-import { graphql, seedBots, seedOrgs, seedUsers, server } from '../utils';
+import {
+  graphql,
+  seedBots,
+  seedOrgs,
+  seedUserOrgs,
+  seedUsers,
+  server,
+} from '../utils';
 
 suite('graphql botInstallations', () => {
   let app: FastifyInstance, org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
@@ -17,27 +24,15 @@ suite('graphql botInstallations', () => {
 
     const [user] = await seedUsers(app, 1);
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
+    await seedUserOrgs(app, user, [org, secondOrg]);
     [bot, , secondOrgBot, nonMemberOrgBot, , nonPublishedBot] = await seedBots(
       app,
       [org, org, secondOrg, nonMemberOrg, nonMemberOrg],
       [org],
     );
 
-    await app.prisma.user_orgs.createMany({
-      data: [
-        {
-          org_id: org.id,
-          user_id: user.id,
-        },
-        {
-          org_id: secondOrg.id,
-          user_id: user.id,
-        },
-      ],
-    });
-
-    app.addHook('preHandler', async (request) => {
-      request.userId = user.id;
+    app.addHook('preValidation', async (request) => {
+      request.session.userId = user.id;
     });
   });
 

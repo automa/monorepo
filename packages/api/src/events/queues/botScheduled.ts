@@ -11,7 +11,7 @@ const botScheduled: QueueDefinition<{
   handler: async (app, { botId }) => {
     logger.emit({
       severityNumber: SeverityNumber.INFO,
-      body: `Processing bot scheduled event`,
+      body: 'Processing bot scheduled event',
       attributes: {
         botId,
       },

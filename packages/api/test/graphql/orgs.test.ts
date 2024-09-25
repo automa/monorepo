@@ -1,7 +1,7 @@
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { assert } from 'chai';
 
-import { graphql, seedUsers, server } from '../utils';
+import { graphql, seedUserOrgs, seedUsers, server } from '../utils';
 
 suite('graphql orgs', () => {
   let app: FastifyInstance;
@@ -48,14 +48,14 @@ suite('graphql orgs', () => {
       ],
     });
 
-    await app.prisma.user_orgs.createMany({
-      data: (await app.prisma.orgs.findMany())
-        .filter((o) => o.name !== 'johndoe')
-        .map(({ id }) => ({ org_id: id, user_id: user.id })),
-    });
+    await seedUserOrgs(
+      app,
+      user,
+      (await app.prisma.orgs.findMany()).filter((o) => o.name !== 'johndoe'),
+    );
 
-    app.addHook('preHandler', async (request) => {
-      request.userId = user.id;
+    app.addHook('preValidation', async (request) => {
+      request.session.userId = user.id;
     });
   });
 

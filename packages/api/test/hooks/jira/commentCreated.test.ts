@@ -128,7 +128,7 @@ suite('jira hook comment_created event', () => {
           id: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
           url: 'https://automa.atlassian.net',
           name: 'Automa',
-          webhook_id: 123,
+          webhookId: 123,
         },
         created_by: user.id,
       },
@@ -1108,7 +1108,7 @@ suite('jira hook comment_created event', () => {
             id: '123e4567-e89b-12d3-a456-426614174000',
             url: 'https://workspace.atlassian.net',
             name: 'Workspace',
-            webhook_id: 123,
+            webhookId: 123,
           },
         },
       });

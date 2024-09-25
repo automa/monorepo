@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 
-import { orgs, provider } from '@automa/prisma';
+import { orgs } from '@automa/prisma';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -10,14 +10,12 @@ declare module 'fastify' {
 
 export default async function (app: FastifyInstance) {
   app.addHook('preHandler', async (request) => {
-    const { provider, org: name } = request.params as {
-      provider: provider;
+    const { org: name } = request.params as {
       org: string;
     };
 
     request.org = await app.prisma.orgs.findFirstOrThrow({
       where: {
-        provider_type: provider,
         name,
         user_orgs: {
           some: {
