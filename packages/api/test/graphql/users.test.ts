@@ -40,8 +40,8 @@ suite('graphql users', () => {
       ],
     });
 
-    app.addHook('preHandler', async (request) => {
-      request.userId = user.id;
+    app.addHook('preValidation', async (request) => {
+      request.session.userId = user.id;
     });
   });
 

@@ -9,11 +9,10 @@ import * as tar from 'tar';
 
 import { bots, orgs, repos, tasks } from '@automa/prisma';
 
-import { call, seedBots, seedOrgs, seedRepos, server } from '../utils';
+import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from '../../mocks';
+import { call, seedBots, seedOrgs, seedRepos, server } from '../../utils';
 
-import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from '../mocks';
-
-suite('code download', () => {
+suite('code/download', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
   let org: orgs, bot: bots, repo: repos, task: tasks;
   let sandbox: SinonSandbox, postStub: SinonStub, tarCreateStub: SinonStub;

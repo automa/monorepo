@@ -5,20 +5,20 @@ import axios from 'axios';
 
 import { users } from '@automa/prisma';
 
-import { call, server } from '../utils';
+import { call, server } from '../../utils';
 
-suite('github auth', () => {
+suite('auth/github', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, sessionUser: users | null;
 
   suiteSetup(async () => {
     app = await server();
     sandbox = createSandbox();
 
-    app.addHook('preHandler', async (request) => {
+    app.addHook('preValidation', async (request) => {
       request.session.referer = '/orgs';
       request.session.integrationOauthState = '1234';
 
-      request.userId = sessionUser?.id ?? null;
+      request.session.userId = sessionUser?.id ?? undefined;
     });
   });
 
