@@ -29,7 +29,7 @@ const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
     () =>
       `${import.meta.env.VITE_API_URI}/api/orgs/${
         org.name
-      }/integrations/${integration}`,
+      }/integrations/connect/${integration}`,
     [org, integration],
   );
 

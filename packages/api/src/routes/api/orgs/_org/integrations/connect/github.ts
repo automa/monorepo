@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 
-import { environment } from '../../../../../env';
+import { environment } from '../../../../../../env';
 
 export default async function (app: FastifyInstance) {
   app.get('/github', async (request, reply) => {
