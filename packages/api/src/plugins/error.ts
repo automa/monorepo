@@ -34,7 +34,7 @@ const errorPlugin: FastifyPluginAsync = async (app) => {
 
     app.decorate('error', {
       capture: (err: any, context?: Record<string, unknown>) => {
-        tracer.startActiveSpan(`error:capture`, (span) => {
+        tracer.startActiveSpan('error:capture', (span) => {
           if (isErrorTrackingEnabled) {
             withScope((scope) => {
               scope.setContext('error', { message: err.message, ...context });

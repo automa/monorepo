@@ -11,7 +11,7 @@ const botScheduleJob: QueueDefinition<object> = {
   handler: async (app, {}) => {
     logger.emit({
       severityNumber: SeverityNumber.INFO,
-      body: `Processing bot schedule job`,
+      body: 'Processing bot schedule job',
     });
 
     let cursor: number | undefined;

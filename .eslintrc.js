@@ -15,6 +15,7 @@ module.exports = {
   ],
   plugins: ['simple-import-sort'],
   rules: {
+    quotes: ['warn', 'single', { avoidEscape: true }],
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/ban-ts-comment': 'off',

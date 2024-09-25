@@ -50,6 +50,7 @@ const {
 } = logs;
 
 const sdk = new NodeSDK({
+  autoDetectResources: false,
   resource: new resources.Resource({
     [ATTR_SERVICE_NAMESPACE]: product,
     [ATTR_SERVICE_NAME]: service,

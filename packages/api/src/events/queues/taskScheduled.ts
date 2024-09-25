@@ -15,7 +15,7 @@ const taskScheduled: QueueDefinition<{
   handler: async (app, { botId, orgId, repoId }) => {
     logger.emit({
       severityNumber: SeverityNumber.INFO,
-      body: `Processing task scheduled event`,
+      body: 'Processing task scheduled event',
       attributes: {
         botId,
         orgId,

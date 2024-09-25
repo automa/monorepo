@@ -12,7 +12,7 @@ const botInstallationScheduled: QueueDefinition<{
   handler: async (app, { botId, orgId }) => {
     logger.emit({
       severityNumber: SeverityNumber.INFO,
-      body: `Processing bot installation scheduled event`,
+      body: 'Processing bot installation scheduled event',
       attributes: {
         botId,
         orgId,

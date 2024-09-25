@@ -23,7 +23,7 @@ const taskCreated: QueueDefinition<{
   handler: async (app, { id }) => {
     logger.emit({
       severityNumber: SeverityNumber.INFO,
-      body: `Processing task created event`,
+      body: 'Processing task created event',
       attributes: {
         id,
       },
