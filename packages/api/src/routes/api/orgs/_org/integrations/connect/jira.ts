@@ -22,6 +22,7 @@ export default async function (app: FastifyInstance) {
     params.append(
       'scope',
       [
+        'read:jira-user',
         'read:jira-work',
         'write:jira-work',
         'manage:jira-webhook',

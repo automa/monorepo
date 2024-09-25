@@ -8,7 +8,7 @@ import { integrations } from '../../consts';
 
 import { IntegrationConnectCardProps } from './types';
 
-import { Container, Tag } from './IntegrationConnectCard.styles';
+import { Container, OrgInfo, UserInfo } from './IntegrationConnectCard.styles';
 
 const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
   integration,
@@ -37,11 +37,19 @@ const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
     const infoConfig = integration === IntegrationType.Github ? org : config;
 
     if (!infoConfig) {
+      return { org: '' };
+    }
+
+    return info(infoConfig);
+  }, [config, info, org, integration]);
+
+  const connectText = useMemo(() => {
+    if (!integrationInfo.org) {
       return '';
     }
 
-    return ` to ${info(infoConfig)}`;
-  }, [config, info, org, integration]);
+    return ` to ${integrationInfo.org}`;
+  }, [integrationInfo]);
 
   return (
     <Container {...props}>
@@ -56,8 +64,9 @@ const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
               Connect
             </Button>
           </Tooltip>
-        ) : connected ? (
-          <Tag>Connected{integrationInfo}</Tag>
+        ) : // TODO: Add disconnect button that takes the user to integration's revoke access page
+        connected ? (
+          <OrgInfo>Connected{connectText}</OrgInfo>
         ) : (
           <Button href={connectIntegration} size="small">
             Connect
@@ -65,6 +74,9 @@ const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
         )}
       </Flex>
       <Typography variant="small">{description}</Typography>
+      {connected && integrationInfo.user && (
+        <UserInfo>via {integrationInfo.user}</UserInfo>
+      )}
     </Container>
   );
 };

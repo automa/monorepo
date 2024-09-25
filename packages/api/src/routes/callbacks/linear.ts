@@ -6,6 +6,7 @@ import { ErrorType } from '@automa/common';
 import { integration } from '@automa/prisma';
 
 import { env } from '../../env';
+import { logger, SeverityNumber } from '../../telemetry';
 
 export default async function (app: FastifyInstance) {
   app.get<{
@@ -64,8 +65,29 @@ export default async function (app: FastifyInstance) {
     }
 
     const client = new LinearClient({ accessToken });
-    const linearOrg = await client.organization;
 
+    const [linearOrg, linearUser] = await Promise.all([
+      client.organization,
+      client.viewer,
+    ]);
+
+    logger.emit({
+      severityNumber: SeverityNumber.INFO,
+      body: 'Connected Linear integration',
+      attributes: {
+        orgId: org.id,
+        linearOrgName: linearOrg.name,
+        linearOrgSlug: linearOrg.urlKey,
+        linearUserEmail: linearUser.email,
+        linearUserActive: linearUser.active,
+        linearUserAdmin: linearUser.admin,
+        linearUserGuest: linearUser.guest,
+      },
+    });
+
+    // Linear sends us an event when the user is deactivated or the app is revoked.
+    // We also don't get any webhooks after that happens. Therefore, we don't need
+    // to constantly keep checking if the connection is still valid.
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,
@@ -78,6 +100,7 @@ export default async function (app: FastifyInstance) {
           name: linearOrg.name,
           slug: linearOrg.urlKey,
           scopes: scope.split(' '),
+          userEmail: linearUser.email,
         },
         created_by: request.userId!,
       },

@@ -121,7 +121,6 @@ const commentCreated: JiraEventHandler<{
     });
 
     if (!tokens.access_token || !tokens.refresh_token) {
-      // TODO: Delete the integration
       throw e;
     }
 
@@ -150,7 +149,7 @@ const commentCreated: JiraEventHandler<{
   );
 
   // Find automa user using email if they exist
-  const automaUser = comment?.author
+  const automaUser = comment?.author?.emailAddress
     ? await app.prisma.users.findFirst({
         where: {
           email: comment?.author?.emailAddress,

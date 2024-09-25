@@ -5,6 +5,8 @@ import axios from 'axios';
 
 import { users } from '@automa/prisma';
 
+import { env } from '../../../src/env';
+
 import { call, server } from '../../utils';
 
 suite('auth/github', () => {
@@ -90,7 +92,7 @@ suite('auth/github', () => {
       });
     });
 
-    test('should error if state is missing', async () => {
+    test('should error if code is missing', async () => {
       const response = await call(app, '/callbacks/github?state=1234');
 
       assert.equal(response.statusCode, 302);
@@ -101,7 +103,7 @@ suite('auth/github', () => {
       assert.equal(location, '/orgs?error=1000');
     });
 
-    test('should error if code is missing', async () => {
+    test('should error if state is missing', async () => {
       const response = await call(app, '/callbacks/github?code=abcd');
 
       assert.equal(response.statusCode, 302);
@@ -208,7 +210,7 @@ suite('auth/github', () => {
         );
         assert.deepEqual(postStub.firstCall.args[1], {
           client_id: 'Iv1.bee7999253d03200',
-          client_secret: '279f43a10c306d492656f8069e8b052dc5ccf7d0',
+          client_secret: env.GITHUB_APP.CLIENT_SECRET,
           code: 'abcd',
           redirect_uri: 'http://localhost:8080/callbacks/github',
         });
@@ -348,7 +350,7 @@ suite('auth/github', () => {
         );
         assert.deepEqual(postStub.firstCall.args[1], {
           client_id: 'Iv1.bee7999253d03200',
-          client_secret: '279f43a10c306d492656f8069e8b052dc5ccf7d0',
+          client_secret: env.GITHUB_APP.CLIENT_SECRET,
           code: 'abcd',
           redirect_uri: 'http://localhost:8080/callbacks/github',
         });
@@ -446,7 +448,7 @@ suite('auth/github', () => {
           );
           assert.deepEqual(postStub.firstCall.args[1], {
             client_id: 'Iv1.bee7999253d03200',
-            client_secret: '279f43a10c306d492656f8069e8b052dc5ccf7d0',
+            client_secret: env.GITHUB_APP.CLIENT_SECRET,
             code: 'abcd',
             redirect_uri: 'http://localhost:8080/callbacks/github',
           });
@@ -557,7 +559,7 @@ suite('auth/github', () => {
           );
           assert.deepEqual(postStub.firstCall.args[1], {
             client_id: 'Iv1.bee7999253d03200',
-            client_secret: '279f43a10c306d492656f8069e8b052dc5ccf7d0',
+            client_secret: env.GITHUB_APP.CLIENT_SECRET,
             code: 'abcd',
             redirect_uri: 'http://localhost:8080/callbacks/github',
           });
@@ -666,7 +668,7 @@ suite('auth/github', () => {
         );
         assert.deepEqual(postStub.firstCall.args[1], {
           client_id: 'Iv1.bee7999253d03200',
-          client_secret: '279f43a10c306d492656f8069e8b052dc5ccf7d0',
+          client_secret: env.GITHUB_APP.CLIENT_SECRET,
           code: 'abcd',
           redirect_uri: 'http://localhost:8080/callbacks/github',
         });
@@ -773,7 +775,7 @@ suite('auth/github', () => {
           );
           assert.deepEqual(postStub.firstCall.args[1], {
             client_id: 'Iv1.bee7999253d03200',
-            client_secret: '279f43a10c306d492656f8069e8b052dc5ccf7d0',
+            client_secret: env.GITHUB_APP.CLIENT_SECRET,
             code: 'abcd',
             redirect_uri: 'http://localhost:8080/callbacks/github',
           });
@@ -883,7 +885,7 @@ suite('auth/github', () => {
           );
           assert.deepEqual(postStub.firstCall.args[1], {
             client_id: 'Iv1.bee7999253d03200',
-            client_secret: '279f43a10c306d492656f8069e8b052dc5ccf7d0',
+            client_secret: env.GITHUB_APP.CLIENT_SECRET,
             code: 'abcd',
             redirect_uri: 'http://localhost:8080/callbacks/github',
           });
@@ -984,7 +986,7 @@ suite('auth/github', () => {
           );
           assert.deepEqual(postStub.firstCall.args[1], {
             client_id: 'Iv1.bee7999253d03200',
-            client_secret: '279f43a10c306d492656f8069e8b052dc5ccf7d0',
+            client_secret: env.GITHUB_APP.CLIENT_SECRET,
             code: 'abcd',
             redirect_uri: 'http://localhost:8080/callbacks/github',
           });

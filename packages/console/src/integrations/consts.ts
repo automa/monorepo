@@ -11,7 +11,10 @@ type Integration = {
   logo: FC<SVGProps<SVGSVGElement>>;
   name: string;
   description: string;
-  info: (config: any) => string;
+  info: (config: any) => {
+    org: string;
+    user?: string;
+  };
   disabled?: boolean;
 };
 
@@ -23,26 +26,36 @@ export const integrations: {
     name: 'GitHub',
     description:
       'Connect your GitHub account to provide access to your code repositories and creating tasks from issues and pull requests.',
-    info: (config) => config.provider_name,
+    info: (config) => ({
+      org: config.provider_name,
+    }),
   },
   [IntegrationType.Linear]: {
     logo: LinearLogo,
     name: 'Linear',
     description: 'Connect your Linear account to create tasks from issues.',
-    info: (config) => config.name,
+    info: (config) => ({
+      org: config.name,
+      user: config.userEmail,
+    }),
   },
   [IntegrationType.Jira]: {
     logo: JiraLogo,
     name: 'Jira',
     description: 'Connect your Jira account to create tasks from issues.',
-    info: (config) => config.name,
+    info: (config) => ({
+      org: config.name,
+      user: config.userEmail,
+    }),
   },
   [IntegrationType.Slack]: {
     logo: SlackLogo,
     name: 'Slack',
     description:
       'Connect your Slack account to receive notifications and create tasks from messages.',
-    info: (config) => '',
+    info: (config) => ({
+      org: config.name,
+    }),
     disabled: true,
   },
 };
