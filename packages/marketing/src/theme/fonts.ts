@@ -1,5 +1,11 @@
-import { Manrope } from 'next/font/google';
+import { Inter, Manrope } from 'next/font/google';
 import localFont from 'next/font/local';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'block',
+  variable: '--font-inter',
+});
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -13,4 +19,4 @@ const calSans = localFont({
   variable: '--font-cal-sans',
 });
 
-export const fonts = `${manrope.variable} ${calSans.variable}`;
+export const fonts = `${inter.variable} ${manrope.variable} ${calSans.variable}`;
