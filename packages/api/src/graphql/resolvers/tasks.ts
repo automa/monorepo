@@ -122,4 +122,22 @@ export const TaskItem: TaskItemResolvers<Context> = {
       })
       .users();
   },
+  bot: ({ id }, args, { prisma }) => {
+    return prisma.task_items
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .bots();
+  },
+  repo: ({ id }, args, { prisma }) => {
+    return prisma.task_items
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .repos();
+  },
 };

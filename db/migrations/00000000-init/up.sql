@@ -165,9 +165,14 @@ CREATE TABLE public.task_items (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   task_id INTEGER NOT NULL REFERENCES public.tasks(id) ON DELETE CASCADE,
   type public.task_item NOT NULL,
-  data JSONB NOT NULL,
+  data JSONB NOT NULL DEFAULT '{}',
   actor_user_id INTEGER REFERENCES public.users(id) ON DELETE SET NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+  repo_id INTEGER REFERENCES public.repos(id) ON DELETE SET NULL,
+  bot_id INTEGER REFERENCES public.bots(id) ON DELETE SET NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT repo_item CHECK (type <> 'repo' OR repo_id IS NOT NULL),
+  CONSTRAINT bot_item CHECK (type <> 'bot' OR bot_id IS NOT NULL),
+  CONSTRAINT proposal_item CHECK (type <> 'proposal' OR (repo_id IS NOT NULL AND bot_id IS NOT NULL))
 );
 
 CREATE INDEX task_items_task_id_created_at_idx

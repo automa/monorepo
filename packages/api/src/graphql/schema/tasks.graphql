@@ -39,6 +39,8 @@ type TaskItem {
   created_at: DateTime!
 
   actor_user: User
+  bot: PublicBot
+  repo: Repo
 }
 
 input TaskMessageInput {

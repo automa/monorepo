@@ -239,7 +239,7 @@ suite('db', () => {
       }
     });
 
-    test('publishing needs details', async () => {
+    test('publish_details', async () => {
       try {
         await app.prisma.bots.update({
           where: {
@@ -315,6 +315,112 @@ suite('db', () => {
         assert.equal(error.meta?.modelName, ['integrations']);
         assert.deepEqual(error.meta?.target, ['org_id', 'integration_type']);
       }
+    });
+  });
+
+  suite('task_items', () => {
+    test('repo_item', async () => {
+      try {
+        await app.prisma.task_items.create({
+          data: {
+            task_id: 1,
+            type: 'repo',
+          },
+        });
+
+        assert.fail('expected to throw');
+      } catch (err) {
+        const error = err as Prisma.PrismaClientUnknownRequestError;
+
+        assert.include(
+          error.message,
+          'new row for relation \\"task_items\\" violates check constraint \\"repo_item\\"',
+        );
+      }
+    });
+
+    test('bot_item', async () => {
+      try {
+        await app.prisma.task_items.create({
+          data: {
+            task_id: 1,
+            type: 'bot',
+          },
+        });
+
+        assert.fail('expected to throw');
+      } catch (err) {
+        const error = err as Prisma.PrismaClientUnknownRequestError;
+
+        assert.include(
+          error.message,
+          'new row for relation \\"task_items\\" violates check constraint \\"bot_item\\"',
+        );
+      }
+    });
+
+    suite('proposal_item', () => {
+      test('missing all', async () => {
+        try {
+          await app.prisma.task_items.create({
+            data: {
+              task_id: 1,
+              type: 'proposal',
+            },
+          });
+
+          assert.fail('expected to throw');
+        } catch (err) {
+          const error = err as Prisma.PrismaClientUnknownRequestError;
+
+          assert.include(
+            error.message,
+            'new row for relation \\"task_items\\" violates check constraint \\"proposal_item\\"',
+          );
+        }
+      });
+
+      test('missing bot', async () => {
+        try {
+          await app.prisma.task_items.create({
+            data: {
+              task_id: 1,
+              type: 'proposal',
+              repo_id: repo.id,
+            },
+          });
+
+          assert.fail('expected to throw');
+        } catch (err) {
+          const error = err as Prisma.PrismaClientUnknownRequestError;
+
+          assert.include(
+            error.message,
+            'new row for relation \\"task_items\\" violates check constraint \\"proposal_item\\"',
+          );
+        }
+      });
+
+      test('missing repo', async () => {
+        try {
+          await app.prisma.task_items.create({
+            data: {
+              task_id: 1,
+              type: 'proposal',
+              bot_id: bot.id,
+            },
+          });
+
+          assert.fail('expected to throw');
+        } catch (err) {
+          const error = err as Prisma.PrismaClientUnknownRequestError;
+
+          assert.include(
+            error.message,
+            'new row for relation \\"task_items\\" violates check constraint \\"proposal_item\\"',
+          );
+        }
+      });
     });
   });
 });

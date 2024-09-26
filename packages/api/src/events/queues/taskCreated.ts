@@ -100,16 +100,8 @@ const taskCreated: QueueDefinition<{
       await app.prisma.task_items.create({
         data: {
           task_id: id,
-          type: 'repo',
-          data: {
-            repoId: repo.id,
-            repoName: repo.name,
-            repoOrgId: repo.orgs.id,
-            repoOrgName: repo.orgs.name,
-            repoOrgProviderType: repo.orgs.provider_type,
-            repoOrgProviderId: repo.orgs.provider_id,
-            repoProviderId: repo.provider_id,
-          },
+          type: task_item.repo,
+          repo_id: repo.id,
         },
       });
     } else {
@@ -167,14 +159,8 @@ const taskCreated: QueueDefinition<{
       await app.prisma.task_items.create({
         data: {
           task_id: id,
-          type: 'bot',
-          data: {
-            botId: botInstallation.bots.id,
-            botName: botInstallation.bots.name,
-            botImageUrl: botInstallation.bots.image_url,
-            botOrgId: botInstallation.bots.orgs.id,
-            botOrgName: botInstallation.bots.orgs.name,
-          },
+          type: task_item.bot,
+          bot_id: botInstallation.bots.id,
         },
       });
     } else {

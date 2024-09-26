@@ -3,14 +3,16 @@ import { VariantProps } from 'class-variance-authority';
 
 import { $, Component, Styled } from 'theme';
 
-import { TaskItemTypeWithData } from 'tasks/types';
+import { TaskItemFragment } from 'gql/graphql';
 
 import { taskItemBadge } from './TaskItemBadge.cva';
 
 type TaskItemBadgeProps = $<
   {},
   VariantProps<typeof taskItemBadge>,
-  HTMLAttributes<HTMLDivElement> & TaskItemTypeWithData
+  HTMLAttributes<HTMLDivElement> & {
+    taskItem: TaskItemFragment;
+  }
 >;
 
 export type TaskItemBadgeComponentProps = Component<TaskItemBadgeProps>;

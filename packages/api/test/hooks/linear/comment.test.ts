@@ -338,13 +338,9 @@ suite('linear hook Comment event', () => {
           userId: '5611201a-9594-4407-9490-731894376791',
           userName: 'Pavan Kumar Sunkara',
           userEmail: 'pavan@example.com',
-          botId: secondBot.id,
-          botName: 'bot-1',
-          botImageUrl: 'https://example.com/image/1.png',
-          botOrgId: org.id,
-          botOrgName: 'org-0',
         },
         actor_user_id: null,
+        bot_id: secondBot.id,
       });
     });
 
@@ -494,15 +490,9 @@ suite('linear hook Comment event', () => {
           userId: '5611201a-9594-4407-9490-731894376791',
           userName: 'Pavan Kumar Sunkara',
           userEmail: 'pavan@example.com',
-          repoId: repo.id,
-          repoName: 'repo-1',
-          repoOrgId: org.id,
-          repoOrgName: 'org-0',
-          repoOrgProviderType: 'github',
-          repoOrgProviderId: '0',
-          repoProviderId: '1',
         },
         actor_user_id: null,
+        repo_id: repo.id,
       });
     });
 
@@ -700,15 +690,9 @@ suite('linear hook Comment event', () => {
           userId: '5611201a-9594-4407-9490-731894376791',
           userName: 'Pavan Kumar Sunkara',
           userEmail: 'pavan@example.com',
-          repoId: repo.id,
-          repoName: 'repo-1',
-          repoOrgId: org.id,
-          repoOrgName: 'org-0',
-          repoOrgProviderType: 'github',
-          repoOrgProviderId: '0',
-          repoProviderId: '1',
         },
         actor_user_id: user.id,
+        repo_id: repo.id,
       });
       assert.deepOwnInclude(taskItems[3], {
         type: 'bot',
@@ -717,13 +701,9 @@ suite('linear hook Comment event', () => {
           userId: '5611201a-9594-4407-9490-731894376791',
           userName: 'Pavan Kumar Sunkara',
           userEmail: 'pavan@example.com',
-          botId: secondBot.id,
-          botName: 'bot-1',
-          botImageUrl: 'https://example.com/image/1.png',
-          botOrgId: org.id,
-          botOrgName: 'org-0',
         },
         actor_user_id: user.id,
+        bot_id: secondBot.id,
       });
     });
 

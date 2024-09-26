@@ -177,7 +177,6 @@ const create: LinearEventActionHandler<{
             ]
           : []),
         {
-          actor_user_id: automaUser?.id,
           type: task_item.origin,
           data: {
             organizationId: org.id,
@@ -193,38 +192,29 @@ const create: LinearEventActionHandler<{
             commentId: body.data.id,
             parentId: body.data.parentId,
           },
+          actor_user_id: automaUser?.id,
         },
         ...(selectedRepo
           ? [
               {
-                actor_user_id: automaUser?.id,
                 type: task_item.repo,
                 data: {
                   ...userData,
-                  repoId: selectedRepo.id,
-                  repoName: selectedRepo.name,
-                  repoOrgId: selectedRepo.orgs.id,
-                  repoOrgName: selectedRepo.orgs.name,
-                  repoOrgProviderType: selectedRepo.orgs.provider_type,
-                  repoOrgProviderId: selectedRepo.orgs.provider_id,
-                  repoProviderId: selectedRepo.provider_id,
                 },
+                actor_user_id: automaUser?.id,
+                repo_id: selectedRepo.id,
               },
             ]
           : []),
         ...(selectedBot
           ? [
               {
-                actor_user_id: automaUser?.id,
                 type: task_item.bot,
                 data: {
                   ...userData,
-                  botId: selectedBot.bots.id,
-                  botName: selectedBot.bots.name,
-                  botImageUrl: selectedBot.bots.image_url,
-                  botOrgId: selectedBot.bots.orgs.id,
-                  botOrgName: selectedBot.bots.orgs.name,
                 },
+                actor_user_id: automaUser?.id,
+                bot_id: selectedBot.bots.id,
               },
             ]
           : []),

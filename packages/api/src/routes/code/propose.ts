@@ -108,12 +108,6 @@ export default async function (app: FastifyInstance) {
           task_id: task.id,
           type: task_item.proposal,
           data: {
-            repoName: repo.name,
-            repoOrgProviderName: repo.orgs.provider_name,
-            repoOrgProviderType: repo.orgs.provider_type,
-            botName: bot.name,
-            botImageUrl: bot.image_url,
-            botOrgName: bot.orgs.name,
             prId: pr.number,
             prTitle: pr.title,
             prState: pr.state,
@@ -121,6 +115,8 @@ export default async function (app: FastifyInstance) {
             prHead: pr.head.label,
             prBase: pr.base.ref,
           },
+          bot_id: bot.id,
+          repo_id: repo.id,
         },
       });
 

@@ -1,10 +1,12 @@
 import { IntegrationType, ProviderType } from '@automa/common';
 
-import { TaskItemData } from './types';
+import { TaskItemFragment } from 'gql/graphql';
 
-export const getTaskItemUser = (
-  data?: TaskItemData & { userName?: string; userEmail?: string },
-) => ({
+export const getTaskItemUser = (data?: {
+  integration?: IntegrationType;
+  userName?: string;
+  userEmail?: string;
+}) => ({
   name: data?.userName
     ? `${data.userName} from ${data.integration}`
     : undefined,
@@ -15,16 +17,16 @@ export const originBaseDefinitions: Partial<
   Record<
     IntegrationType,
     {
-      link: (data: TaskItemData) => string;
+      link: (item: TaskItemFragment) => string;
     }
   >
 > = {
   [IntegrationType.Linear]: {
-    link: (data) =>
+    link: ({ data }) =>
       `https://linear.app/${data.organizationUrlKey}/issue/${data.issueIdentifier}#comment-${data.commentId}`,
   },
   [IntegrationType.Jira]: {
-    link: (data) =>
+    link: ({ data }) =>
       `${data.organizationUrl}/browse/${data.issueKey}?focusedCommentId=${data.commentId}`,
   },
 };
@@ -33,12 +35,14 @@ export const proposalBaseDefinitions: Partial<
   Record<
     ProviderType,
     {
-      link: (data: TaskItemData) => string;
+      link: (item: TaskItemFragment) => string;
     }
   >
 > = {
   [ProviderType.Github]: {
-    link: (data) =>
-      `https://github.com/${data.repoOrgProviderName}/${data.repoName}/pull/${data.prId}`,
+    link: ({ data, repo }) =>
+      `https://github.com/${repo!.org.provider_name}/${repo!.name}/pull/${
+        data.prId
+      }`,
   },
 };

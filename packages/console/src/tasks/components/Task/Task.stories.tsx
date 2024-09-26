@@ -125,11 +125,7 @@ export const OriginIntegration = {
         ...task,
         items: [
           makeFragmentData(
-            {
-              ...TaskItemBadgeStory.args,
-              id: 1,
-              created_at: '2024-05-15T09:04:04.629Z',
-            },
+            TaskItemBadgeStory.args.taskItem,
             TASK_ITEM_FRAGMENT,
           ),
         ],
@@ -147,14 +143,12 @@ export const OriginIntegrationUser = {
         items: [
           makeFragmentData(
             {
+              ...TaskItemBadgeStory.args.taskItem,
               data: {
-                ...TaskItemBadgeStory.args.data,
+                ...TaskItemBadgeStory.args.taskItem.data,
                 userName: 'John Doe',
                 userEmail: 'john@example.com',
               },
-              id: 1,
-              type: TaskItemType.Origin,
-              created_at: '2024-05-15T09:04:04.629Z',
             },
             TASK_ITEM_FRAGMENT,
           ),
@@ -173,14 +167,12 @@ export const OriginIntegrationUserAuthor = {
         items: [
           makeFragmentData(
             {
+              ...TaskItemBadgeStory.args.taskItem,
               data: {
-                ...TaskItemBadgeStory.args.data,
+                ...TaskItemBadgeStory.args.taskItem.data,
                 userName: 'John Doe',
                 userEmail: 'john@example.com',
               },
-              id: 1,
-              type: TaskItemType.Origin,
-              created_at: '2024-05-15T09:04:04.629Z',
               actor_user,
             },
             TASK_ITEM_FRAGMENT,
@@ -199,19 +191,11 @@ export const Badges = {
         ...task,
         items: [
           makeFragmentData(
-            {
-              ...TaskItemBadgeStory.args,
-              id: 1,
-              created_at: '2024-05-15T09:04:04.629Z',
-            },
+            TaskItemBadgeStory.args.taskItem,
             TASK_ITEM_FRAGMENT,
           ),
           makeFragmentData(
-            {
-              ...ProposalGithubOpen.args,
-              id: 2,
-              created_at: '2024-05-15T09:04:04.629Z',
-            },
+            ProposalGithubOpen.args.taskItem,
             TASK_ITEM_FRAGMENT,
           ),
         ],
