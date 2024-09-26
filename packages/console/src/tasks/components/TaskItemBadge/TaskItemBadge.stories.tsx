@@ -53,7 +53,7 @@ export const ProposalGithubOpen = {
       ...meta.args.taskItem,
       type: TaskItemType.Proposal,
       data: {
-        prId: 123,
+        prNumber: 123,
         prTitle: 'Demo PR',
         prState: 'open',
         prMerged: false,

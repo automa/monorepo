@@ -1,27 +1,24 @@
 import { randomBytes } from 'node:crypto';
 
-import { FastifyInstance } from 'fastify';
-
 import { Prisma } from '@automa/prisma';
 
+import { Context } from './types';
+
 export const taskCreate = async (
-  app: {
-    prisma: FastifyInstance['prisma'];
-    events: FastifyInstance['events'];
-  },
+  { prisma, events }: Context,
   data: Prisma.XOR<
     Omit<Prisma.tasksCreateInput, 'token'>,
     Omit<Prisma.tasksUncheckedCreateInput, 'token'>
   >,
 ) => {
-  const task = await app.prisma.tasks.create({
+  const task = await prisma.tasks.create({
     data: {
       ...data,
       token: randomBytes(128).toString('base64url'),
     },
   });
 
-  await app.events.taskCreated.publish({ id: task.id });
+  await events.taskCreated.publish({ id: task.id });
 
   return task;
 };

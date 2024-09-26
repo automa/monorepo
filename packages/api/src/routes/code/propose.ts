@@ -9,6 +9,16 @@ import { caller } from '../../clients/github';
 
 import { getBot, getRepo, getTask } from './utils';
 
+type PullRequest = {
+  id: number;
+  number: number;
+  title: string;
+  state: 'open' | 'closed';
+  merged: boolean;
+  head: { label: string };
+  base: { ref: string };
+};
+
 export default async function (app: FastifyInstance) {
   app.post<{
     Body: {
@@ -57,6 +67,7 @@ export default async function (app: FastifyInstance) {
         proposal: {
           type: repo.orgs.provider_type,
           id: proposalItem.data.prId,
+          number: proposalItem.data.prNumber,
           title: proposalItem.data.prTitle,
           head: proposalItem.data.prHead,
           base: proposalItem.data.prBase,
@@ -91,7 +102,7 @@ export default async function (app: FastifyInstance) {
 
     let {
       data: [pr],
-    } = await axios.get(
+    } = await axios.get<PullRequest[]>(
       `/repos/${repo.orgs.provider_name}/${repo.name}/pulls`,
       {
         params: {
@@ -108,7 +119,8 @@ export default async function (app: FastifyInstance) {
           task_id: task.id,
           type: task_item.proposal,
           data: {
-            prId: pr.number,
+            prId: pr.id,
+            prNumber: pr.number,
             prTitle: pr.title,
             prState: pr.state,
             prMerged: pr.merged,
@@ -123,7 +135,8 @@ export default async function (app: FastifyInstance) {
       return reply.code(201).send({
         proposal: {
           type: repo.orgs.provider_type,
-          id: pr.number,
+          id: pr.id,
+          number: pr.number,
           title: pr.title,
           head: pr.head.label,
           base: pr.base.ref,
@@ -196,7 +209,7 @@ export default async function (app: FastifyInstance) {
     await unlink(`${workingDir}.diff`);
 
     // Create a pull request
-    ({ data: pr } = await axios.post(
+    ({ data: pr } = await axios.post<PullRequest>(
       `/repos/${repo.orgs.provider_name}/${repo.name}/pulls`,
       {
         title,

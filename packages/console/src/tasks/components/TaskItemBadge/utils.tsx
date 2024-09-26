@@ -70,7 +70,7 @@ const proposalDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
       ) : (
         <Open className="size-3" />
       ),
-    title: ({ data }) => `#${data.prId}`,
+    title: ({ data }) => `#${data.prNumber}`,
     link: proposalBaseDefinitions[ProviderType.Github]!.link,
     content: ({ data, repo }) => (
       <Flex direction="column" className="gap-2">
