@@ -480,7 +480,7 @@ export const ProposalGithub = {
         type: TaskItemType.Proposal,
         created_at,
         data: {
-          prId: 123,
+          prNumber: 123,
           prTitle: 'Demo PR',
           prState: 'open',
           prMerged: false,

@@ -63,6 +63,7 @@ suite('code/propose', () => {
       .resolves({ data: { token: 'abcdef' } });
     postStub.withArgs('/repos/org-0/repo-0/pulls').resolves({
       data: {
+        id: 123456,
         number: 123,
         title: 'PR Title',
         state: 'open',
@@ -266,7 +267,8 @@ suite('code/propose', () => {
           task_id: task.id,
           type: 'proposal',
           data: {
-            prId: 123,
+            prId: 123456,
+            prNumber: 123,
             prTitle: 'PR Title',
             prHead: 'repo-0:pr-head',
             prBase: 'pr-base',
@@ -292,7 +294,8 @@ suite('code/propose', () => {
       assert.deepEqual(data, {
         proposal: {
           type: 'github',
-          id: 123,
+          id: 123456,
+          number: 123,
           title: 'PR Title',
           head: 'repo-0:pr-head',
           base: 'pr-base',
@@ -569,7 +572,8 @@ suite('code/propose', () => {
       assert.deepEqual(data, {
         proposal: {
           type: 'github',
-          id: 123,
+          id: 123456,
+          number: 123,
           title: 'PR Title',
           head: `org-0:automa/org-0/bot-0/${task.id}`,
           base: 'default-branch',
@@ -690,7 +694,8 @@ suite('code/propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
-          prId: 123,
+          prId: 123456,
+          prNumber: 123,
           prTitle: 'PR Title',
           prState: 'open',
           prMerged: false,
@@ -733,6 +738,7 @@ suite('code/propose', () => {
 
       postStub.withArgs('/repos/org-0/repo-0/pulls').resolves({
         data: {
+          id: 123456,
           number: 123,
           title: 'PR Title',
           state: 'open',
@@ -762,7 +768,8 @@ suite('code/propose', () => {
       assert.deepEqual(data, {
         proposal: {
           type: 'github',
-          id: 123,
+          id: 123456,
+          number: 123,
           title: 'PR Title',
           head: `org-0:automa/bot-0/${task.id}`,
           base: 'default-branch',
@@ -883,7 +890,8 @@ suite('code/propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
-          prId: 123,
+          prId: 123456,
+          prNumber: 123,
           prTitle: 'PR Title',
           prState: 'open',
           prMerged: false,
@@ -928,7 +936,8 @@ suite('code/propose', () => {
       assert.deepEqual(data, {
         proposal: {
           type: 'github',
-          id: 123,
+          id: 123456,
+          number: 123,
           title: 'PR Title',
           head: `org-0:automa/org-0/bot-0/${task.id}`,
           base: 'default-branch',
@@ -1049,7 +1058,8 @@ suite('code/propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
-          prId: 123,
+          prId: 123456,
+          prNumber: 123,
           prTitle: 'PR Title',
           prState: 'open',
           prMerged: false,
@@ -1075,6 +1085,7 @@ suite('code/propose', () => {
       getStub.withArgs('/repos/org-0/repo-0/pulls').resolves({
         data: [
           {
+            id: 123456,
             number: 123,
             title: 'PR Title',
             state: 'open',
@@ -1105,7 +1116,8 @@ suite('code/propose', () => {
       assert.deepEqual(data, {
         proposal: {
           type: 'github',
-          id: 123,
+          id: 123456,
+          number: 123,
           title: 'PR Title',
           head: `org-0:automa/org-0/bot-0/${task.id}`,
           base: 'default-branch',
@@ -1147,7 +1159,8 @@ suite('code/propose', () => {
       assert.deepOwnInclude(proposals[0], {
         task_id: task.id,
         data: {
-          prId: 123,
+          prId: 123456,
+          prNumber: 123,
           prTitle: 'PR Title',
           prState: 'open',
           prMerged: false,

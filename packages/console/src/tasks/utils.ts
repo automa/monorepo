@@ -42,7 +42,7 @@ export const proposalBaseDefinitions: Partial<
   [ProviderType.Github]: {
     link: ({ data, repo }) =>
       `https://github.com/${repo!.org.provider_name}/${repo!.name}/pull/${
-        data.prId
+        data.prNumber
       }`,
   },
 };
