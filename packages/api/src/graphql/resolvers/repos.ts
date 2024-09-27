@@ -1,4 +1,4 @@
-import { QueryResolvers, RepoResolvers } from '@automa/common';
+import { QueryResolvers, Resolvers } from '@automa/common';
 
 import { Context } from '../types';
 
@@ -36,7 +36,7 @@ export const Query: QueryResolvers<Context> = {
   },
 };
 
-export const Repo: RepoResolvers<Context> = {
+export const Repo: Resolvers<Context>['Repo'] = {
   org: ({ org_id }, args, { prisma }) => {
     return prisma.orgs.findUniqueOrThrow({
       where: {

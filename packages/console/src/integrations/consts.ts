@@ -1,6 +1,6 @@
 import { FC, SVGProps } from 'react';
 
-import { IntegrationType } from '@automa/common';
+import { IntegrationType } from 'gql/graphql';
 
 import GithubLogo from 'assets/logos/github.svg?react';
 import JiraLogo from 'assets/logos/jira.svg?react';

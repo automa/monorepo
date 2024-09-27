@@ -1,6 +1,6 @@
 import { HTMLAttributes } from 'react';
 
-import { IntegrationType } from '@automa/common';
+import { IntegrationType } from 'gql/graphql';
 
 import { Org } from 'orgs';
 

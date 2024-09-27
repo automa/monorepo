@@ -1,4 +1,4 @@
-import { IntegrationResolvers, QueryResolvers } from '@automa/common';
+import { QueryResolvers, Resolvers } from '@automa/common';
 
 import { Context } from '../types';
 
@@ -20,7 +20,7 @@ export const Query: QueryResolvers<Context> = {
   },
 };
 
-export const Integration: IntegrationResolvers<Context> = {
+export const Integration: Resolvers<Context>['Integration'] = {
   author: ({ id }, args, { prisma }) => {
     return prisma.integrations
       .findUniqueOrThrow({

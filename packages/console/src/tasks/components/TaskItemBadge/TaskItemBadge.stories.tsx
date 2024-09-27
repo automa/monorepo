@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { IntegrationType, ProviderType, TaskItemType } from '@automa/common';
+import { IntegrationType, ProviderType, TaskItemType } from 'gql/graphql';
 
 import TaskItemBadge from './TaskItemBadge';
 

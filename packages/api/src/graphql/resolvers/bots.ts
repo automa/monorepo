@@ -2,13 +2,12 @@ import { randomBytes } from 'node:crypto';
 
 import {
   botCreateSchema,
-  BotResolvers,
   botUpdateSchema,
   MutationResolvers,
   publicBotFields,
-  PublicBotResolvers,
   publicOrgFields,
   QueryResolvers,
+  Resolvers,
 } from '@automa/common';
 import { Prisma } from '@automa/prisma';
 
@@ -161,7 +160,7 @@ export const Mutation: MutationResolvers<Context> = {
   },
 };
 
-export const PublicBot: PublicBotResolvers<Context> = {
+export const PublicBot: Resolvers<Context>['PublicBot'] = {
   org: ({ id }, args, { prisma }) => {
     return prisma.bots
       .findUniqueOrThrow({
@@ -206,7 +205,7 @@ export const PublicBot: PublicBotResolvers<Context> = {
   },
 };
 
-export const Bot: BotResolvers<Context> = {
+export const Bot: Resolvers<Context>['Bot'] = {
   org: ({ id }, args, { prisma }) => {
     return prisma.bots
       .findUniqueOrThrow({

@@ -32,6 +32,18 @@ module.exports = {
         allowEmptyCatch: true,
       },
     ],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['@automa/common/build/*'],
+            message:
+              'Please import from `@automa/common`. For types, use `gql/graphql`.',
+          },
+        ],
+      },
+    ],
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': 'warn',

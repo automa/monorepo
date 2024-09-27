@@ -16,6 +16,18 @@ module.exports = {
   plugins: ['simple-import-sort'],
   rules: {
     quotes: ['warn', 'single', { avoidEscape: true }],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['@automa/common/src/*'],
+            message:
+              'Please import from `@automa/common`. For types, use `@automa/prisma`.',
+          },
+        ],
+      },
+    ],
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/ban-ts-comment': 'off',

@@ -1,6 +1,4 @@
-import { IntegrationType, ProviderType } from '@automa/common';
-
-import { TaskItemFragment } from 'gql/graphql';
+import { IntegrationType, ProviderType, TaskItemFragment } from 'gql/graphql';
 
 export const getTaskItemUser = (data?: {
   integration?: IntegrationType;

@@ -2,9 +2,8 @@ import React from 'react';
 import { UserCircle } from '@phosphor-icons/react';
 import { format } from 'date-fns';
 
-import { TaskItemType } from '@automa/common';
-
 import { getFragment } from 'gql';
+import { TaskItemType } from 'gql/graphql';
 import { Avatar, Flex, Tooltip, Typography } from 'shared';
 
 import { UserAvatar } from 'users';

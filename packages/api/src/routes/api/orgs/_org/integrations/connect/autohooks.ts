@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 
-import { IntegrationType } from '@automa/common';
+import { integration } from '@automa/prisma';
 
 import { env } from '../../../../../../env';
 
@@ -16,7 +16,7 @@ export default async function (app: FastifyInstance) {
       where: {
         org_id_type: {
           org_id: request.org!.id,
-          type: integration as IntegrationType,
+          type: integration as integration,
         },
       },
     });

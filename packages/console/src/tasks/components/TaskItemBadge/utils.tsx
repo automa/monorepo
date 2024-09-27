@@ -1,8 +1,11 @@
 import React, { ReactNode } from 'react';
 
-import { IntegrationType, ProviderType, TaskItemType } from '@automa/common';
-
-import { TaskItemFragment } from 'gql/graphql';
+import {
+  IntegrationType,
+  ProviderType,
+  TaskItemFragment,
+  TaskItemType,
+} from 'gql/graphql';
 import { Flex, Typography } from 'shared';
 
 import GithubLogo from 'assets/logos/github.svg?react';

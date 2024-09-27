@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { ProviderType } from '@automa/common';
+import { ProviderType } from 'gql/graphql';
 
 import BotOnboarding from './BotOnboarding';
 

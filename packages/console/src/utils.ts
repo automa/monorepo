@@ -1,6 +1,6 @@
-import { ProviderType } from '@automa/common';
-
 import { environment } from 'env';
+
+import { ProviderType } from 'gql/graphql';
 
 export const appName = (name: string = 'automa') =>
   `${name}${environment === 'production' ? '' : `-${environment}`}`;

@@ -9,9 +9,8 @@ import {
 } from '@phosphor-icons/react';
 import { format, formatDistanceToNow } from 'date-fns';
 
-import { IntegrationType, TaskItemType } from '@automa/common';
-
 import { getFragment } from 'gql';
+import { IntegrationType, TaskItemType } from 'gql/graphql';
 import { Anchor, Avatar, Flex, Tooltip, Typography } from 'shared';
 
 import { USER_AVATAR_FRAGMENT, UserAvatar } from 'users';

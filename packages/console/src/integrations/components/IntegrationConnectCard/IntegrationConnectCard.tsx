@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { IntegrationType } from '@automa/common';
-
+import { IntegrationType } from 'gql/graphql';
 import { Button, Flex, Tooltip, Typography } from 'shared';
 
 import { integrations } from '../../consts';

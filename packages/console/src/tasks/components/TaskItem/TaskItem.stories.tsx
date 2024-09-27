@@ -1,14 +1,13 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { sub } from 'date-fns';
 
+import { makeFragmentData } from 'gql';
 import {
   ProviderType,
   TaskActivityType,
   TaskItemType,
   TaskState,
-} from '@automa/common';
-
-import { makeFragmentData } from 'gql';
+} from 'gql/graphql';
 
 import { USER_AVATAR_FRAGMENT } from 'users';
 

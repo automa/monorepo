@@ -1,4 +1,4 @@
-import { OrgResolvers, QueryResolvers } from '@automa/common';
+import { QueryResolvers, Resolvers } from '@automa/common';
 
 import { Context } from '../types';
 
@@ -17,7 +17,7 @@ export const Query: QueryResolvers<Context> = {
   },
 };
 
-export const Org: OrgResolvers<Context> = {
+export const Org: Resolvers<Context>['Org'] = {
   bot_installations_count: async ({ id }, args, { prisma }) => {
     const {
       _count: { bot_installations: count },

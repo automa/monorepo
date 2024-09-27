@@ -1,4 +1,4 @@
-import { ProviderType } from '@automa/common';
+import { ProviderType } from 'gql/graphql';
 
 export type Org = {
   id: number;
