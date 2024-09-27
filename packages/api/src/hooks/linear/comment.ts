@@ -37,7 +37,7 @@ const create: LinearEventActionHandler<{
   // Find the integration for the organization
   const connection = await app.prisma.integrations.findFirst({
     where: {
-      integration_type: integration.linear,
+      type: integration.linear,
       config: {
         path: ['id'],
         equals: body.organizationId,

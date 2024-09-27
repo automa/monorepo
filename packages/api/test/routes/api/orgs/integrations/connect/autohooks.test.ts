@@ -22,7 +22,7 @@ suite('api/orgs/integrations/connect', () => {
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,
-        integration_type: 'linear',
+        type: 'linear',
         created_by: user.id,
       },
     });

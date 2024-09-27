@@ -7,7 +7,7 @@ const revoked: LinearEventActionHandler<{
 }> = async (app, body) => {
   await app.prisma.integrations.deleteMany({
     where: {
-      integration_type: integration.linear,
+      type: integration.linear,
       config: {
         path: ['id'],
         equals: body.organizationId,

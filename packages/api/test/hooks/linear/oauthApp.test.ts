@@ -30,7 +30,7 @@ suite('linear hook OAuthApp event', () => {
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,
-        integration_type: 'linear',
+        type: 'linear',
         secrets: {
           access_token: 'abcdef',
         },
@@ -69,9 +69,9 @@ suite('linear hook OAuthApp event', () => {
     setup(async () => {
       await app.prisma.integrations.update({
         where: {
-          org_id_integration_type: {
+          org_id_type: {
             org_id: org.id,
-            integration_type: 'linear',
+            type: 'linear',
           },
         },
         data: {

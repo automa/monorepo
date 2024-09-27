@@ -24,7 +24,7 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org }) => {
       (data?.integrations || []).reduce(
         (acc, entry) => ({
           ...acc,
-          [entry.integration_type]: true,
+          [entry.type]: true,
         }),
         {
           [IntegrationType.Github]: org.has_installation,
@@ -44,9 +44,8 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org }) => {
             integration={integrationType}
             connected={connectedIntegrations[integrationType]}
             config={
-              data?.integrations?.find(
-                ({ integration_type }) => integration_type === integrationType,
-              )?.config
+              data?.integrations?.find(({ type }) => type === integrationType)
+                ?.config
             }
             org={org}
           />

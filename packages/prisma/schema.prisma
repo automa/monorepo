@@ -180,17 +180,17 @@ model tasks {
 }
 
 model integrations {
-  id               Int         @id @default(autoincrement())
-  org_id           Int
-  integration_type integration
-  secrets          Json        @default("{}")
-  config           Json        @default("{}")
-  created_by       Int
-  created_at       DateTime    @default(now()) @db.Timestamp(6)
-  users            users       @relation(fields: [created_by], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  orgs             orgs        @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id         Int         @id @default(autoincrement())
+  org_id     Int
+  type       integration
+  secrets    Json        @default("{}")
+  config     Json        @default("{}")
+  created_by Int
+  created_at DateTime    @default(now()) @db.Timestamp(6)
+  users      users       @relation(fields: [created_by], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  orgs       orgs        @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@unique([org_id, integration_type])
+  @@unique([org_id, type])
 }
 
 enum provider {
