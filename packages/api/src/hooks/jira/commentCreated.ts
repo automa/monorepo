@@ -36,7 +36,7 @@ const commentCreated: JiraEventHandler<{
   // Find the integration for the organization
   const connection = await app.prisma.integrations.findFirst({
     where: {
-      integration_type: integration.jira,
+      type: integration.jira,
       config: {
         path: ['url'],
         equals: url,

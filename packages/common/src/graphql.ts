@@ -92,7 +92,7 @@ export type Integration = {
   config: Scalars['JSON']['output'];
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
-  integration_type: IntegrationType;
+  type: IntegrationType;
 };
 
 export enum IntegrationType {
@@ -541,7 +541,7 @@ export type IntegrationResolvers<ContextType = any, ParentType extends Resolvers
   config?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  integration_type?: Resolver<ResolversTypes['IntegrationType'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['IntegrationType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

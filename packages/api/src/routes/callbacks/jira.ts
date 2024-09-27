@@ -126,7 +126,7 @@ export default async function (app: FastifyInstance) {
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,
-        integration_type: integration.jira,
+        type: integration.jira,
         secrets: {
           access_token: accessToken,
           refresh_token: refreshToken,

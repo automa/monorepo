@@ -290,19 +290,19 @@ suite('db', () => {
   });
 
   suite('integrations', () => {
-    test('integration_type is unique per org', async () => {
+    test('type is unique per org', async () => {
       try {
         await app.prisma.integrations.create({
           data: {
             org_id: org.id,
-            integration_type: 'github',
+            type: 'github',
             created_by: user.id,
           },
         });
         await app.prisma.integrations.create({
           data: {
             org_id: org.id,
-            integration_type: 'github',
+            type: 'github',
             created_by: user.id,
           },
         });
@@ -313,7 +313,7 @@ suite('db', () => {
 
         assert.equal(error.code, 'P2002');
         assert.equal(error.meta?.modelName, ['integrations']);
-        assert.deepEqual(error.meta?.target, ['org_id', 'integration_type']);
+        assert.deepEqual(error.meta?.target, ['org_id', 'type']);
       }
     });
   });

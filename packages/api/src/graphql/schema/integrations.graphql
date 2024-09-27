@@ -11,7 +11,7 @@ type Query {
 
 type Integration {
   id: Int!
-  integration_type: IntegrationType!
+  type: IntegrationType!
   config: JSON!
   created_at: DateTime!
 

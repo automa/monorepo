@@ -213,7 +213,7 @@ suite('api/orgs/integrations/connect/linear', () => {
         assert.lengthOf(integrations, 1);
 
         assert.equal(integrations[0].org_id, org.id);
-        assert.equal(integrations[0].integration_type, 'linear');
+        assert.equal(integrations[0].type, 'linear');
         assert.deepEqual(integrations[0].secrets, { access_token: 'abcdef' });
         assert.deepEqual(integrations[0].config, {
           id: '5678',

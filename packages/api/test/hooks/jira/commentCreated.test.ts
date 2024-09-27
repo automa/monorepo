@@ -119,7 +119,7 @@ suite('jira hook comment_created event', () => {
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,
-        integration_type: 'jira',
+        type: 'jira',
         secrets: {
           access_token: 'abcdef',
           refresh_token: 'zyxwvu',
@@ -431,7 +431,7 @@ suite('jira hook comment_created event', () => {
     test('should update integration with new tokens', async () => {
       const integration = await app.prisma.integrations.findFirst({
         where: {
-          integration_type: 'jira',
+          type: 'jira',
           org_id: org.id,
         },
       });
@@ -1078,9 +1078,9 @@ suite('jira hook comment_created event', () => {
     setup(async () => {
       await app.prisma.integrations.update({
         where: {
-          org_id_integration_type: {
+          org_id_type: {
             org_id: org.id,
-            integration_type: 'jira',
+            type: 'jira',
           },
         },
         data: {

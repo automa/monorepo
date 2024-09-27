@@ -14,9 +14,9 @@ export default async function (app: FastifyInstance) {
 
     const connection = await app.prisma.integrations.findUnique({
       where: {
-        org_id_integration_type: {
+        org_id_type: {
           org_id: request.org!.id,
-          integration_type: integration as IntegrationType,
+          type: integration as IntegrationType,
         },
       },
     });

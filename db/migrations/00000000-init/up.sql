@@ -135,12 +135,12 @@ CREATE TYPE public.integration AS ENUM ('github', 'linear', 'slack', 'jira');
 CREATE TABLE public.integrations (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   org_id INTEGER NOT NULL REFERENCES public.orgs(id) ON DELETE CASCADE,
-  integration_type public.integration NOT NULL,
+  type public.integration NOT NULL,
   secrets JSONB NOT NULL DEFAULT '{}',
   config JSONB NOT NULL DEFAULT '{}',
   created_by INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  UNIQUE (org_id, integration_type)
+  UNIQUE (org_id, type)
 );
 
 CREATE TABLE public.tasks (

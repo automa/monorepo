@@ -334,7 +334,7 @@ suite('api/orgs/integrations/connect/jira', () => {
         assert.lengthOf(integrations, 1);
 
         assert.equal(integrations[0].org_id, org.id);
-        assert.equal(integrations[0].integration_type, 'jira');
+        assert.equal(integrations[0].type, 'jira');
         assert.deepEqual(integrations[0].secrets, {
           access_token: 'abcdef',
           refresh_token: 'ghijkl',
