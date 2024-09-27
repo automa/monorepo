@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { ProviderType, TaskItemType } from '@automa/common';
+import { ProviderType, TaskItemType, TaskState } from '@automa/common';
 
 import { makeFragmentData } from 'gql';
 
@@ -21,8 +21,7 @@ const task = {
   title: 'Task 1',
   is_scheduled: false,
   created_at: '2024-05-15T09:04:04.629Z',
-  completed_at: null,
-  is_completed: false,
+  state: TaskState.Started,
   items: [],
 };
 
@@ -87,8 +86,7 @@ export const Completed = {
     task: makeFragmentData(
       {
         ...task,
-        completed_at: '2024-05-16T09:04:04.629Z',
-        is_completed: true,
+        state: TaskState.Completed,
       },
       TASK_FRAGMENT,
     ),

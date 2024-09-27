@@ -162,7 +162,7 @@ suite('jira hook comment_created event', () => {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
         is_scheduled: false,
-        completed_at: null,
+        state: 'started',
       });
       assert.isDefined(tasks[0].token);
 
@@ -302,7 +302,7 @@ suite('jira hook comment_created event', () => {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
         is_scheduled: false,
-        completed_at: null,
+        state: 'started',
       });
       assert.isDefined(tasks[0].token);
 
@@ -460,7 +460,7 @@ suite('jira hook comment_created event', () => {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
         is_scheduled: false,
-        completed_at: null,
+        state: 'started',
       });
     });
 
@@ -926,7 +926,7 @@ suite('jira hook comment_created event', () => {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
         is_scheduled: false,
-        completed_at: null,
+        state: 'started',
       });
       assert.isDefined(tasks[0].token);
 
@@ -948,7 +948,6 @@ suite('jira hook comment_created event', () => {
       assert.deepOwnInclude(taskItems[1], {
         type: 'origin',
         data: {
-          integration: 'jira',
           organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
           organizationUrl: 'https://automa.atlassian.net',
           organizationName: 'Automa',
@@ -957,9 +956,6 @@ suite('jira hook comment_created event', () => {
           projectName: 'Product',
           issuetypeId: '10002',
           issuetypeName: 'Task',
-          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
           issueId: '10281',
           issueKey: 'PRO-93',
           issueTitle: 'Delete tokens when user revokes Github App',
@@ -969,23 +965,13 @@ suite('jira hook comment_created event', () => {
       });
       assert.deepOwnInclude(taskItems[2], {
         type: 'repo',
-        data: {
-          integration: 'jira',
-          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
-        },
+        data: {},
         actor_user_id: user.id,
         repo_id: repo.id,
       });
       assert.deepOwnInclude(taskItems[3], {
         type: 'bot',
-        data: {
-          integration: 'jira',
-          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
-        },
+        data: {},
         actor_user_id: user.id,
         bot_id: secondBot.id,
       });

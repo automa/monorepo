@@ -38,7 +38,7 @@ const push: GithubEventActionHandler<{
     },
   });
 
-  if (!repo?.orgs?.github_installation_id) {
+  if (!repo?.orgs.github_installation_id) {
     return;
   }
 

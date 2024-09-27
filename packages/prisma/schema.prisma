@@ -146,18 +146,20 @@ model bot_installations {
 }
 
 model task_items {
-  id            Int       @id @default(autoincrement())
-  task_id       Int
-  type          task_item
-  data          Json      @default("{}")
-  actor_user_id Int?
-  repo_id       Int?
-  bot_id        Int?
-  created_at    DateTime  @default(now()) @db.Timestamp(6)
-  users         users?    @relation(fields: [actor_user_id], references: [id], onUpdate: NoAction)
-  bots          bots?     @relation(fields: [bot_id], references: [id], onUpdate: NoAction)
-  repos         repos?    @relation(fields: [repo_id], references: [id], onUpdate: NoAction)
-  tasks         tasks     @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id               Int              @id @default(autoincrement())
+  task_id          Int
+  type             task_item
+  data             Json             @default("{}")
+  actor_user_id    Int?
+  repo_id          Int?
+  bot_id           Int?
+  task_activity_id Int?
+  created_at       DateTime         @default(now()) @db.Timestamp(6)
+  users            users?           @relation(fields: [actor_user_id], references: [id], onUpdate: NoAction)
+  bots             bots?            @relation(fields: [bot_id], references: [id], onUpdate: NoAction)
+  repos            repos?           @relation(fields: [repo_id], references: [id], onUpdate: NoAction)
+  task_activities  task_activities? @relation(fields: [task_activity_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tasks            tasks            @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([task_id, created_at])
 }
@@ -167,12 +169,11 @@ model tasks {
   org_id               Int
   title                String       @db.VarChar(255)
   is_scheduled         Boolean      @default(false)
+  state                task_state   @default(started)
   token                String       @db.VarChar(255)
   proposal_token       String?      @db.VarChar(255)
   proposal_base_commit String?      @db.VarChar(40)
   created_at           DateTime     @default(now()) @db.Timestamp(6)
-  completed_at         DateTime?    @db.Timestamp(6)
-  is_completed         Boolean?     @default(dbgenerated("(completed_at IS NOT NULL)"))
   task_items           task_items[]
   orgs                 orgs         @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
@@ -193,6 +194,15 @@ model integrations {
   @@unique([org_id, type])
 }
 
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model task_activities {
+  id         Int           @id @default(autoincrement())
+  type       task_activity
+  from_state task_state?
+  to_state   task_state?
+  task_items task_items[]
+}
+
 enum provider {
   github
   gitlab
@@ -209,6 +219,7 @@ enum task_item {
   repo
   bot
   proposal
+  activity
 }
 
 enum integration {
@@ -216,4 +227,17 @@ enum integration {
   linear
   slack
   jira
+}
+
+enum task_state {
+  started
+  skipped
+  submitted
+  completed
+  cancelled
+  failed
+}
+
+enum task_activity {
+  state
 }

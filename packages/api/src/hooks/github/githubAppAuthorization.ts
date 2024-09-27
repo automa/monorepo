@@ -1,10 +1,7 @@
-import { GithubEventActionHandler } from './types';
+import { GithubEventActionHandler, GithubSender } from './types';
 
 const revoked: GithubEventActionHandler<{
-  sender: {
-    login: string;
-    id: number;
-  };
+  sender: GithubSender;
 }> = async (app, body) => {
   // No need to clear the sessions for the user because they will be
   // automatically logged out when they try to access github

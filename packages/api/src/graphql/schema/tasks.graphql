@@ -7,13 +7,21 @@ type Mutation {
   taskCreate(org_id: Int!, input: TaskMessageInput!): Task!
 }
 
+enum TaskState {
+  started
+  skipped
+  submitted
+  completed
+  cancelled
+  failed
+}
+
 type Task {
   id: Int!
   title: String!
   is_scheduled: Boolean!
+  state: TaskState!
   created_at: DateTime!
-  completed_at: DateTime
-  is_completed: Boolean!
 
   org: Org!
 
@@ -24,12 +32,26 @@ input TasksFilter {
   is_scheduled: Boolean
 }
 
+enum TaskActivityType {
+  state
+}
+
+type TaskActivity {
+  id: Int!
+  type: TaskActivityType!
+
+  # state
+  from_state: TaskState
+  to_state: TaskState
+}
+
 enum TaskItemType {
   message
   origin
   repo
   bot
   proposal
+  activity
 }
 
 type TaskItem {
@@ -41,6 +63,7 @@ type TaskItem {
   actor_user: User
   bot: PublicBot
   repo: Repo
+  activity: TaskActivity
 }
 
 input TaskMessageInput {

@@ -136,7 +136,7 @@ export default async function (app: FastifyInstance) {
       },
     });
 
-    if (!repo?.orgs?.github_installation_id) {
+    if (!repo?.orgs.github_installation_id) {
       return reply.code(404).send();
     }
 

@@ -23,7 +23,7 @@ const Repos: React.FC<ReposProps> = ({ org }) => {
         <Flex justifyContent="center">
           <Loader />
         </Flex>
-      ) : !data?.repos?.length ? (
+      ) : !data?.repos.length ? (
         <Flex justifyContent="center">No repos</Flex>
       ) : (
         <Flex className="grid grid-cols-3 gap-4 md:gap-6">

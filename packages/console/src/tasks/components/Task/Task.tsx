@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, CircleHalf, UserCircle } from '@phosphor-icons/react';
+import { UserCircle } from '@phosphor-icons/react';
 import { format } from 'date-fns';
 
 import { TaskItemType } from '@automa/common';
@@ -13,6 +13,7 @@ import { getTaskItemUser } from 'tasks/utils';
 
 import { TASK_ITEM_FRAGMENT } from '../TaskItem';
 import TaskItemBadge from '../TaskItemBadge';
+import TaskStateIcon from '../TaskStateIcon';
 
 import { TaskProps } from './types';
 
@@ -32,18 +33,7 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
     <Container {...props}>
       <Flex justifyContent="space-between">
         <Flex alignItems="center" className="gap-2">
-          {task.is_completed ? (
-            <Tooltip
-              body={`Completed at ${format(
-                task.completed_at,
-                'MMM dd, yyyy, hh:mm:ss a',
-              )}`}
-            >
-              <CheckCircle className="relative z-10 size-5 text-green-500" />
-            </Tooltip>
-          ) : (
-            <CircleHalf className="size-5 text-yellow-500" />
-          )}
+          <TaskStateIcon state={task.state} />
           <Title to={`../tasks/${task.id}`}>{task.title}</Title>
         </Flex>
         <Flex alignItems="center" className="gap-2">

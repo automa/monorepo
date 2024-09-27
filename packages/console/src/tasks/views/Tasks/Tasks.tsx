@@ -37,7 +37,7 @@ const Tasks: React.FC<TasksProps> = ({ org }) => {
         <Flex justifyContent="center">
           <Loader />
         </Flex>
-      ) : !data?.tasks?.length ? (
+      ) : !data?.tasks.length ? (
         <Flex justifyContent="center">No tasks</Flex>
       ) : filterValues.scheduled === 'false' ? (
         <Flex direction="column" className="gap-4">

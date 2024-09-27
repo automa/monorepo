@@ -123,7 +123,7 @@ suite('linear hook Comment event', () => {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
         is_scheduled: false,
-        completed_at: null,
+        state: 'started',
       });
       assert.isDefined(tasks[0].token);
 
@@ -222,7 +222,7 @@ suite('linear hook Comment event', () => {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
         is_scheduled: false,
-        completed_at: null,
+        state: 'started',
       });
       assert.isDefined(tasks[0].token);
 
@@ -644,7 +644,7 @@ suite('linear hook Comment event', () => {
         org_id: org.id,
         title: 'Delete tokens when user revokes Github App',
         is_scheduled: false,
-        completed_at: null,
+        state: 'started',
       });
       assert.isDefined(tasks[0].token);
 
@@ -666,16 +666,12 @@ suite('linear hook Comment event', () => {
       assert.deepOwnInclude(taskItems[1], {
         type: 'origin',
         data: {
-          integration: 'linear',
           organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
           organizationUrlKey: 'automa',
           organizationName: 'Automa',
           teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
           teamKey: 'PRO',
           teamName: 'Product',
-          userId: '5611201a-9594-4407-9490-731894376791',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           issueIdentifier: 'PRO-93',
           issueTitle: 'Delete tokens when user revokes Github App',
@@ -685,23 +681,13 @@ suite('linear hook Comment event', () => {
       });
       assert.deepOwnInclude(taskItems[2], {
         type: 'repo',
-        data: {
-          integration: 'linear',
-          userId: '5611201a-9594-4407-9490-731894376791',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
-        },
+        data: {},
         actor_user_id: user.id,
         repo_id: repo.id,
       });
       assert.deepOwnInclude(taskItems[3], {
         type: 'bot',
-        data: {
-          integration: 'linear',
-          userId: '5611201a-9594-4407-9490-731894376791',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
-        },
+        data: {},
         actor_user_id: user.id,
         bot_id: secondBot.id,
       });

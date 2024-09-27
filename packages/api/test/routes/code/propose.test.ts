@@ -284,23 +284,12 @@ suite('code/propose', () => {
       });
     });
 
-    test('should return 200', () => {
-      assert.equal(response.statusCode, 200);
+    test('should return 204', () => {
+      assert.equal(response.statusCode, 204);
     });
 
-    test('should return proposal', () => {
-      const data = response.json();
-
-      assert.deepEqual(data, {
-        proposal: {
-          type: 'github',
-          id: 123456,
-          number: 123,
-          title: 'PR Title',
-          head: 'repo-0:pr-head',
-          base: 'pr-base',
-        },
-      });
+    test('should not return any data', () => {
+      assert.isEmpty(response.body);
     });
 
     test('should not get token from github', async () => {
@@ -519,13 +508,31 @@ suite('code/propose', () => {
       assert.isEmpty(response.body);
     });
 
-    test('should complete the task', async () => {
+    test('should mark the task as skipped', async () => {
       task = await app.prisma.tasks.findFirstOrThrow({
         where: { id: task.id },
       });
 
-      assert.isNotNull(task.completed_at);
-      assert.isTrue(task.is_completed);
+      assert.equal(task.state, 'skipped');
+    });
+
+    test('should create task activity saying that bot skipped the task', async () => {
+      const activities = await app.prisma.task_items.findMany({
+        where: { task_id: task.id, type: 'activity' },
+        include: { task_activities: true },
+      });
+
+      assert.lengthOf(activities, 1);
+      assert.deepOwnInclude(activities[0], {
+        actor_user_id: null,
+        bot_id: bot.id,
+        data: {},
+      });
+      assert.deepOwnInclude(activities[0].task_activities, {
+        type: 'state',
+        from_state: 'started',
+        to_state: 'skipped',
+      });
     });
 
     test('should get token from github', async () => {
@@ -562,23 +569,12 @@ suite('code/propose', () => {
       });
     });
 
-    test('should return 201', () => {
-      assert.equal(response.statusCode, 201);
+    test('should return 204', () => {
+      assert.equal(response.statusCode, 204);
     });
 
-    test('should return proposal', () => {
-      const data = response.json();
-
-      assert.deepEqual(data, {
-        proposal: {
-          type: 'github',
-          id: 123456,
-          number: 123,
-          title: 'PR Title',
-          head: `org-0:automa/org-0/bot-0/${task.id}`,
-          base: 'default-branch',
-        },
-      });
+    test('should not return any data', () => {
+      assert.isEmpty(response.body);
     });
 
     test('should get token from github', async () => {
@@ -685,6 +681,14 @@ suite('code/propose', () => {
       });
     });
 
+    test('should mark the task as submitted', async () => {
+      task = await app.prisma.tasks.findFirstOrThrow({
+        where: { id: task.id },
+      });
+
+      assert.equal(task.state, 'submitted');
+    });
+
     test('should update the task with the proposal', async () => {
       const proposals = await app.prisma.task_items.findMany({
         where: { type: 'proposal' },
@@ -705,6 +709,14 @@ suite('code/propose', () => {
         repo_id: repo.id,
         bot_id: bot.id,
       });
+    });
+
+    test('should not create task activity', async () => {
+      const items = await app.prisma.task_items.findMany({
+        where: { task_id: task.id, type: 'activity' },
+      });
+
+      assert.isEmpty(items);
     });
 
     test('should delete the cloned repo', async () => {
@@ -758,23 +770,12 @@ suite('code/propose', () => {
       });
     });
 
-    test('should return 201', () => {
-      assert.equal(response.statusCode, 201);
+    test('should return 204', () => {
+      assert.equal(response.statusCode, 204);
     });
 
-    test('should return proposal', () => {
-      const data = response.json();
-
-      assert.deepEqual(data, {
-        proposal: {
-          type: 'github',
-          id: 123456,
-          number: 123,
-          title: 'PR Title',
-          head: `org-0:automa/bot-0/${task.id}`,
-          base: 'default-branch',
-        },
-      });
+    test('should not return any data', () => {
+      assert.isEmpty(response.body);
     });
 
     test('should get token from github', async () => {
@@ -881,6 +882,14 @@ suite('code/propose', () => {
       });
     });
 
+    test('should mark the task as submitted', async () => {
+      task = await app.prisma.tasks.findFirstOrThrow({
+        where: { id: task.id },
+      });
+
+      assert.equal(task.state, 'submitted');
+    });
+
     test('should update the task with the proposal', async () => {
       const proposals = await app.prisma.task_items.findMany({
         where: { type: 'proposal' },
@@ -901,6 +910,14 @@ suite('code/propose', () => {
         repo_id: repo.id,
         bot_id: bot.id,
       });
+    });
+
+    test('should not create task activity', async () => {
+      const items = await app.prisma.task_items.findMany({
+        where: { task_id: task.id, type: 'activity' },
+      });
+
+      assert.isEmpty(items);
     });
 
     test('should delete the cloned repo', async () => {
@@ -926,23 +943,12 @@ suite('code/propose', () => {
       );
     });
 
-    test('should return 201', () => {
-      assert.equal(response.statusCode, 201);
+    test('should return 204', () => {
+      assert.equal(response.statusCode, 204);
     });
 
-    test('should return proposal', () => {
-      const data = response.json();
-
-      assert.deepEqual(data, {
-        proposal: {
-          type: 'github',
-          id: 123456,
-          number: 123,
-          title: 'PR Title',
-          head: `org-0:automa/org-0/bot-0/${task.id}`,
-          base: 'default-branch',
-        },
-      });
+    test('should not return any data', () => {
+      assert.isEmpty(response.body);
     });
 
     test('should get token from github', async () => {
@@ -1049,6 +1055,14 @@ suite('code/propose', () => {
       });
     });
 
+    test('should mark the task as submitted', async () => {
+      task = await app.prisma.tasks.findFirstOrThrow({
+        where: { id: task.id },
+      });
+
+      assert.equal(task.state, 'submitted');
+    });
+
     test('should update the task with the proposal', async () => {
       const proposals = await app.prisma.task_items.findMany({
         where: { type: 'proposal' },
@@ -1069,6 +1083,14 @@ suite('code/propose', () => {
         repo_id: repo.id,
         bot_id: bot.id,
       });
+    });
+
+    test('should not create task activity', async () => {
+      const items = await app.prisma.task_items.findMany({
+        where: { task_id: task.id, type: 'activity' },
+      });
+
+      assert.isEmpty(items);
     });
 
     test('should delete the cloned repo', async () => {
@@ -1080,100 +1102,127 @@ suite('code/propose', () => {
     });
   });
 
-  suite('with existing pr', () => {
-    setup(async () => {
-      getStub.withArgs('/repos/org-0/repo-0/pulls').resolves({
-        data: [
-          {
-            id: 123456,
-            number: 123,
-            title: 'PR Title',
-            state: 'open',
-            merged: false,
-            head: {
-              label: `org-0:automa/org-0/bot-0/${task.id}`,
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  [
+    {
+      name: 'open',
+      state: 'submitted',
+      prState: 'open',
+      prMerged: false,
+    },
+    {
+      name: 'merged',
+      state: 'completed',
+      prState: 'closed',
+      prMerged: true,
+    },
+    {
+      name: 'closed',
+      state: 'cancelled',
+      prState: 'closed',
+      prMerged: false,
+    },
+  ].forEach(({ name, state, prState, prMerged }) => {
+    suite(`with existing ${name} pr`, () => {
+      setup(async () => {
+        getStub.withArgs('/repos/org-0/repo-0/pulls').resolves({
+          data: [
+            {
+              id: 123456,
+              number: 123,
+              title: 'PR Title',
+              state: prState,
+              merged: prMerged,
+              head: {
+                label: `org-0:automa/org-0/bot-0/${task.id}`,
+              },
+              base: {
+                ref: 'default-branch',
+              },
             },
-            base: {
-              ref: 'default-branch',
-            },
+          ],
+        });
+
+        response = await propose(app, {
+          id: task.id,
+          token: 'abcdef',
+        });
+      });
+
+      test('should return 204', () => {
+        assert.equal(response.statusCode, 204);
+      });
+
+      test('should not return any data', () => {
+        assert.isEmpty(response.body);
+      });
+
+      test('should get token from github', async () => {
+        assert.equal(postStub.callCount, 1);
+        assert.equal(
+          postStub.firstCall.args[0],
+          'https://api.github.com/app/installations/123/access_tokens',
+        );
+      });
+
+      test('should not fetch, commit or push the diff', async () => {
+        assert.equal(zxCmdStub.callCount, 0);
+      });
+
+      test('should check for PR', async () => {
+        assert.equal(getStub.callCount, 2);
+
+        assert.equal(getStub.getCall(0).args[0], '/repos/org-0/repo-0');
+        assert.equal(getStub.getCall(1).args[0], '/repos/org-0/repo-0/pulls');
+        assert.deepEqual(getStub.getCall(1).args[1], {
+          params: {
+            head: `org-0:automa/org-0/bot-0/${task.id}`,
+            base: 'default-branch',
           },
-        ],
+        });
       });
 
-      response = await propose(app, {
-        id: task.id,
-        token: 'abcdef',
-      });
-    });
+      test(`should mark the task as ${state}`, async () => {
+        task = await app.prisma.tasks.findFirstOrThrow({
+          where: { id: task.id },
+        });
 
-    test('should return 201', () => {
-      assert.equal(response.statusCode, 201);
-    });
-
-    test('should return proposal', () => {
-      const data = response.json();
-
-      assert.deepEqual(data, {
-        proposal: {
-          type: 'github',
-          id: 123456,
-          number: 123,
-          title: 'PR Title',
-          head: `org-0:automa/org-0/bot-0/${task.id}`,
-          base: 'default-branch',
-        },
-      });
-    });
-
-    test('should get token from github', async () => {
-      assert.equal(postStub.callCount, 1);
-      assert.equal(
-        postStub.firstCall.args[0],
-        'https://api.github.com/app/installations/123/access_tokens',
-      );
-    });
-
-    test('should not fetch, commit or push the diff', async () => {
-      assert.equal(zxCmdStub.callCount, 0);
-    });
-
-    test('should check for PR', async () => {
-      assert.equal(getStub.callCount, 2);
-
-      assert.equal(getStub.getCall(0).args[0], '/repos/org-0/repo-0');
-      assert.equal(getStub.getCall(1).args[0], '/repos/org-0/repo-0/pulls');
-      assert.deepEqual(getStub.getCall(1).args[1], {
-        params: {
-          head: `org-0:automa/org-0/bot-0/${task.id}`,
-          base: 'default-branch',
-        },
-      });
-    });
-
-    test('should update the task with the proposal', async () => {
-      const proposals = await app.prisma.task_items.findMany({
-        where: { type: 'proposal' },
+        assert.equal(task.state, state);
       });
 
-      assert.lengthOf(proposals, 1);
-      assert.deepOwnInclude(proposals[0], {
-        task_id: task.id,
-        data: {
-          prId: 123456,
-          prNumber: 123,
-          prTitle: 'PR Title',
-          prState: 'open',
-          prMerged: false,
-          prHead: `org-0:automa/org-0/bot-0/${task.id}`,
-          prBase: 'default-branch',
-        },
-        repo_id: repo.id,
-        bot_id: bot.id,
-      });
-    });
+      test('should update the task with the proposal', async () => {
+        const proposals = await app.prisma.task_items.findMany({
+          where: { type: 'proposal' },
+        });
 
-    test('should delete the diff', async () => {
-      assert.isFalse(existsSync(`/tmp/automa/propose/tasks/${task.id}.diff`));
+        assert.lengthOf(proposals, 1);
+        assert.deepOwnInclude(proposals[0], {
+          task_id: task.id,
+          data: {
+            prId: 123456,
+            prNumber: 123,
+            prTitle: 'PR Title',
+            prState,
+            prMerged,
+            prHead: `org-0:automa/org-0/bot-0/${task.id}`,
+            prBase: 'default-branch',
+          },
+          repo_id: repo.id,
+          bot_id: bot.id,
+        });
+      });
+
+      test('should not create task activity', async () => {
+        const items = await app.prisma.task_items.findMany({
+          where: { task_id: task.id, type: 'activity' },
+        });
+
+        assert.isEmpty(items);
+      });
+
+      test('should delete the diff', async () => {
+        assert.isFalse(existsSync(`/tmp/automa/propose/tasks/${task.id}.diff`));
+      });
     });
   });
 });

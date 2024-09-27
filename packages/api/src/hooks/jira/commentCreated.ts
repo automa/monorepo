@@ -1,6 +1,7 @@
+// TODO: Write our own ADF to MD converter
 // @ts-ignore
 import { convert } from 'adf-to-md';
-import axios, { Axios, AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { bot, integration, task_item } from '@automa/prisma';
 
@@ -149,13 +150,22 @@ const commentCreated: JiraEventHandler<{
   );
 
   // Find automa user using email if they exist
-  const automaUser = comment?.author?.emailAddress
+  const automaUser = comment?.author.emailAddress
     ? await app.prisma.users.findFirst({
         where: {
-          email: comment?.author?.emailAddress,
+          email: comment?.author.emailAddress,
         },
       })
     : null;
+  const userData = !automaUser
+    ? {
+        integration: integration.jira,
+        userId: comment?.author.accountId ?? body.comment.author.accountId,
+        userName:
+          comment?.author.displayName ?? body.comment.author.displayName,
+        userEmail: comment?.author.emailAddress,
+      }
+    : {};
 
   // TODO: Check if the issue is already linked to a task
 
@@ -231,13 +241,6 @@ const commentCreated: JiraEventHandler<{
       );
     }
   }
-
-  const userData = {
-    integration: integration.jira,
-    userId: comment?.author?.accountId ?? body.comment.author.accountId,
-    userName: comment?.author?.displayName ?? body.comment.author.displayName,
-    userEmail: comment?.author?.emailAddress,
-  };
 
   const task = await taskCreate(app, {
     org_id: connection.org_id,

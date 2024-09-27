@@ -44,7 +44,7 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org }) => {
             integration={integrationType}
             connected={connectedIntegrations[integrationType]}
             config={
-              data?.integrations?.find(({ type }) => type === integrationType)
+              data?.integrations.find(({ type }) => type === integrationType)
                 ?.config
             }
             org={org}

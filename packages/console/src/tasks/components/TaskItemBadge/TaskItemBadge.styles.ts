@@ -6,7 +6,7 @@ import { TaskItemBadgeStyledProps } from './types';
 
 import { taskItemBadge } from './TaskItemBadge.cva';
 
-export const Container = tw.div`z-10`;
+export const Container = tw.div`z-10 h-6`;
 
 export const Content = tw.div<
   TwcComponentProps<'div'> & TaskItemBadgeStyledProps

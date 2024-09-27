@@ -118,6 +118,7 @@ module.exports = {
         '@graphql-eslint/no-typename-prefix': 'warn',
         '@graphql-eslint/strict-id-in-types': 'off',
         '@graphql-eslint/require-description': 'off',
+        '@graphql-eslint/no-hashtag-description': 'off',
       },
       parserOptions: {
         operations: '**/*.queries.ts',

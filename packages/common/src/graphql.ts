@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { provider, users, user_providers, orgs, repos, bot, bots, bot_installations, integration, integrations, tasks, task_item, task_items } from '@prisma/client';
+import { provider, users, user_providers, orgs, repos, bot, bots, bot_installations, integration, integrations, task_state, tasks, task_activity, task_activities, task_item, task_items } from '@prisma/client';
 import { public_orgs, public_bots } from './public';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -287,18 +287,30 @@ export type Repo = {
 
 export type Task = {
   __typename?: 'Task';
-  completed_at?: Maybe<Scalars['DateTime']['output']>;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
-  is_completed: Scalars['Boolean']['output'];
   is_scheduled: Scalars['Boolean']['output'];
   items: Array<TaskItem>;
   org: Org;
+  state: TaskState;
   title: Scalars['String']['output'];
 };
 
+export type TaskActivity = {
+  __typename?: 'TaskActivity';
+  from_state?: Maybe<TaskState>;
+  id: Scalars['Int']['output'];
+  to_state?: Maybe<TaskState>;
+  type: TaskActivityType;
+};
+
+export enum TaskActivityType {
+  State = 'state'
+}
+
 export type TaskItem = {
   __typename?: 'TaskItem';
+  activity?: Maybe<TaskActivity>;
   actor_user?: Maybe<User>;
   bot?: Maybe<PublicBot>;
   created_at: Scalars['DateTime']['output'];
@@ -309,6 +321,7 @@ export type TaskItem = {
 };
 
 export enum TaskItemType {
+  Activity = 'activity',
   Bot = 'bot',
   Message = 'message',
   Origin = 'origin',
@@ -319,6 +332,15 @@ export enum TaskItemType {
 export type TaskMessageInput = {
   content: Scalars['String']['input'];
 };
+
+export enum TaskState {
+  Cancelled = 'cancelled',
+  Completed = 'completed',
+  Failed = 'failed',
+  Skipped = 'skipped',
+  Started = 'started',
+  Submitted = 'submitted'
+}
 
 export type TasksFilter = {
   is_scheduled?: InputMaybe<Scalars['Boolean']['input']>;
@@ -442,9 +464,12 @@ export type ResolversTypes = {
   Repo: ResolverTypeWrapper<repos>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Task: ResolverTypeWrapper<tasks>;
+  TaskActivity: ResolverTypeWrapper<task_activities>;
+  TaskActivityType: ResolverTypeWrapper<task_activity>;
   TaskItem: ResolverTypeWrapper<task_items>;
   TaskItemType: ResolverTypeWrapper<task_item>;
   TaskMessageInput: TaskMessageInput;
+  TaskState: ResolverTypeWrapper<task_state>;
   TasksFilter: TasksFilter;
   User: ResolverTypeWrapper<users>;
   UserProvider: ResolverTypeWrapper<user_providers>;
@@ -473,6 +498,7 @@ export type ResolversParentTypes = {
   Repo: repos;
   String: Scalars['String']['output'];
   Task: tasks;
+  TaskActivity: task_activities;
   TaskItem: task_items;
   TaskMessageInput: TaskMessageInput;
   TasksFilter: TasksFilter;
@@ -629,18 +655,28 @@ export type RepoResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
-  completed_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  is_completed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   is_scheduled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   items?: Resolver<Array<ResolversTypes['TaskItem']>, ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
+  state?: Resolver<ResolversTypes['TaskState'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TaskActivityResolvers<ContextType = any, ParentType extends ResolversParentTypes['TaskActivity'] = ResolversParentTypes['TaskActivity']> = {
+  from_state?: Resolver<Maybe<ResolversTypes['TaskState']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  to_state?: Resolver<Maybe<ResolversTypes['TaskState']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['TaskActivityType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TaskActivityTypeResolvers = EnumResolverSignature<{ state?: any }, ResolversTypes['TaskActivityType']>;
+
 export type TaskItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['TaskItem'] = ResolversParentTypes['TaskItem']> = {
+  activity?: Resolver<Maybe<ResolversTypes['TaskActivity']>, ParentType, ContextType>;
   actor_user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   bot?: Resolver<Maybe<ResolversTypes['PublicBot']>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -651,7 +687,9 @@ export type TaskItemResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TaskItemTypeResolvers = EnumResolverSignature<{ bot?: any, message?: any, origin?: any, proposal?: any, repo?: any }, ResolversTypes['TaskItemType']>;
+export type TaskItemTypeResolvers = EnumResolverSignature<{ activity?: any, bot?: any, message?: any, origin?: any, proposal?: any, repo?: any }, ResolversTypes['TaskItemType']>;
+
+export type TaskStateResolvers = EnumResolverSignature<{ cancelled?: any, completed?: any, failed?: any, skipped?: any, started?: any, submitted?: any }, ResolversTypes['TaskState']>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -685,8 +723,11 @@ export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   Repo?: RepoResolvers<ContextType>;
   Task?: TaskResolvers<ContextType>;
+  TaskActivity?: TaskActivityResolvers<ContextType>;
+  TaskActivityType?: TaskActivityTypeResolvers;
   TaskItem?: TaskItemResolvers<ContextType>;
   TaskItemType?: TaskItemTypeResolvers;
+  TaskState?: TaskStateResolvers;
   User?: UserResolvers<ContextType>;
   UserProvider?: UserProviderResolvers<ContextType>;
 };

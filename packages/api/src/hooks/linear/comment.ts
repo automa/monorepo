@@ -73,11 +73,20 @@ const create: LinearEventActionHandler<{
   ]);
 
   // Find automa user using email if they exist
+  // TODO: Unify this logic across the app in db/users.ts
   const automaUser = await app.prisma.users.findFirst({
     where: {
       email: user.email,
     },
   });
+  const userData = !automaUser
+    ? {
+        integration: integration.linear,
+        userId: user.id,
+        userName: user.name,
+        userEmail: user.email,
+      }
+    : {};
 
   // TODO: Check if the issue is already linked to a task
 
@@ -153,13 +162,6 @@ const create: LinearEventActionHandler<{
       );
     }
   }
-
-  const userData = {
-    integration: integration.linear,
-    userId: user.id,
-    userName: user.name,
-    userEmail: user.email,
-  };
 
   // Create the task
   const task = await taskCreate(app, {

@@ -1,7 +1,12 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { sub } from 'date-fns';
 
-import { ProviderType, TaskItemType } from '@automa/common';
+import {
+  ProviderType,
+  TaskActivityType,
+  TaskItemType,
+  TaskState,
+} from '@automa/common';
 
 import { makeFragmentData } from 'gql';
 
@@ -128,30 +133,6 @@ export const OriginLinearUser = {
   },
 } satisfies Story;
 
-export const OriginLinearUserAuthor = {
-  args: {
-    taskItem: makeFragmentData(
-      {
-        id: 2,
-        type: TaskItemType.Origin,
-        created_at,
-        data: {
-          integration: 'linear',
-          issueIdentifier: 'DEMO-123',
-          issueTitle: 'Demo Issue',
-          organizationName: 'Demo Org',
-          organizationUrlKey: 'demo',
-          userName: 'John Doe',
-          userEmail: 'john@example.com',
-          commentId: '123',
-        },
-        actor_user,
-      },
-      TASK_ITEM_FRAGMENT,
-    ),
-  },
-} satisfies Story;
-
 export const OriginJira = {
   args: {
     taskItem: makeFragmentData(
@@ -190,30 +171,6 @@ export const OriginJiraUser = {
           userEmail: 'john@example.com',
           commentId: '123',
         },
-      },
-      TASK_ITEM_FRAGMENT,
-    ),
-  },
-} satisfies Story;
-
-export const OriginJiraUserAuthor = {
-  args: {
-    taskItem: makeFragmentData(
-      {
-        id: 2,
-        type: TaskItemType.Origin,
-        created_at,
-        data: {
-          integration: 'jira',
-          issueKey: 'DEMO-123',
-          issueTitle: 'Demo Issue',
-          organizationName: 'Demo Org',
-          organizationUrl: 'https://demo.atlassian.net',
-          userName: 'John Doe',
-          userEmail: 'john@example.com',
-          commentId: '123',
-        },
-        actor_user,
       },
       TASK_ITEM_FRAGMENT,
     ),
@@ -303,34 +260,6 @@ export const BotIntegrationUser = {
           userName: 'John Doe',
           userEmail: 'john@example.com',
         },
-        bot: {
-          id: 1,
-          name: 'aider',
-          image_url: 'https://aider.chat/assets/icons/apple-touch-icon.png',
-          org: {
-            id: 1,
-            name: 'automa',
-          },
-        },
-      },
-      TASK_ITEM_FRAGMENT,
-    ),
-  },
-} satisfies Story;
-
-export const BotIntegrationUserAuthor = {
-  args: {
-    taskItem: makeFragmentData(
-      {
-        id: 2,
-        type: TaskItemType.Bot,
-        created_at,
-        data: {
-          integration: 'linear',
-          userName: 'John Doe',
-          userEmail: 'john@example.com',
-        },
-        actor_user,
         bot: {
           id: 1,
           name: 'aider',
@@ -444,34 +373,6 @@ export const RepoIntegrationUser = {
   },
 } satisfies Story;
 
-export const RepoIntegrationUserAuthor = {
-  args: {
-    taskItem: makeFragmentData(
-      {
-        id: 2,
-        type: TaskItemType.Repo,
-        created_at,
-        data: {
-          integration: 'linear',
-          userName: 'John Doe',
-          userEmail: 'john@example.com',
-        },
-        actor_user,
-        repo: {
-          id: 1,
-          name: 'monorepo',
-          org: {
-            id: 1,
-            provider_type: ProviderType.Github,
-            provider_name: 'automa',
-          },
-        },
-      },
-      TASK_ITEM_FRAGMENT,
-    ),
-  },
-} satisfies Story;
-
 export const ProposalGithub = {
   args: {
     taskItem: makeFragmentData(
@@ -502,6 +403,100 @@ export const ProposalGithub = {
             id: 1,
             name: 'automa',
           },
+        },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const ActivityState = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Activity,
+        created_at,
+        data: {},
+        activity: {
+          id: 1,
+          type: TaskActivityType.State,
+          from_state: TaskState.Submitted,
+          to_state: TaskState.Completed,
+        },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const ActivityStateAuthor = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Activity,
+        created_at,
+        data: {},
+        actor_user,
+        activity: {
+          id: 1,
+          type: TaskActivityType.State,
+          from_state: TaskState.Submitted,
+          to_state: TaskState.Completed,
+        },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const ActivityStateBot = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Activity,
+        created_at,
+        data: {},
+        bot: {
+          id: 1,
+          name: 'aider',
+          image_url: 'https://aider.chat/assets/icons/apple-touch-icon.png',
+          org: {
+            id: 1,
+            name: 'automa',
+          },
+        },
+        activity: {
+          id: 1,
+          type: TaskActivityType.State,
+          from_state: TaskState.Submitted,
+          to_state: TaskState.Completed,
+        },
+      },
+      TASK_ITEM_FRAGMENT,
+    ),
+  },
+} satisfies Story;
+
+export const ActivityStateIntegrationUser = {
+  args: {
+    taskItem: makeFragmentData(
+      {
+        id: 2,
+        type: TaskItemType.Activity,
+        created_at,
+        data: {
+          integration: 'github',
+          userId: 2,
+          userName: 'John Doe',
+        },
+        activity: {
+          id: 1,
+          type: TaskActivityType.State,
+          from_state: TaskState.Submitted,
+          to_state: TaskState.Completed,
         },
       },
       TASK_ITEM_FRAGMENT,

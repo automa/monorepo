@@ -140,4 +140,13 @@ export const TaskItem: TaskItemResolvers<Context> = {
       })
       .repos();
   },
+  activity: ({ id }, args, { prisma }) => {
+    return prisma.task_items
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .task_activities();
+  },
 };

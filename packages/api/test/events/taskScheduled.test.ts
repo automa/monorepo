@@ -49,7 +49,7 @@ suite('events/taskScheduled', () => {
       org_id: org.id,
       title: 'Running org-0/bot-0 on repo-0',
       is_scheduled: true,
-      completed_at: null,
+      state: 'started',
     });
     assert.isDefined(tasks[0].token);
 
