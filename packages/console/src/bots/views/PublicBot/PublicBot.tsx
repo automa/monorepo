@@ -249,7 +249,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
             </Details>
             <Flex direction="column" className="gap-4 px-4">
               {bot.paths.length ? (
-                <Flex className="gap-2">
+                <Flex wrap="wrap" className="gap-2">
                   <DetailsTitle className="gap-1">
                     <Tooltip body="The files paths of the codebase this bot is restricted to">
                       <Question />

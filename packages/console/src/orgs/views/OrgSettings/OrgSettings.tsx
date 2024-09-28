@@ -24,15 +24,15 @@ const OrgSettings: React.FC<OrgSettingsProps> = ({ org }) => {
 
     return [
       {
-        name: 'Billing',
-        path: 'billing',
-        icon: CreditCard,
-      },
-      {
         name: 'Bots',
         path: 'bots',
         icon: Robot,
       },
+      // {
+      //   name: 'Billing',
+      //   path: 'billing',
+      //   icon: CreditCard,
+      // },
     ];
   }, [org]);
 

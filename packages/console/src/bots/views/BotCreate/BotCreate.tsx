@@ -14,7 +14,6 @@ import {
   Input,
   Select,
   SelectItem,
-  Textarea,
   toast,
   Typography,
 } from 'shared';
@@ -103,16 +102,6 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
             input={{
               ...register('short_description'),
               placeholder: 'Uses AI to code.',
-            }}
-          />
-          <Textarea
-            label="Description"
-            optional
-            description="A full description of your bot. This will be shown on the bot's page."
-            error={errors.description?.message}
-            textarea={{
-              ...register('description'),
-              placeholder: 'This bot uses AI to do the given task.',
             }}
           />
           <Controller

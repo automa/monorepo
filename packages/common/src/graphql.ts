@@ -57,6 +57,7 @@ export type BotBase = {
 
 export type BotCreateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
+  homepage?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   short_description: Scalars['String']['input'];
   type: BotType;
@@ -82,6 +83,7 @@ export enum BotType {
 
 export type BotUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
+  homepage?: InputMaybe<Scalars['String']['input']>;
   short_description?: InputMaybe<Scalars['String']['input']>;
   webhook_url?: InputMaybe<Scalars['String']['input']>;
 };
