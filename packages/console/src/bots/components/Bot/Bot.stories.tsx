@@ -11,7 +11,7 @@ const bot = {
   id: 1,
   name: 'Bot',
   short_description: 'Bot description',
-  type: BotType.Event,
+  type: BotType.Manual,
   is_published: true,
   is_preview: false,
   is_deterministic: false,

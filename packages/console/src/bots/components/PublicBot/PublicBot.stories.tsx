@@ -10,7 +10,7 @@ import { PUBLIC_BOT_FRAGMENT } from './PublicBot.queries';
 const publicBot = {
   id: 1,
   name: 'Bot',
-  type: BotType.Event,
+  type: BotType.Manual,
   short_description: 'Bot description',
   is_published: true,
   is_preview: false,

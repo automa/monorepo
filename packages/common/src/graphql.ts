@@ -76,7 +76,7 @@ export type BotInstallation = {
 };
 
 export enum BotType {
-  Event = 'event',
+  Manual = 'manual',
   Scheduled = 'scheduled'
 }
 
@@ -556,7 +556,7 @@ export type BotInstallationResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type BotTypeResolvers = EnumResolverSignature<{ event?: any, scheduled?: any }, ResolversTypes['BotType']>;
+export type BotTypeResolvers = EnumResolverSignature<{ manual?: any, scheduled?: any }, ResolversTypes['BotType']>;
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';

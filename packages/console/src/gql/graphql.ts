@@ -73,7 +73,7 @@ export type BotInstallation = {
 };
 
 export enum BotType {
-  Event = 'event',
+  Manual = 'manual',
   Scheduled = 'scheduled'
 }
 
