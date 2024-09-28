@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { TaskState } from '@automa/common';
+import { TaskState } from 'gql/graphql';
 
 import TaskStateIcon from './TaskStateIcon';
 

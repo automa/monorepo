@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 
-import { IntegrationType } from '@automa/common';
-
+import { IntegrationType } from 'gql/graphql';
 import { Flex, Loader } from 'shared';
 import { objectKeys } from 'utils';
 

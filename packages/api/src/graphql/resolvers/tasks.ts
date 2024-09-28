@@ -1,9 +1,8 @@
 import {
   MutationResolvers,
   QueryResolvers,
-  TaskItemResolvers,
+  Resolvers,
   taskMessageSchema,
-  TaskResolvers,
 } from '@automa/common';
 import { task_item } from '@automa/prisma';
 
@@ -87,7 +86,7 @@ export const Mutation: MutationResolvers<Context> = {
   },
 };
 
-export const Task: TaskResolvers<Context> = {
+export const Task: Resolvers<Context>['Task'] = {
   org: ({ id }, args, { prisma }) => {
     return prisma.tasks
       .findUniqueOrThrow({
@@ -112,7 +111,7 @@ export const Task: TaskResolvers<Context> = {
   },
 };
 
-export const TaskItem: TaskItemResolvers<Context> = {
+export const TaskItem: Resolvers<Context>['TaskItem'] = {
   actor_user: ({ id }, args, { prisma }) => {
     return prisma.task_items
       .findUniqueOrThrow({

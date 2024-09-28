@@ -1,8 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { BotType, ProviderType } from '@automa/common';
-
 import { makeFragmentData } from 'gql';
+import { BotType, ProviderType } from 'gql/graphql';
 
 import PublicBot from './PublicBot';
 

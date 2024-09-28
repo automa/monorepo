@@ -1,6 +1,6 @@
 import { Alarm, BellRinging } from '@phosphor-icons/react';
 
-import { BotType } from '@automa/common';
+import { BotType } from 'gql/graphql';
 
 export const botTypeDefinition = {
   [BotType.Event]: {

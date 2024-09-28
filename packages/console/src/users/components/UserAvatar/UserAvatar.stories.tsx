@@ -1,8 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { ProviderType } from '@automa/common';
-
 import { makeFragmentData } from 'gql';
+import { ProviderType } from 'gql/graphql';
 
 import UserAvatar from './UserAvatar';
 

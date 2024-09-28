@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { IntegrationType, ProviderType } from '@automa/common';
+import { IntegrationType, ProviderType } from 'gql/graphql';
 
 import IntegrationConnectCard from './IntegrationConnectCard';
 

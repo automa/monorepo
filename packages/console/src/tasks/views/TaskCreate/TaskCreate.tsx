@@ -4,9 +4,10 @@ import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { TaskMessageInput, taskMessageSchema } from '@automa/common';
+import { taskMessageSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
+import { TaskMessageInput } from 'gql/graphql';
 import { Button, Flex, Textarea, toast, Typography } from 'shared';
 
 import { TASK_FRAGMENT } from 'tasks';

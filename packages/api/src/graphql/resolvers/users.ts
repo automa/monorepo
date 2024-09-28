@@ -1,7 +1,7 @@
 import {
   MutationResolvers,
   QueryResolvers,
-  UserResolvers,
+  Resolvers,
   userUpdateSchema,
 } from '@automa/common';
 
@@ -30,7 +30,7 @@ export const Mutation: MutationResolvers<Context> = {
   },
 };
 
-export const User: UserResolvers<Context> = {
+export const User: Resolvers<Context>['User'] = {
   providers: ({ id }, args, { prisma }) => {
     return prisma.users
       .findUniqueOrThrow({

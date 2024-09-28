@@ -1,8 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { ProviderType, TaskState } from '@automa/common';
-
 import { makeFragmentData } from 'gql';
+import { ProviderType, TaskState } from 'gql/graphql';
 
 import { TASK_FRAGMENT } from '../Task';
 import { TASK_ITEM_FRAGMENT } from '../TaskItem';

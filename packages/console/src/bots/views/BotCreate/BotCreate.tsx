@@ -4,9 +4,10 @@ import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 
-import { BotCreateInput, botCreateSchema, BotType } from '@automa/common';
+import { botCreateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
+import { BotCreateInput, BotType } from 'gql/graphql';
 import {
   Button,
   Flex,

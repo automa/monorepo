@@ -1,8 +1,6 @@
 import React, { FC, ReactNode, SVGProps } from 'react';
 
-import { IntegrationType, ProviderType } from '@automa/common';
-
-import { TaskItemFragment } from 'gql/graphql';
+import { IntegrationType, ProviderType, TaskItemFragment } from 'gql/graphql';
 import { Typography } from 'shared';
 
 import GithubLogo from 'assets/logos/github.svg?react';

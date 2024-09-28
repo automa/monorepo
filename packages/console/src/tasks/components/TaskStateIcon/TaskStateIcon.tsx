@@ -8,8 +8,7 @@ import {
   XCircle,
 } from '@phosphor-icons/react';
 
-import { TaskState } from '@automa/common';
-
+import { TaskState } from 'gql/graphql';
 import { Tooltip, Typography } from 'shared';
 
 import { TaskStateIconProps } from './types';

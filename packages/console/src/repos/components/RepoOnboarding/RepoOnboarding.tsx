@@ -2,8 +2,7 @@ import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from '@phosphor-icons/react';
 
-import { ProviderType } from '@automa/common';
-
+import { ProviderType } from 'gql/graphql';
 import { Flex, Tooltip, Typography } from 'shared';
 
 import GithubLogo from 'assets/logos/github.svg?react';

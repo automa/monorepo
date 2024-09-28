@@ -1,9 +1,9 @@
 import {
-  BotInstallationResolvers,
   MutationResolvers,
   publicBotFields,
   publicOrgFields,
   QueryResolvers,
+  Resolvers,
 } from '@automa/common';
 
 import { Context } from '../types';
@@ -81,7 +81,7 @@ export const Mutation: MutationResolvers<Context> = {
   },
 };
 
-export const BotInstallation: BotInstallationResolvers<Context> = {
+export const BotInstallation: Resolvers<Context>['BotInstallation'] = {
   org: ({ id }, args, { prisma }) => {
     return prisma.bot_installations
       .findUniqueOrThrow({

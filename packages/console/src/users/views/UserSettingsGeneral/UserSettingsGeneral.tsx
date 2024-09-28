@@ -3,9 +3,10 @@ import { useMutation, useQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { UserUpdateInput, userUpdateSchema } from '@automa/common';
+import { userUpdateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
+import { UserUpdateInput } from 'gql/graphql';
 import { Button, Flex, Input, toast, Typography } from 'shared';
 
 import { ME_QUERY, ME_QUERY_FRAGMENT, USER_AVATAR_FRAGMENT } from 'users';

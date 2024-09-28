@@ -1,6 +1,6 @@
 import { FC, SVGProps } from 'react';
 
-import { ProviderType } from '@automa/common';
+import { ProviderType } from 'gql/graphql';
 
 import GithubLogo from 'assets/logos/github.svg?react';
 import GitlabLogo from 'assets/logos/gitlab.svg?react';

@@ -1,5 +1,4 @@
-import { BotType } from '@automa/common';
-
+import { BotType } from 'gql/graphql';
 import { FiltersDefinition, FilterType } from 'shared';
 
 export const publicBotsfilters: FiltersDefinition = {

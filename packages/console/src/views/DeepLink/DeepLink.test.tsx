@@ -1,8 +1,8 @@
 import { expect } from 'vitest';
 
-import { ProviderType } from '@automa/common';
-
 import { mockedNavigate, render } from 'tests';
+
+import { ProviderType } from 'gql/graphql';
 
 import DeepLink from './DeepLink';
 
