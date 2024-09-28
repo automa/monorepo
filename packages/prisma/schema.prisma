@@ -209,7 +209,7 @@ enum provider {
 }
 
 enum bot {
-  event
+  manual
   scheduled
 }
 

@@ -34,7 +34,7 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
   } = useForm<BotCreateInput>({
     resolver: zodResolver(botCreateSchema),
     defaultValues: {
-      type: BotType.Event,
+      type: BotType.Manual,
     },
   });
 
@@ -121,7 +121,7 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
             render={({ field: { value, onChange } }) => (
               <Select
                 label="Bot type"
-                description="The type of bot you want to create. Event bots are triggered by events, while scheduled bots run on a schedule."
+                description="The type of bot you want to create. Manual bots are triggered by users, while scheduled bots run on a schedule."
                 error={errors.type?.message}
                 select={{
                   ...register('type'),
@@ -129,14 +129,14 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
                   onChange,
                 }}
               >
-                <SelectItem value={BotType.Event}>Event</SelectItem>
+                <SelectItem value={BotType.Manual}>Manual</SelectItem>
                 <SelectItem value={BotType.Scheduled}>Scheduled</SelectItem>
               </Select>
             )}
           />
           <Input
             label="Webhook URL"
-            description="The URL where your bot will receive events from Automa."
+            description="The URL where your bot will receive webhooks from Automa."
             error={errors.webhook_url?.message}
             input={{
               ...register('webhook_url'),

@@ -6,9 +6,9 @@ export const publicBotsfilters: FiltersDefinition = {
     // TODO: Convert to enum filter
     type: FilterType.Boolean,
     false: {
-      label: 'Event',
+      label: 'Manual',
       params: {
-        type: BotType.Event,
+        type: BotType.Manual,
       },
     },
     true: {

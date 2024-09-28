@@ -86,7 +86,7 @@ CREATE TABLE public.user_repos (
   UNIQUE (user_id, repo_id)
 );
 
-CREATE TYPE public.bot AS ENUM ('event', 'scheduled');
+CREATE TYPE public.bot AS ENUM ('manual', 'scheduled');
 
 CREATE TABLE public.bots (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

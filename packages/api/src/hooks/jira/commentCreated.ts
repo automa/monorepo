@@ -182,7 +182,7 @@ const commentCreated: JiraEventHandler<{
       where: {
         org_id: connection.org_id,
         bots: {
-          type: bot.event,
+          type: bot.manual,
         },
       },
       select: {

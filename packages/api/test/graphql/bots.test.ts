@@ -118,7 +118,7 @@ suite('graphql bots', () => {
         assert.equal(bots[0].short_description, 'Bot 0');
         assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
         assert.equal(bots[0].description, 'Bot 0 long description');
-        assert.equal(bots[0].type, 'event');
+        assert.equal(bots[0].type, 'manual');
         assert.equal(bots[0].webhook_url, 'https://example.com/webhook/0');
         assert.equal(bots[0].webhook_secret, 'atma_whsec_0');
         assert.isEmpty(bots[0].paths);
@@ -134,7 +134,7 @@ suite('graphql bots', () => {
         assert.equal(bots[1].short_description, 'Bot 3');
         assert.equal(bots[1].image_url, 'https://example.com/image/3.png');
         assert.equal(bots[1].description, 'Bot 3 long description');
-        assert.equal(bots[1].type, 'event');
+        assert.equal(bots[1].type, 'manual');
         assert.equal(bots[1].webhook_url, 'https://example.com/webhook/3');
         assert.equal(bots[1].webhook_secret, 'atma_whsec_3');
         assert.deepEqual(bots[1].paths, ['path-0', 'path-1']);
@@ -257,7 +257,7 @@ suite('graphql bots', () => {
         assert.equal(bot.short_description, 'Bot 3');
         assert.equal(bot.image_url, 'https://example.com/image/3.png');
         assert.equal(bot.description, 'Bot 3 long description');
-        assert.equal(bot.type, 'event');
+        assert.equal(bot.type, 'manual');
         assert.equal(bot.webhook_url, 'https://example.com/webhook/3');
         assert.equal(bot.webhook_secret, 'atma_whsec_3');
         assert.deepEqual(bot.paths, ['path-0', 'path-1']);
@@ -1330,7 +1330,7 @@ suite('graphql bots', () => {
         name: 'bot-5',
         short_description: 'Bot 5',
         description: 'Bot 5',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/5',
       });
 
@@ -1352,7 +1352,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-5');
       assert.equal(bot.short_description, 'Bot 5');
       assert.equal(bot.description, 'Bot 5');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -1369,7 +1369,7 @@ suite('graphql bots', () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-5',
         short_description: 'Bot 5',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/5',
       });
 
@@ -1391,7 +1391,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-5');
       assert.equal(bot.short_description, 'Bot 5');
       assert.isNull(bot.description);
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -1409,7 +1409,7 @@ suite('graphql bots', () => {
         name: 'bot-5',
         short_description: 'Bot 5',
         description: null,
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/5',
       });
 
@@ -1431,7 +1431,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-5');
       assert.equal(bot.short_description, 'Bot 5');
       assert.isNull(bot.description);
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -1449,7 +1449,7 @@ suite('graphql bots', () => {
         name: 'bot-5',
         short_description: 'Bot 5',
         description: '',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/5',
       });
 
@@ -1471,7 +1471,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-5');
       assert.equal(bot.short_description, 'Bot 5');
       assert.equal(bot.description, '');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -1489,7 +1489,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1515,7 +1515,7 @@ suite('graphql bots', () => {
       const response = await botCreate(app, org.id, {
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1545,7 +1545,7 @@ suite('graphql bots', () => {
         name: 'b',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1584,7 +1584,7 @@ suite('graphql bots', () => {
         name: 'a'.repeat(256),
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1623,7 +1623,7 @@ suite('graphql bots', () => {
         name: 'bot-@#$%',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1659,7 +1659,7 @@ suite('graphql bots', () => {
         name: '     ',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1703,7 +1703,7 @@ suite('graphql bots', () => {
         name: 'new',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1738,7 +1738,7 @@ suite('graphql bots', () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-0',
         short_description: 'Bot 0',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/0',
       });
 
@@ -1766,7 +1766,7 @@ suite('graphql bots', () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-6',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1796,7 +1796,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: 'b',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1835,7 +1835,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: 'a'.repeat(256),
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1874,7 +1874,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: '     ',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
       });
 
@@ -1971,7 +1971,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
       });
 
       assert.equal(response.statusCode, 400);
@@ -2000,7 +2000,7 @@ suite('graphql bots', () => {
         name: 'bot-6',
         short_description: 'Bot 6',
         description: 'Bot 6',
-        type: 'event',
+        type: 'manual',
         webhook_url: 'invalid_url',
       });
 
@@ -2066,7 +2066,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0 that does something');
       assert.equal(bot.description, 'Bot 0 that does something');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2099,7 +2099,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0');
       assert.equal(bot.description, 'Bot 0 that does something');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2132,7 +2132,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0 that does something');
       assert.equal(bot.description, 'Bot 0 that does something');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2165,7 +2165,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0 that does something');
       assert.equal(bot.description, 'Bot 0 long description');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2199,7 +2199,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0 that does something');
       assert.isNull(bot.description);
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2233,7 +2233,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0 that does something');
       assert.equal(bot.description, '');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2272,7 +2272,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-1');
       assert.equal(bot.short_description, 'Bot 1');
       assert.equal(bot.description, 'Bot 1 long description');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/1');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2320,7 +2320,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0');
       assert.equal(bot.description, 'Bot 0 long description');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2370,7 +2370,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0');
       assert.equal(bot.description, 'Bot 0 long description');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2420,7 +2420,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0');
       assert.equal(bot.description, 'Bot 0 long description');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2469,7 +2469,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0');
       assert.equal(bot.description, 'Bot 0 long description');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2517,7 +2517,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0');
       assert.equal(bot.description, 'Bot 0 long description');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);
@@ -2564,7 +2564,7 @@ suite('graphql bots', () => {
       assert.equal(bot.name, 'bot-0');
       assert.equal(bot.short_description, 'Bot 0');
       assert.equal(bot.description, 'Bot 0 long description');
-      assert.equal(bot.type, 'event');
+      assert.equal(bot.type, 'manual');
       assert.equal(bot.webhook_url, 'https://example.com/webhook/0');
       assert.isDefined(bot.webhook_secret);
       assert.isNull(bot.homepage);

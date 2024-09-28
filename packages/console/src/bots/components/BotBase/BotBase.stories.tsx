@@ -10,7 +10,7 @@ import { BOT_BASE_FRAGMENT } from './BotBase.queries';
 const bot = {
   id: 1,
   name: 'Bot',
-  type: BotType.Event,
+  type: BotType.Manual,
   short_description: 'Bot description',
   is_published: true,
   is_preview: false,
