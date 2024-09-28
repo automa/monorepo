@@ -51,7 +51,7 @@ const Select: React.FC<SelectComponentProps> = ({
           })
         }
       >
-        <Trigger>
+        <Trigger id={select.name} $error={error} disabled={select.disabled}>
           <Flex
             inline
             fullWidth
@@ -66,7 +66,9 @@ const Select: React.FC<SelectComponentProps> = ({
         </Trigger>
         <SelectPrimitive.Portal>
           <Content
+            $error={error}
             position="popper"
+            collisionPadding={0}
             {...{ side, sideOffset, align, alignOffset }}
           >
             <ScrollUpButton>

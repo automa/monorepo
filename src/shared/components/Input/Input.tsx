@@ -19,7 +19,7 @@ const Input: React.FC<InputComponentProps> = ({
         {label}
         {!optional && '*'}
       </Label.Root>
-      <Control $error={error} id={input.name} {...input} />
+      <Control $error={error} {...input} />
       <Text variant="small" $error={error}>
         {error ? error : description}
       </Text>
