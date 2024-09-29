@@ -1,5 +1,6 @@
 import React from 'react';
-import * as Label from '@radix-ui/react-label';
+
+import Label from '../Label';
 
 import { InputComponentProps } from './types';
 
@@ -15,10 +16,7 @@ const Input: React.FC<InputComponentProps> = ({
 }) => {
   return (
     <Container {...props}>
-      <Label.Root htmlFor={input.name}>
-        {label}
-        {!optional && '*'}
-      </Label.Root>
+      <Label label={label} optional={optional} name={input.name} />
       <Control $error={error} {...input} />
       <Text variant="small" $error={error}>
         {error ? error : description}

@@ -1,9 +1,9 @@
 import React from 'react';
 import { CaretDown, CaretUp, CaretUpDown, Check } from '@phosphor-icons/react';
-import * as Label from '@radix-ui/react-label';
 import * as SelectPrimitive from '@radix-ui/react-select';
 
 import Flex from '../Flex';
+import Label from '../Label';
 
 import { SelectComponentProps } from './types';
 
@@ -36,10 +36,7 @@ const Select: React.FC<SelectComponentProps> = ({
 }) => {
   return (
     <Container {...props}>
-      <Label.Root htmlFor={select.name}>
-        {label}
-        {!optional && '*'}
-      </Label.Root>
+      <Label label={label} optional={optional} name={select.name} />
       <SelectPrimitive.Root
         name={select.name}
         required={select.required}
