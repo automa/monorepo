@@ -133,11 +133,16 @@ export const Mutation: MutationResolvers<Context> = {
       data: {
         org_id,
         webhook_secret,
+        paths: data.draft_paths,
         ...data,
       },
     });
   },
-  botUpdate: async (_, { org_id, name, input }, { userId, prisma }) => {
+  botUpdate: async (
+    _,
+    { org_id, name, input },
+    { userId, prisma, optimizer },
+  ) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
@@ -148,6 +153,22 @@ export const Mutation: MutationResolvers<Context> = {
 
     const data = botUpdateSchema.parse(input);
 
+    const bot = await prisma.bots.findUniqueOrThrow({
+      where: {
+        org_id_name: {
+          org_id,
+          name,
+        },
+      },
+    });
+
+    // We need approval if:
+    // - The bot has updated paths
+    // - The bot is published
+    // - The server is cloud
+    const isCloud = optimizer.gate('cloud');
+    const needsApproval = data.draft_paths && bot.is_published && isCloud;
+
     return prisma.bots.update({
       where: {
         org_id_name: {
@@ -155,7 +176,14 @@ export const Mutation: MutationResolvers<Context> = {
           name,
         },
       },
-      data: data as Prisma.botsUpdateInput,
+      data: {
+        ...(data as Prisma.botsUpdateInput),
+        ...(!needsApproval
+          ? {
+              paths: data.draft_paths ?? undefined,
+            }
+          : {}),
+      },
     });
   },
 };

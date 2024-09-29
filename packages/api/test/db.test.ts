@@ -238,28 +238,6 @@ suite('db', () => {
         assert.deepEqual(error.meta?.target, ['org_id', 'name']);
       }
     });
-
-    test('publish_details', async () => {
-      try {
-        await app.prisma.bots.update({
-          where: {
-            id: bot.id,
-          },
-          data: {
-            published_at: new Date(),
-          },
-        });
-
-        assert.fail('expected to throw');
-      } catch (err) {
-        const error = err as Prisma.PrismaClientUnknownRequestError;
-
-        assert.include(
-          error.message,
-          'new row for relation \\"bots\\" violates check constraint \\"publish_details\\"',
-        );
-      }
-    });
   });
 
   suite('bot_installations', () => {

@@ -5,10 +5,11 @@ export const BOT_FRAGMENT = gql(`
     id
     name
     short_description
-    image_url
     type
     webhook_url
     webhook_secret
+    draft_paths
+    image_url
     description
     homepage
     is_published

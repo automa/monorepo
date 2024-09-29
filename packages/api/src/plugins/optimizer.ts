@@ -5,19 +5,15 @@ import Statsig, { DynamicConfig } from 'statsig-node';
 
 import { orgs, users } from '@automa/prisma';
 
-import { env, environment } from '../env';
+import { env, environment, isTest } from '../env';
 import { tracer } from '../telemetry';
 
 declare module 'fastify' {
   interface FastifyInstance {
     optimizer: {
-      gate: (key: string, user?: users, org?: orgs) => Promise<boolean>;
-      config: (key: string, user?: users, org?: orgs) => Promise<DynamicConfig>;
-      experiment: (
-        key: string,
-        user?: users,
-        org?: orgs,
-      ) => Promise<DynamicConfig>;
+      gate: (key: string, user?: users, org?: orgs) => boolean;
+      config: (key: string, user?: users, org?: orgs) => DynamicConfig;
+      experiment: (key: string, user?: users, org?: orgs) => DynamicConfig;
     };
   }
 }
@@ -38,7 +34,7 @@ const marshallUser = (user?: users, org?: orgs) =>
       };
 
 const optimizerPlugin: FastifyPluginAsync = async (app) => {
-  const isOptimizerEnabled = !!env.STATSIG_KEY;
+  const isOptimizerEnabled = !isTest && !!env.STATSIG_KEY;
 
   await tracer.startActiveSpan('optimizer:initialize', async (span) => {
     if (isOptimizerEnabled) {
@@ -51,7 +47,7 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
 
     app.decorate('optimizer', {
       gate: (gate: string, user?: users, org?: orgs) =>
-        tracer.startActiveSpan('optimizer:gate', async (span) => {
+        tracer.startActiveSpan('optimizer:gate', (span) => {
           span.setAttribute('gate', gate);
 
           try {
@@ -70,7 +66,7 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
           }
         }),
       config: (key: string, user?: users, org?: orgs) =>
-        tracer.startActiveSpan('optimizer:config', async (span) => {
+        tracer.startActiveSpan('optimizer:config', (span) => {
           span.setAttribute('key', key);
 
           try {
@@ -89,7 +85,7 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
           }
         }),
       experiment: (experiment: string, user?: users, org?: orgs) =>
-        tracer.startActiveSpan('optimizer:experiment', async (span) => {
+        tracer.startActiveSpan('optimizer:experiment', (span) => {
           span.setAttribute('experiment', experiment);
 
           try {
