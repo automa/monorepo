@@ -22,11 +22,7 @@ import { botTypeDefinition } from 'bots/utils';
 
 import { BotProps } from './types';
 
-import {
-  BOT_QUERY,
-  BOT_UPDATE_MUTATION,
-  BOT_VIEW_FRAGMENT,
-} from './Bot.queries';
+import { BOT_FRAGMENT, BOT_QUERY, BOT_UPDATE_MUTATION } from './Bot.queries';
 import { Label, SectionTitle } from './Bot.styles';
 
 const Bot: React.FC<BotProps> = ({ org }) => {
@@ -61,7 +57,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
     },
   );
 
-  const bot = getFragment(BOT_VIEW_FRAGMENT, data?.bot);
+  const bot = getFragment(BOT_FRAGMENT, data?.bot);
 
   return (
     <>

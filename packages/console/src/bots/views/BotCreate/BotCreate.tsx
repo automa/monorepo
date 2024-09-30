@@ -18,7 +18,7 @@ import {
   Typography,
 } from 'shared';
 
-import { BOT_FRAGMENT } from 'bots';
+import { BOT_BASE_FRAGMENT } from 'bots';
 
 import { BotCreateProps } from './types';
 
@@ -57,8 +57,8 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
                 return existing;
 
               const newBotRef = cache.writeFragment({
-                data: getFragment(BOT_FRAGMENT, data.botCreate),
-                fragment: BOT_FRAGMENT,
+                data: getFragment(BOT_BASE_FRAGMENT, data.botCreate),
+                fragment: BOT_BASE_FRAGMENT,
               });
 
               return [...existing, newBotRef];

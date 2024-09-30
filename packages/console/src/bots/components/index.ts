@@ -1,4 +1,4 @@
-export { default as Bot, BOT_FRAGMENT } from './Bot';
+export { default as Bot } from './Bot';
 export { default as BotBase, BOT_BASE_FRAGMENT } from './BotBase';
 export {
   default as BotInstallation,

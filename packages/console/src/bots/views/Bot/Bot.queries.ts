@@ -1,7 +1,7 @@
 import { gql } from 'gql';
 
-export const BOT_VIEW_FRAGMENT = gql(`
-  fragment BotView on Bot {
+export const BOT_FRAGMENT = gql(`
+  fragment Bot on Bot {
     id
     name
     short_description
@@ -23,7 +23,7 @@ export const BOT_QUERY = gql(`
     $name: String!
   ) {
     bot(org_id: $org_id, name: $name) {
-      ...BotView
+      ...Bot
     }
   }
 `);
@@ -31,7 +31,7 @@ export const BOT_QUERY = gql(`
 export const BOT_UPDATE_MUTATION = gql(`
   mutation BotUpdate($org_id: Int!, $name: String!, $input: BotUpdateInput!) {
     botUpdate(org_id: $org_id, name: $name, input: $input) {
-      ...BotView
+      ...Bot
     }
   }
 `);

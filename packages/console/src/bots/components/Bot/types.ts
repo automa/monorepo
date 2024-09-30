@@ -2,8 +2,8 @@ import { HTMLAttributes } from 'react';
 
 import { FragmentType } from 'gql';
 
-import { BOT_FRAGMENT } from './Bot.queries';
+import { BOT_BASE_FRAGMENT } from 'bots';
 
 export interface BotProps extends HTMLAttributes<HTMLDivElement> {
-  bot: FragmentType<typeof BOT_FRAGMENT>;
+  bot: FragmentType<typeof BOT_BASE_FRAGMENT>;
 }
