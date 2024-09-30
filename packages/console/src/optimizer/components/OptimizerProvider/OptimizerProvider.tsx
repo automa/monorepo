@@ -11,12 +11,10 @@ import { OptimizerProviderProps } from './types';
 const OptimizerProvider: React.FC<OptimizerProviderProps> = ({ children }) => {
   const { anonymousId } = useAnalyticsContext();
 
-  // const isOptimizerEnabled = !!import.meta.env.VITE_STATSIG_KEY;
-
   const apiHost = import.meta.env.VITE_STATSIG_HOST;
 
   const { client, isLoading } = useClientAsyncInit(
-    import.meta.env.VITE_STATSIG_KEY,
+    isTest ? '' : import.meta.env.VITE_STATSIG_KEY,
     {
       customIDs: {
         // Checking for undefined because we don't allow loading segment in development

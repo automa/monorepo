@@ -47,6 +47,43 @@ export const OriginJira = {
   },
 } satisfies Story;
 
+export const RepoGithub = {
+  args: {
+    taskItem: {
+      ...meta.args.taskItem,
+      type: TaskItemType.Repo,
+      repo: {
+        id: 1,
+        name: 'monorepo',
+        org: {
+          id: 1,
+          provider_type: ProviderType.Github,
+          provider_name: 'automa',
+        },
+      },
+    },
+  },
+} satisfies Story;
+
+export const Bot = {
+  args: {
+    taskItem: {
+      ...meta.args.taskItem,
+      type: TaskItemType.Bot,
+      bot: {
+        id: 1,
+        name: 'aider',
+        image_url: null,
+        short_description: 'AI bot that codes',
+        org: {
+          id: 1,
+          name: 'automa',
+        },
+      },
+    },
+  },
+} satisfies Story;
+
 export const ProposalGithubOpen = {
   args: {
     taskItem: {

@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const taskItemBadge = cva(
-  'inline-flex w-fit items-center gap-1 rounded-lg py-1',
+  'flex w-fit items-center gap-1 rounded-lg py-1',
   {
     variants: {
       variant: {

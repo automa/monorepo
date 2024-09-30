@@ -5,6 +5,17 @@ import { HoverCardComponentProps } from './types';
 
 import { Container, Content } from './HoverCard.styles';
 
+const HoverCardTriggerWrapper = React.forwardRef<
+  HTMLDivElement,
+  { children: React.ReactNode }
+>(({ children, ...props }, ref) => (
+  <div ref={ref} {...props}>
+    {children}
+  </div>
+));
+
+HoverCardTriggerWrapper.displayName = 'HoverCardTriggerWrapper';
+
 const HoverCard: React.FC<HoverCardComponentProps> = ({
   side,
   sideOffset = 4,
@@ -18,7 +29,9 @@ const HoverCard: React.FC<HoverCardComponentProps> = ({
   return (
     <Container {...props} asChild>
       <HoverCardPrimitive.Root>
-        <HoverCardPrimitive.Trigger>{trigger}</HoverCardPrimitive.Trigger>
+        <HoverCardPrimitive.Trigger asChild>
+          <HoverCardTriggerWrapper>{trigger}</HoverCardTriggerWrapper>
+        </HoverCardPrimitive.Trigger>
         <HoverCardPrimitive.Portal>
           <Content {...{ side, sideOffset, align, alignOffset, arrowPadding }}>
             {children}

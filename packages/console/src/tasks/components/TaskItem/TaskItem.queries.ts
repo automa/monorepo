@@ -12,6 +12,7 @@ export const TASK_ITEM_FRAGMENT = gql(`
     bot {
       id
       name
+      short_description
       image_url
       org {
         id

@@ -7,6 +7,7 @@ export const avatar = cva('!leading-normal', {
       square: '',
     },
     size: {
+      xxsmall: 'size-3 text-2xs',
       xsmall: 'size-4 text-2xs',
       small: 'size-5 text-2xs',
       medium: 'size-6 text-xs',

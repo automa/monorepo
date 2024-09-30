@@ -10,7 +10,7 @@ import { SelectStyledProps } from './types';
 export const Trigger = tw(Select.Trigger)<
   TwcComponentProps<typeof Select.Trigger> & SelectStyledProps
 >(({ $error, disabled }) => [
-  `w-80 lg:w-96 rounded-md bg-neutral-100 p-2 ring-1 ring-neutral-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-500 data-[placeholder]:text-neutral-400`,
+  'w-80 lg:w-96 rounded-md bg-neutral-100 p-2 ring-1 ring-neutral-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-500 data-[placeholder]:text-neutral-400',
   $error && 'ring-red-500',
   disabled && 'cursor-not-allowed bg-neutral-300 opacity-50 ring-0',
 ]);
@@ -20,7 +20,7 @@ export const Value = tw(Select.Value)``;
 export const Content = tw(Select.Content)<
   TwcComponentProps<typeof Select.Content> & SelectStyledProps
 >(({ $error }) => [
-  `relative z-50 min-w-80 lg:min-w-96 overflow-hidden rounded-md p-1 bg-neutral-100 ring-1 ring-neutral-500 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1`,
+  'relative z-50 min-w-80 lg:min-w-96 overflow-hidden rounded-md p-1 bg-neutral-100 ring-1 ring-neutral-500 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
   $error && 'ring-red-500',
 ]);
 

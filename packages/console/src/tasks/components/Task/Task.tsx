@@ -30,8 +30,8 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
 
   return (
     <Container {...props}>
-      <Flex justifyContent="space-between">
-        <Flex alignItems="center" className="gap-2">
+      <Flex wrap="wrap" justifyContent="space-between" className="gap-2">
+        <Flex alignItems="center" className="h-6 gap-2">
           <TaskStateIcon state={task.state} />
           <Title to={`../tasks/${task.id}`}>{task.title}</Title>
         </Flex>
