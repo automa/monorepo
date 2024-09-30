@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import { botUpdateSchema } from '@automa/common';
 
@@ -18,6 +18,8 @@ import {
   Typography,
 } from 'shared';
 
+import { InputPaths } from 'bots';
+
 import { botTypeDefinition } from 'bots/utils';
 
 import { BotProps } from './types';
@@ -30,6 +32,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<BotUpdateInput>({
@@ -103,6 +106,25 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                   placeholder: 'Uses AI to code.',
                 }}
               />
+              <Controller
+                control={control}
+                name="draft_paths"
+                defaultValue={bot.draft_paths}
+                render={({ field: { value, onChange } }) => (
+                  <InputPaths
+                    label="Code paths"
+                    optional
+                    description="Paths of the codebase this bot is restricted to."
+                    error={errors.draft_paths?.message}
+                    {...{
+                      ...register('draft_paths'),
+                      value: value ?? undefined,
+                      onChange,
+                    }}
+                    placeholder="src, test"
+                  />
+                )}
+              />
               <SectionTitle>Webhook</SectionTitle>
               <Input
                 label="Webhook URL"
@@ -128,7 +150,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 error={errors.homepage?.message}
                 input={{
                   ...register('homepage'),
-                  defaultValue: bot.homepage || '',
+                  defaultValue: bot.homepage ?? undefined,
                   placeholder: 'https://example.com',
                 }}
               />
@@ -139,7 +161,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 error={errors.description?.message}
                 textarea={{
                   ...register('description'),
-                  defaultValue: bot.description || '',
+                  defaultValue: bot.description ?? undefined,
                   placeholder: 'This bot uses AI to do the given task.',
                 }}
               />

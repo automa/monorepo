@@ -18,9 +18,20 @@ export const botCreateSchema = z.object<ZodInferSchema<BotCreateInput>>({
     .refine((value) => !RESTRICTED_BOT_NAMES.includes(value), {
       message: 'Must not be a reserved name',
     }),
-  short_description: z.string().trim().min(3).max(255),
-  description: z.string().trim().nullish(),
-  homepage: z.string().url().trim().nullish(),
   type: z.nativeEnum(BotType),
   webhook_url: z.string().url().trim(),
+  short_description: z.string().trim().min(3).max(255),
+  draft_paths: z.array(z.string().trim()),
+  description: z
+    .string()
+    .trim()
+    .transform((value) => (value === '' ? null : value))
+    .nullish(),
+  homepage: z
+    .string()
+    .url()
+    .trim()
+    .or(z.literal(''))
+    .transform((value) => (value === '' ? null : value))
+    .nullish(),
 });

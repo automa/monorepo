@@ -5,4 +5,5 @@ export {
   BOT_INSTALLATION_FRAGMENT,
 } from './BotInstallation';
 export { default as BotOnboarding } from './BotOnboarding';
+export { default as InputPaths } from './InputPaths';
 export { default as PublicBot } from './PublicBot';

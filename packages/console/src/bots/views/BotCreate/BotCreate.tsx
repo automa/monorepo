@@ -18,7 +18,7 @@ import {
   Typography,
 } from 'shared';
 
-import { BOT_BASE_FRAGMENT } from 'bots';
+import { BOT_BASE_FRAGMENT, InputPaths } from 'bots';
 
 import { BotCreateProps } from './types';
 
@@ -131,6 +131,24 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
               ...register('webhook_url'),
               placeholder: 'https://example.com/hook',
             }}
+          />
+          <Controller
+            control={control}
+            name="draft_paths"
+            render={({ field: { value, onChange } }) => (
+              <InputPaths
+                label="Code paths"
+                optional
+                description="Paths of the codebase this bot is restricted to."
+                error={errors.draft_paths?.message}
+                {...{
+                  ...register('draft_paths'),
+                  value,
+                  onChange,
+                }}
+                placeholder="src, test"
+              />
+            )}
           />
         </Flex>
         <Button type="submit" disabled={loading}>

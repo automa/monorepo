@@ -96,8 +96,9 @@ CREATE TABLE public.bots (
   webhook_url VARCHAR(255) NOT NULL,
   webhook_secret VARCHAR(255) NOT NULL,
   short_description VARCHAR(255) NOT NULL,
-  image_url VARCHAR(255),
+  draft_paths TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
   paths TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+  image_url VARCHAR(255),
   description TEXT,
   homepage VARCHAR(255),
   published_at TIMESTAMP,
@@ -105,12 +106,7 @@ CREATE TABLE public.bots (
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   is_preview BOOLEAN NOT NULL DEFAULT FALSE,
   is_deterministic BOOLEAN NOT NULL DEFAULT FALSE,
-  UNIQUE (org_id, name),
-  CONSTRAINT publish_details CHECK (published_at IS NULL OR (
-    published_at IS NOT NULL AND
-    description IS NOT NULL AND
-    homepage IS NOT NULL
-  ))
+  UNIQUE (org_id, name)
 );
 
 CREATE INDEX bots_is_published_idx

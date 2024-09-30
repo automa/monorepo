@@ -5,8 +5,8 @@ export const BOT_BASE_FRAGMENT = gql(`
     id
     name
     short_description
-    image_url
     type
+    image_url
     is_published
     is_preview
     is_deterministic

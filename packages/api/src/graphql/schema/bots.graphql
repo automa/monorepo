@@ -42,6 +42,7 @@ input PublicBotsFilter {
 type Bot implements BotBase @inherits(type: "BotBase") {
   webhook_url: String!
   webhook_secret: String!
+  draft_paths: [String!]!
   published_at: DateTime
   created_at: DateTime!
 
@@ -50,16 +51,18 @@ type Bot implements BotBase @inherits(type: "BotBase") {
 
 input BotCreateInput {
   name: String!
-  short_description: String!
-  description: String
-  homepage: String
   type: BotType!
   webhook_url: String!
+  short_description: String!
+  draft_paths: [String!]!
+  description: String
+  homepage: String
 }
 
 input BotUpdateInput {
+  webhook_url: String
   short_description: String
+  draft_paths: [String!]
   description: String
   homepage: String
-  webhook_url: String
 }

@@ -25,6 +25,7 @@ export type Bot = BotBase & {
   __typename?: 'Bot';
   created_at: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  draft_paths: Array<Scalars['String']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   image_url?: Maybe<Scalars['String']['output']>;
@@ -57,6 +58,7 @@ export type BotBase = {
 
 export type BotCreateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
+  draft_paths: Array<Scalars['String']['input']>;
   homepage?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   short_description: Scalars['String']['input'];
@@ -83,6 +85,7 @@ export enum BotType {
 
 export type BotUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
+  draft_paths?: InputMaybe<Array<Scalars['String']['input']>>;
   homepage?: InputMaybe<Scalars['String']['input']>;
   short_description?: InputMaybe<Scalars['String']['input']>;
   webhook_url?: InputMaybe<Scalars['String']['input']>;
@@ -518,6 +521,7 @@ export type InheritsDirectiveResolver<Result, Parent, ContextType = any, Args = 
 export type BotResolvers<ContextType = any, ParentType extends ResolversParentTypes['Bot'] = ResolversParentTypes['Bot']> = {
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  draft_paths?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   image_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
