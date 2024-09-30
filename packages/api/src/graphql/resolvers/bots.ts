@@ -186,6 +186,28 @@ export const Mutation: MutationResolvers<Context> = {
       },
     });
   },
+  botPublish: async (_, { org_id, name }, { userId, prisma }) => {
+    // Check if the user is a member of the org
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: userId,
+        org_id,
+      },
+    });
+
+    return prisma.bots.update({
+      where: {
+        org_id_name: {
+          org_id,
+          name,
+        },
+        is_published: false,
+      },
+      data: {
+        published_at: new Date(),
+      },
+    });
+  },
 };
 
 export const PublicBot: Resolvers<Context>['PublicBot'] = {

@@ -8,6 +8,7 @@ import { botUpdateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
 import { BotUpdateInput } from 'gql/graphql';
+import { useGateValue } from 'optimizer';
 import {
   Button,
   Flex,
@@ -15,6 +16,7 @@ import {
   Loader,
   Textarea,
   toast,
+  Tooltip,
   Typography,
 } from 'shared';
 
@@ -24,7 +26,12 @@ import { botTypeDefinition } from 'bots/utils';
 
 import { BotProps } from './types';
 
-import { BOT_FRAGMENT, BOT_QUERY, BOT_UPDATE_MUTATION } from './Bot.queries';
+import {
+  BOT_FRAGMENT,
+  BOT_PUBLISH_MUTATION,
+  BOT_QUERY,
+  BOT_UPDATE_MUTATION,
+} from './Bot.queries';
 import { Label, SectionTitle } from './Bot.styles';
 
 const Bot: React.FC<BotProps> = ({ org }) => {
@@ -48,19 +55,33 @@ const Bot: React.FC<BotProps> = ({ org }) => {
   });
 
   // TODO: Handle error
-  const [botUpdate, { loading: mutationLoading, error }] = useMutation(
-    BOT_UPDATE_MUTATION,
-    {
+  const [botUpdate, { loading: updateLoading, error: updateError }] =
+    useMutation(BOT_UPDATE_MUTATION, {
       onCompleted() {
         toast({
           title: 'Bot updated',
           variant: 'success',
         });
       },
-    },
-  );
+    });
+
+  const [botPublish, { loading: publishLoading, error: publishError }] =
+    useMutation(BOT_PUBLISH_MUTATION, {
+      onCompleted() {
+        toast({
+          title: 'Bot published',
+          variant: 'success',
+        });
+      },
+    });
 
   const bot = getFragment(BOT_FRAGMENT, data?.bot);
+
+  const isCloud = useGateValue('cloud');
+  const needsApproval = isCloud && bot && bot.is_published;
+  const needsMarketplaceApproval =
+    needsApproval &&
+    JSON.stringify(bot.draft_paths) !== JSON.stringify(bot.paths);
 
   return (
     <>
@@ -71,7 +92,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
       ) : !bot ? (
         <Flex justifyContent="center">Not found</Flex>
       ) : (
-        <>
+        <Flex fullWidth direction="column" className="gap-8 pb-8">
           <form
             onSubmit={handleSubmit((data) =>
               botUpdate({
@@ -166,11 +187,56 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 }}
               />
             </Flex>
-            <Button type="submit" disabled={mutationLoading} className="mt-8">
+            <Button type="submit" disabled={updateLoading} className="mt-8">
               Update
             </Button>
           </form>
-        </>
+          <Flex direction="column" className="gap-6">
+            <SectionTitle>Publishing</SectionTitle>
+            {bot.is_published ? (
+              <>
+                <Typography variant="large">Your bot is published.</Typography>
+                {needsMarketplaceApproval && (
+                  <>
+                    <Typography className="text-red-600">
+                      Your bot has updates to restricted fields. You need to
+                      request approval to publish your changes. Please contact
+                      support.
+                    </Typography>
+                    <Tooltip body="Coming soon!">
+                      <Button disabled>Submit for approval</Button>
+                    </Tooltip>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <Typography variant="large">
+                  Your bot is not published.
+                </Typography>
+                <Typography className="text-red-600">
+                  Publishing your bot will make it available to all users. You
+                  cannot delete a bot once it is published.
+                </Typography>
+                <div>
+                  <Button
+                    onClick={() =>
+                      botPublish({
+                        variables: {
+                          org_id: org.id,
+                          name: bot.name,
+                        },
+                      })
+                    }
+                    disabled={publishLoading}
+                  >
+                    Publish
+                  </Button>
+                </div>
+              </>
+            )}
+          </Flex>
+        </Flex>
       )}
     </>
   );

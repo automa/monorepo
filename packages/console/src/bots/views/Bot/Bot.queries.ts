@@ -9,6 +9,7 @@ export const BOT_FRAGMENT = gql(`
     webhook_url
     webhook_secret
     draft_paths
+    paths
     image_url
     description
     homepage
@@ -32,6 +33,14 @@ export const BOT_QUERY = gql(`
 export const BOT_UPDATE_MUTATION = gql(`
   mutation BotUpdate($org_id: Int!, $name: String!, $input: BotUpdateInput!) {
     botUpdate(org_id: $org_id, name: $name, input: $input) {
+      ...Bot
+    }
+  }
+`);
+
+export const BOT_PUBLISH_MUTATION = gql(`
+  mutation BotPublish($org_id: Int!, $name: String!) {
+    botPublish(org_id: $org_id, name: $name) {
       ...Bot
     }
   }

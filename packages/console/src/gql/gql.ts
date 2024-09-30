@@ -16,9 +16,10 @@ const documents = {
     "\n  fragment BotBase on BotBase {\n    id\n    name\n    short_description\n    type\n    image_url\n    is_published\n    is_preview\n    is_deterministic\n  }\n": types.BotBaseFragmentDoc,
     "\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      name\n      org {\n        provider_type\n        name\n      }\n    }\n  }\n": types.BotInstallationFragmentDoc,
     "\n  fragment PublicBot on PublicBot {\n    ...BotBase\n    org {\n      name\n    }\n    installation(org_id: $org_id) {\n      id\n    }\n  }\n": types.PublicBotFragmentDoc,
-    "\n  fragment Bot on Bot {\n    id\n    name\n    short_description\n    type\n    webhook_url\n    webhook_secret\n    draft_paths\n    image_url\n    description\n    homepage\n    is_published\n    is_preview\n    is_deterministic\n  }\n": types.BotFragmentDoc,
+    "\n  fragment Bot on Bot {\n    id\n    name\n    short_description\n    type\n    webhook_url\n    webhook_secret\n    draft_paths\n    paths\n    image_url\n    description\n    homepage\n    is_published\n    is_preview\n    is_deterministic\n  }\n": types.BotFragmentDoc,
     "\n  query Bot(\n    $org_id: Int!\n    $name: String!\n  ) {\n    bot(org_id: $org_id, name: $name) {\n      ...Bot\n    }\n  }\n": types.BotDocument,
     "\n  mutation BotUpdate($org_id: Int!, $name: String!, $input: BotUpdateInput!) {\n    botUpdate(org_id: $org_id, name: $name, input: $input) {\n      ...Bot\n    }\n  }\n": types.BotUpdateDocument,
+    "\n  mutation BotPublish($org_id: Int!, $name: String!) {\n    botPublish(org_id: $org_id, name: $name) {\n      ...Bot\n    }\n  }\n": types.BotPublishDocument,
     "\n  mutation BotCreate($org_id: Int!, $input: BotCreateInput!) {\n    botCreate(org_id: $org_id, input: $input) {\n      ...BotBase\n    }\n  }\n": types.BotCreateDocument,
     "\n  query BotInstallations($org_id: Int!) {\n    botInstallations(org_id: $org_id) {\n      id\n      ...BotInstallation\n    }\n  }\n": types.BotInstallationsDocument,
     "\n  query Bots($org_id: Int!) {\n    bots(org_id: $org_id) {\n      id\n      ...BotBase\n    }\n  }\n": types.BotsDocument,
@@ -72,7 +73,7 @@ export function gql(source: "\n  fragment PublicBot on PublicBot {\n    ...BotBa
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment Bot on Bot {\n    id\n    name\n    short_description\n    type\n    webhook_url\n    webhook_secret\n    draft_paths\n    image_url\n    description\n    homepage\n    is_published\n    is_preview\n    is_deterministic\n  }\n"): (typeof documents)["\n  fragment Bot on Bot {\n    id\n    name\n    short_description\n    type\n    webhook_url\n    webhook_secret\n    draft_paths\n    image_url\n    description\n    homepage\n    is_published\n    is_preview\n    is_deterministic\n  }\n"];
+export function gql(source: "\n  fragment Bot on Bot {\n    id\n    name\n    short_description\n    type\n    webhook_url\n    webhook_secret\n    draft_paths\n    paths\n    image_url\n    description\n    homepage\n    is_published\n    is_preview\n    is_deterministic\n  }\n"): (typeof documents)["\n  fragment Bot on Bot {\n    id\n    name\n    short_description\n    type\n    webhook_url\n    webhook_secret\n    draft_paths\n    paths\n    image_url\n    description\n    homepage\n    is_published\n    is_preview\n    is_deterministic\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -81,6 +82,10 @@ export function gql(source: "\n  query Bot(\n    $org_id: Int!\n    $name: Strin
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation BotUpdate($org_id: Int!, $name: String!, $input: BotUpdateInput!) {\n    botUpdate(org_id: $org_id, name: $name, input: $input) {\n      ...Bot\n    }\n  }\n"): (typeof documents)["\n  mutation BotUpdate($org_id: Int!, $name: String!, $input: BotUpdateInput!) {\n    botUpdate(org_id: $org_id, name: $name, input: $input) {\n      ...Bot\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation BotPublish($org_id: Int!, $name: String!) {\n    botPublish(org_id: $org_id, name: $name) {\n      ...Bot\n    }\n  }\n"): (typeof documents)["\n  mutation BotPublish($org_id: Int!, $name: String!) {\n    botPublish(org_id: $org_id, name: $name) {\n      ...Bot\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
