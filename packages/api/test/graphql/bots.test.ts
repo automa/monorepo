@@ -3427,6 +3427,91 @@ suite('graphql bots', () => {
       });
     });
   });
+
+  suite('mutation botPublish', () => {
+    setup(async () => {
+      await seedBots(app, [org], [org, nonMemberOrg]);
+    });
+
+    teardown(async () => {
+      await app.prisma.bots.deleteMany();
+    });
+
+    test('with unpublished bot should succeed', async () => {
+      const response = await botPublish(app, org.id, 'bot-1');
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { botPublish: bot },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(bot.id);
+      assert.equal(bot.name, 'bot-1');
+      assert.isNotNull(bot.published_at);
+      assert.isTrue(bot.is_published);
+
+      const count = await app.prisma.bots.count({
+        where: { is_published: true },
+      });
+
+      assert.equal(count, 2);
+    });
+
+    test('with published bot should fail', async () => {
+      const response = await botPublish(app, org.id, 'bot-0');
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+
+      const count = await app.prisma.bots.count({
+        where: { is_published: true },
+      });
+
+      assert.equal(count, 1);
+    });
+
+    test('non-member org should fail', async () => {
+      const response = await botPublish(app, nonMemberOrg.id, 'bot-2');
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+
+      const count = await app.prisma.bots.count({
+        where: { is_published: true },
+      });
+
+      assert.equal(count, 1);
+    });
+  });
 });
 
 const botCreate = (app: FastifyInstance, orgId: number, input: any) =>
@@ -3492,5 +3577,24 @@ const botUpdate = (
       org_id: orgId,
       name,
       input,
+    },
+  );
+
+const botPublish = (app: FastifyInstance, orgId: number, name: string) =>
+  graphql(
+    app,
+    `
+      mutation BotPublish($org_id: Int!, $name: String!) {
+        botPublish(org_id: $org_id, name: $name) {
+          id
+          name
+          published_at
+          is_published
+        }
+      }
+    `,
+    {
+      org_id: orgId,
+      name,
     },
   );

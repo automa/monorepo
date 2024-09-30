@@ -13,6 +13,7 @@ type Query {
 type Mutation {
   botCreate(org_id: Int!, input: BotCreateInput!): Bot!
   botUpdate(org_id: Int!, name: String!, input: BotUpdateInput!): Bot!
+  botPublish(org_id: Int!, name: String!): Bot!
 }
 
 interface BotBase {
