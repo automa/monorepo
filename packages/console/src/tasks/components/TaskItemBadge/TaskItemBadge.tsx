@@ -28,7 +28,13 @@ const TaskItemBadge: React.FC<TaskItemBadgeComponentProps> = ({
       <HoverCard
         side="top"
         trigger={
-          <Anchor href={definition.link(taskItem)} blank>
+          <Anchor
+            {...{
+              to: definition.to?.(taskItem),
+              href: definition.href?.(taskItem),
+              blank: true,
+            }}
+          >
             <Content $variant={variant}>
               <div className="size-3">{logo}</div>
               <Typography variant="xsmall" className="text-neutral-600">

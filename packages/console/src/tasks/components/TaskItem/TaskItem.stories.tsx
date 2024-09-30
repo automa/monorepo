@@ -188,6 +188,7 @@ export const Bot = {
           id: 1,
           name: 'aider',
           image_url: 'https://aider.chat/assets/icons/apple-touch-icon.png',
+          short_description: 'AI bot that codes',
           org: {
             id: 1,
             name: 'automa',
@@ -211,6 +212,7 @@ export const BotScheduled = {
           id: 1,
           name: 'aider',
           image_url: 'https://aider.chat/assets/icons/apple-touch-icon.png',
+          short_description: 'AI bot that codes',
           org: {
             id: 1,
             name: 'automa',
@@ -236,6 +238,7 @@ export const BotAuthor = {
           id: 1,
           name: 'aider',
           image_url: 'https://aider.chat/assets/icons/apple-touch-icon.png',
+          short_description: 'AI bot that codes',
           org: {
             id: 1,
             name: 'automa',
@@ -263,6 +266,7 @@ export const BotIntegrationUser = {
           id: 1,
           name: 'aider',
           image_url: 'https://aider.chat/assets/icons/apple-touch-icon.png',
+          short_description: 'AI bot that codes',
           org: {
             id: 1,
             name: 'automa',
@@ -398,6 +402,7 @@ export const ProposalGithub = {
           id: 1,
           name: 'aider',
           image_url: 'https://aider.chat/assets/icons/apple-touch-icon.png',
+          short_description: 'AI bot that codes',
           org: {
             id: 1,
             name: 'automa',
@@ -462,6 +467,7 @@ export const ActivityStateBot = {
           id: 1,
           name: 'aider',
           image_url: 'https://aider.chat/assets/icons/apple-touch-icon.png',
+          short_description: 'AI bot that codes',
           org: {
             id: 1,
             name: 'automa',

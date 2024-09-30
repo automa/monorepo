@@ -6,7 +6,7 @@ import {
   TaskItemFragment,
   TaskItemType,
 } from 'gql/graphql';
-import { Flex, Typography } from 'shared';
+import { Avatar, Flex, Typography } from 'shared';
 
 import GithubLogo from 'assets/logos/github.svg?react';
 import JiraLogo from 'assets/logos/jira.svg?react';
@@ -20,7 +20,8 @@ import { originBaseDefinitions, proposalBaseDefinitions } from 'tasks/utils';
 type BadgeFunction = {
   logo: ReactNode | ((item: TaskItemFragment) => ReactNode);
   title: (item: TaskItemFragment) => ReactNode;
-  link: (item: TaskItemFragment) => string;
+  to?: (item: TaskItemFragment) => string;
+  href?: (item: TaskItemFragment) => string;
   content: (item: TaskItemFragment) => ReactNode;
 };
 
@@ -28,7 +29,7 @@ const originDefinitions: Partial<Record<IntegrationType, BadgeFunction>> = {
   [IntegrationType.Linear]: {
     logo: <LinearLogo className="size-3" />,
     title: ({ data }) => data.issueIdentifier,
-    link: originBaseDefinitions[IntegrationType.Linear]!.link,
+    href: originBaseDefinitions[IntegrationType.Linear]!.link,
     content: ({ data }) => (
       <Flex direction="column" className="gap-2">
         <Flex alignItems="center" className="gap-1">
@@ -46,7 +47,7 @@ const originDefinitions: Partial<Record<IntegrationType, BadgeFunction>> = {
   [IntegrationType.Jira]: {
     logo: <JiraLogo className="size-3" />,
     title: ({ data }) => data.issueKey,
-    link: originBaseDefinitions[IntegrationType.Jira]!.link,
+    href: originBaseDefinitions[IntegrationType.Jira]!.link,
     content: ({ data }) => (
       <Flex direction="column" className="gap-2">
         <Flex alignItems="center" className="gap-1">
@@ -63,6 +64,25 @@ const originDefinitions: Partial<Record<IntegrationType, BadgeFunction>> = {
   },
 };
 
+const repoDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
+  [ProviderType.Github]: {
+    logo: <GithubLogo className="size-3" />,
+    title: ({ repo }) => repo!.name,
+    // TODO: Fix link
+    to: ({ repo }) => '../repos',
+    content: ({ repo }) => (
+      <Flex direction="column" className="gap-2">
+        <Flex alignItems="center" className="gap-1">
+          <GithubLogo className="size-3" />
+          <Typography variant="xsmall" className="text-neutral-600">
+            {repo!.org.provider_name} / {repo!.name}
+          </Typography>
+        </Flex>
+      </Flex>
+    ),
+  },
+};
+
 const proposalDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
   [ProviderType.Github]: {
     logo: ({ data }) =>
@@ -74,7 +94,7 @@ const proposalDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
         <Open className="size-3" />
       ),
     title: ({ data }) => `#${data.prNumber}`,
-    link: proposalBaseDefinitions[ProviderType.Github]!.link,
+    href: proposalBaseDefinitions[ProviderType.Github]!.link,
     content: ({ data, repo }) => (
       <Flex direction="column" className="gap-2">
         <Flex alignItems="center" className="gap-1">
@@ -94,6 +114,47 @@ const proposalDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
 export const getBadgeDefinition = (item: TaskItemFragment) => {
   if (item.type === TaskItemType.Origin) {
     return originDefinitions[item.data.integration as IntegrationType];
+  }
+
+  if (item.type === TaskItemType.Repo) {
+    return repoDefinitions[item.repo!.org.provider_type];
+  }
+
+  if (item.type === TaskItemType.Bot) {
+    // TODO: Shorten automa bot's name
+    const botName = `${item.bot!.org.name}/${item.bot!.name}`;
+
+    return {
+      logo: (
+        <Avatar
+          src={item.bot!.image_url ?? null}
+          alt={item.bot!.name}
+          variant="square"
+          size="xxsmall"
+        />
+      ),
+      title: () => botName,
+      href: undefined,
+      to: () => `../bots/${botName}`,
+      content: () => (
+        <Flex direction="column" className="gap-2">
+          <Flex alignItems="center" className="gap-1">
+            <Avatar
+              src={item.bot!.image_url ?? null}
+              alt={item.bot!.name}
+              variant="square"
+              size="xxsmall"
+            />
+            <Typography variant="xsmall" className="text-neutral-800">
+              {item.bot!.org.name} / {item.bot!.name}
+            </Typography>
+          </Flex>
+          <Typography variant="xsmall" className="text-neutral-600">
+            {item.bot!.short_description}
+          </Typography>
+        </Flex>
+      ),
+    };
   }
 
   if (item.type === TaskItemType.Proposal) {

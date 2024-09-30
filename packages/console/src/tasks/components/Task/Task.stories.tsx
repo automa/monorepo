@@ -12,7 +12,9 @@ import Task from './Task';
 import { TASK_FRAGMENT } from './Task.queries';
 
 import TaskItemBadgeStory, {
+  Bot,
   ProposalGithubOpen,
+  RepoGithub,
 } from '../TaskItemBadge/TaskItemBadge.stories';
 
 const task = {
@@ -191,6 +193,8 @@ export const Badges = {
             TaskItemBadgeStory.args.taskItem,
             TASK_ITEM_FRAGMENT,
           ),
+          makeFragmentData(RepoGithub.args.taskItem, TASK_ITEM_FRAGMENT),
+          makeFragmentData(Bot.args.taskItem, TASK_ITEM_FRAGMENT),
           makeFragmentData(
             ProposalGithubOpen.args.taskItem,
             TASK_ITEM_FRAGMENT,
