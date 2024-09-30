@@ -11,7 +11,9 @@ type TextareaProps = $<
     label: string;
     optional?: boolean;
     description?: string;
-    textarea: TextareaHTMLAttributes<HTMLTextAreaElement>;
+    textarea: TextareaHTMLAttributes<HTMLTextAreaElement> & {
+      name: string;
+    };
   } & HTMLAttributes<HTMLDivElement>
 >;
 

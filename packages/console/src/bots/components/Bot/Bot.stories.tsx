@@ -3,9 +3,9 @@ import { Meta, StoryObj } from '@storybook/react';
 import { makeFragmentData } from 'gql';
 import { BotType } from 'gql/graphql';
 
-import Bot from './Bot';
+import { BOT_BASE_FRAGMENT } from 'bots';
 
-import { BOT_FRAGMENT } from './Bot.queries';
+import Bot from './Bot';
 
 const bot = {
   id: 1,
@@ -21,7 +21,7 @@ const meta = {
   title: 'Bot',
   component: Bot,
   args: {
-    bot: makeFragmentData(bot, BOT_FRAGMENT),
+    bot: makeFragmentData(bot, BOT_BASE_FRAGMENT),
   },
 } satisfies Meta<typeof Bot>;
 

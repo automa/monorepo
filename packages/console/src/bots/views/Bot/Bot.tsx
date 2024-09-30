@@ -22,11 +22,7 @@ import { botTypeDefinition } from 'bots/utils';
 
 import { BotProps } from './types';
 
-import {
-  BOT_QUERY,
-  BOT_UPDATE_MUTATION,
-  BOT_VIEW_FRAGMENT,
-} from './Bot.queries';
+import { BOT_FRAGMENT, BOT_QUERY, BOT_UPDATE_MUTATION } from './Bot.queries';
 import { Label, SectionTitle } from './Bot.styles';
 
 const Bot: React.FC<BotProps> = ({ org }) => {
@@ -61,7 +57,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
     },
   );
 
-  const bot = getFragment(BOT_VIEW_FRAGMENT, data?.bot);
+  const bot = getFragment(BOT_FRAGMENT, data?.bot);
 
   return (
     <>
@@ -107,17 +103,6 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                   placeholder: 'Uses AI to code.',
                 }}
               />
-              <Textarea
-                label="Description"
-                optional
-                description="A full description of your bot. This will be shown on the bot's page."
-                error={errors.description?.message}
-                textarea={{
-                  ...register('description'),
-                  defaultValue: bot.description || '',
-                  placeholder: 'This bot uses AI to do the given task.',
-                }}
-              />
               <SectionTitle>Webhook</SectionTitle>
               <Input
                 label="Webhook URL"
@@ -135,6 +120,29 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 <Label>Webhook secret</Label>
                 <Typography>{bot.webhook_secret}</Typography>
               </Flex>
+              <SectionTitle>Marketplace details</SectionTitle>
+              <Input
+                label="Homepage"
+                optional
+                description="The URL to your bot's website."
+                error={errors.homepage?.message}
+                input={{
+                  ...register('homepage'),
+                  defaultValue: bot.homepage || '',
+                  placeholder: 'https://example.com',
+                }}
+              />
+              <Textarea
+                label="Description"
+                optional
+                description="A full description of your bot. This will be shown on the bot's page."
+                error={errors.description?.message}
+                textarea={{
+                  ...register('description'),
+                  defaultValue: bot.description || '',
+                  placeholder: 'This bot uses AI to do the given task.',
+                }}
+              />
             </Flex>
             <Button type="submit" disabled={mutationLoading} className="mt-8">
               Update

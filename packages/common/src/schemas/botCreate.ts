@@ -20,6 +20,7 @@ export const botCreateSchema = z.object<ZodInferSchema<BotCreateInput>>({
     }),
   short_description: z.string().trim().min(3).max(255),
   description: z.string().trim().nullish(),
+  homepage: z.string().url().trim().nullish(),
   type: z.nativeEnum(BotType),
   webhook_url: z.string().url().trim(),
 });

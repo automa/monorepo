@@ -1,8 +1,7 @@
 import React from 'react';
-import * as Label from '@radix-ui/react-label';
 
 import Flex from '../Flex';
-import Typography from '../Typography';
+import Label from '../Label';
 
 import { InputComponentProps } from './types';
 
@@ -18,12 +17,7 @@ const Input: React.FC<InputComponentProps> = ({
 }) => {
   return (
     <Flex {...props} fullWidth direction="column" className="gap-2">
-      <Label.Root htmlFor={input.name}>
-        <Typography className="font-semibold lg:font-semibold">
-          {label}
-          {!optional && <span className="text-red-600">&nbsp;*</span>}
-        </Typography>
-      </Label.Root>
+      <Label label={label} optional={optional} name={input.name} />
       <Control $error={error} id={input.name} {...input} />
       <Text variant="xsmall" $error={error}>
         {error ? error : description}

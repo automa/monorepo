@@ -14,12 +14,11 @@ import {
   Input,
   Select,
   SelectItem,
-  Textarea,
   toast,
   Typography,
 } from 'shared';
 
-import { BOT_FRAGMENT } from 'bots';
+import { BOT_BASE_FRAGMENT } from 'bots';
 
 import { BotCreateProps } from './types';
 
@@ -58,8 +57,8 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
                 return existing;
 
               const newBotRef = cache.writeFragment({
-                data: getFragment(BOT_FRAGMENT, data.botCreate),
-                fragment: BOT_FRAGMENT,
+                data: getFragment(BOT_BASE_FRAGMENT, data.botCreate),
+                fragment: BOT_BASE_FRAGMENT,
               });
 
               return [...existing, newBotRef];
@@ -103,16 +102,6 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
             input={{
               ...register('short_description'),
               placeholder: 'Uses AI to code.',
-            }}
-          />
-          <Textarea
-            label="Description"
-            optional
-            description="A full description of your bot. This will be shown on the bot's page."
-            error={errors.description?.message}
-            textarea={{
-              ...register('description'),
-              placeholder: 'This bot uses AI to do the given task.',
             }}
           />
           <Controller

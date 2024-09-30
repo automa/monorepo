@@ -52,6 +52,7 @@ input BotCreateInput {
   name: String!
   short_description: String!
   description: String
+  homepage: String
   type: BotType!
   webhook_url: String!
 }
@@ -59,5 +60,6 @@ input BotCreateInput {
 input BotUpdateInput {
   short_description: String
   description: String
+  homepage: String
   webhook_url: String
 }
