@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -23,15 +23,21 @@ const UserSettingsGeneral: React.FC<UserSettingsGeneralProps> = () => {
 
   const {
     register,
+    reset,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<UserUpdateInput>({
     resolver: zodResolver(userUpdateSchema),
-    defaultValues: {
-      name: data?.name,
-      email: meData?.email,
-    },
   });
+
+  useEffect(() => {
+    if (meData && data) {
+      reset({
+        name: data?.name,
+        email: meData?.email,
+      });
+    }
+  }, [meData, data, reset]);
 
   // TODO: Handle error
   const [userUpdate, { loading: mutationLoading, error }] = useMutation(
@@ -76,7 +82,7 @@ const UserSettingsGeneral: React.FC<UserSettingsGeneralProps> = () => {
             }}
           />
         </Flex>
-        <Button type="submit" disabled={mutationLoading}>
+        <Button type="submit" disabled={mutationLoading || !isDirty}>
           Save
         </Button>
       </form>

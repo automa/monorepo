@@ -34,6 +34,7 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
     resolver: zodResolver(botCreateSchema),
     defaultValues: {
       type: BotType.Manual,
+      draft_paths: [],
     },
   });
 
@@ -93,14 +94,21 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
             label="Bot name"
             description="The name of your Automa bot."
             error={errors.name?.message}
-            input={{ ...register('name'), placeholder: 'ai-bot' }}
+            input={{
+              ...register('name', {
+                setValueAs: (value) => value || undefined,
+              }),
+              placeholder: 'ai-bot',
+            }}
           />
           <Input
             label="Very short description"
             description="This description will be shown as a tagline under your bot to give users a quick idea of what it does."
             error={errors.short_description?.message}
             input={{
-              ...register('short_description'),
+              ...register('short_description', {
+                setValueAs: (value) => value || undefined,
+              }),
               placeholder: 'Uses AI to code.',
             }}
           />
@@ -128,21 +136,24 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
             description="The URL where your bot will receive webhooks from Automa."
             error={errors.webhook_url?.message}
             input={{
-              ...register('webhook_url'),
+              ...register('webhook_url', {
+                setValueAs: (value) => value || undefined,
+              }),
               placeholder: 'https://example.com/hook',
             }}
           />
           <Controller
             control={control}
             name="draft_paths"
-            render={({ field: { value, onChange } }) => (
+            render={({ field: { name, disabled, value, onChange } }) => (
               <InputPaths
                 label="Code paths"
                 optional
                 description="Paths of the codebase this bot is restricted to."
                 error={errors.draft_paths?.message}
                 {...{
-                  ...register('draft_paths'),
+                  name,
+                  disabled,
                   value,
                   onChange,
                 }}

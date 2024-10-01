@@ -1,13 +1,20 @@
+import { useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import InputPaths from './InputPaths';
 
 const meta = {
   title: 'InputPaths',
-  component: InputPaths,
+  component: (props) => {
+    const [value, onChange] = useState(props.value);
+
+    return <InputPaths {...props} value={value} onChange={onChange} />;
+  },
   args: {
     label: 'Label',
     name: 'name',
+    value: [],
+    onChange: () => {},
   },
 } satisfies Meta<typeof InputPaths>;
 
