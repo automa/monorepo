@@ -13,10 +13,10 @@ type InputPathsProps = $<
     optional?: boolean;
     description?: string;
     name: string;
-    value?: string[];
-    onChange?: (value: string[]) => void;
+    value: string[];
+    onChange: (value: string[]) => void;
     placeholder?: string;
-  } & HTMLAttributes<HTMLDivElement>
+  } & Omit<HTMLAttributes<HTMLDivElement>, 'value' | 'onChange'>
 >;
 
 export type InputPathsComponentProps = Component<InputPathsProps>;

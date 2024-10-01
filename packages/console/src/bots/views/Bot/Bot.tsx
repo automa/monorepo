@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -37,15 +37,6 @@ import { Label, SectionTitle } from './Bot.styles';
 const Bot: React.FC<BotProps> = ({ org }) => {
   const { botName } = useParams();
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<BotUpdateInput>({
-    resolver: zodResolver(botUpdateSchema),
-  });
-
   const { data, loading } = useQuery(BOT_QUERY, {
     variables: {
       name: botName!,
@@ -53,6 +44,24 @@ const Bot: React.FC<BotProps> = ({ org }) => {
     },
     skip: !botName,
   });
+
+  const bot = getFragment(BOT_FRAGMENT, data?.bot);
+
+  const {
+    register,
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors, isDirty, dirtyFields },
+  } = useForm<BotUpdateInput>({
+    resolver: zodResolver(botUpdateSchema),
+  });
+
+  useEffect(() => {
+    if (bot) {
+      reset(bot);
+    }
+  }, [bot, reset]);
 
   // TODO: Handle error
   const [botUpdate, { loading: updateLoading, error: updateError }] =
@@ -75,10 +84,10 @@ const Bot: React.FC<BotProps> = ({ org }) => {
       },
     });
 
-  const bot = getFragment(BOT_FRAGMENT, data?.bot);
-
   const isCloud = useGateValue('cloud');
   const needsApproval = isCloud && bot && bot.is_published;
+
+  const warnAboutNeedingApproval = needsApproval && dirtyFields.draft_paths;
   const needsMarketplaceApproval =
     needsApproval &&
     JSON.stringify(bot.draft_paths) !== JSON.stringify(bot.paths);
@@ -92,7 +101,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
       ) : !bot ? (
         <Flex justifyContent="center">Not found</Flex>
       ) : (
-        <Flex fullWidth direction="column" className="gap-8 pb-8">
+        <Flex fullWidth direction="column" className="gap-6 pb-8">
           <form
             onSubmit={handleSubmit((data) =>
               botUpdate({
@@ -123,23 +132,22 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 error={errors.short_description?.message}
                 input={{
                   ...register('short_description'),
-                  defaultValue: bot.short_description,
                   placeholder: 'Uses AI to code.',
                 }}
               />
               <Controller
                 control={control}
                 name="draft_paths"
-                defaultValue={bot.draft_paths}
-                render={({ field: { value, onChange } }) => (
+                render={({ field: { name, disabled, value, onChange } }) => (
                   <InputPaths
                     label="Code paths"
                     optional
                     description="Paths of the codebase this bot is restricted to."
                     error={errors.draft_paths?.message}
                     {...{
-                      ...register('draft_paths'),
-                      value: value ?? undefined,
+                      name,
+                      disabled,
+                      value: value ?? [],
                       onChange,
                     }}
                     placeholder="src, test"
@@ -153,7 +161,6 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 error={errors.webhook_url?.message}
                 input={{
                   ...register('webhook_url'),
-                  defaultValue: bot.webhook_url,
                   placeholder: 'https://example.com/hook',
                 }}
               />
@@ -170,8 +177,9 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 description="The URL to your bot's website."
                 error={errors.homepage?.message}
                 input={{
-                  ...register('homepage'),
-                  defaultValue: bot.homepage ?? undefined,
+                  ...register('homepage', {
+                    setValueAs: (value) => value || null,
+                  }),
                   placeholder: 'https://example.com',
                 }}
               />
@@ -181,15 +189,28 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 description="A full description of your bot. This will be shown on the bot's page."
                 error={errors.description?.message}
                 textarea={{
-                  ...register('description'),
-                  defaultValue: bot.description ?? undefined,
+                  ...register('description', {
+                    setValueAs: (value) => value || null,
+                  }),
                   placeholder: 'This bot uses AI to do the given task.',
                 }}
               />
             </Flex>
-            <Button type="submit" disabled={updateLoading} className="mt-8">
+            <Button
+              type="submit"
+              disabled={updateLoading || !isDirty}
+              className="mb-2 mt-8"
+            >
               Update
             </Button>
+            {warnAboutNeedingApproval ? (
+              <Typography variant="xsmall" className="text-red-600">
+                You are updating restricted fields. You will need to request
+                approval after saving.
+              </Typography>
+            ) : (
+              <div className="h-4"></div>
+            )}
           </form>
           <Flex direction="column" className="gap-6">
             <SectionTitle>Publishing</SectionTitle>

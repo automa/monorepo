@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import React, { KeyboardEvent, useRef, useState } from 'react';
 import { X } from '@phosphor-icons/react';
 
 import { Flex, Label } from 'shared';
@@ -21,7 +21,6 @@ const InputPaths: React.FC<InputPathsComponentProps> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [values, setValues] = useState(value ?? []);
   const [input, setInput] = useState('');
   const [focus, setFocus] = useState(false);
 
@@ -32,14 +31,14 @@ const InputPaths: React.FC<InputPathsComponentProps> = ({
   const addTag = () => {
     const tag = input.trim();
 
-    if (tag && !values.includes(tag)) {
-      setValues([...values, tag]);
+    if (tag && !value.includes(tag)) {
+      onChange([...value, tag]);
       setInput('');
     }
   };
 
   const removeTag = (tagToRemove: string) => {
-    setValues(values.filter((tag) => tag !== tagToRemove));
+    onChange(value.filter((tag) => tag !== tagToRemove));
   };
 
   const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -48,15 +47,10 @@ const InputPaths: React.FC<InputPathsComponentProps> = ({
       addTag();
     }
 
-    if (e.key === 'Backspace' && !input && values.length) {
-      removeTag(values[values.length - 1]);
+    if (e.key === 'Backspace' && !input && value.length) {
+      removeTag(value[value.length - 1]);
     }
   };
-
-  useEffect(() => {
-    onChange?.(values);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values]);
 
   return (
     <Flex {...props} fullWidth direction="column" className="gap-2">
@@ -68,9 +62,9 @@ const InputPaths: React.FC<InputPathsComponentProps> = ({
         $focus={focus}
         onClick={handleContainerClick}
       >
-        {values.length ? (
+        {value.length ? (
           <Flex wrap="wrap" className="gap-1">
-            {values.map((tag, index) => (
+            {value.map((tag, index) => (
               <Tag key={index}>
                 {tag}
                 <TagX tabIndex={-1} onClick={() => removeTag(tag)}>
