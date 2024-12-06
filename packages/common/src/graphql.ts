@@ -151,7 +151,7 @@ export type MutationBotUpdateArgs = {
 
 
 export type MutationTaskCreateArgs = {
-  input: TaskMessageInput;
+  input: TaskCreateInput;
   org_id: Scalars['Int']['input'];
 };
 
@@ -320,6 +320,10 @@ export enum TaskActivityType {
   State = 'state'
 }
 
+export type TaskCreateInput = {
+  content: Scalars['String']['input'];
+};
+
 export type TaskItem = {
   __typename?: 'TaskItem';
   activity?: Maybe<TaskActivity>;
@@ -340,10 +344,6 @@ export enum TaskItemType {
   Proposal = 'proposal',
   Repo = 'repo'
 }
-
-export type TaskMessageInput = {
-  content: Scalars['String']['input'];
-};
 
 export enum TaskState {
   Cancelled = 'cancelled',
@@ -478,9 +478,9 @@ export type ResolversTypes = {
   Task: ResolverTypeWrapper<tasks>;
   TaskActivity: ResolverTypeWrapper<task_activities>;
   TaskActivityType: ResolverTypeWrapper<task_activity>;
+  TaskCreateInput: TaskCreateInput;
   TaskItem: ResolverTypeWrapper<task_items>;
   TaskItemType: ResolverTypeWrapper<task_item>;
-  TaskMessageInput: TaskMessageInput;
   TaskState: ResolverTypeWrapper<task_state>;
   TasksFilter: TasksFilter;
   User: ResolverTypeWrapper<users>;
@@ -511,8 +511,8 @@ export type ResolversParentTypes = {
   String: Scalars['String']['output'];
   Task: tasks;
   TaskActivity: task_activities;
+  TaskCreateInput: TaskCreateInput;
   TaskItem: task_items;
-  TaskMessageInput: TaskMessageInput;
   TasksFilter: TasksFilter;
   User: users;
   UserProvider: user_providers;

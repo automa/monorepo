@@ -4,7 +4,7 @@ type Query {
 }
 
 type Mutation {
-  taskCreate(org_id: Int!, input: TaskMessageInput!): Task!
+  taskCreate(org_id: Int!, input: TaskCreateInput!): Task!
 }
 
 enum TaskState {
@@ -66,6 +66,6 @@ type TaskItem {
   activity: TaskActivity
 }
 
-input TaskMessageInput {
+input TaskCreateInput {
   content: String!
 }

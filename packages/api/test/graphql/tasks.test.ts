@@ -692,7 +692,7 @@ const taskCreate = (app: FastifyInstance, orgId: number, input: any) =>
   graphql(
     app,
     `
-      mutation taskCreate($org_id: Int!, $input: TaskMessageInput!) {
+      mutation taskCreate($org_id: Int!, $input: TaskCreateInput!) {
         taskCreate(org_id: $org_id, input: $input) {
           id
           title

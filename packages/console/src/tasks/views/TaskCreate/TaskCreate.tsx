@@ -4,10 +4,10 @@ import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { taskMessageSchema } from '@automa/common';
+import { taskCreateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
-import { TaskMessageInput } from 'gql/graphql';
+import { TaskCreateInput } from 'gql/graphql';
 import { Button, Flex, Textarea, toast, Typography } from 'shared';
 
 import { TASK_FRAGMENT } from 'tasks';
@@ -21,8 +21,8 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TaskMessageInput>({
-    resolver: zodResolver(taskMessageSchema),
+  } = useForm<TaskCreateInput>({
+    resolver: zodResolver(taskCreateSchema),
   });
 
   // TODO: Handle error
@@ -51,7 +51,7 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     },
   );
 
-  const onSubmit: SubmitHandler<TaskMessageInput> = async (data) => {
+  const onSubmit: SubmitHandler<TaskCreateInput> = async (data) => {
     await taskCreate({
       variables: {
         org_id: org.id,

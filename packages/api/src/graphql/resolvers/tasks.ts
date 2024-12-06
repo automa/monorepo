@@ -2,7 +2,7 @@ import {
   MutationResolvers,
   QueryResolvers,
   Resolvers,
-  taskMessageSchema,
+  taskCreateSchema,
 } from '@automa/common';
 import { task_item } from '@automa/prisma';
 
@@ -58,7 +58,7 @@ export const Mutation: MutationResolvers<Context> = {
       },
     });
 
-    const data = taskMessageSchema.parse(input);
+    const data = taskCreateSchema.parse(input);
 
     return taskCreate(
       { prisma, events },
