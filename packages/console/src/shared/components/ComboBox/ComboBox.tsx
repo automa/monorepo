@@ -83,7 +83,7 @@ const ComboBox = <T extends ComboBoxOption>({
           >
             <Command>
               <SearchContainer>
-                <MagnifyingGlass />
+                <MagnifyingGlass className="size-4" />
                 <Search placeholder="Search" />
               </SearchContainer>
               <List>
@@ -113,8 +113,14 @@ const ComboBox = <T extends ComboBoxOption>({
                             setOpen(false);
                           }}
                         >
-                          {renderOption(option)}
-                          {option.id === value && <Check />}
+                          <Flex
+                            alignItems="center"
+                            justifyContent="space-between"
+                            fullWidth
+                          >
+                            {renderOption(option)}
+                            {option.id === value && <Check />}
+                          </Flex>
                         </Item>
                       ))}
                     </Group>
@@ -125,7 +131,7 @@ const ComboBox = <T extends ComboBoxOption>({
           </Content>
         </PopoverPrimitive.Portal>
       </PopoverPrimitive.Root>
-      <Text variant="small" $error={error}>
+      <Text variant="xsmall" $error={error}>
         {error ? error : description}
       </Text>
     </Flex>
