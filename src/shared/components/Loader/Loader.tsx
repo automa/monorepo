@@ -1,11 +1,15 @@
 import React from 'react';
 
-import { LoaderProps } from './types';
+import { LoaderComponentProps } from './types';
 
 import { Container } from './Loader.styles';
 
-const Loader: React.FC<LoaderProps> = ({ ...props }) => {
-  return <Container {...props}>Loading...</Container>;
+const Loader: React.FC<LoaderComponentProps> = ({ size, ...props }) => {
+  return (
+    <Container $size={size} {...props}>
+      Loading...
+    </Container>
+  );
 };
 
 export default Loader;
