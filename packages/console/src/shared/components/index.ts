@@ -3,6 +3,7 @@ export { default as Avatar } from './Avatar';
 export * from './Avatar';
 export { default as Badge } from './Badge';
 export { default as Button } from './Button';
+export { default as ComboBox } from './ComboBox';
 export { default as Dialog } from './Dialog';
 export * from './Dialog';
 export { default as DropdownMenu } from './DropdownMenu';

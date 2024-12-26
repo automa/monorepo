@@ -22,7 +22,6 @@ type SelectProps = $<
       onChange?: (event: {
         target: { name: string; value: string };
       }) => void | boolean | Promise<void | boolean>;
-      required?: boolean;
       disabled?: boolean;
       placeholder?: string;
     };

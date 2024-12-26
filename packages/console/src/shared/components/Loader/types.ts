@@ -1,3 +1,16 @@
 import { HTMLAttributes } from 'react';
+import { VariantProps } from 'class-variance-authority';
 
-export interface LoaderProps extends HTMLAttributes<HTMLDivElement> {}
+import { $, Component, Styled } from 'theme';
+
+import { loader } from './Loader.cva';
+
+type LoaderProps = $<
+  {},
+  VariantProps<typeof loader>,
+  HTMLAttributes<HTMLDivElement>
+>;
+
+export type LoaderComponentProps = Component<LoaderProps>;
+
+export type LoaderStyledProps = Styled<LoaderProps>;
