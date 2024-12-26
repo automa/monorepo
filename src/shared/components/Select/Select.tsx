@@ -39,7 +39,7 @@ const Select: React.FC<SelectComponentProps> = ({
       <Label label={label} optional={optional} name={select.name} />
       <SelectPrimitive.Root
         name={select.name}
-        required={select.required}
+        required={!optional}
         disabled={select.disabled}
         value={select.value}
         onValueChange={(value) =>

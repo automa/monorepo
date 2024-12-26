@@ -17,7 +17,12 @@ const Textarea: React.FC<TextareaComponentProps> = ({
   return (
     <Container {...props}>
       <Label label={label} optional={optional} name={textarea.name} />
-      <Control $error={error} id={textarea.name} {...textarea} />
+      <Control
+        $error={error}
+        id={textarea.name}
+        required={!optional}
+        {...textarea}
+      />
       <Text variant="small" $error={error}>
         {error ? error : description}
       </Text>

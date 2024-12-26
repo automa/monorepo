@@ -17,7 +17,7 @@ const Input: React.FC<InputComponentProps> = ({
   return (
     <Container {...props}>
       <Label label={label} optional={optional} name={input.name} />
-      <Control $error={error} {...input} />
+      <Control $error={error} id={input.name} required={!optional} {...input} />
       <Text variant="small" $error={error}>
         {error ? error : description}
       </Text>
