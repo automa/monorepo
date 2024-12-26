@@ -15,6 +15,7 @@ const meta = {
     name: 'name',
     value: [],
     onChange: () => {},
+    required: true,
   },
 } satisfies Meta<typeof InputPaths>;
 
@@ -26,7 +27,7 @@ export const Default = {} satisfies Story;
 
 export const Optional = {
   args: {
-    optional: true,
+    required: false,
   },
 } satisfies Story;
 

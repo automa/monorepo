@@ -10,11 +10,11 @@ type InputPathsProps = $<
   },
   {
     label: string;
-    optional?: boolean;
     description?: string;
     name: string;
     value: string[];
     onChange: (value: string[]) => void;
+    required?: boolean;
     placeholder?: string;
   } & Omit<HTMLAttributes<HTMLDivElement>, 'value' | 'onChange'>
 >;

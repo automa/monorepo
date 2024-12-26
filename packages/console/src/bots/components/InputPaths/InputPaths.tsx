@@ -9,13 +9,13 @@ import { Container, Control, Tag, TagX, Text } from './InputPaths.styles';
 
 const InputPaths: React.FC<InputPathsComponentProps> = ({
   label,
-  optional,
   description,
   error,
   disabled,
   name,
   value,
   onChange,
+  required,
   placeholder,
   ...props
 }) => {
@@ -54,7 +54,7 @@ const InputPaths: React.FC<InputPathsComponentProps> = ({
 
   return (
     <Flex {...props} fullWidth direction="column" className="gap-2">
-      <Label label={label} optional={optional} name={name} />
+      <Label label={label} optional={!required} name={name} />
       <Container
         direction="column"
         $error={error}

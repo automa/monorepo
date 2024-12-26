@@ -148,7 +148,6 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
             render={({ field: { name, disabled, value, onChange } }) => (
               <InputPaths
                 label="Code paths"
-                optional
                 description="Paths of the codebase this bot is restricted to."
                 error={errors.draft_paths?.message}
                 {...{

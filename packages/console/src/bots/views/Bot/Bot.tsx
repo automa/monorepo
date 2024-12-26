@@ -141,7 +141,6 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 render={({ field: { name, disabled, value, onChange } }) => (
                   <InputPaths
                     label="Code paths"
-                    optional
                     description="Paths of the codebase this bot is restricted to."
                     error={errors.draft_paths?.message}
                     {...{
@@ -155,6 +154,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                 )}
               />
               <SectionTitle>Webhook</SectionTitle>
+              {/* TODO: Check submitting form with empty webhook_url and/or short_description */}
               <Input
                 label="Webhook URL"
                 description="The URL where your bot will receive webhooks from Automa."
@@ -173,7 +173,6 @@ const Bot: React.FC<BotProps> = ({ org }) => {
               <SectionTitle>Marketplace details</SectionTitle>
               <Input
                 label="Homepage"
-                optional
                 description="The URL to your bot's website."
                 error={errors.homepage?.message}
                 input={{
@@ -185,7 +184,6 @@ const Bot: React.FC<BotProps> = ({ org }) => {
               />
               <Textarea
                 label="Description"
-                optional
                 description="A full description of your bot. This will be shown on the bot's page."
                 error={errors.description?.message}
                 textarea={{
