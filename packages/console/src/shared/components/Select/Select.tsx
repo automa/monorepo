@@ -26,7 +26,6 @@ const Select: React.FC<SelectComponentProps> = ({
   align,
   alignOffset,
   label,
-  optional,
   description,
   error,
   select,
@@ -35,7 +34,7 @@ const Select: React.FC<SelectComponentProps> = ({
 }) => {
   return (
     <Flex {...props} fullWidth direction="column" className="gap-2">
-      <Label label={label} optional={optional} name={select.name} />
+      <Label label={label} optional={!select.required} name={select.name} />
       <SelectPrimitive.Root
         name={select.name}
         required={select.required}

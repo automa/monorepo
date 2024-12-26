@@ -14,7 +14,6 @@ type SelectProps = $<
     align?: Select.SelectContentProps['align'];
     alignOffset?: Select.SelectContentProps['alignOffset'];
     label: string;
-    optional?: boolean;
     description?: string;
     select: {
       name: string;

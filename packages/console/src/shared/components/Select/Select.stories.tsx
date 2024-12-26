@@ -9,6 +9,7 @@ const meta = {
     label: 'Select',
     select: {
       name: 'name',
+      required: true,
       placeholder: 'Select',
     },
     children: (
@@ -31,7 +32,10 @@ export const Default = {} satisfies Story;
 
 export const Optional = {
   args: {
-    optional: true,
+    select: {
+      ...meta.args.select,
+      required: false,
+    },
   },
 } satisfies Story;
 

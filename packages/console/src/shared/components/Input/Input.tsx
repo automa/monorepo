@@ -9,7 +9,6 @@ import { Control, Text } from './Input.styles';
 
 const Input: React.FC<InputComponentProps> = ({
   label,
-  optional,
   description,
   error,
   input,
@@ -17,7 +16,7 @@ const Input: React.FC<InputComponentProps> = ({
 }) => {
   return (
     <Flex {...props} fullWidth direction="column" className="gap-2">
-      <Label label={label} optional={optional} name={input.name} />
+      <Label label={label} optional={!input.required} name={input.name} />
       <Control $error={error} id={input.name} {...input} />
       <Text variant="xsmall" $error={error}>
         {error ? error : description}

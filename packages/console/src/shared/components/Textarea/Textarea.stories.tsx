@@ -9,6 +9,7 @@ const meta = {
     label: 'Textarea',
     textarea: {
       name: 'name',
+      required: true,
       placeholder: 'Textarea',
     },
   },
@@ -22,7 +23,10 @@ export const Default = {} satisfies Story;
 
 export const Optional = {
   args: {
-    optional: true,
+    textarea: {
+      ...meta.args.textarea,
+      required: false,
+    },
   },
 } satisfies Story;
 

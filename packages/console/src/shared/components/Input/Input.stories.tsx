@@ -9,6 +9,7 @@ const meta = {
     label: 'Input',
     input: {
       name: 'name',
+      required: true,
       placeholder: 'Input',
     },
   },
@@ -22,7 +23,10 @@ export const Default = {} satisfies Story;
 
 export const Optional = {
   args: {
-    optional: true,
+    input: {
+      ...meta.args.input,
+      required: false,
+    },
   },
 } satisfies Story;
 
