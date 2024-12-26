@@ -18,7 +18,7 @@ const Input: React.FC<InputComponentProps> = ({
   return (
     <Flex {...props} fullWidth direction="column" className="gap-2">
       <Label label={label} optional={optional} name={input.name} />
-      <Control $error={error} id={input.name} {...input} />
+      <Control $error={error} id={input.name} required={!optional} {...input} />
       <Text variant="xsmall" $error={error}>
         {error ? error : description}
       </Text>

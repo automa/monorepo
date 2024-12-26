@@ -18,7 +18,12 @@ const Textarea: React.FC<TextareaComponentProps> = ({
   return (
     <Flex {...props} fullWidth direction="column" className="gap-2">
       <Label label={label} optional={optional} name={textarea.name} />
-      <Control $error={error} id={textarea.name} {...textarea} />
+      <Control
+        $error={error}
+        id={textarea.name}
+        required={!optional}
+        {...textarea}
+      />
       <Text variant="xsmall" $error={error}>
         {error ? error : description}
       </Text>
