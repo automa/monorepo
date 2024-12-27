@@ -26,8 +26,8 @@ const Org: React.FC<OrgProps> = () => {
   };
 
   const isOrgIndexView = useRelativeMatch('.');
-  const isOrgTasksView = useRelativeMatch('tasks');
-  const isOrgReposView = useRelativeMatch('repos');
+  const isOrgTasksView = useRelativeMatch('tasks', false);
+  const isOrgReposView = useRelativeMatch('repos', false);
 
   const { setUserOrg } = useAuth();
 

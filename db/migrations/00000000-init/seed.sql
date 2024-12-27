@@ -2,7 +2,8 @@ UPDATE public.orgs SET has_installation = TRUE;
 
 INSERT INTO public.users (name, email)
 VALUES
-  ('John', 'john@example.com');
+  ('John', 'john@example.com'),
+  ('Pavan Sunkara', 'pavan.sss1991@gmail.com');
 
 INSERT INTO public.user_providers (user_id, provider_type, provider_id, provider_email, refresh_token)
 VALUES
@@ -10,11 +11,16 @@ VALUES
 
 INSERT INTO public.user_orgs (user_id, org_id)
 VALUES
-  (1, 1);
+  (1, 1),
+  (2, 1);
 
 INSERT INTO public.repos (org_id, name, provider_id, is_private, is_archived, has_installation)
 VALUES
   (1, 'monorepo', '245484486', TRUE, FALSE, TRUE);
+
+INSERT INTO public.user_repos (user_id, repo_id)
+VALUES
+  (2, 1);
 
 INSERT INTO public.bots (org_id, name, short_description, image_url, type, webhook_url, webhook_secret, homepage, published_at, is_deterministic, is_preview, paths, draft_paths)
 VALUES
