@@ -133,8 +133,10 @@ module.exports = {
         '@graphql-eslint/no-hashtag-description': 'off',
       },
       parserOptions: {
-        operations: '**/*.queries.ts',
-        schema: '**/*.graphql',
+        graphQLConfig: {
+          documents: '**/*.queries.ts',
+          schema: '**/*.graphql',
+        },
       },
     },
   ],
