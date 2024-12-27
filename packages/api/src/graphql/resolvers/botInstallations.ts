@@ -1,3 +1,6 @@
+import { ApolloServerErrorCode } from '@apollo/server/errors';
+import { GraphQLError } from 'graphql';
+
 import {
   MutationResolvers,
   publicBotFields,
@@ -9,7 +12,7 @@ import {
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  botInstallations: async (root, { org_id }, { userId, prisma }) => {
+  botInstallations: async (root, { org_id, filter }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
@@ -21,6 +24,9 @@ export const Query: QueryResolvers<Context> = {
     return prisma.bot_installations.findMany({
       where: {
         org_id,
+        bots: {
+          type: filter?.type ?? undefined,
+        },
       },
       orderBy: {
         created_at: 'asc',
@@ -40,7 +46,7 @@ export const Mutation: MutationResolvers<Context> = {
     });
 
     // Check if org owns the bot or if the bot is published
-    await prisma.bots.findFirstOrThrow({
+    const bot = await prisma.bots.findFirst({
       where: {
         id: bot_id,
         OR: [
@@ -54,10 +60,25 @@ export const Mutation: MutationResolvers<Context> = {
       },
     });
 
+    if (!bot) {
+      throw new GraphQLError('Unprocessable Entity', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_USER_INPUT,
+          errors: [
+            {
+              code: 'invalid',
+              message: 'Bot not found',
+              path: ['bot_id'],
+            },
+          ],
+        },
+      });
+    }
+
     return prisma.bot_installations.create({
       data: {
         org_id,
-        bot_id,
+        bot_id: bot.id,
       },
     });
   },

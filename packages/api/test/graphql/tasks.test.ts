@@ -2,6 +2,7 @@ import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { assert } from 'chai';
 
 import {
+  bot_installations,
   bots,
   orgs,
   repos,
@@ -23,7 +24,7 @@ import {
 suite('graphql tasks', () => {
   let app: FastifyInstance, user: users;
   let org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
-  let repo: repos, bot: bots;
+  let repo: repos, bot: bots, secondBot: bots;
 
   suiteSetup(async () => {
     app = await server();
@@ -32,7 +33,16 @@ suite('graphql tasks', () => {
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
     await seedUserOrgs(app, user, [org, secondOrg]);
     [repo] = await seedRepos(app, [org]);
-    [bot] = await seedBots(app, [nonMemberOrg]);
+    [bot, secondBot] = await seedBots(app, [nonMemberOrg, nonMemberOrg]);
+
+    await app.prisma.bots.update({
+      data: {
+        type: 'scheduled',
+      },
+      where: {
+        id: bot.id,
+      },
+    });
 
     app.addHook('preValidation', async (request) => {
       request.session.userId = user.id;
@@ -505,6 +515,29 @@ suite('graphql tasks', () => {
   });
 
   suite('mutation taskCreate', () => {
+    let botInstallations: bot_installations[];
+
+    suiteSetup(async () => {
+      botInstallations = await app.prisma.bot_installations.createManyAndReturn(
+        {
+          data: [
+            {
+              bot_id: bot.id,
+              org_id: org.id,
+            },
+            {
+              bot_id: secondBot.id,
+              org_id: org.id,
+            },
+          ],
+        },
+      );
+    });
+
+    suiteTeardown(async () => {
+      await app.prisma.bot_installations.deleteMany();
+    });
+
     suite('with valid input', () => {
       let response: LightMyRequestResponse;
 
@@ -512,6 +545,8 @@ suite('graphql tasks', () => {
         response = await taskCreate(app, org.id, {
           content:
             'Send an analytics event when user clicks on "Create Task" button',
+          bot_installation_id: botInstallations[1].id,
+          repo_id: repo.id,
         });
       });
 
@@ -557,15 +592,33 @@ suite('graphql tasks', () => {
         assert.isDefined(task.token);
       });
 
-      test('should create task item', async () => {
-        const [taskItem] = await app.prisma.task_items.findMany();
+      test('should create task items', async () => {
+        const taskItems = await app.prisma.task_items.findMany();
 
-        assert.equal(taskItem.type, 'message');
-        assert.deepEqual(taskItem.data, {
+        assert.lengthOf(taskItems, 4);
+
+        assert.equal(taskItems[0].type, 'message');
+        assert.deepEqual(taskItems[0].data, {
           content:
             'Send an analytics event when user clicks on "Create Task" button',
         });
-        assert.equal(taskItem.actor_user_id, user.id);
+        assert.equal(taskItems[0].actor_user_id, user.id);
+
+        assert.equal(taskItems[1].type, 'origin');
+        assert.deepEqual(taskItems[1].data, {
+          orgId: org.id,
+        });
+        assert.equal(taskItems[1].actor_user_id, user.id);
+
+        assert.equal(taskItems[2].type, 'repo');
+        assert.deepEqual(taskItems[2].data, {});
+        assert.equal(taskItems[2].actor_user_id, user.id);
+        assert.equal(taskItems[2].repo_id, repo.id);
+
+        assert.equal(taskItems[3].type, 'bot');
+        assert.deepEqual(taskItems[3].data, {});
+        assert.equal(taskItems[3].actor_user_id, user.id);
+        assert.equal(taskItems[3].bot_id, secondBot.id);
       });
     });
 
@@ -573,6 +626,8 @@ suite('graphql tasks', () => {
       const response = await taskCreate(app, nonMemberOrg.id, {
         content:
           'Send an analytics event when user clicks on "Create Task" button',
+        bot_installation_id: botInstallations[1].id,
+        repo_id: repo.id,
       });
 
       assert.equal(response.statusCode, 200);
@@ -594,7 +649,10 @@ suite('graphql tasks', () => {
     });
 
     test('with missing content should fail', async () => {
-      const response = await taskCreate(app, org.id, {});
+      const response = await taskCreate(app, org.id, {
+        bot_installation_id: botInstallations[1].id,
+        repo_id: repo.id,
+      });
 
       assert.equal(response.statusCode, 400);
 
@@ -617,9 +675,39 @@ suite('graphql tasks', () => {
       assert.equal(count, 0);
     });
 
+    test('with null content should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content: null,
+        bot_installation_id: botInstallations[1].id,
+        repo_id: repo.id,
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Variable "$input" got invalid value null at "input.content"; Expected non-nullable type "String!" not to be null.',
+      );
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
+    });
+
     test('with short content should fail', async () => {
       const response = await taskCreate(app, org.id, {
         content: 'abc',
+        bot_installation_id: botInstallations[1].id,
+        repo_id: repo.id,
       });
 
       assert.equal(response.statusCode, 200);
@@ -655,6 +743,8 @@ suite('graphql tasks', () => {
     test('with content containing only spaces should fail', async () => {
       const response = await taskCreate(app, org.id, {
         content: '     ',
+        bot_installation_id: botInstallations[1].id,
+        repo_id: repo.id,
       });
 
       assert.equal(response.statusCode, 200);
@@ -685,6 +775,294 @@ suite('graphql tasks', () => {
 
       assert.equal(count, 0);
     });
+
+    test('with missing bot_installation_id should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content:
+          'Send an analytics event when user clicks on "Create Task" button',
+        repo_id: repo.id,
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Field "bot_installation_id" of required type "Int!" was not provided',
+      );
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
+    });
+
+    test('with null bot_installation_id should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content:
+          'Send an analytics event when user clicks on "Create Task" button',
+        bot_installation_id: null,
+        repo_id: repo.id,
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Variable "$input" got invalid value null at "input.bot_installation_id"; Expected non-nullable type "Int!" not to be null.',
+      );
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
+    });
+
+    test('with invalid bot_installation_id should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content:
+          'Send an analytics event when user clicks on "Create Task" button',
+        bot_installation_id: -1,
+        repo_id: repo.id,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_small',
+          exact: false,
+          inclusive: false,
+          message: 'Number must be greater than 0',
+          minimum: 0,
+          path: ['bot_installation_id'],
+          type: 'number',
+        },
+      ]);
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
+    });
+
+    test('with non-existent bot_installation_id should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content:
+          'Send an analytics event when user clicks on "Create Task" button',
+        bot_installation_id: 1,
+        repo_id: repo.id,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'invalid',
+          message: 'Bot installation not found',
+          path: ['bot_installation_id'],
+        },
+      ]);
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
+    });
+
+    test('with scheduled bot should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content:
+          'Send an analytics event when user clicks on "Create Task" button',
+        bot_installation_id: botInstallations[0].id,
+        repo_id: repo.id,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'invalid',
+          message: 'Bot installation not found',
+          path: ['bot_installation_id'],
+        },
+      ]);
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
+    });
+
+    test('with missing repo_id should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content:
+          'Send an analytics event when user clicks on "Create Task" button',
+        bot_installation_id: botInstallations[1].id,
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Field "repo_id" of required type "Int!" was not provided',
+      );
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
+    });
+
+    test('with null repo_id should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content:
+          'Send an analytics event when user clicks on "Create Task" button',
+        bot_installation_id: botInstallations[1].id,
+        repo_id: null,
+      });
+
+      assert.equal(response.statusCode, 400);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(
+        errors[0].message,
+        'Variable "$input" got invalid value null at "input.repo_id"; Expected non-nullable type "Int!" not to be null.',
+      );
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
+    });
+
+    test('with invalid repo_id should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content:
+          'Send an analytics event when user clicks on "Create Task" button',
+        bot_installation_id: botInstallations[1].id,
+        repo_id: -1,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'too_small',
+          exact: false,
+          inclusive: false,
+          message: 'Number must be greater than 0',
+          minimum: 0,
+          path: ['repo_id'],
+          type: 'number',
+        },
+      ]);
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 0);
+    });
+
+    test('with non-existent repo_id should fail', async () => {
+      const response = await taskCreate(app, org.id, {
+        content:
+          'Send an analytics event when user clicks on "Create Task" button',
+        bot_installation_id: botInstallations[1].id,
+        repo_id: 1,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'invalid',
+          message: 'Repository not found',
+          path: ['repo_id'],
+        },
+      ]);
+    });
   });
 });
 
@@ -692,7 +1070,7 @@ const taskCreate = (app: FastifyInstance, orgId: number, input: any) =>
   graphql(
     app,
     `
-      mutation taskCreate($org_id: Int!, $input: TaskMessageInput!) {
+      mutation taskCreate($org_id: Int!, $input: TaskCreateInput!) {
         taskCreate(org_id: $org_id, input: $input) {
           id
           title

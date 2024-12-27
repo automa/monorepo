@@ -1,5 +1,8 @@
 type Query {
-  botInstallations(org_id: Int!): [BotInstallation!]!
+  botInstallations(
+    org_id: Int!
+    filter: BotInstallationsFilter
+  ): [BotInstallation!]!
 }
 
 type Mutation {
@@ -13,6 +16,10 @@ type BotInstallation {
 
   org: PublicOrg!
   bot: PublicBot!
+}
+
+input BotInstallationsFilter {
+  type: BotType
 }
 
 input BotInstallInput {

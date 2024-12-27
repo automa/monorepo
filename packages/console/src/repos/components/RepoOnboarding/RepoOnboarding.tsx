@@ -16,7 +16,7 @@ const RepoOnboarding: React.FC<RepoOnboardingProps> = ({ org, ...props }) => {
     (integration: string) =>
       `${import.meta.env.VITE_API_URI}/api/orgs/${
         org.name
-      }/integrations/${integration}`,
+      }/integrations/connect/${integration}`,
     [org],
   );
 

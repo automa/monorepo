@@ -12,7 +12,7 @@ import { ComboBoxStyledProps } from './types';
 export const Trigger = tw(Popover.Trigger)<
   TwcComponentProps<typeof Popover.Trigger> & ComboBoxStyledProps<any>
 >(({ $error, disabled }) => [
-  'w-80 lg:w-96 rounded-md bg-neutral-100 p-2 ring-1 ring-neutral-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-500',
+  'inline-flex items-center h-9 w-80 lg:w-96 rounded-md bg-neutral-100 p-2 ring-1 ring-neutral-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-500',
   $error && 'ring-red-500',
   disabled && 'cursor-not-allowed opacity-50 bg-neutral-300 ring-0',
 ]);

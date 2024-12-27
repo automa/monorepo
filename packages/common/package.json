@@ -7,7 +7,7 @@
   "module": "src/index.ts",
   "dependencies": {
     "@prisma/client": "~6.1.0",
-    "graphql": "~16.7.0",
+    "graphql": "~16.8.1",
     "http-status-codes": "~2.2.0",
     "zod": "~3.23.0"
   },

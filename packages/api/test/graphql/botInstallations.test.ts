@@ -31,6 +31,17 @@ suite('graphql botInstallations', () => {
       [org],
     );
 
+    await app.prisma.bots.updateMany({
+      data: {
+        type: 'scheduled',
+      },
+      where: {
+        id: {
+          in: [bot.id, nonPublishedBot.id],
+        },
+      },
+    });
+
     app.addHook('preValidation', async (request) => {
       request.session.userId = user.id;
     });
@@ -232,6 +243,47 @@ suite('graphql botInstallations', () => {
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
     });
 
+    test('should return only manual bots with filter.type = manual', async () => {
+      const response = await graphql(
+        app,
+        `
+          query botInstallations($org_id: Int!) {
+            botInstallations(org_id: $org_id, filter: { type: manual }) {
+              id
+              bot {
+                name
+              }
+            }
+          }
+        `,
+        {
+          org_id: org.id,
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { botInstallations },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.lengthOf(botInstallations, 2);
+
+      assert.isNumber(botInstallations[0].id);
+      assert.equal(botInstallations[0].bot.name, secondOrgBot.name);
+
+      assert.isNumber(botInstallations[1].id);
+      assert.equal(botInstallations[1].bot.name, nonMemberOrgBot.name);
+    });
+
     test('should restrict PublicOrg fields', async () => {
       const response = await graphql(
         app,
@@ -404,8 +456,16 @@ suite('graphql botInstallations', () => {
       const { errors } = response.json();
 
       assert.lengthOf(errors, 1);
-      assert.include(errors[0].message, 'Not Found');
-      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+      assert.include(errors[0].message, 'Unprocessable Entity');
+      assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
+
+      assert.deepEqual(errors[0].extensions.errors, [
+        {
+          code: 'invalid',
+          message: 'Bot not found',
+          path: ['bot_id'],
+        },
+      ]);
 
       const count = await app.prisma.bot_installations.count();
 

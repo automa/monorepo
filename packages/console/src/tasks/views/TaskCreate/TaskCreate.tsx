@@ -1,29 +1,72 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import { taskMessageSchema } from '@automa/common';
+import { taskCreateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
-import { TaskMessageInput } from 'gql/graphql';
-import { Button, Flex, Textarea, toast, Typography } from 'shared';
+import { TaskCreateInput } from 'gql/graphql';
+import {
+  Avatar,
+  Button,
+  ComboBox,
+  Flex,
+  Textarea,
+  toast,
+  Typography,
+} from 'shared';
 
 import { TASK_FRAGMENT } from 'tasks';
 
 import { TaskCreateProps } from './types';
 
-import { TASK_CREATE_MUTATION } from './TaskCreate.queries';
+import {
+  BOT_INSTALLATIONS_AS_OPTIONS_QUERY,
+  REPOSITORIES_AS_OPTIONS_QUERY,
+  TASK_CREATE_MUTATION,
+} from './TaskCreate.queries';
 
 const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
-  } = useForm<TaskMessageInput>({
-    resolver: zodResolver(taskMessageSchema),
+  } = useForm<TaskCreateInput>({
+    resolver: zodResolver(taskCreateSchema),
   });
+
+  // Load bot installations
+  const { data: botInstallationsData, loading: botInstallationsLoading } =
+    useQuery(BOT_INSTALLATIONS_AS_OPTIONS_QUERY, {
+      variables: {
+        org_id: org.id,
+      },
+    });
+
+  const botInstallations = (botInstallationsData?.botInstallations ?? []).map(
+    (botInstallation) => ({
+      ...botInstallation,
+      value: `${botInstallation.bot.org.name}/${botInstallation.bot.name}`,
+    }),
+  );
+
+  // Load repositories
+  const { data: repositoriesData, loading: repositoriesLoading } = useQuery(
+    REPOSITORIES_AS_OPTIONS_QUERY,
+    {
+      variables: {
+        org_id: org.id,
+      },
+    },
+  );
+
+  const repositories = (repositoriesData?.repos ?? []).map((repo) => ({
+    ...repo,
+    value: repo.name,
+  }));
 
   // TODO: Handle error
   const [taskCreate, { data, loading, error }] = useMutation(
@@ -41,6 +84,7 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
               const newTaskRef = cache.writeFragment({
                 data: getFragment(TASK_FRAGMENT, data.taskCreate),
                 fragment: TASK_FRAGMENT,
+                fragmentName: 'Task',
               });
 
               return [newTaskRef, ...existing];
@@ -51,7 +95,7 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     },
   );
 
-  const onSubmit: SubmitHandler<TaskMessageInput> = async (data) => {
+  const onSubmit: SubmitHandler<TaskCreateInput> = async (data) => {
     await taskCreate({
       variables: {
         org_id: org.id,
@@ -85,6 +129,62 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
               ...register('content'),
               placeholder: '',
             }}
+          />
+          <Controller
+            control={control}
+            name="bot_installation_id"
+            render={({ field: { name, disabled, value, onChange } }) => (
+              <ComboBox
+                label="Bot"
+                description=""
+                error={errors.bot_installation_id?.message}
+                {...{
+                  name,
+                  disabled,
+                  value,
+                  onChange,
+                }}
+                placeholder="Select bot"
+                emptyText="No bots found."
+                loading={botInstallationsLoading}
+                options={botInstallations}
+                renderOption={({ bot, value }) => (
+                  <Flex alignItems="center" className="gap-2">
+                    <Avatar
+                      key={bot.id}
+                      src={bot.image_url ?? null}
+                      alt={bot.name}
+                      variant="square"
+                      size="xsmall"
+                      className="ml-0.5"
+                    />
+                    {value}
+                  </Flex>
+                )}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="repo_id"
+            render={({ field: { name, disabled, value, onChange } }) => (
+              <ComboBox
+                label="Repository"
+                description=""
+                error={errors.repo_id?.message}
+                {...{
+                  name,
+                  disabled,
+                  value,
+                  onChange,
+                }}
+                placeholder="Select repository"
+                emptyText="No repositories found."
+                loading={repositoriesLoading}
+                options={repositories}
+                renderOption={({ value }) => <span>{value}</span>}
+              />
+            )}
           />
         </Flex>
         <Button type="submit" disabled={loading}>

@@ -78,6 +78,10 @@ export type BotInstallation = {
   org: PublicOrg;
 };
 
+export type BotInstallationsFilter = {
+  type?: InputMaybe<BotType>;
+};
+
 export enum BotType {
   Manual = 'manual',
   Scheduled = 'scheduled'
@@ -151,7 +155,7 @@ export type MutationBotUpdateArgs = {
 
 
 export type MutationTaskCreateArgs = {
-  input: TaskMessageInput;
+  input: TaskCreateInput;
   org_id: Scalars['Int']['input'];
 };
 
@@ -238,6 +242,7 @@ export type QueryBotArgs = {
 
 
 export type QueryBotInstallationsArgs = {
+  filter?: InputMaybe<BotInstallationsFilter>;
   org_id: Scalars['Int']['input'];
 };
 
@@ -320,6 +325,12 @@ export enum TaskActivityType {
   State = 'state'
 }
 
+export type TaskCreateInput = {
+  bot_installation_id: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+  repo_id: Scalars['Int']['input'];
+};
+
 export type TaskItem = {
   __typename?: 'TaskItem';
   activity?: Maybe<TaskActivity>;
@@ -340,10 +351,6 @@ export enum TaskItemType {
   Proposal = 'proposal',
   Repo = 'repo'
 }
-
-export type TaskMessageInput = {
-  content: Scalars['String']['input'];
-};
 
 export enum TaskState {
   Cancelled = 'cancelled',
@@ -447,7 +454,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 
 /** Mapping of interface types */
-export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
+export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
   BotBase: ( bots ) | ( public_bots );
 };
 
@@ -459,6 +466,7 @@ export type ResolversTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: ResolverTypeWrapper<bot_installations>;
+  BotInstallationsFilter: BotInstallationsFilter;
   BotType: ResolverTypeWrapper<bot>;
   BotUpdateInput: BotUpdateInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -478,9 +486,9 @@ export type ResolversTypes = {
   Task: ResolverTypeWrapper<tasks>;
   TaskActivity: ResolverTypeWrapper<task_activities>;
   TaskActivityType: ResolverTypeWrapper<task_activity>;
+  TaskCreateInput: TaskCreateInput;
   TaskItem: ResolverTypeWrapper<task_items>;
   TaskItemType: ResolverTypeWrapper<task_item>;
-  TaskMessageInput: TaskMessageInput;
   TaskState: ResolverTypeWrapper<task_state>;
   TasksFilter: TasksFilter;
   User: ResolverTypeWrapper<users>;
@@ -496,6 +504,7 @@ export type ResolversParentTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: bot_installations;
+  BotInstallationsFilter: BotInstallationsFilter;
   BotUpdateInput: BotUpdateInput;
   DateTime: Scalars['DateTime']['output'];
   Int: Scalars['Int']['output'];
@@ -511,8 +520,8 @@ export type ResolversParentTypes = {
   String: Scalars['String']['output'];
   Task: tasks;
   TaskActivity: task_activities;
+  TaskCreateInput: TaskCreateInput;
   TaskItem: task_items;
-  TaskMessageInput: TaskMessageInput;
   TasksFilter: TasksFilter;
   User: users;
   UserProvider: user_providers;
