@@ -34,7 +34,7 @@
     "@opentelemetry/instrumentation-ioredis": "~0.43.0",
     "@opentelemetry/sdk-node": "~0.53.0",
     "@opentelemetry/semantic-conventions": "~1.26.0",
-    "@prisma/instrumentation": "~5.14.0",
+    "@prisma/instrumentation": "~6.1.0",
     "@segment/analytics-node": "~1.1.0",
     "@sentry/node": "~7.59.3",
     "@sinclair/typebox": "~0.25.21",
