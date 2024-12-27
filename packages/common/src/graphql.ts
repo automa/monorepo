@@ -78,6 +78,10 @@ export type BotInstallation = {
   org: PublicOrg;
 };
 
+export type BotInstallationsFilter = {
+  type?: InputMaybe<BotType>;
+};
+
 export enum BotType {
   Manual = 'manual',
   Scheduled = 'scheduled'
@@ -238,6 +242,7 @@ export type QueryBotArgs = {
 
 
 export type QueryBotInstallationsArgs = {
+  filter?: InputMaybe<BotInstallationsFilter>;
   org_id: Scalars['Int']['input'];
 };
 
@@ -321,7 +326,9 @@ export enum TaskActivityType {
 }
 
 export type TaskCreateInput = {
+  bot_installation_id: Scalars['Int']['input'];
   content: Scalars['String']['input'];
+  repo_id: Scalars['Int']['input'];
 };
 
 export type TaskItem = {
@@ -459,6 +466,7 @@ export type ResolversTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: ResolverTypeWrapper<bot_installations>;
+  BotInstallationsFilter: BotInstallationsFilter;
   BotType: ResolverTypeWrapper<bot>;
   BotUpdateInput: BotUpdateInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -496,6 +504,7 @@ export type ResolversParentTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: bot_installations;
+  BotInstallationsFilter: BotInstallationsFilter;
   BotUpdateInput: BotUpdateInput;
   DateTime: Scalars['DateTime']['output'];
   Int: Scalars['Int']['output'];

@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  fragment BotBase on BotBase {\n    id\n    name\n    short_description\n    type\n    image_url\n    is_published\n    is_preview\n    is_deterministic\n  }\n": types.BotBaseFragmentDoc,
-    "\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      name\n      org {\n        provider_type\n        name\n      }\n    }\n  }\n": types.BotInstallationFragmentDoc,
+    "\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      id\n      name\n      short_description\n      image_url\n      org {\n        id\n        name\n      }\n    }\n  }\n": types.BotInstallationFragmentDoc,
     "\n  fragment PublicBot on PublicBot {\n    ...BotBase\n    org {\n      name\n    }\n    installation(org_id: $org_id) {\n      id\n    }\n  }\n": types.PublicBotFragmentDoc,
     "\n  fragment Bot on Bot {\n    id\n    name\n    short_description\n    type\n    webhook_url\n    webhook_secret\n    draft_paths\n    paths\n    image_url\n    description\n    homepage\n    is_published\n    is_preview\n    is_deterministic\n  }\n": types.BotFragmentDoc,
     "\n  query Bot(\n    $org_id: Int!\n    $name: String!\n  ) {\n    bot(org_id: $org_id, name: $name) {\n      ...Bot\n    }\n  }\n": types.BotDocument,
@@ -37,6 +37,8 @@ const documents = {
     "\n  fragment TaskItem on TaskItem {\n    id\n    type\n    data\n    created_at\n    actor_user {\n      ...UserAvatar\n    }\n    bot {\n      id\n      name\n      short_description\n      image_url\n      org {\n        id\n        name\n      }\n    }\n    repo {\n      id\n      name\n      org {\n        id\n        provider_type\n        provider_name\n      }\n    }\n    activity {\n      id\n      type\n      from_state\n      to_state\n    }\n  }\n": types.TaskItemFragmentDoc,
     "\n  query Task($org_id: Int!, $id: Int!) {\n    task(org_id: $org_id, id: $id) {\n      id\n      ...Task\n    }\n  }\n": types.TaskDocument,
     "\n  mutation TaskCreate($org_id: Int!, $input: TaskCreateInput!) {\n    taskCreate(org_id: $org_id, input: $input) {\n      ...Task\n    }\n  }\n": types.TaskCreateDocument,
+    "\n  query BotInstallationsAsOptions($org_id: Int!) {\n    botInstallations(org_id: $org_id, filter: { type: manual }) {\n      id\n      bot {\n        id\n        name\n        image_url\n        org {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.BotInstallationsAsOptionsDocument,
+    "\n  query RepositoriesAsOptions($org_id: Int!) {\n    repos(org_id: $org_id) {\n      id\n      name\n    }\n  }\n": types.RepositoriesAsOptionsDocument,
     "\n  query Tasks($org_id: Int!, $filter: TasksFilter) {\n    tasks(org_id: $org_id, filter: $filter) {\n      id\n      ...Task\n    }\n  }\n": types.TasksDocument,
     "\n  fragment UserAvatar on User {\n    id\n    name\n    providers {\n      id\n      provider_type\n      provider_id\n    }\n  }\n": types.UserAvatarFragmentDoc,
     "\n  fragment MeQuery on Query {\n    me {\n      email\n      ...UserAvatar\n    }\n  }\n": types.MeQueryFragmentDoc,
@@ -66,7 +68,7 @@ export function gql(source: "\n  fragment BotBase on BotBase {\n    id\n    name
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      name\n      org {\n        provider_type\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      name\n      org {\n        provider_type\n        name\n      }\n    }\n  }\n"];
+export function gql(source: "\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      id\n      name\n      short_description\n      image_url\n      org {\n        id\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      id\n      name\n      short_description\n      image_url\n      org {\n        id\n        name\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -151,6 +153,14 @@ export function gql(source: "\n  query Task($org_id: Int!, $id: Int!) {\n    tas
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation TaskCreate($org_id: Int!, $input: TaskCreateInput!) {\n    taskCreate(org_id: $org_id, input: $input) {\n      ...Task\n    }\n  }\n"): (typeof documents)["\n  mutation TaskCreate($org_id: Int!, $input: TaskCreateInput!) {\n    taskCreate(org_id: $org_id, input: $input) {\n      ...Task\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query BotInstallationsAsOptions($org_id: Int!) {\n    botInstallations(org_id: $org_id, filter: { type: manual }) {\n      id\n      bot {\n        id\n        name\n        image_url\n        org {\n          id\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query BotInstallationsAsOptions($org_id: Int!) {\n    botInstallations(org_id: $org_id, filter: { type: manual }) {\n      id\n      bot {\n        id\n        name\n        image_url\n        org {\n          id\n          name\n        }\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query RepositoriesAsOptions($org_id: Int!) {\n    repos(org_id: $org_id) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  query RepositoriesAsOptions($org_id: Int!) {\n    repos(org_id: $org_id) {\n      id\n      name\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -68,4 +68,6 @@ type TaskItem {
 
 input TaskCreateInput {
   content: String!
+  bot_installation_id: Int!
+  repo_id: Int!
 }

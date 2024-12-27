@@ -16,7 +16,7 @@ type InputPathsProps = $<
     value: string[];
     onChange: (value: string[]) => void;
     placeholder?: string;
-  } & Omit<HTMLAttributes<HTMLDivElement>, 'value' | 'onChange'>
+  } & Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'>
 >;
 
 export type InputPathsComponentProps = Component<InputPathsProps>;

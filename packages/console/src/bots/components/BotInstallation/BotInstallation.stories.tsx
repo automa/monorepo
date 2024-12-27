@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { makeFragmentData } from 'gql';
-import { ProviderType } from 'gql/graphql';
 
 import BotInstallation from './BotInstallation';
 
@@ -16,9 +15,12 @@ const meta = {
         id: 1,
         created_at: '2021-08-14T00:00:00Z',
         bot: {
+          id: 1,
           name: 'Bot',
+          short_description: 'Short description',
+          image_url: 'https://example.com/image.jpg',
           org: {
-            provider_type: ProviderType.Github,
+            id: 1,
             name: 'Org',
           },
         },

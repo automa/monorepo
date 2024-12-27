@@ -5,9 +5,12 @@ export const BOT_INSTALLATION_FRAGMENT = gql(`
     id
     created_at
     bot {
+      id
       name
+      short_description
+      image_url
       org {
-        provider_type
+        id
         name
       }
     }

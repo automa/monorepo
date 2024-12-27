@@ -1,10 +1,13 @@
+import { ApolloServerErrorCode } from '@apollo/server/errors';
+import { GraphQLError } from 'graphql';
+
 import {
   MutationResolvers,
   QueryResolvers,
   Resolvers,
   taskCreateSchema,
 } from '@automa/common';
-import { task_item } from '@automa/prisma';
+import { bot, task_item } from '@automa/prisma';
 
 import { Context } from '../types';
 
@@ -60,6 +63,52 @@ export const Mutation: MutationResolvers<Context> = {
 
     const data = taskCreateSchema.parse(input);
 
+    const [repo, botInstallation] = await Promise.all([
+      prisma.repos.findFirst({
+        where: {
+          id: data.repo_id,
+        },
+      }),
+      prisma.bot_installations.findFirst({
+        where: {
+          id: data.bot_installation_id,
+          bots: {
+            type: bot.manual,
+          },
+        },
+      }),
+    ]);
+
+    if (!botInstallation) {
+      throw new GraphQLError('Unprocessable Entity', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_USER_INPUT,
+          errors: [
+            {
+              code: 'invalid',
+              message: 'Bot installation not found',
+              path: ['bot_installation_id'],
+            },
+          ],
+        },
+      });
+    }
+
+    if (!repo) {
+      throw new GraphQLError('Unprocessable Entity', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_USER_INPUT,
+          errors: [
+            {
+              code: 'invalid',
+              message: 'Repository not found',
+              path: ['repo_id'],
+            },
+          ],
+        },
+      });
+    }
+
     return taskCreate(
       { prisma, events },
       {
@@ -78,6 +127,16 @@ export const Mutation: MutationResolvers<Context> = {
               data: {
                 orgId: org_id,
               },
+            },
+            {
+              type: task_item.repo,
+              actor_user_id: userId,
+              repo_id: repo.id,
+            },
+            {
+              type: task_item.bot,
+              actor_user_id: userId,
+              bot_id: botInstallation.bot_id,
             },
           ],
         },
