@@ -120,11 +120,13 @@ module.exports = {
             },
           },
         ],
-        '@graphql-eslint/require-id-when-available': 'off',
+        '@graphql-eslint/require-selections': 'off',
       },
       parserOptions: {
-        operations: '**/*.queries.ts',
-        schema: '**/*.graphql',
+        graphQLConfig: {
+          documents: '**/*.queries.ts',
+          schema: '**/*.graphql',
+        },
       },
     },
     {
