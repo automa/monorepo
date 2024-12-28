@@ -707,4 +707,117 @@ suite('linear hook Comment event', () => {
       assert.equal(createCommentStub.callCount, 0);
     });
   });
+
+  suite('update', () => {
+    setup(async () => {
+      response = await callWithFixture(app, 'Comment', 'update');
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 1);
+      assert.deepOwnInclude(tasks[0], {
+        org_id: org.id,
+        title: 'Delete tokens when user revokes Github App',
+        is_scheduled: false,
+        state: 'started',
+      });
+      assert.isDefined(tasks[0].token);
+
+      const taskItems = await app.prisma.task_items.findMany({
+        where: {
+          task_id: tasks[0].id,
+        },
+      });
+
+      assert.equal(taskItems.length, 4);
+      assert.deepOwnInclude(taskItems[0], {
+        type: 'message',
+        data: {
+          content:
+            '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
+        },
+        actor_user_id: null,
+      });
+      assert.deepOwnInclude(taskItems[1], {
+        type: 'origin',
+        data: {
+          integration: 'linear',
+          organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+          organizationUrlKey: 'automa',
+          organizationName: 'Automa',
+          teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+          teamKey: 'PRO',
+          teamName: 'Product',
+          userId: '5611201a-9594-4407-9490-731894376791',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          issueIdentifier: 'PRO-93',
+          issueTitle: 'Delete tokens when user revokes Github App',
+          commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        },
+        actor_user_id: null,
+      });
+      assert.deepOwnInclude(taskItems[2], {
+        type: 'repo',
+        data: {
+          integration: 'linear',
+          userId: '5611201a-9594-4407-9490-731894376791',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
+        },
+        actor_user_id: null,
+        repo_id: repo.id,
+      });
+      assert.deepOwnInclude(taskItems[3], {
+        type: 'bot',
+        data: {
+          integration: 'linear',
+          userId: '5611201a-9594-4407-9490-731894376791',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
+        },
+        actor_user_id: null,
+        bot_id: secondBot.id,
+      });
+    });
+
+    test('should get information about issue', async () => {
+      assert.equal(issueStub.callCount, 1);
+      assert.equal(
+        issueStub.firstCall.args[0],
+        'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+      );
+    });
+
+    test('should get information about team', async () => {
+      assert.equal(teamStub.callCount, 1);
+      assert.equal(
+        teamStub.firstCall.args[0],
+        'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+      );
+    });
+
+    test('should get information about organization', async () => {
+      assert.equal(organizationStub.callCount, 1);
+      assert.lengthOf(organizationStub.firstCall.args, 0);
+    });
+
+    test('should create comment about the task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(createCommentStub.callCount, 1);
+      assert.deepEqual(createCommentStub.firstCall.args[0], {
+        body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+        issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+        parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+      });
+    });
+  });
 });

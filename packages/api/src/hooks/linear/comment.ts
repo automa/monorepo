@@ -191,4 +191,5 @@ const create: LinearEventActionHandler<{
 
 export default {
   create,
+  update: create,
 };
