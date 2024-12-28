@@ -1,7 +1,7 @@
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { assert } from 'chai';
 import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
-import { CommentPayload, Issue, LinearClient, Team, User } from '@linear/sdk';
+import { CommentPayload, Issue, LinearClient, Team } from '@linear/sdk';
 
 import { bots, orgs, repos, users } from '@automa/prisma';
 
@@ -15,7 +15,6 @@ suite('linear hook Comment event', () => {
   let sandbox: SinonSandbox,
     issueStub: SinonStub,
     teamStub: SinonStub,
-    userStub: SinonStub,
     organizationStub: SinonStub,
     createCommentStub: SinonStub;
 
@@ -80,12 +79,6 @@ suite('linear hook Comment event', () => {
       key: 'PRO',
       name: 'Product',
     } as Team);
-
-    userStub = sandbox.stub(LinearClient.prototype, 'user').resolves({
-      id: '5611201a-9594-4407-9490-731894376791',
-      name: 'Pavan Kumar Sunkara',
-      email: 'pavan@example.com',
-    } as User);
 
     organizationStub = sandbox.stub().resolves({
       id: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
@@ -202,14 +195,6 @@ suite('linear hook Comment event', () => {
       );
     });
 
-    test('should get information about user', async () => {
-      assert.equal(userStub.callCount, 1);
-      assert.equal(
-        userStub.firstCall.args[0],
-        '5611201a-9594-4407-9490-731894376791',
-      );
-    });
-
     test('should get information about organization', async () => {
       assert.equal(organizationStub.callCount, 1);
       assert.lengthOf(organizationStub.firstCall.args, 0);
@@ -322,14 +307,6 @@ suite('linear hook Comment event', () => {
       );
     });
 
-    test('should get information about user', async () => {
-      assert.equal(userStub.callCount, 1);
-      assert.equal(
-        userStub.firstCall.args[0],
-        '5611201a-9594-4407-9490-731894376791',
-      );
-    });
-
     test('should get information about organization', async () => {
       assert.equal(organizationStub.callCount, 1);
       assert.lengthOf(organizationStub.firstCall.args, 0);
@@ -370,10 +347,6 @@ suite('linear hook Comment event', () => {
       assert.equal(teamStub.callCount, 0);
     });
 
-    test('should not get information about user', async () => {
-      assert.equal(userStub.callCount, 0);
-    });
-
     test('should not get information about organization', async () => {
       assert.equal(organizationStub.callCount, 0);
     });
@@ -409,10 +382,6 @@ suite('linear hook Comment event', () => {
 
     test('should not get information about team', async () => {
       assert.equal(teamStub.callCount, 0);
-    });
-
-    test('should not get information about user', async () => {
-      assert.equal(userStub.callCount, 0);
     });
 
     test('should not get information about organization', async () => {
@@ -452,10 +421,6 @@ suite('linear hook Comment event', () => {
       assert.equal(teamStub.callCount, 0);
     });
 
-    test('should not get information about user', async () => {
-      assert.equal(userStub.callCount, 0);
-    });
-
     test('should not get information about organization', async () => {
       assert.equal(organizationStub.callCount, 0);
     });
@@ -491,10 +456,6 @@ suite('linear hook Comment event', () => {
 
     test('should not get information about team', async () => {
       assert.equal(teamStub.callCount, 0);
-    });
-
-    test('should not get information about user', async () => {
-      assert.equal(userStub.callCount, 0);
     });
 
     test('should not get information about organization', async () => {
@@ -613,14 +574,6 @@ suite('linear hook Comment event', () => {
       );
     });
 
-    test('should get information about user', async () => {
-      assert.equal(userStub.callCount, 1);
-      assert.equal(
-        userStub.firstCall.args[0],
-        '5611201a-9594-4407-9490-731894376791',
-      );
-    });
-
     test('should get information about organization', async () => {
       assert.equal(organizationStub.callCount, 1);
       assert.lengthOf(organizationStub.firstCall.args, 0);
@@ -661,10 +614,6 @@ suite('linear hook Comment event', () => {
       assert.equal(teamStub.callCount, 0);
     });
 
-    test('should not get information about user', async () => {
-      assert.equal(userStub.callCount, 0);
-    });
-
     test('should not get information about organization', async () => {
       assert.equal(organizationStub.callCount, 0);
     });
@@ -700,10 +649,6 @@ suite('linear hook Comment event', () => {
 
     test('should not get information about team', async () => {
       assert.equal(teamStub.callCount, 0);
-    });
-
-    test('should not get information about user', async () => {
-      assert.equal(userStub.callCount, 0);
     });
 
     test('should not get information about organization', async () => {
@@ -752,10 +697,6 @@ suite('linear hook Comment event', () => {
 
     test('should not get information about team', async () => {
       assert.equal(teamStub.callCount, 0);
-    });
-
-    test('should not get information about user', async () => {
-      assert.equal(userStub.callCount, 0);
     });
 
     test('should not get information about organization', async () => {

@@ -15,6 +15,7 @@ const create: LinearEventActionHandler<{
   actor: {
     id: string;
     name: string;
+    email: string;
   };
   data: {
     id: string;
@@ -77,10 +78,9 @@ const create: LinearEventActionHandler<{
   // TODO: Allow the user to not specify a bot and repo
   if (selectedBot && selectedRepo) {
     // Retrieve the issue
-    const [issue, team, user, org] = await Promise.all([
+    const [issue, team, org] = await Promise.all([
       client.issue(body.data.issue.id),
       client.team(body.data.issue.teamId),
-      client.user(body.actor.id),
       client.organization,
     ]);
 
@@ -90,15 +90,15 @@ const create: LinearEventActionHandler<{
     // TODO: Unify this logic across the app in db/users.ts
     const automaUser = await app.prisma.users.findFirst({
       where: {
-        email: user.email,
+        email: body.actor.email,
       },
     });
     const userData = !automaUser
       ? {
           integration: integration.linear,
-          userId: user.id,
-          userName: user.name,
-          userEmail: user.email,
+          userId: body.actor.id,
+          userName: body.actor.name,
+          userEmail: body.actor.email,
         }
       : {};
 
