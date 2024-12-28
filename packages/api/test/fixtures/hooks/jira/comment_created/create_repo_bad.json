@@ -16,7 +16,7 @@
       "timeZone": "Europe/London",
       "accountType": "atlassian"
     },
-    "body": "/automa repo=repo-2",
+    "body": "/automa bot=bot-1 repo=repo-2",
     "updateAuthor": {
       "self": "https://automa.atlassian.net/rest/api/2/user?accountId=712020%3A3dd57004-4041-4aca-ab80-ced34cc711ab",
       "accountId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab",
