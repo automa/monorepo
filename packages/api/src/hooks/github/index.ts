@@ -5,7 +5,6 @@ import installation from './installation';
 import installationRepositories from './installationRepositories';
 import organization from './organization';
 import pullRequest from './pullRequest';
-import push from './push';
 import repository from './repository';
 
 export const eventHandlers: {
@@ -16,7 +15,6 @@ export const eventHandlers: {
   [GithubEventType.InstallationRepositories]: installationRepositories,
   [GithubEventType.Organization]: organization,
   [GithubEventType.PullRequest]: pullRequest,
-  [GithubEventType.Push]: push,
   [GithubEventType.Repository]: repository,
 };
 

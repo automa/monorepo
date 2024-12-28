@@ -6,7 +6,6 @@ export enum GithubEventType {
   InstallationRepositories = 'installation_repositories',
   Organization = 'organization',
   PullRequest = 'pull_request',
-  Push = 'push',
   Repository = 'repository',
 }
 
