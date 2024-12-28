@@ -3,7 +3,8 @@
   "actor": {
     "id": "5611201a-9594-4407-9490-731894376791",
     "name": "Pavan Kumar Sunkara",
-    "type": "user"
+    "type": "user",
+    "email": "pavan@example.com"
   },
   "createdAt": "2024-05-29T00:26:31.749Z",
   "data": {
@@ -16,7 +17,8 @@
     "reactionData": [],
     "user": {
       "id": "5611201a-9594-4407-9490-731894376791",
-      "name": "Pavan Kumar Sunkara"
+      "name": "Pavan Kumar Sunkara",
+      "email": "pavan@example.com"
     },
     "issue": {
       "id": "f2f72e62-b1a4-46c3-b605-0962d24792d8",
