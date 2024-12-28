@@ -172,7 +172,7 @@ suite('jira hook comment_created event', () => {
         },
       });
 
-      assert.equal(taskItems.length, 2);
+      assert.equal(taskItems.length, 4);
       assert.deepOwnInclude(taskItems[0], {
         type: 'message',
         data: {
@@ -202,6 +202,28 @@ suite('jira hook comment_created event', () => {
           commentId: '10237',
         },
         actor_user_id: null,
+      });
+      assert.deepOwnInclude(taskItems[2], {
+        type: 'repo',
+        data: {
+          integration: 'jira',
+          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
+        },
+        actor_user_id: null,
+        repo_id: repo.id,
+      });
+      assert.deepOwnInclude(taskItems[3], {
+        type: 'bot',
+        data: {
+          integration: 'jira',
+          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
+        },
+        actor_user_id: null,
+        bot_id: secondBot.id,
       });
     });
 
@@ -312,7 +334,7 @@ suite('jira hook comment_created event', () => {
         },
       });
 
-      assert.equal(taskItems.length, 2);
+      assert.equal(taskItems.length, 4);
       assert.deepOwnInclude(taskItems[0], {
         type: 'message',
         data: {
@@ -342,6 +364,28 @@ suite('jira hook comment_created event', () => {
           commentId: '10237',
         },
         actor_user_id: null,
+      });
+      assert.deepOwnInclude(taskItems[2], {
+        type: 'repo',
+        data: {
+          integration: 'jira',
+          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
+        },
+        actor_user_id: null,
+        repo_id: repo.id,
+      });
+      assert.deepOwnInclude(taskItems[3], {
+        type: 'bot',
+        data: {
+          integration: 'jira',
+          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
+          userName: 'Pavan Kumar Sunkara',
+          userEmail: 'pavan@example.com',
+        },
+        actor_user_id: null,
+        bot_id: secondBot.id,
       });
     });
 
@@ -443,65 +487,26 @@ suite('jira hook comment_created event', () => {
     });
   });
 
-  suite('create with bot specified', () => {
+  suite('create with no bot specified', () => {
     setup(async () => {
-      response = await callWithFixture(app, 'comment_created', 'create_bot');
+      response = await callWithFixture(app, 'comment_created', 'create_no_bot');
     });
 
     test('should return 200', async () => {
       assert.equal(response.statusCode, 200);
     });
 
-    test('should create task', async () => {
+    test('should not create task', async () => {
       const tasks = await app.prisma.tasks.findMany();
 
-      assert.equal(tasks.length, 1);
-      assert.deepOwnInclude(tasks[0], {
-        org_id: org.id,
-        title: 'Delete tokens when user revokes Github App',
-        is_scheduled: false,
-        state: 'started',
-      });
+      assert.equal(tasks.length, 0);
     });
 
-    test('should assign task to bot', async () => {
-      const taskItems = await app.prisma.task_items.findMany({
-        where: {
-          type: 'bot',
-        },
-      });
-
-      assert.equal(taskItems.length, 1);
-
-      assert.deepOwnInclude(taskItems[0], {
-        type: 'bot',
-        data: {
-          integration: 'jira',
-          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
-        },
-        actor_user_id: null,
-        bot_id: secondBot.id,
-      });
-    });
-
-    test('should get information about issue', async () => {
-      assert.equal(issueStub.callCount, 1);
-      assert.equal(
-        issueStub.firstCall.args[0],
-        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281',
-      );
-      assert.deepEqual(issueStub.firstCall.args[1], {
-        headers: {
-          Authorization: 'Bearer abcdef',
-        },
-      });
+    test('should not get information about issue', async () => {
+      assert.equal(issueStub.callCount, 0);
     });
 
     test('should create comment about the task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
-
       assert.equal(createCommentStub.callCount, 1);
       assert.equal(
         createCommentStub.firstCall.args[0],
@@ -515,21 +520,27 @@ suite('jira hook comment_created event', () => {
             {
               content: [
                 {
-                  text: 'Created task: ',
                   type: 'text',
+                  text: 'We encountered the following issues while creating the task:',
                 },
                 {
-                  marks: [
+                  type: 'bulletList',
+                  content: [
                     {
-                      attrs: {
-                        href: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-                        title: 'Automa Task',
-                      },
-                      type: 'link',
+                      type: 'listItem',
+                      content: [
+                        {
+                          type: 'paragraph',
+                          content: [
+                            {
+                              type: 'text',
+                              text: 'Bot not specified. Use `bot=name` to specify a bot.',
+                            },
+                          ],
+                        },
+                      ],
                     },
                   ],
-                  text: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-                  type: 'text',
                 },
               ],
               type: 'paragraph',
@@ -558,42 +569,17 @@ suite('jira hook comment_created event', () => {
       assert.equal(response.statusCode, 200);
     });
 
-    test('should create task', async () => {
+    test('should not create task', async () => {
       const tasks = await app.prisma.tasks.findMany();
 
-      assert.equal(tasks.length, 1);
-      assert.deepOwnInclude(tasks[0], {
-        org_id: org.id,
-        title: 'Delete tokens when user revokes Github App',
-      });
+      assert.equal(tasks.length, 0);
     });
 
-    test('should not assign task to bot', async () => {
-      const taskItems = await app.prisma.task_items.findMany({
-        where: {
-          type: 'bot',
-        },
-      });
-
-      assert.isEmpty(taskItems);
-    });
-
-    test('should get information about issue', async () => {
-      assert.equal(issueStub.callCount, 1);
-      assert.equal(
-        issueStub.firstCall.args[0],
-        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281',
-      );
-      assert.deepEqual(issueStub.firstCall.args[1], {
-        headers: {
-          Authorization: 'Bearer abcdef',
-        },
-      });
+    test('should not get information about issue', async () => {
+      assert.equal(issueStub.callCount, 0);
     });
 
     test('should create comment about the task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
-
       assert.equal(createCommentStub.callCount, 1);
       assert.equal(
         createCommentStub.firstCall.args[0],
@@ -607,49 +593,27 @@ suite('jira hook comment_created event', () => {
             {
               content: [
                 {
-                  text: 'Created task: ',
                   type: 'text',
-                },
-                {
-                  marks: [
-                    {
-                      attrs: {
-                        href: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-                        title: 'Automa Task',
-                      },
-                      type: 'link',
-                    },
-                  ],
-                  text: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-                  type: 'text',
-                },
-              ],
-              type: 'paragraph',
-            },
-            {
-              content: [
-                {
                   text: 'We encountered the following issues while creating the task:',
-                  type: 'text',
                 },
                 {
+                  type: 'bulletList',
                   content: [
                     {
+                      type: 'listItem',
                       content: [
                         {
+                          type: 'paragraph',
                           content: [
                             {
-                              text: 'Bot `bot-2` not found. Using AI to select bot.',
                               type: 'text',
+                              text: 'Bot `bot-2` not found.',
                             },
                           ],
-                          type: 'paragraph',
                         },
                       ],
-                      type: 'listItem',
                     },
                   ],
-                  type: 'bulletList',
                 },
               ],
               type: 'paragraph',
@@ -665,63 +629,30 @@ suite('jira hook comment_created event', () => {
     });
   });
 
-  suite('create with repo specified', () => {
+  suite('create with no repo specified', () => {
     setup(async () => {
-      response = await callWithFixture(app, 'comment_created', 'create_repo');
+      response = await callWithFixture(
+        app,
+        'comment_created',
+        'create_no_repo',
+      );
     });
 
     test('should return 200', async () => {
       assert.equal(response.statusCode, 200);
     });
 
-    test('should create task', async () => {
+    test('should not create task', async () => {
       const tasks = await app.prisma.tasks.findMany();
 
-      assert.equal(tasks.length, 1);
-      assert.deepOwnInclude(tasks[0], {
-        org_id: org.id,
-        title: 'Delete tokens when user revokes Github App',
-      });
+      assert.equal(tasks.length, 0);
     });
 
-    test('should select repo for the task', async () => {
-      const taskItems = await app.prisma.task_items.findMany({
-        where: {
-          type: 'repo',
-        },
-      });
-
-      assert.equal(taskItems.length, 1);
-
-      assert.deepOwnInclude(taskItems[0], {
-        type: 'repo',
-        data: {
-          integration: 'jira',
-          userId: '712020:3dd57004-4041-4aca-ab80-ced34cc711ab',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
-        },
-        actor_user_id: null,
-        repo_id: repo.id,
-      });
-    });
-
-    test('should get information about issue', async () => {
-      assert.equal(issueStub.callCount, 1);
-      assert.equal(
-        issueStub.firstCall.args[0],
-        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281',
-      );
-      assert.deepEqual(issueStub.firstCall.args[1], {
-        headers: {
-          Authorization: 'Bearer abcdef',
-        },
-      });
+    test('should not get information about issue', async () => {
+      assert.equal(issueStub.callCount, 0);
     });
 
     test('should create comment about the task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
-
       assert.equal(createCommentStub.callCount, 1);
       assert.equal(
         createCommentStub.firstCall.args[0],
@@ -735,21 +666,27 @@ suite('jira hook comment_created event', () => {
             {
               content: [
                 {
-                  text: 'Created task: ',
                   type: 'text',
+                  text: 'We encountered the following issues while creating the task:',
                 },
                 {
-                  marks: [
+                  type: 'bulletList',
+                  content: [
                     {
-                      attrs: {
-                        href: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-                        title: 'Automa Task',
-                      },
-                      type: 'link',
+                      type: 'listItem',
+                      content: [
+                        {
+                          type: 'paragraph',
+                          content: [
+                            {
+                              type: 'text',
+                              text: 'Repo not specified. Use `repo=name` to specify a repo.',
+                            },
+                          ],
+                        },
+                      ],
                     },
                   ],
-                  text: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-                  type: 'text',
                 },
               ],
               type: 'paragraph',
@@ -778,42 +715,17 @@ suite('jira hook comment_created event', () => {
       assert.equal(response.statusCode, 200);
     });
 
-    test('should create task', async () => {
+    test('should not create task', async () => {
       const tasks = await app.prisma.tasks.findMany();
 
-      assert.equal(tasks.length, 1);
-      assert.deepOwnInclude(tasks[0], {
-        org_id: org.id,
-        title: 'Delete tokens when user revokes Github App',
-      });
+      assert.equal(tasks.length, 0);
     });
 
-    test('should not select repo for the task', async () => {
-      const taskItems = await app.prisma.task_items.findMany({
-        where: {
-          type: 'repo',
-        },
-      });
-
-      assert.isEmpty(taskItems);
-    });
-
-    test('should get information about issue', async () => {
-      assert.equal(issueStub.callCount, 1);
-      assert.equal(
-        issueStub.firstCall.args[0],
-        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281',
-      );
-      assert.deepEqual(issueStub.firstCall.args[1], {
-        headers: {
-          Authorization: 'Bearer abcdef',
-        },
-      });
+    test('should not get information about issue', async () => {
+      assert.equal(issueStub.callCount, 0);
     });
 
     test('should create comment about the task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
-
       assert.equal(createCommentStub.callCount, 1);
       assert.equal(
         createCommentStub.firstCall.args[0],
@@ -827,49 +739,27 @@ suite('jira hook comment_created event', () => {
             {
               content: [
                 {
-                  text: 'Created task: ',
                   type: 'text',
-                },
-                {
-                  marks: [
-                    {
-                      attrs: {
-                        href: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-                        title: 'Automa Task',
-                      },
-                      type: 'link',
-                    },
-                  ],
-                  text: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-                  type: 'text',
-                },
-              ],
-              type: 'paragraph',
-            },
-            {
-              content: [
-                {
                   text: 'We encountered the following issues while creating the task:',
-                  type: 'text',
                 },
                 {
+                  type: 'bulletList',
                   content: [
                     {
+                      type: 'listItem',
                       content: [
                         {
+                          type: 'paragraph',
                           content: [
                             {
-                              text: 'Repo `repo-2` not found. Using AI to select repo.',
                               type: 'text',
+                              text: 'Repo `repo-2` not found.',
                             },
                           ],
-                          type: 'paragraph',
                         },
                       ],
-                      type: 'listItem',
                     },
                   ],
-                  type: 'bulletList',
                 },
               ],
               type: 'paragraph',
@@ -896,11 +786,7 @@ suite('jira hook comment_created event', () => {
         },
       });
 
-      response = await callWithFixture(
-        app,
-        'comment_created',
-        'create_bot_repo',
-      );
+      response = await callWithFixture(app, 'comment_created', 'create');
     });
 
     teardown(async () => {
@@ -1021,6 +907,93 @@ suite('jira hook comment_created event', () => {
                   ],
                   text: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
                   type: 'text',
+                },
+              ],
+              type: 'paragraph',
+            },
+          ],
+        },
+      });
+      assert.deepEqual(createCommentStub.firstCall.args[2], {
+        headers: {
+          Authorization: 'Bearer abcdef',
+        },
+      });
+    });
+  });
+
+  suite('create with no bot and no repo specified', () => {
+    setup(async () => {
+      response = await callWithFixture(
+        app,
+        'comment_created',
+        'create_no_bot_repo',
+      );
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should not create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 0);
+    });
+
+    test('should not get information about issue', async () => {
+      assert.equal(issueStub.callCount, 0);
+    });
+
+    test('should create comment about the task', async () => {
+      assert.equal(createCommentStub.callCount, 1);
+      assert.equal(
+        createCommentStub.firstCall.args[0],
+        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281/comment',
+      );
+      assert.deepEqual(createCommentStub.firstCall.args[1], {
+        body: {
+          version: 1,
+          type: 'doc',
+          content: [
+            {
+              content: [
+                {
+                  type: 'text',
+                  text: 'We encountered the following issues while creating the task:',
+                },
+                {
+                  type: 'bulletList',
+                  content: [
+                    {
+                      type: 'listItem',
+                      content: [
+                        {
+                          type: 'paragraph',
+                          content: [
+                            {
+                              type: 'text',
+                              text: 'Bot not specified. Use `bot=name` to specify a bot.',
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      type: 'listItem',
+                      content: [
+                        {
+                          type: 'paragraph',
+                          content: [
+                            {
+                              type: 'text',
+                              text: 'Repo not specified. Use `repo=name` to specify a repo.',
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
                 },
               ],
               type: 'paragraph',
