@@ -9,7 +9,7 @@ import { seedBots, seedOrgs, seedRepos, seedUsers, server } from '../../utils';
 
 import { callWithFixture } from './utils';
 
-suite('jira hook comment_created event', () => {
+suite('jira hook comment_created & comment_updated event', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
   let user: users, org: orgs, repo: repos, bot: bots, secondBot: bots;
   let sandbox: SinonSandbox, issueStub: SinonStub, createCommentStub: SinonStub;
@@ -523,27 +523,27 @@ suite('jira hook comment_created event', () => {
                   type: 'text',
                   text: 'We encountered the following issues while creating the task:',
                 },
+              ],
+              type: 'paragraph',
+            },
+            {
+              type: 'bulletList',
+              content: [
                 {
-                  type: 'bulletList',
+                  type: 'listItem',
                   content: [
                     {
-                      type: 'listItem',
+                      type: 'paragraph',
                       content: [
                         {
-                          type: 'paragraph',
-                          content: [
-                            {
-                              type: 'text',
-                              text: 'Bot not specified. Use `bot=name` to specify a bot.',
-                            },
-                          ],
+                          type: 'text',
+                          text: 'Bot not specified. Use `bot=name` to specify a bot.',
                         },
                       ],
                     },
                   ],
                 },
               ],
-              type: 'paragraph',
             },
           ],
         },
@@ -596,27 +596,27 @@ suite('jira hook comment_created event', () => {
                   type: 'text',
                   text: 'We encountered the following issues while creating the task:',
                 },
+              ],
+              type: 'paragraph',
+            },
+            {
+              type: 'bulletList',
+              content: [
                 {
-                  type: 'bulletList',
+                  type: 'listItem',
                   content: [
                     {
-                      type: 'listItem',
+                      type: 'paragraph',
                       content: [
                         {
-                          type: 'paragraph',
-                          content: [
-                            {
-                              type: 'text',
-                              text: 'Bot `bot-2` not found.',
-                            },
-                          ],
+                          type: 'text',
+                          text: 'Bot `bot-2` not found.',
                         },
                       ],
                     },
                   ],
                 },
               ],
-              type: 'paragraph',
             },
           ],
         },
@@ -669,27 +669,27 @@ suite('jira hook comment_created event', () => {
                   type: 'text',
                   text: 'We encountered the following issues while creating the task:',
                 },
+              ],
+              type: 'paragraph',
+            },
+            {
+              type: 'bulletList',
+              content: [
                 {
-                  type: 'bulletList',
+                  type: 'listItem',
                   content: [
                     {
-                      type: 'listItem',
+                      type: 'paragraph',
                       content: [
                         {
-                          type: 'paragraph',
-                          content: [
-                            {
-                              type: 'text',
-                              text: 'Repo not specified. Use `repo=name` to specify a repo.',
-                            },
-                          ],
+                          type: 'text',
+                          text: 'Repo not specified. Use `repo=name` to specify a repo.',
                         },
                       ],
                     },
                   ],
                 },
               ],
-              type: 'paragraph',
             },
           ],
         },
@@ -742,27 +742,27 @@ suite('jira hook comment_created event', () => {
                   type: 'text',
                   text: 'We encountered the following issues while creating the task:',
                 },
+              ],
+              type: 'paragraph',
+            },
+            {
+              type: 'bulletList',
+              content: [
                 {
-                  type: 'bulletList',
+                  type: 'listItem',
                   content: [
                     {
-                      type: 'listItem',
+                      type: 'paragraph',
                       content: [
                         {
-                          type: 'paragraph',
-                          content: [
-                            {
-                              type: 'text',
-                              text: 'Repo `repo-2` not found.',
-                            },
-                          ],
+                          type: 'text',
+                          text: 'Repo `repo-2` not found.',
                         },
                       ],
                     },
                   ],
                 },
               ],
-              type: 'paragraph',
             },
           ],
         },
@@ -962,41 +962,41 @@ suite('jira hook comment_created event', () => {
                   type: 'text',
                   text: 'We encountered the following issues while creating the task:',
                 },
+              ],
+              type: 'paragraph',
+            },
+            {
+              type: 'bulletList',
+              content: [
                 {
-                  type: 'bulletList',
+                  type: 'listItem',
                   content: [
                     {
-                      type: 'listItem',
+                      type: 'paragraph',
                       content: [
                         {
-                          type: 'paragraph',
-                          content: [
-                            {
-                              type: 'text',
-                              text: 'Bot not specified. Use `bot=name` to specify a bot.',
-                            },
-                          ],
+                          type: 'text',
+                          text: 'Bot not specified. Use `bot=name` to specify a bot.',
                         },
                       ],
                     },
+                  ],
+                },
+                {
+                  type: 'listItem',
+                  content: [
                     {
-                      type: 'listItem',
+                      type: 'paragraph',
                       content: [
                         {
-                          type: 'paragraph',
-                          content: [
-                            {
-                              type: 'text',
-                              text: 'Repo not specified. Use `repo=name` to specify a repo.',
-                            },
-                          ],
+                          type: 'text',
+                          text: 'Repo not specified. Use `repo=name` to specify a repo.',
                         },
                       ],
                     },
                   ],
                 },
               ],
-              type: 'paragraph',
             },
           ],
         },

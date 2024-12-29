@@ -6,6 +6,7 @@ export const eventHandlers: {
   [type in JiraEventType]: JiraEventHandler;
 } = {
   [JiraEventType.CommentCreated]: commentCreated,
+  [JiraEventType.CommentUpdated]: commentCreated,
 };
 
 export default eventHandlers;

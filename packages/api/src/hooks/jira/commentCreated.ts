@@ -275,24 +275,25 @@ const commentCreated: JiraEventHandler<{
           type: 'text',
           text: 'We encountered the following issues while creating the task:',
         },
-        {
-          type: 'bulletList',
-          content: problems.map((problem) => ({
-            type: 'listItem',
+      ],
+    });
+
+    reponseComment.content.push({
+      type: 'bulletList',
+      content: problems.map((problem) => ({
+        type: 'listItem',
+        content: [
+          {
+            type: 'paragraph',
             content: [
               {
-                type: 'paragraph',
-                content: [
-                  {
-                    type: 'text',
-                    text: problem,
-                  },
-                ],
+                type: 'text',
+                text: problem,
               },
             ],
-          })),
-        },
-      ],
+          },
+        ],
+      })),
     });
   }
 
