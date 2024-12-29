@@ -239,18 +239,6 @@ suite('api/orgs/integrations/connect/jira', () => {
               emailAddress: 'pavan@example.com',
             },
           });
-
-        postStub.onSecondCall().resolves({
-          data: {
-            webhookRegistrationResult: [
-              {
-                createdWebhookId: 123,
-              },
-            ],
-          },
-        });
-
-        response = await call(app, '/callbacks/jira?code=abcd&state=1234');
       });
 
       teardown(async () => {
@@ -258,102 +246,437 @@ suite('api/orgs/integrations/connect/jira', () => {
         sandbox.restore();
       });
 
-      test('should redirect to integrations page', async () => {
-        assert.equal(response.statusCode, 302);
-
-        const location = response.headers.location;
-
-        assert.isString(location);
-        assert.equal(location, 'http://localhost:3000/org-0/integrations');
-      });
-
-      test('should request access token', async () => {
-        assert.equal(postStub.callCount, 2);
-        assert.equal(
-          postStub.firstCall.args[0],
-          'https://auth.atlassian.com/oauth/token',
-        );
-        assert.deepEqual(postStub.firstCall.args[1], {
-          client_id: 'F2xGP22ZI3MmnsJphTWPvk9qt6FXgB0A',
-          client_secret: env.JIRA_APP.CLIENT_SECRET,
-          code: 'abcd',
-          redirect_uri: 'http://localhost:8080/callbacks/jira',
-          grant_type: 'authorization_code',
-        });
-      });
-
-      test('should retrieve accessible resources', async () => {
-        assert.equal(getStub.callCount, 2);
-        assert.equal(
-          getStub.firstCall.args[0],
-          'https://api.atlassian.com/oauth/token/accessible-resources',
-        );
-        assert.deepEqual(getStub.firstCall.args[1], {
-          headers: {
-            Authorization: 'Bearer abcdef',
-          },
-        });
-      });
-
-      test('should retrieve user information', async () => {
-        assert.equal(
-          getStub.secondCall.args[0],
-          'https://api.atlassian.com/ex/jira/5678/rest/api/3/myself',
-        );
-        assert.deepEqual(getStub.secondCall.args[1], {
-          headers: {
-            Authorization: 'Bearer abcdef',
-          },
-        });
-      });
-
-      test('should create webhook', async () => {
-        assert.equal(
-          postStub.secondCall.args[0],
-          'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
-        );
-        assert.deepEqual(postStub.secondCall.args[1], {
-          url: 'http://localhost:8080/hooks/jira',
-          webhooks: [
-            {
-              events: ['comment_created'],
-              jqlFilter: 'project != ______NON_EXISTENT_PROJECT',
+      suite('with webhook creation success', () => {
+        setup(async () => {
+          postStub.onSecondCall().resolves({
+            data: {
+              webhookRegistrationResult: [
+                {
+                  createdWebhookId: 123,
+                },
+              ],
             },
-          ],
+          });
+
+          response = await call(app, '/callbacks/jira?code=abcd&state=1234');
         });
-        assert.deepEqual(postStub.secondCall.args[2], {
-          headers: {
-            Authorization: 'Bearer abcdef',
-          },
+
+        test('should redirect to integrations page', async () => {
+          assert.equal(response.statusCode, 302);
+
+          const location = response.headers.location;
+
+          assert.isString(location);
+          assert.equal(location, 'http://localhost:3000/org-0/integrations');
+        });
+
+        test('should request access token', async () => {
+          assert.equal(postStub.callCount, 2);
+          assert.equal(
+            postStub.firstCall.args[0],
+            'https://auth.atlassian.com/oauth/token',
+          );
+          assert.deepEqual(postStub.firstCall.args[1], {
+            client_id: 'F2xGP22ZI3MmnsJphTWPvk9qt6FXgB0A',
+            client_secret: env.JIRA_APP.CLIENT_SECRET,
+            code: 'abcd',
+            redirect_uri: 'http://localhost:8080/callbacks/jira',
+            grant_type: 'authorization_code',
+          });
+        });
+
+        test('should retrieve accessible resources', async () => {
+          assert.equal(getStub.callCount, 2);
+          assert.equal(
+            getStub.firstCall.args[0],
+            'https://api.atlassian.com/oauth/token/accessible-resources',
+          );
+          assert.deepEqual(getStub.firstCall.args[1], {
+            headers: {
+              Authorization: 'Bearer abcdef',
+            },
+          });
+        });
+
+        test('should retrieve user information', async () => {
+          assert.equal(
+            getStub.secondCall.args[0],
+            'https://api.atlassian.com/ex/jira/5678/rest/api/3/myself',
+          );
+          assert.deepEqual(getStub.secondCall.args[1], {
+            headers: {
+              Authorization: 'Bearer abcdef',
+            },
+          });
+        });
+
+        test('should create webhook', async () => {
+          assert.equal(
+            postStub.secondCall.args[0],
+            'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
+          );
+          assert.deepEqual(postStub.secondCall.args[1], {
+            url: 'http://localhost:8080/hooks/jira',
+            webhooks: [
+              {
+                events: ['comment_created', 'comment_updated'],
+                jqlFilter: 'project != ______NON_EXISTENT_PROJECT',
+              },
+            ],
+          });
+          assert.deepEqual(postStub.secondCall.args[2], {
+            headers: {
+              Authorization: 'Bearer abcdef',
+            },
+          });
+        });
+
+        test('should create integration', async () => {
+          const integrations = await app.prisma.integrations.findMany();
+
+          assert.lengthOf(integrations, 1);
+
+          assert.equal(integrations[0].org_id, org.id);
+          assert.equal(integrations[0].type, 'jira');
+          assert.deepEqual(integrations[0].secrets, {
+            access_token: 'abcdef',
+            refresh_token: 'ghijkl',
+          });
+          assert.deepEqual(integrations[0].config, {
+            id: '5678',
+            name: 'Automa',
+            url: 'automa.atlassian.net',
+            scopes: [
+              'read:jira-user',
+              'read:jira-work',
+              'write:jira-work',
+              'manage:jira-webhook',
+              'offline_access',
+            ],
+            webhookId: 123,
+            userEmail: 'pavan@example.com',
+          });
+          assert.equal(integrations[0].created_by, user.id);
         });
       });
 
-      test('should create integration', async () => {
-        const integrations = await app.prisma.integrations.findMany();
+      suite('with webhook creation error', () => {
+        setup(async () => {
+          postStub.onSecondCall().resolves({
+            data: {
+              webhookRegistrationResult: [
+                {
+                  errors: ['Something went wrong'],
+                },
+              ],
+            },
+          });
 
-        assert.lengthOf(integrations, 1);
+          response = await call(app, '/callbacks/jira?code=abcd&state=1234');
+        });
 
-        assert.equal(integrations[0].org_id, org.id);
-        assert.equal(integrations[0].type, 'jira');
-        assert.deepEqual(integrations[0].secrets, {
-          access_token: 'abcdef',
-          refresh_token: 'ghijkl',
+        test('should redirect to integrations page with error', async () => {
+          assert.equal(response.statusCode, 302);
+
+          const location = response.headers.location;
+
+          assert.isString(location);
+          assert.equal(
+            location,
+            'http://localhost:3000/org-0/integrations?error=1005',
+          );
         });
-        assert.deepEqual(integrations[0].config, {
-          id: '5678',
-          name: 'Automa',
-          url: 'automa.atlassian.net',
-          scopes: [
-            'read:jira-user',
-            'read:jira-work',
-            'write:jira-work',
-            'manage:jira-webhook',
-            'offline_access',
-          ],
-          webhookId: 123,
-          userEmail: 'pavan@example.com',
+
+        test('should try to create webhook', async () => {
+          assert.equal(
+            postStub.secondCall.args[0],
+            'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
+          );
+          assert.deepEqual(postStub.secondCall.args[1], {
+            url: 'http://localhost:8080/hooks/jira',
+            webhooks: [
+              {
+                events: ['comment_created', 'comment_updated'],
+                jqlFilter: 'project != ______NON_EXISTENT_PROJECT',
+              },
+            ],
+          });
+          assert.deepEqual(postStub.secondCall.args[2], {
+            headers: {
+              Authorization: 'Bearer abcdef',
+            },
+          });
         });
-        assert.equal(integrations[0].created_by, user.id);
+
+        test('should not create integration', async () => {
+          const integrations = await app.prisma.integrations.findMany();
+
+          assert.lengthOf(integrations, 0);
+        });
+      });
+
+      suite('with maximum webhooks error', () => {
+        let requestSub: SinonStub;
+
+        setup(async () => {
+          getStub.onThirdCall().resolves({
+            data: {
+              values: [
+                { id: 1 },
+                { id: 2 },
+                { id: 3 },
+                { id: 4 },
+                { id: 5 },
+                { id: 6 },
+                { id: 7 },
+                { id: 8 },
+                { id: 9 },
+                { id: 10 },
+              ],
+            },
+          });
+
+          postStub.onSecondCall().resolves({
+            data: {
+              webhookRegistrationResult: [
+                {
+                  errors: [
+                    'A maximum of 10 webhooks can be registered per app per user',
+                  ],
+                },
+              ],
+            },
+          });
+
+          requestSub = sandbox.stub(axios, 'request').resolves();
+        });
+
+        suite('with retry success', () => {
+          setup(async () => {
+            postStub.onThirdCall().resolves({
+              data: {
+                webhookRegistrationResult: [
+                  {
+                    createdWebhookId: 123,
+                  },
+                ],
+              },
+            });
+
+            response = await call(app, '/callbacks/jira?code=abcd&state=1234');
+          });
+
+          test('should redirect to integrations page', async () => {
+            assert.equal(response.statusCode, 302);
+
+            const location = response.headers.location;
+
+            assert.isString(location);
+            assert.equal(location, 'http://localhost:3000/org-0/integrations');
+          });
+
+          test('should try to create webhook', async () => {
+            assert.equal(
+              postStub.secondCall.args[0],
+              'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
+            );
+            assert.deepEqual(postStub.secondCall.args[1], {
+              url: 'http://localhost:8080/hooks/jira',
+              webhooks: [
+                {
+                  events: ['comment_created', 'comment_updated'],
+                  jqlFilter: 'project != ______NON_EXISTENT_PROJECT',
+                },
+              ],
+            });
+            assert.deepEqual(postStub.secondCall.args[2], {
+              headers: {
+                Authorization: 'Bearer abcdef',
+              },
+            });
+          });
+
+          test('should list webhooks', async () => {
+            assert.equal(getStub.callCount, 3);
+            assert.equal(
+              getStub.thirdCall.args[0],
+              'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
+            );
+            assert.deepEqual(getStub.thirdCall.args[1], {
+              headers: {
+                Authorization: 'Bearer abcdef',
+              },
+            });
+          });
+
+          test('should delete webhooks', async () => {
+            assert.equal(requestSub.callCount, 1);
+            assert.equal(
+              requestSub.firstCall.args[0].url,
+              'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
+            );
+            assert.equal(requestSub.firstCall.args[0].method, 'DELETE');
+            assert.deepEqual(requestSub.firstCall.args[0].data, {
+              webhookIds: [1, 2, 3, 4, 5],
+            });
+            assert.deepEqual(requestSub.firstCall.args[0].headers, {
+              Authorization: 'Bearer abcdef',
+            });
+          });
+
+          test('should retry creating webhook', async () => {
+            assert.equal(
+              postStub.thirdCall.args[0],
+              'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
+            );
+            assert.deepEqual(postStub.thirdCall.args[1], {
+              url: 'http://localhost:8080/hooks/jira',
+              webhooks: [
+                {
+                  events: ['comment_created', 'comment_updated'],
+                  jqlFilter: 'project != ______NON_EXISTENT_PROJECT',
+                },
+              ],
+            });
+            assert.deepEqual(postStub.thirdCall.args[2], {
+              headers: {
+                Authorization: 'Bearer abcdef',
+              },
+            });
+          });
+
+          test('should create integration', async () => {
+            const integrations = await app.prisma.integrations.findMany();
+
+            assert.lengthOf(integrations, 1);
+
+            assert.equal(integrations[0].org_id, org.id);
+            assert.equal(integrations[0].type, 'jira');
+            assert.deepEqual(integrations[0].secrets, {
+              access_token: 'abcdef',
+              refresh_token: 'ghijkl',
+            });
+            assert.deepEqual(integrations[0].config, {
+              id: '5678',
+              name: 'Automa',
+              url: 'automa.atlassian.net',
+              scopes: [
+                'read:jira-user',
+                'read:jira-work',
+                'write:jira-work',
+                'manage:jira-webhook',
+                'offline_access',
+              ],
+              webhookId: 123,
+              userEmail: 'pavan@example.com',
+            });
+            assert.equal(integrations[0].created_by, user.id);
+          });
+        });
+
+        suite('with retry error', () => {
+          setup(async () => {
+            postStub.onThirdCall().resolves({
+              data: {
+                webhookRegistrationResult: [
+                  {
+                    errors: ['Something went wrong'],
+                  },
+                ],
+              },
+            });
+
+            response = await call(app, '/callbacks/jira?code=abcd&state=1234');
+          });
+
+          test('should redirect to integrations page with error', async () => {
+            assert.equal(response.statusCode, 302);
+
+            const location = response.headers.location;
+
+            assert.isString(location);
+            assert.equal(
+              location,
+              'http://localhost:3000/org-0/integrations?error=1005',
+            );
+          });
+
+          test('should try to create webhook', async () => {
+            assert.equal(
+              postStub.secondCall.args[0],
+              'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
+            );
+            assert.deepEqual(postStub.secondCall.args[1], {
+              url: 'http://localhost:8080/hooks/jira',
+              webhooks: [
+                {
+                  events: ['comment_created', 'comment_updated'],
+                  jqlFilter: 'project != ______NON_EXISTENT_PROJECT',
+                },
+              ],
+            });
+            assert.deepEqual(postStub.secondCall.args[2], {
+              headers: {
+                Authorization: 'Bearer abcdef',
+              },
+            });
+          });
+
+          test('should list webhooks', async () => {
+            assert.equal(getStub.callCount, 3);
+            assert.equal(
+              getStub.thirdCall.args[0],
+              'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
+            );
+            assert.deepEqual(getStub.thirdCall.args[1], {
+              headers: {
+                Authorization: 'Bearer abcdef',
+              },
+            });
+          });
+
+          test('should delete webhooks', async () => {
+            assert.equal(requestSub.callCount, 1);
+            assert.equal(
+              requestSub.firstCall.args[0].url,
+              'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
+            );
+            assert.equal(requestSub.firstCall.args[0].method, 'DELETE');
+            assert.deepEqual(requestSub.firstCall.args[0].data, {
+              webhookIds: [1, 2, 3, 4, 5],
+            });
+            assert.deepEqual(requestSub.firstCall.args[0].headers, {
+              Authorization: 'Bearer abcdef',
+            });
+          });
+
+          test('should retry creating webhook', async () => {
+            assert.equal(
+              postStub.thirdCall.args[0],
+              'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
+            );
+            assert.deepEqual(postStub.thirdCall.args[1], {
+              url: 'http://localhost:8080/hooks/jira',
+              webhooks: [
+                {
+                  events: ['comment_created', 'comment_updated'],
+                  jqlFilter: 'project != ______NON_EXISTENT_PROJECT',
+                },
+              ],
+            });
+            assert.deepEqual(postStub.thirdCall.args[2], {
+              headers: {
+                Authorization: 'Bearer abcdef',
+              },
+            });
+          });
+
+          test('should not create integration', async () => {
+            const integrations = await app.prisma.integrations.findMany();
+
+            assert.lengthOf(integrations, 0);
+          });
+        });
       });
     });
   });
