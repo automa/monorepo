@@ -3,7 +3,7 @@ import fasitfyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';
 import redisStoreFactory from 'connect-redis';
 
-import { env, isProduction } from './env';
+import { env } from './env';
 
 declare module 'fastify' {
   interface Session {
@@ -30,7 +30,8 @@ export default async function (app: FastifyInstance) {
     secret: env.COOKIE_SECRET,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      secure: isProduction,
+      // Railway doesn't support secure cookies because of proxy routing
+      secure: false,
       sameSite: 'lax',
     },
     store,
