@@ -6,6 +6,7 @@ export enum ErrorType {
   UNABLE_TO_CONNECT_INTEGRATION,
   MULTIPLE_JIRA_SITES_FOR_USER_NOT_SUPPORTED,
   UNABLE_TO_READ_JIRA_USER,
+  UNABLE_TO_REGISTER_JIRA_WEBHOOK,
 }
 
 export type Error = {
@@ -36,5 +37,9 @@ export const errors: { [key in ErrorType]: Omit<Error, 'code'> } = {
   [ErrorType.UNABLE_TO_READ_JIRA_USER]: {
     status: StatusCodes.BAD_REQUEST,
     message: "Unable to read Jira user's email.",
+  },
+  [ErrorType.UNABLE_TO_REGISTER_JIRA_WEBHOOK]: {
+    status: StatusCodes.BAD_REQUEST,
+    message: 'Unable to register Jira webhook.',
   },
 };

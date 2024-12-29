@@ -5,6 +5,7 @@ import { ErrorType } from '@automa/common';
 import { integration } from '@automa/prisma';
 
 import { env, isProduction, isTest } from '../../env';
+import { logger, SeverityNumber } from '../../telemetry';
 
 export default async function (app: FastifyInstance) {
   app.get<{
@@ -88,41 +89,109 @@ export default async function (app: FastifyInstance) {
       return replyError(ErrorType.UNABLE_TO_READ_JIRA_USER);
     }
 
-    // TODO: Rotate webhook and refresh token every 30 days
+    // TODO: Rotate webhook and refresh token every 30 days (bullmq)
     // https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-webhooks/#api-rest-api-3-webhook-refresh-put
-    const {
-      data: {
-        webhookRegistrationResult: [webhook],
-      },
-    } = await axios.post<{
-      webhookRegistrationResult: {
-        createdWebhookId: number;
-      }[];
-    }>(
-      `${JIRA_APP.API_URI}/${jiraOrg.id}/rest/api/3/webhook`,
-      {
-        url: `${
-          isTest || isProduction ? BASE_URI : 'https://automa.eu.ngrok.io'
-        }/hooks/jira`,
-        webhooks: [
-          {
-            events: ['comment_created'],
-            jqlFilter: 'project != ______NON_EXISTENT_PROJECT',
-          },
-        ],
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+    const registerWebhook = () =>
+      axios.post<{
+        webhookRegistrationResult: (
+          | {
+              createdWebhookId: number;
+            }
+          | {
+              errors: string[];
+            }
+        )[];
+      }>(
+        `${JIRA_APP.API_URI}/${jiraOrg.id}/rest/api/3/webhook`,
+        {
+          url: `${
+            isTest || isProduction ? BASE_URI : 'https://automa.eu.ngrok.io'
+          }/hooks/jira`,
+          webhooks: [
+            {
+              events: ['comment_created', 'comment_updated'],
+              jqlFilter: 'project != ______NON_EXISTENT_PROJECT',
+            },
+          ],
         },
-      },
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+
+    let data;
+
+    try {
+      ({
+        data: {
+          webhookRegistrationResult: [data],
+        },
+      } = await registerWebhook());
+
+      // Check for errors for webhook registration
+      if ('errors' in data) {
+        if (data.errors[0].startsWith('A maximum')) {
+          // Get all webhooks for the app
+          const {
+            data: { values: webhooks },
+          } = await axios.get<{
+            values: {
+              id: number;
+            }[];
+          }>(`${JIRA_APP.API_URI}/${jiraOrg.id}/rest/api/3/webhook`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          // Delete first 5 webhooks for the app
+          await axios.request({
+            method: 'DELETE',
+            url: `${JIRA_APP.API_URI}/${jiraOrg.id}/rest/api/3/webhook`,
+            data: {
+              webhookIds: webhooks.slice(0, 5).map(({ id }) => id),
+            },
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          // Retry registering the webhook
+          ({
+            data: {
+              webhookRegistrationResult: [data],
+            },
+          } = await registerWebhook());
+
+          // Check for errors for webhook registration retry
+          if ('errors' in data) {
+            throw data.errors;
+          }
+        }
+        // If unknown error, throw it to log it
+        else {
+          throw data.errors;
+        }
+      }
+    } catch (error: any) {
+      logger.emit({
+        severityNumber: SeverityNumber.ERROR,
+        body: 'Unable to register Jira webhook',
+        attributes: {
+          error,
+        },
+      });
+
+      return replyError(ErrorType.UNABLE_TO_REGISTER_JIRA_WEBHOOK);
+    }
 
     // Jira doesn't notify us if the user is deactivated or the app is uninstalled.
     // But we don't seem to get any webhooks after that happens. Therefore, we don't
     // need to delete the webhooks ourselves, but we need to constantly check if the
     // connection is still valid and delete it if invalid.
-    // TODO: Add a job to check the connection and delete if invalid
+    // TODO: Add a job to check the connection and delete if invalid (bullmq)
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,
@@ -136,7 +205,7 @@ export default async function (app: FastifyInstance) {
           url: jiraOrg.url,
           name: jiraOrg.name,
           scopes: jiraOrg.scopes,
-          webhookId: webhook.createdWebhookId,
+          webhookId: data.createdWebhookId,
           userEmail: jiraUser.emailAddress,
         },
         created_by: request.userId!,
