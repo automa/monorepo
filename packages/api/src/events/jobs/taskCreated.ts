@@ -14,24 +14,23 @@ import {
 import { env } from '../../env';
 import { logger, SeverityNumber } from '../../telemetry';
 
-import { QueueDefinition } from '../types';
+import { JobDefinition } from '../types';
 
-const taskCreated: QueueDefinition<{
-  id: number;
+const taskCreated: JobDefinition<{
+  taskId: number;
 }> = {
-  topic: 'task-created',
-  handler: async (app, { id }) => {
+  handler: async (app, { taskId }) => {
     logger.emit({
       severityNumber: SeverityNumber.INFO,
       body: 'Processing task created event',
       attributes: {
-        id,
+        taskId,
       },
     });
 
     const task = await app.prisma.tasks.findUnique({
       where: {
-        id,
+        id: taskId,
       },
       include: {
         task_items: true,
@@ -43,7 +42,7 @@ const taskCreated: QueueDefinition<{
         severityNumber: SeverityNumber.WARN,
         body: 'Unable to find task for task created event',
         attributes: {
-          id,
+          taskId,
         },
       });
 
@@ -66,7 +65,7 @@ const taskCreated: QueueDefinition<{
         severityNumber: SeverityNumber.INFO,
         body: 'Deciding on repo for task',
         attributes: {
-          id,
+          taskId,
         },
       });
 
@@ -86,7 +85,7 @@ const taskCreated: QueueDefinition<{
           severityNumber: SeverityNumber.WARN,
           body: 'No active repos found for task',
           attributes: {
-            id,
+            taskId,
           },
         });
 
@@ -99,7 +98,7 @@ const taskCreated: QueueDefinition<{
       // Update the task with the selected repo
       await app.prisma.task_items.create({
         data: {
-          task_id: id,
+          task_id: taskId,
           type: task_item.repo,
           repo_id: repo.id,
         },
@@ -121,7 +120,7 @@ const taskCreated: QueueDefinition<{
         severityNumber: SeverityNumber.INFO,
         body: 'Deciding on bot for task',
         attributes: {
-          id,
+          taskId,
         },
       });
 
@@ -145,7 +144,7 @@ const taskCreated: QueueDefinition<{
           severityNumber: SeverityNumber.WARN,
           body: 'No active bots found for task',
           attributes: {
-            id,
+            taskId,
           },
         });
 
@@ -158,7 +157,7 @@ const taskCreated: QueueDefinition<{
       // Update the task with the selected bot
       await app.prisma.task_items.create({
         data: {
-          task_id: id,
+          task_id: taskId,
           type: task_item.bot,
           bot_id: botInstallation.bots.id,
         },
@@ -181,7 +180,7 @@ const taskCreated: QueueDefinition<{
 
     const payload = {
       task: {
-        id,
+        id: taskId,
         token: task.token,
         title: task.title,
         items: task.task_items

@@ -6,7 +6,7 @@ import { bots, orgs, repos, tasks } from '@automa/prisma';
 
 import { seedBots, seedOrgs, seedRepos, server } from '../utils';
 
-import taskScheduled from '../../src/events/queues/taskScheduled';
+import taskScheduled from '../../src/events/jobs/taskScheduled';
 
 suite('events/taskScheduled', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, publishStub: SinonStub;
@@ -79,6 +79,9 @@ suite('events/taskScheduled', () => {
 
   test('should publish taskCreated event for the task', async () => {
     assert.isTrue(publishStub.calledOnce);
-    assert.deepEqual(publishStub.firstCall.args, [{ id: tasks[0].id }]);
+    assert.deepEqual(publishStub.firstCall.args, [
+      tasks[0].id,
+      { taskId: tasks[0].id },
+    ]);
   });
 });

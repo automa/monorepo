@@ -22,7 +22,7 @@ import {
   server,
 } from '../utils';
 
-import taskCreated from '../../src/events/queues/taskCreated';
+import taskCreated from '../../src/events/jobs/taskCreated';
 
 suite('events/taskCreated', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, user: users;
@@ -96,7 +96,7 @@ suite('events/taskCreated', () => {
       });
 
       await taskCreated.handler?.(app, {
-        id: task.id,
+        taskId: task.id,
       });
     });
 
@@ -193,7 +193,7 @@ suite('events/taskCreated', () => {
       });
 
       await taskCreated.handler?.(app, {
-        id: task.id,
+        taskId: task.id,
       });
     });
 

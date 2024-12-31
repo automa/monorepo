@@ -2,16 +2,15 @@ import { task_item } from '@automa/prisma';
 
 import { logger, SeverityNumber } from '../../telemetry';
 
-import { QueueDefinition } from '../types';
+import { JobDefinition } from '../types';
 
 import { taskCreate } from '../../db';
 
-const taskScheduled: QueueDefinition<{
+const taskScheduled: JobDefinition<{
   botId: number;
   orgId: number;
   repoId: number;
 }> = {
-  topic: 'task-scheduled',
   handler: async (app, { botId, orgId, repoId }) => {
     logger.emit({
       severityNumber: SeverityNumber.INFO,

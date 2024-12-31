@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
+import { RepeatOptions } from 'bullmq';
 
-export type QueueDefinition<I> = {
-  topic: string;
+export type JobDefinition<I> = {
+  repeat?: RepeatOptions;
   handler?: (app: FastifyInstance, event: I) => Promise<void>;
 };

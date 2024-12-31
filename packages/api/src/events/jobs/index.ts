@@ -1,13 +1,13 @@
 import botInstallationScheduled from './botInstallationScheduled';
 import botScheduled from './botScheduled';
-import botScheduleJob from './botScheduleJob';
+import botScheduleTriggered from './botScheduleTriggered';
 import taskCreated from './taskCreated';
 import taskScheduled from './taskScheduled';
 
 const queues = {
   botInstallationScheduled,
   botScheduled,
-  botScheduleJob,
+  botScheduleTriggered,
   taskCreated,
   taskScheduled,
 };

@@ -6,9 +6,9 @@ import { bot, bots, orgs } from '@automa/prisma';
 
 import { seedBots, seedOrgs, server } from '../utils';
 
-import botScheduleJob from '../../src/events/queues/botScheduleJob';
+import botScheduleTriggered from '../../src/events/jobs/botScheduleTriggered';
 
-suite('events/botScheduleJob', () => {
+suite('events/botScheduleTriggered', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, publishStub: SinonStub;
   let org: orgs, bots: bots[];
 
@@ -48,22 +48,22 @@ suite('events/botScheduleJob', () => {
   });
 
   test('publishes botScheduled event for each scheduled bot', async () => {
-    await botScheduleJob.handler?.(app, {});
+    await botScheduleTriggered.handler?.(app, {});
 
     assert.equal(publishStub.callCount, 11);
 
     assert.deepEqual(publishStub.args, [
-      [{ botId: bots[0].id }],
-      [{ botId: bots[1].id }],
-      [{ botId: bots[2].id }],
-      [{ botId: bots[3].id }],
-      [{ botId: bots[4].id }],
-      [{ botId: bots[6].id }],
-      [{ botId: bots[7].id }],
-      [{ botId: bots[8].id }],
-      [{ botId: bots[9].id }],
-      [{ botId: bots[11].id }],
-      [{ botId: bots[12].id }],
+      [bots[0].id, { botId: bots[0].id }],
+      [bots[1].id, { botId: bots[1].id }],
+      [bots[2].id, { botId: bots[2].id }],
+      [bots[3].id, { botId: bots[3].id }],
+      [bots[4].id, { botId: bots[4].id }],
+      [bots[6].id, { botId: bots[6].id }],
+      [bots[7].id, { botId: bots[7].id }],
+      [bots[8].id, { botId: bots[8].id }],
+      [bots[9].id, { botId: bots[9].id }],
+      [bots[11].id, { botId: bots[11].id }],
+      [bots[12].id, { botId: bots[12].id }],
     ]);
   });
 });
