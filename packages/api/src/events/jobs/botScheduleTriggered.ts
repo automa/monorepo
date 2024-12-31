@@ -2,12 +2,14 @@ import { bot } from '@automa/prisma';
 
 import { logger, SeverityNumber } from '../../telemetry';
 
-import { QueueDefinition } from '../types';
+import { JobDefinition } from '../types';
 
 const PAGE_SIZE = 10;
 
-const botScheduleJob: QueueDefinition<object> = {
-  topic: 'bot-schedule-job',
+const botScheduleTriggered: JobDefinition<object> = {
+  repeat: {
+    pattern: '0 0 * * 1',
+  },
   handler: async (app, {}) => {
     logger.emit({
       severityNumber: SeverityNumber.INFO,
@@ -36,7 +38,7 @@ const botScheduleJob: QueueDefinition<object> = {
 
       await Promise.all(
         bots.map((bot) =>
-          app.events.botScheduled.publish({
+          app.events.botScheduled.publish(bot.id, {
             botId: bot.id,
           }),
         ),
@@ -48,4 +50,4 @@ const botScheduleJob: QueueDefinition<object> = {
   },
 };
 
-export default botScheduleJob;
+export default botScheduleTriggered;

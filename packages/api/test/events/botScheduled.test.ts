@@ -6,7 +6,7 @@ import { bots, orgs } from '@automa/prisma';
 
 import { seedBots, seedOrgs, server } from '../utils';
 
-import botScheduled from '../../src/events/queues/botScheduled';
+import botScheduled from '../../src/events/jobs/botScheduled';
 
 suite('events/botScheduled', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, publishStub: SinonStub;
@@ -62,17 +62,17 @@ suite('events/botScheduled', () => {
     assert.equal(publishStub.callCount, 11);
 
     assert.deepEqual(publishStub.args, [
-      [{ botId: bot.id, orgId: orgs[0].id }],
-      [{ botId: bot.id, orgId: orgs[1].id }],
-      [{ botId: bot.id, orgId: orgs[2].id }],
-      [{ botId: bot.id, orgId: orgs[3].id }],
-      [{ botId: bot.id, orgId: orgs[4].id }],
-      [{ botId: bot.id, orgId: orgs[6].id }],
-      [{ botId: bot.id, orgId: orgs[7].id }],
-      [{ botId: bot.id, orgId: orgs[8].id }],
-      [{ botId: bot.id, orgId: orgs[9].id }],
-      [{ botId: bot.id, orgId: orgs[11].id }],
-      [{ botId: bot.id, orgId: orgs[12].id }],
+      [`${bot.id}-${orgs[0].id}`, { botId: bot.id, orgId: orgs[0].id }],
+      [`${bot.id}-${orgs[1].id}`, { botId: bot.id, orgId: orgs[1].id }],
+      [`${bot.id}-${orgs[2].id}`, { botId: bot.id, orgId: orgs[2].id }],
+      [`${bot.id}-${orgs[3].id}`, { botId: bot.id, orgId: orgs[3].id }],
+      [`${bot.id}-${orgs[4].id}`, { botId: bot.id, orgId: orgs[4].id }],
+      [`${bot.id}-${orgs[6].id}`, { botId: bot.id, orgId: orgs[6].id }],
+      [`${bot.id}-${orgs[7].id}`, { botId: bot.id, orgId: orgs[7].id }],
+      [`${bot.id}-${orgs[8].id}`, { botId: bot.id, orgId: orgs[8].id }],
+      [`${bot.id}-${orgs[9].id}`, { botId: bot.id, orgId: orgs[9].id }],
+      [`${bot.id}-${orgs[11].id}`, { botId: bot.id, orgId: orgs[11].id }],
+      [`${bot.id}-${orgs[12].id}`, { botId: bot.id, orgId: orgs[12].id }],
     ]);
   });
 });

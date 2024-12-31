@@ -18,7 +18,9 @@ export const taskCreate = async (
     },
   });
 
-  await events.taskCreated.publish({ id: task.id });
+  await events.taskCreated.publish(task.id, {
+    taskId: task.id,
+  });
 
   return task;
 };

@@ -6,7 +6,7 @@ import { bots, orgs, repos } from '@automa/prisma';
 
 import { seedBots, seedOrgs, seedRepos, server } from '../utils';
 
-import botInstallationScheduled from '../../src/events/queues/botInstallationScheduled';
+import botInstallationScheduled from '../../src/events/jobs/botInstallationScheduled';
 
 suite('events/botInstallationScheduled', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, publishStub: SinonStub;
@@ -57,17 +57,50 @@ suite('events/botInstallationScheduled', () => {
     assert.equal(publishStub.callCount, 11);
 
     assert.deepEqual(publishStub.args, [
-      [{ botId: bot.id, orgId: org.id, repoId: repos[0].id }],
-      [{ botId: bot.id, orgId: org.id, repoId: repos[1].id }],
-      [{ botId: bot.id, orgId: org.id, repoId: repos[2].id }],
-      [{ botId: bot.id, orgId: org.id, repoId: repos[3].id }],
-      [{ botId: bot.id, orgId: org.id, repoId: repos[4].id }],
-      [{ botId: bot.id, orgId: org.id, repoId: repos[6].id }],
-      [{ botId: bot.id, orgId: org.id, repoId: repos[7].id }],
-      [{ botId: bot.id, orgId: org.id, repoId: repos[8].id }],
-      [{ botId: bot.id, orgId: org.id, repoId: repos[9].id }],
-      [{ botId: bot.id, orgId: org.id, repoId: repos[11].id }],
-      [{ botId: bot.id, orgId: org.id, repoId: repos[12].id }],
+      [
+        `${bot.id}-${org.id}-${repos[0].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[0].id },
+      ],
+      [
+        `${bot.id}-${org.id}-${repos[1].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[1].id },
+      ],
+      [
+        `${bot.id}-${org.id}-${repos[2].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[2].id },
+      ],
+      [
+        `${bot.id}-${org.id}-${repos[3].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[3].id },
+      ],
+      [
+        `${bot.id}-${org.id}-${repos[4].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[4].id },
+      ],
+      [
+        `${bot.id}-${org.id}-${repos[6].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[6].id },
+      ],
+      [
+        `${bot.id}-${org.id}-${repos[7].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[7].id },
+      ],
+      [
+        `${bot.id}-${org.id}-${repos[8].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[8].id },
+      ],
+      [
+        `${bot.id}-${org.id}-${repos[9].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[9].id },
+      ],
+      [
+        `${bot.id}-${org.id}-${repos[11].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[11].id },
+      ],
+      [
+        `${bot.id}-${org.id}-${repos[12].id}`,
+        { botId: bot.id, orgId: org.id, repoId: repos[12].id },
+      ],
     ]);
   });
 });

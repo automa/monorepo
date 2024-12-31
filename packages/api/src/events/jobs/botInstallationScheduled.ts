@@ -1,14 +1,13 @@
 import { logger, SeverityNumber } from '../../telemetry';
 
-import { QueueDefinition } from '../types';
+import { JobDefinition } from '../types';
 
 const PAGE_SIZE = 10;
 
-const botInstallationScheduled: QueueDefinition<{
+const botInstallationScheduled: JobDefinition<{
   botId: number;
   orgId: number;
 }> = {
-  topic: 'bot-installation-scheduled',
   handler: async (app, { botId, orgId }) => {
     logger.emit({
       severityNumber: SeverityNumber.INFO,
@@ -43,7 +42,7 @@ const botInstallationScheduled: QueueDefinition<{
         repos
           .filter((repo) => repo.has_installation && !repo.is_archived)
           .map((repo) =>
-            app.events.taskScheduled.publish({
+            app.events.taskScheduled.publish(`${botId}-${orgId}-${repo.id}`, {
               botId,
               orgId,
               repoId: repo.id,
