@@ -1,5 +1,6 @@
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { assert } from 'chai';
+import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
 
 import { bots, orgs } from '@automa/prisma';
 
@@ -13,7 +14,8 @@ import {
 } from '../utils';
 
 suite('graphql botInstallations', () => {
-  let app: FastifyInstance, org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
+  let app: FastifyInstance, sandbox: SinonSandbox, publishStub: SinonStub;
+  let org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
   let bot: bots,
     secondOrgBot: bots,
     nonMemberOrgBot: bots,
@@ -21,6 +23,7 @@ suite('graphql botInstallations', () => {
 
   suiteSetup(async () => {
     app = await server();
+    sandbox = createSandbox();
 
     const [user] = await seedUsers(app, 1);
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
@@ -356,37 +359,67 @@ suite('graphql botInstallations', () => {
   });
 
   suite('mutation botInstall', () => {
-    teardown(async () => {
-      await app.prisma.bot_installations.deleteMany();
+    setup(() => {
+      publishStub = sandbox
+        .stub(app.events.botInstallationScheduled, 'publish')
+        .resolves();
     });
 
-    test('with valid input should succeed', async () => {
-      const response = await botInstall(app, org.id, {
-        bot_id: bot.id,
+    teardown(async () => {
+      sandbox.restore();
+      await app.prisma.bot_installations.deleteMany();
+
+      await app.prisma.bots.update({
+        where: {
+          id: bot.id,
+        },
+        data: {
+          type: 'manual',
+        },
+      });
+    });
+
+    suite('with valid input should succeed', () => {
+      let response: LightMyRequestResponse;
+
+      setup(async () => {
+        response = await botInstall(app, org.id, {
+          bot_id: bot.id,
+        });
       });
 
-      assert.equal(response.statusCode, 200);
+      test('should be successful', () => {
+        assert.equal(response.statusCode, 200);
+      });
 
-      assert.equal(
-        response.headers['content-type'],
-        'application/json; charset=utf-8',
-      );
+      test('should return botInstallation', async () => {
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
 
-      const {
-        errors,
-        data: { botInstall: botInstallation },
-      } = response.json();
+        const {
+          errors,
+          data: { botInstall: botInstallation },
+        } = response.json();
 
-      assert.isUndefined(errors);
+        assert.isUndefined(errors);
 
-      assert.isNumber(botInstallation.id);
-      assert.isString(botInstallation.created_at);
-      assert.equal(botInstallation.bot.name, bot.name);
-      assert.equal(botInstallation.bot.org.name, org.name);
+        assert.isNumber(botInstallation.id);
+        assert.isString(botInstallation.created_at);
+        assert.equal(botInstallation.bot.name, bot.name);
+        assert.equal(botInstallation.bot.org.name, org.name);
+      });
 
-      const count = await app.prisma.bot_installations.count();
+      test('should create botInstallation', async () => {
+        const count = await app.prisma.bot_installations.count();
 
-      assert.equal(count, 1);
+        assert.equal(count, 1);
+      });
+
+      test('should not publish botInstallationScheduled event', async () => {
+        assert.equal(publishStub.callCount, 0);
+      });
     });
 
     test('non-published bot on org should succeed', async () => {
@@ -470,6 +503,34 @@ suite('graphql botInstallations', () => {
       const count = await app.prisma.bot_installations.count();
 
       assert.equal(count, 0);
+    });
+
+    test('scheduled bot should publish botInstallationScheduled event', async () => {
+      await app.prisma.bots.update({
+        where: {
+          id: bot.id,
+        },
+        data: {
+          type: 'scheduled',
+        },
+      });
+
+      const response = await botInstall(app, org.id, {
+        bot_id: bot.id,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      assert.equal(publishStub.callCount, 1);
+
+      assert.deepEqual(publishStub.args, [
+        [`${bot.id}-${org.id}`, { botId: bot.id, orgId: org.id }],
+      ]);
     });
   });
 
