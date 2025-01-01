@@ -11,6 +11,8 @@ import {
 
 import { Context } from '../types';
 
+import { botInstall } from '../../db';
+
 export const Query: QueryResolvers<Context> = {
   botInstallations: async (root, { org_id, filter }, { userId, prisma }) => {
     // Check if the user is a member of the org
@@ -36,7 +38,11 @@ export const Query: QueryResolvers<Context> = {
 };
 
 export const Mutation: MutationResolvers<Context> = {
-  botInstall: async (_, { org_id, input: { bot_id } }, { userId, prisma }) => {
+  botInstall: async (
+    _,
+    { org_id, input: { bot_id } },
+    { userId, prisma, events },
+  ) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
@@ -75,12 +81,13 @@ export const Mutation: MutationResolvers<Context> = {
       });
     }
 
-    return prisma.bot_installations.create({
-      data: {
+    return botInstall(
+      { prisma, events },
+      {
         org_id,
         bot_id: bot.id,
       },
-    });
+    );
   },
   botUninstall: async (_, { org_id, bot_id }, { userId, prisma }) => {
     // Check if the user is a member of the org
