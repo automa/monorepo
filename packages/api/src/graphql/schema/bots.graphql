@@ -23,7 +23,7 @@ interface BotBase {
   image_url: String
   type: BotType!
   paths: [String!]!
-  description: String
+  description: JSON
   homepage: String
   is_published: Boolean!
   is_preview: Boolean!
@@ -56,7 +56,7 @@ input BotCreateInput {
   webhook_url: String!
   short_description: String!
   draft_paths: [String!]!
-  description: String
+  description: JSON
   homepage: String
 }
 
@@ -64,6 +64,6 @@ input BotUpdateInput {
   webhook_url: String
   short_description: String
   draft_paths: [String!]
-  description: String
+  description: JSON
   homepage: String
 }

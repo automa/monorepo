@@ -91,7 +91,15 @@ export const seedBots = (
       type: 'manual',
       webhook_url: `https://example.com/webhook/${i}`,
       webhook_secret: `atma_whsec_${i}`,
-      description: `Bot ${i} long description`,
+      description: {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: `Bot ${i} long description` }],
+          },
+        ],
+      },
       homepage: `https://example${i}.com`,
       image_url: `https://example.com/image/${i}.png`,
       ...(i < published.length && {

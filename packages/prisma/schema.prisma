@@ -105,7 +105,7 @@ model bots {
   draft_paths       String[]            @default([])
   paths             String[]            @default([])
   image_url         String?             @db.VarChar(255)
-  description       String?
+  description       Json?
   homepage          String?             @db.VarChar(255)
   published_at      DateTime?           @db.Timestamp(6)
   is_published      Boolean?            @default(dbgenerated("(published_at IS NOT NULL)"))

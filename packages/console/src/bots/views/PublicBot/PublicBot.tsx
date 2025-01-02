@@ -8,6 +8,7 @@ import { getFragment } from 'gql';
 import {
   Badge,
   Button,
+  Editor,
   Flex,
   Loader,
   toast,
@@ -263,7 +264,9 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
                   ))}
                 </Flex>
               ) : null}
-              <Description>{bot.description}</Description>
+              <Description>
+                <Editor editable={false} value={bot.description} />
+              </Description>
             </Flex>
           </Flex>
         </Container>

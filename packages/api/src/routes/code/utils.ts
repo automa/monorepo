@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyReply } from 'fastify';
 
-import { task_item, task_items, tasks } from '@automa/prisma';
+import { bots, orgs, task_item, task_items, tasks } from '@automa/prisma';
 
 import { logger, SeverityNumber } from '../../telemetry';
 
@@ -104,7 +104,7 @@ export const getBot = async (
   app: FastifyInstance,
   reply: FastifyReply,
   task: tasks & { task_items: task_items[] },
-) => {
+): Promise<(bots & { orgs: Pick<orgs, 'name'> }) | void> => {
   const botTaskItem = task.task_items.find(
     (item) => item.type === task_item.bot,
   );

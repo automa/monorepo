@@ -21,7 +21,7 @@ export type Scalars = {
 export type Bot = BotBase & {
   __typename?: 'Bot';
   created_at: Scalars['DateTime']['output'];
-  description?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['JSON']['output']>;
   draft_paths: Array<Scalars['String']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
@@ -40,7 +40,7 @@ export type Bot = BotBase & {
 };
 
 export type BotBase = {
-  description?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['JSON']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   image_url?: Maybe<Scalars['String']['output']>;
@@ -54,7 +54,7 @@ export type BotBase = {
 };
 
 export type BotCreateInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['JSON']['input']>;
   draft_paths: Array<Scalars['String']['input']>;
   homepage?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -85,7 +85,7 @@ export enum BotType {
 }
 
 export type BotUpdateInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['JSON']['input']>;
   draft_paths?: InputMaybe<Array<Scalars['String']['input']>>;
   homepage?: InputMaybe<Scalars['String']['input']>;
   short_description?: InputMaybe<Scalars['String']['input']>;
@@ -182,7 +182,7 @@ export enum ProviderType {
 
 export type PublicBot = BotBase & {
   __typename?: 'PublicBot';
-  description?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['JSON']['output']>;
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   image_url?: Maybe<Scalars['String']['output']>;
@@ -395,7 +395,7 @@ export type PublicBotFragment = (
   & { ' $fragmentRefs'?: { 'BotBase_PublicBot_Fragment': BotBase_PublicBot_Fragment } }
 ) & { ' $fragmentName'?: 'PublicBotFragment' };
 
-export type BotFragment = { __typename?: 'Bot', id: number, name: string, short_description: string, type: BotType, webhook_url: string, webhook_secret: string, draft_paths: Array<string>, paths: Array<string>, image_url?: string | null, description?: string | null, homepage?: string | null, is_published: boolean, is_preview: boolean, is_deterministic: boolean } & { ' $fragmentName'?: 'BotFragment' };
+export type BotFragment = { __typename?: 'Bot', id: number, name: string, short_description: string, type: BotType, webhook_url: string, webhook_secret: string, draft_paths: Array<string>, paths: Array<string>, image_url?: string | null, description?: any | null, homepage?: string | null, is_published: boolean, is_preview: boolean, is_deterministic: boolean } & { ' $fragmentName'?: 'BotFragment' };
 
 export type BotQueryVariables = Exact<{
   org_id: Scalars['Int']['input'];
@@ -469,7 +469,7 @@ export type PublicBotQueryVariables = Exact<{
 }>;
 
 
-export type PublicBotQuery = { __typename?: 'Query', publicBot: { __typename?: 'PublicBot', id: number, name: string, short_description: string, type: BotType, paths: Array<string>, image_url?: string | null, description?: string | null, homepage?: string | null, is_published: boolean, is_preview: boolean, is_deterministic: boolean, org: { __typename?: 'PublicOrg', name: string }, installation?: { __typename?: 'BotInstallation', id: number } | null } };
+export type PublicBotQuery = { __typename?: 'Query', publicBot: { __typename?: 'PublicBot', id: number, name: string, short_description: string, type: BotType, paths: Array<string>, image_url?: string | null, description?: any | null, homepage?: string | null, is_published: boolean, is_preview: boolean, is_deterministic: boolean, org: { __typename?: 'PublicOrg', name: string }, installation?: { __typename?: 'BotInstallation', id: number } | null } };
 
 export type BotInstallMutationVariables = Exact<{
   org_id: Scalars['Int']['input'];

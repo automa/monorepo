@@ -22,11 +22,7 @@ export const botCreateSchema = z.object<ZodInferSchema<BotCreateInput>>({
   webhook_url: z.string().url().trim(),
   short_description: z.string().trim().min(3).max(255),
   draft_paths: z.array(z.string().trim()),
-  description: z
-    .string()
-    .trim()
-    .transform((value) => (value === '' ? null : value))
-    .nullish(),
+  description: z.object({}).passthrough().nullish(),
   homepage: z
     .string()
     .url()

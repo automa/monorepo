@@ -127,7 +127,15 @@ suite('graphql bots', () => {
         assert.equal(bots[0].webhook_secret, 'atma_whsec_0');
         assert.isEmpty(bots[0].draft_paths);
         assert.isEmpty(bots[0].paths);
-        assert.equal(bots[0].description, 'Bot 0 long description');
+        assert.deepEqual(bots[0].description, {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 long description' }],
+            },
+          ],
+        });
         assert.equal(bots[0].homepage, 'https://example0.com');
         assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
         assert.isString(bots[0].published_at);
@@ -144,7 +152,15 @@ suite('graphql bots', () => {
         assert.equal(bots[1].webhook_secret, 'atma_whsec_3');
         assert.deepEqual(bots[1].draft_paths, ['path-0']);
         assert.deepEqual(bots[1].paths, ['path-0', 'path-1']);
-        assert.equal(bots[1].description, 'Bot 3 long description');
+        assert.deepEqual(bots[1].description, {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 3 long description' }],
+            },
+          ],
+        });
         assert.equal(bots[1].homepage, 'https://example3.com');
         assert.equal(bots[1].image_url, 'https://example.com/image/3.png');
         assert.isNull(bots[1].published_at);
@@ -270,7 +286,15 @@ suite('graphql bots', () => {
         assert.equal(bot.webhook_secret, 'atma_whsec_3');
         assert.deepEqual(bot.draft_paths, ['path-0']);
         assert.deepEqual(bot.paths, ['path-0', 'path-1']);
-        assert.equal(bot.description, 'Bot 3 long description');
+        assert.deepEqual(bot.description, {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 3 long description' }],
+            },
+          ],
+        });
         assert.equal(bot.homepage, 'https://example3.com');
         assert.equal(bot.image_url, 'https://example.com/image/3.png');
         assert.isNull(bot.published_at);
@@ -425,7 +449,15 @@ suite('graphql bots', () => {
       assert.equal(bots[0].short_description, 'Bot 0');
       assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
       assert.isEmpty(bots[0].paths);
-      assert.equal(bots[0].description, 'Bot 0 long description');
+      assert.deepEqual(bots[0].description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(bots[0].homepage, 'https://example0.com');
       assert.isTrue(bots[0].is_published);
       assert.isFalse(bots[0].is_preview);
@@ -437,7 +469,15 @@ suite('graphql bots', () => {
       assert.equal(bots[1].short_description, 'Bot 1');
       assert.equal(bots[1].image_url, 'https://example.com/image/1.png');
       assert.isEmpty(bots[0].paths);
-      assert.equal(bots[1].description, 'Bot 1 long description');
+      assert.deepEqual(bots[1].description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 1 long description' }],
+          },
+        ],
+      });
       assert.equal(bots[1].homepage, 'https://example1.com');
       assert.isTrue(bots[1].is_published);
       assert.isFalse(bots[1].is_preview);
@@ -449,7 +489,15 @@ suite('graphql bots', () => {
       assert.equal(bots[2].short_description, 'Bot 2');
       assert.equal(bots[2].image_url, 'https://example.com/image/2.png');
       assert.deepEqual(bots[2].paths, ['path-0', 'path-1']);
-      assert.equal(bots[2].description, 'Bot 2 long description');
+      assert.deepEqual(bots[2].description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 2 long description' }],
+          },
+        ],
+      });
       assert.equal(bots[2].homepage, 'https://example2.com');
       assert.isTrue(bots[2].is_published);
       assert.isTrue(bots[2].is_preview);
@@ -502,7 +550,15 @@ suite('graphql bots', () => {
       assert.equal(bots[0].short_description, 'Bot 1');
       assert.equal(bots[0].image_url, 'https://example.com/image/1.png');
       assert.isEmpty(bots[0].paths);
-      assert.equal(bots[0].description, 'Bot 1 long description');
+      assert.deepEqual(bots[0].description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 1 long description' }],
+          },
+        ],
+      });
       assert.equal(bots[0].homepage, 'https://example1.com');
       assert.isTrue(bots[0].is_published);
       assert.isFalse(bots[0].is_preview);
@@ -514,7 +570,15 @@ suite('graphql bots', () => {
       assert.equal(bots[1].short_description, 'Bot 2');
       assert.equal(bots[1].image_url, 'https://example.com/image/2.png');
       assert.deepEqual(bots[1].paths, ['path-0', 'path-1']);
-      assert.equal(bots[1].description, 'Bot 2 long description');
+      assert.deepEqual(bots[1].description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 2 long description' }],
+          },
+        ],
+      });
       assert.equal(bots[1].homepage, 'https://example2.com');
       assert.isTrue(bots[1].is_published);
       assert.isTrue(bots[1].is_preview);
@@ -567,7 +631,15 @@ suite('graphql bots', () => {
       assert.equal(bots[0].short_description, 'Bot 0');
       assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
       assert.isEmpty(bots[0].paths);
-      assert.equal(bots[0].description, 'Bot 0 long description');
+      assert.deepEqual(bots[0].description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(bots[0].homepage, 'https://example0.com');
       assert.isTrue(bots[0].is_published);
       assert.isFalse(bots[0].is_preview);
@@ -762,7 +834,15 @@ suite('graphql bots', () => {
       assert.equal(publicBot.short_description, 'Bot 0');
       assert.equal(publicBot.image_url, 'https://example.com/image/0.png');
       assert.deepEqual(publicBot.paths, ['path-0', 'path-1']);
-      assert.equal(publicBot.description, 'Bot 0 long description');
+      assert.deepEqual(publicBot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(publicBot.homepage, 'https://example0.com');
       assert.isTrue(publicBot.is_published);
       assert.isFalse(publicBot.is_preview);
@@ -1347,7 +1427,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/5',
         draft_paths: ['src'],
-        description: 'Bot 5',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 5' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -1373,7 +1461,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 5');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 5' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -1471,50 +1567,6 @@ suite('graphql bots', () => {
       assert.equal(count, 1);
     });
 
-    test('with empty description should succeed', async () => {
-      const response = await botCreate(app, org.id, {
-        name: 'bot-5',
-        short_description: 'Bot 5',
-        type: 'manual',
-        webhook_url: 'https://example.com/webhook/5',
-        draft_paths: ['src'],
-        description: '',
-        homepage: 'https://example.com',
-      });
-
-      assert.equal(response.statusCode, 200);
-
-      assert.equal(
-        response.headers['content-type'],
-        'application/json; charset=utf-8',
-      );
-
-      const {
-        errors,
-        data: { botCreate: bot },
-      } = response.json();
-
-      assert.isUndefined(errors);
-
-      assert.isNumber(bot.id);
-      assert.equal(bot.name, 'bot-5');
-      assert.equal(bot.short_description, 'Bot 5');
-      assert.equal(bot.type, 'manual');
-      assert.equal(bot.webhook_url, 'https://example.com/webhook/5');
-      assert.isDefined(bot.webhook_secret);
-      assert.deepEqual(bot.draft_paths, ['src']);
-      assert.deepEqual(bot.paths, ['src']);
-      assert.isNull(bot.description);
-      assert.equal(bot.homepage, 'https://example.com');
-      assert.isNull(bot.published_at);
-      assert.isFalse(bot.is_published);
-      assert.isString(bot.created_at);
-
-      const count = await app.prisma.bots.count();
-
-      assert.equal(count, 1);
-    });
-
     test('with no homepage should succeed', async () => {
       const response = await botCreate(app, org.id, {
         name: 'bot-5',
@@ -1522,7 +1574,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/5',
         draft_paths: ['src'],
-        description: 'Bot 5',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 5' }],
+            },
+          ],
+        },
       });
 
       assert.equal(response.statusCode, 200);
@@ -1547,7 +1607,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 5');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 5' }],
+          },
+        ],
+      });
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -1565,7 +1633,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/5',
         draft_paths: ['src'],
-        description: 'Bot 5',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 5' }],
+            },
+          ],
+        },
         homepage: null,
       });
 
@@ -1591,7 +1667,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 5');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 5' }],
+          },
+        ],
+      });
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -1609,7 +1693,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/5',
         draft_paths: ['src'],
-        description: 'Bot 5',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 5' }],
+            },
+          ],
+        },
         homepage: '',
       });
 
@@ -1635,7 +1727,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 5');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 5' }],
+          },
+        ],
+      });
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -1653,7 +1753,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/5',
         draft_paths: [],
-        description: 'Bot 5',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 5' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -1679,7 +1787,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 5');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 5' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -1697,7 +1813,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -1725,7 +1849,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -1757,7 +1889,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -1789,7 +1929,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -1830,7 +1978,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -1871,7 +2027,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -1909,7 +2073,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -1955,7 +2127,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -1993,7 +2173,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/0',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2023,7 +2211,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2055,7 +2251,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2087,7 +2291,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2128,7 +2340,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2169,7 +2389,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2208,7 +2436,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 6',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2240,7 +2476,15 @@ suite('graphql bots', () => {
         type: null,
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2272,7 +2516,15 @@ suite('graphql bots', () => {
         type: 'invalid',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2303,7 +2555,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 6',
         type: 'manual',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2335,7 +2595,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: null,
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2367,7 +2635,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'invalid_url',
         draft_paths: ['src'],
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2404,7 +2680,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 6',
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2436,7 +2720,15 @@ suite('graphql bots', () => {
         type: 'manual',
         webhook_url: 'https://example.com/webhook/6',
         draft_paths: null,
-        description: 'Bot 6',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 6' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2476,7 +2768,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 0 that does something',
         webhook_url: 'https://example.com/webhooks/automa/0',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2502,7 +2802,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 that does something' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2513,7 +2821,15 @@ suite('graphql bots', () => {
       const response = await botUpdate(app, org.id, 'bot-0', {
         webhook_url: 'https://example.com/webhooks/automa/0',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2539,7 +2855,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 that does something' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2550,7 +2874,15 @@ suite('graphql bots', () => {
       const response = await botUpdate(app, org.id, 'bot-0', {
         short_description: 'Bot 0 that does something',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2576,7 +2908,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 that does something' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2587,7 +2927,15 @@ suite('graphql bots', () => {
       const response = await botUpdate(app, org.id, 'bot-0', {
         short_description: 'Bot 0 that does something',
         webhook_url: 'https://example.com/webhooks/automa/0',
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2613,7 +2961,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 that does something' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2625,7 +2981,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 0 that does something',
         webhook_url: 'https://example.com/webhooks/automa/0',
         draft_paths: [],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2651,7 +3015,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 that does something' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2688,7 +3060,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 0 long description');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2733,50 +3113,20 @@ suite('graphql bots', () => {
       assert.isString(bot.created_at);
     });
 
-    test('with empty description should succeed', async () => {
-      const response = await botUpdate(app, org.id, 'bot-0', {
-        short_description: 'Bot 0 that does something',
-        webhook_url: 'https://example.com/webhooks/automa/0',
-        draft_paths: ['src'],
-        description: '',
-        homepage: 'https://example.com',
-      });
-
-      assert.equal(response.statusCode, 200);
-
-      assert.equal(
-        response.headers['content-type'],
-        'application/json; charset=utf-8',
-      );
-
-      const {
-        errors,
-        data: { botUpdate: bot },
-      } = response.json();
-
-      assert.isUndefined(errors);
-
-      assert.isNumber(bot.id);
-      assert.equal(bot.name, 'bot-0');
-      assert.equal(bot.short_description, 'Bot 0 that does something');
-      assert.equal(bot.type, 'manual');
-      assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
-      assert.isDefined(bot.webhook_secret);
-      assert.deepEqual(bot.draft_paths, ['src']);
-      assert.deepEqual(bot.paths, ['src']);
-      assert.isNull(bot.description);
-      assert.equal(bot.homepage, 'https://example.com');
-      assert.isNull(bot.published_at);
-      assert.isFalse(bot.is_published);
-      assert.isString(bot.created_at);
-    });
-
     test('with missing homepage should succeed', async () => {
       const response = await botUpdate(app, org.id, 'bot-0', {
         short_description: 'Bot 0 that does something',
         webhook_url: 'https://example.com/webhooks/automa/0',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
       });
 
       assert.equal(response.statusCode, 200);
@@ -2801,7 +3151,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 that does something' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example0.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2813,7 +3171,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 0 that does something',
         webhook_url: 'https://example.com/webhooks/automa/0',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: null,
       });
 
@@ -2839,7 +3205,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 that does something' }],
+          },
+        ],
+      });
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2851,7 +3225,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 0 that does something',
         webhook_url: 'https://example.com/webhooks/automa/0',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: '',
       });
 
@@ -2877,7 +3259,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 that does something' }],
+          },
+        ],
+      });
       assert.isNull(bot.homepage);
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2889,7 +3279,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 1 that does something',
         webhook_url: 'https://example.com/webhooks/automa/1',
         draft_paths: ['src'],
-        description: 'Bot 1 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 1 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2920,7 +3318,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 1 long description');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 1 long description' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example1.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2931,7 +3337,15 @@ suite('graphql bots', () => {
         short_description: null,
         webhook_url: 'https://example.com/webhooks/automa/0',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -2972,7 +3386,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 0 long description');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example0.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -2983,7 +3405,15 @@ suite('graphql bots', () => {
         short_description: 'b',
         webhook_url: 'https://example.com/webhooks/automa/0',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -3026,7 +3456,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 0 long description');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example0.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -3037,7 +3475,15 @@ suite('graphql bots', () => {
         short_description: 'a'.repeat(256),
         webhook_url: 'https://example.com/webhooks/automa/0',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -3080,7 +3526,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 0 long description');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example0.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -3090,7 +3544,15 @@ suite('graphql bots', () => {
       const response = await botUpdate(app, org.id, 'bot-0', {
         short_description: '      ',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
         webhook_url: 'https://example.com/webhooks/automa/0',
       });
@@ -3133,7 +3595,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 0 long description');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example0.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -3144,7 +3614,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 0 that does something',
         webhook_url: null,
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -3185,7 +3663,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 0 long description');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example0.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -3196,7 +3682,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 0 that does something',
         webhook_url: 'invalid_url',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -3236,7 +3730,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 0 long description');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example0.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -3247,7 +3749,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 0 that does something',
         webhook_url: 'https://example.com/hooks/automa/0',
         draft_paths: null,
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -3288,7 +3798,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, []);
       assert.deepEqual(bot.paths, []);
-      assert.equal(bot.description, 'Bot 0 long description');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example0.com');
       assert.isNull(bot.published_at);
       assert.isFalse(bot.is_published);
@@ -3305,7 +3823,15 @@ suite('graphql bots', () => {
         short_description: 'Bot 0 that does something',
         webhook_url: 'https://example.com/webhooks/automa/0',
         draft_paths: ['src'],
-        description: 'Bot 0 that does something',
+        description: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        },
         homepage: 'https://example.com',
       });
 
@@ -3331,7 +3857,15 @@ suite('graphql bots', () => {
       assert.isDefined(bot.webhook_secret);
       assert.deepEqual(bot.draft_paths, ['src']);
       assert.deepEqual(bot.paths, ['src']);
-      assert.equal(bot.description, 'Bot 0 that does something');
+      assert.deepEqual(bot.description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 that does something' }],
+          },
+        ],
+      });
       assert.equal(bot.homepage, 'https://example.com');
       assert.isNotNull(bot.published_at);
       assert.isTrue(bot.is_published);
@@ -3344,7 +3878,15 @@ suite('graphql bots', () => {
           short_description: 'Bot 0 that does something',
           webhook_url: 'https://example.com/webhooks/automa/0',
           draft_paths: ['src'],
-          description: 'Bot 0 that does something',
+          description: {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [{ type: 'text', text: 'Bot 0 that does something' }],
+              },
+            ],
+          },
           homepage: 'https://example.com',
         });
 
@@ -3370,7 +3912,15 @@ suite('graphql bots', () => {
         assert.isDefined(bot.webhook_secret);
         assert.deepEqual(bot.draft_paths, ['src']);
         assert.deepEqual(bot.paths, ['src']);
-        assert.equal(bot.description, 'Bot 0 that does something');
+        assert.deepEqual(bot.description, {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        });
         assert.equal(bot.homepage, 'https://example.com');
         assert.isNull(bot.published_at);
         assert.isFalse(bot.is_published);
@@ -3390,7 +3940,15 @@ suite('graphql bots', () => {
           short_description: 'Bot 0 that does something',
           webhook_url: 'https://example.com/webhooks/automa/0',
           draft_paths: ['src'],
-          description: 'Bot 0 that does something',
+          description: {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [{ type: 'text', text: 'Bot 0 that does something' }],
+              },
+            ],
+          },
           homepage: 'https://example.com',
         });
 
@@ -3419,7 +3977,15 @@ suite('graphql bots', () => {
         assert.isDefined(bot.webhook_secret);
         assert.deepEqual(bot.draft_paths, ['src']);
         assert.deepEqual(bot.paths, []);
-        assert.equal(bot.description, 'Bot 0 that does something');
+        assert.deepEqual(bot.description, {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        });
         assert.equal(bot.homepage, 'https://example.com');
         assert.isNotNull(bot.published_at);
         assert.isTrue(bot.is_published);
