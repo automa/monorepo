@@ -37,7 +37,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
 
   const navigate = useNavigate();
 
-  useAnalyticsPage('Product', 'Public Bot Overview');
+  useAnalyticsPage('Bots', 'Public Bot Overview');
 
   const { setOrgBotInstallationsCount } = useOrg();
 
