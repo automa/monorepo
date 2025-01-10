@@ -13,8 +13,8 @@ import {
   Button,
   Flex,
   Input,
+  InputEditor,
   Loader,
-  Textarea,
   toast,
   Tooltip,
   Typography,
@@ -183,17 +183,24 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                   placeholder: 'https://example.com',
                 }}
               />
-              <Textarea
-                label="Description"
-                optional
-                description="A full description of your bot. This will be shown on the bot's page."
-                error={errors.description?.message}
-                textarea={{
-                  ...register('description', {
-                    setValueAs: (value) => value || null,
-                  }),
-                  placeholder: 'This bot uses AI to do the given task.',
-                }}
+              <Controller
+                control={control}
+                name="description"
+                render={({ field: { name, disabled, value, onChange } }) => (
+                  <InputEditor
+                    label="Description"
+                    optional
+                    description="A full description of your bot. This will be shown on the bot's page."
+                    error={errors.description?.message as string}
+                    {...{
+                      name,
+                      disabled,
+                      value,
+                      onChange,
+                      placeholder: 'This bot uses AI to do the given task.',
+                    }}
+                  />
+                )}
               />
             </Flex>
             <Button

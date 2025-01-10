@@ -77,6 +77,19 @@ export const GhostDisabled = {
   },
 } satisfies Story;
 
+export const GhostActive = {
+  args: {
+    variant: 'ghostActive',
+  },
+} satisfies Story;
+
+export const GhostActiveDisabled = {
+  args: {
+    ...GhostActive.args,
+    ...Disabled.args,
+  },
+} satisfies Story;
+
 export const Danger = {
   args: {
     variant: 'danger',
@@ -117,6 +130,13 @@ export const SmallGhost = {
   },
 } satisfies Story;
 
+export const SmallGhostActive = {
+  args: {
+    ...Small.args,
+    ...GhostActive.args,
+  },
+} satisfies Story;
+
 export const SmallDanger = {
   args: {
     ...Small.args,
@@ -151,9 +171,57 @@ export const LargeGhost = {
   },
 } satisfies Story;
 
+export const LargeGhostActive = {
+  args: {
+    ...Large.args,
+    ...GhostActive.args,
+  },
+} satisfies Story;
+
 export const LargeDanger = {
   args: {
     ...Large.args,
+    ...Danger.args,
+  },
+} satisfies Story;
+
+export const ExtraSmall = {
+  args: {
+    size: 'xsmall',
+  },
+} satisfies Story;
+
+export const ExtraSmallSecondary = {
+  args: {
+    ...ExtraSmall.args,
+    ...Secondary.args,
+  },
+} satisfies Story;
+
+export const ExtraSmallTertiary = {
+  args: {
+    ...ExtraSmall.args,
+    ...Tertiary.args,
+  },
+} satisfies Story;
+
+export const ExtraSmallGhost = {
+  args: {
+    ...ExtraSmall.args,
+    ...Ghost.args,
+  },
+} satisfies Story;
+
+export const ExtraSmallGhostActive = {
+  args: {
+    ...ExtraSmall.args,
+    ...GhostActive.args,
+  },
+} satisfies Story;
+
+export const ExtraSmallDanger = {
+  args: {
+    ...ExtraSmall.args,
     ...Danger.args,
   },
 } satisfies Story;

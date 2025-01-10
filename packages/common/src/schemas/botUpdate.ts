@@ -8,11 +8,7 @@ export const botUpdateSchema = z.object<ZodInferSchema<BotUpdateInput>>({
   webhook_url: z.string().url().trim().optional(),
   short_description: z.string().trim().min(3).max(255).optional(),
   draft_paths: z.array(z.string().trim()).optional(),
-  description: z
-    .string()
-    .trim()
-    .transform((value) => (value === '' ? null : value))
-    .nullish(),
+  description: z.object({}).passthrough().nullish(),
   homepage: z
     .string()
     .url()

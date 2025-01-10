@@ -99,7 +99,7 @@ CREATE TABLE public.bots (
   draft_paths TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
   paths TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
   image_url VARCHAR(255),
-  description TEXT,
+  description JSONB,
   homepage VARCHAR(255),
   published_at TIMESTAMP,
   is_published BOOLEAN GENERATED ALWAYS AS (published_at IS NOT NULL) STORED,
