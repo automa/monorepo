@@ -35,10 +35,10 @@ loadFonts().then(() => {
             <StoreProvider store={store}>
               <BrowserRouter>
                 <Tooltip.Provider delayDuration={500}>
+                  <Toasts />
                   <ErrorBoundary>
                     <App />
                   </ErrorBoundary>
-                  <Toasts />
                 </Tooltip.Provider>
               </BrowserRouter>
             </StoreProvider>
