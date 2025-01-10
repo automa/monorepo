@@ -538,20 +538,22 @@ suite('graphql tasks', () => {
       await app.prisma.bot_installations.deleteMany();
     });
 
+    teardown(async () => {
+      await app.prisma.tasks.deleteMany();
+    });
+
     suite('with valid input', () => {
       let response: LightMyRequestResponse;
 
       setup(async () => {
         response = await taskCreate(app, org.id, {
-          content:
+          title:
             'Send an analytics event when user clicks on "Create Task" button',
+          content:
+            '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
           bot_installation_id: botInstallations[1].id,
           repo_id: repo.id,
         });
-      });
-
-      teardown(async () => {
-        await app.prisma.tasks.deleteMany();
       });
 
       test('should succeed', async () => {
@@ -600,7 +602,7 @@ suite('graphql tasks', () => {
         assert.equal(taskItems[0].type, 'message');
         assert.deepEqual(taskItems[0].data, {
           content:
-            'Send an analytics event when user clicks on "Create Task" button',
+            '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         });
         assert.equal(taskItems[0].actor_user_id, user.id);
 
@@ -622,10 +624,99 @@ suite('graphql tasks', () => {
       });
     });
 
+    test('with no description should succeed', async () => {
+      const response = await taskCreate(app, org.id, {
+        title:
+          'Send an analytics event when user clicks on "Create Task" button',
+        bot_installation_id: botInstallations[1].id,
+        repo_id: repo.id,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { taskCreate: task },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(task.id);
+      assert.equal(
+        task.title,
+        'Send an analytics event when user clicks on "Create Task" button',
+      );
+      assert.isString(task.created_at);
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 1);
+
+      const task_items = await app.prisma.task_items.findMany({
+        where: {
+          task_id: task.id,
+          type: 'message',
+        },
+      });
+
+      assert.isEmpty(task_items);
+    });
+
+    test('with null description should succeed', async () => {
+      const response = await taskCreate(app, org.id, {
+        title:
+          'Send an analytics event when user clicks on "Create Task" button',
+        content: null,
+        bot_installation_id: botInstallations[1].id,
+        repo_id: repo.id,
+      });
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        errors,
+        data: { taskCreate: task },
+      } = response.json();
+
+      assert.isUndefined(errors);
+
+      assert.isNumber(task.id);
+      assert.equal(
+        task.title,
+        'Send an analytics event when user clicks on "Create Task" button',
+      );
+      assert.isString(task.created_at);
+
+      const count = await app.prisma.tasks.count();
+
+      assert.equal(count, 1);
+
+      const task_items = await app.prisma.task_items.findMany({
+        where: {
+          task_id: task.id,
+          type: 'message',
+        },
+      });
+
+      assert.isEmpty(task_items);
+    });
+
     test('non-member org should fail', async () => {
       const response = await taskCreate(app, nonMemberOrg.id, {
-        content:
+        title:
           'Send an analytics event when user clicks on "Create Task" button',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[1].id,
         repo_id: repo.id,
       });
@@ -648,8 +739,10 @@ suite('graphql tasks', () => {
       assert.equal(count, 0);
     });
 
-    test('with missing content should fail', async () => {
+    test('with missing title should fail', async () => {
       const response = await taskCreate(app, org.id, {
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[1].id,
         repo_id: repo.id,
       });
@@ -666,7 +759,7 @@ suite('graphql tasks', () => {
       assert.lengthOf(errors, 1);
       assert.include(
         errors[0].message,
-        'Field "content" of required type "String!" was not provided',
+        'Field "title" of required type "String!" was not provided',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
 
@@ -675,9 +768,11 @@ suite('graphql tasks', () => {
       assert.equal(count, 0);
     });
 
-    test('with null content should fail', async () => {
+    test('with null title should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content: null,
+        title: null,
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[1].id,
         repo_id: repo.id,
       });
@@ -694,7 +789,7 @@ suite('graphql tasks', () => {
       assert.lengthOf(errors, 1);
       assert.include(
         errors[0].message,
-        'Variable "$input" got invalid value null at "input.content"; Expected non-nullable type "String!" not to be null.',
+        'Variable "$input" got invalid value null at "input.title"; Expected non-nullable type "String!" not to be null.',
       );
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');
 
@@ -703,9 +798,11 @@ suite('graphql tasks', () => {
       assert.equal(count, 0);
     });
 
-    test('with short content should fail', async () => {
+    test('with short title should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content: 'abc',
+        title: 'abc',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[1].id,
         repo_id: repo.id,
       });
@@ -727,7 +824,7 @@ suite('graphql tasks', () => {
         {
           code: 'too_small',
           message: 'String must contain at least 5 character(s)',
-          path: ['content'],
+          path: ['title'],
           type: 'string',
           inclusive: true,
           exact: false,
@@ -740,9 +837,11 @@ suite('graphql tasks', () => {
       assert.equal(count, 0);
     });
 
-    test('with content containing only spaces should fail', async () => {
+    test('with title containing only spaces should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content: '     ',
+        title: '     ',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[1].id,
         repo_id: repo.id,
       });
@@ -763,7 +862,7 @@ suite('graphql tasks', () => {
         {
           code: 'too_small',
           message: 'String must contain at least 5 character(s)',
-          path: ['content'],
+          path: ['title'],
           type: 'string',
           inclusive: true,
           exact: false,
@@ -778,8 +877,10 @@ suite('graphql tasks', () => {
 
     test('with missing bot_installation_id should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content:
+        title:
           'Send an analytics event when user clicks on "Create Task" button',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         repo_id: repo.id,
       });
 
@@ -806,8 +907,10 @@ suite('graphql tasks', () => {
 
     test('with null bot_installation_id should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content:
+        title:
           'Send an analytics event when user clicks on "Create Task" button',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: null,
         repo_id: repo.id,
       });
@@ -835,8 +938,10 @@ suite('graphql tasks', () => {
 
     test('with invalid bot_installation_id should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content:
+        title:
           'Send an analytics event when user clicks on "Create Task" button',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: -1,
         repo_id: repo.id,
       });
@@ -873,8 +978,10 @@ suite('graphql tasks', () => {
 
     test('with non-existent bot_installation_id should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content:
+        title:
           'Send an analytics event when user clicks on "Create Task" button',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: 1,
         repo_id: repo.id,
       });
@@ -907,8 +1014,10 @@ suite('graphql tasks', () => {
 
     test('with scheduled bot should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content:
+        title:
           'Send an analytics event when user clicks on "Create Task" button',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[0].id,
         repo_id: repo.id,
       });
@@ -941,8 +1050,10 @@ suite('graphql tasks', () => {
 
     test('with missing repo_id should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content:
+        title:
           'Send an analytics event when user clicks on "Create Task" button',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[1].id,
       });
 
@@ -969,8 +1080,10 @@ suite('graphql tasks', () => {
 
     test('with null repo_id should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content:
+        title:
           'Send an analytics event when user clicks on "Create Task" button',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[1].id,
         repo_id: null,
       });
@@ -998,8 +1111,10 @@ suite('graphql tasks', () => {
 
     test('with invalid repo_id should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content:
+        title:
           'Send an analytics event when user clicks on "Create Task" button',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[1].id,
         repo_id: -1,
       });
@@ -1036,8 +1151,10 @@ suite('graphql tasks', () => {
 
     test('with non-existent repo_id should fail', async () => {
       const response = await taskCreate(app, org.id, {
-        content:
+        title:
           'Send an analytics event when user clicks on "Create Task" button',
+        content:
+          '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[1].id,
         repo_id: 1,
       });

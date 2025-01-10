@@ -327,8 +327,9 @@ export enum TaskActivityType {
 
 export type TaskCreateInput = {
   bot_installation_id: Scalars['Int']['input'];
-  content: Scalars['String']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
   repo_id: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type TaskItem = {
