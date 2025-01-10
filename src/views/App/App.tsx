@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAnalytics } from 'analytics';
 import { useOptimizerUser } from 'optimizer';
-import { Loader, RoutesLoader, useAsyncEffect } from 'shared';
+import { Loader, RoutesLoader, toast, useAsyncEffect } from 'shared';
 
 import { useAuth, useUser } from 'auth';
 
@@ -39,6 +39,20 @@ const App: React.FC<{}> = () => {
       setAuthLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    const error = parseInt(
+      new URLSearchParams(location.search).get('error') || '',
+      10,
+    );
+
+    if (error) {
+      toast({
+        title: `${error}`,
+        variant: 'error',
+      });
+    }
+  }, [location.search]);
 
   useEffect(() => {
     if (!user && !authLoading) {

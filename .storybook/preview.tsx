@@ -41,8 +41,8 @@ const preview: Preview = {
                 <BrowserRouter>
                   <Tooltip.Provider delayDuration={500}>
                     <Toast.Provider>
-                      <AppContainer>{Story()}</AppContainer>
                       <Toast.Viewport />
+                      <AppContainer>{Story()}</AppContainer>
                     </Toast.Provider>
                   </Tooltip.Provider>
                 </BrowserRouter>
