@@ -1,5 +1,4 @@
 import { HTMLAttributes } from 'react';
-import { JSONContent } from '@tiptap/react';
 
 import { $, Component, Styled } from 'theme';
 
