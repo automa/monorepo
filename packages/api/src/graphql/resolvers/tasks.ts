@@ -113,14 +113,18 @@ export const Mutation: MutationResolvers<Context> = {
       { prisma, events },
       {
         org_id,
-        title: data.content.slice(0, 255),
+        title: data.title,
         task_items: {
           create: [
-            {
-              actor_user_id: userId,
-              type: task_item.message,
-              data: { content: data.content },
-            },
+            ...(data.content
+              ? [
+                  {
+                    actor_user_id: userId,
+                    type: task_item.message,
+                    data: { content: data.content },
+                  },
+                ]
+              : []),
             {
               actor_user_id: userId,
               type: task_item.origin,

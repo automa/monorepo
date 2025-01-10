@@ -13,7 +13,8 @@ import {
   Button,
   ComboBox,
   Flex,
-  Textarea,
+  Input,
+  InputEditor,
   toast,
   Typography,
 } from 'shared';
@@ -122,12 +123,32 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
       </Flex>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <Flex fullWidth direction="column" className="mb-8 gap-6">
-          <Textarea
-            label="Message"
-            error={errors.content?.message}
-            textarea={{
-              ...register('content'),
-              placeholder: '',
+          <Input
+            label="Title"
+            description="A short description of the task"
+            error={errors.title?.message}
+            input={{
+              ...register('title'),
+            }}
+          />
+          <Controller
+            control={control}
+            name="content"
+            render={({ field: { name, disabled, value, onChange } }) => {
+              return (
+                <InputEditor
+                  label="Message"
+                  optional
+                  description="A detailed description of the task along with relevant context"
+                  error={errors.content?.message}
+                  {...{
+                    name,
+                    disabled,
+                    value,
+                    onChangeAsMarkdown: onChange,
+                  }}
+                />
+              );
             }}
           />
           <Controller

@@ -17,6 +17,10 @@ import {
 import TiptapHeading, { Level } from '@tiptap/extension-heading';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
 import {
   EditorContent,
   EditorOptions,
@@ -24,6 +28,7 @@ import {
   useEditor,
 } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import { Markdown } from 'tiptap-markdown';
 
 import { twp } from 'theme';
 
@@ -81,19 +86,22 @@ const Editor: React.FC<EditorProps> = ({
   editable = true,
   value = null,
   onChange,
+  onChangeAsMarkdown,
   placeholder,
 }) => {
   const handleUpdate: EditorOptions['onUpdate'] = ({ editor }) => {
-    if (editor.getText().trim() === '') {
-      return onChange?.(null);
+    if (!editor.getText().trim().length) {
+      return (onChange ?? onChangeAsMarkdown)?.(null);
     }
 
-    return onChange?.(editor.getJSON());
+    return (
+      onChange?.(editor.getJSON()) ??
+      onChangeAsMarkdown?.(editor.storage.markdown.getMarkdown())
+    );
   };
 
   const editor = useEditor({
     editable,
-    content: value,
     onUpdate: handleUpdate,
     extensions: [
       StarterKit.configure({
@@ -150,14 +158,35 @@ const Editor: React.FC<EditorProps> = ({
       Placeholder.configure({
         placeholder,
       }),
+      Table.configure({
+        HTMLAttributes: {
+          class: twp`my-6 border-collapse [&_p]:mb-0`,
+        },
+      }),
+      TableRow,
+      TableHeader.configure({
+        HTMLAttributes: {
+          class: twp`border border-neutral-200 bg-neutral-200 px-2 py-1.5 font-bold [&.selectedCell]:bg-neutral-300`,
+        },
+      }),
+      TableCell.configure({
+        HTMLAttributes: {
+          class: twp`border border-neutral-200 px-2 py-1.5 [&.selectedCell]:bg-neutral-200`,
+        },
+      }),
+      Markdown,
     ],
   });
 
+  // Setting value every time the value changes causes the cursor to jump to the end of the text
+  // and if the editor is being used for markdown, the ending spaces are removed too
   useEffect(() => {
-    if (editor && value) {
-      editor.commands.setContent(value);
+    if (!editor || !value) {
+      return;
     }
-  }, [editor, value]);
+
+    editor.commands.setContent(value);
+  }, []);
 
   return (
     <>

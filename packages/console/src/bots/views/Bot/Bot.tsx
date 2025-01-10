@@ -186,6 +186,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
               <Controller
                 control={control}
                 name="description"
+                defaultValue={bot.description}
                 render={({ field: { name, disabled, value, onChange } }) => (
                   <InputEditor
                     label="Description"
@@ -197,8 +198,8 @@ const Bot: React.FC<BotProps> = ({ org }) => {
                       disabled,
                       value,
                       onChange,
-                      placeholder: 'This bot uses AI to do the given task.',
                     }}
+                    placeholder="This bot uses AI to do the given task."
                   />
                 )}
               />

@@ -11,7 +11,7 @@ import { format, formatDistanceToNow } from 'date-fns';
 
 import { getFragment } from 'gql';
 import { IntegrationType, TaskItemType } from 'gql/graphql';
-import { Anchor, Avatar, Flex, Tooltip, Typography } from 'shared';
+import { Anchor, Avatar, Editor, Flex, Tooltip, Typography } from 'shared';
 
 import { USER_AVATAR_FRAGMENT, UserAvatar } from 'users';
 
@@ -57,7 +57,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
   const botName = `${taskItem.bot?.org.name}/${taskItem.bot?.name}`;
 
   if (taskItem.type === TaskItemType.Message) {
-    return <div className="px-1 py-2">{taskItem.data.content}</div>;
+    return (
+      <div className="px-1 py-2">
+        <Editor editable={false} value={taskItem.data.content} />
+      </div>
+    );
   }
 
   if (taskItem.type === TaskItemType.Origin) {

@@ -8,6 +8,7 @@ import { InputEditorComponentProps } from './types';
 
 import { Content, Text } from './InputEditor.styles';
 
+// TODO: This doesn't work with form reset
 const InputEditor: React.FC<InputEditorComponentProps> = ({
   label,
   optional,
@@ -17,6 +18,7 @@ const InputEditor: React.FC<InputEditorComponentProps> = ({
   disabled,
   value,
   onChange,
+  onChangeAsMarkdown,
   placeholder,
   ...props
 }) => {
@@ -28,6 +30,7 @@ const InputEditor: React.FC<InputEditorComponentProps> = ({
           editable={!disabled}
           value={value}
           onChange={onChange}
+          onChangeAsMarkdown={onChangeAsMarkdown}
           placeholder={placeholder}
         />
       </Content>
