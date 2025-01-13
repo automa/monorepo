@@ -1,21 +1,13 @@
-import { logger, SeverityNumber } from '../../telemetry';
-
 import { JobDefinition } from '../types';
+import { chunkArray } from '../utils';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 100;
+const CHUNK_SIZE = 10;
 
 const botScheduled: JobDefinition<{
   botId: number;
 }> = {
   handler: async (app, { botId }) => {
-    logger.emit({
-      severityNumber: SeverityNumber.INFO,
-      body: 'Processing bot scheduled event',
-      attributes: {
-        botId,
-      },
-    });
-
     let cursor: number | undefined;
     let hasMore = true;
 
@@ -44,17 +36,22 @@ const botScheduled: JobDefinition<{
       });
 
       await Promise.all(
-        botInstallations
-          .filter((botInstallation) => botInstallation.orgs.has_installation)
-          .map((botInstallation) =>
-            app.events.botInstallationScheduled.publish(
-              `${botId}-${botInstallation.org_id}`,
-              {
+        chunkArray(
+          botInstallations.filter(
+            (botInstallation) => botInstallation.orgs.has_installation,
+          ),
+          CHUNK_SIZE,
+        ).map((botInstallations) =>
+          app.events.botInstallationScheduled.bulkPublish(
+            botInstallations.map((botInstallation) => ({
+              id: `${botId}-${botInstallation.org_id}`,
+              input: {
                 botId,
                 orgId: botInstallation.org_id,
               },
-            ),
+            })),
           ),
+        ),
       );
 
       cursor = botInstallations[PAGE_SIZE - 1]?.id;

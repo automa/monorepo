@@ -20,14 +20,6 @@ const taskCreated: JobDefinition<{
   taskId: number;
 }> = {
   handler: async (app, { taskId }) => {
-    logger.emit({
-      severityNumber: SeverityNumber.INFO,
-      body: 'Processing task created event',
-      attributes: {
-        taskId,
-      },
-    });
-
     const task = await app.prisma.tasks.findUnique({
       where: {
         id: taskId,
@@ -40,7 +32,7 @@ const taskCreated: JobDefinition<{
     if (!task) {
       logger.emit({
         severityNumber: SeverityNumber.WARN,
-        body: 'Unable to find task for task created event',
+        body: 'Unable to find task for taskCreated event',
         attributes: {
           taskId,
         },
