@@ -16,6 +16,15 @@ export { server } from '../src';
 
 export * from './mocks';
 
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+export const waitFor = async (cond: () => boolean) => {
+  while (!cond()) {
+    await sleep(100);
+  }
+};
+
 export const call = (
   app: FastifyInstance,
   uri: string,

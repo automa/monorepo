@@ -45,18 +45,7 @@ const suspend: GithubEventActionHandler<{
 const unsuspend: GithubEventActionHandler<{
   installation: GithubInstallation;
 }> = async (app, body) => {
-  const org = await app.prisma.orgs.update({
-    where: {
-      provider_type_provider_id: {
-        provider_type: provider.github,
-        provider_id: `${body.installation.account.id}`,
-      },
-    },
-    data: {
-      provider_name: body.installation.account.login,
-      has_installation: true,
-    },
-  });
+  const org = await addOrg(app, body.installation);
 
   const { axios, paginate } = await caller(body.installation.id);
 

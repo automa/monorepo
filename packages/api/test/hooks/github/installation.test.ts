@@ -6,13 +6,14 @@ import axios from 'axios';
 import { CauseType } from '@automa/common';
 import { orgs, repos } from '@automa/prisma';
 
-import { server } from '../../utils';
+import { server, sleep, waitFor } from '../../utils';
 
 import { callWithFixture, encodeSettings } from './utils';
 
 suite('github hook installation event', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
   let sandbox: SinonSandbox, postStub: SinonStub, getStub: SinonStub;
+  let syncOrgStub: SinonStub, syncRepoStub: SinonStub;
 
   suiteSetup(async () => {
     app = await server();
@@ -24,6 +25,13 @@ suite('github hook installation event', () => {
   });
 
   setup(() => {
+    syncOrgStub = sandbox
+      .stub(app.events.syncGithubOrgUsers, 'publish')
+      .resolves();
+    syncRepoStub = sandbox
+      .stub(app.events.syncGithubRepoUsers, 'publish')
+      .resolves();
+
     postStub = sandbox
       .stub(axios, 'post')
       .resolves({ data: { token: 'abcdef' } });
@@ -60,8 +68,11 @@ suite('github hook installation event', () => {
   });
 
   suite('created', () => {
+    let orgs: orgs[];
+
     setup(async () => {
       response = await callWithFixture(app, 'installation', 'created');
+      orgs = await app.prisma.orgs.findMany();
     });
 
     test('should return 200', async () => {
@@ -69,8 +80,6 @@ suite('github hook installation event', () => {
     });
 
     test('should create organization', async () => {
-      const orgs = await app.prisma.orgs.findMany();
-
       assert.equal(orgs.length, 1);
       assert.deepOwnInclude(orgs[0], {
         name: 'automa',
@@ -90,6 +99,8 @@ suite('github hook installation event', () => {
         'https://api.github.com/app/installations/40335964/access_tokens',
       );
 
+      await waitFor(() => getStub.callCount === 3);
+
       assert.equal(getStub.callCount, 3);
       assert.equal(getStub.withArgs('/repos/automa/automa').callCount, 1);
       assert.equal(
@@ -100,6 +111,15 @@ suite('github hook installation event', () => {
         getStub.withArgs('/repos/automa/automa/contents/automa.json').callCount,
         1,
       );
+    });
+
+    test('should sync github org users', async () => {
+      assert.equal(syncOrgStub.callCount, 1);
+
+      assert.deepEqual(syncOrgStub.firstCall.args, [
+        orgs[0].id,
+        { orgId: orgs[0].id },
+      ]);
     });
 
     suite('and repository', () => {
@@ -124,11 +144,21 @@ suite('github hook installation event', () => {
           is_private: true,
           is_archived: false,
           has_installation: true,
-          last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         });
       });
 
+      test('should sync github repo users', async () => {
+        assert.equal(syncRepoStub.callCount, 1);
+
+        assert.deepEqual(syncRepoStub.firstCall.args, [
+          repos[0].id,
+          { repoId: repos[0].id },
+        ]);
+      });
+
       test('and settings should be created', async () => {
+        await sleep(1000);
+
         const settings = await app.prisma.repo_settings.findMany({
           where: {
             repo_id: repos[0].id,
@@ -191,7 +221,6 @@ suite('github hook installation event', () => {
           is_private: true,
           is_archived: false,
           has_installation: false,
-          last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         });
       });
 
@@ -203,31 +232,23 @@ suite('github hook installation event', () => {
             'installation',
             'created_another_installation',
           );
+          orgs = await app.prisma.orgs.findMany();
         });
 
         test('should return 200', async () => {
           assert.equal(response.statusCode, 200);
         });
 
-        suite('should mark organization', () => {
-          let orgs: orgs[];
-
-          setup(async () => {
-            orgs = await app.prisma.orgs.findMany();
-          });
-
-          test('as active', () => {
-            assert.equal(orgs.length, 1);
-            assert.deepOwnInclude(orgs[0], {
-              has_installation: true,
-            });
-          });
-
-          test('with new github installation id', () => {
-            assert.equal(orgs.length, 1);
-            assert.deepOwnInclude(orgs[0], {
-              github_installation_id: 40401522,
-            });
+        test('should mark organization as active and update it', async () => {
+          assert.equal(orgs.length, 1);
+          assert.deepOwnInclude(orgs[0], {
+            name: 'automa',
+            provider_type: 'github',
+            provider_id: '65730741',
+            provider_name: 'automa-app',
+            is_user: true,
+            has_installation: true,
+            github_installation_id: 40401522,
           });
         });
 
@@ -237,6 +258,8 @@ suite('github hook installation event', () => {
             postStub.firstCall.args[0],
             'https://api.github.com/app/installations/40401522/access_tokens',
           );
+
+          await waitFor(() => getStub.callCount === 3);
 
           assert.equal(getStub.callCount, 3);
           assert.equal(getStub.withArgs('/repos/automa/automa').callCount, 1);
@@ -249,6 +272,15 @@ suite('github hook installation event', () => {
               .callCount,
             1,
           );
+        });
+
+        test('should sync github org users', async () => {
+          assert.equal(syncOrgStub.callCount, 1);
+
+          assert.deepEqual(syncOrgStub.firstCall.args, [
+            orgs[0].id,
+            { orgId: orgs[0].id },
+          ]);
         });
 
         suite('and repository', () => {
@@ -273,11 +305,21 @@ suite('github hook installation event', () => {
               is_private: true,
               is_archived: false,
               has_installation: true,
-              last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
             });
           });
 
+          test('should sync github repo users', async () => {
+            assert.equal(syncRepoStub.callCount, 1);
+
+            assert.deepEqual(syncRepoStub.firstCall.args, [
+              repos[0].id,
+              { repoId: repos[0].id },
+            ]);
+          });
+
           test('should create settings for repository', async () => {
+            await sleep(1000);
+
             const settings = await app.prisma.repo_settings.findMany({
               where: {
                 repo_id: repos[0].id,
@@ -354,14 +396,12 @@ suite('github hook installation event', () => {
           is_private: true,
           is_archived: false,
           has_installation: false,
-          last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
         });
       });
 
       suite('and unsuspend', () => {
         setup(async () => {
-          postStub.resetHistory();
-          getStub.resetHistory();
+          sandbox.resetHistory();
 
           // Make sure to have 2 pages of repositories
           getStub.withArgs('/installation/repositories').resolves({
@@ -408,6 +448,7 @@ suite('github hook installation event', () => {
             .resolves(encodeSettings('dependency'));
 
           response = await callWithFixture(app, 'installation', 'unsuspend');
+          orgs = await app.prisma.orgs.findMany();
         });
 
         test('should return 200', async () => {
@@ -420,6 +461,8 @@ suite('github hook installation event', () => {
             postStub.firstCall.args[0],
             'https://api.github.com/app/installations/40335964/access_tokens',
           );
+
+          await waitFor(() => getStub.callCount === 6);
 
           assert.equal(getStub.callCount, 6);
           assert.equal(
@@ -451,8 +494,6 @@ suite('github hook installation event', () => {
         });
 
         test('should mark organization as active and update provider name', async () => {
-          const orgs = await app.prisma.orgs.findMany();
-
           assert.equal(orgs.length, 1);
           assert.deepOwnInclude(orgs[0], {
             name: 'automa',
@@ -463,6 +504,15 @@ suite('github hook installation event', () => {
             has_installation: true,
             github_installation_id: 40335964,
           });
+        });
+
+        test('should sync github org users', async () => {
+          assert.equal(syncOrgStub.callCount, 1);
+
+          assert.deepEqual(syncOrgStub.firstCall.args, [
+            orgs[0].id,
+            { orgId: orgs[0].id },
+          ]);
         });
 
         suite('and checking repositories', () => {
@@ -490,7 +540,6 @@ suite('github hook installation event', () => {
               is_private: true,
               is_archived: false,
               has_installation: true,
-              last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
             });
           });
 
@@ -499,7 +548,6 @@ suite('github hook installation event', () => {
               name: 'automa',
               provider_id: '592296270',
               has_installation: true,
-              last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
             });
           });
 
@@ -509,11 +557,21 @@ suite('github hook installation event', () => {
               provider_id: '592296270',
               is_private: false,
               is_archived: true,
-              last_commit_synced: 'a2006e2015d93931f00fc3a8a04d24d66b7059da',
             });
           });
 
+          test('should sync github repo users', async () => {
+            assert.equal(syncRepoStub.callCount, 2);
+
+            assert.deepEqual(syncRepoStub.args, [
+              [repos[0].id, { repoId: repos[0].id }],
+              [repos[1].id, { repoId: repos[1].id }],
+            ]);
+          });
+
           test('should create settings for repositories', async () => {
+            await sleep(1000);
+
             let settings = await app.prisma.repo_settings.findMany({
               where: {
                 repo_id: repos[0].id,
