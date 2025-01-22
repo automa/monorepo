@@ -7,7 +7,7 @@ import { USER_AVATAR_FRAGMENT } from '../UserAvatar';
 
 import UserNavbar from './UserNavbar';
 
-import { ME_QUERY_FRAGMENT } from './UserNavbar.queries';
+import { USER_QUERY_FRAGMENT } from './UserNavbar.queries';
 
 const meta = {
   title: 'UserNavbar',
@@ -15,7 +15,7 @@ const meta = {
   args: {
     data: makeFragmentData(
       {
-        me: {
+        user: {
           email: 'pavan.sss1991@gmail.com',
           ...makeFragmentData(
             {
@@ -33,7 +33,7 @@ const meta = {
           ),
         },
       },
-      ME_QUERY_FRAGMENT,
+      USER_QUERY_FRAGMENT,
     ),
   },
 } satisfies Meta<typeof UserNavbar>;

@@ -9,16 +9,16 @@ import { getFragment } from 'gql';
 import { UserUpdateInput } from 'gql/graphql';
 import { Button, Flex, Input, toast, Typography } from 'shared';
 
-import { ME_QUERY, ME_QUERY_FRAGMENT, USER_AVATAR_FRAGMENT } from 'users';
+import { USER_AVATAR_FRAGMENT, USER_QUERY, USER_QUERY_FRAGMENT } from 'users';
 
 import { UserSettingsGeneralProps } from './types';
 
 import { USER_UPDATE_MUTATION } from './UserSettingsGeneral.queries';
 
 const UserSettingsGeneral: React.FC<UserSettingsGeneralProps> = () => {
-  const { data: fullData } = useQuery(ME_QUERY);
+  const { data: fullData } = useQuery(USER_QUERY);
 
-  const meData = getFragment(ME_QUERY_FRAGMENT, fullData)?.me;
+  const meData = getFragment(USER_QUERY_FRAGMENT, fullData)?.user;
   const data = getFragment(USER_AVATAR_FRAGMENT, meData);
 
   const {

@@ -1,16 +1,16 @@
 import { gql } from 'gql';
 
-export const ME_QUERY_FRAGMENT = gql(`
-  fragment MeQuery on Query {
-    me {
+export const USER_QUERY_FRAGMENT = gql(`
+  fragment UserQuery on Query {
+    user {
       email
       ...UserAvatar
     }
   }
 `);
 
-export const ME_QUERY = gql(`
-  query Me {
-    ...MeQuery
+export const USER_QUERY = gql(`
+  query User {
+    ...UserQuery
   }
 `);
