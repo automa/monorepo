@@ -24,6 +24,7 @@ export const sync = async (
   //   - If the org name already exists, we should add a suffix to it.
   //   - If the org name is reserved, we should add a suffix to it.
   //   - Restrict org names using `RESTRICTED_ORG_NAMES` const. (we currently get that because it is reserved in github too).
+  // If we want to fix this, we need to fix it in `addOrg` in `packages/api/src/hooks/github/installationRepositories.ts` too.
   const personalOrg = await app.prisma.orgs.upsert({
     where: {
       provider_type_provider_id: {
@@ -71,43 +72,43 @@ export const sync = async (
     skipDuplicates: true,
   });
 
-  const repoSyncs = orgs
-    .filter((o) => !!o.github_installation_id)
-    .map(async (org) => {
-      const pages = request.github.paginate<{
-        // TODO: permissions
-        repositories: { id: number }[];
-      }>(
-        `/user/installations/${org.github_installation_id}/repositories?per_page=100`,
-      );
+  const repoSyncs = Promise.all(
+    orgs
+      .filter((o) => !!o.github_installation_id)
+      .map(async (org) => {
+        const pages = request.github.paginate<{
+          // TODO: Do we need to check permissions since we don't let the user do anything with the repos?
+          repositories: { id: number }[];
+        }>(
+          `/user/installations/${org.github_installation_id}/repositories?per_page=100`,
+        );
 
-      const repositories: { id: number }[] = [];
+        const repositories: { id: number }[] = [];
 
-      for await (const data of pages) {
-        repositories.push(...data.repositories);
-      }
+        for await (const data of pages) {
+          repositories.push(...data.repositories);
+        }
 
-      const repos = await app.prisma.repos.findMany({
-        where: {
-          org_id: org.id,
-          provider_id: {
-            in: (repositories || []).map(({ id }) => `${id}`),
+        const repos = await app.prisma.repos.findMany({
+          where: {
+            org_id: org.id,
+            provider_id: {
+              in: (repositories || []).map(({ id }) => `${id}`),
+            },
           },
-        },
-      });
+        });
 
-      return app.prisma.user_repos.createMany({
-        data: repos.map((repo) => ({
-          user_id: userId,
-          repo_id: repo.id,
-        })),
-        skipDuplicates: true,
-      });
-    });
+        return app.prisma.user_repos.createMany({
+          data: repos.map((repo) => ({
+            user_id: userId,
+            repo_id: repo.id,
+          })),
+          skipDuplicates: true,
+        });
+      }),
+  );
 
   if (waitForRepoSyncs) {
-    await Promise.all(repoSyncs);
-  } else {
-    Promise.all(repoSyncs);
+    await repoSyncs;
   }
 };

@@ -2,6 +2,7 @@
 import '../src/plugins/analytics';
 import '../src/plugins/auth';
 import '../src/plugins/error';
+import '../src/plugins/github';
 import '../src/plugins/optimizer';
 import '../src/plugins/prisma';
 import '../src/plugins/redis';
