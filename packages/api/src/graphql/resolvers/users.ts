@@ -8,7 +8,7 @@ import {
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  me: (root, args, { userId, prisma }) => {
+  user: (root, args, { userId, prisma }) => {
     return prisma.users.findUniqueOrThrow({
       where: {
         id: userId,

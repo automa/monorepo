@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { getFragment } from 'gql';
 import { Button, Flex, Tooltip, Typography } from 'shared';
 
-import { ME_QUERY, ME_QUERY_FRAGMENT, USER_AVATAR_FRAGMENT } from 'users';
+import { USER_AVATAR_FRAGMENT, USER_QUERY, USER_QUERY_FRAGMENT } from 'users';
 
 import { UserSettingsConnectionsProps } from './types';
 import { providers } from './utils';
@@ -12,11 +12,11 @@ import { providers } from './utils';
 import { Card, Tag } from './UserSettingsConnections.styles';
 
 const UserSettingsConnections: React.FC<UserSettingsConnectionsProps> = () => {
-  const { data: fullData } = useQuery(ME_QUERY);
+  const { data: fullData } = useQuery(USER_QUERY);
 
   const data = getFragment(
     USER_AVATAR_FRAGMENT,
-    getFragment(ME_QUERY_FRAGMENT, fullData)?.me,
+    getFragment(USER_QUERY_FRAGMENT, fullData)?.user,
   );
 
   if (!data) return null;

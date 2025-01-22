@@ -224,7 +224,6 @@ export type Query = {
   botInstallations: Array<BotInstallation>;
   bots: Array<Bot>;
   integrations: Array<Integration>;
-  me: User;
   orgs: Array<Org>;
   publicBot: PublicBot;
   publicBots: Array<PublicBot>;
@@ -232,6 +231,7 @@ export type Query = {
   repos: Array<Repo>;
   task: Task;
   tasks: Array<Task>;
+  user: User;
 };
 
 
@@ -656,7 +656,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   botInstallations?: Resolver<Array<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<QueryBotInstallationsArgs, 'org_id'>>;
   bots?: Resolver<Array<ResolversTypes['Bot']>, ParentType, ContextType, RequireFields<QueryBotsArgs, 'org_id'>>;
   integrations?: Resolver<Array<ResolversTypes['Integration']>, ParentType, ContextType, RequireFields<QueryIntegrationsArgs, 'org_id'>>;
-  me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
   publicBot?: Resolver<ResolversTypes['PublicBot'], ParentType, ContextType, RequireFields<QueryPublicBotArgs, 'name' | 'org_name'>>;
   publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType, Partial<QueryPublicBotsArgs>>;
@@ -664,6 +663,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
   task?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<QueryTaskArgs, 'id' | 'org_id'>>;
   tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTasksArgs, 'org_id'>>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
 };
 
 export type RepoResolvers<ContextType = any, ParentType extends ResolversParentTypes['Repo'] = ResolversParentTypes['Repo']> = {

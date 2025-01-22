@@ -12,7 +12,7 @@ import {
 
 import { useAuth } from 'auth';
 import { BotOnboarding } from 'bots';
-import { useOrg, useOrgs } from 'orgs';
+import { EmptyTopNav, useOrg, useOrgs } from 'orgs';
 import { RepoOnboarding } from 'repos';
 
 import routes from './routes';
@@ -98,9 +98,12 @@ const Org: React.FC<OrgProps> = () => {
   return (
     <>
       {!org ? (
-        <Content>
-          <Flex justifyContent="center">Not found</Flex>
-        </Content>
+        <>
+          <EmptyTopNav />
+          <Content>
+            <Flex justifyContent="center">Not found</Flex>
+          </Content>
+        </>
       ) : (
         <>
           <NavigationMenu.Root>

@@ -48,7 +48,7 @@ suite('events/botScheduled', () => {
 
   setup(async () => {
     publishStub = sandbox
-      .stub(app.events.botInstallationScheduled, 'publish')
+      .stub(app.events.botInstallationScheduled, 'bulkPublish')
       .resolves();
   });
 
@@ -59,20 +59,61 @@ suite('events/botScheduled', () => {
   test('should publish botInstallationScheduled events for all bot installations', async () => {
     await botScheduled.handler?.(app, { botId: bot.id });
 
-    assert.equal(publishStub.callCount, 11);
+    assert.equal(publishStub.callCount, 2);
 
     assert.deepEqual(publishStub.args, [
-      [`${bot.id}-${orgs[0].id}`, { botId: bot.id, orgId: orgs[0].id }],
-      [`${bot.id}-${orgs[1].id}`, { botId: bot.id, orgId: orgs[1].id }],
-      [`${bot.id}-${orgs[2].id}`, { botId: bot.id, orgId: orgs[2].id }],
-      [`${bot.id}-${orgs[3].id}`, { botId: bot.id, orgId: orgs[3].id }],
-      [`${bot.id}-${orgs[4].id}`, { botId: bot.id, orgId: orgs[4].id }],
-      [`${bot.id}-${orgs[6].id}`, { botId: bot.id, orgId: orgs[6].id }],
-      [`${bot.id}-${orgs[7].id}`, { botId: bot.id, orgId: orgs[7].id }],
-      [`${bot.id}-${orgs[8].id}`, { botId: bot.id, orgId: orgs[8].id }],
-      [`${bot.id}-${orgs[9].id}`, { botId: bot.id, orgId: orgs[9].id }],
-      [`${bot.id}-${orgs[11].id}`, { botId: bot.id, orgId: orgs[11].id }],
-      [`${bot.id}-${orgs[12].id}`, { botId: bot.id, orgId: orgs[12].id }],
+      [
+        [
+          {
+            id: `${bot.id}-${orgs[0].id}`,
+            input: { botId: bot.id, orgId: orgs[0].id },
+          },
+          {
+            id: `${bot.id}-${orgs[1].id}`,
+            input: { botId: bot.id, orgId: orgs[1].id },
+          },
+          {
+            id: `${bot.id}-${orgs[2].id}`,
+            input: { botId: bot.id, orgId: orgs[2].id },
+          },
+          {
+            id: `${bot.id}-${orgs[3].id}`,
+            input: { botId: bot.id, orgId: orgs[3].id },
+          },
+          {
+            id: `${bot.id}-${orgs[4].id}`,
+            input: { botId: bot.id, orgId: orgs[4].id },
+          },
+          {
+            id: `${bot.id}-${orgs[6].id}`,
+            input: { botId: bot.id, orgId: orgs[6].id },
+          },
+          {
+            id: `${bot.id}-${orgs[7].id}`,
+            input: { botId: bot.id, orgId: orgs[7].id },
+          },
+          {
+            id: `${bot.id}-${orgs[8].id}`,
+            input: { botId: bot.id, orgId: orgs[8].id },
+          },
+          {
+            id: `${bot.id}-${orgs[9].id}`,
+            input: { botId: bot.id, orgId: orgs[9].id },
+          },
+          {
+            id: `${bot.id}-${orgs[11].id}`,
+            input: { botId: bot.id, orgId: orgs[11].id },
+          },
+        ],
+      ],
+      [
+        [
+          {
+            id: `${bot.id}-${orgs[12].id}`,
+            input: { botId: bot.id, orgId: orgs[12].id },
+          },
+        ],
+      ],
     ]);
   });
 });

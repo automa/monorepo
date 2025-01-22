@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 
 import { Flex, Loader, RoutesLoader, useRelativeMatch } from 'shared';
 
-import { OrgList } from 'orgs';
+import { EmptyTopNav, OrgList } from 'orgs';
 import { UserNavbar } from 'users';
 
 import Logo from 'assets/logo.svg?react';
@@ -13,7 +13,7 @@ import routes from './routes';
 import { DashboardProps } from './types';
 
 import { DASHBOARD_QUERY } from './Dashboard.queries';
-import { EmptyTopNav, Header } from './Dashboard.styles';
+import { Header } from './Dashboard.styles';
 
 const Dashboard: React.FC<DashboardProps> = () => {
   const isDashboardView = useRelativeMatch('.');
@@ -27,7 +27,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
           <Logo className="size-8" />
         </Link>
         {loading && !data ? (
-          <div>Loading</div>
+          <></>
         ) : !data ? (
           <div>Error</div>
         ) : (
@@ -42,8 +42,18 @@ const Dashboard: React.FC<DashboardProps> = () => {
           </Flex>
         )}
       </Header>
-      {isDashboardView && <EmptyTopNav />}
-      {data && <RoutesLoader fallback={<Loader />} routes={routes} />}
+      {(isDashboardView || loading) && <EmptyTopNav />}
+      {data && (
+        <RoutesLoader
+          fallback={
+            <>
+              <EmptyTopNav />
+              <Loader />
+            </>
+          }
+          routes={routes}
+        />
+      )}
     </>
   );
 };

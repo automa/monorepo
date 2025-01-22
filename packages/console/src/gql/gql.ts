@@ -41,10 +41,10 @@ const documents = {
     "\n  query RepositoriesAsOptions($org_id: Int!) {\n    repos(org_id: $org_id) {\n      id\n      name\n    }\n  }\n": types.RepositoriesAsOptionsDocument,
     "\n  query Tasks($org_id: Int!, $filter: TasksFilter) {\n    tasks(org_id: $org_id, filter: $filter) {\n      id\n      ...Task\n    }\n  }\n": types.TasksDocument,
     "\n  fragment UserAvatar on User {\n    id\n    name\n    providers {\n      id\n      provider_type\n      provider_id\n    }\n  }\n": types.UserAvatarFragmentDoc,
-    "\n  fragment MeQuery on Query {\n    me {\n      email\n      ...UserAvatar\n    }\n  }\n": types.MeQueryFragmentDoc,
-    "\n  query Me {\n    ...MeQuery\n  }\n": types.MeDocument,
+    "\n  fragment UserQuery on Query {\n    user {\n      email\n      ...UserAvatar\n    }\n  }\n": types.UserQueryFragmentDoc,
+    "\n  query User {\n    ...UserQuery\n  }\n": types.UserDocument,
     "\n  mutation UserUpdate($input: UserUpdateInput!) {\n    userUpdate(input: $input) {\n      id\n      name\n      email\n    }\n  }\n": types.UserUpdateDocument,
-    "\n  query Dashboard {\n    ...MeQuery\n    ...OrgsQuery\n  }\n": types.DashboardDocument,
+    "\n  query Dashboard {\n    ...UserQuery\n    ...OrgsQuery\n  }\n": types.DashboardDocument,
 };
 
 /**
@@ -172,11 +172,11 @@ export function gql(source: "\n  fragment UserAvatar on User {\n    id\n    name
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment MeQuery on Query {\n    me {\n      email\n      ...UserAvatar\n    }\n  }\n"): (typeof documents)["\n  fragment MeQuery on Query {\n    me {\n      email\n      ...UserAvatar\n    }\n  }\n"];
+export function gql(source: "\n  fragment UserQuery on Query {\n    user {\n      email\n      ...UserAvatar\n    }\n  }\n"): (typeof documents)["\n  fragment UserQuery on Query {\n    user {\n      email\n      ...UserAvatar\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query Me {\n    ...MeQuery\n  }\n"): (typeof documents)["\n  query Me {\n    ...MeQuery\n  }\n"];
+export function gql(source: "\n  query User {\n    ...UserQuery\n  }\n"): (typeof documents)["\n  query User {\n    ...UserQuery\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -184,7 +184,7 @@ export function gql(source: "\n  mutation UserUpdate($input: UserUpdateInput!) {
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query Dashboard {\n    ...MeQuery\n    ...OrgsQuery\n  }\n"): (typeof documents)["\n  query Dashboard {\n    ...MeQuery\n    ...OrgsQuery\n  }\n"];
+export function gql(source: "\n  query Dashboard {\n    ...UserQuery\n    ...OrgsQuery\n  }\n"): (typeof documents)["\n  query Dashboard {\n    ...UserQuery\n    ...OrgsQuery\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

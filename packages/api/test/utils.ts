@@ -2,6 +2,7 @@
 import '../src/plugins/analytics';
 import '../src/plugins/auth';
 import '../src/plugins/error';
+import '../src/plugins/github';
 import '../src/plugins/optimizer';
 import '../src/plugins/prisma';
 import '../src/plugins/redis';
@@ -14,6 +15,15 @@ import { FastifyInstance, InjectOptions } from 'fastify';
 export { server } from '../src';
 
 export * from './mocks';
+
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+export const waitFor = async (cond: () => boolean) => {
+  while (!cond()) {
+    await sleep(100);
+  }
+};
 
 export const call = (
   app: FastifyInstance,

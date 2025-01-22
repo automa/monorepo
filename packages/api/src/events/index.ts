@@ -5,6 +5,7 @@ import { BullMQOtel } from 'bullmq-otel';
 import Redis from 'ioredis';
 
 import { env } from '../env';
+import { logger, SeverityNumber } from '../telemetry';
 
 import { JobDefinition } from './types';
 
@@ -28,6 +29,12 @@ declare module 'fastify' {
           id: string | number,
           input: JobInput<Jobs[K]>,
         ) => Promise<void>;
+        bulkPublish: (
+          jobs: {
+            id: string | number;
+            input: JobInput<Jobs[K]>;
+          }[],
+        ) => void;
       };
     };
   }
@@ -83,6 +90,12 @@ const eventsPlugin: FastifyPluginAsync<{
 
       if (handler && subscribe) {
         try {
+          logger.emit({
+            severityNumber: SeverityNumber.INFO,
+            body: `Processing ${job.name} event`,
+            attributes: job.data,
+          });
+
           await handler(app, job.data);
         } catch (error) {
           app.error.capture(error);
@@ -113,6 +126,22 @@ const eventsPlugin: FastifyPluginAsync<{
             queue.add(key, input, {
               jobId: `${key}-${id}`,
             }),
+          bulkPublish: (
+            jobs: {
+              id: string | number;
+              input: JobInput<typeof job>;
+            }[],
+          ) => {
+            queue.addBulk(
+              jobs.map(({ id, input }) => ({
+                name: key,
+                data: input,
+                opts: {
+                  jobId: `${key}-${id}`,
+                },
+              })),
+            );
+          },
         },
       }),
       {},

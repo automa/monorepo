@@ -24,8 +24,8 @@ suite('graphql', () => {
     const response = await graphql(
       app,
       `
-        query me {
-          me {
+        query user {
+          user {
             id
           }
         }
@@ -52,7 +52,7 @@ suite('graphql', () => {
     const response = await graphql(
       app,
       `
-        query me {
+        query user {
           hi
         }
       `,

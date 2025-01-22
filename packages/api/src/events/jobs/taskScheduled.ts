@@ -1,7 +1,5 @@
 import { task_item } from '@automa/prisma';
 
-import { logger, SeverityNumber } from '../../telemetry';
-
 import { JobDefinition } from '../types';
 
 import { taskCreate } from '../../db';
@@ -12,16 +10,6 @@ const taskScheduled: JobDefinition<{
   repoId: number;
 }> = {
   handler: async (app, { botId, orgId, repoId }) => {
-    logger.emit({
-      severityNumber: SeverityNumber.INFO,
-      body: 'Processing task scheduled event',
-      attributes: {
-        botId,
-        orgId,
-        repoId,
-      },
-    });
-
     const [repo, bot] = await Promise.all([
       app.prisma.repos.findUniqueOrThrow({
         where: {

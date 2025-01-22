@@ -50,15 +50,15 @@ suite('graphql users', () => {
     await app.close();
   });
 
-  suite('query me', () => {
+  suite('query user', () => {
     let response: LightMyRequestResponse;
 
     setup(async () => {
       response = await graphql(
         app,
         `
-          query me {
-            me {
+          query user {
+            user {
               id
               name
               email
@@ -84,28 +84,28 @@ suite('graphql users', () => {
 
     test('should return user', async () => {
       const {
-        data: { me },
+        data: { user },
       } = response.json();
 
-      assert.isNumber(me.id);
-      assert.equal(me.name, 'User 0');
-      assert.equal(me.email, 'user-0@example.com');
+      assert.isNumber(user.id);
+      assert.equal(user.name, 'User 0');
+      assert.equal(user.email, 'user-0@example.com');
     });
 
     test("should return user's providers only", async () => {
       const {
-        data: { me },
+        data: { user },
       } = response.json();
 
-      assert.lengthOf(me.providers, 2);
+      assert.lengthOf(user.providers, 2);
 
-      assert.isNumber(me.providers[0].id);
-      assert.equal(me.providers[0].provider_type, 'github');
-      assert.equal(me.providers[0].provider_id, '123');
+      assert.isNumber(user.providers[0].id);
+      assert.equal(user.providers[0].provider_type, 'github');
+      assert.equal(user.providers[0].provider_id, '123');
 
-      assert.isNumber(me.providers[1].id);
-      assert.equal(me.providers[1].provider_type, 'gitlab');
-      assert.equal(me.providers[1].provider_id, '123');
+      assert.isNumber(user.providers[1].id);
+      assert.equal(user.providers[1].provider_type, 'gitlab');
+      assert.equal(user.providers[1].provider_id, '123');
     });
   });
 

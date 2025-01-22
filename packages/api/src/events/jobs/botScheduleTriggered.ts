@@ -1,21 +1,16 @@
 import { bot } from '@automa/prisma';
 
-import { logger, SeverityNumber } from '../../telemetry';
-
 import { JobDefinition } from '../types';
+import { chunkArray } from '../utils';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 100;
+const CHUNK_SIZE = 10;
 
 const botScheduleTriggered: JobDefinition<object> = {
   repeat: {
     pattern: '0 0 * * 1',
   },
   handler: async (app, {}) => {
-    logger.emit({
-      severityNumber: SeverityNumber.INFO,
-      body: 'Processing bot schedule job',
-    });
-
     let cursor: number | undefined;
     let hasMore = true;
 
@@ -37,10 +32,15 @@ const botScheduleTriggered: JobDefinition<object> = {
       });
 
       await Promise.all(
-        bots.map((bot) =>
-          app.events.botScheduled.publish(bot.id, {
-            botId: bot.id,
-          }),
+        chunkArray(bots, CHUNK_SIZE).map((bots) =>
+          app.events.botScheduled.bulkPublish(
+            bots.map((bot) => ({
+              id: bot.id,
+              input: {
+                botId: bot.id,
+              },
+            })),
+          ),
         ),
       );
 

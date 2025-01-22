@@ -8,22 +8,22 @@ import UserAvatar from '../UserAvatar';
 
 import { UserNavbarProps } from './types';
 
-import { ME_QUERY_FRAGMENT } from './UserNavbar.queries';
+import { USER_QUERY_FRAGMENT } from './UserNavbar.queries';
 import { Container } from './UserNavbar.styles';
 
 const UserNavbar: React.FC<UserNavbarProps> = ({
   data: fullData,
   ...props
 }) => {
-  const data = getFragment(ME_QUERY_FRAGMENT, fullData);
+  const data = getFragment(USER_QUERY_FRAGMENT, fullData);
 
   return (
     <Container {...props} asChild>
       <DropdownMenu
         align="end"
-        trigger={<UserAvatar user={data.me} size="large" />}
+        trigger={<UserAvatar user={data.user} size="large" />}
       >
-        <DropdownMenuLabel>{data.me.email}</DropdownMenuLabel>
+        <DropdownMenuLabel>{data.user.email}</DropdownMenuLabel>
         <Link to="/account">
           <DropdownMenuItem>Preferences</DropdownMenuItem>
         </Link>

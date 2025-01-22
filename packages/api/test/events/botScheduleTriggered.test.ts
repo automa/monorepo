@@ -40,7 +40,9 @@ suite('events/botScheduleTriggered', () => {
   });
 
   setup(async () => {
-    publishStub = sandbox.stub(app.events.botScheduled, 'publish').resolves();
+    publishStub = sandbox
+      .stub(app.events.botScheduled, 'bulkPublish')
+      .resolves();
   });
 
   teardown(async () => {
@@ -50,20 +52,24 @@ suite('events/botScheduleTriggered', () => {
   test('publishes botScheduled event for each scheduled bot', async () => {
     await botScheduleTriggered.handler?.(app, {});
 
-    assert.equal(publishStub.callCount, 11);
+    assert.equal(publishStub.callCount, 2);
 
     assert.deepEqual(publishStub.args, [
-      [bots[0].id, { botId: bots[0].id }],
-      [bots[1].id, { botId: bots[1].id }],
-      [bots[2].id, { botId: bots[2].id }],
-      [bots[3].id, { botId: bots[3].id }],
-      [bots[4].id, { botId: bots[4].id }],
-      [bots[6].id, { botId: bots[6].id }],
-      [bots[7].id, { botId: bots[7].id }],
-      [bots[8].id, { botId: bots[8].id }],
-      [bots[9].id, { botId: bots[9].id }],
-      [bots[11].id, { botId: bots[11].id }],
-      [bots[12].id, { botId: bots[12].id }],
+      [
+        [
+          { id: bots[0].id, input: { botId: bots[0].id } },
+          { id: bots[1].id, input: { botId: bots[1].id } },
+          { id: bots[2].id, input: { botId: bots[2].id } },
+          { id: bots[3].id, input: { botId: bots[3].id } },
+          { id: bots[4].id, input: { botId: bots[4].id } },
+          { id: bots[6].id, input: { botId: bots[6].id } },
+          { id: bots[7].id, input: { botId: bots[7].id } },
+          { id: bots[8].id, input: { botId: bots[8].id } },
+          { id: bots[9].id, input: { botId: bots[9].id } },
+          { id: bots[11].id, input: { botId: bots[11].id } },
+        ],
+      ],
+      [[{ id: bots[12].id, input: { botId: bots[12].id } }]],
     ]);
   });
 });

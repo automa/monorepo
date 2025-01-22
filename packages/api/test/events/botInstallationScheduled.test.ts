@@ -41,7 +41,9 @@ suite('events/botInstallationScheduled', () => {
   });
 
   setup(async () => {
-    publishStub = sandbox.stub(app.events.taskScheduled, 'publish').resolves();
+    publishStub = sandbox
+      .stub(app.events.taskScheduled, 'bulkPublish')
+      .resolves();
   });
 
   teardown(async () => {
@@ -54,52 +56,60 @@ suite('events/botInstallationScheduled', () => {
       orgId: org.id,
     });
 
-    assert.equal(publishStub.callCount, 11);
+    assert.equal(publishStub.callCount, 2);
 
     assert.deepEqual(publishStub.args, [
       [
-        `${bot.id}-${org.id}-${repos[0].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[0].id },
+        [
+          {
+            id: `${bot.id}-${org.id}-${repos[0].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[0].id },
+          },
+          {
+            id: `${bot.id}-${org.id}-${repos[1].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[1].id },
+          },
+          {
+            id: `${bot.id}-${org.id}-${repos[2].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[2].id },
+          },
+          {
+            id: `${bot.id}-${org.id}-${repos[3].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[3].id },
+          },
+          {
+            id: `${bot.id}-${org.id}-${repos[4].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[4].id },
+          },
+          {
+            id: `${bot.id}-${org.id}-${repos[6].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[6].id },
+          },
+          {
+            id: `${bot.id}-${org.id}-${repos[7].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[7].id },
+          },
+          {
+            id: `${bot.id}-${org.id}-${repos[8].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[8].id },
+          },
+          {
+            id: `${bot.id}-${org.id}-${repos[9].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[9].id },
+          },
+          {
+            id: `${bot.id}-${org.id}-${repos[11].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[11].id },
+          },
+        ],
       ],
       [
-        `${bot.id}-${org.id}-${repos[1].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[1].id },
-      ],
-      [
-        `${bot.id}-${org.id}-${repos[2].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[2].id },
-      ],
-      [
-        `${bot.id}-${org.id}-${repos[3].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[3].id },
-      ],
-      [
-        `${bot.id}-${org.id}-${repos[4].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[4].id },
-      ],
-      [
-        `${bot.id}-${org.id}-${repos[6].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[6].id },
-      ],
-      [
-        `${bot.id}-${org.id}-${repos[7].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[7].id },
-      ],
-      [
-        `${bot.id}-${org.id}-${repos[8].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[8].id },
-      ],
-      [
-        `${bot.id}-${org.id}-${repos[9].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[9].id },
-      ],
-      [
-        `${bot.id}-${org.id}-${repos[11].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[11].id },
-      ],
-      [
-        `${bot.id}-${org.id}-${repos[12].id}`,
-        { botId: bot.id, orgId: org.id, repoId: repos[12].id },
+        [
+          {
+            id: `${bot.id}-${org.id}-${repos[12].id}`,
+            input: { botId: bot.id, orgId: org.id, repoId: repos[12].id },
+          },
+        ],
       ],
     ]);
   });

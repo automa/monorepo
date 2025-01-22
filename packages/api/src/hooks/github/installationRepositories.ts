@@ -64,29 +64,34 @@ export const addOrg = async (
   app: FastifyInstance,
   installation: GithubInstallation,
 ) => {
-  // TODO: Sync users and orgs
-  return app.prisma.orgs.upsert({
+  const update = {
+    provider_name: installation.account.login,
+    has_installation: true,
+    github_installation_id: installation.id,
+    is_user: installation.account.type === 'User',
+  };
+
+  const org = await app.prisma.orgs.upsert({
     where: {
       provider_type_provider_id: {
         provider_type: provider.github,
         provider_id: `${installation.account.id}`,
       },
     },
-    update: {
-      has_installation: true,
-      github_installation_id: installation.id,
-      // TODO: Add a test for an user being converted to an org when app is uninstalled and reinstalled
-      is_user: installation.account.type === 'User',
-    },
+    update,
     create: {
       name: installation.account.login,
       provider_type: provider.github,
       provider_id: `${installation.account.id}`,
-      provider_name: installation.account.login,
-      has_installation: true,
-      github_installation_id: installation.id,
+      ...update,
     },
   });
+
+  await app.events.syncGithubOrgUsers.publish(org.id, {
+    orgId: org.id,
+  });
+
+  return org;
 };
 
 export const addRepo = async (
@@ -96,7 +101,6 @@ export const addRepo = async (
   repository: GithubRepositoryMinimal,
   cause: CauseType,
 ) => {
-  // TODO: Sync users and repos
   const { data } = await axios.get(`/repos/${repository.full_name}`);
 
   return updateRepo(app, axios, org, data, cause);
@@ -131,7 +135,14 @@ export const updateRepo = async (
     },
   });
 
-  return syncSettings(app, axios, repo, repository, cause);
+  await app.events.syncGithubRepoUsers.publish(repo.id, {
+    repoId: repo.id,
+  });
+
+  // No need to wait for this to finish
+  syncSettings(app, axios, repo, repository, cause);
+
+  return repo;
 };
 
 export default {

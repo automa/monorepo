@@ -26,7 +26,7 @@ import { useOrg, useOrgs } from '../../hooks';
 import { OrgListProps } from './types';
 
 import { ORGS_QUERY_FRAGMENT } from './OrgList.queries';
-import { Container, Icon, Item, Switcher } from './OrgList.styles';
+import { Icon, Item, Placeholder, Switcher } from './OrgList.styles';
 
 const OrgList: React.FC<OrgListProps> = ({
   data: fullData,
@@ -47,11 +47,11 @@ const OrgList: React.FC<OrgListProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.orgs]);
 
+  // TODO: Show a success toast or sync loading state
   const sync = async () => {
     try {
       await axios.post('/api/sync');
       await refetch?.();
-      // TODO: Show success toast
     } catch (_) {}
   };
 
@@ -64,24 +64,25 @@ const OrgList: React.FC<OrgListProps> = ({
     return null;
   }
 
-  // Don't show org list on non-org pages
-  if (!isOrgView) {
-    return null;
-  }
-
   return (
-    <Container {...props} asChild>
+    <Flex alignItems="center" className="gap-2" {...props}>
       <DropdownMenu
         align="start"
         trigger={
           <Switcher justifyContent="space-between" alignItems="center">
             <Flex alignItems="center" className="gap-2">
-              <Avatar
-                size="small"
-                src={getOrgAvatarUrl(org.provider_type, org.provider_id)}
-                alt={org.name}
-              />
-              {org.name}
+              {isOrgView ? (
+                <>
+                  <Avatar
+                    size="small"
+                    src={getOrgAvatarUrl(org.provider_type, org.provider_id)}
+                    alt={org.name}
+                  />
+                  {org.name}
+                </>
+              ) : (
+                <Placeholder variant="small">Select org</Placeholder>
+              )}
             </Flex>
             <Icon>
               <CaretUpDown />
@@ -94,7 +95,10 @@ const OrgList: React.FC<OrgListProps> = ({
           // TODO: Switch the org part of the URL only and not the whole URL
           // (can use location.pathname.replace())
           <Link key={o.id} to={o.name}>
-            <Item $active={org.id === o.id} disabled={org.id === o.id}>
+            <Item
+              $active={!!isOrgView && org.id === o.id}
+              disabled={!!isOrgView && org.id === o.id}
+            >
               <Flex
                 fullWidth
                 justifyContent="space-between"
@@ -109,7 +113,9 @@ const OrgList: React.FC<OrgListProps> = ({
                   />
                   <Typography>{o.name}</Typography>
                 </Flex>
-                {org.id === o.id && <Check className="font-medium" />}
+                {!!isOrgView && org.id === o.id && (
+                  <Check className="font-medium" />
+                )}
               </Flex>
             </Item>
           </Link>
@@ -133,7 +139,7 @@ const OrgList: React.FC<OrgListProps> = ({
           </Flex>
         </Item>
       </DropdownMenu>
-    </Container>
+    </Flex>
   );
 };
 
