@@ -6,7 +6,7 @@
   "types": "build/index.d.ts",
   "module": "src/index.ts",
   "dependencies": {
-    "@prisma/client": "~6.1.0"
+    "@prisma/client": "catalog:"
   },
   "scripts": {
     "build": "rm -rf build && tsc -b --force",
@@ -18,7 +18,6 @@
     "node": ">=22.3.0"
   },
   "devDependencies": {
-    "prettier-plugin-prisma": "~5.0.0",
-    "prisma": "~6.1.0"
+    "prisma": "catalog:"
   }
 }
