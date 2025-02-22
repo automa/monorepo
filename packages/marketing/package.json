@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@phosphor-icons/react": "~2.1.5",
-    "@radix-ui/react-navigation-menu": "~1.2.3",
-    "@radix-ui/react-tooltip": "~1.1.6",
-    "class-variance-authority": "~0.7.0",
-    "date-fns": "~3.6.0",
+    "@phosphor-icons/react": "catalog:",
+    "@radix-ui/react-navigation-menu": "catalog:",
+    "@radix-ui/react-tooltip": "catalog:",
+    "class-variance-authority": "catalog:",
+    "date-fns": "catalog:",
     "next": "~14.2.3",
     "next-mdx-remote": "~5.0.0",
-    "react": "~18.3.1",
-    "react-dom": "~18.3.1",
-    "react-twc": "~1.4.2",
-    "tailwind-merge": "~2.2.1"
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-twc": "catalog:",
+    "tailwind-merge": "catalog:"
   },
   "scripts": {
     "build": "next build",
