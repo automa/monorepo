@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAnalytics } from 'analytics';
 import { useOptimizerUser } from 'optimizer';
@@ -22,6 +22,8 @@ const App: React.FC<{}> = () => {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+
   useAsyncEffect(async () => {
     try {
       const { data } = await Promise.resolve({
@@ -35,9 +37,9 @@ const App: React.FC<{}> = () => {
       if (data) {
         setAuth(data);
       }
-    } catch (_) {
-      setAuthLoading(false);
-    }
+    } catch {}
+
+    setAuthLoading(false);
   }, []);
 
   useEffect(() => {

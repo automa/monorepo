@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { VariantProps } from 'class-variance-authority';
+import { type VariantProps } from 'class-variance-authority';
 import * as Toast from '@radix-ui/react-toast';
 
 import { $, Component, Styled } from 'theme';

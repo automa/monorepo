@@ -23,7 +23,7 @@ const AuthLogout: React.FC<AuthLogoutProps> = () => {
 
     try {
       await logout();
-    } catch (_) {}
+    } catch {}
 
     setAuthLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
