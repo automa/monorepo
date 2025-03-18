@@ -23,10 +23,10 @@
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "start": "next dev -p 4000",
-    "storybook": "storybook dev -p 6006",
-    "storybook-build": "storybook build",
-    "test-storybook": "test-storybook",
-    "test-storybook-cover": "test-storybook --coverage",
+    "storybook": "NODE_ENV=test storybook dev -p 6006",
+    "storybook-build": "NODE_ENV=test storybook build",
+    "test-storybook": "NODE_ENV=test test-storybook",
+    "test-storybook-cover": "NODE_ENV=test test-storybook --coverage",
     "update-boilerplate": "git pull --no-rebase -s subtree -X subtree=packages/marketing https://git.sr.ht/~pksunkara/marketing-next master"
   },
   "engines": {

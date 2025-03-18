@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/consistent-type-specifier-style
 import type { MDXComponents } from 'mdx/types';
 
 import { Typography } from 'components';
