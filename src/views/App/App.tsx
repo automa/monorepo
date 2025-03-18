@@ -57,10 +57,12 @@ const App: React.FC<{}> = () => {
   }, [location.search]);
 
   useEffect(() => {
-    if (!user && !authLoading) {
-      navigate('/auth/login');
+    if (!user && !authLoading && location.pathname !== '/auth/login') {
+      navigate('/auth/login', {
+        state: { from: window.location.href },
+      });
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, location]);
 
   useEffect(() => {
     identify(user);

@@ -14,7 +14,7 @@ const AuthLogin: React.FC<AuthLoginProps> = () => {
     return <Navigate to="/" />;
   }
 
-  return <Container></Container>;
+  return <Container>Login</Container>;
 };
 
 export default AuthLogin;
