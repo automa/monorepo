@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import {
   Code,
   GitPullRequest,
-  Icon,
+  type Icon,
   PlusCircle,
   Pulse,
   Robot,
