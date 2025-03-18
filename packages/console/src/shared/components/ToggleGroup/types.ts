@@ -1,5 +1,5 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import { VariantProps } from 'class-variance-authority';
+import { type VariantProps } from 'class-variance-authority';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 
 import { $, Component, Styled } from 'theme';

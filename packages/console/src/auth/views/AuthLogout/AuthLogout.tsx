@@ -24,7 +24,7 @@ const AuthLogout: React.FC<AuthLogoutProps> = () => {
 
     try {
       await logout();
-    } catch (_) {}
+    } catch {}
 
     setAuthLoading(false);
     setOrgsLoading(false);

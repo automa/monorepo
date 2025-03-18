@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./src",
-    "target": "es5",
+    "target": "es2018",
     "module": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "declaration": false,
