@@ -37,7 +37,6 @@
     "@segment/analytics-node": "~1.1.0",
     "@sentry/node": "~7.59.3",
     "@sinclair/typebox": "~0.25.21",
-    "adf-to-md": "~1.1.1",
     "axios": "catalog:",
     "bullmq": "~5.34.5",
     "bullmq-otel": "~1.0.1",

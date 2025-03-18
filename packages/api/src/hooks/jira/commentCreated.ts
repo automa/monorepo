@@ -1,6 +1,3 @@
-// TODO: Write our own ADF to MD converter
-// @ts-ignore
-import { convert } from 'adf-to-md';
 import axios, { AxiosError } from 'axios';
 
 import { integration, task_item } from '@automa/prisma';
@@ -10,6 +7,7 @@ import { env } from '../../env';
 import { AUTOMA_REGEX, getSelectedBotAndRepo } from '../utils';
 
 import { taskCreate } from '../../db';
+import { fromAdfToMarkdown } from '../../integrations';
 
 import { JiraEventHandler } from './types';
 
@@ -192,7 +190,9 @@ const commentCreated: JiraEventHandler<{
             ? [
                 {
                   type: task_item.message,
-                  data: { content: convert(issue.fields.description).result },
+                  data: {
+                    content: fromAdfToMarkdown(issue.fields.description),
+                  },
                 },
               ]
             : []),
