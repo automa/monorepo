@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { addBreadcrumb } from '@sentry/node';
 import axios from 'axios';
 
 import { ErrorType } from '@automa/common';
@@ -57,9 +58,7 @@ export default async function (app: FastifyInstance) {
     }
 
     // Get email & username from GitHub
-    const {
-      data: { id, email, name, login },
-    } = await axios.get<{
+    const { data } = await axios.get<{
       id: number;
       email: string;
       name: string;
@@ -69,6 +68,14 @@ export default async function (app: FastifyInstance) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
+    addBreadcrumb({
+      message: 'GitHub user data',
+      data,
+      level: 'debug',
+    });
+
+    const { id, email, name, login } = data;
 
     const updateProvider = (userProviderId: number) =>
       app.prisma.user_providers.update({
