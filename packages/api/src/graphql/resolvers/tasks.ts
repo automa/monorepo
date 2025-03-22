@@ -120,6 +120,8 @@ export const Mutation: MutationResolvers<Context> = {
               ? [
                   {
                     actor_user_id: userId,
+                    // TODO: Save task message as tiptap
+                    // Need to change the converters for integrations too
                     type: task_item.message,
                     data: { content: data.content },
                   },
