@@ -3,7 +3,6 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { FastifyInstance } from 'fastify';
 
 import { env } from '../../env';
-import { logger, SeverityNumber } from '../../telemetry';
 
 import { linear, LinearEventType } from '../../hooks';
 
@@ -21,27 +20,25 @@ export default async function (app: FastifyInstance) {
       return reply.unauthorized();
     }
 
-    logger.emit({
-      severityNumber: SeverityNumber.INFO,
-      body: 'Received linear event',
-      attributes: {
+    app.log.info(
+      {
         event,
         action: request.body.action,
       },
-    });
+      'Received linear event',
+    );
 
     const handler =
       linear[event as LinearEventType]?.[request.body.action ?? event];
 
     if (!handler) {
-      logger.emit({
-        severityNumber: SeverityNumber.INFO,
-        body: 'Ignoring event',
-        attributes: {
+      app.log.info(
+        {
           event,
           action: request.body.action,
         },
-      });
+        'Ignoring event',
+      );
 
       return reply.code(204).send();
     }
@@ -50,10 +47,7 @@ export default async function (app: FastifyInstance) {
     const signature = request.headers['linear-signature'];
 
     if (!signature || typeof signature !== 'string') {
-      logger.emit({
-        severityNumber: SeverityNumber.WARN,
-        body: 'No signature',
-      });
+      app.log.warn('No signature');
 
       return reply.unauthorized();
     }
@@ -69,10 +63,7 @@ export default async function (app: FastifyInstance) {
       checksum.length !== digest.length ||
       !timingSafeEqual(digest, checksum)
     ) {
-      logger.emit({
-        severityNumber: SeverityNumber.WARN,
-        body: 'Invalid signature',
-      });
+      app.log.warn('Invalid signature');
 
       return reply.unauthorized();
     }

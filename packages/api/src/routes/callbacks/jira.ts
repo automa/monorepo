@@ -5,7 +5,6 @@ import { ErrorType } from '@automa/common';
 import { integration } from '@automa/prisma';
 
 import { env, isProduction, isTest } from '../../env';
-import { logger, SeverityNumber } from '../../telemetry';
 
 export default async function (app: FastifyInstance) {
   app.get<{
@@ -176,13 +175,7 @@ export default async function (app: FastifyInstance) {
         }
       }
     } catch (error: any) {
-      logger.emit({
-        severityNumber: SeverityNumber.ERROR,
-        body: 'Unable to register Jira webhook',
-        attributes: {
-          error,
-        },
-      });
+      app.log.error({ error }, 'Unable to register Jira webhook');
 
       return replyError(ErrorType.UNABLE_TO_REGISTER_JIRA_WEBHOOK);
     }

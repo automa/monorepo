@@ -3,6 +3,8 @@ import { dirname, join } from 'node:path';
 import { Static, Type } from '@sinclair/typebox';
 import envSchema from 'nested-env-schema';
 
+import './telemetry';
+
 // @ts-ignore
 import pkg from '../package.json';
 

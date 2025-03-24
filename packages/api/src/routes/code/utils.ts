@@ -2,8 +2,6 @@ import { FastifyInstance, FastifyReply } from 'fastify';
 
 import { bots, orgs, task_item, task_items, tasks } from '@automa/prisma';
 
-import { logger, SeverityNumber } from '../../telemetry';
-
 export const getTask = async (
   app: FastifyInstance,
   reply: FastifyReply,
@@ -27,13 +25,7 @@ export const getTask = async (
 
   // If task was created more than 7 days ago, we return 403
   if (task.created_at.getTime() < Date.now() - 7 * 24 * 60 * 60 * 1000) {
-    logger.emit({
-      severityNumber: SeverityNumber.WARN,
-      body: 'Task is too old',
-      attributes: {
-        task_id: body.id,
-      },
-    });
+    app.log.warn({ task_id: body.id }, 'Task is too old');
 
     // TODO: Check for old tasks in a cron and mark them as failed (bullmq)
     return reply.forbidden(
@@ -54,13 +46,7 @@ export const getRepo = async (
   );
 
   if (!repoTaskItem) {
-    logger.emit({
-      severityNumber: SeverityNumber.ERROR,
-      body: 'Unable to find repo task item',
-      attributes: {
-        task_id: task.id,
-      },
-    });
+    app.log.error({ task_id: task.id }, 'Unable to find repo task item');
 
     throw new Error('Unable to find repo task item when downloading code');
   }
@@ -110,13 +96,7 @@ export const getBot = async (
   );
 
   if (!botTaskItem) {
-    logger.emit({
-      severityNumber: SeverityNumber.ERROR,
-      body: 'Unable to find bot task item',
-      attributes: {
-        task_id: task.id,
-      },
-    });
+    app.log.error({ task_id: task.id }, 'Unable to find bot task item');
 
     throw new Error('Unable to find bot task item when downloading code');
   }

@@ -37,6 +37,7 @@ module.exports = {
         groups: [
           ['^\u0000'],
           ['^node:'],
+          ['^\\./env$'],
           [
             '^(fastify)$',
             '^(chai|quibble|sinon)$',
@@ -46,7 +47,7 @@ module.exports = {
           ],
           [`^@${product}/`],
           ['^'],
-          ['^.*/(env|telemetry)$'],
+          ['^.+/(env|telemetry)$'],
           ['^\\.\\./(types|utils)$'],
           ['^\\.\\.'],
           ['^\\./(types|utils)$'],

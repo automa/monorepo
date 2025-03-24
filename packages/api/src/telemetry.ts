@@ -1,6 +1,16 @@
 import process from 'node:process';
 
 import {
+  env,
+  environment,
+  isProduction,
+  isTest,
+  product,
+  service,
+  version,
+} from './env';
+
+import {
   api,
   logs,
   metrics,
@@ -14,30 +24,18 @@ import {
 } from '@opentelemetry/semantic-conventions';
 import { MetricExporter as GCPMetricExporter } from '@google-cloud/opentelemetry-cloud-monitoring-exporter';
 import { TraceExporter as GCPTraceExporter } from '@google-cloud/opentelemetry-cloud-trace-exporter';
-import { logs as logsAPI } from '@opentelemetry/api-logs';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-grpc';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
 import { FastifyInstrumentation } from '@opentelemetry/instrumentation-fastify';
 import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { IORedisInstrumentation } from '@opentelemetry/instrumentation-ioredis';
+import { PinoInstrumentation } from '@opentelemetry/instrumentation-pino';
 import {
   ATTR_DEPLOYMENT_ENVIRONMENT_NAME,
   ATTR_SERVICE_NAMESPACE,
 } from '@opentelemetry/semantic-conventions/incubating';
 import { PrismaInstrumentation } from '@prisma/instrumentation';
-
-import {
-  env,
-  environment,
-  isProduction,
-  isTest,
-  product,
-  service,
-  version,
-} from './env';
-
-export { SeverityNumber } from '@opentelemetry/api-logs';
 
 const { BatchSpanProcessor, SimpleSpanProcessor } = tracing;
 
@@ -74,6 +72,7 @@ const sdk = new NodeSDK({
     new IORedisInstrumentation(),
     new HttpInstrumentation(),
     new FastifyInstrumentation(),
+    new PinoInstrumentation(),
     new GraphQLInstrumentation(),
   ],
   logRecordProcessors: !isTest
@@ -101,8 +100,6 @@ const sdk = new NodeSDK({
 sdk.start();
 
 export const tracer = api.trace.getTracer('default');
-
-export const logger = logsAPI.getLogger('default');
 
 export const meter = api.metrics.getMeter('default');
 

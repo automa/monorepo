@@ -1,7 +1,5 @@
 import { FastifyInstance } from 'fastify';
 
-import { logger, SeverityNumber } from '../../telemetry';
-
 import { jira, JiraEventType } from '../../hooks';
 
 export default async function (app: FastifyInstance) {
@@ -18,24 +16,12 @@ export default async function (app: FastifyInstance) {
       return reply.unauthorized();
     }
 
-    logger.emit({
-      severityNumber: SeverityNumber.INFO,
-      body: 'Received jira event',
-      attributes: {
-        event,
-      },
-    });
+    app.log.info({ event }, 'Received jira event');
 
     const handler = jira[event as JiraEventType];
 
     if (!handler) {
-      logger.emit({
-        severityNumber: SeverityNumber.INFO,
-        body: 'Ignoring event',
-        attributes: {
-          event,
-        },
-      });
+      app.log.info({ event }, 'Ignoring event');
 
       return reply.code(204).send();
     }

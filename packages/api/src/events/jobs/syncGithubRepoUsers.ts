@@ -1,7 +1,5 @@
 import { provider } from '@automa/prisma';
 
-import { logger, SeverityNumber } from '../../telemetry';
-
 import { JobDefinition } from '../types';
 
 import { caller } from '../../clients/github';
@@ -20,27 +18,17 @@ const syncGithubRepoUsers: JobDefinition<{
     });
 
     if (!repo) {
-      logger.emit({
-        severityNumber: SeverityNumber.WARN,
-        body: 'Unable to find repo for syncGithubRepoUsers event',
-        attributes: {
-          repoId,
-        },
-      });
-
-      return;
+      return app.log.warn(
+        { repo_id: repoId },
+        'Unable to find repo for syncGithubRepoUsers event',
+      );
     }
 
     if (!repo.orgs.github_installation_id) {
-      logger.emit({
-        severityNumber: SeverityNumber.WARN,
-        body: 'Repo org does not have a github installation',
-        attributes: {
-          repoId,
-        },
-      });
-
-      return;
+      return app.log.warn(
+        { repo_id: repoId },
+        'Repo org does not have a github installation',
+      );
     }
 
     const { paginate } = await caller(repo.orgs.github_installation_id);

@@ -1,5 +1,8 @@
 import { join } from 'node:path';
 
+// Always setup the environment first
+import { env, isProduction, version } from './env';
+
 import fastify from 'fastify';
 import fastifyAutoload from '@fastify/autoload';
 import fastifyCors from '@fastify/cors';
@@ -11,17 +14,18 @@ import httpErrors from 'http-errors';
 
 import { Prisma } from '@automa/prisma';
 
-// Always setup the environment first
-import { env, isProduction, version } from './env';
-import { logger, SeverityNumber } from './telemetry';
-
 import eventsPlugin from './events';
 import graphql from './graphql';
 import session from './session';
 
 export const server = async () => {
   const app = fastify({
-    logger: false,
+    logger: {
+      transport: {
+        targets: [],
+      },
+    },
+    disableRequestLogging: true,
     forceCloseConnections: true,
     pluginTimeout: 15_000,
   });
@@ -106,14 +110,6 @@ async function start() {
     await app.listen({
       port: env.PORT,
       host: '0.0.0.0',
-    });
-
-    logger.emit({
-      severityNumber: SeverityNumber.INFO,
-      body: 'Server started',
-      attributes: {
-        port: env.PORT,
-      },
     });
   } catch (err) {
     console.error(err);
