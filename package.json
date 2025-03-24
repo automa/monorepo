@@ -121,7 +121,7 @@
     "postcss": "~8.5.3",
     "prettier": "~3.0.1",
     "prettier-plugin-tailwindcss": "~0.6.9",
-    "rollup-plugin-webpack-stats": "~0.2.3",
+    "rollup-plugin-webpack-stats": "~0.2.6",
     "sharp": "~0.32.1",
     "source-map-explorer": "~2.5.2",
     "storybook": "~8.1.11",
