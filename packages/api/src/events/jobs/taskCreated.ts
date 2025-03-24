@@ -12,7 +12,6 @@ import {
 } from '@automa/prisma';
 
 import { env } from '../../env';
-import { logger, SeverityNumber } from '../../telemetry';
 
 import { JobDefinition } from '../types';
 
@@ -30,13 +29,10 @@ const taskCreated: JobDefinition<{
     });
 
     if (!task) {
-      logger.emit({
-        severityNumber: SeverityNumber.WARN,
-        body: 'Unable to find task for taskCreated event',
-        attributes: {
-          taskId,
-        },
-      });
+      return app.log.warn(
+        { task_id: taskId },
+        'Unable to find task for taskCreated event',
+      );
 
       return;
     }
@@ -53,13 +49,7 @@ const taskCreated: JobDefinition<{
 
     // If the task does not have a repo, select one
     if (!repoTaskItem) {
-      logger.emit({
-        severityNumber: SeverityNumber.INFO,
-        body: 'Deciding on repo for task',
-        attributes: {
-          taskId,
-        },
-      });
+      app.log.info({ task_id: taskId }, 'Deciding on repo for task');
 
       // Get all repos for the org
       const repos = await app.prisma.repos.findMany({
@@ -73,15 +63,10 @@ const taskCreated: JobDefinition<{
 
       // TODO: Handle gracefully if no active repos are found
       if (!repos.length) {
-        logger.emit({
-          severityNumber: SeverityNumber.WARN,
-          body: 'No active repos found for task',
-          attributes: {
-            taskId,
-          },
-        });
-
-        return;
+        return app.log.warn(
+          { task_id: taskId },
+          'No active repos found for task',
+        );
       }
 
       // TODO: Use AI to select the best repo
@@ -108,13 +93,7 @@ const taskCreated: JobDefinition<{
 
     // If the task does not have a bot, select one
     if (!botTaskItem) {
-      logger.emit({
-        severityNumber: SeverityNumber.INFO,
-        body: 'Deciding on bot for task',
-        attributes: {
-          taskId,
-        },
-      });
+      app.log.info({ task_id: taskId }, 'Deciding on bot for task');
 
       // Get all bot installations for the org
       const botInstallations = await app.prisma.bot_installations.findMany({
@@ -132,15 +111,10 @@ const taskCreated: JobDefinition<{
 
       // TODO: Handle gracefully if no bot installations are found
       if (!botInstallations.length) {
-        logger.emit({
-          severityNumber: SeverityNumber.WARN,
-          body: 'No active bots found for task',
-          attributes: {
-            taskId,
-          },
-        });
-
-        return;
+        return app.log.warn(
+          { task_id: taskId },
+          'No active bots found for task',
+        );
       }
 
       // TODO: Use AI to select the best bot

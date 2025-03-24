@@ -1,9 +1,9 @@
+import { env } from './env';
+
 import { FastifyInstance } from 'fastify';
 import fasitfyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';
 import redisStoreFactory from 'connect-redis';
-
-import { env } from './env';
 
 declare module 'fastify' {
   interface Session {

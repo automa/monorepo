@@ -1,61 +1,66 @@
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
+import {
+  ATTR_CLIENT_ADDRESS,
+  ATTR_HTTP_REQUEST_METHOD,
+  ATTR_HTTP_RESPONSE_STATUS_CODE,
+  ATTR_HTTP_ROUTE,
+  ATTR_URL_PATH,
+} from '@opentelemetry/semantic-conventions/incubating';
 
-import { logger, meter, SeverityNumber } from '../telemetry';
+import { meter } from '../telemetry';
 
 const telemetryPlugin: FastifyPluginAsync = async (app) => {
   const requestCounter = meter.createCounter('http.request');
   const responseTimer = meter.createHistogram('http.response_time');
 
   app.addHook('onRequest', async (request) => {
-    logger.emit({
-      severityNumber: SeverityNumber.INFO,
-      body: 'Incoming request',
-      attributes: {
-        reqId: request.id,
-        reqMethod: request.method,
-        reqUrl: request.url,
-        reqPath: request.routerPath,
-        reqIp: request.ip,
+    app.log.info(
+      {
+        'http.request.id': request.id,
+        [ATTR_HTTP_REQUEST_METHOD]: request.method,
+        [ATTR_HTTP_ROUTE]: request.routerPath,
+        [ATTR_URL_PATH]: request.url,
+        [ATTR_CLIENT_ADDRESS]: request.ip,
       },
-    });
+      'Incoming request',
+    );
 
     requestCounter.add(1, {
-      method: request.method,
-      reqUrl: request.url,
-      reqPath: request.routerPath,
+      [ATTR_HTTP_REQUEST_METHOD]: request.method,
+      [ATTR_HTTP_ROUTE]: request.routerPath,
+      [ATTR_URL_PATH]: request.url,
     });
   });
 
   app.addHook('onResponse', async (request, reply) => {
     const responseTime = reply.getResponseTime();
 
-    logger.emit({
-      severityNumber: SeverityNumber.INFO,
-      body: 'Request completed',
-      attributes: {
-        reqId: request.id,
-        responseStatusCode: reply.statusCode,
-        responseTime,
+    app.log.info(
+      {
+        'http.request.id': request.id,
+        [ATTR_HTTP_RESPONSE_STATUS_CODE]: reply.statusCode,
+        'http.response.time': responseTime,
       },
-    });
+      'Request completed',
+    );
 
     responseTimer.record(responseTime, {
-      method: request.method,
-      reqUrl: request.url,
-      reqPath: request.routerPath,
+      [ATTR_HTTP_REQUEST_METHOD]: request.method,
+      [ATTR_HTTP_ROUTE]: request.routerPath,
+      [ATTR_URL_PATH]: request.url,
     });
   });
 
   app.addHook('onError', async (request, reply, error) => {
-    logger.emit({
-      severityNumber: SeverityNumber.ERROR,
-      body: 'Request errored',
-      attributes: {
-        reqId: request.id,
-        errStack: error.stack,
+    app.log.error(
+      {
+        'http.request.id': request.id,
+        'error.message': error.message,
+        'error.stack': error.stack,
       },
-    });
+      'Request errored',
+    );
   });
 };
 

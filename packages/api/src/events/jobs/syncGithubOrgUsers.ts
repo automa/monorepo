@@ -1,7 +1,5 @@
 import { provider } from '@automa/prisma';
 
-import { logger, SeverityNumber } from '../../telemetry';
-
 import { JobDefinition } from '../types';
 
 import { caller } from '../../clients/github';
@@ -17,27 +15,17 @@ const syncGithubOrgUsers: JobDefinition<{
     });
 
     if (!org) {
-      logger.emit({
-        severityNumber: SeverityNumber.WARN,
-        body: 'Unable to find org for syncGithubOrgUsers event',
-        attributes: {
-          orgId,
-        },
-      });
-
-      return;
+      return app.log.warn(
+        { org_id: orgId },
+        'Unable to find org for syncGithubOrgUsers event',
+      );
     }
 
     if (!org.github_installation_id) {
-      logger.emit({
-        severityNumber: SeverityNumber.WARN,
-        body: 'Org does not have a github installation',
-        attributes: {
-          orgId,
-        },
-      });
-
-      return;
+      return app.log.warn(
+        { org_id: orgId },
+        'Org does not have a github installation',
+      );
     }
 
     const { paginate } = await caller(org.github_installation_id);

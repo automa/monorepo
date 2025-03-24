@@ -5,7 +5,6 @@ import { BullMQOtel } from 'bullmq-otel';
 import Redis from 'ioredis';
 
 import { env } from '../env';
-import { logger, SeverityNumber } from '../telemetry';
 
 import { JobDefinition } from './types';
 
@@ -90,11 +89,7 @@ const eventsPlugin: FastifyPluginAsync<{
 
       if (handler && subscribe) {
         try {
-          logger.emit({
-            severityNumber: SeverityNumber.INFO,
-            body: `Processing ${job.name} event`,
-            attributes: job.data,
-          });
+          app.log.info(job.data, `Processing ${job.name} event`);
 
           await handler(app, job.data);
         } catch (error) {

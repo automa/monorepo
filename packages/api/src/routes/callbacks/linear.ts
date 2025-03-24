@@ -6,7 +6,6 @@ import { ErrorType } from '@automa/common';
 import { integration } from '@automa/prisma';
 
 import { env } from '../../env';
-import { logger, SeverityNumber } from '../../telemetry';
 
 export default async function (app: FastifyInstance) {
   app.get<{
@@ -70,12 +69,9 @@ export default async function (app: FastifyInstance) {
       client.organization,
       client.viewer,
     ]);
-
-    logger.emit({
-      severityNumber: SeverityNumber.INFO,
-      body: 'Connected Linear integration',
-      attributes: {
-        orgId: org.id,
+    app.log.info(
+      {
+        org_id: org.id,
         linearOrgName: linearOrg.name,
         linearOrgSlug: linearOrg.urlKey,
         linearUserEmail: linearUser.email,
@@ -83,7 +79,8 @@ export default async function (app: FastifyInstance) {
         linearUserAdmin: linearUser.admin,
         linearUserGuest: linearUser.guest,
       },
-    });
+      'Connected Linear integration',
+    );
 
     // Linear sends us an event when the user is deactivated or the app is revoked.
     // We also don't get any webhooks after that happens. Therefore, we don't need
