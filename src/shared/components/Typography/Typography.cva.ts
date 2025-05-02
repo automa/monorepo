@@ -25,6 +25,10 @@ export const typography = cva('', {
       right: 'text-right',
       justify: 'text-justify',
     },
+    wordBreak: {
+      normal: 'break-normal',
+      all: 'break-all',
+    },
     whitespace: {
       normal: 'whitespace-normal',
       nowrap: 'whitespace-nowrap',

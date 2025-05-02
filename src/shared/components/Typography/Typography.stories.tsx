@@ -128,6 +128,15 @@ export const AlighJustify = {
   },
 } satisfies Story;
 
+export const WordBreakAll = {
+  args: {
+    wordBreak: 'all',
+    style: {
+      width: '50px',
+    },
+  },
+} satisfies Story;
+
 export const Whitespace = {
   args: {
     whitespace: 'nowrap',
