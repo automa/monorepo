@@ -129,6 +129,7 @@ const taskCreated: JobDefinition<{
         },
       });
     } else {
+      // TODO: Handle case where bot has been uninstalled after task creation
       botInstallation = await app.prisma.bot_installations.findFirstOrThrow({
         where: {
           bot_id: (botTaskItem.data as Prisma.JsonObject).botId as number,

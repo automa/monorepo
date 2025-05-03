@@ -608,7 +608,7 @@ importers:
         specifier: ~22.1.0
         version: 22.1.0
       rollup-plugin-webpack-stats:
-        specifier: ~0.2.3
+        specifier: ~0.2.6
         version: 0.2.6(rollup@4.17.2)
       sharp:
         specifier: ~0.32.1

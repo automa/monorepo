@@ -471,7 +471,9 @@ suite('code/download', () => {
         { cwd: `/tmp/automa/download/tasks/${task.id}` },
       ]);
 
-      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git checkout']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [
+        ['git -c core.ignoreCase=true checkout'],
+      ]);
       assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['git rev-parse HEAD']]);
       assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['rm -rf .git']]);
       assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['git init']]);
@@ -593,10 +595,15 @@ suite('code/download', () => {
       ]);
 
       assert.deepEqual(zxCmdArgsStub.getCall(0).args, [
-        ['git sparse-checkout set --no-cone .gitignore ', ''],
-        'path-1 path-2',
+        [
+          'git -c core.ignoreCase=true sparse-checkout set --no-cone .gitignore ',
+          '',
+        ],
+        ['path-1', 'path-2'],
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['git checkout']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(1).args, [
+        ['git -c core.ignoreCase=true checkout'],
+      ]);
       assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['git rev-parse HEAD']]);
       assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['rm -rf .git']]);
       assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git init']]);

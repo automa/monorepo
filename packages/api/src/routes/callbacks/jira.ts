@@ -104,7 +104,7 @@ export default async function (app: FastifyInstance) {
         `${JIRA_APP.API_URI}/${jiraOrg.id}/rest/api/3/webhook`,
         {
           url: `${
-            isTest || isProduction ? BASE_URI : 'https://automa.eu.ngrok.io'
+            isTest || isProduction ? BASE_URI : 'https://automa.in.ngrok.io'
           }/hooks/jira`,
           webhooks: [
             {

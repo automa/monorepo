@@ -12,8 +12,8 @@ import { BotName, Card, Container, Content } from './BotOnboarding.styles';
 const DEFAULT_BOTS = [
   {
     botOrgName: 'automa',
-    botName: 'posthog',
-    logo: 'https://posthog.com/brand/posthog-logomark.svg',
+    botName: 'package-badges',
+    logo: 'https://avatars.githubusercontent.com/u/6254238?s=64',
   },
   {
     botOrgName: 'automa',
