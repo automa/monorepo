@@ -17,6 +17,7 @@ const Typography: React.FC<TypographyComponentProps> = ({
   variant,
   transform,
   align,
+  wordBreak,
   whitespace,
   children,
   ...props
@@ -60,6 +61,7 @@ const Typography: React.FC<TypographyComponentProps> = ({
         $variant={variant}
         $transform={transform}
         $align={align}
+        $wordBreak={wordBreak}
         $whitespace={whitespace}
         {...props}
       >

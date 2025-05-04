@@ -29,13 +29,15 @@ VALUES
   (1, 'refactor', 'Refactors your code according to your rules', NULL, 'manual', 'https://localhost:5002/hooks/automa', 'atma_whsec_refactor', 'https://refactor.bot', NULL, TRUE, FALSE, DEFAULT, DEFAULT),
   (1, 'aider', 'Basic bot that codes', 'https://aider.chat/assets/icons/apple-touch-icon.png', 'manual', 'https://localhost:5003/hooks/automa', 'atma_whsec_aider', 'https://aider.chat', NOW(), FALSE, FALSE, DEFAULT, DEFAULT),
   (1, 'github-runners', 'Changes GitHub CI configuration to use Depot runners', 'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg', 'scheduled', 'http://localhost:5004/hooks/automa', 'atma_whsec_github-runners', 'https://depot.dev', NOW(), TRUE, FALSE, ARRAY['.github/workflows'], ARRAY['.github/workflows']),
-  (1, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', 'manual', 'http://localhost:5005/hooks/automa', 'atma_whsec_posthog', 'https://posthog.com', NOW(), FALSE, FALSE, DEFAULT, ARRAY['data']);
+  (1, 'package-badges', 'Adds package manager badges to public packages', 'https://avatars.githubusercontent.com/u/6254238?s=64', 'scheduled', 'http://localhost:5005/hooks/automa', 'atma_whsec_package-badges', 'https://github.com/automa/package-badges', NOW(), TRUE, FALSE, ARRAY['readme.md', 'readme.rst', 'package.json', 'Cargo.toml', 'pyproject.toml'], ARRAY['readme.md', 'readme.rst', 'package.json', 'Cargo.toml', 'pyproject.toml']),
+  (1, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', 'manual', 'http://localhost:5006/hooks/automa', 'atma_whsec_posthog', 'https://posthog.com', NOW(), FALSE, FALSE, DEFAULT, ARRAY['data']);
 
 INSERT INTO public.bot_installations (bot_id, org_id)
 VALUES
   (4, 1),
   (5, 1),
-  (6, 1);
+  (6, 1),
+  (7, 1);
 
 INSERT INTO public.tasks (org_id, title, is_scheduled, token, created_at, state)
 VALUES
@@ -76,9 +78,9 @@ VALUES
   (6, NOW(), NULL, NULL, NULL, NULL, 'message', '{ "content": "In `AuthLogin` component, when the user clicks on any of the login buttons, we want to send the \"User Login Attempted\" analytic event to track that the user has attempted a login." }'),
   (6, NOW(), NULL, NULL, NULL, NULL, 'origin', '{ "integration": "linear", "organizationId": "aa0479aa-f603-4508-8669-e283bca5a17f", "organizationName": "Automa", "teamId": "7b9f50fa-75b4-43bd-9a0a-0e0994f0ccd9", "teamKey": "DEMO", "teamName": "Demo", "userId": "db18fe9b-d550-44c5-816a-49ac71fccce9", "userName": "Pavan Sunkara", "userEmail": "pavan.sunkara@automa.app", "issueId": "cfb003a0-5c42-48da-b34e-ebbacb9282bb", "issueTitle": "Track \"User Logged In\" event", "issueIdentifier": "DEMO-11", "commentId": "661237eb-3f3d-4bb8-ad22-9245aff0a5d9" }'),
   (6, NOW(), NULL, 1, NULL, NULL, 'repo', '{}'),
-  (6, NOW(), NULL, NULL, 6, NULL, 'bot', '{}'),
-  (6, NOW(), NULL, 1, 6, NULL, 'proposal', '{ "prId": 108, "prNumber": 8, "prTitle": "Implemented tracking of \"User Login Attempted\" event", "prState": "open", "prMerged": false, "prHead": "automa:automa/posthog/6", "prBase": "master" }'),
+  (6, NOW(), NULL, NULL, 7, NULL, 'bot', '{}'),
+  (6, NOW(), NULL, 1, 7, NULL, 'proposal', '{ "prId": 108, "prNumber": 8, "prTitle": "Implemented tracking of \"User Login Attempted\" event", "prState": "open", "prMerged": false, "prHead": "automa:automa/posthog/6", "prBase": "master" }'),
   (7, NOW(), NULL, NULL, NULL, NULL, 'message', '{ "content": "In `AuthLogout` component, when the user clicks on the logout button, we want to send the \"User Logout Attempted\" analytic event to track that the user has attempted a logout." }'),
   (7, NOW(), NULL, NULL, NULL, NULL, 'origin', '{ "integration": "jira", "organizationId": "373e3aed-a60d-4a6d-9fd1-d136bc545eaa", "organizationUrl": "https://automa-demo.atlassian.net", "organizationName": "automa-demo", "projectId": "10000", "projectKey": "DEMO", "projectName": "Demo", "issuetypeId": "10002", "issuetypeName": "Task", "userId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab", "userName": "Pavan Sunkara", "userEmail": "pavan.sunkara@automa.app", "issueId": "10000", "issueTitle": "Track \"User Logged Out\" event", "issueKey": "DEMO-1", "commentId": "10040" }'),
   (7, NOW(), NULL, 1, NULL, NULL, 'repo', '{ "integration": "jira", "userId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab", "userName": "Pavan Sunkara", "userEmail": "pavan.sunkara@automa.app" }'),
-  (7, NOW(), NULL, NULL, 6, NULL, 'bot', '{ "integration": "jira", "userId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab", "userName": "Pavan Sunkara", "userEmail": "pavan.sunkara@automa.app" }');
+  (7, NOW(), NULL, NULL, 7, NULL, 'bot', '{ "integration": "jira", "userId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab", "userName": "Pavan Sunkara", "userEmail": "pavan.sunkara@automa.app" }');

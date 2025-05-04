@@ -47,10 +47,10 @@ export default async function (app: FastifyInstance) {
     if (bot.paths.length) {
       await $({
         cwd: workingDir,
-      })`git sparse-checkout set --no-cone .gitignore ${bot.paths.join(' ')}`;
+      })`git -c core.ignoreCase=true sparse-checkout set --no-cone .gitignore ${bot.paths}`;
     }
 
-    await $({ cwd: workingDir })`git checkout`;
+    await $({ cwd: workingDir })`git -c core.ignoreCase=true checkout`;
 
     // We ask the bots to send this token along with code proposal in order to
     // prevent race conditions when bots work on the same task at the same time

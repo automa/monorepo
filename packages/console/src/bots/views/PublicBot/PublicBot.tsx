@@ -226,9 +226,15 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
           <Flex>
             <Details>
               {bot.homepage && (
-                <Flex direction="column" className="gap-2">
+                // TODO: Long links do not look good
+                <Flex direction="column" wrap="wrap" className="gap-2">
                   <DetailsTitle>About</DetailsTitle>
-                  <Typography href={bot.homepage} blank variant="small">
+                  <Typography
+                    href={bot.homepage}
+                    blank
+                    variant="small"
+                    wordBreak="all"
+                  >
                     {bot.homepage}
                   </Typography>
                 </Flex>
