@@ -28,13 +28,13 @@ export const syncSettings = async (
     } catch (err) {
       errors = { deserialize: (err as Error).message };
     }
-  }
 
-  if (!errors) {
-    const errs = validate(settingsJSON);
+    if (!errors) {
+      const errs = validate(settingsJSON);
 
-    if (errs) {
-      errors = { schema: errs };
+      if (errs) {
+        errors = { schema: errs };
+      }
     }
   }
 
