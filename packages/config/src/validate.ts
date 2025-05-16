@@ -11,6 +11,7 @@ const ajv = new Ajv({
   ),
 });
 
+// TODO: Handle $schema key
 export const validate = (config: Config) => {
   const schemaValidate = ajv.getSchema('https://automa.app/schema.json');
 
