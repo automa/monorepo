@@ -32,6 +32,8 @@ export default async function (app: FastifyInstance) {
       return replyError(ErrorType.UNABLE_TO_LOGIN_WITH_PROVIDER);
     }
 
+    // TODO: Can this return an error when user's email is not verified
+    // https://docs.github.com/en/apps/oauth-apps/maintaining-oauth-apps/troubleshooting-oauth-app-access-token-request-errors#unverified-user-email
     const {
       data: { access_token: accessToken, refresh_token: refreshToken },
     } = await axios.post<{
@@ -57,11 +59,9 @@ export default async function (app: FastifyInstance) {
     }
 
     // Get email & username from GitHub
-    const {
-      data: { id, email, name, login },
-    } = await axios.get<{
+    const { data } = await axios.get<{
       id: number;
-      email: string;
+      email: string | null;
       name: string;
       login: string;
     }>(`${GITHUB_APP.API_URI}/user`, {
@@ -69,6 +69,33 @@ export default async function (app: FastifyInstance) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
+    const { id, name, login } = data;
+    let { email } = data;
+
+    // Check if we have an email. It can be null if the user has set it to private.
+    if (!email) {
+      const { data: emails } = await axios.get<
+        {
+          email: string;
+          verified: boolean;
+          primary: boolean;
+        }[]
+      >(`${GITHUB_APP.API_URI}/user/emails`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      email =
+        emails.find((e) => e.primary && e.verified)?.email ||
+        emails.find((e) => e.verified)?.email ||
+        null;
+    }
+
+    if (!email) {
+      return replyError(ErrorType.UNABLE_TO_FIND_EMAIL_FROM_PROVIDER);
+    }
 
     const updateProvider = (userProviderId: number) =>
       app.prisma.user_providers.update({
