@@ -436,8 +436,8 @@ suite('code/download', () => {
     });
 
     test('should clone and checkout the repo', async () => {
-      assert.equal(zxCmdStub.callCount, 7);
-      assert.equal(zxCmdArgsStub.callCount, 6);
+      assert.equal(zxCmdStub.callCount, 6);
+      assert.equal(zxCmdArgsStub.callCount, 5);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
         [
@@ -467,19 +467,17 @@ suite('code/download', () => {
       assert.deepEqual(zxCmdStub.getCall(5).args, [
         { cwd: `/tmp/automa/download/tasks/${task.id}` },
       ]);
-      assert.deepEqual(zxCmdStub.getCall(6).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
 
       assert.deepEqual(zxCmdArgsStub.getCall(0).args, [
         ['git -c core.ignoreCase=true checkout'],
       ]);
       assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['git rev-parse HEAD']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['rm -rf .git']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['git init']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git add .']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
-        ['git commit --allow-empty -m "Downloaded code"'],
+      assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['git add .']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
+        [
+          'git commit --allow-empty -m "Downloaded code" --author "automa[bot] <60525818+automa[bot]@users.noreply.github.com>"',
+        ],
       ]);
     });
 
@@ -556,8 +554,8 @@ suite('code/download', () => {
     });
 
     test('should clone and checkout the repo', async () => {
-      assert.equal(zxCmdStub.callCount, 8);
-      assert.equal(zxCmdArgsStub.callCount, 7);
+      assert.equal(zxCmdStub.callCount, 7);
+      assert.equal(zxCmdArgsStub.callCount, 6);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
         [
@@ -590,9 +588,6 @@ suite('code/download', () => {
       assert.deepEqual(zxCmdStub.getCall(6).args, [
         { cwd: `/tmp/automa/download/tasks/${task.id}` },
       ]);
-      assert.deepEqual(zxCmdStub.getCall(7).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
 
       assert.deepEqual(zxCmdArgsStub.getCall(0).args, [
         [
@@ -605,11 +600,12 @@ suite('code/download', () => {
         ['git -c core.ignoreCase=true checkout'],
       ]);
       assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['git rev-parse HEAD']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['rm -rf .git']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git init']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [['git add .']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
-        ['git commit --allow-empty -m "Downloaded code"'],
+      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git add .']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
+        [
+          'git commit --allow-empty -m "Downloaded code" --author "automa[bot] <60525818+automa[bot]@users.noreply.github.com>"',
+        ],
       ]);
     });
 
