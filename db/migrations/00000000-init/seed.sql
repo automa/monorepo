@@ -1,5 +1,8 @@
 UPDATE public.orgs SET has_installation = TRUE;
 
+INSERT INTO public.orgs (name, provider_type, provider_id, provider_name)
+VALUES ('badges', 'github', '6254238', 'badges');
+
 INSERT INTO public.users (name, email)
 VALUES
   ('John', 'john@example.com'),
@@ -12,7 +15,8 @@ VALUES
 INSERT INTO public.user_orgs (user_id, org_id)
 VALUES
   (1, 1),
-  (2, 1);
+  (2, 1),
+  (2, 2);
 
 INSERT INTO public.repos (org_id, name, provider_id, is_private, is_archived, has_installation)
 VALUES
@@ -29,7 +33,7 @@ VALUES
   (1, 'refactor', 'Refactors your code according to your rules', NULL, 'manual', 'https://localhost:5002/hooks/automa', 'atma_whsec_refactor', 'https://refactor.bot', NULL, TRUE, FALSE, DEFAULT, DEFAULT),
   (1, 'aider', 'Basic bot that codes', 'https://aider.chat/assets/icons/apple-touch-icon.png', 'manual', 'https://localhost:5003/hooks/automa', 'atma_whsec_aider', 'https://aider.chat', NOW(), FALSE, FALSE, DEFAULT, DEFAULT),
   (1, 'github-runners', 'Changes GitHub CI configuration to use Depot runners', 'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg', 'scheduled', 'http://localhost:5004/hooks/automa', 'atma_whsec_github-runners', 'https://depot.dev', NOW(), TRUE, FALSE, ARRAY['.github/workflows'], ARRAY['.github/workflows']),
-  (1, 'package-badges', 'Adds package manager badges to public packages', 'https://avatars.githubusercontent.com/u/6254238?s=64', 'scheduled', 'http://localhost:5005/hooks/automa', 'atma_whsec_package-badges', 'https://github.com/automa/package-badges', NOW(), TRUE, FALSE, ARRAY['readme.md', 'readme.rst', 'package.json', 'Cargo.toml', 'pyproject.toml'], ARRAY['readme.md', 'readme.rst', 'package.json', 'Cargo.toml', 'pyproject.toml']),
+  (2, 'package-badges', 'Adds package manager badges to public packages', 'https://avatars.githubusercontent.com/u/6254238?s=64', 'scheduled', 'http://localhost:5005/hooks/automa', 'atma_whsec_package-badges', 'https://github.com/automa/package-badges', NOW(), TRUE, FALSE, ARRAY['readme.md', 'readme.rst', 'package.json', 'Cargo.toml', 'pyproject.toml'], ARRAY['readme.md', 'readme.rst', 'package.json', 'Cargo.toml', 'pyproject.toml']),
   (1, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', 'manual', 'http://localhost:5006/hooks/automa', 'atma_whsec_posthog', 'https://posthog.com', NOW(), FALSE, FALSE, DEFAULT, ARRAY['data']);
 
 INSERT INTO public.bot_installations (bot_id, org_id)

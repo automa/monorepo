@@ -223,7 +223,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
               </Button>
             )}
           </Flex>
-          <Flex>
+          <Flex className="gap-8 lg:gap-12">
             <Details>
               {bot.homepage && (
                 // TODO: Long links do not look good
