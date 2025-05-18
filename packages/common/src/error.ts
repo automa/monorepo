@@ -7,6 +7,7 @@ export enum ErrorType {
   MULTIPLE_JIRA_SITES_FOR_USER_NOT_SUPPORTED,
   UNABLE_TO_READ_JIRA_USER,
   UNABLE_TO_REGISTER_JIRA_WEBHOOK,
+  UNABLE_TO_FIND_EMAIL_FROM_PROVIDER,
 }
 
 export type Error = {
@@ -41,5 +42,9 @@ export const errors: { [key in ErrorType]: Omit<Error, 'code'> } = {
   [ErrorType.UNABLE_TO_REGISTER_JIRA_WEBHOOK]: {
     status: StatusCodes.BAD_REQUEST,
     message: 'Unable to register Jira webhook.',
+  },
+  [ErrorType.UNABLE_TO_FIND_EMAIL_FROM_PROVIDER]: {
+    status: StatusCodes.FORBIDDEN,
+    message: 'Unable to find email from given provider account.',
   },
 };

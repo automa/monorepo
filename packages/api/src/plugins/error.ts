@@ -29,6 +29,7 @@ const errorPlugin: FastifyPluginAsync = async (app) => {
         dsn: env.SENTRY_DSN,
         release: `${product}-${service}@${version}`,
         environment,
+        maxValueLength: 4096,
       });
     }
 
