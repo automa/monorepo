@@ -2,6 +2,8 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
+RUN apk add --no-cache bash
+
 RUN npm install -g pnpm
 
 # Copy rarely changing files first
@@ -39,6 +41,10 @@ RUN pnpm --filter @automa/prisma prisma-generate
 FROM node:22-alpine AS runner
 
 WORKDIR /app
+
+RUN apk add --no-cache git
+
+COPY --from=builder /bin/bash /bin/bash
 
 COPY --from=builder /app/packages/api/build ./packages/api/build
 COPY --from=builder /app/packages/api/package.json ./packages/api/package.json
