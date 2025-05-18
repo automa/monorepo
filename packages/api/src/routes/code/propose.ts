@@ -158,7 +158,7 @@ export default async function (app: FastifyInstance) {
 
     // Calculate the commit title & description for the proposal
     const title =
-      proposal.message || `Implemented automa#${task.id} using ${botName} bot`;
+      proposal.message || `Implemented automa@${task.id} using ${botName} bot`;
 
     // Create a working directory
     const workingDir = `/tmp/automa/propose/tasks/${task.id}`;
@@ -175,12 +175,6 @@ export default async function (app: FastifyInstance) {
       cwd: workingDir,
     })`git fetch --depth 1 origin ${task.proposal_base_commit}`;
 
-    // Set the git user
-    await $({ cwd: workingDir })`git config user.name "automa[bot]"`;
-    await $({
-      cwd: workingDir,
-    })`git config user.email "60525818+automa[bot]@users.noreply.github.com"`;
-
     // Write the diff to a file
     await writeFile(`${workingDir}.diff`, proposal.diff);
 
@@ -192,7 +186,7 @@ export default async function (app: FastifyInstance) {
     })`git apply --index ${workingDir}.diff`;
     await $({
       cwd: workingDir,
-    })`git commit -m ${title}`;
+    })`git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit -m ${title}`;
 
     // Push the changes
     await $({ cwd: workingDir })`git push -f origin HEAD:refs/heads/${branch}`;

@@ -79,7 +79,7 @@ export default async function (app: FastifyInstance) {
     await $({ cwd: workingDir })`git add .`;
     await $({
       cwd: workingDir,
-    })`git commit --allow-empty -m "Downloaded code" --author "automa[bot] <60525818+automa[bot]@users.noreply.github.com>"`;
+    })`git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit --allow-empty -m "Downloaded code"`;
 
     // Attach the download token to the response
     reply.header('x-automa-proposal-token', proposalToken);
