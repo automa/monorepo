@@ -476,7 +476,7 @@ suite('code/download', () => {
       assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['git add .']]);
       assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
         [
-          'git commit --allow-empty -m "Downloaded code" --author "automa[bot] <60525818+automa[bot]@users.noreply.github.com>"',
+          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit --allow-empty -m "Downloaded code"',
         ],
       ]);
     });
@@ -604,7 +604,7 @@ suite('code/download', () => {
       assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git add .']]);
       assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
         [
-          'git commit --allow-empty -m "Downloaded code" --author "automa[bot] <60525818+automa[bot]@users.noreply.github.com>"',
+          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit --allow-empty -m "Downloaded code"',
         ],
       ]);
     });
