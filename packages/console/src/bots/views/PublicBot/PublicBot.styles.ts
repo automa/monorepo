@@ -8,7 +8,7 @@ export const Container = tw(Flex).attrs({
 
 export const Details = tw(Flex).attrs({
   direction: 'column',
-})`lg:w-60 w-48 gap-8 shrink-0`;
+})`lg:w-48 w-40 gap-8 shrink-0`;
 
 export const DetailsTitle = tw(Flex).attrs({
   alignItems: 'center',

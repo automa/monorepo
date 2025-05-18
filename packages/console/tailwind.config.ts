@@ -46,15 +46,18 @@ const config: Config = {
         '0.25': '0.0625rem',
         '18': '4.5rem',
       },
+      maxWidth: {
+        '8xl': '90rem',
+      },
       padding: {
         'cal-sans': '0.1em',
+      },
+      screens: {
+        short: { raw: '(max-height: 700px)' },
       },
       width: {
         '0.25': '0.0625rem',
         '180': '45rem',
-      },
-      maxWidth: {
-        '8xl': '90rem',
       },
     },
   },

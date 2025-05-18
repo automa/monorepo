@@ -11,7 +11,7 @@ import { BotName, Card, Container, Content } from './BotOnboarding.styles';
 // TODO: Add description as tooltip after loading these from DB
 const DEFAULT_BOTS = [
   {
-    botOrgName: 'automa',
+    botOrgName: 'badges',
     botName: 'package-badges',
     logo: 'https://avatars.githubusercontent.com/u/6254238?s=64',
   },
