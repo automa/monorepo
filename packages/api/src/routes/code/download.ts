@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { rm } from 'node:fs/promises';
+import { join } from 'node:path';
 
 import { FastifyInstance } from 'fastify';
 import { c as createTar } from 'tar';
@@ -72,7 +73,8 @@ export default async function (app: FastifyInstance) {
     });
 
     // Refresh the .git directory
-    await $({ cwd: workingDir })`rm -rf .git`;
+    await rm(join(workingDir, '.git'), { recursive: true, force: true });
+
     await $({ cwd: workingDir })`git init`;
     await $({ cwd: workingDir })`git add .`;
     await $({ cwd: workingDir })`git commit --allow-empty -m "Downloaded code"`;
