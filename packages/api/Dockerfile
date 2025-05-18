@@ -2,8 +2,6 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-RUN apk add --no-cache bash
-
 RUN npm install -g pnpm
 
 # Copy rarely changing files first
@@ -42,9 +40,7 @@ FROM node:22-alpine AS runner
 
 WORKDIR /app
 
-RUN apk add --no-cache git
-
-COPY --from=builder /bin/bash /bin/bash
+RUN apk add --no-cache bash git
 
 COPY --from=builder /app/packages/api/build ./packages/api/build
 COPY --from=builder /app/packages/api/package.json ./packages/api/package.json
