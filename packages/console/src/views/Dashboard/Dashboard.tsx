@@ -42,7 +42,12 @@ const Dashboard: React.FC<DashboardProps> = () => {
           </Flex>
         )}
       </Header>
-      {(isDashboardView || loading) && <EmptyTopNav />}
+      {(isDashboardView || loading) && (
+        <>
+          <EmptyTopNav />
+          <Loader />
+        </>
+      )}
       {data && (
         <RoutesLoader
           fallback={
