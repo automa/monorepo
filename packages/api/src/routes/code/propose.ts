@@ -196,6 +196,7 @@ export default async function (app: FastifyInstance) {
     await unlink(`${workingDir}.diff`);
 
     // Create a pull request
+    // TODO: Add a way to set the PR description
     ({ data: pr } = await axios.post<PullRequest>(
       `/repos/${repo.orgs.provider_name}/${repo.name}/pulls`,
       {
