@@ -2,7 +2,7 @@ import { BotType } from 'gql/graphql';
 import { FiltersDefinition, FilterType } from 'shared';
 
 export const publicBotsfilters: FiltersDefinition = {
-  type: {
+  scheduled: {
     // TODO: Convert to enum filter
     type: FilterType.Boolean,
     false: {

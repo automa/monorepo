@@ -27,9 +27,9 @@ const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
         <Flex className="gap-4">
           <ToggleGroup
             optional
-            defaultValue={filterValues.type}
-            options={filterOptions.type}
-            onValueChange={filterChangeFns.type}
+            defaultValue={filterValues.scheduled}
+            options={filterOptions.scheduled}
+            onValueChange={filterChangeFns.scheduled}
           />
           <ToggleGroup
             optional

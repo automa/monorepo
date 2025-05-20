@@ -27,6 +27,7 @@ type FilterDefaults = {
   [key in keyof FiltersDefinition]?: string | string[];
 };
 
+// TODO: Need better filter system for combining filters using AND/OR
 const useFilters = (
   definition: FiltersDefinition,
   defaults?: FilterDefaults,
