@@ -19,7 +19,6 @@ DROP TYPE public.bot;
 DROP TYPE public.provider;
 
 DROP EXTENSION citext;
-DROP EXTENSION pg_jsonschema;
 DROP EXTENSION "uuid-ossp";
 
 COMMIT;

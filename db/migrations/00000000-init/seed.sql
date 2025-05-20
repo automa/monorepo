@@ -1,7 +1,7 @@
-UPDATE public.orgs SET has_installation = TRUE;
-
-INSERT INTO public.orgs (name, provider_type, provider_id, provider_name)
-VALUES ('badges', 'github', '6254238', 'badges');
+INSERT INTO public.orgs (name, provider_type, provider_id, provider_name, has_installation)
+VALUES
+  ('automa', 'github', '65730741', 'automa', TRUE),
+  ('badges', 'github', '6254238', 'badges', FALSE);
 
 INSERT INTO public.users (name, email)
 VALUES
