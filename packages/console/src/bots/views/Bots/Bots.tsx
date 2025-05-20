@@ -24,9 +24,7 @@ const Bots: React.FC<BotsProps> = ({ org }) => {
         <Button to="../bots/new">Create Bot</Button>
       </Flex>
       {loading && !data ? (
-        <Flex justifyContent="center">
-          <Loader />
-        </Flex>
+        <Loader />
       ) : !data?.bots.length ? (
         <Flex justifyContent="center">No bots</Flex>
       ) : (

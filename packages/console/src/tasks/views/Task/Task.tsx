@@ -27,9 +27,7 @@ const Task: React.FC<TaskProps> = ({ org }) => {
   return (
     <>
       {loading && !data ? (
-        <Flex justifyContent="center">
-          <Loader />
-        </Flex>
+        <Loader />
       ) : !task ? (
         <Flex justifyContent="center">Not found</Flex>
       ) : (

@@ -41,9 +41,7 @@ const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
         <Button to="../settings/bots/new">Create Bot</Button>
       </Flex>
       {loading && !data ? (
-        <Flex justifyContent="center">
-          <Loader />
-        </Flex>
+        <Loader />
       ) : !data?.publicBots.length ? (
         <Flex justifyContent="center">No bots</Flex>
       ) : (

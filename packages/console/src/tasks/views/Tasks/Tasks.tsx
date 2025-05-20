@@ -34,9 +34,7 @@ const Tasks: React.FC<TasksProps> = ({ org }) => {
         <Button to="../tasks/new">Create Task</Button>
       </Flex>
       {loading && !data ? (
-        <Flex justifyContent="center">
-          <Loader />
-        </Flex>
+        <Loader />
       ) : !data?.tasks.length ? (
         <Flex justifyContent="center">No tasks</Flex>
       ) : filterValues.scheduled === 'false' ? (
