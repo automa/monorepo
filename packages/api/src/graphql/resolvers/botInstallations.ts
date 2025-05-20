@@ -132,4 +132,24 @@ export const BotInstallation: Resolvers<Context>['BotInstallation'] = {
         select: publicBotFields,
       });
   },
+  tasks_count: async ({ org_id, bot_id }, args, { prisma }) => {
+    const counts = await prisma.tasks.groupBy({
+      by: ['state'],
+      where: {
+        org_id,
+        task_items: {
+          some: {
+            type: 'bot',
+            bot_id,
+          },
+        },
+      },
+      _count: true,
+    });
+
+    return counts.map(({ _count, state }) => ({
+      state,
+      count: _count,
+    }));
+  },
 };

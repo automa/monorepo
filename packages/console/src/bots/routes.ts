@@ -9,10 +9,14 @@ export const routes = [
   },
   {
     Component: lazy(() => import('bots/views/PublicBot')),
-    path: '/bots/:botOrgName/:botName',
+    path: '/bots/new/:botOrgName/:botName',
   },
   {
     Component: lazy(() => import('bots/views/BotInstallations')),
     path: '/bots',
+  },
+  {
+    Component: lazy(() => import('bots/views/BotInstallation')),
+    path: '/bots/:botOrgName/:botName',
   },
 ] satisfies Route[];

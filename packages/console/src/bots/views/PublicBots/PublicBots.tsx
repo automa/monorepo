@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
+import { useAnalyticsPage } from 'analytics';
 import { Button, Flex, Loader, ToggleGroup, useFilters } from 'shared';
 
 import { PublicBot, publicBotsfilters } from 'bots';
@@ -10,6 +11,8 @@ import { PublicBotsProps } from './types';
 import { PUBLIC_BOTS_QUERY } from './PublicBots.queries';
 
 const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
+  useAnalyticsPage('Bots', 'Public Bots Overview');
+
   const { filterValues, filterParams, filterOptions, filterChangeFns } =
     useFilters(publicBotsfilters);
 

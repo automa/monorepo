@@ -38,7 +38,10 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
 
   const navigate = useNavigate();
 
-  useAnalyticsPage('Bots', 'Public Bot Overview');
+  useAnalyticsPage('Bots', 'Public Bot Overview', {
+    botOrgName,
+    botName,
+  });
 
   const { setOrgBotInstallationsCount } = useOrg();
 
@@ -246,7 +249,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
               <Flex direction="column" className="gap-2">
                 <DetailsTitle>Category</DetailsTitle>
                 <Link to={`../bots/new?ai=${!bot.is_deterministic}`}>
-                  <Badge variant="tag">
+                  <Badge variant="info">
                     {bot.is_deterministic ? 'Deterministic' : 'Uses AI'}
                   </Badge>
                 </Link>

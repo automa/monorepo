@@ -10,12 +10,19 @@ type Mutation {
   botUninstall(org_id: Int!, bot_id: Int!): Boolean!
 }
 
+type BotInstallationTasksCount {
+  state: TaskState!
+  count: Int!
+}
+
 type BotInstallation {
   id: Int!
   created_at: DateTime!
 
   org: PublicOrg!
   bot: PublicBot!
+
+  tasks_count: [BotInstallationTasksCount!]!
 }
 
 input BotInstallationsFilter {

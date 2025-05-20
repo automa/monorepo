@@ -150,6 +150,61 @@ suite('graphql botInstallations', () => {
     suite('member org', () => {
       let response: LightMyRequestResponse;
 
+      suiteSetup(async () => {
+        const tasks = await app.prisma.tasks.createManyAndReturn({
+          data: [
+            {
+              title: 'task-0',
+              token: '0',
+              org_id: org.id,
+            },
+            {
+              title: 'task-1',
+              token: '1',
+              org_id: secondOrg.id,
+            },
+            {
+              title: 'task-2',
+              token: '2',
+              org_id: org.id,
+              state: 'submitted',
+            },
+            {
+              title: 'task-3',
+              token: '3',
+              org_id: org.id,
+              state: 'completed',
+            },
+            {
+              title: 'task-4',
+              token: '4',
+              org_id: org.id,
+              state: 'skipped',
+            },
+            {
+              title: 'task-5',
+              token: '5',
+              org_id: org.id,
+              state: 'failed',
+            },
+          ],
+        });
+
+        await app.prisma.task_items.createMany({
+          data: tasks
+            .filter((task) => task.org_id === org.id)
+            .map((task) => ({
+              task_id: task.id,
+              bot_id: bot.id,
+              type: 'bot',
+            })),
+        });
+      });
+
+      suiteTeardown(async () => {
+        await app.prisma.tasks.deleteMany();
+      });
+
       setup(async () => {
         response = await graphql(
           app,
@@ -158,11 +213,18 @@ suite('graphql botInstallations', () => {
               botInstallations(org_id: $org_id) {
                 id
                 created_at
+                org {
+                  name
+                }
                 bot {
                   name
                   org {
                     name
                   }
+                }
+                tasks_count {
+                  state
+                  count
                 }
               }
             }
@@ -196,24 +258,52 @@ suite('graphql botInstallations', () => {
         assert.lengthOf(botInstallations, 4);
 
         assert.isNumber(botInstallations[0].id);
+        assert.equal(botInstallations[0].org.name, org.name);
         assert.equal(botInstallations[0].bot.name, bot.name);
         assert.equal(botInstallations[0].bot.org.name, org.name);
         assert.isString(botInstallations[0].created_at);
+        assert.lengthOf(botInstallations[0].tasks_count, 5);
+        assert.deepInclude(botInstallations[0].tasks_count, {
+          state: 'started',
+          count: 1,
+        });
+        assert.deepInclude(botInstallations[0].tasks_count, {
+          state: 'submitted',
+          count: 1,
+        });
+        assert.deepInclude(botInstallations[0].tasks_count, {
+          state: 'completed',
+          count: 1,
+        });
+        assert.deepInclude(botInstallations[0].tasks_count, {
+          state: 'skipped',
+          count: 1,
+        });
+        assert.deepInclude(botInstallations[0].tasks_count, {
+          state: 'failed',
+          count: 1,
+        });
 
         assert.isNumber(botInstallations[1].id);
+        assert.equal(botInstallations[1].org.name, org.name);
         assert.equal(botInstallations[1].bot.name, secondOrgBot.name);
         assert.equal(botInstallations[1].bot.org.name, secondOrg.name);
         assert.isString(botInstallations[1].created_at);
+        assert.lengthOf(botInstallations[1].tasks_count, 0);
 
         assert.isNumber(botInstallations[2].id);
+        assert.equal(botInstallations[2].org.name, org.name);
         assert.equal(botInstallations[2].bot.name, nonMemberOrgBot.name);
         assert.equal(botInstallations[2].bot.org.name, nonMemberOrg.name);
         assert.isString(botInstallations[2].created_at);
+        assert.lengthOf(botInstallations[2].tasks_count, 0);
 
         assert.isNumber(botInstallations[3].id);
+        assert.equal(botInstallations[3].org.name, org.name);
         assert.equal(botInstallations[3].bot.name, nonPublishedBot.name);
         assert.equal(botInstallations[3].bot.org.name, org.name);
         assert.isString(botInstallations[3].created_at);
+        assert.lengthOf(botInstallations[3].tasks_count, 0);
       });
     });
 

@@ -75,6 +75,7 @@ export const taskUpdateState = async (
               }),
               type: task_item.activity,
               task_activities: {
+                // TODO: Change this to connect instead of duplicating the state changes
                 create: {
                   type: task_activity.state,
                   from_state: task.state,

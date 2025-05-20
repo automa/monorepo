@@ -7,12 +7,15 @@ export const BOT_INSTALLATION_FRAGMENT = gql(`
     bot {
       id
       name
-      short_description
       image_url
       org {
         id
         name
       }
+    }
+    tasks_count {
+      state
+      count
     }
   }
 `);

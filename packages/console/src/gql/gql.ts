@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  fragment BotBase on BotBase {\n    id\n    name\n    short_description\n    type\n    image_url\n    is_published\n    is_preview\n    is_deterministic\n  }\n": types.BotBaseFragmentDoc,
-    "\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      id\n      name\n      short_description\n      image_url\n      org {\n        id\n        name\n      }\n    }\n  }\n": types.BotInstallationFragmentDoc,
+    "\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      id\n      name\n      image_url\n      org {\n        id\n        name\n      }\n    }\n    tasks_count {\n      state\n      count\n    }\n  }\n": types.BotInstallationFragmentDoc,
     "\n  fragment PublicBot on PublicBot {\n    ...BotBase\n    org {\n      name\n    }\n    installation(org_id: $org_id) {\n      id\n    }\n  }\n": types.PublicBotFragmentDoc,
     "\n  fragment Bot on Bot {\n    id\n    name\n    short_description\n    type\n    webhook_url\n    webhook_secret\n    draft_paths\n    paths\n    image_url\n    description\n    homepage\n    is_published\n    is_preview\n    is_deterministic\n  }\n": types.BotFragmentDoc,
     "\n  query Bot(\n    $org_id: Int!\n    $name: String!\n  ) {\n    bot(org_id: $org_id, name: $name) {\n      ...Bot\n    }\n  }\n": types.BotDocument,
@@ -69,7 +69,7 @@ export function gql(source: "\n  fragment BotBase on BotBase {\n    id\n    name
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      id\n      name\n      short_description\n      image_url\n      org {\n        id\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      id\n      name\n      short_description\n      image_url\n      org {\n        id\n        name\n      }\n    }\n  }\n"];
+export function gql(source: "\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      id\n      name\n      image_url\n      org {\n        id\n        name\n      }\n    }\n    tasks_count {\n      state\n      count\n    }\n  }\n"): (typeof documents)["\n  fragment BotInstallation on BotInstallation {\n    id\n    created_at\n    bot {\n      id\n      name\n      image_url\n      org {\n        id\n        name\n      }\n    }\n    tasks_count {\n      state\n      count\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

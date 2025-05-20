@@ -40,7 +40,7 @@ const BotBase: React.FC<BotBaseProps> = ({
           )}
           {!bot.is_published && <Badge variant="warning">Private</Badge>}
           {bot.is_preview && <Badge variant="success">Beta</Badge>}
-          <Badge variant="tag">
+          <Badge variant="info">
             {bot.is_deterministic ? 'Deterministic' : 'Uses AI'}
           </Badge>
         </Flex>
