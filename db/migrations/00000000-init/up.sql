@@ -1,7 +1,6 @@
 BEGIN;
 
 CREATE EXTENSION citext;
-CREATE EXTENSION pg_jsonschema;
 CREATE EXTENSION "uuid-ossp";
 
 CREATE TABLE public.users (
@@ -40,9 +39,6 @@ CREATE TABLE public.orgs (
   UNIQUE (provider_type, provider_id),
   UNIQUE (github_installation_id)
 );
-
-INSERT INTO public.orgs (name, provider_type, provider_id, provider_name)
-VALUES ('automa', 'github', '65730741', 'automa');
 
 CREATE TABLE public.repos (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
