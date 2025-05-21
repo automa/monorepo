@@ -129,7 +129,9 @@ const BotInstallation: React.FC<BotInstallationProps> = ({ org }) => {
             {bot.installation && (
               <Flex alignItems="center" className="gap-2">
                 {bot.type === 'manual' && (
-                  <Button to="../tasks/new">Create Task</Button>
+                  <Button to={`../tasks/new?bot=${bot.installation.id}`}>
+                    Create Task
+                  </Button>
                 )}
                 <Tooltip body="Uninstall bot">
                   <Button variant="danger" icon onClick={click}>

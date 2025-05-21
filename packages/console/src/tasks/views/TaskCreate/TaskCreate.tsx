@@ -1,5 +1,5 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect, useMemo } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -30,11 +30,14 @@ import {
 } from './TaskCreate.queries';
 
 const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
+  const location = useLocation();
+
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<TaskCreateInput>({
     resolver: zodResolver(taskCreateSchema),
   });
@@ -47,12 +50,29 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
       },
     });
 
-  const botInstallations = (botInstallationsData?.botInstallations ?? []).map(
-    (botInstallation) => ({
-      ...botInstallation,
-      value: `${botInstallation.bot.org.name}/${botInstallation.bot.name}`,
-    }),
+  const botInstallations = useMemo(
+    () =>
+      (botInstallationsData?.botInstallations ?? []).map((botInstallation) => ({
+        ...botInstallation,
+        value: `${botInstallation.bot.org.name}/${botInstallation.bot.name}`,
+      })),
+    [botInstallationsData],
   );
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const botInstallationId = parseInt(searchParams.get('bot') ?? '0', 10);
+
+    if (!botInstallationId) return;
+
+    const botInstallation = botInstallations.find(
+      (installation) => installation.id === botInstallationId,
+    );
+
+    if (!botInstallation) return;
+
+    setValue('bot_installation_id', botInstallation.id);
+  }, [location, botInstallations, setValue]);
 
   // Load repositories
   const { data: repositoriesData, loading: repositoriesLoading } = useQuery(
