@@ -51,14 +51,16 @@ VALUES
   (1, 'Running automa/github-runners on monorepo', TRUE, 'd', NOW(), DEFAULT),
   (1, 'Running automa/github-runners on monorepo', TRUE, 'e', NOW(), 'cancelled'),
   (1, 'Track "User Login Attempted" event', FALSE, 'f', NOW(), 'submitted'),
-  (1, 'Track "User Logout Attempted" event', FALSE, 'g', NOW(), DEFAULT);
+  (1, 'Track "User Logout Attempted" event', FALSE, 'g', NOW(), DEFAULT),
+  (1, 'Provision the node.js template repo', FALSE, 'h', NOW(), 'skipped');
 
 INSERT INTO public.task_activities (type, from_state, to_state)
 VALUES
   ('state', 'started', 'failed'),
   ('state', 'submitted', 'completed'),
   ('state', 'started', 'skipped'),
-  ('state', 'submitted', 'cancelled');
+  ('state', 'submitted', 'cancelled'),
+  ('state', 'started', 'skipped');
 
 INSERT INTO public.task_items (task_id, created_at, actor_user_id, repo_id, bot_id, task_activity_id, type, data)
 VALUES
@@ -87,4 +89,6 @@ VALUES
   (7, NOW(), NULL, NULL, NULL, NULL, 'message', '{ "content": "In `AuthLogout` component, when the user clicks on the logout button, we want to send the \"User Logout Attempted\" analytic event to track that the user has attempted a logout." }'),
   (7, NOW(), NULL, NULL, NULL, NULL, 'origin', '{ "integration": "jira", "organizationId": "373e3aed-a60d-4a6d-9fd1-d136bc545eaa", "organizationUrl": "https://automa-demo.atlassian.net", "organizationName": "automa-demo", "projectId": "10000", "projectKey": "DEMO", "projectName": "Demo", "issuetypeId": "10002", "issuetypeName": "Task", "userId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab", "userName": "Pavan Sunkara", "userEmail": "pavan.sunkara@automa.app", "issueId": "10000", "issueTitle": "Track \"User Logged Out\" event", "issueKey": "DEMO-1", "commentId": "10040" }'),
   (7, NOW(), NULL, 1, NULL, NULL, 'repo', '{ "integration": "jira", "userId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab", "userName": "Pavan Sunkara", "userEmail": "pavan.sunkara@automa.app" }'),
-  (7, NOW(), NULL, NULL, 7, NULL, 'bot', '{ "integration": "jira", "userId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab", "userName": "Pavan Sunkara", "userEmail": "pavan.sunkara@automa.app" }');
+  (7, NOW(), NULL, NULL, 7, NULL, 'bot', '{ "integration": "jira", "userId": "712020:3dd57004-4041-4aca-ab80-ced34cc711ab", "userName": "Pavan Sunkara", "userEmail": "pavan.sunkara@automa.app" }'),
+  (8, NOW(), 1, NULL, NULL, NULL, 'origin', '{ "orgId": 1 }'),
+  (8, NOW(), NULL, NULL, NULL, 5, 'activity', '{}');

@@ -20,9 +20,7 @@ const Repos: React.FC<ReposProps> = ({ org }) => {
   return (
     <>
       {loading && !data ? (
-        <Flex justifyContent="center">
-          <Loader />
-        </Flex>
+        <Loader />
       ) : !data?.repos.length ? (
         <Flex justifyContent="center">No repos</Flex>
       ) : (

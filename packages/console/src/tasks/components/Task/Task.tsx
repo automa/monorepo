@@ -8,6 +8,8 @@ import { Avatar, Flex, Tooltip, Typography } from 'shared';
 
 import { UserAvatar } from 'users';
 
+import Logo from 'assets/logo.svg?react';
+
 import { getTaskItemUser } from 'tasks/utils';
 
 import { TASK_ITEM_FRAGMENT } from '../TaskItem';
@@ -62,6 +64,10 @@ const Task: React.FC<TaskProps> = ({ task: data, ...props }) => {
                 alt={originUser.name}
                 className="relative z-10"
               />
+            </Tooltip>
+          ) : task.is_scheduled ? (
+            <Tooltip body={`Automa${task.is_scheduled ? '' : ' AI'}`}>
+              <Logo className="relative z-10 size-4" />
             </Tooltip>
           ) : (
             <UserCircle className="size-5 text-neutral-400" />

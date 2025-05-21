@@ -27,9 +27,9 @@ const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
         <Flex className="gap-4">
           <ToggleGroup
             optional
-            defaultValue={filterValues.type}
-            options={filterOptions.type}
-            onValueChange={filterChangeFns.type}
+            defaultValue={filterValues.scheduled}
+            options={filterOptions.scheduled}
+            onValueChange={filterChangeFns.scheduled}
           />
           <ToggleGroup
             optional
@@ -41,9 +41,7 @@ const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
         <Button to="../settings/bots/new">Create Bot</Button>
       </Flex>
       {loading && !data ? (
-        <Flex justifyContent="center">
-          <Loader />
-        </Flex>
+        <Loader />
       ) : !data?.publicBots.length ? (
         <Flex justifyContent="center">No bots</Flex>
       ) : (

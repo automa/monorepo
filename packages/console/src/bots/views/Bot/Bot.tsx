@@ -95,9 +95,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
   return (
     <>
       {loading && !data ? (
-        <Flex justifyContent="center">
-          <Loader />
-        </Flex>
+        <Loader />
       ) : !bot ? (
         <Flex justifyContent="center">Not found</Flex>
       ) : (

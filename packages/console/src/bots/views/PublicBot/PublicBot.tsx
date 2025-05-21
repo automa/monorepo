@@ -172,14 +172,12 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
   return (
     <>
       {loading && !data ? (
-        <Flex justifyContent="center">
-          <Loader />
-        </Flex>
+        <Loader />
       ) : !bot ? (
         <Flex justifyContent="center">Not found</Flex>
       ) : (
         <Container>
-          <Flex justifyContent="space-between">
+          <Flex justifyContent="space-between" alignItems="center">
             <Flex alignItems="center" className="gap-4">
               {bot.image_url ? (
                 <img src={bot.image_url} alt={bot.name} className="size-16" />
