@@ -8,16 +8,9 @@ import { taskCreateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
 import { TaskCreateInput } from 'gql/graphql';
-import {
-  Avatar,
-  Button,
-  ComboBox,
-  Flex,
-  Input,
-  InputEditor,
-  toast,
-  Typography,
-} from 'shared';
+import { Avatar, Button, Flex, Input, toast, Typography } from 'shared';
+import ComboBox from 'shared/components/ComboBox';
+import InputEditor from 'shared/components/InputEditor';
 
 import { TASK_FRAGMENT } from 'tasks';
 

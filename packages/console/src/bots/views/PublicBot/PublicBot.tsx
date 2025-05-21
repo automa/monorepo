@@ -8,13 +8,13 @@ import { getFragment } from 'gql';
 import {
   Badge,
   Button,
-  Editor,
   Flex,
   Loader,
   toast,
   Tooltip,
   Typography,
 } from 'shared';
+import Editor from 'shared/components/Editor';
 
 import { BOT_INSTALLATION_FRAGMENT } from 'bots';
 import { useOrg } from 'orgs';

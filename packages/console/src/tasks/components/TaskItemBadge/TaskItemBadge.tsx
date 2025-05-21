@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Anchor, HoverCard, Typography } from 'shared';
+import { Anchor, Typography } from 'shared';
+import HoverCard from 'shared/components/HoverCard';
 
 import { TaskItemBadgeComponentProps } from './types';
 import { getBadgeDefinition } from './utils';
