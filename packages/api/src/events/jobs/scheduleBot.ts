@@ -4,7 +4,7 @@ import { chunkArray } from '../utils';
 const PAGE_SIZE = 100;
 const CHUNK_SIZE = 10;
 
-const botScheduled: JobDefinition<{
+const scheduleBot: JobDefinition<{
   botId: number;
 }> = {
   handler: async (app, { botId }) => {
@@ -42,7 +42,7 @@ const botScheduled: JobDefinition<{
           ),
           CHUNK_SIZE,
         ).map((botInstallations) =>
-          app.events.botInstallationScheduled.bulkPublish(
+          app.events.scheduleBotInstallation.bulkPublish(
             botInstallations.map((botInstallation) => ({
               id: `${botId}-${botInstallation.org_id}`,
               input: {
@@ -60,4 +60,4 @@ const botScheduled: JobDefinition<{
   },
 };
 
-export default botScheduled;
+export default scheduleBot;

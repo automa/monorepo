@@ -451,7 +451,7 @@ suite('graphql botInstallations', () => {
   suite('mutation botInstall', () => {
     setup(() => {
       publishStub = sandbox
-        .stub(app.events.botInstallationScheduled, 'publish')
+        .stub(app.events.scheduleBotInstallation, 'publish')
         .resolves();
     });
 
@@ -507,7 +507,7 @@ suite('graphql botInstallations', () => {
         assert.equal(count, 1);
       });
 
-      test('should not publish botInstallationScheduled event', async () => {
+      test('should not publish scheduleBotInstallation event', async () => {
         assert.equal(publishStub.callCount, 0);
       });
     });
@@ -595,7 +595,7 @@ suite('graphql botInstallations', () => {
       assert.equal(count, 0);
     });
 
-    test('scheduled bot should publish botInstallationScheduled event', async () => {
+    test('scheduled bot should publish scheduleBotInstallation event', async () => {
       await app.prisma.bots.update({
         where: {
           id: bot.id,

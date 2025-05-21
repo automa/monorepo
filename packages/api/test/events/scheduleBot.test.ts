@@ -6,9 +6,9 @@ import { bots, orgs } from '@automa/prisma';
 
 import { seedBots, seedOrgs, server } from '../utils';
 
-import botScheduled from '../../src/events/jobs/botScheduled';
+import scheduleBot from '../../src/events/jobs/scheduleBot';
 
-suite('events/botScheduled', () => {
+suite('events/scheduleBot', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, publishStub: SinonStub;
   let orgs: orgs[], bot: bots;
 
@@ -48,7 +48,7 @@ suite('events/botScheduled', () => {
 
   setup(async () => {
     publishStub = sandbox
-      .stub(app.events.botInstallationScheduled, 'bulkPublish')
+      .stub(app.events.scheduleBotInstallation, 'bulkPublish')
       .resolves();
   });
 
@@ -56,8 +56,8 @@ suite('events/botScheduled', () => {
     sandbox.restore();
   });
 
-  test('should publish botInstallationScheduled events for all bot installations', async () => {
-    await botScheduled.handler?.(app, { botId: bot.id });
+  test('should publish scheduleBotInstallation events for all bot installations', async () => {
+    await scheduleBot.handler?.(app, { botId: bot.id });
 
     assert.equal(publishStub.callCount, 2);
 

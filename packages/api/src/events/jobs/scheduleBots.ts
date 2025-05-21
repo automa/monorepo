@@ -6,7 +6,7 @@ import { chunkArray } from '../utils';
 const PAGE_SIZE = 100;
 const CHUNK_SIZE = 10;
 
-const botScheduleTriggered: JobDefinition<object> = {
+const scheduleBots: JobDefinition<object> = {
   repeat: {
     pattern: '0 0 * * 1',
   },
@@ -33,7 +33,7 @@ const botScheduleTriggered: JobDefinition<object> = {
 
       await Promise.all(
         chunkArray(bots, CHUNK_SIZE).map((bots) =>
-          app.events.botScheduled.bulkPublish(
+          app.events.scheduleBot.bulkPublish(
             bots.map((bot) => ({
               id: bot.id,
               input: {
@@ -50,4 +50,4 @@ const botScheduleTriggered: JobDefinition<object> = {
   },
 };
 
-export default botScheduleTriggered;
+export default scheduleBots;

@@ -18,7 +18,7 @@ export const taskCreate = async (
     },
   });
 
-  await events.taskCreated.publish(task.id, {
+  await events.sendTaskWebhook.publish(task.id, {
     taskId: task.id,
   });
 

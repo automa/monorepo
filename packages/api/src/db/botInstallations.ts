@@ -17,7 +17,7 @@ export const botInstall = async (
   });
 
   if (botInstallation.bots.type === bot.scheduled) {
-    await events.botInstallationScheduled.publish(
+    await events.scheduleBotInstallation.publish(
       `${botInstallation.bot_id}-${botInstallation.org_id}`,
       {
         botId: botInstallation.bot_id,

@@ -6,9 +6,9 @@ import { bots, orgs, repos } from '@automa/prisma';
 
 import { seedBots, seedOrgs, seedRepos, server } from '../utils';
 
-import botInstallationScheduled from '../../src/events/jobs/botInstallationScheduled';
+import scheduleBotInstallation from '../../src/events/jobs/scheduleBotInstallation';
 
-suite('events/botInstallationScheduled', () => {
+suite('events/scheduleBotInstallation', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, publishStub: SinonStub;
   let org: orgs, bot: bots, repos: repos[];
 
@@ -42,7 +42,7 @@ suite('events/botInstallationScheduled', () => {
 
   setup(async () => {
     publishStub = sandbox
-      .stub(app.events.taskScheduled, 'bulkPublish')
+      .stub(app.events.scheduleTask, 'bulkPublish')
       .resolves();
   });
 
@@ -50,8 +50,8 @@ suite('events/botInstallationScheduled', () => {
     sandbox.restore();
   });
 
-  test('should publish taskScheduled events for all repos with an installation', async () => {
-    await botInstallationScheduled.handler?.(app, {
+  test('should publish scheduleTask events for all repos with an installation', async () => {
+    await scheduleBotInstallation.handler?.(app, {
       botId: bot.id,
       orgId: org.id,
     });

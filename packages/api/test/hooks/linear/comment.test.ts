@@ -48,7 +48,7 @@ suite('linear hook Comment event', () => {
   });
 
   setup(async () => {
-    sandbox.stub(app.events.taskCreated, 'publish').resolves();
+    sandbox.stub(app.events.sendTaskWebhook, 'publish').resolves();
 
     await app.prisma.integrations.create({
       data: {

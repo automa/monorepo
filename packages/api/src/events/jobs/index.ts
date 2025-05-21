@@ -1,19 +1,19 @@
-import botInstallationScheduled from './botInstallationScheduled';
-import botScheduled from './botScheduled';
-import botScheduleTriggered from './botScheduleTriggered';
+import scheduleBot from './scheduleBot';
+import scheduleBotInstallation from './scheduleBotInstallation';
+import scheduleBots from './scheduleBots';
+import scheduleTask from './scheduleTask';
+import sendTaskWebhook from './sendTaskWebhook';
 import syncGithubOrgUsers from './syncGithubOrgUsers';
 import syncGithubRepoUsers from './syncGithubRepoUsers';
-import taskCreated from './taskCreated';
-import taskScheduled from './taskScheduled';
 
 const queues = {
-  botInstallationScheduled,
-  botScheduled,
-  botScheduleTriggered,
+  scheduleBotInstallation,
+  scheduleBot,
+  scheduleBots,
   syncGithubOrgUsers,
   syncGithubRepoUsers,
-  taskCreated,
-  taskScheduled,
+  sendTaskWebhook,
+  scheduleTask,
 };
 
 export default queues;
