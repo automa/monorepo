@@ -178,11 +178,7 @@ export default async function (app: FastifyInstance) {
       return replyError(ErrorType.UNABLE_TO_REGISTER_JIRA_WEBHOOK);
     }
 
-    // Jira doesn't notify us if the user is deactivated or the app is uninstalled.
-    // But we don't seem to get any webhooks after that happens. Therefore, we don't
-    // need to delete the webhooks ourselves, but we need to constantly check if the
-    // connection is still valid and delete it if invalid.
-    // TODO: Add a job to check the connection and delete if invalid (bullmq)
+    // Save integration along with jira webhook information
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,

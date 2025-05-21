@@ -1,3 +1,4 @@
+import checkJiraWebhooks from './checkJiraWebhooks';
 import extendJiraWebhooks from './extendJiraWebhooks';
 import scheduleBot from './scheduleBot';
 import scheduleBotInstallation from './scheduleBotInstallation';
@@ -8,6 +9,7 @@ import syncGithubOrgUsers from './syncGithubOrgUsers';
 import syncGithubRepoUsers from './syncGithubRepoUsers';
 
 const queues = {
+  checkJiraWebhooks,
   extendJiraWebhooks,
   scheduleBot,
   scheduleBotInstallation,
