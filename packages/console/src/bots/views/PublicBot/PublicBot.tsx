@@ -168,9 +168,15 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
                 </Button>
               )
             ) : (
-              <Button to={`../bots/${botOrgName}/${botName}`} size="large">
-                <Gear className="size-4" />
-              </Button>
+              <Tooltip body="Bot installation settings">
+                <Button
+                  to={`../bots/${botOrgName}/${botName}`}
+                  size="large"
+                  icon
+                >
+                  <Gear />
+                </Button>
+              </Tooltip>
             )}
           </Flex>
           <Flex className="gap-8 lg:gap-12">

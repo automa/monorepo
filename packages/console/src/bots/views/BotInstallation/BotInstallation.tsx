@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
-import { Robot } from '@phosphor-icons/react';
+import { Robot, Trash } from '@phosphor-icons/react';
 
 import { useAnalyticsPage } from 'analytics';
-import { Button, Flex, Loader, toast, Typography } from 'shared';
+import { Button, Flex, Loader, toast, Tooltip, Typography } from 'shared';
 
 import { useOrg } from 'orgs';
 import { Task } from 'tasks';
@@ -131,9 +131,11 @@ const BotInstallation: React.FC<BotInstallationProps> = ({ org }) => {
                 {bot.type === 'manual' && (
                   <Button to="../tasks/new">Create Task</Button>
                 )}
-                <Button variant="danger" onClick={click}>
-                  Uninstall
-                </Button>
+                <Tooltip body="Uninstall bot">
+                  <Button variant="danger" icon onClick={click}>
+                    <Trash />
+                  </Button>
+                </Tooltip>
               </Flex>
             )}
           </Flex>

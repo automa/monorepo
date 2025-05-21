@@ -195,6 +195,7 @@ const Editor: React.FC<EditorProps> = ({
           <Button
             variant={editor?.isActive('bold') ? 'ghostActive' : 'ghost'}
             size="xsmall"
+            icon
             onClick={() => editor?.chain().focus().toggleBold().run()}
           >
             <TextB weight="bold" />
@@ -204,6 +205,7 @@ const Editor: React.FC<EditorProps> = ({
           <Button
             variant={editor?.isActive('italic') ? 'ghostActive' : 'ghost'}
             size="xsmall"
+            icon
             onClick={() => editor?.chain().focus().toggleItalic().run()}
           >
             <TextItalic />
@@ -213,6 +215,7 @@ const Editor: React.FC<EditorProps> = ({
           <Button
             variant={editor?.isActive('strike') ? 'ghostActive' : 'ghost'}
             size="xsmall"
+            icon
             onClick={() => editor?.chain().focus().toggleStrike().run()}
           >
             <TextStrikethrough />
@@ -222,6 +225,7 @@ const Editor: React.FC<EditorProps> = ({
           <Button
             variant={editor?.isActive('code') ? 'ghostActive' : 'ghost'}
             size="xsmall"
+            icon
             onClick={() => editor?.chain().focus().toggleCode().run()}
           >
             <CodeSimple />
@@ -233,6 +237,7 @@ const Editor: React.FC<EditorProps> = ({
             <Button
               variant="ghostActive"
               size="xsmall"
+              icon
               onClick={() => editor?.chain().focus().unsetLink().run()}
             >
               <LinkBreak />
@@ -243,6 +248,7 @@ const Editor: React.FC<EditorProps> = ({
           <Button
             variant={editor?.isActive('blockquote') ? 'ghostActive' : 'ghost'}
             size="xsmall"
+            icon
             onClick={() => editor?.chain().focus().toggleBlockquote().run()}
           >
             <Quotes />
@@ -256,6 +262,7 @@ const Editor: React.FC<EditorProps> = ({
                 : 'ghost'
             }
             size="xsmall"
+            icon
             onClick={() =>
               editor?.chain().focus().toggleHeading({ level: 1 }).run()
             }
@@ -271,6 +278,7 @@ const Editor: React.FC<EditorProps> = ({
                 : 'ghost'
             }
             size="xsmall"
+            icon
             onClick={() =>
               editor?.chain().focus().toggleHeading({ level: 2 }).run()
             }
@@ -286,6 +294,7 @@ const Editor: React.FC<EditorProps> = ({
                 : 'ghost'
             }
             size="xsmall"
+            icon
             onClick={() =>
               editor?.chain().focus().toggleHeading({ level: 3 }).run()
             }
@@ -301,6 +310,7 @@ const Editor: React.FC<EditorProps> = ({
                 : 'ghost'
             }
             size="xsmall"
+            icon
             onClick={() =>
               editor?.chain().focus().toggleHeading({ level: 4 }).run()
             }
@@ -312,6 +322,7 @@ const Editor: React.FC<EditorProps> = ({
           <Button
             variant={editor?.isActive('bulletList') ? 'ghostActive' : 'ghost'}
             size="xsmall"
+            icon
             onClick={() => editor?.chain().focus().toggleBulletList().run()}
           >
             <ListBullets />
@@ -321,6 +332,7 @@ const Editor: React.FC<EditorProps> = ({
           <Button
             variant={editor?.isActive('orderedList') ? 'ghostActive' : 'ghost'}
             size="xsmall"
+            icon
             onClick={() => editor?.chain().focus().toggleOrderedList().run()}
           >
             <ListNumbers />
@@ -330,6 +342,7 @@ const Editor: React.FC<EditorProps> = ({
           <Button
             variant={editor?.isActive('codeBlock') ? 'ghostActive' : 'ghost'}
             size="xsmall"
+            icon
             onClick={() => editor?.chain().focus().toggleCodeBlock().run()}
           >
             <CodeBlock />
