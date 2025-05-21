@@ -4,7 +4,7 @@ import { chunkArray } from '../utils';
 const PAGE_SIZE = 100;
 const CHUNK_SIZE = 10;
 
-const botInstallationScheduled: JobDefinition<{
+const scheduleBotInstallation: JobDefinition<{
   botId: number;
   orgId: number;
 }> = {
@@ -34,7 +34,7 @@ const botInstallationScheduled: JobDefinition<{
           repos.filter((repo) => repo.has_installation && !repo.is_archived),
           CHUNK_SIZE,
         ).map((repos) =>
-          app.events.taskScheduled.bulkPublish(
+          app.events.scheduleTask.bulkPublish(
             repos.map((repo) => ({
               id: `${botId}-${orgId}-${repo.id}`,
               input: {
@@ -53,4 +53,4 @@ const botInstallationScheduled: JobDefinition<{
   },
 };
 
-export default botInstallationScheduled;
+export default scheduleBotInstallation;

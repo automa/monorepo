@@ -22,9 +22,9 @@ import {
   server,
 } from '../utils';
 
-import taskCreated from '../../src/events/jobs/taskCreated';
+import sendTaskWebhook from '../../src/events/jobs/sendTaskWebhook';
 
-suite('events/taskCreated', () => {
+suite('events/sendTaskWebhook', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, user: users;
   let org: orgs, nonMemberOrg: orgs;
   let repo: repos, bot: bots;
@@ -95,7 +95,7 @@ suite('events/taskCreated', () => {
         },
       });
 
-      await taskCreated.handler?.(app, {
+      await sendTaskWebhook.handler?.(app, {
         taskId: task.id,
       });
     });
@@ -192,7 +192,7 @@ suite('events/taskCreated', () => {
         },
       });
 
-      await taskCreated.handler?.(app, {
+      await sendTaskWebhook.handler?.(app, {
         taskId: task.id,
       });
     });

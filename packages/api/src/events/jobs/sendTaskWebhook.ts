@@ -15,7 +15,7 @@ import { env } from '../../env';
 
 import { JobDefinition } from '../types';
 
-const taskCreated: JobDefinition<{
+const sendTaskWebhook: JobDefinition<{
   taskId: number;
 }> = {
   handler: async (app, { taskId }) => {
@@ -31,7 +31,7 @@ const taskCreated: JobDefinition<{
     if (!task) {
       return app.log.warn(
         { task_id: taskId },
-        'Unable to find task for taskCreated event',
+        'Unable to find task for sendTaskWebhook event',
       );
 
       return;
@@ -189,4 +189,4 @@ const taskCreated: JobDefinition<{
   },
 };
 
-export default taskCreated;
+export default sendTaskWebhook;

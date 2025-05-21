@@ -4,7 +4,7 @@ import { JobDefinition } from '../types';
 
 import { taskCreate } from '../../db';
 
-const taskScheduled: JobDefinition<{
+const scheduleTask: JobDefinition<{
   botId: number;
   orgId: number;
   repoId: number;
@@ -49,4 +49,4 @@ const taskScheduled: JobDefinition<{
   },
 };
 
-export default taskScheduled;
+export default scheduleTask;
