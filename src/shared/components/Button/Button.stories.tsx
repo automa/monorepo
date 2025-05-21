@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from '@storybook/test';
+import { Gear } from '@phosphor-icons/react';
 
 import { ButtonComponentProps } from './types';
 
@@ -32,6 +33,13 @@ export const Anchor = {
   },
 } satisfies Story;
 
+export const Icon = {
+  args: {
+    icon: true,
+    children: <Gear />,
+  },
+} satisfies Story;
+
 export const Disabled = {
   args: {
     disabled: true,
@@ -41,6 +49,13 @@ export const Disabled = {
 export const Secondary = {
   args: {
     variant: 'secondary',
+  },
+} satisfies Story;
+
+export const SecondaryIcon = {
+  args: {
+    ...Secondary.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -57,6 +72,13 @@ export const Tertiary = {
   },
 } satisfies Story;
 
+export const TertiaryIcon = {
+  args: {
+    ...Tertiary.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const TertiaryDisabled = {
   args: {
     ...Tertiary.args,
@@ -70,10 +92,25 @@ export const Small = {
   },
 } satisfies Story;
 
+export const SmallIcon = {
+  args: {
+    ...Small.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const SmallSecondary = {
   args: {
     ...Small.args,
     ...Secondary.args,
+  },
+} satisfies Story;
+
+export const SmallSecondaryIcon = {
+  args: {
+    ...Small.args,
+    ...Secondary.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -84,9 +121,24 @@ export const SmallTertiary = {
   },
 } satisfies Story;
 
+export const SmallTertiaryIcon = {
+  args: {
+    ...Small.args,
+    ...Tertiary.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const Large = {
   args: {
     size: 'large',
+  },
+} satisfies Story;
+
+export const LargeIcon = {
+  args: {
+    ...Large.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -97,10 +149,26 @@ export const LargeSecondary = {
   },
 } satisfies Story;
 
+export const LargeSecondaryIcon = {
+  args: {
+    ...Large.args,
+    ...Secondary.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const LargeTertiary = {
   args: {
     ...Large.args,
     ...Tertiary.args,
+  },
+} satisfies Story;
+
+export const LargeTertiaryIcon = {
+  args: {
+    ...Large.args,
+    ...Tertiary.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
