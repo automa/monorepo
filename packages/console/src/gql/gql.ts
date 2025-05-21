@@ -22,11 +22,13 @@ const documents = {
     "\n  mutation BotUpdate($org_id: Int!, $name: String!, $input: BotUpdateInput!) {\n    botUpdate(org_id: $org_id, name: $name, input: $input) {\n      ...Bot\n    }\n  }\n": types.BotUpdateDocument,
     "\n  mutation BotPublish($org_id: Int!, $name: String!) {\n    botPublish(org_id: $org_id, name: $name) {\n      ...Bot\n    }\n  }\n": types.BotPublishDocument,
     "\n  mutation BotCreate($org_id: Int!, $input: BotCreateInput!) {\n    botCreate(org_id: $org_id, input: $input) {\n      ...BotBase\n    }\n  }\n": types.BotCreateDocument,
+    "\n  query BotInstallationBot(\n    $org_name: String!\n    $name: String!\n    $org_id: Int!\n  ) {\n    publicBot(org_name: $org_name, name: $name) {\n      id\n      short_description\n      type\n      image_url\n      installation(org_id: $org_id) {\n        id\n      }\n    }\n  }\n": types.BotInstallationBotDocument,
+    "\n  query BotInstallationTasks(\n    $org_id: Int!\n    $bot_id: Int!\n  ) {\n    tasks(org_id: $org_id, filter: { bot_id: $bot_id }) {\n      id\n      ...Task\n    }\n  }\n": types.BotInstallationTasksDocument,
+    "\n  mutation BotUninstall($org_id: Int!, $bot_id: Int!) {\n    botUninstall(org_id: $org_id, bot_id: $bot_id)\n  }\n": types.BotUninstallDocument,
     "\n  query BotInstallations($org_id: Int!) {\n    botInstallations(org_id: $org_id) {\n      id\n      ...BotInstallation\n    }\n  }\n": types.BotInstallationsDocument,
     "\n  query Bots($org_id: Int!) {\n    bots(org_id: $org_id) {\n      id\n      ...BotBase\n    }\n  }\n": types.BotsDocument,
     "\n  query PublicBot(\n    $org_name: String!\n    $name: String!\n    $org_id: Int!\n  ) {\n    publicBot(org_name: $org_name, name: $name) {\n      id\n      name\n      short_description\n      type\n      paths\n      image_url\n      description\n      homepage\n      is_published\n      is_preview\n      is_deterministic\n      org {\n        name\n      }\n      installation(org_id: $org_id) {\n        id\n      }\n    }\n  }\n": types.PublicBotDocument,
     "\n  mutation BotInstall($org_id: Int!, $input: BotInstallInput!) {\n    botInstall(org_id: $org_id, input: $input) {\n      ...BotInstallation\n    }\n  }\n": types.BotInstallDocument,
-    "\n  mutation BotUninstall($org_id: Int!, $bot_id: Int!) {\n    botUninstall(org_id: $org_id, bot_id: $bot_id)\n  }\n": types.BotUninstallDocument,
     "\n  query PublicBots($org_id: Int!, $filter: PublicBotsFilter) {\n    publicBots(filter: $filter) {\n      id\n      ...PublicBot\n    }\n  }\n": types.PublicBotsDocument,
     "\n  query IntegrationSetupGithub {\n    orgs {\n      name\n      github_installation_id\n    }\n  }\n": types.IntegrationSetupGithubDocument,
     "\n  fragment OrgsQuery on Query {\n    orgs {\n      id\n      name\n      provider_type\n      provider_id\n      provider_name\n      has_installation\n\n      bot_installations_count\n    }\n  }\n": types.OrgsQueryFragmentDoc,
@@ -97,6 +99,18 @@ export function gql(source: "\n  mutation BotCreate($org_id: Int!, $input: BotCr
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  query BotInstallationBot(\n    $org_name: String!\n    $name: String!\n    $org_id: Int!\n  ) {\n    publicBot(org_name: $org_name, name: $name) {\n      id\n      short_description\n      type\n      image_url\n      installation(org_id: $org_id) {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  query BotInstallationBot(\n    $org_name: String!\n    $name: String!\n    $org_id: Int!\n  ) {\n    publicBot(org_name: $org_name, name: $name) {\n      id\n      short_description\n      type\n      image_url\n      installation(org_id: $org_id) {\n        id\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query BotInstallationTasks(\n    $org_id: Int!\n    $bot_id: Int!\n  ) {\n    tasks(org_id: $org_id, filter: { bot_id: $bot_id }) {\n      id\n      ...Task\n    }\n  }\n"): (typeof documents)["\n  query BotInstallationTasks(\n    $org_id: Int!\n    $bot_id: Int!\n  ) {\n    tasks(org_id: $org_id, filter: { bot_id: $bot_id }) {\n      id\n      ...Task\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation BotUninstall($org_id: Int!, $bot_id: Int!) {\n    botUninstall(org_id: $org_id, bot_id: $bot_id)\n  }\n"): (typeof documents)["\n  mutation BotUninstall($org_id: Int!, $bot_id: Int!) {\n    botUninstall(org_id: $org_id, bot_id: $bot_id)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  query BotInstallations($org_id: Int!) {\n    botInstallations(org_id: $org_id) {\n      id\n      ...BotInstallation\n    }\n  }\n"): (typeof documents)["\n  query BotInstallations($org_id: Int!) {\n    botInstallations(org_id: $org_id) {\n      id\n      ...BotInstallation\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -110,10 +124,6 @@ export function gql(source: "\n  query PublicBot(\n    $org_name: String!\n    $
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation BotInstall($org_id: Int!, $input: BotInstallInput!) {\n    botInstall(org_id: $org_id, input: $input) {\n      ...BotInstallation\n    }\n  }\n"): (typeof documents)["\n  mutation BotInstall($org_id: Int!, $input: BotInstallInput!) {\n    botInstall(org_id: $org_id, input: $input) {\n      ...BotInstallation\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  mutation BotUninstall($org_id: Int!, $bot_id: Int!) {\n    botUninstall(org_id: $org_id, bot_id: $bot_id)\n  }\n"): (typeof documents)["\n  mutation BotUninstall($org_id: Int!, $bot_id: Int!) {\n    botUninstall(org_id: $org_id, bot_id: $bot_id)\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

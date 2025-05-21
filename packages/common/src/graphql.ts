@@ -371,6 +371,7 @@ export enum TaskState {
 }
 
 export type TasksFilter = {
+  bot_id?: InputMaybe<Scalars['Int']['input']>;
   is_scheduled?: InputMaybe<Scalars['Boolean']['input']>;
 };
 

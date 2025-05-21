@@ -70,9 +70,10 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
     },
   );
 
-  if (!loading && data) {
-    // TODO: Go to the bot view
-    return <Navigate to="../bots" />;
+  if (!loading && data?.botCreate) {
+    const bot = getFragment(BOT_BASE_FRAGMENT, data.botCreate);
+
+    return <Navigate to={`../bots/${bot.name}`} />;
   }
 
   return (

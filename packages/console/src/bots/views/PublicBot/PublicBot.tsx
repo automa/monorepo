@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
-import { Question, Robot } from '@phosphor-icons/react';
+import { Gear, Question, Robot } from '@phosphor-icons/react';
 
 import { useAnalyticsPage } from 'analytics';
 import { getFragment } from 'gql';
@@ -21,11 +21,7 @@ import { useOrg } from 'orgs';
 
 import { PublicBotProps } from './types';
 
-import {
-  BOT_INSTALL_MUTATION,
-  BOT_UNINSTALL_MUTATION,
-  PUBLIC_BOT_QUERY,
-} from './PublicBot.queries';
+import { BOT_INSTALL_MUTATION, PUBLIC_BOT_QUERY } from './PublicBot.queries';
 import {
   Container,
   Description,
@@ -64,8 +60,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
         variant: 'success',
       });
 
-      // TODO: Redirect to bot installation page
-      navigate('../bots');
+      navigate(`../bots/${botOrgName}/${botName}`);
     },
     update(cache, { data }) {
       if (!bot || !data) return;
@@ -111,65 +106,17 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
     },
   });
 
-  // TODO: Handle error
-  const [botUninstall] = useMutation(BOT_UNINSTALL_MUTATION, {
-    onCompleted() {
-      toast({
-        title: 'Bot uninstalled',
-        variant: 'success',
-      });
-    },
-    update(cache) {
-      if (!bot?.installation) return;
-
-      setOrgBotInstallationsCount(org.name, org.bot_installations_count - 1);
-
-      cache.evict({ id: `BotInstallation:${bot.installation.id}` });
-
-      cache.modify({
-        id: cache.identify(org),
-        fields: {
-          botInstallationsCount(existing) {
-            return existing - 1;
-          },
-        },
-      });
-
-      cache.modify({
-        id: cache.identify(bot),
-        fields: {
-          installation(existing, details) {
-            if (!details.storeFieldName.includes(`"org_id":${org.id}`))
-              return existing;
-
-            return null;
-          },
-        },
-      });
-    },
-  });
-
   const click = () => {
     if (!bot) return;
 
-    if (!bot.installation) {
-      botInstall({
-        variables: {
-          org_id: org.id,
-          input: {
-            bot_id: bot.id,
-          },
-        },
-      });
-    } else {
-      // TODO: Add confirmation dialog
-      botUninstall({
-        variables: {
-          org_id: org.id,
+    botInstall({
+      variables: {
+        org_id: org.id,
+        input: {
           bot_id: bot.id,
         },
-      });
-    }
+      },
+    });
   };
 
   return (
@@ -208,19 +155,21 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
                 <Typography variant="large">{bot.short_description}</Typography>
               </Flex>
             </Flex>
-            {bot.is_preview ? (
-              <Tooltip body="Coming soon!">
-                <Button size="large" disabled>
+            {!bot.installation ? (
+              bot.is_preview ? (
+                <Tooltip body="Coming soon!">
+                  <Button size="large" disabled>
+                    Install
+                  </Button>
+                </Tooltip>
+              ) : (
+                <Button size="large" onClick={click}>
                   Install
                 </Button>
-              </Tooltip>
+              )
             ) : (
-              <Button
-                size="large"
-                variant={!bot.installation ? 'primary' : 'danger'}
-                onClick={click}
-              >
-                {!bot.installation ? 'Install' : 'Uninstall'}
+              <Button to={`../bots/${botOrgName}/${botName}`} size="large">
+                <Gear className="size-4" />
               </Button>
             )}
           </Flex>
