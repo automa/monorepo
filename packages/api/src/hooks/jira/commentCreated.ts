@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 import { integration, task_item } from '@automa/prisma';
 
@@ -7,7 +7,7 @@ import { env } from '../../env';
 import { AUTOMA_REGEX, getSelectedBotAndRepo } from '../utils';
 
 import { taskCreate } from '../../db';
-import { fromAdfToMarkdown } from '../../integrations';
+import { fromAdfToMarkdown, withJiraTokenRefresh } from '../../integrations';
 
 import { JiraEventHandler } from './types';
 
@@ -46,13 +46,12 @@ const commentCreated: JiraEventHandler<{
     },
   });
 
-  // Check if we have the refresh token
+  // Read JSON fields
   if (
     !(
       connection?.secrets &&
       typeof connection.secrets === 'object' &&
-      !Array.isArray(connection.secrets) &&
-      connection.secrets.refresh_token
+      !Array.isArray(connection.secrets)
     ) ||
     !(
       connection?.config &&
@@ -63,7 +62,15 @@ const commentCreated: JiraEventHandler<{
     return;
   }
 
-  let accessToken = connection.secrets.access_token as string;
+  // Check if we have the refresh token
+  if (!connection.secrets.refresh_token || !connection.secrets.access_token) {
+    return;
+  }
+
+  let tokens = {
+    access_token: connection.secrets.access_token as string,
+    refresh_token: connection.secrets.refresh_token as string,
+  };
 
   // Select the bot and repo
   const { selectedBot, selectedRepo, problems } = await getSelectedBotAndRepo(
@@ -81,7 +88,7 @@ const commentCreated: JiraEventHandler<{
     const issueUrl = `${env.JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${body.issue.id}`;
     let issue;
 
-    const readIssue = () =>
+    const readIssue = (token: string) =>
       axios.get<{
         id: string;
         key: string;
@@ -110,50 +117,14 @@ const commentCreated: JiraEventHandler<{
         };
       }>(issueUrl, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
-    try {
-      ({ data: issue } = await readIssue());
-    } catch (e) {
-      if ((e as AxiosError)?.response?.status !== 401) {
-        throw e;
-      }
-
-      // If the access token is expired, refresh it
-      const { data: tokens } = await axios.post<{
-        access_token: string;
-        refresh_token: string;
-      }>(env.JIRA_APP.ACCESS_TOKEN_URL, {
-        client_id: env.JIRA_APP.CLIENT_ID,
-        client_secret: env.JIRA_APP.CLIENT_SECRET,
-        refresh_token: connection.secrets.refresh_token as string,
-        grant_type: 'refresh_token',
-      });
-
-      if (!tokens.access_token || !tokens.refresh_token) {
-        throw e;
-      }
-
-      accessToken = tokens.access_token;
-
-      [{ data: issue }] = await Promise.all([
-        readIssue(),
-        // Update the integration with the new tokens
-        app.prisma.integrations.update({
-          where: {
-            id: connection.id,
-          },
-          data: {
-            secrets: {
-              refresh_token: tokens.refresh_token,
-              access_token: accessToken,
-            },
-          },
-        }),
-      ]);
-    }
+    ({
+      result: { data: issue },
+      tokens: tokens,
+    } = await withJiraTokenRefresh(app, connection.id, tokens, readIssue));
 
     // Find comment from list of comments in the issue
     const comment = issue.fields.comment.comments.find(
@@ -298,16 +269,20 @@ const commentCreated: JiraEventHandler<{
   }
 
   // Create a comment to notify the user
-  await axios.post(
-    `${env.JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${body.issue.id}/comment`,
-    {
-      body: reponseComment,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+  const commentUrl = `${env.JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${body.issue.id}/comment`;
+
+  await withJiraTokenRefresh(app, connection.id, tokens, (token: string) =>
+    axios.post(
+      commentUrl,
+      {
+        body: reponseComment,
       },
-    },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    ),
   );
 
   return;

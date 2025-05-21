@@ -1009,6 +1009,149 @@ suite('jira hook comment_created & comment_updated event', () => {
     });
   });
 
+  suite('create with no bot and no repo specified with expired token', () => {
+    setup(async () => {
+      createCommentStub
+        .onFirstCall()
+        .rejects({
+          response: {
+            status: 401,
+          },
+        })
+        .onSecondCall()
+        .resolves({
+          data: {
+            access_token: 'new-token',
+            refresh_token: 'new-refresh-token',
+          },
+        })
+        .onThirdCall()
+        .resolves({});
+
+      response = await callWithFixture(
+        app,
+        'comment_created',
+        'create_no_bot_repo',
+      );
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should not create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 0);
+    });
+
+    test('should not get information about issue', async () => {
+      assert.equal(issueStub.callCount, 0);
+    });
+
+    test('should try to create comment about the task', async () => {
+      assert.equal(createCommentStub.callCount, 3);
+      assert.equal(
+        createCommentStub.firstCall.args[0],
+        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281/comment',
+      );
+      assert.deepEqual(createCommentStub.firstCall.args[2], {
+        headers: {
+          Authorization: 'Bearer abcdef',
+        },
+      });
+    });
+
+    test('should get new token', async () => {
+      assert.equal(createCommentStub.callCount, 3);
+      assert.equal(
+        createCommentStub.secondCall.args[0],
+        'https://auth.atlassian.com/oauth/token',
+      );
+      assert.deepInclude(createCommentStub.secondCall.args[1], {
+        grant_type: 'refresh_token',
+        refresh_token: 'zyxwvu',
+      });
+    });
+
+    test('should create comment about the task using new token', async () => {
+      assert.equal(createCommentStub.callCount, 3);
+      assert.equal(
+        createCommentStub.thirdCall.args[0],
+        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281/comment',
+      );
+      assert.deepEqual(createCommentStub.thirdCall.args[1], {
+        body: {
+          version: 1,
+          type: 'doc',
+          content: [
+            {
+              content: [
+                {
+                  type: 'text',
+                  text: 'We encountered the following issues while creating the task:',
+                },
+              ],
+              type: 'paragraph',
+            },
+            {
+              type: 'bulletList',
+              content: [
+                {
+                  type: 'listItem',
+                  content: [
+                    {
+                      type: 'paragraph',
+                      content: [
+                        {
+                          type: 'text',
+                          text: 'Bot not specified. Use `bot=name` to specify a bot.',
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: 'listItem',
+                  content: [
+                    {
+                      type: 'paragraph',
+                      content: [
+                        {
+                          type: 'text',
+                          text: 'Repo not specified. Use `repo=name` to specify a repo.',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      });
+      assert.deepEqual(createCommentStub.thirdCall.args[2], {
+        headers: {
+          Authorization: 'Bearer new-token',
+        },
+      });
+    });
+
+    test('should update integration with new tokens', async () => {
+      const integration = await app.prisma.integrations.findFirst({
+        where: {
+          type: 'jira',
+          org_id: org.id,
+        },
+      });
+
+      assert.deepEqual(integration?.secrets, {
+        access_token: 'new-token',
+        refresh_token: 'new-refresh-token',
+      });
+    });
+  });
+
   suite('create with non-automa comment', () => {
     setup(async () => {
       response = await callWithFixture(app, 'comment_created', 'create_ignore');
