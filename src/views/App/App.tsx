@@ -70,9 +70,13 @@ const App: React.FC<{}> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  if (authLoading) {
+    return <Loader />;
+  }
+
   return (
     <Container>
-      {!authLoading && <RoutesLoader fallback={<Loader />} routes={routes} />}
+      <RoutesLoader fallback={<Loader />} routes={routes} />
     </Container>
   );
 };
