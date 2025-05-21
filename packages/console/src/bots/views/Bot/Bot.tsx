@@ -13,12 +13,12 @@ import {
   Button,
   Flex,
   Input,
-  InputEditor,
   Loader,
   toast,
   Tooltip,
   Typography,
 } from 'shared';
+import InputEditor from 'shared/components/InputEditor';
 
 import { InputPaths } from 'bots';
 

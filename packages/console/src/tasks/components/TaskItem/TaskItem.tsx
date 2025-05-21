@@ -11,7 +11,8 @@ import { format, formatDistanceToNow } from 'date-fns';
 
 import { getFragment } from 'gql';
 import { IntegrationType, TaskItemType } from 'gql/graphql';
-import { Anchor, Avatar, Editor, Flex, Tooltip, Typography } from 'shared';
+import { Anchor, Avatar, Flex, Tooltip, Typography } from 'shared';
+import Editor from 'shared/components/Editor';
 
 import { USER_AVATAR_FRAGMENT, UserAvatar } from 'users';
 
