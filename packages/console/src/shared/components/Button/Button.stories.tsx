@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from '@storybook/test';
+import { Gear } from '@phosphor-icons/react';
 
 import { ButtonComponentProps } from './types';
 
@@ -32,6 +33,13 @@ export const Anchor = {
   },
 } satisfies Story;
 
+export const Icon = {
+  args: {
+    icon: true,
+    children: <Gear />,
+  },
+} satisfies Story;
+
 export const Disabled = {
   args: {
     disabled: true,
@@ -41,6 +49,13 @@ export const Disabled = {
 export const Secondary = {
   args: {
     variant: 'secondary',
+  },
+} satisfies Story;
+
+export const SecondaryIcon = {
+  args: {
+    ...Secondary.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -57,6 +72,13 @@ export const Tertiary = {
   },
 } satisfies Story;
 
+export const TertiaryIcon = {
+  args: {
+    ...Tertiary.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const TertiaryDisabled = {
   args: {
     ...Tertiary.args,
@@ -67,6 +89,13 @@ export const TertiaryDisabled = {
 export const Ghost = {
   args: {
     variant: 'ghost',
+  },
+} satisfies Story;
+
+export const GhostIcon = {
+  args: {
+    ...Ghost.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -83,6 +112,13 @@ export const GhostActive = {
   },
 } satisfies Story;
 
+export const GhostActiveIcon = {
+  args: {
+    ...GhostActive.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const GhostActiveDisabled = {
   args: {
     ...GhostActive.args,
@@ -93,6 +129,13 @@ export const GhostActiveDisabled = {
 export const Danger = {
   args: {
     variant: 'danger',
+  },
+} satisfies Story;
+
+export const DangerIcon = {
+  args: {
+    ...Danger.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -109,10 +152,25 @@ export const Small = {
   },
 } satisfies Story;
 
+export const SmallIcon = {
+  args: {
+    ...Small.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const SmallSecondary = {
   args: {
     ...Small.args,
     ...Secondary.args,
+  },
+} satisfies Story;
+
+export const SmallSecondaryIcon = {
+  args: {
+    ...Small.args,
+    ...Secondary.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -123,10 +181,26 @@ export const SmallTertiary = {
   },
 } satisfies Story;
 
+export const SmallTertiaryIcon = {
+  args: {
+    ...Small.args,
+    ...Tertiary.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const SmallGhost = {
   args: {
     ...Small.args,
     ...Ghost.args,
+  },
+} satisfies Story;
+
+export const SmallGhostIcon = {
+  args: {
+    ...Small.args,
+    ...Ghost.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -137,6 +211,14 @@ export const SmallGhostActive = {
   },
 } satisfies Story;
 
+export const SmallGhostActiveIcon = {
+  args: {
+    ...Small.args,
+    ...GhostActive.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const SmallDanger = {
   args: {
     ...Small.args,
@@ -144,9 +226,24 @@ export const SmallDanger = {
   },
 } satisfies Story;
 
+export const SmallDangerIcon = {
+  args: {
+    ...Small.args,
+    ...Danger.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const Large = {
   args: {
     size: 'large',
+  },
+} satisfies Story;
+
+export const LargeIcon = {
+  args: {
+    ...Large.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -157,10 +254,26 @@ export const LargeSecondary = {
   },
 } satisfies Story;
 
+export const LargeSecondaryIcon = {
+  args: {
+    ...Large.args,
+    ...Secondary.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const LargeTertiary = {
   args: {
     ...Large.args,
     ...Tertiary.args,
+  },
+} satisfies Story;
+
+export const LargeTertiaryIcon = {
+  args: {
+    ...Large.args,
+    ...Tertiary.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -171,10 +284,26 @@ export const LargeGhost = {
   },
 } satisfies Story;
 
+export const LargeGhostIcon = {
+  args: {
+    ...Large.args,
+    ...Ghost.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const LargeGhostActive = {
   args: {
     ...Large.args,
     ...GhostActive.args,
+  },
+} satisfies Story;
+
+export const LargeGhostActiveIcon = {
+  args: {
+    ...Large.args,
+    ...GhostActive.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -185,9 +314,24 @@ export const LargeDanger = {
   },
 } satisfies Story;
 
+export const LargeDangerIcon = {
+  args: {
+    ...Large.args,
+    ...Danger.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const ExtraSmall = {
   args: {
     size: 'xsmall',
+  },
+} satisfies Story;
+
+export const ExtraSmallIcon = {
+  args: {
+    ...ExtraSmall.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -198,10 +342,26 @@ export const ExtraSmallSecondary = {
   },
 } satisfies Story;
 
+export const ExtraSmallSecondaryIcon = {
+  args: {
+    ...ExtraSmall.args,
+    ...Secondary.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const ExtraSmallTertiary = {
   args: {
     ...ExtraSmall.args,
     ...Tertiary.args,
+  },
+} satisfies Story;
+
+export const ExtraSmallTertiaryIcon = {
+  args: {
+    ...ExtraSmall.args,
+    ...Tertiary.args,
+    ...Icon.args,
   },
 } satisfies Story;
 
@@ -212,6 +372,14 @@ export const ExtraSmallGhost = {
   },
 } satisfies Story;
 
+export const ExtraSmallGhostIcon = {
+  args: {
+    ...ExtraSmall.args,
+    ...Ghost.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const ExtraSmallGhostActive = {
   args: {
     ...ExtraSmall.args,
@@ -219,10 +387,26 @@ export const ExtraSmallGhostActive = {
   },
 } satisfies Story;
 
+export const ExtraSmallGhostActiveIcon = {
+  args: {
+    ...ExtraSmall.args,
+    ...GhostActive.args,
+    ...Icon.args,
+  },
+} satisfies Story;
+
 export const ExtraSmallDanger = {
   args: {
     ...ExtraSmall.args,
     ...Danger.args,
+  },
+} satisfies Story;
+
+export const ExtraSmallDangerIcon = {
+  args: {
+    ...ExtraSmall.args,
+    ...Danger.args,
+    ...Icon.args,
   },
 } satisfies Story;
 

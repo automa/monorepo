@@ -18,10 +18,37 @@ export const button = cva(
         medium: 'h-9 px-4 py-2',
         large: 'h-10 px-8',
       },
+      icon: {
+        true: 'justify-center p-0 *:size-4',
+        false: '',
+      },
     },
+    compoundVariants: [
+      {
+        size: 'xsmall',
+        icon: true,
+        class: 'size-6',
+      },
+      {
+        size: 'small',
+        icon: true,
+        class: 'size-8',
+      },
+      {
+        size: 'medium',
+        icon: true,
+        class: 'size-9',
+      },
+      {
+        size: 'large',
+        icon: true,
+        class: 'size-10 *:size-5',
+      },
+    ],
     defaultVariants: {
       variant: 'primary',
       size: 'medium',
+      icon: false,
     },
   },
 );
