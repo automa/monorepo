@@ -88,8 +88,6 @@ export default async function (app: FastifyInstance) {
       return replyError(ErrorType.UNABLE_TO_READ_JIRA_USER);
     }
 
-    // TODO: Rotate webhook and refresh token every 30 days (bullmq)
-    // https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-webhooks/#api-rest-api-3-webhook-refresh-put
     const registerWebhook = () =>
       axios.post<{
         webhookRegistrationResult: (
@@ -200,6 +198,7 @@ export default async function (app: FastifyInstance) {
           scopes: jiraOrg.scopes,
           webhookId: data.createdWebhookId,
           userEmail: jiraUser.emailAddress,
+          refreshedAt: new Date(),
         },
         created_by: request.userId!,
       },

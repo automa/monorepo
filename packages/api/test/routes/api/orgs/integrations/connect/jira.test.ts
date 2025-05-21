@@ -342,7 +342,7 @@ suite('api/orgs/integrations/connect/jira', () => {
             access_token: 'abcdef',
             refresh_token: 'ghijkl',
           });
-          assert.deepEqual(integrations[0].config, {
+          assert.deepInclude(integrations[0].config, {
             id: '5678',
             name: 'Automa',
             url: 'automa.atlassian.net',
@@ -356,6 +356,7 @@ suite('api/orgs/integrations/connect/jira', () => {
             webhookId: 123,
             userEmail: 'pavan@example.com',
           });
+          assert.containsAllKeys(integrations[0].config, ['refreshedAt']);
           assert.equal(integrations[0].created_by, user.id);
         });
       });
@@ -556,7 +557,7 @@ suite('api/orgs/integrations/connect/jira', () => {
               access_token: 'abcdef',
               refresh_token: 'ghijkl',
             });
-            assert.deepEqual(integrations[0].config, {
+            assert.deepInclude(integrations[0].config, {
               id: '5678',
               name: 'Automa',
               url: 'automa.atlassian.net',
@@ -570,6 +571,7 @@ suite('api/orgs/integrations/connect/jira', () => {
               webhookId: 123,
               userEmail: 'pavan@example.com',
             });
+            assert.containsAllKeys(integrations[0].config, ['refreshedAt']);
             assert.equal(integrations[0].created_by, user.id);
           });
         });
