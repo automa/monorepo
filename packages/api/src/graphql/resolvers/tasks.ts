@@ -27,6 +27,14 @@ export const Query: QueryResolvers<Context> = {
       where: {
         org_id,
         is_scheduled: filter?.is_scheduled ?? undefined,
+        ...(filter?.bot_id && {
+          task_items: {
+            some: {
+              type: task_item.bot,
+              bot_id: filter.bot_id,
+            },
+          },
+        }),
       },
       orderBy: {
         id: 'desc',

@@ -57,7 +57,7 @@ suite('graphql tasks', () => {
 
   suite('query tasks', () => {
     suiteSetup(async () => {
-      await app.prisma.tasks.createMany({
+      const [, , , task] = await app.prisma.tasks.createManyAndReturn({
         data: [
           {
             title: 'task-0',
@@ -80,6 +80,26 @@ suite('graphql tasks', () => {
             is_scheduled: true,
             org_id: org.id,
             state: 'completed',
+          },
+        ],
+      });
+
+      await app.prisma.task_items.createMany({
+        data: [
+          {
+            task_id: task.id,
+            type: 'message',
+            data: { content: 'task-3' },
+          },
+          {
+            task_id: task.id,
+            type: 'repo',
+            repo_id: repo.id,
+          },
+          {
+            task_id: task.id,
+            type: 'bot',
+            bot_id: bot.id,
           },
         ],
       });
@@ -212,6 +232,78 @@ suite('graphql tasks', () => {
       assert.isFalse(tasks[0].is_scheduled);
     });
 
+    test('should return only scheduled tasks with filter.is_scheduled = true', async () => {
+      const response = await graphql(
+        app,
+        `
+          query tasks($org_id: Int!, $filter: TasksFilter) {
+            tasks(org_id: $org_id, filter: $filter) {
+              id
+              title
+              is_scheduled
+            }
+          }
+        `,
+        {
+          org_id: org.id,
+          filter: {
+            is_scheduled: true,
+          },
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { tasks },
+      } = response.json();
+
+      assert.lengthOf(tasks, 1);
+
+      assert.equal(tasks[0].title, 'task-3');
+      assert.isTrue(tasks[0].is_scheduled);
+    });
+
+    test('should return only tasks assigned to bot with filter.bot_id set', async () => {
+      const response = await graphql(
+        app,
+        `
+          query tasks($org_id: Int!, $filter: TasksFilter) {
+            tasks(org_id: $org_id, filter: $filter) {
+              id
+              title
+            }
+          }
+        `,
+        {
+          org_id: org.id,
+          filter: {
+            bot_id: bot.id,
+          },
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { tasks },
+      } = response.json();
+
+      assert.lengthOf(tasks, 1);
+
+      assert.equal(tasks[0].title, 'task-3');
+    });
+
     suite('items', () => {
       let response: LightMyRequestResponse, activity: task_activities;
 
@@ -234,11 +326,6 @@ suite('graphql tasks', () => {
           data: [
             {
               task_id: task.id,
-              type: 'message',
-              data: { content: 'task-3' },
-            },
-            {
-              task_id: task.id,
               type: 'origin',
               data: {
                 integration: 'linear',
@@ -246,16 +333,6 @@ suite('graphql tasks', () => {
                 issueTitle: 'Demo Issue',
               },
               actor_user_id: user.id,
-            },
-            {
-              task_id: task.id,
-              type: 'repo',
-              repo_id: repo.id,
-            },
-            {
-              task_id: task.id,
-              type: 'bot',
-              bot_id: bot.id,
             },
             {
               task_id: task.id,
@@ -334,34 +411,34 @@ suite('graphql tasks', () => {
         assert.isString(items[0].created_at);
         assert.deepEqual(items[0].data, { content: 'task-3' });
         assert.isNull(items[0].actor_user);
-        assert.isNull(items[4].repo);
-        assert.isNull(items[4].bot);
+        assert.isNull(items[0].repo);
+        assert.isNull(items[0].bot);
 
-        assert.equal(items[1].type, 'origin');
+        assert.equal(items[1].type, 'repo');
         assert.isString(items[1].created_at);
-        assert.deepEqual(items[1].data, {
+        assert.deepEqual(items[1].data, {});
+        assert.isNull(items[1].actor_user);
+        assert.equal(items[1].repo.id, repo.id);
+        assert.isNull(items[1].bot);
+
+        assert.equal(items[2].type, 'bot');
+        assert.isString(items[2].created_at);
+        assert.deepEqual(items[2].data, {});
+        assert.isNull(items[2].actor_user);
+        assert.isNull(items[2].repo);
+        assert.equal(items[2].bot.id, bot.id);
+        assert.equal(items[2].bot.org.id, nonMemberOrg.id);
+
+        assert.equal(items[3].type, 'origin');
+        assert.isString(items[3].created_at);
+        assert.deepEqual(items[3].data, {
           integration: 'linear',
           issueIdentifier: 'DEMO-123',
           issueTitle: 'Demo Issue',
         });
-        assert.equal(items[1].actor_user.id, user.id);
-        assert.isNull(items[4].repo);
-        assert.isNull(items[4].bot);
-
-        assert.equal(items[2].type, 'repo');
-        assert.isString(items[2].created_at);
-        assert.deepEqual(items[2].data, {});
-        assert.isNull(items[2].actor_user);
-        assert.equal(items[2].repo.id, repo.id);
-        assert.isNull(items[4].bot);
-
-        assert.equal(items[3].type, 'bot');
-        assert.isString(items[3].created_at);
-        assert.deepEqual(items[3].data, {});
-        assert.isNull(items[3].actor_user);
-        assert.isNull(items[4].repo);
-        assert.equal(items[3].bot.id, bot.id);
-        assert.equal(items[3].bot.org.id, nonMemberOrg.id);
+        assert.equal(items[3].actor_user.id, user.id);
+        assert.isNull(items[3].repo);
+        assert.isNull(items[3].bot);
 
         assert.equal(items[4].type, 'activity');
         assert.isString(items[4].created_at);

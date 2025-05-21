@@ -35,9 +35,3 @@ export const BOT_INSTALL_MUTATION = gql(`
     }
   }
 `);
-
-export const BOT_UNINSTALL_MUTATION = gql(`
-  mutation BotUninstall($org_id: Int!, $bot_id: Int!) {
-    botUninstall(org_id: $org_id, bot_id: $bot_id)
-  }
-`);

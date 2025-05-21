@@ -8,6 +8,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type EnumResolverSignature<T, AllowedValues = any> = { [key in keyof T]?: AllowedValues };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -76,6 +77,13 @@ export type BotInstallation = {
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   org: PublicOrg;
+  tasks_count: Array<BotInstallationTasksCount>;
+};
+
+export type BotInstallationTasksCount = {
+  __typename?: 'BotInstallationTasksCount';
+  count: Scalars['Int']['output'];
+  state: TaskState;
 };
 
 export type BotInstallationsFilter = {
@@ -363,6 +371,7 @@ export enum TaskState {
 }
 
 export type TasksFilter = {
+  bot_id?: InputMaybe<Scalars['Int']['input']>;
   is_scheduled?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -467,6 +476,7 @@ export type ResolversTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: ResolverTypeWrapper<bot_installations>;
+  BotInstallationTasksCount: ResolverTypeWrapper<Omit<BotInstallationTasksCount, 'state'> & { state: ResolversTypes['TaskState'] }>;
   BotInstallationsFilter: BotInstallationsFilter;
   BotType: ResolverTypeWrapper<bot>;
   BotUpdateInput: BotUpdateInput;
@@ -505,6 +515,7 @@ export type ResolversParentTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: bot_installations;
+  BotInstallationTasksCount: BotInstallationTasksCount;
   BotInstallationsFilter: BotInstallationsFilter;
   BotUpdateInput: BotUpdateInput;
   DateTime: Scalars['DateTime']['output'];
@@ -576,6 +587,13 @@ export type BotInstallationResolvers<ContextType = any, ParentType extends Resol
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
+  tasks_count?: Resolver<Array<ResolversTypes['BotInstallationTasksCount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BotInstallationTasksCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['BotInstallationTasksCount'] = ResolversParentTypes['BotInstallationTasksCount']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  state?: Resolver<ResolversTypes['TaskState'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -734,6 +752,7 @@ export type Resolvers<ContextType = any> = {
   Bot?: BotResolvers<ContextType>;
   BotBase?: BotBaseResolvers<ContextType>;
   BotInstallation?: BotInstallationResolvers<ContextType>;
+  BotInstallationTasksCount?: BotInstallationTasksCountResolvers<ContextType>;
   BotType?: BotTypeResolvers;
   DateTime?: GraphQLScalarType;
   Integration?: IntegrationResolvers<ContextType>;

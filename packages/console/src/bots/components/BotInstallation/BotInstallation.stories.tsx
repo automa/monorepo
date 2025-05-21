@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { makeFragmentData } from 'gql';
+import { TaskState } from 'gql/graphql';
 
 import BotInstallation from './BotInstallation';
 
@@ -17,13 +18,20 @@ const meta = {
         bot: {
           id: 1,
           name: 'Bot',
-          short_description: 'Short description',
           image_url: 'https://example.com/image.jpg',
           org: {
             id: 1,
             name: 'Org',
           },
         },
+        tasks_count: [
+          { count: 2, state: TaskState.Started },
+          { count: 3, state: TaskState.Completed },
+          { count: 1, state: TaskState.Submitted },
+          { count: 2, state: TaskState.Skipped },
+          { count: 1, state: TaskState.Failed },
+          { count: 1, state: TaskState.Cancelled },
+        ],
       },
       BOT_INSTALLATION_FRAGMENT,
     ),

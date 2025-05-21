@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
+import { useAnalyticsPage } from 'analytics';
 import { Button, Flex, Loader, Typography } from 'shared';
 
 import { BotInstallation } from 'bots';
@@ -11,6 +12,8 @@ import { BotInstallationsProps } from './types';
 import { BOT_INSTALLATIONS_QUERY } from './BotInstallations.queries';
 
 const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
+  useAnalyticsPage('Bots', 'Bot Installations Overview');
+
   // TODO: Add infinite scroll (with pagination cache)
   const { data, loading } = useQuery(BOT_INSTALLATIONS_QUERY, {
     variables: {
@@ -35,7 +38,7 @@ const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
       {loading && !data ? (
         <Loader />
       ) : (
-        <Flex direction="column" className="gap-2">
+        <Flex direction="column" className="gap-4">
           {data!.botInstallations.map((botInstallation) => (
             <BotInstallation
               key={botInstallation.id}

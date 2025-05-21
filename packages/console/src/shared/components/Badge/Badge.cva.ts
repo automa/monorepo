@@ -6,7 +6,7 @@ export const badge = cva(
     variants: {
       variant: {
         primary: 'bg-gray-100 text-neutral-700 ring-neutral-500/30',
-        tag: 'rounded-lg bg-sky-100 py-3 text-sky-600 ring-sky-500/10',
+        info: 'bg-sky-100 text-sky-700 ring-sky-500/30',
         success: 'bg-green-100 text-green-700 ring-green-500/30',
         warning: 'bg-yellow-100 text-yellow-700 ring-yellow-500/30',
         error: 'bg-red-100 text-red-700 ring-red-500/30',
