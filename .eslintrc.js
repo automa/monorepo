@@ -1,5 +1,5 @@
 const product = 'frontend-react';
-const modules = ['analytics', 'optimizer', 'shared', 'utils'];
+const modules = ['analytics', 'optimizer', 'utils'];
 const features = ['auth'];
 
 module.exports = {
@@ -50,7 +50,7 @@ module.exports = {
           ['^.*\\.css$'],
           ['^\u0000?(env|telemetry)$'],
           ['^(client|error|store|theme|tests)$'],
-          [`^(gql(/.*)?|${modules.join('|')})$`],
+          [`^(gql(/.*)?|shared(/.*)?|${modules.join('|')})$`],
           [`^(${features.join('|')})$`],
           ['^(assets|views)/.*'],
           [`^(${modules.concat(features).join('|')})/.*$`],
