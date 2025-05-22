@@ -88,8 +88,6 @@ export default async function (app: FastifyInstance) {
       return replyError(ErrorType.UNABLE_TO_READ_JIRA_USER);
     }
 
-    // TODO: Rotate webhook and refresh token every 30 days (bullmq)
-    // https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-webhooks/#api-rest-api-3-webhook-refresh-put
     const registerWebhook = () =>
       axios.post<{
         webhookRegistrationResult: (
@@ -180,11 +178,7 @@ export default async function (app: FastifyInstance) {
       return replyError(ErrorType.UNABLE_TO_REGISTER_JIRA_WEBHOOK);
     }
 
-    // Jira doesn't notify us if the user is deactivated or the app is uninstalled.
-    // But we don't seem to get any webhooks after that happens. Therefore, we don't
-    // need to delete the webhooks ourselves, but we need to constantly check if the
-    // connection is still valid and delete it if invalid.
-    // TODO: Add a job to check the connection and delete if invalid (bullmq)
+    // Save integration along with jira webhook information
     await app.prisma.integrations.create({
       data: {
         org_id: org.id,
@@ -200,6 +194,7 @@ export default async function (app: FastifyInstance) {
           scopes: jiraOrg.scopes,
           webhookId: data.createdWebhookId,
           userEmail: jiraUser.emailAddress,
+          refreshedAt: new Date(),
         },
         created_by: request.userId!,
       },
