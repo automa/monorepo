@@ -7,5 +7,9 @@ export const REPO_FRAGMENT = gql(`
     is_private
     is_archived
     has_installation
+    tasks_count {
+      state
+      count
+    }
   }
 `);

@@ -77,13 +77,7 @@ export type BotInstallation = {
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   org: PublicOrg;
-  tasks_count: Array<BotInstallationTasksCount>;
-};
-
-export type BotInstallationTasksCount = {
-  __typename?: 'BotInstallationTasksCount';
-  count: Scalars['Int']['output'];
-  state: TaskState;
+  tasks_count: Array<TasksCount>;
 };
 
 export type BotInstallationsFilter = {
@@ -308,6 +302,7 @@ export type Repo = {
   name: Scalars['String']['output'];
   org: Org;
   provider_id: Scalars['String']['output'];
+  tasks_count: Array<TasksCount>;
 };
 
 export type Task = {
@@ -369,6 +364,12 @@ export enum TaskState {
   Started = 'started',
   Submitted = 'submitted'
 }
+
+export type TasksCount = {
+  __typename?: 'TasksCount';
+  count: Scalars['Int']['output'];
+  state: TaskState;
+};
 
 export type TasksFilter = {
   bot_id?: InputMaybe<Scalars['Int']['input']>;
@@ -476,7 +477,6 @@ export type ResolversTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: ResolverTypeWrapper<bot_installations>;
-  BotInstallationTasksCount: ResolverTypeWrapper<Omit<BotInstallationTasksCount, 'state'> & { state: ResolversTypes['TaskState'] }>;
   BotInstallationsFilter: BotInstallationsFilter;
   BotType: ResolverTypeWrapper<bot>;
   BotUpdateInput: BotUpdateInput;
@@ -501,6 +501,7 @@ export type ResolversTypes = {
   TaskItem: ResolverTypeWrapper<task_items>;
   TaskItemType: ResolverTypeWrapper<task_item>;
   TaskState: ResolverTypeWrapper<task_state>;
+  TasksCount: ResolverTypeWrapper<Omit<TasksCount, 'state'> & { state: ResolversTypes['TaskState'] }>;
   TasksFilter: TasksFilter;
   User: ResolverTypeWrapper<users>;
   UserProvider: ResolverTypeWrapper<user_providers>;
@@ -515,7 +516,6 @@ export type ResolversParentTypes = {
   BotCreateInput: BotCreateInput;
   BotInstallInput: BotInstallInput;
   BotInstallation: bot_installations;
-  BotInstallationTasksCount: BotInstallationTasksCount;
   BotInstallationsFilter: BotInstallationsFilter;
   BotUpdateInput: BotUpdateInput;
   DateTime: Scalars['DateTime']['output'];
@@ -534,6 +534,7 @@ export type ResolversParentTypes = {
   TaskActivity: task_activities;
   TaskCreateInput: TaskCreateInput;
   TaskItem: task_items;
+  TasksCount: TasksCount;
   TasksFilter: TasksFilter;
   User: users;
   UserProvider: user_providers;
@@ -587,13 +588,7 @@ export type BotInstallationResolvers<ContextType = any, ParentType extends Resol
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
-  tasks_count?: Resolver<Array<ResolversTypes['BotInstallationTasksCount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type BotInstallationTasksCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['BotInstallationTasksCount'] = ResolversParentTypes['BotInstallationTasksCount']> = {
-  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  state?: Resolver<ResolversTypes['TaskState'], ParentType, ContextType>;
+  tasks_count?: Resolver<Array<ResolversTypes['TasksCount']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -693,6 +688,7 @@ export type RepoResolvers<ContextType = any, ParentType extends ResolversParentT
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
   provider_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tasks_count?: Resolver<Array<ResolversTypes['TasksCount']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -733,6 +729,12 @@ export type TaskItemTypeResolvers = EnumResolverSignature<{ activity?: any, bot?
 
 export type TaskStateResolvers = EnumResolverSignature<{ cancelled?: any, completed?: any, failed?: any, skipped?: any, started?: any, submitted?: any }, ResolversTypes['TaskState']>;
 
+export type TasksCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['TasksCount'] = ResolversParentTypes['TasksCount']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  state?: Resolver<ResolversTypes['TaskState'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -752,7 +754,6 @@ export type Resolvers<ContextType = any> = {
   Bot?: BotResolvers<ContextType>;
   BotBase?: BotBaseResolvers<ContextType>;
   BotInstallation?: BotInstallationResolvers<ContextType>;
-  BotInstallationTasksCount?: BotInstallationTasksCountResolvers<ContextType>;
   BotType?: BotTypeResolvers;
   DateTime?: GraphQLScalarType;
   Integration?: IntegrationResolvers<ContextType>;
@@ -771,6 +772,7 @@ export type Resolvers<ContextType = any> = {
   TaskItem?: TaskItemResolvers<ContextType>;
   TaskItemType?: TaskItemTypeResolvers;
   TaskState?: TaskStateResolvers;
+  TasksCount?: TasksCountResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserProvider?: UserProviderResolvers<ContextType>;
 };

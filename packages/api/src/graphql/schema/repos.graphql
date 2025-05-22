@@ -13,4 +13,6 @@ type Repo {
   created_at: DateTime!
 
   org: Org!
+
+  tasks_count: [TasksCount!]!
 }

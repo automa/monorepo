@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { makeFragmentData } from 'gql';
+import { TaskState } from 'gql/graphql';
 
 import Repo from './Repo';
 
@@ -17,6 +18,14 @@ const meta = {
         is_archived: false,
         is_private: false,
         has_installation: true,
+        tasks_count: [
+          { count: 2, state: TaskState.Started },
+          { count: 3, state: TaskState.Completed },
+          { count: 1, state: TaskState.Submitted },
+          { count: 2, state: TaskState.Skipped },
+          { count: 1, state: TaskState.Failed },
+          { count: 1, state: TaskState.Cancelled },
+        ],
       },
       REPO_FRAGMENT,
     ),

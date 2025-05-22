@@ -1,4 +1,5 @@
 import { QueryResolvers, Resolvers } from '@automa/common';
+import { task_item } from '@automa/prisma';
 
 import { Context } from '../types';
 
@@ -43,5 +44,25 @@ export const Repo: Resolvers<Context>['Repo'] = {
         id: org_id,
       },
     });
+  },
+  tasks_count: async ({ id, org_id }, args, { prisma }) => {
+    const counts = await prisma.tasks.groupBy({
+      by: ['state'],
+      where: {
+        org_id,
+        task_items: {
+          some: {
+            type: task_item.repo,
+            repo_id: id,
+          },
+        },
+      },
+      _count: true,
+    });
+
+    return counts.map(({ _count, state }) => ({
+      state,
+      count: _count,
+    }));
   },
 };
