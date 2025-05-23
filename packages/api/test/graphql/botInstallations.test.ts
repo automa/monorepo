@@ -215,6 +215,7 @@ suite('graphql botInstallations', () => {
                 created_at
                 org {
                   name
+                  provider_name
                 }
                 bot {
                   name
@@ -259,6 +260,7 @@ suite('graphql botInstallations', () => {
 
         assert.isNumber(botInstallations[0].id);
         assert.equal(botInstallations[0].org.name, org.name);
+        assert.equal(botInstallations[0].org.provider_name, org.name);
         assert.equal(botInstallations[0].bot.name, bot.name);
         assert.equal(botInstallations[0].bot.org.name, org.name);
         assert.isString(botInstallations[0].created_at);
@@ -286,6 +288,7 @@ suite('graphql botInstallations', () => {
 
         assert.isNumber(botInstallations[1].id);
         assert.equal(botInstallations[1].org.name, org.name);
+        assert.equal(botInstallations[1].org.provider_name, org.name);
         assert.equal(botInstallations[1].bot.name, secondOrgBot.name);
         assert.equal(botInstallations[1].bot.org.name, secondOrg.name);
         assert.isString(botInstallations[1].created_at);
@@ -293,6 +296,7 @@ suite('graphql botInstallations', () => {
 
         assert.isNumber(botInstallations[2].id);
         assert.equal(botInstallations[2].org.name, org.name);
+        assert.equal(botInstallations[2].org.provider_name, org.name);
         assert.equal(botInstallations[2].bot.name, nonMemberOrgBot.name);
         assert.equal(botInstallations[2].bot.org.name, nonMemberOrg.name);
         assert.isString(botInstallations[2].created_at);
@@ -300,6 +304,7 @@ suite('graphql botInstallations', () => {
 
         assert.isNumber(botInstallations[3].id);
         assert.equal(botInstallations[3].org.name, org.name);
+        assert.equal(botInstallations[3].org.provider_name, org.name);
         assert.equal(botInstallations[3].bot.name, nonPublishedBot.name);
         assert.equal(botInstallations[3].bot.org.name, org.name);
         assert.isString(botInstallations[3].created_at);
@@ -375,41 +380,6 @@ suite('graphql botInstallations', () => {
 
       assert.isNumber(botInstallations[1].id);
       assert.equal(botInstallations[1].bot.name, nonMemberOrgBot.name);
-    });
-
-    test('should restrict PublicOrg fields', async () => {
-      const response = await graphql(
-        app,
-        `
-          query botInstallations($org_id: Int!) {
-            botInstallations(org_id: $org_id) {
-              id
-              org {
-                provider_name
-              }
-            }
-          }
-        `,
-        {
-          id: bot.id,
-        },
-      );
-
-      assert.equal(response.statusCode, 400);
-
-      assert.equal(
-        response.headers['content-type'],
-        'application/json; charset=utf-8',
-      );
-
-      const { errors } = response.json();
-
-      assert.lengthOf(errors, 1);
-      assert.include(
-        errors[0].message,
-        'Cannot query field "provider_name" on type "PublicOrg".',
-      );
-      assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
     });
 
     test('should restrict PublicBot fields', async () => {

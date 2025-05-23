@@ -32,7 +32,7 @@ interface BotBase {
 
 type PublicBot implements BotBase @inherits(type: "BotBase") {
   org: PublicOrg!
-  installation(org_id: Int!): BotInstallation
+  installation(org_id: Int!): PublicBotInstallation
 }
 
 input PublicBotsFilter {

@@ -76,7 +76,7 @@ export type BotInstallation = {
   bot: PublicBot;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
-  org: PublicOrg;
+  org: Org;
   tasks_count: Array<TasksCount>;
 };
 
@@ -191,7 +191,7 @@ export type PublicBot = BotBase & {
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   image_url?: Maybe<Scalars['String']['output']>;
-  installation?: Maybe<BotInstallation>;
+  installation?: Maybe<PublicBotInstallation>;
   is_deterministic: Scalars['Boolean']['output'];
   is_preview: Scalars['Boolean']['output'];
   is_published: Scalars['Boolean']['output'];
@@ -205,6 +205,13 @@ export type PublicBot = BotBase & {
 
 export type PublicBotInstallationArgs = {
   org_id: Scalars['Int']['input'];
+};
+
+export type PublicBotInstallation = {
+  __typename?: 'PublicBotInstallation';
+  created_at: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  org: PublicOrg;
 };
 
 export type PublicBotsFilter = {
@@ -490,6 +497,7 @@ export type ResolversTypes = {
   Org: ResolverTypeWrapper<orgs>;
   ProviderType: ResolverTypeWrapper<provider>;
   PublicBot: ResolverTypeWrapper<public_bots>;
+  PublicBotInstallation: ResolverTypeWrapper<bot_installations>;
   PublicBotsFilter: PublicBotsFilter;
   PublicOrg: ResolverTypeWrapper<public_orgs>;
   Query: ResolverTypeWrapper<{}>;
@@ -526,6 +534,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   Org: orgs;
   PublicBot: public_bots;
+  PublicBotInstallation: bot_installations;
   PublicBotsFilter: PublicBotsFilter;
   PublicOrg: public_orgs;
   Query: {};
@@ -588,7 +597,7 @@ export type BotInstallationResolvers<ContextType = any, ParentType extends Resol
   bot?: Resolver<ResolversTypes['PublicBot'], ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
+  org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
   tasks_count?: Resolver<Array<ResolversTypes['TasksCount']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -645,7 +654,7 @@ export type PublicBotResolvers<ContextType = any, ParentType extends ResolversPa
   homepage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   image_url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  installation?: Resolver<Maybe<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<PublicBotInstallationArgs, 'org_id'>>;
+  installation?: Resolver<Maybe<ResolversTypes['PublicBotInstallation']>, ParentType, ContextType, RequireFields<PublicBotInstallationArgs, 'org_id'>>;
   is_deterministic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   is_preview?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   is_published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -654,6 +663,13 @@ export type PublicBotResolvers<ContextType = any, ParentType extends ResolversPa
   paths?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   short_description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['BotType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PublicBotInstallationResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublicBotInstallation'] = ResolversParentTypes['PublicBotInstallation']> = {
+  created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  org?: Resolver<ResolversTypes['PublicOrg'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -764,6 +780,7 @@ export type Resolvers<ContextType = any> = {
   Org?: OrgResolvers<ContextType>;
   ProviderType?: ProviderTypeResolvers;
   PublicBot?: PublicBotResolvers<ContextType>;
+  PublicBotInstallation?: PublicBotInstallationResolvers<ContextType>;
   PublicOrg?: PublicOrgResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Repo?: RepoResolvers<ContextType>;

@@ -15,11 +15,15 @@ type TasksCount {
   count: Int!
 }
 
-type BotInstallation {
+type PublicBotInstallation {
   id: Int!
   created_at: DateTime!
 
   org: PublicOrg!
+}
+
+type BotInstallation @inherits(type: "PublicBotInstallation") {
+  org: Org!
   bot: PublicBot!
 
   tasks_count: [TasksCount!]!
