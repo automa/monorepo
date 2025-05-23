@@ -110,6 +110,21 @@ export const Mutation: MutationResolvers<Context> = {
   },
 };
 
+export const PublicBotInstallation: Resolvers<Context>['PublicBotInstallation'] =
+  {
+    org: ({ id }, args, { prisma }) => {
+      return prisma.bot_installations
+        .findUniqueOrThrow({
+          where: {
+            id,
+          },
+        })
+        .orgs({
+          select: publicOrgFields,
+        });
+    },
+  };
+
 export const BotInstallation: Resolvers<Context>['BotInstallation'] = {
   org: ({ id }, args, { prisma }) => {
     return prisma.bot_installations
@@ -118,9 +133,7 @@ export const BotInstallation: Resolvers<Context>['BotInstallation'] = {
           id,
         },
       })
-      .orgs({
-        select: publicOrgFields,
-      });
+      .orgs();
   },
   bot: ({ id }, args, { prisma }) => {
     return prisma.bot_installations

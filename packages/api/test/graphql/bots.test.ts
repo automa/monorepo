@@ -1372,46 +1372,6 @@ suite('graphql bots', () => {
         );
         assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
       });
-
-      test('should restrict PublicBot fields', async () => {
-        const response = await graphql(
-          app,
-          `
-            query publicBot($org_name: String!, $name: String!, $org_id: Int!) {
-              publicBot(org_name: $org_name, name: $name) {
-                id
-                installation(org_id: $org_id) {
-                  id
-                  bot {
-                    webhook_url
-                  }
-                }
-              }
-            }
-          `,
-          {
-            org_name: nonMemberOrg.name,
-            name: nonMemberOrgBot.name,
-            org_id: org.id,
-          },
-        );
-
-        assert.equal(response.statusCode, 400);
-
-        assert.equal(
-          response.headers['content-type'],
-          'application/json; charset=utf-8',
-        );
-
-        const { errors } = response.json();
-
-        assert.lengthOf(errors, 1);
-        assert.include(
-          errors[0].message,
-          'Cannot query field "webhook_url" on type "PublicBot".',
-        );
-        assert.equal(errors[0].extensions.code, 'GRAPHQL_VALIDATION_FAILED');
-      });
     });
   });
 

@@ -56,12 +56,14 @@ export const Query: QueryResolvers<Context> = {
 };
 
 export const Repo: Resolvers<Context>['Repo'] = {
-  org: ({ org_id }, args, { prisma }) => {
-    return prisma.orgs.findUniqueOrThrow({
-      where: {
-        id: org_id,
-      },
-    });
+  org: ({ id }, args, { prisma }) => {
+    return prisma.repos
+      .findUniqueOrThrow({
+        where: {
+          id,
+        },
+      })
+      .orgs();
   },
   tasks_count: async ({ id, org_id }, args, { prisma }) => {
     const counts = await prisma.tasks.groupBy({

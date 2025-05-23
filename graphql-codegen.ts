@@ -22,6 +22,7 @@ const config: CodegenConfig = {
           BotType: '@prisma/client#bot',
           PublicBot: './public#public_bots',
           Bot: '@prisma/client#bots',
+          PublicBotInstallation: '@prisma/client#bot_installations',
           BotInstallation: '@prisma/client#bot_installations',
           IntegrationType: '@prisma/client#integration',
           Integration: '@prisma/client#integrations',

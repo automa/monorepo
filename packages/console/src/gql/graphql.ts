@@ -72,7 +72,7 @@ export type BotInstallation = {
   bot: PublicBot;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
-  org: PublicOrg;
+  org: Org;
   tasks_count: Array<TasksCount>;
 };
 
@@ -187,7 +187,7 @@ export type PublicBot = BotBase & {
   homepage?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   image_url?: Maybe<Scalars['String']['output']>;
-  installation?: Maybe<BotInstallation>;
+  installation?: Maybe<PublicBotInstallation>;
   is_deterministic: Scalars['Boolean']['output'];
   is_preview: Scalars['Boolean']['output'];
   is_published: Scalars['Boolean']['output'];
@@ -201,6 +201,13 @@ export type PublicBot = BotBase & {
 
 export type PublicBotInstallationArgs = {
   org_id: Scalars['Int']['input'];
+};
+
+export type PublicBotInstallation = {
+  __typename?: 'PublicBotInstallation';
+  created_at: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  org: PublicOrg;
 };
 
 export type PublicBotsFilter = {
@@ -402,7 +409,7 @@ export type BotBaseFragment = BotBase_Bot_Fragment | BotBase_PublicBot_Fragment;
 export type BotInstallationFragment = { __typename?: 'BotInstallation', id: number, created_at: any, bot: { __typename?: 'PublicBot', id: number, name: string, image_url?: string | null, org: { __typename?: 'PublicOrg', id: number, name: string } }, tasks_count: Array<{ __typename?: 'TasksCount', state: TaskState, count: number }> } & { ' $fragmentName'?: 'BotInstallationFragment' };
 
 export type PublicBotFragment = (
-  { __typename?: 'PublicBot', org: { __typename?: 'PublicOrg', name: string }, installation?: { __typename?: 'BotInstallation', id: number } | null }
+  { __typename?: 'PublicBot', org: { __typename?: 'PublicOrg', name: string }, installation?: { __typename?: 'PublicBotInstallation', id: number } | null }
   & { ' $fragmentRefs'?: { 'BotBase_PublicBot_Fragment': BotBase_PublicBot_Fragment } }
 ) & { ' $fragmentName'?: 'PublicBotFragment' };
 
@@ -460,7 +467,7 @@ export type BotInstallationBotQueryVariables = Exact<{
 }>;
 
 
-export type BotInstallationBotQuery = { __typename?: 'Query', publicBot: { __typename?: 'PublicBot', id: number, short_description: string, type: BotType, image_url?: string | null, installation?: { __typename?: 'BotInstallation', id: number } | null } };
+export type BotInstallationBotQuery = { __typename?: 'Query', publicBot: { __typename?: 'PublicBot', id: number, short_description: string, type: BotType, image_url?: string | null, installation?: { __typename?: 'PublicBotInstallation', id: number } | null } };
 
 export type BotInstallationTasksQueryVariables = Exact<{
   org_id: Scalars['Int']['input'];
@@ -508,7 +515,7 @@ export type PublicBotQueryVariables = Exact<{
 }>;
 
 
-export type PublicBotQuery = { __typename?: 'Query', publicBot: { __typename?: 'PublicBot', id: number, name: string, short_description: string, type: BotType, paths: Array<string>, image_url?: string | null, description?: any | null, homepage?: string | null, is_published: boolean, is_preview: boolean, is_deterministic: boolean, org: { __typename?: 'PublicOrg', name: string }, installation?: { __typename?: 'BotInstallation', id: number } | null } };
+export type PublicBotQuery = { __typename?: 'Query', publicBot: { __typename?: 'PublicBot', id: number, name: string, short_description: string, type: BotType, paths: Array<string>, image_url?: string | null, description?: any | null, homepage?: string | null, is_published: boolean, is_preview: boolean, is_deterministic: boolean, org: { __typename?: 'PublicOrg', name: string }, installation?: { __typename?: 'PublicBotInstallation', id: number } | null } };
 
 export type BotInstallMutationVariables = Exact<{
   org_id: Scalars['Int']['input'];
