@@ -70,10 +70,6 @@ const Org: React.FC<OrgProps> = () => {
         path: 'integrations',
       },
       {
-        name: 'Insights',
-        path: 'insights',
-      },
-      {
         name: 'Settings',
         path: 'settings',
       },

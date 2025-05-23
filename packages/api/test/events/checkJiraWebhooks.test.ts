@@ -71,7 +71,6 @@ suite('events/checkJiraWebhooks', () => {
           secrets: {},
         },
       });
-      console.log('updated connection');
 
       await checkJiraWebhooks.handler?.(app, {});
     });

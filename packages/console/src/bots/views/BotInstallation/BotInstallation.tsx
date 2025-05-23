@@ -123,7 +123,9 @@ const BotInstallation: React.FC<BotInstallationProps> = ({ org }) => {
                 <Typography variant="title6">
                   {botOrgName}/{botName}
                 </Typography>
-                <Typography variant="small">{bot.short_description}</Typography>
+                <Typography variant="small" className="text-neutral-600">
+                  {bot.short_description}
+                </Typography>
               </Flex>
             </Flex>
             {bot.installation && (
