@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Robot, Trash } from '@phosphor-icons/react';
 
 import { useAnalyticsPage } from 'analytics';
+import { TaskItemType } from 'gql/graphql';
 import { Button, Flex, Loader, toast, Tooltip, Typography } from 'shared';
 
 import { useOrg } from 'orgs';
@@ -150,7 +151,11 @@ const BotInstallation: React.FC<BotInstallationProps> = ({ org }) => {
           ) : (
             <Flex direction="column" className="gap-4">
               {data.tasks.map((task) => (
-                <Task key={task.id} task={task} />
+                <Task
+                  key={task.id}
+                  task={task}
+                  filteredOn={[TaskItemType.Bot]}
+                />
               ))}
             </Flex>
           )}

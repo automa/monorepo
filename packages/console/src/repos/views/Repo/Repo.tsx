@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { ShareFat } from '@phosphor-icons/react';
 
 import { useAnalyticsPage } from 'analytics';
-import { ProviderType } from 'gql/graphql';
+import { ProviderType, TaskItemType } from 'gql/graphql';
 import { Button, Flex, Loader, Tooltip, Typography } from 'shared';
 
 import { Task } from 'tasks';
@@ -75,7 +75,11 @@ const Repo: React.FC<RepoProps> = ({ org }) => {
           ) : (
             <Flex direction="column" className="gap-4">
               {data.tasks.map((task) => (
-                <Task key={task.id} task={task} />
+                <Task
+                  key={task.id}
+                  task={task}
+                  filteredOn={[TaskItemType.Repo]}
+                />
               ))}
             </Flex>
           )}

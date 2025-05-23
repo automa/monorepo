@@ -8,6 +8,7 @@ export const TASK_FRAGMENT = gql(`
     state
     created_at
     items {
+      type
       ...TaskItem
     }
   }
