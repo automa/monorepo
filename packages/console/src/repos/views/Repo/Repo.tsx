@@ -59,7 +59,7 @@ const Repo: React.FC<RepoProps> = ({ org }) => {
             <Typography variant="title4">{repoName}</Typography>
             <Flex alignItems="center" className="gap-2">
               {repo.has_installation && (
-                <Button to="../tasks/new">Create Task</Button>
+                <Button to={`../tasks/new?repo=${repo.id}`}>Create Task</Button>
               )}
               <Tooltip body="View repository in provider">
                 <Button variant="secondary" icon href={repoLink} blank>
