@@ -68,8 +68,7 @@ const repoDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
   [ProviderType.Github]: {
     logo: <GithubLogo className="size-3" />,
     title: ({ repo }) => repo!.name,
-    // TODO: Fix link
-    to: ({ repo }) => '../repos',
+    to: ({ repo }) => `../repos/${repo!.name}`,
     content: ({ repo }) => (
       <Flex direction="column" className="gap-2">
         <Flex alignItems="center" className="gap-1">

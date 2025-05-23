@@ -1,1 +1,5 @@
-export interface RepoProps {}
+import { Org } from 'orgs';
+
+export interface RepoProps {
+  org: Org;
+}

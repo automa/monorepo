@@ -272,7 +272,7 @@ export type QueryPublicBotsArgs = {
 
 export type QueryRepoArgs = {
   name: Scalars['String']['input'];
-  org_name: Scalars['String']['input'];
+  org_id: Scalars['Int']['input'];
 };
 
 
@@ -374,6 +374,7 @@ export type TasksCount = {
 export type TasksFilter = {
   bot_id?: InputMaybe<Scalars['Int']['input']>;
   is_scheduled?: InputMaybe<Scalars['Boolean']['input']>;
+  repo_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type User = {
@@ -672,7 +673,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   orgs?: Resolver<Array<ResolversTypes['Org']>, ParentType, ContextType>;
   publicBot?: Resolver<ResolversTypes['PublicBot'], ParentType, ContextType, RequireFields<QueryPublicBotArgs, 'name' | 'org_name'>>;
   publicBots?: Resolver<Array<ResolversTypes['PublicBot']>, ParentType, ContextType, Partial<QueryPublicBotsArgs>>;
-  repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_name'>>;
+  repo?: Resolver<Maybe<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryRepoArgs, 'name' | 'org_id'>>;
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
   task?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<QueryTaskArgs, 'id' | 'org_id'>>;
   tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTasksArgs, 'org_id'>>;
