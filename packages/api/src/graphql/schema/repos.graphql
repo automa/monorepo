@@ -1,6 +1,6 @@
 type Query {
   repos(org_id: Int!): [Repo!]!
-  repo(org_name: String!, name: String!): Repo
+  repo(org_id: Int!, name: String!): Repo
 }
 
 type Repo {
@@ -13,4 +13,6 @@ type Repo {
   created_at: DateTime!
 
   org: Org!
+
+  tasks_count: [TasksCount!]!
 }

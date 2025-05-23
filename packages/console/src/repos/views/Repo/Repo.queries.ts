@@ -2,22 +2,31 @@ import { gql } from 'gql';
 
 export const REPO_QUERY = gql(`
   query Repo(
-    $org_name: String!
+    $org_id: Int!
     $name: String!
   ) {
-    repo(org_name: $org_name, name: $name) {
+    repo(org_id: $org_id, name: $name) {
       id
       name
-      provider_id
       is_private
       is_archived
       has_installation
       org {
-        id
         name
         provider_type
-        github_installation_id
       }
+    }
+  }
+`);
+
+export const REPO_TASKS_QUERY = gql(`
+  query RepoTasks(
+    $org_id: Int!
+    $repo_id: Int!
+  ) {
+    tasks(org_id: $org_id, filter: { repo_id: $repo_id }) {
+      id
+      ...Task
     }
   }
 `);

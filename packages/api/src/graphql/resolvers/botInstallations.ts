@@ -8,6 +8,7 @@ import {
   QueryResolvers,
   Resolvers,
 } from '@automa/common';
+import { task_item } from '@automa/prisma';
 
 import { Context } from '../types';
 
@@ -139,7 +140,7 @@ export const BotInstallation: Resolvers<Context>['BotInstallation'] = {
         org_id,
         task_items: {
           some: {
-            type: 'bot',
+            type: task_item.bot,
             bot_id,
           },
         },

@@ -35,6 +35,11 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     resolver: zodResolver(taskCreateSchema),
   });
 
+  const searchParams = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search],
+  );
+
   // Load bot installations
   const { data: botInstallationsData, loading: botInstallationsLoading } =
     useQuery(BOT_INSTALLATIONS_AS_OPTIONS_QUERY, {
@@ -53,7 +58,6 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
   );
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
     const botInstallationId = parseInt(searchParams.get('bot') ?? '0', 10);
 
     if (!botInstallationId) return;
@@ -65,7 +69,7 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     if (!botInstallation) return;
 
     setValue('bot_installation_id', botInstallation.id);
-  }, [location, botInstallations, setValue]);
+  }, [searchParams, botInstallations, setValue]);
 
   // Load repositories
   const { data: repositoriesData, loading: repositoriesLoading } = useQuery(
@@ -77,10 +81,26 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     },
   );
 
-  const repositories = (repositoriesData?.repos ?? []).map((repo) => ({
-    ...repo,
-    value: repo.name,
-  }));
+  const repositories = useMemo(
+    () =>
+      (repositoriesData?.repos ?? []).map((repo) => ({
+        ...repo,
+        value: repo.name,
+      })),
+    [repositoriesData],
+  );
+
+  useEffect(() => {
+    const repoId = parseInt(searchParams.get('repo') ?? '0', 10);
+
+    if (!repoId) return;
+
+    const repo = repositories.find((repo) => repo.id === repoId);
+
+    if (!repo) return;
+
+    setValue('repo_id', repo.id);
+  }, [searchParams, repositories, setValue]);
 
   // TODO: Handle error
   const [taskCreate, { data, loading, error }] = useMutation(

@@ -51,22 +51,20 @@ const BotInstallation: React.FC<BotInstallationProps> = ({
 
   return (
     <Link to={`${bot.org.name}/${bot.name}`}>
-      <Container>
+      <Container {...props}>
         <Flex justifyContent="space-between">
-          <Flex {...props} alignItems="center" className="gap-4">
+          <Flex alignItems="center" className="gap-4">
             {bot.image_url ? (
               <img src={bot.image_url} alt={bot.name} className="size-6" />
             ) : (
               <Robot className="size-6 text-neutral-400" />
             )}
-            <Flex alignItems="center" className="gap-2">
-              <Typography variant="medium" className="break-all">
-                {bot.org.name} / {bot.name}
-              </Typography>
-            </Flex>
+            <Typography className="break-all">
+              {bot.org.name} / {bot.name}
+            </Typography>
           </Flex>
           <Flex alignItems="center" className="gap-4">
-            <Tooltip body="Tasks assigned to this bot">
+            <Tooltip body="Total tasks assigned to this bot">
               <Item>
                 <PlusCircle className="size-4" />
                 <ItemText>{totalTasksCount}</ItemText>

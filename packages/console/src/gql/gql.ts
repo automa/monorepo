@@ -31,12 +31,13 @@ const documents = {
     "\n  mutation BotInstall($org_id: Int!, $input: BotInstallInput!) {\n    botInstall(org_id: $org_id, input: $input) {\n      ...BotInstallation\n    }\n  }\n": types.BotInstallDocument,
     "\n  query PublicBots($org_id: Int!, $filter: PublicBotsFilter) {\n    publicBots(filter: $filter) {\n      id\n      ...PublicBot\n    }\n  }\n": types.PublicBotsDocument,
     "\n  query IntegrationSetupGithub {\n    orgs {\n      name\n      github_installation_id\n    }\n  }\n": types.IntegrationSetupGithubDocument,
-    "\n  fragment OrgsQuery on Query {\n    orgs {\n      id\n      name\n      provider_type\n      provider_id\n      provider_name\n      has_installation\n\n      bot_installations_count\n    }\n  }\n": types.OrgsQueryFragmentDoc,
+    "\n  fragment OrgsQuery on Query {\n    orgs {\n      id\n      name\n      provider_type\n      provider_id\n      provider_name\n      has_installation\n      github_installation_id\n\n      bot_installations_count\n    }\n  }\n": types.OrgsQueryFragmentDoc,
     "\n  query Integrations($org_id: Int!) {\n    integrations(org_id: $org_id) {\n      id\n      type\n      config\n      created_at\n      author {\n        name\n      }\n    }\n  }\n": types.IntegrationsDocument,
-    "\n  fragment Repo on Repo {\n    id\n    name\n    is_private\n    is_archived\n    has_installation\n  }\n": types.RepoFragmentDoc,
-    "\n  query Repo(\n    $org_name: String!\n    $name: String!\n  ) {\n    repo(org_name: $org_name, name: $name) {\n      id\n      name\n      provider_id\n      is_private\n      is_archived\n      has_installation\n      org {\n        id\n        name\n        provider_type\n        github_installation_id\n      }\n    }\n  }\n": types.RepoDocument,
+    "\n  fragment Repo on Repo {\n    id\n    name\n    is_private\n    is_archived\n    has_installation\n    tasks_count {\n      state\n      count\n    }\n  }\n": types.RepoFragmentDoc,
+    "\n  query Repo(\n    $org_id: Int!\n    $name: String!\n  ) {\n    repo(org_id: $org_id, name: $name) {\n      id\n      name\n      is_private\n      is_archived\n      has_installation\n      org {\n        name\n        provider_type\n      }\n    }\n  }\n": types.RepoDocument,
+    "\n  query RepoTasks(\n    $org_id: Int!\n    $repo_id: Int!\n  ) {\n    tasks(org_id: $org_id, filter: { repo_id: $repo_id }) {\n      id\n      ...Task\n    }\n  }\n": types.RepoTasksDocument,
     "\n  query Repos($org_id: Int!) {\n    repos(org_id: $org_id) {\n      id\n      ...Repo\n    }\n  }\n": types.ReposDocument,
-    "\n  fragment Task on Task {\n    id\n    title\n    is_scheduled\n    state\n    created_at\n    items {\n      ...TaskItem\n    }\n  }\n": types.TaskFragmentDoc,
+    "\n  fragment Task on Task {\n    id\n    title\n    is_scheduled\n    state\n    created_at\n    items {\n      type\n      ...TaskItem\n    }\n  }\n": types.TaskFragmentDoc,
     "\n  fragment TaskItem on TaskItem {\n    id\n    type\n    data\n    created_at\n    actor_user {\n      ...UserAvatar\n    }\n    bot {\n      id\n      name\n      short_description\n      image_url\n      org {\n        id\n        name\n      }\n    }\n    repo {\n      id\n      name\n      org {\n        id\n        provider_type\n        provider_name\n      }\n    }\n    activity {\n      id\n      type\n      from_state\n      to_state\n    }\n  }\n": types.TaskItemFragmentDoc,
     "\n  query Task($org_id: Int!, $id: Int!) {\n    task(org_id: $org_id, id: $id) {\n      id\n      ...Task\n    }\n  }\n": types.TaskDocument,
     "\n  mutation TaskCreate($org_id: Int!, $input: TaskCreateInput!) {\n    taskCreate(org_id: $org_id, input: $input) {\n      ...Task\n    }\n  }\n": types.TaskCreateDocument,
@@ -135,7 +136,7 @@ export function gql(source: "\n  query IntegrationSetupGithub {\n    orgs {\n   
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment OrgsQuery on Query {\n    orgs {\n      id\n      name\n      provider_type\n      provider_id\n      provider_name\n      has_installation\n\n      bot_installations_count\n    }\n  }\n"): (typeof documents)["\n  fragment OrgsQuery on Query {\n    orgs {\n      id\n      name\n      provider_type\n      provider_id\n      provider_name\n      has_installation\n\n      bot_installations_count\n    }\n  }\n"];
+export function gql(source: "\n  fragment OrgsQuery on Query {\n    orgs {\n      id\n      name\n      provider_type\n      provider_id\n      provider_name\n      has_installation\n      github_installation_id\n\n      bot_installations_count\n    }\n  }\n"): (typeof documents)["\n  fragment OrgsQuery on Query {\n    orgs {\n      id\n      name\n      provider_type\n      provider_id\n      provider_name\n      has_installation\n      github_installation_id\n\n      bot_installations_count\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -143,11 +144,15 @@ export function gql(source: "\n  query Integrations($org_id: Int!) {\n    integr
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment Repo on Repo {\n    id\n    name\n    is_private\n    is_archived\n    has_installation\n  }\n"): (typeof documents)["\n  fragment Repo on Repo {\n    id\n    name\n    is_private\n    is_archived\n    has_installation\n  }\n"];
+export function gql(source: "\n  fragment Repo on Repo {\n    id\n    name\n    is_private\n    is_archived\n    has_installation\n    tasks_count {\n      state\n      count\n    }\n  }\n"): (typeof documents)["\n  fragment Repo on Repo {\n    id\n    name\n    is_private\n    is_archived\n    has_installation\n    tasks_count {\n      state\n      count\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query Repo(\n    $org_name: String!\n    $name: String!\n  ) {\n    repo(org_name: $org_name, name: $name) {\n      id\n      name\n      provider_id\n      is_private\n      is_archived\n      has_installation\n      org {\n        id\n        name\n        provider_type\n        github_installation_id\n      }\n    }\n  }\n"): (typeof documents)["\n  query Repo(\n    $org_name: String!\n    $name: String!\n  ) {\n    repo(org_name: $org_name, name: $name) {\n      id\n      name\n      provider_id\n      is_private\n      is_archived\n      has_installation\n      org {\n        id\n        name\n        provider_type\n        github_installation_id\n      }\n    }\n  }\n"];
+export function gql(source: "\n  query Repo(\n    $org_id: Int!\n    $name: String!\n  ) {\n    repo(org_id: $org_id, name: $name) {\n      id\n      name\n      is_private\n      is_archived\n      has_installation\n      org {\n        name\n        provider_type\n      }\n    }\n  }\n"): (typeof documents)["\n  query Repo(\n    $org_id: Int!\n    $name: String!\n  ) {\n    repo(org_id: $org_id, name: $name) {\n      id\n      name\n      is_private\n      is_archived\n      has_installation\n      org {\n        name\n        provider_type\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query RepoTasks(\n    $org_id: Int!\n    $repo_id: Int!\n  ) {\n    tasks(org_id: $org_id, filter: { repo_id: $repo_id }) {\n      id\n      ...Task\n    }\n  }\n"): (typeof documents)["\n  query RepoTasks(\n    $org_id: Int!\n    $repo_id: Int!\n  ) {\n    tasks(org_id: $org_id, filter: { repo_id: $repo_id }) {\n      id\n      ...Task\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -155,7 +160,7 @@ export function gql(source: "\n  query Repos($org_id: Int!) {\n    repos(org_id:
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment Task on Task {\n    id\n    title\n    is_scheduled\n    state\n    created_at\n    items {\n      ...TaskItem\n    }\n  }\n"): (typeof documents)["\n  fragment Task on Task {\n    id\n    title\n    is_scheduled\n    state\n    created_at\n    items {\n      ...TaskItem\n    }\n  }\n"];
+export function gql(source: "\n  fragment Task on Task {\n    id\n    title\n    is_scheduled\n    state\n    created_at\n    items {\n      type\n      ...TaskItem\n    }\n  }\n"): (typeof documents)["\n  fragment Task on Task {\n    id\n    title\n    is_scheduled\n    state\n    created_at\n    items {\n      type\n      ...TaskItem\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

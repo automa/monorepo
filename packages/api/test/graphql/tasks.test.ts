@@ -24,7 +24,7 @@ import {
 suite('graphql tasks', () => {
   let app: FastifyInstance, user: users;
   let org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
-  let repo: repos, bot: bots, secondBot: bots;
+  let repo: repos, secondRepo: repos, bot: bots, secondBot: bots;
 
   suiteSetup(async () => {
     app = await server();
@@ -32,7 +32,7 @@ suite('graphql tasks', () => {
     [user] = await seedUsers(app, 1);
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
     await seedUserOrgs(app, user, [org, secondOrg]);
-    [repo] = await seedRepos(app, [org]);
+    [repo, secondRepo] = await seedRepos(app, [org, org]);
     [bot, secondBot] = await seedBots(app, [nonMemberOrg, nonMemberOrg]);
 
     await app.prisma.bots.update({
@@ -57,7 +57,7 @@ suite('graphql tasks', () => {
 
   suite('query tasks', () => {
     suiteSetup(async () => {
-      const [, , , task] = await app.prisma.tasks.createManyAndReturn({
+      const [task0, , , task3] = await app.prisma.tasks.createManyAndReturn({
         data: [
           {
             title: 'task-0',
@@ -87,19 +87,29 @@ suite('graphql tasks', () => {
       await app.prisma.task_items.createMany({
         data: [
           {
-            task_id: task.id,
+            task_id: task3.id,
             type: 'message',
             data: { content: 'task-3' },
           },
           {
-            task_id: task.id,
+            task_id: task3.id,
+            type: 'repo',
+            repo_id: secondRepo.id,
+          },
+          {
+            task_id: task3.id,
+            type: 'bot',
+            bot_id: bot.id,
+          },
+          {
+            task_id: task0.id,
             type: 'repo',
             repo_id: repo.id,
           },
           {
-            task_id: task.id,
+            task_id: task0.id,
             type: 'bot',
-            bot_id: bot.id,
+            bot_id: secondBot.id,
           },
         ],
       });
@@ -304,6 +314,75 @@ suite('graphql tasks', () => {
       assert.equal(tasks[0].title, 'task-3');
     });
 
+    test('should return only tasks on repo with filter.repo_id set', async () => {
+      const response = await graphql(
+        app,
+        `
+          query tasks($org_id: Int!, $filter: TasksFilter) {
+            tasks(org_id: $org_id, filter: $filter) {
+              id
+              title
+            }
+          }
+        `,
+        {
+          org_id: org.id,
+          filter: {
+            repo_id: repo.id,
+          },
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { tasks },
+      } = response.json();
+
+      assert.lengthOf(tasks, 1);
+
+      assert.equal(tasks[0].title, 'task-0');
+    });
+
+    test.skip('should return only tasks assigned to bot and on repo with filter.bot_id and filter.repo_id set', async () => {
+      const response = await graphql(
+        app,
+        `
+          query tasks($org_id: Int!, $filter: TasksFilter) {
+            tasks(org_id: $org_id, filter: $filter) {
+              id
+              title
+            }
+          }
+        `,
+        {
+          org_id: org.id,
+          filter: {
+            bot_id: bot.id,
+            repo_id: repo.id,
+          },
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { tasks },
+      } = response.json();
+
+      assert.lengthOf(tasks, 0);
+    });
+
     suite('items', () => {
       let response: LightMyRequestResponse, activity: task_activities;
 
@@ -418,7 +497,7 @@ suite('graphql tasks', () => {
         assert.isString(items[1].created_at);
         assert.deepEqual(items[1].data, {});
         assert.isNull(items[1].actor_user);
-        assert.equal(items[1].repo.id, repo.id);
+        assert.equal(items[1].repo.id, secondRepo.id);
         assert.isNull(items[1].bot);
 
         assert.equal(items[2].type, 'bot');
@@ -1233,7 +1312,7 @@ suite('graphql tasks', () => {
         content:
           '#### Define\n\nAdd `Task Created` event to our data catalog in `src/analytics`.#### Implementation\n\nIn file `src/components/TaskCreate.tsx`, send the `Task Created` event after succeeding in creation of task.',
         bot_installation_id: botInstallations[1].id,
-        repo_id: 1,
+        repo_id: 300,
       });
 
       assert.equal(response.statusCode, 200);

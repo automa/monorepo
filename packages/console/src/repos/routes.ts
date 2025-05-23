@@ -9,6 +9,6 @@ export const routes = [
   },
   {
     Component: lazy(() => import('repos/views/Repo')),
-    path: '/repos/:repoName/*',
+    path: '/repos/:repoName',
   },
 ] satisfies Route[];

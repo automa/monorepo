@@ -31,6 +31,7 @@ type Task {
 input TasksFilter {
   is_scheduled: Boolean
   bot_id: Int
+  repo_id: Int
 }
 
 enum TaskActivityType {

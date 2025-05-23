@@ -130,8 +130,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
         <Typography variant="small">
           decided to implement the task in
         </Typography>
-        {/* TODO: Fix link */}
-        <Anchor to="../repos">
+        <Anchor to={`../repos/${taskItem.repo!.name}`}>
           <Flex alignItems="center" className="gap-1">
             <definition.icon className="ml-0.5 size-3" />
             <Subject>

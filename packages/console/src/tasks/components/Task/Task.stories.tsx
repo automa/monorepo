@@ -100,16 +100,19 @@ export const OriginAuthor = {
       {
         ...task,
         items: [
-          makeFragmentData(
-            {
-              id: 1,
-              type: TaskItemType.Origin,
-              created_at: '2024-05-15T09:04:04.629Z',
-              data: {},
-              actor_user,
-            },
-            TASK_ITEM_FRAGMENT,
-          ),
+          {
+            type: TaskItemType.Origin,
+            ...makeFragmentData(
+              {
+                id: 1,
+                type: TaskItemType.Origin,
+                created_at: '2024-05-15T09:04:04.629Z',
+                data: {},
+                actor_user,
+              },
+              TASK_ITEM_FRAGMENT,
+            ),
+          },
         ],
       },
       TASK_FRAGMENT,
@@ -123,10 +126,13 @@ export const OriginIntegration = {
       {
         ...task,
         items: [
-          makeFragmentData(
-            TaskItemBadgeStory.args.taskItem,
-            TASK_ITEM_FRAGMENT,
-          ),
+          {
+            type: TaskItemType.Origin,
+            ...makeFragmentData(
+              TaskItemBadgeStory.args.taskItem,
+              TASK_ITEM_FRAGMENT,
+            ),
+          },
         ],
       },
       TASK_FRAGMENT,
@@ -140,17 +146,20 @@ export const OriginIntegrationUser = {
       {
         ...task,
         items: [
-          makeFragmentData(
-            {
-              ...TaskItemBadgeStory.args.taskItem,
-              data: {
-                ...TaskItemBadgeStory.args.taskItem.data,
-                userName: 'John Doe',
-                userEmail: 'john@example.com',
+          {
+            type: TaskItemType.Origin,
+            ...makeFragmentData(
+              {
+                ...TaskItemBadgeStory.args.taskItem,
+                data: {
+                  ...TaskItemBadgeStory.args.taskItem.data,
+                  userName: 'John Doe',
+                  userEmail: 'john@example.com',
+                },
               },
-            },
-            TASK_ITEM_FRAGMENT,
-          ),
+              TASK_ITEM_FRAGMENT,
+            ),
+          },
         ],
       },
       TASK_FRAGMENT,
@@ -164,18 +173,21 @@ export const OriginIntegrationUserAuthor = {
       {
         ...task,
         items: [
-          makeFragmentData(
-            {
-              ...TaskItemBadgeStory.args.taskItem,
-              data: {
-                ...TaskItemBadgeStory.args.taskItem.data,
-                userName: 'John Doe',
-                userEmail: 'john@example.com',
+          {
+            type: TaskItemType.Origin,
+            ...makeFragmentData(
+              {
+                ...TaskItemBadgeStory.args.taskItem,
+                data: {
+                  ...TaskItemBadgeStory.args.taskItem.data,
+                  userName: 'John Doe',
+                  userEmail: 'john@example.com',
+                },
+                actor_user,
               },
-              actor_user,
-            },
-            TASK_ITEM_FRAGMENT,
-          ),
+              TASK_ITEM_FRAGMENT,
+            ),
+          },
         ],
       },
       TASK_FRAGMENT,
@@ -189,19 +201,45 @@ export const Badges = {
       {
         ...task,
         items: [
-          makeFragmentData(
-            TaskItemBadgeStory.args.taskItem,
-            TASK_ITEM_FRAGMENT,
-          ),
-          makeFragmentData(RepoGithub.args.taskItem, TASK_ITEM_FRAGMENT),
-          makeFragmentData(Bot.args.taskItem, TASK_ITEM_FRAGMENT),
-          makeFragmentData(
-            ProposalGithubOpen.args.taskItem,
-            TASK_ITEM_FRAGMENT,
-          ),
+          {
+            type: TaskItemType.Origin,
+            ...makeFragmentData(
+              TaskItemBadgeStory.args.taskItem,
+              TASK_ITEM_FRAGMENT,
+            ),
+          },
+          {
+            type: TaskItemType.Repo,
+            ...makeFragmentData(RepoGithub.args.taskItem, TASK_ITEM_FRAGMENT),
+          },
+          {
+            type: TaskItemType.Bot,
+            ...makeFragmentData(Bot.args.taskItem, TASK_ITEM_FRAGMENT),
+          },
+          {
+            type: TaskItemType.Proposal,
+            ...makeFragmentData(
+              ProposalGithubOpen.args.taskItem,
+              TASK_ITEM_FRAGMENT,
+            ),
+          },
         ],
       },
       TASK_FRAGMENT,
     ),
+  },
+} satisfies Story;
+
+export const FilteredOnBot = {
+  args: {
+    ...Badges.args,
+    filteredOn: [TaskItemType.Bot],
+  },
+} satisfies Story;
+
+export const FilteredOnRepo = {
+  args: {
+    ...Badges.args,
+    filteredOn: [TaskItemType.Repo],
   },
 } satisfies Story;

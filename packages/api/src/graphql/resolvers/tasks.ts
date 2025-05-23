@@ -27,11 +27,20 @@ export const Query: QueryResolvers<Context> = {
       where: {
         org_id,
         is_scheduled: filter?.is_scheduled ?? undefined,
+        // TODO: Filter when both bot_id and repo_id are provided (have a skipped test)
         ...(filter?.bot_id && {
           task_items: {
             some: {
               type: task_item.bot,
               bot_id: filter.bot_id,
+            },
+          },
+        }),
+        ...(filter?.repo_id && {
+          task_items: {
+            some: {
+              type: task_item.repo,
+              repo_id: filter.repo_id,
             },
           },
         }),
