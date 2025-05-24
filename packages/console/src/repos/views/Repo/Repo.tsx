@@ -1,12 +1,14 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { ShareFat } from '@phosphor-icons/react';
+import { Code } from '@phosphor-icons/react';
 
 import { useAnalyticsPage } from 'analytics';
-import { ProviderType, TaskItemType } from 'gql/graphql';
+import { TaskItemType } from 'gql/graphql';
 import { Button, Flex, Loader, Tooltip, Typography } from 'shared';
 
+import { getOrgSettingsLink } from 'orgs';
+import { getRepoLink } from 'repos';
 import { Task } from 'tasks';
 
 import { RepoProps } from './types';
@@ -37,15 +39,7 @@ const Repo: React.FC<RepoProps> = ({ org }) => {
     skip: !repo?.id,
   });
 
-  const repoLink = useMemo(() => {
-    if (!repo) return;
-
-    if (repo.org.provider_type === ProviderType.Github) {
-      return `https://github.com/${repo.org.name}/${repo.name}`;
-    }
-
-    return;
-  }, [repo]);
+  const repoLink = useMemo(() => getRepoLink(org, repo?.name), [repo, org]);
 
   return (
     <Flex direction="column" className="gap-8">
@@ -58,12 +52,20 @@ const Repo: React.FC<RepoProps> = ({ org }) => {
           <Flex justifyContent="space-between" alignItems="center">
             <Typography variant="title4">{repoName}</Typography>
             <Flex alignItems="center" className="gap-2">
-              {repo.has_installation && (
+              {repo.has_installation && !repo.is_archived ? (
                 <Button to={`../tasks/new?repo=${repo.id}`}>Create Task</Button>
+              ) : (
+                !repo.has_installation && (
+                  <Tooltip body="Connect repository from provider">
+                    <Button href={getOrgSettingsLink(org)} blank>
+                      Connect
+                    </Button>
+                  </Tooltip>
+                )
               )}
               <Tooltip body="View repository in provider">
                 <Button variant="secondary" icon href={repoLink} blank>
-                  <ShareFat weight="fill" />
+                  <Code />
                 </Button>
               </Tooltip>
             </Flex>
