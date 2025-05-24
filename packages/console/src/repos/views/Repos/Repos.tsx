@@ -57,7 +57,7 @@ const Repos: React.FC<ReposProps> = ({ org }) => {
       ) : (
         <Flex className="grid grid-cols-4 gap-4 md:gap-6">
           {data.repos.map((repo) => (
-            <Repo key={repo.id} repo={repo} />
+            <Repo key={repo.id} org={org} repo={repo} />
           ))}
         </Flex>
       )}

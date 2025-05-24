@@ -1,24 +1,26 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import {
+  Archive,
   CheckCircle,
   CircleHalf,
   CircleHalfTilt,
+  Code,
   Globe,
   Lock,
+  Plugs,
   PlusCircle,
 } from '@phosphor-icons/react';
 
 import { getFragment } from 'gql';
-import { TaskState } from 'gql/graphql';
-import { Flex, Tooltip, Typography } from 'shared';
+import { ProviderType, TaskState } from 'gql/graphql';
+import { Anchor, Flex, Tooltip, Typography } from 'shared';
 
 import { RepoProps } from './types';
 
 import { REPO_FRAGMENT } from './Repo.queries';
-import { Container, Item, ItemText } from './Repo.styles';
+import { Container, Item, ItemText, Title } from './Repo.styles';
 
-const Repo: React.FC<RepoProps> = ({ repo: data, ...props }) => {
+const Repo: React.FC<RepoProps> = ({ org, repo: data, ...props }) => {
   const repo = getFragment(REPO_FRAGMENT, data);
 
   const taskCounts = useMemo(() => {
@@ -42,59 +44,85 @@ const Repo: React.FC<RepoProps> = ({ repo: data, ...props }) => {
     );
   }, [taskCounts]);
 
+  const repoLink = useMemo(() => {
+    if (!repo) return;
+
+    if (org.provider_type === ProviderType.Github) {
+      return `https://github.com/${org.provider_name}/${repo.name}`;
+    }
+
+    return;
+  }, [repo, org]);
+
   return (
-    <Link to={`${repo.name}`}>
-      <Container {...props}>
+    <Container {...props}>
+      <Flex
+        direction="column"
+        justifyContent="space-between"
+        className="h-full gap-6"
+      >
         <Flex
-          direction="column"
           justifyContent="space-between"
-          className="h-full gap-6"
+          alignItems="center"
+          className="gap-4"
         >
-          <Flex
-            justifyContent="space-between"
-            alignItems="center"
-            className="gap-4"
-          >
-            <Typography variant="large" className="break-all">
-              {repo.name}
-            </Typography>
+          <Typography variant="large" className="break-all">
+            <Title to={repo.name}>{repo.name}</Title>
+          </Typography>
+          <Flex alignItems="center" className="gap-2">
+            {repo.is_archived ? (
+              <Tooltip body="Archived">
+                <Archive className="relative z-10 size-4 text-neutral-600" />
+              </Tooltip>
+            ) : (
+              !repo.has_installation && (
+                <Tooltip body="Repository not connected">
+                  <Plugs className="relative z-10 size-4 text-red-500" />
+                </Tooltip>
+              )
+            )}
             <Tooltip body={repo.is_private ? 'Private' : 'Public'}>
               {repo.is_private ? (
-                <Lock className="size-4 text-neutral-600" />
+                <Lock className="relative z-10 size-4 text-neutral-600" />
               ) : (
-                <Globe className="size-4 text-neutral-600" />
+                <Globe className="relative z-10 size-4 text-neutral-600" />
               )}
             </Tooltip>
-          </Flex>
-          <Flex alignItems="center" className="gap-4">
-            <Tooltip body="Total tasks for this repo">
-              <Item>
-                <PlusCircle className="size-4" />
-                <ItemText>{totalTasksCount}</ItemText>
-              </Item>
-            </Tooltip>
-            <Tooltip body="Tasks completed in this repo">
-              <Item variant="success">
-                <CheckCircle className="size-4" />
-                <ItemText>{completedTasksCount}</ItemText>
-              </Item>
-            </Tooltip>
-            <Tooltip body="Tasks currently submitted to this repo">
-              <Item variant="info">
-                <CircleHalfTilt className="size-4" />
-                <ItemText>{taskCounts[TaskState.Submitted] || 0}</ItemText>
-              </Item>
-            </Tooltip>
-            <Tooltip body="Tasks currently started for this repo">
-              <Item variant="warning">
-                <CircleHalf className="size-4" />
-                <ItemText>{taskCounts[TaskState.Started] || 0}</ItemText>
-              </Item>
+            <Tooltip body="View repository in provider">
+              <Anchor href={repoLink} blank>
+                <Code className="relative z-10 size-4 text-neutral-600" />
+              </Anchor>
             </Tooltip>
           </Flex>
         </Flex>
-      </Container>
-    </Link>
+        <Flex alignItems="center" className="gap-4">
+          <Tooltip body="Total tasks for this repo">
+            <Item>
+              <PlusCircle className="size-4" />
+              <ItemText>{totalTasksCount}</ItemText>
+            </Item>
+          </Tooltip>
+          <Tooltip body="Tasks completed in this repo">
+            <Item variant="success">
+              <CheckCircle className="size-4" />
+              <ItemText>{completedTasksCount}</ItemText>
+            </Item>
+          </Tooltip>
+          <Tooltip body="Tasks currently submitted to this repo">
+            <Item variant="info">
+              <CircleHalfTilt className="size-4" />
+              <ItemText>{taskCounts[TaskState.Submitted] || 0}</ItemText>
+            </Item>
+          </Tooltip>
+          <Tooltip body="Tasks currently started for this repo">
+            <Item variant="warning">
+              <CircleHalf className="size-4" />
+              <ItemText>{taskCounts[TaskState.Started] || 0}</ItemText>
+            </Item>
+          </Tooltip>
+        </Flex>
+      </Flex>
+    </Container>
   );
 };
 
