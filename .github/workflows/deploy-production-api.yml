@@ -18,8 +18,9 @@ jobs:
   deploy-production-api:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       packages: write
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
