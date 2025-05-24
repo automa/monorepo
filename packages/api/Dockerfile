@@ -38,6 +38,9 @@ RUN pnpm --filter @automa/prisma prisma-generate
 
 FROM node:22-alpine AS runner
 
+LABEL org.opencontainers.image.title = "Automa API"
+LABEL org.opencontainers.image.description = "API service for Automa"
+
 WORKDIR /app
 
 RUN apk add --no-cache bash git
