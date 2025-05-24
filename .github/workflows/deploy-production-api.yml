@@ -62,6 +62,8 @@ jobs:
           tags: |
             type=raw,value=latest
             type=raw,value=0.0.{{date 'YYYYMMDD'}}
+      - name: Install depot
+        uses: depot/setup-action@v1
       - name: Build and push image
         uses: depot/build-push-action@v1
         with:
