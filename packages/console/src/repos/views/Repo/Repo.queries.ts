@@ -11,10 +11,6 @@ export const REPO_QUERY = gql(`
       is_private
       is_archived
       has_installation
-      org {
-        name
-        provider_type
-      }
     }
   }
 `);

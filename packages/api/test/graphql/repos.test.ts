@@ -15,7 +15,7 @@ import {
 suite('graphql repos', () => {
   let app: FastifyInstance;
   let org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
-  let repo: repos, secondRepo: repos;
+  let repo: repos;
 
   suiteSetup(async () => {
     app = await server();
@@ -23,11 +23,12 @@ suite('graphql repos', () => {
     const [user] = await seedUsers(app, 1);
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
     await seedUserOrgs(app, user, [org, secondOrg]);
-    [repo, , , , secondRepo] = await seedRepos(
+    const repos = await seedRepos(
       app,
-      [org, org, secondOrg, nonMemberOrg],
+      [org, org, org, secondOrg, nonMemberOrg],
       [org],
     );
+    repo = repos[0];
 
     await app.prisma.repos.update({
       where: {
@@ -39,18 +40,17 @@ suite('graphql repos', () => {
       },
     });
 
-    await app.prisma.user_repos.createMany({
-      data: [
-        {
-          user_id: user.id,
-          repo_id: repo.id,
-        },
-        {
-          user_id: user.id,
-          repo_id: secondRepo.id,
-        },
-      ],
-    });
+    repos
+      .filter(({ org_id }) => org_id === org.id)
+      .filter(({ name }) => name !== 'repo-1')
+      .forEach(async (repo) => {
+        await app.prisma.user_repos.create({
+          data: {
+            user_id: user.id,
+            repo_id: repo.id,
+          },
+        });
+      });
 
     app.addHook('preValidation', async (request) => {
       request.session.userId = user.id;
@@ -172,7 +172,7 @@ suite('graphql repos', () => {
           data: { repos },
         } = response.json();
 
-        assert.lengthOf(repos, 2);
+        assert.lengthOf(repos, 3);
 
         assert.isNumber(repos[0].id);
         assert.equal(repos[0].name, 'repo-0');
@@ -206,15 +206,26 @@ suite('graphql repos', () => {
         });
 
         assert.isNumber(repos[1].id);
-        assert.equal(repos[1].name, 'repo-4');
+        assert.equal(repos[1].name, 'repo-2');
         assert.equal(repos[1].org.name, org.name);
         assert.equal(repos[1].org.provider_name, org.name);
         assert.isString(repos[1].created_at);
-        assert.equal(repos[1].provider_id, '4');
+        assert.equal(repos[1].provider_id, '2');
         assert.isFalse(repos[1].is_private);
         assert.isFalse(repos[1].is_archived);
-        assert.isFalse(repos[1].has_installation);
+        assert.isTrue(repos[1].has_installation);
         assert.lengthOf(repos[1].tasks_count, 0);
+
+        assert.isNumber(repos[2].id);
+        assert.equal(repos[2].name, 'repo-5');
+        assert.equal(repos[2].org.name, org.name);
+        assert.equal(repos[2].org.provider_name, org.name);
+        assert.isString(repos[2].created_at);
+        assert.equal(repos[2].provider_id, '5');
+        assert.isFalse(repos[2].is_private);
+        assert.isFalse(repos[2].is_archived);
+        assert.isFalse(repos[2].has_installation);
+        assert.lengthOf(repos[2].tasks_count, 0);
       });
     });
 
@@ -245,6 +256,81 @@ suite('graphql repos', () => {
       assert.lengthOf(errors, 1);
       assert.equal(errors[0].message, 'Not Found');
       assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+
+    test('should return only non-archived repos with filter.is_archived = false', async () => {
+      const response = await graphql(
+        app,
+        `
+          query repos($org_id: Int!, $filter: ReposFilter) {
+            repos(org_id: $org_id, filter: $filter) {
+              name
+              is_archived
+            }
+          }
+        `,
+        {
+          org_id: org.id,
+          filter: {
+            is_archived: false,
+          },
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { repos },
+      } = response.json();
+
+      assert.lengthOf(repos, 2);
+
+      assert.equal(repos[0].name, 'repo-2');
+      assert.isFalse(repos[0].is_archived);
+
+      assert.equal(repos[1].name, 'repo-5');
+      assert.isFalse(repos[1].is_archived);
+    });
+
+    test('should return only archived repos with filter.is_archived = true', async () => {
+      const response = await graphql(
+        app,
+        `
+          query repos($org_id: Int!, $filter: ReposFilter) {
+            repos(org_id: $org_id, filter: $filter) {
+              name
+              is_archived
+            }
+          }
+        `,
+        {
+          org_id: org.id,
+          filter: {
+            is_archived: true,
+          },
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const {
+        data: { repos },
+      } = response.json();
+
+      assert.lengthOf(repos, 1);
+
+      assert.equal(repos[0].name, 'repo-0');
+      assert.isTrue(repos[0].is_archived);
     });
   });
 

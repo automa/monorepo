@@ -75,12 +75,12 @@ export const getRepo = async (
     return reply.notFound('Automa has been suspended for the organization');
   }
 
-  if (!repo.has_installation) {
-    return reply.notFound('Automa has not been installed for the repository');
-  }
-
   if (repo.is_archived) {
     return reply.notFound('Repository is archived');
+  }
+
+  if (!repo.has_installation) {
+    return reply.notFound('Automa has not been installed for the repository');
   }
 
   return repo;

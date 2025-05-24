@@ -1,5 +1,5 @@
 type Query {
-  repos(org_id: Int!): [Repo!]!
+  repos(org_id: Int!, filter: ReposFilter): [Repo!]!
   repo(org_id: Int!, name: String!): Repo
 }
 
@@ -15,4 +15,8 @@ type Repo {
   org: Org!
 
   tasks_count: [TasksCount!]!
+}
+
+input ReposFilter {
+  is_archived: Boolean
 }

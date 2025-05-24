@@ -27,9 +27,10 @@ export const BOT_INSTALLATIONS_AS_OPTIONS_QUERY = gql(`
 
 export const REPOSITORIES_AS_OPTIONS_QUERY = gql(`
   query RepositoriesAsOptions($org_id: Int!) {
-    repos(org_id: $org_id) {
+    repos(org_id: $org_id, filter: { is_archived: false }) {
       id
       name
+      has_installation
     }
   }
 `);

@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from '@phosphor-icons/react';
 
-import { ProviderType } from 'gql/graphql';
 import { Flex, Tooltip, Typography } from 'shared';
+
+import { getOrgInstallLink } from 'orgs';
 
 import GithubLogo from 'assets/logos/github.svg?react';
 
@@ -12,14 +13,6 @@ import { RepoOnboardingProps } from './types';
 import { Card, Container } from './RepoOnboarding.styles';
 
 const RepoOnboarding: React.FC<RepoOnboardingProps> = ({ org, ...props }) => {
-  const connectIntegration = useCallback(
-    (integration: string) =>
-      `${import.meta.env.VITE_API_URI}/api/orgs/${
-        org.name
-      }/integrations/connect/${integration}`,
-    [org],
-  );
-
   return (
     <Container {...props}>
       <Flex direction="column" alignItems="center" className="gap-2 lg:gap-4">
@@ -39,7 +32,7 @@ const RepoOnboarding: React.FC<RepoOnboardingProps> = ({ org, ...props }) => {
         side="bottom"
         sideOffset={12}
       >
-        <Card href={connectIntegration(ProviderType.Github)} blank>
+        <Card href={getOrgInstallLink(org)} blank>
           <Flex direction="column" alignItems="center" className="gap-6">
             <GithubLogo className="size-16" />
             <Typography variant="large">GitHub</Typography>

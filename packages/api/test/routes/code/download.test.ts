@@ -280,6 +280,42 @@ suite('code/download', () => {
     });
   });
 
+  suite('archived repo', () => {
+    setup(async () => {
+      await app.prisma.repos.update({
+        where: {
+          id: repo.id,
+        },
+        data: {
+          is_archived: true,
+        },
+      });
+
+      response = await download(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 404', () => {
+      assert.equal(response.statusCode, 404);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.message, 'Repository is archived');
+      assert.equal(data.error, 'Not Found');
+      assert.equal(data.statusCode, 404);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(tarCreateStub.callCount, 0);
+    });
+  });
+
   suite('repo without installation', () => {
     setup(async () => {
       await app.prisma.repos.update({
@@ -319,7 +355,7 @@ suite('code/download', () => {
     });
   });
 
-  suite('archived repo', () => {
+  suite('archived repo without installation', () => {
     setup(async () => {
       await app.prisma.repos.update({
         where: {
@@ -327,6 +363,7 @@ suite('code/download', () => {
         },
         data: {
           is_archived: true,
+          has_installation: false,
         },
       });
 

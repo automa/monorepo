@@ -4,7 +4,7 @@ import { task_item } from '@automa/prisma';
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  repos: async (root, { org_id }, { userId, prisma }) => {
+  repos: async (root, { org_id, filter }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
@@ -18,6 +18,7 @@ export const Query: QueryResolvers<Context> = {
         user_id: userId,
         repos: {
           org_id,
+          is_archived: filter?.is_archived ?? undefined,
         },
       },
       include: {
