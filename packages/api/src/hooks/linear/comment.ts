@@ -57,7 +57,7 @@ export const handleMention = async (
       };
     };
     comment: {
-      id: string;
+      id?: string;
       body: string;
     };
     parentCommentId?: string;
@@ -215,7 +215,7 @@ export const handleMention = async (
       .join('\n');
 
     reponseComment.push(
-      `We encountered the following issues while creating the task:\n${problemsMessage}`,
+      `We encountered the following issues while creating the task:\n${problemsMessage}\n\n*NOTE: We don't support assigning issues yet.*`,
     );
   }
 

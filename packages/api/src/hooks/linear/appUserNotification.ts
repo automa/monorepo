@@ -1,3 +1,5 @@
+import { getMentionUsername } from '../utils';
+
 import { LinearEventActionHandler } from './types';
 
 import { handleMention } from './comment';
@@ -19,7 +21,16 @@ const issueAssignedToYou: LinearEventActionHandler<{
       email: string;
     };
   };
-}> = async (app, body) => {};
+}> = async (app, body) =>
+  handleMention(app, {
+    organizationId: body.organizationId,
+    comment: {
+      id: undefined,
+      body: getMentionUsername(),
+    },
+    parentCommentId: undefined,
+    ...body.notification,
+  });
 
 const issueCommentMention: LinearEventActionHandler<{
   organizationId: string;

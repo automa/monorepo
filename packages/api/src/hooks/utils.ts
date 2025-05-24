@@ -6,16 +6,20 @@ import { environment } from '../env';
 
 const OPTIONS = ['bot', 'repo'];
 
+export const getMentionUsername = () => {
+  const mentionUser = ['test', 'production'].includes(environment)
+    ? ''
+    : environment;
+
+  return `@automa${mentionUser}`;
+};
+
 export const getRegex = (mentionable: boolean = false) => {
   if (!mentionable) {
     return /^\/automa(\s.*)?$/;
   }
 
-  const mentionUser = ['test', 'production'].includes(environment)
-    ? ''
-    : environment;
-
-  return new RegExp(`^@automa${mentionUser}(\\s.*)?$`);
+  return new RegExp(`^${getMentionUsername()}(\\s.*)?$`);
 };
 
 export const getOptions = (comment: string, regex: RegExp) => {

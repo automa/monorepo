@@ -340,7 +340,7 @@ suite('linear hook AppUserNotification event', () => {
       test('should create comment about the task', async () => {
         assert.equal(createCommentStub.callCount, 1);
         assert.deepEqual(createCommentStub.firstCall.args[0], {
-          body: 'We encountered the following issues while creating the task:\n- Bot not specified. Use `bot=name` to specify a bot.',
+          body: "We encountered the following issues while creating the task:\n- Bot not specified. Use `bot=name` to specify a bot.\n\n*NOTE: We don't support assigning issues yet.*",
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
         });
@@ -377,7 +377,7 @@ suite('linear hook AppUserNotification event', () => {
       test('should create comment about the task', async () => {
         assert.equal(createCommentStub.callCount, 1);
         assert.deepEqual(createCommentStub.firstCall.args[0], {
-          body: 'We encountered the following issues while creating the task:\n- Bot `bot-2` not found.',
+          body: "We encountered the following issues while creating the task:\n- Bot `bot-2` not found.\n\n*NOTE: We don't support assigning issues yet.*",
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
         });
@@ -414,7 +414,7 @@ suite('linear hook AppUserNotification event', () => {
       test('should create comment about the task', async () => {
         assert.equal(createCommentStub.callCount, 1);
         assert.deepEqual(createCommentStub.firstCall.args[0], {
-          body: 'We encountered the following issues while creating the task:\n- Repo not specified. Use `repo=name` to specify a repo.',
+          body: "We encountered the following issues while creating the task:\n- Repo not specified. Use `repo=name` to specify a repo.\n\n*NOTE: We don't support assigning issues yet.*",
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
         });
@@ -451,7 +451,7 @@ suite('linear hook AppUserNotification event', () => {
       test('should create comment about the task', async () => {
         assert.equal(createCommentStub.callCount, 1);
         assert.deepEqual(createCommentStub.firstCall.args[0], {
-          body: 'We encountered the following issues while creating the task:\n- Repo `repo-2` not found.',
+          body: "We encountered the following issues while creating the task:\n- Repo `repo-2` not found.\n\n*NOTE: We don't support assigning issues yet.*",
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
         });
@@ -488,7 +488,7 @@ suite('linear hook AppUserNotification event', () => {
       test('should create comment about the task', async () => {
         assert.equal(createCommentStub.callCount, 1);
         assert.deepEqual(createCommentStub.firstCall.args[0], {
-          body: 'We encountered the following issues while creating the task:\n- Bot not specified. Use `bot=name` to specify a bot.\n- Repo not specified. Use `repo=name` to specify a repo.',
+          body: "We encountered the following issues while creating the task:\n- Bot not specified. Use `bot=name` to specify a bot.\n- Repo not specified. Use `repo=name` to specify a repo.\n\n*NOTE: We don't support assigning issues yet.*",
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
         });
@@ -687,6 +687,45 @@ suite('linear hook AppUserNotification event', () => {
 
       test('should not be able to create any comment', async () => {
         assert.equal(createCommentStub.callCount, 0);
+      });
+    });
+  });
+
+  suite('issueAssignedToYou', () => {
+    suite('assign', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'AppUserNotification',
+          'issueAssignedToYou/assign',
+        );
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Bot not specified. Use `bot=name` to specify a bot.\n- Repo not specified. Use `repo=name` to specify a repo.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: undefined,
+        });
       });
     });
   });
