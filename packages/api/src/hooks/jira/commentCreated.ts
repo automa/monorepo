@@ -4,7 +4,7 @@ import { integration, task_item } from '@automa/prisma';
 
 import { env } from '../../env';
 
-import { AUTOMA_REGEX, getSelectedBotAndRepo } from '../utils';
+import { getRegex, getSelectedBotAndRepo } from '../utils';
 
 import { taskCreate } from '../../db';
 import { fromAdfToMarkdown, withJiraTokenRefresh } from '../../integrations';
@@ -27,8 +27,9 @@ const commentCreated: JiraEventHandler<{
 }> = async (app, body) => {
   const text = body.comment.body.trim();
   const url = /^(.*)\/rest\/api\//.exec(body.comment.self)?.[1];
+  const regex = getRegex();
 
-  if (!AUTOMA_REGEX.test(text) || !url) {
+  if (!regex.test(text) || !url) {
     return;
   }
 
@@ -77,6 +78,7 @@ const commentCreated: JiraEventHandler<{
     app,
     connection.org_id,
     text,
+    regex,
   );
 
   const reponseComment: any = { version: 1, type: 'doc', content: [] };

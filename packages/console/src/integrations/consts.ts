@@ -36,7 +36,6 @@ export const integrations: {
     description: 'Connect your Linear account to create tasks from issues.',
     info: (config) => ({
       org: config.name,
-      user: config.userEmail,
     }),
   },
   [IntegrationType.Jira]: {

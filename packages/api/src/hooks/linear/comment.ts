@@ -1,16 +1,17 @@
+import { FastifyInstance } from 'fastify';
 import { LinearClient } from '@linear/sdk';
 
 import { integration, task_item } from '@automa/prisma';
 
 import { env } from '../../env';
 
-import { AUTOMA_REGEX, getSelectedBotAndRepo } from '../utils';
+import { getRegex, getSelectedBotAndRepo } from '../utils';
 
 import { taskCreate } from '../../db';
 
 import { LinearEventActionHandler } from './types';
 
-const create: LinearEventActionHandler<{
+const update: LinearEventActionHandler<{
   url: string;
   actor: {
     id: string;
@@ -23,15 +24,54 @@ const create: LinearEventActionHandler<{
     body: string;
     issue: {
       id: string;
-      title: string;
-      teamId: string;
+      team: {
+        id: string;
+        key: string;
+        name: string;
+      };
     };
   };
   organizationId: string;
-}> = async (app, body) => {
-  const text = body.data.body.trim();
+}> = (app, body) =>
+  handleMention(app, {
+    organizationId: body.organizationId,
+    issue: body.data.issue,
+    comment: {
+      id: body.data.id,
+      body: body.data.body,
+    },
+    parentCommentId: body.data.parentId,
+    actor: body.actor,
+  });
 
-  if (!AUTOMA_REGEX.test(text)) {
+export const handleMention = async (
+  app: FastifyInstance,
+  body: {
+    organizationId: string;
+    issue: {
+      id: string;
+      team: {
+        id: string;
+        key: string;
+        name: string;
+      };
+    };
+    comment: {
+      id?: string;
+      body: string;
+    };
+    parentCommentId?: string;
+    actor: {
+      id: string;
+      name: string;
+      email: string;
+    };
+  },
+) => {
+  const text = body.comment.body.trim();
+  const regex = getRegex(true);
+
+  if (!regex.test(text)) {
     return;
   }
 
@@ -70,6 +110,7 @@ const create: LinearEventActionHandler<{
     app,
     connection.org_id,
     text,
+    regex,
   );
 
   const reponseComment = [];
@@ -78,9 +119,8 @@ const create: LinearEventActionHandler<{
   // TODO: Allow the user to not specify a bot and repo
   if (selectedBot && selectedRepo) {
     // Retrieve the issue
-    const [issue, team, org] = await Promise.all([
-      client.issue(body.data.issue.id),
-      client.team(body.data.issue.teamId),
+    const [issue, org] = await Promise.all([
+      client.issue(body.issue.id),
       client.organization,
     ]);
 
@@ -123,15 +163,15 @@ const create: LinearEventActionHandler<{
               organizationId: org.id,
               organizationUrlKey: org.urlKey,
               organizationName: org.name,
-              teamId: team.id,
-              teamKey: team.key,
-              teamName: team.name,
+              teamId: body.issue.team.id,
+              teamKey: body.issue.team.key,
+              teamName: body.issue.team.name,
               ...userData,
               issueId: issue.id,
               issueIdentifier: issue.identifier,
               issueTitle: issue.title,
-              commentId: body.data.id,
-              parentId: body.data.parentId,
+              commentId: body.comment.id,
+              parentId: body.parentCommentId,
             },
             actor_user_id: automaUser?.id,
           },
@@ -175,21 +215,20 @@ const create: LinearEventActionHandler<{
       .join('\n');
 
     reponseComment.push(
-      `We encountered the following issues while creating the task:\n${problemsMessage}`,
+      `We encountered the following issues while creating the task:\n${problemsMessage}\n\n*NOTE: We don't support assigning issues yet.*`,
     );
   }
 
   // Create a comment to notify the user
   await client.createComment({
     body: reponseComment.join('\n\n'),
-    issueId: body.data.issue.id,
-    parentId: body.data.parentId || body.data.id,
+    issueId: body.issue.id,
+    parentId: body.parentCommentId || body.comment.id,
   });
 
   return;
 };
 
 export default {
-  create,
-  update: create,
+  update,
 };

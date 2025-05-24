@@ -775,153 +775,6 @@ suite('jira hook comment_created & comment_updated event', () => {
     });
   });
 
-  suite('create with matching user', () => {
-    setup(async () => {
-      await app.prisma.users.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          email: 'pavan@example.com',
-        },
-      });
-
-      response = await callWithFixture(app, 'comment_created', 'create');
-    });
-
-    teardown(async () => {
-      await app.prisma.users.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          email: 'user-0@example.com',
-        },
-      });
-    });
-
-    test('should return 200', async () => {
-      assert.equal(response.statusCode, 200);
-    });
-
-    test('should create task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
-
-      assert.equal(tasks.length, 1);
-      assert.deepOwnInclude(tasks[0], {
-        org_id: org.id,
-        title: 'Delete tokens when user revokes Github App',
-        is_scheduled: false,
-        state: 'started',
-      });
-      assert.isDefined(tasks[0].token);
-
-      const taskItems = await app.prisma.task_items.findMany({
-        where: {
-          task_id: tasks[0].id,
-        },
-      });
-
-      assert.equal(taskItems.length, 4);
-      assert.deepOwnInclude(taskItems[0], {
-        type: 'message',
-        data: {
-          content:
-            '  * Delete the github refresh token stored in DB\n  * Clear all sessions for the user',
-        },
-        actor_user_id: null,
-      });
-      assert.deepOwnInclude(taskItems[1], {
-        type: 'origin',
-        data: {
-          organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
-          organizationUrl: 'https://automa.atlassian.net',
-          organizationName: 'Automa',
-          projectId: '10003',
-          projectKey: 'PRO',
-          projectName: 'Product',
-          issuetypeId: '10002',
-          issuetypeName: 'Task',
-          issueId: '10281',
-          issueKey: 'PRO-93',
-          issueTitle: 'Delete tokens when user revokes Github App',
-          commentId: '10237',
-        },
-        actor_user_id: user.id,
-      });
-      assert.deepOwnInclude(taskItems[2], {
-        type: 'repo',
-        data: {},
-        actor_user_id: user.id,
-        repo_id: repo.id,
-      });
-      assert.deepOwnInclude(taskItems[3], {
-        type: 'bot',
-        data: {},
-        actor_user_id: user.id,
-        bot_id: secondBot.id,
-      });
-    });
-
-    test('should get information about issue', async () => {
-      assert.equal(issueStub.callCount, 1);
-      assert.equal(
-        issueStub.firstCall.args[0],
-        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281',
-      );
-      assert.deepEqual(issueStub.firstCall.args[1], {
-        headers: {
-          Authorization: 'Bearer abcdef',
-        },
-      });
-    });
-
-    test('should create comment about the task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
-
-      assert.equal(createCommentStub.callCount, 1);
-      assert.equal(
-        createCommentStub.firstCall.args[0],
-        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281/comment',
-      );
-      assert.deepEqual(createCommentStub.firstCall.args[1], {
-        body: {
-          version: 1,
-          type: 'doc',
-          content: [
-            {
-              content: [
-                {
-                  text: 'Created task: ',
-                  type: 'text',
-                },
-                {
-                  marks: [
-                    {
-                      attrs: {
-                        href: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-                        title: 'Automa Task',
-                      },
-                      type: 'link',
-                    },
-                  ],
-                  text: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-                  type: 'text',
-                },
-              ],
-              type: 'paragraph',
-            },
-          ],
-        },
-      });
-      assert.deepEqual(createCommentStub.firstCall.args[2], {
-        headers: {
-          Authorization: 'Bearer abcdef',
-        },
-      });
-    });
-  });
-
   suite('create with no bot and no repo specified', () => {
     setup(async () => {
       response = await callWithFixture(
@@ -1148,6 +1001,153 @@ suite('jira hook comment_created & comment_updated event', () => {
       assert.deepEqual(integration?.secrets, {
         access_token: 'new-token',
         refresh_token: 'new-refresh-token',
+      });
+    });
+  });
+
+  suite('create with matching user', () => {
+    setup(async () => {
+      await app.prisma.users.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          email: 'pavan@example.com',
+        },
+      });
+
+      response = await callWithFixture(app, 'comment_created', 'create');
+    });
+
+    teardown(async () => {
+      await app.prisma.users.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          email: 'user-0@example.com',
+        },
+      });
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 1);
+      assert.deepOwnInclude(tasks[0], {
+        org_id: org.id,
+        title: 'Delete tokens when user revokes Github App',
+        is_scheduled: false,
+        state: 'started',
+      });
+      assert.isDefined(tasks[0].token);
+
+      const taskItems = await app.prisma.task_items.findMany({
+        where: {
+          task_id: tasks[0].id,
+        },
+      });
+
+      assert.equal(taskItems.length, 4);
+      assert.deepOwnInclude(taskItems[0], {
+        type: 'message',
+        data: {
+          content:
+            '  * Delete the github refresh token stored in DB\n  * Clear all sessions for the user',
+        },
+        actor_user_id: null,
+      });
+      assert.deepOwnInclude(taskItems[1], {
+        type: 'origin',
+        data: {
+          organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+          organizationUrl: 'https://automa.atlassian.net',
+          organizationName: 'Automa',
+          projectId: '10003',
+          projectKey: 'PRO',
+          projectName: 'Product',
+          issuetypeId: '10002',
+          issuetypeName: 'Task',
+          issueId: '10281',
+          issueKey: 'PRO-93',
+          issueTitle: 'Delete tokens when user revokes Github App',
+          commentId: '10237',
+        },
+        actor_user_id: user.id,
+      });
+      assert.deepOwnInclude(taskItems[2], {
+        type: 'repo',
+        data: {},
+        actor_user_id: user.id,
+        repo_id: repo.id,
+      });
+      assert.deepOwnInclude(taskItems[3], {
+        type: 'bot',
+        data: {},
+        actor_user_id: user.id,
+        bot_id: secondBot.id,
+      });
+    });
+
+    test('should get information about issue', async () => {
+      assert.equal(issueStub.callCount, 1);
+      assert.equal(
+        issueStub.firstCall.args[0],
+        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281',
+      );
+      assert.deepEqual(issueStub.firstCall.args[1], {
+        headers: {
+          Authorization: 'Bearer abcdef',
+        },
+      });
+    });
+
+    test('should create comment about the task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(createCommentStub.callCount, 1);
+      assert.equal(
+        createCommentStub.firstCall.args[0],
+        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281/comment',
+      );
+      assert.deepEqual(createCommentStub.firstCall.args[1], {
+        body: {
+          version: 1,
+          type: 'doc',
+          content: [
+            {
+              content: [
+                {
+                  text: 'Created task: ',
+                  type: 'text',
+                },
+                {
+                  marks: [
+                    {
+                      attrs: {
+                        href: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+                        title: 'Automa Task',
+                      },
+                      type: 'link',
+                    },
+                  ],
+                  text: `http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+                  type: 'text',
+                },
+              ],
+              type: 'paragraph',
+            },
+          ],
+        },
+      });
+      assert.deepEqual(createCommentStub.firstCall.args[2], {
+        headers: {
+          Authorization: 'Bearer abcdef',
+        },
       });
     });
   });
