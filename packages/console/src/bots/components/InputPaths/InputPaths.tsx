@@ -61,13 +61,18 @@ const InputPaths: React.FC<InputPathsComponentProps> = ({
         $disabled={disabled}
         $focus={focus}
         onClick={handleContainerClick}
+        data-testid={`InputPaths-${name}`}
       >
         {value.length ? (
           <Flex wrap="wrap" className="gap-1">
             {value.map((tag, index) => (
               <Tag key={index}>
                 {tag}
-                <TagX tabIndex={-1} onClick={() => removeTag(tag)}>
+                <TagX
+                  tabIndex={-1}
+                  data-testid={`InputPathsX-${tag}`}
+                  onClick={() => removeTag(tag)}
+                >
                   <X />
                 </TagX>
               </Tag>
