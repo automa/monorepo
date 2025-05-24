@@ -2,10 +2,9 @@ import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 
 import { useAnalyticsPage } from 'analytics';
-import { ProviderType } from 'gql/graphql';
 import { Button, Flex, Loader, Typography } from 'shared';
-import { appName } from 'utils';
 
+import { getOrgInstallLink, getOrgSettingsLink } from 'orgs';
 import { Repo } from 'repos';
 
 import { ReposProps } from './types';
@@ -23,23 +22,11 @@ const Repos: React.FC<ReposProps> = ({ org }) => {
   });
 
   const [settingsLink, isSettings] = useMemo(() => {
-    if (org.provider_type === ProviderType.Github) {
-      if (org.github_installation_id) {
-        return [
-          `https://github.com/organizations/${org.provider_name}/settings/installations/${org.github_installation_id}`,
-          true,
-        ];
-      } else {
-        return [
-          `https://github.com/apps/${appName()}/installations/new/permissions?target_id=${
-            org.provider_id
-          }`,
-          false,
-        ];
-      }
+    if (org.github_installation_id) {
+      return [getOrgSettingsLink(org), true];
     }
 
-    return [undefined, false];
+    return [getOrgInstallLink(org), false];
   }, [org]);
 
   return (

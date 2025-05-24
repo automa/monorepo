@@ -12,8 +12,10 @@ import {
 } from '@phosphor-icons/react';
 
 import { getFragment } from 'gql';
-import { ProviderType, TaskState } from 'gql/graphql';
+import { TaskState } from 'gql/graphql';
 import { Anchor, Flex, Tooltip, Typography } from 'shared';
+
+import { getRepoLink } from '../../utils';
 
 import { RepoProps } from './types';
 
@@ -44,15 +46,7 @@ const Repo: React.FC<RepoProps> = ({ org, repo: data, ...props }) => {
     );
   }, [taskCounts]);
 
-  const repoLink = useMemo(() => {
-    if (!repo) return;
-
-    if (org.provider_type === ProviderType.Github) {
-      return `https://github.com/${org.provider_name}/${repo.name}`;
-    }
-
-    return;
-  }, [repo, org]);
+  const repoLink = useMemo(() => getRepoLink(org, repo?.name), [repo, org]);
 
   return (
     <Container {...props}>

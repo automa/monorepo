@@ -40,7 +40,7 @@ const BotOnboarding: React.FC<BotOnboardingProps> = ({ ...props }) => {
       </Flex>
       <Flex className="gap-2 lg:gap-4">
         {DEFAULT_BOTS.map(({ botOrgName, botName, logo }, index) => (
-          <Card key={index} to={`bots/${botOrgName}/${botName}`}>
+          <Card key={index} to={`bots/new/${botOrgName}/${botName}`}>
             <Content>
               <img src={logo} alt={`${botName} logo`} className="size-16" />
               <Flex direction="column" className="gap-1 lg:gap-2">
