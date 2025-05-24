@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import {
   ArrowsClockwise,
@@ -16,6 +16,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   Flex,
+  toast,
   Typography,
   useRelativeMatch,
 } from 'shared';
@@ -41,18 +42,29 @@ const OrgList: React.FC<OrgListProps> = ({
 
   const data = getFragment(ORGS_QUERY_FRAGMENT, fullData);
 
+  const [syncLoading, setSyncLoading] = useState(false);
+
   // Redirect to first org if on home page
   useEffect(() => {
     setOrgs(data.orgs);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.orgs]);
 
-  // TODO: Show a success toast or sync loading state
   const sync = async () => {
     try {
+      setSyncLoading(true);
+
       await axios.post('/api/sync');
       await refetch?.();
-    } catch (_) {}
+
+      toast({
+        title: 'All your orgs have been synced.',
+        variant: 'success',
+      });
+    } catch (_) {
+    } finally {
+      setSyncLoading(false);
+    }
   };
 
   // Redirect to first org if on home page
@@ -132,10 +144,12 @@ const OrgList: React.FC<OrgListProps> = ({
             </Flex>
           </Item>
         </Anchor>
-        <Item onSelect={sync}>
+        <Item onSelect={sync} disabled={syncLoading}>
           <Flex alignItems="center" className="gap-2">
             <ArrowsClockwise className="size-5" />
-            <Typography variant="small">Sync all your orgs</Typography>
+            <Typography variant="small">
+              {syncLoading ? 'Syncing ...' : 'Sync all your orgs'}
+            </Typography>
           </Flex>
         </Item>
       </DropdownMenu>

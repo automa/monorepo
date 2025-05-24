@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { NetworkStatus, useQuery } from '@apollo/client';
 
 import { Flex, Loader, RoutesLoader, useRelativeMatch } from 'shared';
 
@@ -18,7 +18,7 @@ import { Header } from './Dashboard.styles';
 const Dashboard: React.FC<DashboardProps> = () => {
   const isDashboardView = useRelativeMatch('.');
 
-  const { data, loading, refetch } = useQuery(DASHBOARD_QUERY);
+  const { data, loading, refetch, networkStatus } = useQuery(DASHBOARD_QUERY);
 
   return (
     <>
@@ -42,7 +42,8 @@ const Dashboard: React.FC<DashboardProps> = () => {
           </Flex>
         )}
       </Header>
-      {(isDashboardView || loading) && (
+      {(isDashboardView ||
+        (loading && networkStatus === NetworkStatus.loading)) && (
         <>
           <EmptyTopNav />
           <Loader />
