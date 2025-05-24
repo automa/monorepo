@@ -1,8 +1,9 @@
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { assert } from 'chai';
-import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
 
 import { bot_installations, bots, orgs, users } from '@automa/prisma';
+
+import { env } from '../../src/env';
 
 import {
   graphql,
@@ -16,11 +17,9 @@ import {
 suite('graphql bots', () => {
   let app: FastifyInstance, sessionUser: users | null;
   let user: users, org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
-  let sandbox: SinonSandbox, gateStub: SinonStub;
 
   suiteSetup(async () => {
     app = await server();
-    sandbox = createSandbox();
 
     [user] = await seedUsers(app, 1);
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
@@ -32,7 +31,6 @@ suite('graphql bots', () => {
   });
 
   suiteTeardown(async () => {
-    sandbox.restore();
     await app.prisma.orgs.deleteMany();
     await app.prisma.users.deleteMany();
     await app.close();
@@ -3772,18 +3770,55 @@ suite('graphql bots', () => {
       assert.isFalse(bot.is_published);
     });
 
-    test('should update published fields on published bot', async () => {
-      await app.prisma.bots.updateMany({
-        data: {
-          published_at: new Date(),
-        },
+    suite('on self-hosted', () => {
+      suiteSetup(() => {
+        env.CLOUD = false;
       });
 
-      const response = await botUpdate(app, org.id, 'bot-0', {
-        short_description: 'Bot 0 that does something',
-        webhook_url: 'https://example.com/webhooks/automa/0',
-        draft_paths: ['src'],
-        description: {
+      suiteTeardown(() => {
+        env.CLOUD = true;
+      });
+
+      test('should update published fields on unpublished bot', async () => {
+        const response = await botUpdate(app, org.id, 'bot-0', {
+          short_description: 'Bot 0 that does something',
+          webhook_url: 'https://example.com/webhooks/automa/0',
+          draft_paths: ['src'],
+          description: {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [{ type: 'text', text: 'Bot 0 that does something' }],
+              },
+            ],
+          },
+          homepage: 'https://example.com',
+        });
+
+        assert.equal(response.statusCode, 200);
+
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+
+        const {
+          errors,
+          data: { botUpdate: bot },
+        } = response.json();
+
+        assert.isUndefined(errors);
+
+        assert.isNumber(bot.id);
+        assert.equal(bot.name, 'bot-0');
+        assert.equal(bot.short_description, 'Bot 0 that does something');
+        assert.equal(bot.type, 'manual');
+        assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
+        assert.isDefined(bot.webhook_secret);
+        assert.deepEqual(bot.draft_paths, ['src']);
+        assert.deepEqual(bot.paths, ['src']);
+        assert.deepEqual(bot.description, {
           type: 'doc',
           content: [
             {
@@ -3791,45 +3826,72 @@ suite('graphql bots', () => {
               content: [{ type: 'text', text: 'Bot 0 that does something' }],
             },
           ],
-        },
-        homepage: 'https://example.com',
+        });
+        assert.equal(bot.homepage, 'https://example.com');
+        assert.isNull(bot.published_at);
+        assert.isFalse(bot.is_published);
+        assert.isString(bot.created_at);
       });
 
-      assert.equal(response.statusCode, 200);
-
-      assert.equal(
-        response.headers['content-type'],
-        'application/json; charset=utf-8',
-      );
-
-      const {
-        errors,
-        data: { botUpdate: bot },
-      } = response.json();
-
-      assert.isUndefined(errors);
-
-      assert.isNumber(bot.id);
-      assert.equal(bot.name, 'bot-0');
-      assert.equal(bot.short_description, 'Bot 0 that does something');
-      assert.equal(bot.type, 'manual');
-      assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
-      assert.isDefined(bot.webhook_secret);
-      assert.deepEqual(bot.draft_paths, ['src']);
-      assert.deepEqual(bot.paths, ['src']);
-      assert.deepEqual(bot.description, {
-        type: 'doc',
-        content: [
-          {
-            type: 'paragraph',
-            content: [{ type: 'text', text: 'Bot 0 that does something' }],
+      test('should update published fields on published bot', async () => {
+        await app.prisma.bots.updateMany({
+          data: {
+            published_at: new Date(),
           },
-        ],
+        });
+
+        const response = await botUpdate(app, org.id, 'bot-0', {
+          short_description: 'Bot 0 that does something',
+          webhook_url: 'https://example.com/webhooks/automa/0',
+          draft_paths: ['src'],
+          description: {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [{ type: 'text', text: 'Bot 0 that does something' }],
+              },
+            ],
+          },
+          homepage: 'https://example.com',
+        });
+
+        assert.equal(response.statusCode, 200);
+
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+
+        const {
+          errors,
+          data: { botUpdate: bot },
+        } = response.json();
+
+        assert.isUndefined(errors);
+
+        assert.isNumber(bot.id);
+        assert.equal(bot.name, 'bot-0');
+        assert.equal(bot.short_description, 'Bot 0 that does something');
+        assert.equal(bot.type, 'manual');
+        assert.equal(bot.webhook_url, 'https://example.com/webhooks/automa/0');
+        assert.isDefined(bot.webhook_secret);
+        assert.deepEqual(bot.draft_paths, ['src']);
+        assert.deepEqual(bot.paths, ['src']);
+        assert.deepEqual(bot.description, {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [{ type: 'text', text: 'Bot 0 that does something' }],
+            },
+          ],
+        });
+        assert.equal(bot.homepage, 'https://example.com');
+        assert.isNotNull(bot.published_at);
+        assert.isTrue(bot.is_published);
+        assert.isString(bot.created_at);
       });
-      assert.equal(bot.homepage, 'https://example.com');
-      assert.isNotNull(bot.published_at);
-      assert.isTrue(bot.is_published);
-      assert.isString(bot.created_at);
     });
 
     suite('on cloud', () => {
@@ -3888,8 +3950,6 @@ suite('graphql bots', () => {
       });
 
       test('should not update published fields on published bot', async () => {
-        gateStub = sandbox.stub(app.optimizer, 'gate').returns(true);
-
         await app.prisma.bots.updateMany({
           data: {
             published_at: new Date(),
@@ -3911,9 +3971,6 @@ suite('graphql bots', () => {
           },
           homepage: 'https://example.com',
         });
-
-        assert.isTrue(gateStub.calledOnce);
-        assert.deepEqual(gateStub.firstCall.args, ['cloud']);
 
         assert.equal(response.statusCode, 200);
 

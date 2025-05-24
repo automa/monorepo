@@ -11,6 +11,8 @@ import {
 } from '@automa/common';
 import { Prisma } from '@automa/prisma';
 
+import { env } from '../../env';
+
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
@@ -138,11 +140,7 @@ export const Mutation: MutationResolvers<Context> = {
       },
     });
   },
-  botUpdate: async (
-    _,
-    { org_id, name, input },
-    { userId, prisma, optimizer },
-  ) => {
+  botUpdate: async (_, { org_id, name, input }, { userId, prisma }) => {
     // Check if the user is a member of the org
     await prisma.user_orgs.findFirstOrThrow({
       where: {
@@ -166,8 +164,7 @@ export const Mutation: MutationResolvers<Context> = {
     // - The bot has updated paths
     // - The bot is published
     // - The server is cloud
-    const isCloud = optimizer.gate('cloud');
-    const needsApproval = data.draft_paths && bot.is_published && isCloud;
+    const needsApproval = data.draft_paths && bot.is_published && env.CLOUD;
 
     return prisma.bots.update({
       where: {
