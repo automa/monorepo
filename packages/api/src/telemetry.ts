@@ -59,10 +59,12 @@ const sdk = new NodeSDK({
     ? [
         isProduction
           ? new BatchSpanProcessor(
-              new GCPTraceExporter({
-                credentials: JSON.parse(env.GCP.CREDENTIALS),
-                projectId: env.GCP.PROJECT_ID,
-              }),
+              env.CLOUD
+                ? new GCPTraceExporter({
+                    credentials: JSON.parse(env.GCP.CREDENTIALS),
+                    projectId: env.GCP.PROJECT_ID,
+                  })
+                : new OTLPTraceExporter({}),
             )
           : new SimpleSpanProcessor(new OTLPTraceExporter()),
       ]

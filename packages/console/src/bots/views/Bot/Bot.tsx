@@ -84,8 +84,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
       },
     });
 
-  const isCloud = useGateValue('cloud');
-  const needsApproval = isCloud && bot && bot.is_published;
+  const needsApproval = !!import.meta.env.VITE_CLOUD && bot && bot.is_published;
 
   const warnAboutNeedingApproval = needsApproval && dirtyFields.draft_paths;
   const needsMarketplaceApproval =

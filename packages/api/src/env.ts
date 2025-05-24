@@ -27,6 +27,9 @@ const schema = Type.Object({
   COOKIE_SECRET: Type.String({
     default: 'cookie_secret_for_development_purpose',
   }),
+  CLOUD: Type.Boolean({
+    default: true,
+  }),
   DATABASE_URL: Type.String({
     default: 'postgresql://automa@localhost:5432/automa',
   }),
