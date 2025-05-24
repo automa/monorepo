@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Plugs } from '@phosphor-icons/react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import { taskCreateSchema } from '@automa/common';
@@ -85,6 +86,7 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     () =>
       (repositoriesData?.repos ?? []).map((repo) => ({
         ...repo,
+        disabled: !repo.has_installation,
         value: repo.name,
       })),
     [repositoriesData],
@@ -162,6 +164,7 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
             error={errors.title?.message}
             input={{
               ...register('title'),
+              autoFocus: true,
             }}
           />
           <Controller
@@ -212,7 +215,7 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
                       size="xsmall"
                       className="ml-0.5"
                     />
-                    {value}
+                    <Typography>{value}</Typography>
                   </Flex>
                 )}
               />
@@ -236,7 +239,16 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
                 emptyText="No repositories found."
                 loading={repositoriesLoading}
                 options={repositories}
-                renderOption={({ value }) => <span>{value}</span>}
+                renderOption={({ disabled, value }) => (
+                  <Flex
+                    justifyContent="space-between"
+                    alignItems="center"
+                    fullWidth
+                  >
+                    <Typography>{value}</Typography>
+                    {disabled && <Plugs className="size-4 text-red-500" />}
+                  </Flex>
+                )}
               />
             )}
           />

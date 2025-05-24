@@ -284,6 +284,7 @@ export type QueryRepoArgs = {
 
 
 export type QueryReposArgs = {
+  filter?: InputMaybe<ReposFilter>;
   org_id: Scalars['Int']['input'];
 };
 
@@ -310,6 +311,10 @@ export type Repo = {
   org: Org;
   provider_id: Scalars['String']['output'];
   tasks_count: Array<TasksCount>;
+};
+
+export type ReposFilter = {
+  is_archived?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type Task = {
@@ -502,6 +507,7 @@ export type ResolversTypes = {
   PublicOrg: ResolverTypeWrapper<public_orgs>;
   Query: ResolverTypeWrapper<{}>;
   Repo: ResolverTypeWrapper<repos>;
+  ReposFilter: ReposFilter;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Task: ResolverTypeWrapper<tasks>;
   TaskActivity: ResolverTypeWrapper<task_activities>;
@@ -539,6 +545,7 @@ export type ResolversParentTypes = {
   PublicOrg: public_orgs;
   Query: {};
   Repo: repos;
+  ReposFilter: ReposFilter;
   String: Scalars['String']['output'];
   Task: tasks;
   TaskActivity: task_activities;
