@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
+import { expect, userEvent, within } from '@storybook/test';
 
 import InputPaths from './InputPaths';
 
@@ -64,5 +65,38 @@ export const DisabledValue = {
   args: {
     ...Disabled.args,
     ...Value.args,
+  },
+} satisfies Story;
+
+export const KeyEnter = {
+  play: async ({ canvasElement }) => {
+    const { getByTestId } = within(canvasElement);
+
+    await userEvent.type(getByTestId('InputPaths-name'), 'src');
+    await userEvent.keyboard('{enter}');
+
+    expect(getByTestId('InputPathsX-src')).toBeInTheDocument();
+  },
+} satisfies Story;
+
+export const KeyComma = {
+  play: async ({ canvasElement }) => {
+    const { getByTestId } = within(canvasElement);
+
+    await userEvent.type(getByTestId('InputPaths-name'), 'src,');
+
+    expect(getByTestId('InputPathsX-src')).toBeInTheDocument();
+  },
+} satisfies Story;
+
+export const ClickDelete = {
+  ...Value,
+  play: async ({ canvasElement }) => {
+    const { getByTestId, queryByTestId } = within(canvasElement);
+
+    await userEvent.click(getByTestId('InputPathsX-foo'));
+
+    expect(queryByTestId('InputPathsX-foo')).not.toBeInTheDocument();
+    expect(getByTestId('InputPathsX-bar')).toBeInTheDocument();
   },
 } satisfies Story;
