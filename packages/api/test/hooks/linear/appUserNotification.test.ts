@@ -421,6 +421,124 @@ suite('linear hook AppUserNotification event', () => {
       });
     });
 
+    suite('create with archived repo specified', () => {
+      suiteSetup(async () => {
+        await app.prisma.repos.update({
+          where: {
+            id: repo.id,
+          },
+          data: {
+            is_archived: true,
+          },
+        });
+      });
+
+      suiteTeardown(async () => {
+        await app.prisma.repos.update({
+          where: {
+            id: repo.id,
+          },
+          data: {
+            is_archived: false,
+          },
+        });
+      });
+
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'AppUserNotification',
+          'issueCommentMention/create',
+        );
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Repo `repo-1` is archived.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
+    });
+
+    suite('create with uninstalled repo specified', () => {
+      suiteSetup(async () => {
+        await app.prisma.repos.update({
+          where: {
+            id: repo.id,
+          },
+          data: {
+            has_installation: false,
+          },
+        });
+      });
+
+      suiteTeardown(async () => {
+        await app.prisma.repos.update({
+          where: {
+            id: repo.id,
+          },
+          data: {
+            has_installation: true,
+          },
+        });
+      });
+
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'AppUserNotification',
+          'issueCommentMention/create',
+        );
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Repo `repo-1` is not connected to Automa.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
+    });
+
     suite('create with wrong repo specified', () => {
       setup(async () => {
         response = await callWithFixture(

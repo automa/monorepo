@@ -101,18 +101,18 @@ export const getSelectedBotAndRepo = async (
       where: {
         org_id: orgId,
       },
-      select: {
-        id: true,
-        name: true,
-        provider_id: true,
-        orgs: true,
-      },
     });
 
     selectedRepo = repos.find((repo) => [repo.name].includes(options.repo));
 
     if (!selectedRepo) {
       problems.push(`Repo \`${options.repo}\` not found.`);
+    } else if (selectedRepo.is_archived) {
+      selectedRepo = undefined;
+      problems.push(`Repo \`${options.repo}\` is archived.`);
+    } else if (!selectedRepo.has_installation) {
+      selectedRepo = undefined;
+      problems.push(`Repo \`${options.repo}\` is not connected to Automa.`);
     }
   } else {
     problems.push('Repo not specified. Use `repo=name` to specify a repo.');

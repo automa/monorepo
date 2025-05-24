@@ -775,6 +775,188 @@ suite('jira hook comment_created & comment_updated event', () => {
     });
   });
 
+  suite('create with archived repo specified', () => {
+    suiteSetup(async () => {
+      await app.prisma.repos.update({
+        where: {
+          id: repo.id,
+        },
+        data: {
+          is_archived: true,
+        },
+      });
+    });
+
+    suiteTeardown(async () => {
+      await app.prisma.repos.update({
+        where: {
+          id: repo.id,
+        },
+        data: {
+          is_archived: false,
+        },
+      });
+    });
+
+    setup(async () => {
+      response = await callWithFixture(app, 'comment_created', 'create');
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should not create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 0);
+    });
+
+    test('should not get information about issue', async () => {
+      assert.equal(issueStub.callCount, 0);
+    });
+
+    test('should create comment about the task', async () => {
+      assert.equal(createCommentStub.callCount, 1);
+      assert.equal(
+        createCommentStub.firstCall.args[0],
+        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281/comment',
+      );
+      assert.deepEqual(createCommentStub.firstCall.args[1], {
+        body: {
+          version: 1,
+          type: 'doc',
+          content: [
+            {
+              content: [
+                {
+                  type: 'text',
+                  text: 'We encountered the following issues while creating the task:',
+                },
+              ],
+              type: 'paragraph',
+            },
+            {
+              type: 'bulletList',
+              content: [
+                {
+                  type: 'listItem',
+                  content: [
+                    {
+                      type: 'paragraph',
+                      content: [
+                        {
+                          type: 'text',
+                          text: 'Repo `repo-1` is archived.',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      });
+      assert.deepEqual(createCommentStub.firstCall.args[2], {
+        headers: {
+          Authorization: 'Bearer abcdef',
+        },
+      });
+    });
+  });
+
+  suite('create with uninstalled repo specified', () => {
+    suiteSetup(async () => {
+      await app.prisma.repos.update({
+        where: {
+          id: repo.id,
+        },
+        data: {
+          has_installation: false,
+        },
+      });
+    });
+
+    suiteTeardown(async () => {
+      await app.prisma.repos.update({
+        where: {
+          id: repo.id,
+        },
+        data: {
+          has_installation: true,
+        },
+      });
+    });
+
+    setup(async () => {
+      response = await callWithFixture(app, 'comment_created', 'create');
+    });
+
+    test('should return 200', async () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should not create task', async () => {
+      const tasks = await app.prisma.tasks.findMany();
+
+      assert.equal(tasks.length, 0);
+    });
+
+    test('should not get information about issue', async () => {
+      assert.equal(issueStub.callCount, 0);
+    });
+
+    test('should create comment about the task', async () => {
+      assert.equal(createCommentStub.callCount, 1);
+      assert.equal(
+        createCommentStub.firstCall.args[0],
+        'https://api.atlassian.com/ex/jira/6cb652a9-8f3f-40b7-9695-df81e161fe07/rest/api/3/issue/10281/comment',
+      );
+      assert.deepEqual(createCommentStub.firstCall.args[1], {
+        body: {
+          version: 1,
+          type: 'doc',
+          content: [
+            {
+              content: [
+                {
+                  type: 'text',
+                  text: 'We encountered the following issues while creating the task:',
+                },
+              ],
+              type: 'paragraph',
+            },
+            {
+              type: 'bulletList',
+              content: [
+                {
+                  type: 'listItem',
+                  content: [
+                    {
+                      type: 'paragraph',
+                      content: [
+                        {
+                          type: 'text',
+                          text: 'Repo `repo-1` is not connected to Automa.',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      });
+      assert.deepEqual(createCommentStub.firstCall.args[2], {
+        headers: {
+          Authorization: 'Bearer abcdef',
+        },
+      });
+    });
+  });
+
   suite('create with no bot and no repo specified', () => {
     setup(async () => {
       response = await callWithFixture(

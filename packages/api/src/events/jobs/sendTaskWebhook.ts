@@ -55,6 +55,8 @@ const sendTaskWebhook: JobDefinition<{
       const repos = await app.prisma.repos.findMany({
         where: {
           org_id: task.org_id,
+          is_archived: false,
+          has_installation: true,
         },
         include: {
           orgs: true,
