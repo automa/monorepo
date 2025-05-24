@@ -19,10 +19,15 @@ export default async function (app: FastifyInstance) {
     params.append('client_id', LINEAR_APP.CLIENT_ID);
     params.append('redirect_uri', `${BASE_URI}${LINEAR_APP.CALLBACK_URI}`);
     params.append('response_type', 'code');
-    params.append('scope', ['read', 'comments:create'].join(','));
+    params.append(
+      'scope',
+      ['read', 'comments:create', 'app:assignable', 'app:mentionable'].join(
+        ',',
+      ),
+    );
     params.append('state', state);
     params.append('prompt', 'consent');
-    params.append('actor', 'application');
+    params.append('actor', 'app');
 
     return reply.redirect(`${LINEAR_APP.AUTHORIZE_URL}?${params.toString()}`);
   });

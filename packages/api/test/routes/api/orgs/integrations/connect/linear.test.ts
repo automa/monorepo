@@ -56,7 +56,7 @@ suite('api/orgs/integrations/connect/linear', () => {
 
     assert.match(
       location as string,
-      /^https:\/\/linear.app\/oauth\/authorize\?client_id=896839d929f08c9c54d1fef96550fa9c&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallbacks%2Flinear&response_type=code&scope=read%2Ccomments%3Acreate&state=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}&prompt=consent&actor=application/,
+      /^https:\/\/linear.app\/oauth\/authorize\?client_id=896839d929f08c9c54d1fef96550fa9c&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallbacks%2Flinear&response_type=code&scope=read%2Ccomments%3Acreate%2Capp%3Aassignable%2Capp%3Amentionable&state=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}&prompt=consent&actor=app/,
     );
   });
 
@@ -65,7 +65,10 @@ suite('api/orgs/integrations/connect/linear', () => {
 
     setup(() => {
       postStub = sandbox.stub(axios, 'post').resolves({
-        data: { access_token: 'abcdef', scope: 'read comments:create' },
+        data: {
+          access_token: 'abcdef',
+          scope: 'read comments:create app:assignable app:mentionable',
+        },
       });
     });
 
@@ -164,8 +167,6 @@ suite('api/orgs/integrations/connect/linear', () => {
           // @ts-ignore
           () => ({
             id: '90',
-            name: 'Pavan Kumar Sunkara',
-            email: 'pavan@example.com',
           }),
         );
 
@@ -219,8 +220,13 @@ suite('api/orgs/integrations/connect/linear', () => {
           id: '5678',
           name: 'Automa',
           slug: 'automa',
-          scopes: ['read', 'comments:create'],
-          userEmail: 'pavan@example.com',
+          scopes: [
+            'read',
+            'comments:create',
+            'app:assignable',
+            'app:mentionable',
+          ],
+          appUserId: '90',
         });
         assert.equal(integrations[0].created_by, user.id);
       });

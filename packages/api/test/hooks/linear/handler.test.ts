@@ -67,7 +67,7 @@ suite('linear hook', () => {
         'Linear-Event': 'Comment',
       },
       payload: {
-        action: 'create',
+        action: 'update',
       },
     });
 
@@ -82,7 +82,7 @@ suite('linear hook', () => {
         'Linear-Signature': 'invalid',
       },
       payload: {
-        action: 'create',
+        action: 'update',
       },
     });
 

@@ -2,12 +2,24 @@ import { FastifyInstance } from 'fastify';
 
 import { bot } from '@automa/prisma';
 
-export const AUTOMA_REGEX = /^\/automa(\s.*)?$/;
+import { environment } from '../env';
 
 const OPTIONS = ['bot', 'repo'];
 
-export const getOptions = (comment: string) => {
-  const options = comment.match(AUTOMA_REGEX)![1];
+export const getRegex = (mentionable: boolean = false) => {
+  if (!mentionable) {
+    return /^\/automa(\s.*)?$/;
+  }
+
+  const mentionUser = ['test', 'production'].includes(environment)
+    ? ''
+    : environment;
+
+  return new RegExp(`^@automa${mentionUser}(\\s.*)?$`);
+};
+
+export const getOptions = (comment: string, regex: RegExp) => {
+  const options = comment.match(regex)![1];
 
   if (!options) {
     return {};
@@ -27,11 +39,12 @@ export const getSelectedBotAndRepo = async (
   app: FastifyInstance,
   orgId: number,
   text: string,
+  regex: RegExp,
 ) => {
   const problems = [];
 
   // Get the options
-  const options = getOptions(text);
+  const options = getOptions(text, regex);
 
   // Find and assign bot if specified
   let selectedBot;

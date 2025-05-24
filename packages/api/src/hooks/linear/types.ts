@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 
 export enum LinearEventType {
+  AppUserNotification = 'AppUserNotification',
   Comment = 'Comment',
   OAuthApp = 'OAuthApp',
 }

@@ -65,19 +65,17 @@ export default async function (app: FastifyInstance) {
 
     const client = new LinearClient({ accessToken });
 
-    const [linearOrg, linearUser] = await Promise.all([
+    const [linearOrg, linearAppUser] = await Promise.all([
       client.organization,
       client.viewer,
     ]);
+
     app.log.info(
       {
         org_id: org.id,
+        linearAppId: linearAppUser.id,
         linearOrgName: linearOrg.name,
         linearOrgSlug: linearOrg.urlKey,
-        linearUserEmail: linearUser.email,
-        linearUserActive: linearUser.active,
-        linearUserAdmin: linearUser.admin,
-        linearUserGuest: linearUser.guest,
       },
       'Connected Linear integration',
     );
@@ -97,7 +95,7 @@ export default async function (app: FastifyInstance) {
           name: linearOrg.name,
           slug: linearOrg.urlKey,
           scopes: scope.split(' '),
-          userEmail: linearUser.email,
+          appUserId: linearAppUser.id,
         },
         created_by: request.userId!,
       },
