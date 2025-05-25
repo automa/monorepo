@@ -8,7 +8,7 @@ import { listChangelogs } from './utils';
 
 import Changelog from './Changelog';
 
-import { Container, Header, Timestamp } from './page.styles';
+import { Container, Content, Header, Timestamp } from './page.styles';
 
 export const metadata = {
   title: 'Automa ‒ Changelog',
@@ -23,7 +23,7 @@ const ChangelogPage: React.FC = () => {
   return (
     <Container>
       <Header>Changelog</Header>
-      <Flex direction="column" className="gap-12 lg:gap-20">
+      <Content>
         {changelogs.map(({ date, path, slug }) => (
           <Flex key={slug} className="flex-wrap lg:flex-nowrap">
             <Timestamp>
@@ -34,7 +34,7 @@ const ChangelogPage: React.FC = () => {
             <Changelog path={path} />
           </Flex>
         ))}
-      </Flex>
+      </Content>
     </Container>
   );
 };

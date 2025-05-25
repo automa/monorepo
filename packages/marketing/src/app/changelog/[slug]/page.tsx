@@ -1,4 +1,5 @@
 import React from 'react';
+import { format } from 'date-fns';
 
 import { parseContent } from 'utils';
 
@@ -6,6 +7,8 @@ import { ChangelogMatter } from '../types';
 import { listChangelogs } from '../utils';
 
 import Changelog from '../Changelog';
+
+import { Container, Timestamp } from './page.styles';
 
 export const generateStaticParams = listChangelogs;
 
@@ -35,7 +38,12 @@ const ChangelogPage: React.FC<Props> = ({ params: { slug } }) => {
     return null;
   }
 
-  return <Changelog path={file.path} />;
+  return (
+    <Container>
+      <Timestamp>{format(new Date(file.date), 'MMM dd, yyyy')}</Timestamp>
+      <Changelog path={file.path} />
+    </Container>
+  );
 };
 
 export default ChangelogPage;

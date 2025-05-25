@@ -10,7 +10,11 @@ export const common: MDXComponents = {
   h4: (props) => <Typography variant="title4" {...props} />,
   h5: (props) => <Typography variant="title5" {...props} />,
   h6: (props) => <Typography variant="title6" {...props} />,
-  p: (props) => <p className="py-4" {...props} />,
+  p: ({ children, ...props }) => (
+    <p className="py-4" {...props}>
+      <Typography variant="large">{children}</Typography>
+    </p>
+  ),
   em: (props) => <em className="italic" {...props} />,
 };
 
