@@ -102,7 +102,7 @@
     "@vitest/coverage-v8": "~1.2.1",
     "jsdom": "~22.1.0",
     "rollup-plugin-webpack-stats": "~0.2.6",
-    "sharp": "~0.32.1",
+    "sharp": "~0.34.2",
     "source-map-explorer": "~2.5.2",
     "svgo": "~3.0.2",
     "vite": "~5.0.11",
