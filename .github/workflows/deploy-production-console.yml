@@ -17,6 +17,10 @@ concurrency:
 jobs:
   deploy-production-console:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -72,3 +76,28 @@ jobs:
         run: aws cloudfront create-invalidation
           --distribution-id ${{ secrets.PRODUCTION_AWS_CLOUDFRONT_DISTRIBUTION_CONSOLE }}
           --paths '/index.html'
+      - name: Login to github container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract docker metadata
+        id: docker-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/automa/console
+          tags: |
+            type=raw,value=latest
+            type=raw,value=0.0.{{date 'YYYYMMDD'}}
+      - name: Install depot
+        uses: depot/setup-action@v1
+      - name: Build and push image
+        uses: depot/build-push-action@v1
+        with:
+          project: ${{ secrets.DEPOT_PROJECT_ID_CONSOLE }}
+          context: .
+          file: ./packages/console/Dockerfile
+          tags: ${{ steps.docker-meta.outputs.tags }}
+          labels: ${{ steps.docker-meta.outputs.labels }}
+          push: true
