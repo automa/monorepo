@@ -66,7 +66,7 @@ INSERT INTO public.task_items (task_id, created_at, actor_user_id, repo_id, bot_
 VALUES
   (1, NOW(), 1, NULL, NULL, NULL, 'origin', '{ "orgId": 1 }'),
   (1, NOW(), NULL, NULL, NULL, 1, 'activity', '{}'),
-  (2, NOW(), 1, NULL, NULL, NULL, 'message', '{ "content": "Update the homepage headline" }'),
+  (2, NOW(), 1, NULL, NULL, NULL, 'message', '{ "content": "Change it to say \"Run any coding agent asynchronously from any integration\"" }'),
   (2, NOW(), 1, NULL, NULL, NULL, 'origin', '{ "orgId": 1 }'),
   (2, NOW(), 1, 1, NULL, NULL, 'repo', '{}'),
   (2, NOW(), 1, NULL, 4, NULL, 'bot', '{}'),

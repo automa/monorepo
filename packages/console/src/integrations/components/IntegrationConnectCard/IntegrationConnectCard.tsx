@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { IntegrationType } from 'gql/graphql';
+import { useGateValue } from 'optimizer';
 import { Button, Flex, Tooltip, Typography } from 'shared';
 
 import { integrations } from '../../consts';
@@ -22,7 +23,10 @@ const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
     description,
     info,
     disabled,
+    gate,
   } = integrations[integration];
+
+  const isGateEnabled = useGateValue(gate!);
 
   const connectIntegration = useMemo(
     () =>
@@ -57,7 +61,7 @@ const IntegrationConnectCard: React.FC<IntegrationConnectCardProps> = ({
           <Logo className="size-8" />
           <Typography variant="title5">{name}</Typography>
         </Flex>
-        {disabled ? (
+        {(gate && !isGateEnabled) || disabled ? (
           <Tooltip body="Coming soon!">
             <Button disabled size="small">
               Connect
