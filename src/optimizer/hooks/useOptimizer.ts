@@ -4,8 +4,8 @@ import {
   useFeatureGate,
 } from '@statsig/react-bindings';
 
-export const useGateValue = (gate: string) => {
-  const { value } = useFeatureGate(gate);
+export const useGateValue = (gate?: string) => {
+  const { value } = useFeatureGate(gate ?? '');
 
   return !!value;
 };
