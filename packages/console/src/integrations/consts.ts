@@ -16,6 +16,7 @@ type Integration = {
     user?: string;
   };
   disabled?: boolean;
+  gate?: string;
 };
 
 export const integrations: {
@@ -55,6 +56,6 @@ export const integrations: {
     info: (config) => ({
       org: config.name,
     }),
-    disabled: true,
+    gate: 'slack_tasks',
   },
 };
