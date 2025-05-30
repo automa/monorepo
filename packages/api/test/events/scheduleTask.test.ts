@@ -84,6 +84,9 @@ suite('events/scheduleTask', () => {
     assert.deepEqual(publishStub.firstCall.args, [
       tasks[0].id,
       { taskId: tasks[0].id },
+      {
+        attempts: 10,
+      },
     ]);
   });
 });
