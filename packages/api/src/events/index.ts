@@ -1,6 +1,6 @@
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
-import { Queue, Worker } from 'bullmq';
+import { JobsOptions, Queue, Worker } from 'bullmq';
 import { BullMQOtel } from 'bullmq-otel';
 import Redis from 'ioredis';
 
@@ -27,12 +27,14 @@ declare module 'fastify' {
         publish: (
           id: string | number,
           input: JobInput<Jobs[K]>,
+          opts?: JobsOptions,
         ) => Promise<void>;
         bulkPublish: (
           jobs: {
             id: string | number;
             input: JobInput<Jobs[K]>;
           }[],
+          opts?: JobsOptions,
         ) => void;
       };
     };
@@ -117,8 +119,13 @@ const eventsPlugin: FastifyPluginAsync<{
       (acc, [key, job]) => ({
         ...acc,
         [key]: {
-          publish: (id: string | number, input: JobInput<typeof job>) =>
+          publish: (
+            id: string | number,
+            input: JobInput<typeof job>,
+            opts?: JobsOptions,
+          ) =>
             queue.add(key, input, {
+              ...opts,
               jobId: `${key}-${id}`,
             }),
           bulkPublish: (
@@ -126,12 +133,14 @@ const eventsPlugin: FastifyPluginAsync<{
               id: string | number;
               input: JobInput<typeof job>;
             }[],
+            opts?: JobsOptions,
           ) => {
             queue.addBulk(
               jobs.map(({ id, input }) => ({
                 name: key,
                 data: input,
                 opts: {
+                  ...opts,
                   jobId: `${key}-${id}`,
                 },
               })),

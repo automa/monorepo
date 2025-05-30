@@ -16,6 +16,7 @@ module.exports = {
   plugins: ['simple-import-sort'],
   rules: {
     quotes: ['warn', 'single', { avoidEscape: true }],
+    'no-throw-literal': 'error',
     'no-restricted-imports': [
       'error',
       {
