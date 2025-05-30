@@ -147,45 +147,61 @@ const sendTaskWebhook: JobDefinition<{
       });
     }
 
+    const id = `whmsg_task_created_${taskId}`;
+    const timestamp = new Date();
+    const unixTimestamp = Math.floor(timestamp.getTime() / 1000);
+
     const payload = {
-      task: {
-        id: taskId,
-        token: task.token,
-        title: task.title,
-        items: task.task_items
-          .filter(({ type }) =>
-            ([task_item.message, task_item.origin] as task_item[]).includes(
+      id,
+      type: 'task.created',
+      data: {
+        task: {
+          id: taskId,
+          token: task.token,
+          title: task.title,
+          items: task.task_items
+            .filter(({ type }) =>
+              ([task_item.message, task_item.origin] as task_item[]).includes(
+                type,
+              ),
+            )
+            .map(({ id, type, data }) => ({
+              id,
               type,
-            ),
-          )
-          .map(({ id, type, data }) => ({
-            id,
-            type,
-            data,
-          })),
+              data,
+            })),
+        },
+        repo: {
+          id: repo.id,
+          name: repo.name,
+          is_private: repo.is_private,
+        },
+        org: {
+          id: repo.orgs.id,
+          name: repo.orgs.name,
+          provider_type: repo.orgs.provider_type,
+        },
       },
-      repo: {
-        id: repo.id,
-        name: repo.name,
-        is_private: repo.is_private,
-      },
-      org: {
-        id: repo.orgs.id,
-        name: repo.orgs.name,
-        provider_type: repo.orgs.provider_type,
-      },
+      // Better to keep the timestamp last to avoid issues with JSON serialization
+      // in tests for generating the signature
+      timestamp: timestamp.toISOString(),
     };
 
     // Create webhook signature
-    const signature = createHmac('sha256', botInstallation.bots.webhook_secret)
-      .update(JSON.stringify(payload))
-      .digest('hex');
+    const signature = createHmac(
+      'sha256',
+      botInstallation.bots.webhook_secret.slice(11),
+    )
+      .update(`${id}.${unixTimestamp}.${JSON.stringify(payload)}`)
+      .digest('base64');
 
     // Send webhook to bot
     return axios.post(botInstallation.bots.webhook_url, payload, {
       headers: {
+        'webhook-id': id,
+        'webhook-timestamp': unixTimestamp,
+        'webhook-signature': `v1,${signature}`,
         'x-automa-server-host': env.BASE_URI,
-        'x-automa-signature': signature,
       },
     });
   },

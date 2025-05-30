@@ -16,6 +16,8 @@ export { server } from '../src';
 
 export * from './mocks';
 
+export const regexTimestamp = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/;
+
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -134,5 +136,18 @@ export const seedRepos = (
     })),
   });
 
-export const generateSignature = (secret: string, payload: string) =>
-  createHmac('sha256', secret).update(payload).digest('hex');
+export const generateWebhookSignature = (
+  secret: string,
+  timestamp: string,
+  payload: { id: string },
+) =>
+  `v1,${createHmac('sha256', secret.slice(11))
+    .update(
+      `${payload.id}.${Math.floor(
+        new Date(timestamp).getTime() / 1000,
+      )}.${JSON.stringify({
+        ...payload,
+        timestamp: new Date(timestamp).toISOString(),
+      })}`,
+    )
+    .digest('base64')}`;
