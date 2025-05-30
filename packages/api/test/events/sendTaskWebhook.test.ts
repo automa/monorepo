@@ -14,7 +14,8 @@ import {
 } from '@automa/prisma';
 
 import {
-  generateSignature,
+  generateWebhookSignature,
+  regexTimestamp,
   seedBots,
   seedOrgs,
   seedRepos,
@@ -102,42 +103,53 @@ suite('events/sendTaskWebhook', () => {
 
     test('should call bot webhook_url', () => {
       const body = {
-        task: {
-          id: task.id,
-          token: 'example',
-          title: 'Write test for handling "example" event',
-          items: [
-            {
-              id: task.task_items[0].id,
-              type: 'message',
-              data: {
-                content: 'Write test for handling "example" event',
+        id: `whmsg_task_created_${task.id}`,
+        type: 'task.created',
+        data: {
+          task: {
+            id: task.id,
+            token: 'example',
+            title: 'Write test for handling "example" event',
+            items: [
+              {
+                id: task.task_items[0].id,
+                type: 'message',
+                data: {
+                  content: 'Write test for handling "example" event',
+                },
               },
-            },
-          ],
-        },
-        repo: {
-          id: repo.id,
-          name: 'repo-0',
-          is_private: false,
-        },
-        org: {
-          id: org.id,
-          name: 'org-0',
-          provider_type: 'github',
+            ],
+          },
+          repo: {
+            id: repo.id,
+            name: 'repo-0',
+            is_private: false,
+          },
+          org: {
+            id: org.id,
+            name: 'org-0',
+            provider_type: 'github',
+          },
         },
       };
 
       assert.equal(postStub.callCount, 1);
       assert.equal(postStub.firstCall.args[0], 'https://example.com/webhook/0');
-      assert.deepEqual(postStub.firstCall.args[1], body);
+      assert.deepNestedInclude(postStub.firstCall.args[1], body);
+      assert.match(postStub.firstCall.args[1].timestamp, regexTimestamp);
+
       assert.deepEqual(postStub.firstCall.args[2], {
         headers: {
-          'x-automa-server-host': 'http://localhost:8080',
-          'x-automa-signature': generateSignature(
-            'atma_whsec_0',
-            JSON.stringify(body),
+          'webhook-id': body.id,
+          'webhook-timestamp': Math.floor(
+            new Date(postStub.firstCall.args[1].timestamp).getTime() / 1000,
           ),
+          'webhook-signature': generateWebhookSignature(
+            'atma_whsec_0',
+            postStub.firstCall.args[1].timestamp,
+            body,
+          ),
+          'x-automa-server-host': 'http://localhost:8080',
         },
       });
     });
@@ -230,46 +242,50 @@ suite('events/sendTaskWebhook', () => {
 
       test('should call bot webhook_url', () => {
         const body = {
-          task: {
-            id: task.id,
-            token: 'example',
-            title: 'Write test for handling "example" event',
-            items: [
-              {
-                id: task.task_items[0].id,
-                type: 'message',
-                data: {
-                  content:
-                    '- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
+          id: `whmsg_task_created_${task.id}`,
+          type: 'task.created',
+          data: {
+            task: {
+              id: task.id,
+              token: 'example',
+              title: 'Write test for handling "example" event',
+              items: [
+                {
+                  id: task.task_items[0].id,
+                  type: 'message',
+                  data: {
+                    content:
+                      '- Delete the github refresh token stored in DB\n- Clear all sessions for the user',
+                  },
                 },
-              },
-              {
-                id: task.task_items[1].id,
-                type: 'origin',
-                data: {
-                  url: 'https://linear.app/automa/issue/PRO-93/handle-when-user-revokes-github-app#comment-a41c315a',
-                  teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
-                  userId: '5611201a-9594-4407-9490-731894376791',
-                  issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
-                  commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
-                  issueTitle: 'Write test for handling "example" event',
-                  integration: 'linear',
-                  organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
-                  issueIdentifier: 'PRO-93',
-                  organizationName: 'Automa',
+                {
+                  id: task.task_items[1].id,
+                  type: 'origin',
+                  data: {
+                    url: 'https://linear.app/automa/issue/PRO-93/handle-when-user-revokes-github-app#comment-a41c315a',
+                    teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+                    userId: '5611201a-9594-4407-9490-731894376791',
+                    issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+                    commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+                    issueTitle: 'Write test for handling "example" event',
+                    integration: 'linear',
+                    organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+                    issueIdentifier: 'PRO-93',
+                    organizationName: 'Automa',
+                  },
                 },
-              },
-            ],
-          },
-          repo: {
-            id: repo.id,
-            name: 'repo-0',
-            is_private: true,
-          },
-          org: {
-            id: org.id,
-            name: 'org-0',
-            provider_type: 'github',
+              ],
+            },
+            repo: {
+              id: repo.id,
+              name: 'repo-0',
+              is_private: true,
+            },
+            org: {
+              id: org.id,
+              name: 'org-0',
+              provider_type: 'github',
+            },
           },
         };
 
@@ -278,14 +294,21 @@ suite('events/sendTaskWebhook', () => {
           postStub.firstCall.args[0],
           'https://example.com/webhook/0',
         );
-        assert.deepEqual(postStub.firstCall.args[1], body);
+        assert.deepNestedInclude(postStub.firstCall.args[1], body);
+        assert.match(postStub.firstCall.args[1].timestamp, regexTimestamp);
+
         assert.deepEqual(postStub.firstCall.args[2], {
           headers: {
-            'x-automa-server-host': 'http://localhost:8080',
-            'x-automa-signature': generateSignature(
-              'atma_whsec_0',
-              JSON.stringify(body),
+            'webhook-id': `whmsg_task_created_${task.id}`,
+            'webhook-timestamp': Math.floor(
+              new Date(postStub.firstCall.args[1].timestamp).getTime() / 1000,
             ),
+            'webhook-signature': generateWebhookSignature(
+              'atma_whsec_0',
+              postStub.firstCall.args[1].timestamp,
+              body,
+            ),
+            'x-automa-server-host': 'http://localhost:8080',
           },
         });
       });
