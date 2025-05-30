@@ -21,7 +21,6 @@ test('with user logs them out and redirects to login', async () => {
   const { store } = render(<AuthLogout />, {
     state: {
       auth: {
-        loading: false,
         user: {
           id: '1',
           email: 'john@example.com',
@@ -41,7 +40,6 @@ test('with user logs them out and redirects to login', async () => {
   expect(mockedNavigate).toHaveBeenCalledWith({ to: '/auth/login' });
 
   expect(store.getState().auth).toEqual({
-    loading: false,
     user: null,
   });
 });

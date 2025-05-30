@@ -5,6 +5,7 @@ import { IntegrationType } from 'gql/graphql';
 import { Flex, Loader } from 'shared';
 import { objectKeys } from 'utils';
 
+import { useApp } from 'app';
 import { IntegrationConnectCard, integrations } from 'integrations';
 
 import { OrgIntegrationsProps } from './types';
@@ -12,6 +13,8 @@ import { OrgIntegrationsProps } from './types';
 import { INTEGRATIONS_QUERY } from './OrgIntegrations.queries';
 
 const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org }) => {
+  const { app } = useApp();
+
   const { data, loading } = useQuery(INTEGRATIONS_QUERY, {
     variables: {
       org_id: org.id,
@@ -37,18 +40,22 @@ const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org }) => {
       {loading && !data ? (
         <Loader />
       ) : (
-        objectKeys(integrations).map((integrationType) => (
-          <IntegrationConnectCard
-            key={integrationType}
-            integration={integrationType}
-            connected={connectedIntegrations[integrationType]}
-            config={
-              data?.integrations.find(({ type }) => type === integrationType)
-                ?.config
-            }
-            org={org}
-          />
-        ))
+        objectKeys(integrations).map(
+          (integrationType) =>
+            app.integrations[integrationType] && (
+              <IntegrationConnectCard
+                key={integrationType}
+                integration={integrationType}
+                connected={connectedIntegrations[integrationType]}
+                config={
+                  data?.integrations.find(
+                    ({ type }) => type === integrationType,
+                  )?.config
+                }
+                org={org}
+              />
+            ),
+        )
       )}
     </Flex>
   );

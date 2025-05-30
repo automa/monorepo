@@ -3,6 +3,7 @@ import { Link, Navigate, useLocation } from 'react-router-dom';
 
 import { Button, Flex, Tooltip, Typography } from 'shared';
 
+import { useApp } from 'app';
 import { useUser } from 'auth';
 
 import Logo from 'assets/logo.svg?react';
@@ -14,6 +15,8 @@ import { AuthLoginProps } from './types';
 import { LoginButton } from './AuthLogin.styles';
 
 const AuthLogin: React.FC<AuthLoginProps> = () => {
+  const { app } = useApp();
+
   const user = useUser();
 
   const location = useLocation();
@@ -39,6 +42,10 @@ const AuthLogin: React.FC<AuthLoginProps> = () => {
 
   if (user) {
     return <Navigate to="/" />;
+  }
+
+  if (!app.integrations.github && !app.integrations.gitlab) {
+    return <Navigate to="/admin/setup" replace />;
   }
 
   return (

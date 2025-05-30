@@ -1,21 +1,78 @@
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
-import { mockedNavigate, mockedUseNavigate, render } from 'tests';
+import { mockedNavigate, render } from 'tests';
 
 import AuthLogin from './AuthLogin';
 
-test('with no user renders', async () => {
-  render(<AuthLogin />);
+beforeEach(() => {
+  vi.clearAllMocks();
+});
 
-  expect(mockedUseNavigate).toHaveBeenCalledTimes(0);
+test('with no github and no gitlab redirects to /admin/setup', async () => {
+  render(<AuthLogin />, {
+    state: {
+      app: {
+        app: {
+          cloud: true,
+          client_uri: 'http://localhost:3000',
+          integrations: {
+            github: false,
+            gitlab: false,
+            linear: false,
+            jira: false,
+            slack: false,
+          },
+        },
+      },
+    },
+  });
+
+  expect(mockedNavigate).toHaveBeenCalledTimes(1);
+  expect(mockedNavigate).toHaveBeenCalledWith({
+    to: '/admin/setup',
+    replace: true,
+  });
+});
+
+test('with github and with no user renders', async () => {
+  render(<AuthLogin />, {
+    state: {
+      app: {
+        app: {
+          cloud: true,
+          client_uri: 'http://localhost:3000',
+          integrations: {
+            github: true,
+            gitlab: false,
+            linear: false,
+            jira: false,
+            slack: false,
+          },
+        },
+      },
+    },
+  });
+
   expect(mockedNavigate).toHaveBeenCalledTimes(0);
 });
 
-test('with user redirects to /', async () => {
+test('with github and user redirects to /', async () => {
   render(<AuthLogin />, {
     state: {
+      app: {
+        app: {
+          cloud: true,
+          client_uri: 'http://localhost:3000',
+          integrations: {
+            github: true,
+            gitlab: false,
+            linear: false,
+            jira: false,
+            slack: false,
+          },
+        },
+      },
       auth: {
-        loading: false,
         user: {
           id: '1',
           email: 'john@example.com',

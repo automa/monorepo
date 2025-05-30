@@ -17,6 +17,10 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
 }) => {
   const data = getFragment(USER_QUERY_FRAGMENT, fullData);
 
+  if (!data.user) {
+    return null;
+  }
+
   return (
     <Container {...props} asChild>
       <DropdownMenu

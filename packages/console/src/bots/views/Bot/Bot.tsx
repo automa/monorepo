@@ -20,6 +20,7 @@ import {
 } from 'shared';
 import InputEditor from 'shared/components/InputEditor';
 
+import { useApp } from 'app';
 import { InputPaths } from 'bots';
 
 import { botTypeDefinition } from 'bots/utils';
@@ -36,6 +37,8 @@ import { Label, SectionTitle } from './Bot.styles';
 
 const Bot: React.FC<BotProps> = ({ org }) => {
   const { botName } = useParams();
+
+  const { app } = useApp();
 
   const { data, loading } = useQuery(BOT_QUERY, {
     variables: {
@@ -84,7 +87,7 @@ const Bot: React.FC<BotProps> = ({ org }) => {
       },
     });
 
-  const needsApproval = !!import.meta.env.VITE_CLOUD && bot && bot.is_published;
+  const needsApproval = app.cloud && bot && bot.is_published;
 
   const warnAboutNeedingApproval = needsApproval && dirtyFields.draft_paths;
   const needsMarketplaceApproval =

@@ -6,7 +6,7 @@ import { users } from '@automa/prisma';
 import { graphql, seedUsers, server } from '../utils';
 
 suite('graphql users', () => {
-  let app: FastifyInstance;
+  let app: FastifyInstance, sessionUser: users | null;
   let user: users, secondUser: users;
 
   suiteSetup(async () => {
@@ -41,7 +41,7 @@ suite('graphql users', () => {
     });
 
     app.addHook('preValidation', async (request) => {
-      request.session.userId = user.id;
+      request.session.userId = sessionUser?.id ?? undefined;
     });
   });
 
@@ -50,62 +50,115 @@ suite('graphql users', () => {
     await app.close();
   });
 
+  setup(() => {
+    sessionUser = user;
+  });
+
   suite('query user', () => {
     let response: LightMyRequestResponse;
 
-    setup(async () => {
-      response = await graphql(
-        app,
-        `
-          query user {
-            user {
-              id
-              name
-              email
-              providers {
+    suite('with session', () => {
+      setup(async () => {
+        response = await graphql(
+          app,
+          `
+            query user {
+              user {
                 id
-                provider_type
-                provider_id
+                name
+                email
+                providers {
+                  id
+                  provider_type
+                  provider_id
+                }
               }
             }
-          }
-        `,
-      );
+          `,
+        );
+      });
+
+      test('should be successful', () => {
+        assert.equal(response.statusCode, 200);
+
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+      });
+
+      test('should have no errors', async () => {
+        const { errors } = response.json();
+
+        assert.isUndefined(errors);
+      });
+
+      test('should return user', async () => {
+        const {
+          data: { user },
+        } = response.json();
+
+        assert.isNumber(user.id);
+        assert.equal(user.name, 'User 0');
+        assert.equal(user.email, 'user-0@example.com');
+      });
+
+      test("should return user's providers only", async () => {
+        const {
+          data: { user },
+        } = response.json();
+
+        assert.lengthOf(user.providers, 2);
+
+        assert.isNumber(user.providers[0].id);
+        assert.equal(user.providers[0].provider_type, 'github');
+        assert.equal(user.providers[0].provider_id, '123');
+
+        assert.isNumber(user.providers[1].id);
+        assert.equal(user.providers[1].provider_type, 'gitlab');
+        assert.equal(user.providers[1].provider_id, '123');
+      });
     });
 
-    test('should be successful', () => {
-      assert.equal(response.statusCode, 200);
+    suite('without session', () => {
+      setup(async () => {
+        sessionUser = null;
 
-      assert.equal(
-        response.headers['content-type'],
-        'application/json; charset=utf-8',
-      );
-    });
+        response = await graphql(
+          app,
+          `
+            query user {
+              user {
+                id
+                email
+              }
+            }
+          `,
+        );
+      });
 
-    test('should return user', async () => {
-      const {
-        data: { user },
-      } = response.json();
+      test('should be successful', () => {
+        assert.equal(response.statusCode, 200);
 
-      assert.isNumber(user.id);
-      assert.equal(user.name, 'User 0');
-      assert.equal(user.email, 'user-0@example.com');
-    });
+        assert.equal(
+          response.headers['content-type'],
+          'application/json; charset=utf-8',
+        );
+      });
 
-    test("should return user's providers only", async () => {
-      const {
-        data: { user },
-      } = response.json();
+      test('should have no errors', async () => {
+        const { errors } = response.json();
 
-      assert.lengthOf(user.providers, 2);
+        assert.isUndefined(errors);
+      });
 
-      assert.isNumber(user.providers[0].id);
-      assert.equal(user.providers[0].provider_type, 'github');
-      assert.equal(user.providers[0].provider_id, '123');
+      test('should return null', async () => {
+        const {
+          data: { user },
+        } = response.json();
 
-      assert.isNumber(user.providers[1].id);
-      assert.equal(user.providers[1].provider_type, 'gitlab');
-      assert.equal(user.providers[1].provider_id, '123');
+        assert.isNull(user);
+      });
     });
   });
 

@@ -88,7 +88,12 @@ const Org: React.FC<OrgProps> = () => {
 
   // Redirect to first tab if on org page
   if (org && isOrgIndexView) {
-    return <Navigate to={tabs[0].path} replace />;
+    return (
+      <>
+        <Loader />
+        <Navigate to={tabs[0].path} replace />
+      </>
+    );
   }
 
   return (

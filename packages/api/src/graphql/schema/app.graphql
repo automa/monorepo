@@ -1,0 +1,17 @@
+type Query {
+  app: App!
+}
+
+type App {
+  cloud: Boolean!
+  client_uri: String!
+  integrations: AppIntegrations!
+}
+
+type AppIntegrations {
+  github: Boolean!
+  gitlab: Boolean!
+  linear: Boolean!
+  jira: Boolean!
+  slack: Boolean!
+}

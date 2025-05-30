@@ -9,7 +9,7 @@ import DeepLink from './DeepLink';
 test('with no orgs does nothing', async () => {
   render(<DeepLink />);
 
-  expect(mockedNavigate).not.toHaveBeenCalled();
+  expect(mockedNavigate).toHaveBeenCalledTimes(0);
 });
 
 test('with orgs redirects to first org', async () => {
