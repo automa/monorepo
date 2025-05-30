@@ -24,8 +24,11 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <html lang="en" className={fonts}>
       <link rel="icon" href="/favicon.svg" />
       <Container>
-        <Flex direction="column" className="mx-auto w-screen max-w-7xl px-6">
-          <Flex justifyContent="space-between">
+        <Flex direction="column" className="mx-auto w-screen max-w-8xl">
+          <Flex
+            justifyContent="space-between"
+            className="mx-auto w-screen max-w-7xl px-6"
+          >
             <Link href="/">
               <Flex className="gap-2 py-4">
                 <Image src={Logo} alt="logo" className="size-8" />
