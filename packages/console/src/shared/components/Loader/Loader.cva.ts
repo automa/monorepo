@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority';
 export const loader = cva('', {
   variants: {
     size: {
-      medium: 'size-20',
+      medium: 'size-16',
       small: 'size-8',
     },
   },
