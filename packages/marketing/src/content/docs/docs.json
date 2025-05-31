@@ -1,0 +1,135 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Automa Docs",
+  "description": "Documentation for Automa - A code automation platform",
+  "favicon": "https://automa.app/favicon.svg",
+  "logo": {
+    "light": "/images/full_light.svg",
+    "dark": "/images/full_dark.svg",
+    "href": "https://automa.app"
+  },
+  "colors": {
+    "primary": "#DB475E",
+    "light": "#DB475E",
+    "dark": "#DB475E"
+  },
+  "icons": {
+    "library": "lucide"
+  },
+  "styling": {
+    "eyebrows": "breadcrumbs"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "",
+        "icon": "github",
+        "href": "https://github.com/automa"
+      },
+      {
+        "label": "",
+        "icon": "discord",
+        "href": "https://discord.gg/z4Gqd7T2WQ"
+      },
+      {
+        "label": "Support",
+        "href": "mailto:support@automa.app"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get Started",
+      "href": "https://console.automa.app"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/automa",
+      "discord": "https://discord.gg/z4Gqd7T2WQ",
+      "bluesky": "https://bsky.app/profile/automa.app",
+      "linkedin": "https://linkedin.com/company/automa-app"
+    },
+    "links": [
+      {
+        "header": "Product",
+        "items": [
+          {
+            "label": "Product",
+            "href": "https://automa.app"
+          },
+          {
+            "label": "Pricing",
+            "href": "https://automa.app/pricing"
+          },
+          {
+            "label": "Changelog",
+            "href": "https://automa.app/changelog"
+          }
+        ]
+      },
+      {
+        "header": "Resources",
+        "items": [
+          {
+            "label": "Manifesto",
+            "href": "https://automa.app/manifesto"
+          },
+          {
+            "label": "Privacy Policy",
+            "href": "https://automa.app/privacy"
+          },
+          {
+            "label": "Terms of Service",
+            "href": "https://automa.app/tos"
+          }
+        ]
+      },
+      {
+        "header": "Support",
+        "items": [
+          {
+            "label": "Docs",
+            "href": "https://docs.automa.app"
+          },
+          {
+            "label": "Community",
+            "href": "https://discord.gg/z4Gqd7T2WQ"
+          },
+          {
+            "label": "GitHub",
+            "href": "https://github.com/automa/monorepo/issues"
+          },
+          {
+            "label": "Feedback",
+            "href": "https://github.com/automa/feedback/issues"
+          },
+          {
+            "label": "Support",
+            "href": "mailto:support@automa.app"
+          }
+        ]
+      }
+    ]
+  },
+  "contextual": {
+    "options": ["copy", "chatgpt", "claude"]
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["index"]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "href": "https://automa.app/changelog"
+      }
+    ]
+  }
+}
