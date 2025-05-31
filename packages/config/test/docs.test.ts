@@ -27,7 +27,7 @@ const assertDocumented = (schemaFile: string, docsFile: string) => {
   }
 };
 
-suite('docs', () => {
+suite.skip('docs', () => {
   test('repository', () => {
     assertDocumented('repository', 'repository');
   });

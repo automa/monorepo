@@ -53,6 +53,8 @@
     "@storybook/nextjs": "~8.1.11",
     "@storybook/react": "~8.1.11",
     "@types/mdx": "~2.0.13",
+    "rehype-autolink-headings": "~7.1.0",
+    "rehype-slug": "~6.0.0",
     "remark-gfm": "~4.0.0"
   }
 }
