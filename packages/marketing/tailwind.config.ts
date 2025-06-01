@@ -22,17 +22,25 @@ const config: Config = {
       fontSize: {
         '2xs': '0.625rem',
       },
+      gridTemplateColumns: {
+        '2': 'repeat(2, minmax(0, 1fr))',
+        '3': 'repeat(3, minmax(0, 1fr))',
+        '4': 'repeat(4, minmax(0, 1fr))',
+      },
       height: {
-        '0.25': '0.0625rem',
-      },
-      padding: {
-        'cal-sans': '0.1em',
-      },
-      width: {
         '0.25': '0.0625rem',
       },
       maxWidth: {
         '8xl': '90rem',
+      },
+      padding: {
+        'cal-sans': '0.1em',
+      },
+      screens: {
+        short: { raw: '(max-height: 700px)' },
+      },
+      width: {
+        '0.25': '0.0625rem',
       },
     },
   },

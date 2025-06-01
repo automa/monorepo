@@ -25,6 +25,11 @@ const Nav: React.FC<NavProps> = ({ ...props }) => {
           </NavigationMenu.Item>
           <NavigationMenu.Item>
             <NavigationMenu.Link asChild>
+              <Link href="/agents">Agents</Link>
+            </NavigationMenu.Link>
+          </NavigationMenu.Item>
+          <NavigationMenu.Item>
+            <NavigationMenu.Link asChild>
               <Link href="https://docs.automa.app">Docs</Link>
             </NavigationMenu.Link>
           </NavigationMenu.Item>

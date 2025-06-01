@@ -10,6 +10,7 @@ import { Button, Flex, Typography } from 'components';
 
 import Logo from 'assets/logo.svg';
 
+import Footer from './Footer';
 import Nav from './Nav';
 
 import { Container } from './layout.styles';
@@ -42,6 +43,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </Flex>
           </Flex>
           {children}
+          <Footer />
         </Flex>
       </Container>
     </html>
