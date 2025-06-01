@@ -53,3 +53,14 @@ jobs:
             --cache-control max-age=31536000
           aws s3 sync packages/marketing/build s3://${{ secrets.PRODUCTION_AWS_S3_BUCKET_MARKETING }} \
             --exclude '*' --include '*.html'
+      - name: Invalidate cloudfront cache
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID_MARKETING }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY_MARKETING }}
+          AWS_REGION: ${{ secrets.PRODUCTION_AWS_REGION_MARKETING }}
+        run: |
+          HTML_PATHS=$(find ./build -name "*.html" | sed 's|./build||g' | tr '\n' ' ')
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.PRODUCTION_AWS_CLOUDFRONT_DISTRIBUTION_MARKETING }} \
+            --paths $HTML_PATHS
+        working-directory: packages/marketing
