@@ -31,10 +31,6 @@
         "label": "",
         "icon": "discord",
         "href": "https://discord.gg/z4Gqd7T2WQ"
-      },
-      {
-        "label": "Support",
-        "href": "mailto:support@automa.app"
       }
     ],
     "primary": {
@@ -81,7 +77,7 @@
           },
           {
             "label": "Terms of Service",
-            "href": "https://automa.app/tos"
+            "href": "https://automa.app/terms"
           }
         ]
       },
@@ -97,7 +93,7 @@
             "href": "https://discord.gg/z4Gqd7T2WQ"
           },
           {
-            "label": "GitHub",
+            "label": "Issues",
             "href": "https://github.com/automa/monorepo/issues"
           },
           {
