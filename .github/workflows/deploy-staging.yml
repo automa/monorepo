@@ -51,3 +51,13 @@ jobs:
             --cache-control max-age=31536000
           aws s3 sync build s3://${{ secrets.STAGING_AWS_S3_BUCKET }} \
             --exclude '*' --include '*.html'
+      - name: Invalidate cloudfront cache
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.STAGING_AWS_REGION }}
+        run: |
+          HTML_PATHS=$(find ./build -name "*.html" | sed 's|./build||g' | tr '\n' ' ')
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.STAGING_AWS_CLOUDFRONT_DISTRIBUTION }} \
+            --paths $HTML_PATHS
