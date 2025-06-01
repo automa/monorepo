@@ -63,3 +63,4 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.STAGING_AWS_CLOUDFRONT_DISTRIBUTION_MARKETING }} \
             --paths $HTML_PATHS
+        working-directory: packages/marketing
