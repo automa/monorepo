@@ -22,17 +22,48 @@ const config: Config = {
       fontSize: {
         '2xs': '0.625rem',
       },
+      gridTemplateColumns: {
+        '2': 'repeat(2, minmax(0, 1fr))',
+        '3': 'repeat(3, minmax(0, 1fr))',
+        '4': 'repeat(4, minmax(0, 1fr))',
+      },
       height: {
         '0.25': '0.0625rem',
+      },
+      keyframes: {
+        heroText1: {
+          '0%': { opacity: '0' },
+          '2.365%, 27.286%': { opacity: '1' },
+          '29.652%, 100%': { opacity: '0' },
+        },
+        heroText2: {
+          '0%, 32.018%': { opacity: '0' },
+          '34.384%, 65.298%': { opacity: '1' },
+          '67.663%, 100%': { opacity: '0' },
+        },
+        heroText3: {
+          '0%, 70.029%': { opacity: '0' },
+          '72.395%, 95.265%': { opacity: '1' },
+          '97.631%, 100%': { opacity: '0' },
+        },
+      },
+      animation: {
+        heroText1: 'heroText1 25.36s linear infinite',
+        heroText2: 'heroText2 25.36s linear infinite',
+        heroText3: 'heroText3 25.36s linear infinite',
+      },
+      maxWidth: {
+        '8xl': '90rem',
       },
       padding: {
         'cal-sans': '0.1em',
       },
+      screens: {
+        hero: '444px',
+        short: { raw: '(max-height: 700px)' },
+      },
       width: {
         '0.25': '0.0625rem',
-      },
-      maxWidth: {
-        '8xl': '90rem',
       },
     },
   },

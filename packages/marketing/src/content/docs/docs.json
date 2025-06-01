@@ -51,7 +51,7 @@
         "header": "Product",
         "items": [
           {
-            "label": "Product",
+            "label": "Features",
             "href": "https://automa.app"
           },
           {
@@ -85,7 +85,7 @@
         "header": "Support",
         "items": [
           {
-            "label": "Docs",
+            "label": "Documentation",
             "href": "https://docs.automa.app"
           },
           {
