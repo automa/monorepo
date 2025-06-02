@@ -7,8 +7,9 @@ const CHUNK_SIZE = 10;
 const scheduleBotInstallation: JobDefinition<{
   botId: number;
   orgId: number;
+  timestamp: number;
 }> = {
-  handler: async (app, { botId, orgId }) => {
+  handler: async (app, { botId, orgId, timestamp }) => {
     let cursor: number | undefined;
     let hasMore = true;
 
@@ -36,7 +37,7 @@ const scheduleBotInstallation: JobDefinition<{
         ).map((repos) =>
           app.events.scheduleTask.bulkPublish(
             repos.map((repo) => ({
-              id: `${botId}-${orgId}-${repo.id}`,
+              id: `${botId}-${orgId}-${repo.id}-${timestamp}`,
               input: {
                 botId,
                 orgId,

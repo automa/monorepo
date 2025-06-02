@@ -9,8 +9,9 @@ import { seedBots, seedOrgs, server } from '../utils';
 import scheduleBots from '../../src/events/jobs/scheduleBots';
 
 suite('events/scheduleBots', () => {
-  let app: FastifyInstance, sandbox: SinonSandbox, publishStub: SinonStub;
-  let org: orgs, bots: bots[];
+  let app: FastifyInstance, sandbox: SinonSandbox;
+  let publishStub: SinonStub, timeStub: SinonStub;
+  let org: orgs, bots: bots[], timestamp: number;
 
   suiteSetup(async () => {
     app = await server();
@@ -40,6 +41,9 @@ suite('events/scheduleBots', () => {
   });
 
   setup(async () => {
+    timestamp = Date.now();
+    sandbox.stub(Date, 'now').returns(timestamp);
+
     publishStub = sandbox
       .stub(app.events.scheduleBot, 'bulkPublish')
       .resolves();
@@ -57,19 +61,56 @@ suite('events/scheduleBots', () => {
     assert.deepEqual(publishStub.args, [
       [
         [
-          { id: bots[0].id, input: { botId: bots[0].id } },
-          { id: bots[1].id, input: { botId: bots[1].id } },
-          { id: bots[2].id, input: { botId: bots[2].id } },
-          { id: bots[3].id, input: { botId: bots[3].id } },
-          { id: bots[4].id, input: { botId: bots[4].id } },
-          { id: bots[6].id, input: { botId: bots[6].id } },
-          { id: bots[7].id, input: { botId: bots[7].id } },
-          { id: bots[8].id, input: { botId: bots[8].id } },
-          { id: bots[9].id, input: { botId: bots[9].id } },
-          { id: bots[11].id, input: { botId: bots[11].id } },
+          {
+            id: `${bots[0].id}-${timestamp}`,
+            input: { botId: bots[0].id, timestamp },
+          },
+          {
+            id: `${bots[1].id}-${timestamp}`,
+            input: { botId: bots[1].id, timestamp },
+          },
+          {
+            id: `${bots[2].id}-${timestamp}`,
+            input: { botId: bots[2].id, timestamp },
+          },
+          {
+            id: `${bots[3].id}-${timestamp}`,
+            input: { botId: bots[3].id, timestamp },
+          },
+          {
+            id: `${bots[4].id}-${timestamp}`,
+            input: { botId: bots[4].id, timestamp },
+          },
+          {
+            id: `${bots[6].id}-${timestamp}`,
+            input: { botId: bots[6].id, timestamp },
+          },
+          {
+            id: `${bots[7].id}-${timestamp}`,
+            input: { botId: bots[7].id, timestamp },
+          },
+          {
+            id: `${bots[8].id}-${timestamp}`,
+            input: { botId: bots[8].id, timestamp },
+          },
+          {
+            id: `${bots[9].id}-${timestamp}`,
+            input: { botId: bots[9].id, timestamp },
+          },
+          {
+            id: `${bots[11].id}-${timestamp}`,
+            input: { botId: bots[11].id, timestamp },
+          },
         ],
       ],
-      [[{ id: bots[12].id, input: { botId: bots[12].id } }]],
+      [
+        [
+          {
+            id: `${bots[12].id}-${timestamp}`,
+            input: { botId: bots[12].id, timestamp },
+          },
+        ],
+      ],
     ]);
   });
 });

@@ -575,6 +575,9 @@ suite('graphql botInstallations', () => {
         },
       });
 
+      const timestamp = Date.now();
+      sandbox.stub(Date, 'now').returns(timestamp);
+
       const response = await botInstall(app, org.id, {
         bot_id: bot.id,
       });
@@ -589,7 +592,10 @@ suite('graphql botInstallations', () => {
       assert.equal(publishStub.callCount, 1);
 
       assert.deepEqual(publishStub.args, [
-        [`${bot.id}-${org.id}`, { botId: bot.id, orgId: org.id }],
+        [
+          `${bot.id}-${org.id}-${timestamp}`,
+          { botId: bot.id, orgId: org.id, timestamp },
+        ],
       ]);
     });
   });

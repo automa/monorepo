@@ -17,13 +17,14 @@ export const botInstall = async (
   });
 
   if (botInstallation.bots.type === bot.scheduled) {
-    await events.scheduleBotInstallation.publish(
-      `${botInstallation.bot_id}-${botInstallation.org_id}`,
-      {
-        botId: botInstallation.bot_id,
-        orgId: botInstallation.org_id,
-      },
-    );
+    const timestamp = Date.now();
+    const jobId = `${botInstallation.bot_id}-${botInstallation.org_id}-${timestamp}`;
+
+    await events.scheduleBotInstallation.publish(jobId, {
+      botId: botInstallation.bot_id,
+      orgId: botInstallation.org_id,
+      timestamp,
+    });
   }
 
   return botInstallation;

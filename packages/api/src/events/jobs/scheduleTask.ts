@@ -1,4 +1,4 @@
-import { task_item } from '@automa/prisma';
+import { task_item, task_state } from '@automa/prisma';
 
 import { JobDefinition } from '../types';
 
@@ -28,6 +28,37 @@ const scheduleTask: JobDefinition<{
         },
       }),
     ]);
+
+    const hasTask = await app.prisma.tasks.count({
+      where: {
+        org_id: orgId,
+        state: {
+          in: [task_state.submitted, task_state.started],
+        },
+        task_items: {
+          some: {
+            type: task_item.repo,
+            repo_id: repo.id,
+          },
+        },
+        AND: {
+          task_items: {
+            some: {
+              type: task_item.bot,
+              bot_id: bot.id,
+            },
+          },
+        },
+      },
+    });
+
+    if (hasTask > 0) {
+      app.log.info(
+        `The previous task for ${bot.orgs.name}/${bot.name} on ${repo.name} is still waiting, skipping scheduling a new task.`,
+      );
+
+      return;
+    }
 
     await taskCreate(app, {
       org_id: orgId,
