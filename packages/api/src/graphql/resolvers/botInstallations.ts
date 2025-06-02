@@ -1,6 +1,3 @@
-import { ApolloServerErrorCode } from '@apollo/server/errors';
-import { GraphQLError } from 'graphql';
-
 import {
   MutationResolvers,
   publicBotFields,
@@ -11,6 +8,7 @@ import {
 import { task_item } from '@automa/prisma';
 
 import { Context } from '../types';
+import { throwGraphQLError } from '../utils';
 
 import { botInstall } from '../../db';
 
@@ -68,18 +66,7 @@ export const Mutation: MutationResolvers<Context> = {
     });
 
     if (!bot) {
-      throw new GraphQLError('Unprocessable Entity', {
-        extensions: {
-          code: ApolloServerErrorCode.BAD_USER_INPUT,
-          errors: [
-            {
-              code: 'invalid',
-              message: 'Bot not found',
-              path: ['bot_id'],
-            },
-          ],
-        },
-      });
+      return throwGraphQLError('invalid', 'Bot not found', ['bot_id']);
     }
 
     return botInstall(

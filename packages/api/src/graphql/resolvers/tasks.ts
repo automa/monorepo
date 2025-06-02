@@ -1,6 +1,3 @@
-import { ApolloServerErrorCode } from '@apollo/server/errors';
-import { GraphQLError } from 'graphql';
-
 import {
   MutationResolvers,
   QueryResolvers,
@@ -10,6 +7,7 @@ import {
 import { bot, task_item } from '@automa/prisma';
 
 import { Context } from '../types';
+import { throwGraphQLError } from '../utils';
 
 import { taskCreate } from '../../db';
 
@@ -97,33 +95,27 @@ export const Mutation: MutationResolvers<Context> = {
     ]);
 
     if (!botInstallation) {
-      throw new GraphQLError('Unprocessable Entity', {
-        extensions: {
-          code: ApolloServerErrorCode.BAD_USER_INPUT,
-          errors: [
-            {
-              code: 'invalid',
-              message: 'Bot installation not found',
-              path: ['bot_installation_id'],
-            },
-          ],
-        },
-      });
+      return throwGraphQLError('invalid', 'Bot installation not found', [
+        'bot_installation_id',
+      ]);
     }
 
     if (!repo) {
-      throw new GraphQLError('Unprocessable Entity', {
-        extensions: {
-          code: ApolloServerErrorCode.BAD_USER_INPUT,
-          errors: [
-            {
-              code: 'invalid',
-              message: 'Repository not found',
-              path: ['repo_id'],
-            },
-          ],
-        },
-      });
+      return throwGraphQLError('invalid', 'Repository not found', ['repo_id']);
+    }
+
+    if (repo.is_archived) {
+      return throwGraphQLError('invalid', 'Repository is archived', [
+        'repo_id',
+      ]);
+    }
+
+    if (!repo.has_installation) {
+      return throwGraphQLError(
+        'invalid',
+        'Repository is not connected to Automa',
+        ['repo_id'],
+      );
     }
 
     return taskCreate(
