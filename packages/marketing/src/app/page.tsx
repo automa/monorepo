@@ -39,7 +39,14 @@ const AppPage: React.FC = () => {
         </Flex>
       </Section>
       <Section>
-        <Image src={Hero} alt="Hero" width={907} height={476} />
+        <Image
+          id="hero-animation"
+          src={Hero}
+          alt="Hero"
+          width={907}
+          height={476}
+          priority
+        />
         <HeroImageTextWrapper>
           <HeroImageText className="animate-heroText1">
             Fixing a minor bug
@@ -51,6 +58,28 @@ const AppPage: React.FC = () => {
             Recurring maintenance
           </HeroImageText>
         </HeroImageTextWrapper>
+        {/* Inline script for animation sync because we didn't add text to the animation */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function() {
+              function restartWebPAnimation() {
+                const webp = document.getElementById('hero-animation');
+
+                if (webp) {
+                  const src = webp.src;
+
+                  webp.src = '';
+                  webp.src = src;
+                }
+              }
+
+              document.addEventListener('DOMContentLoaded', restartWebPAnimation);
+              window.addEventListener('load', restartWebPAnimation);
+            })();
+          `,
+          }}
+        />
       </Section>
     </Container>
   );

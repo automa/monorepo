@@ -119,6 +119,14 @@
           {
             "group": "Get Started",
             "pages": ["index"]
+          },
+          {
+            "group": "Bot Development",
+            "pages": ["bot-development/index"]
+          },
+          {
+            "group": "Self Hosting",
+            "pages": ["self-hosting/index"]
           }
         ]
       },
