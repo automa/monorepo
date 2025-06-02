@@ -134,7 +134,7 @@ suite('events/sendTaskWebhook', () => {
       };
 
       assert.equal(postStub.callCount, 1);
-      assert.equal(postStub.firstCall.args[0], 'https://example.com/webhook/0');
+      assert.equal(postStub.firstCall.args[0], 'http://test.local/webhook/0');
       assert.deepNestedInclude(postStub.firstCall.args[1], body);
       assert.match(postStub.firstCall.args[1].timestamp, regexTimestamp);
 
@@ -290,10 +290,7 @@ suite('events/sendTaskWebhook', () => {
         };
 
         assert.equal(postStub.callCount, 1);
-        assert.equal(
-          postStub.firstCall.args[0],
-          'https://example.com/webhook/0',
-        );
+        assert.equal(postStub.firstCall.args[0], 'http://test.local/webhook/0');
         assert.deepNestedInclude(postStub.firstCall.args[1], body);
         assert.match(postStub.firstCall.args[1].timestamp, regexTimestamp);
 

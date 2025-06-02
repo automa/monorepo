@@ -101,7 +101,7 @@ export const seedBots = (
       name: `bot-${i}`,
       short_description: `Bot ${i}`,
       type: 'manual',
-      webhook_url: `https://example.com/webhook/${i}`,
+      webhook_url: `http://test.local/webhook/${i}`,
       webhook_secret: `atma_whsec_${i}`,
       description: {
         type: 'doc',
