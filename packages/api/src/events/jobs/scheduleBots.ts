@@ -13,6 +13,7 @@ const scheduleBots: JobDefinition<object> = {
   handler: async (app, {}) => {
     let cursor: number | undefined;
     let hasMore = true;
+    const timestamp = Date.now();
 
     while (hasMore) {
       const bots = await app.prisma.bots.findMany({
@@ -35,9 +36,10 @@ const scheduleBots: JobDefinition<object> = {
         chunkArray(bots, CHUNK_SIZE).map((bots) =>
           app.events.scheduleBot.bulkPublish(
             bots.map((bot) => ({
-              id: bot.id,
+              id: `${bot.id}-${timestamp}`,
               input: {
                 botId: bot.id,
+                timestamp,
               },
             })),
           ),

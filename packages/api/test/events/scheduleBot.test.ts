@@ -10,7 +10,7 @@ import scheduleBot from '../../src/events/jobs/scheduleBot';
 
 suite('events/scheduleBot', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, publishStub: SinonStub;
-  let orgs: orgs[], bot: bots;
+  let orgs: orgs[], bot: bots, timestamp: number;
 
   suiteSetup(async () => {
     app = await server();
@@ -18,6 +18,7 @@ suite('events/scheduleBot', () => {
 
     orgs = await seedOrgs(app, 13);
     [bot] = await seedBots(app, [orgs[0]]);
+    timestamp = Date.now();
 
     // Mark some orgs as having an installation
     await app.prisma.orgs.updateMany({
@@ -57,7 +58,7 @@ suite('events/scheduleBot', () => {
   });
 
   test('should publish scheduleBotInstallation events for all bot installations', async () => {
-    await scheduleBot.handler?.(app, { botId: bot.id });
+    await scheduleBot.handler?.(app, { botId: bot.id, timestamp });
 
     assert.equal(publishStub.callCount, 2);
 
@@ -65,52 +66,52 @@ suite('events/scheduleBot', () => {
       [
         [
           {
-            id: `${bot.id}-${orgs[0].id}`,
-            input: { botId: bot.id, orgId: orgs[0].id },
+            id: `${bot.id}-${orgs[0].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[0].id, timestamp },
           },
           {
-            id: `${bot.id}-${orgs[1].id}`,
-            input: { botId: bot.id, orgId: orgs[1].id },
+            id: `${bot.id}-${orgs[1].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[1].id, timestamp },
           },
           {
-            id: `${bot.id}-${orgs[2].id}`,
-            input: { botId: bot.id, orgId: orgs[2].id },
+            id: `${bot.id}-${orgs[2].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[2].id, timestamp },
           },
           {
-            id: `${bot.id}-${orgs[3].id}`,
-            input: { botId: bot.id, orgId: orgs[3].id },
+            id: `${bot.id}-${orgs[3].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[3].id, timestamp },
           },
           {
-            id: `${bot.id}-${orgs[4].id}`,
-            input: { botId: bot.id, orgId: orgs[4].id },
+            id: `${bot.id}-${orgs[4].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[4].id, timestamp },
           },
           {
-            id: `${bot.id}-${orgs[6].id}`,
-            input: { botId: bot.id, orgId: orgs[6].id },
+            id: `${bot.id}-${orgs[6].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[6].id, timestamp },
           },
           {
-            id: `${bot.id}-${orgs[7].id}`,
-            input: { botId: bot.id, orgId: orgs[7].id },
+            id: `${bot.id}-${orgs[7].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[7].id, timestamp },
           },
           {
-            id: `${bot.id}-${orgs[8].id}`,
-            input: { botId: bot.id, orgId: orgs[8].id },
+            id: `${bot.id}-${orgs[8].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[8].id, timestamp },
           },
           {
-            id: `${bot.id}-${orgs[9].id}`,
-            input: { botId: bot.id, orgId: orgs[9].id },
+            id: `${bot.id}-${orgs[9].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[9].id, timestamp },
           },
           {
-            id: `${bot.id}-${orgs[11].id}`,
-            input: { botId: bot.id, orgId: orgs[11].id },
+            id: `${bot.id}-${orgs[11].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[11].id, timestamp },
           },
         ],
       ],
       [
         [
           {
-            id: `${bot.id}-${orgs[12].id}`,
-            input: { botId: bot.id, orgId: orgs[12].id },
+            id: `${bot.id}-${orgs[12].id}-${timestamp}`,
+            input: { botId: bot.id, orgId: orgs[12].id, timestamp },
           },
         ],
       ],

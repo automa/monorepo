@@ -6,8 +6,9 @@ const CHUNK_SIZE = 10;
 
 const scheduleBot: JobDefinition<{
   botId: number;
+  timestamp: number;
 }> = {
-  handler: async (app, { botId }) => {
+  handler: async (app, { botId, timestamp }) => {
     let cursor: number | undefined;
     let hasMore = true;
 
@@ -44,10 +45,11 @@ const scheduleBot: JobDefinition<{
         ).map((botInstallations) =>
           app.events.scheduleBotInstallation.bulkPublish(
             botInstallations.map((botInstallation) => ({
-              id: `${botId}-${botInstallation.org_id}`,
+              id: `${botId}-${botInstallation.org_id}-${timestamp}`,
               input: {
                 botId,
                 orgId: botInstallation.org_id,
+                timestamp,
               },
             })),
           ),
