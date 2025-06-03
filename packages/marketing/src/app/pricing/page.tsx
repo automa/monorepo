@@ -216,7 +216,7 @@ const PricingPage: React.FC = () => {
 
           <TableRow>
             <FeatureCell>
-              <FeatureText>Agent Marketplace</FeatureText>
+              <FeatureText>Agent marketplace</FeatureText>
             </FeatureCell>
             <TableCell>
               <CrossMark />
@@ -264,7 +264,7 @@ const PricingPage: React.FC = () => {
 
           <TableRow>
             <FeatureCell>
-              <FeatureText>Managed Infrastructure</FeatureText>
+              <FeatureText>Managed infrastructure</FeatureText>
             </FeatureCell>
             <TableCell>
               <CrossMark />
@@ -276,7 +276,7 @@ const PricingPage: React.FC = () => {
 
           <TableRow>
             <FeatureCell>
-              <FeatureText>Automatic Updates</FeatureText>
+              <FeatureText>Automatic updates</FeatureText>
             </FeatureCell>
             <TableCell>
               <TableText>Manual</TableText>
@@ -288,7 +288,7 @@ const PricingPage: React.FC = () => {
 
           <TableRow>
             <FeatureCell>
-              <FeatureText>Support Level</FeatureText>
+              <FeatureText>Support level</FeatureText>
             </FeatureCell>
             <TableCell>
               <TableText>Community / Priority</TableText>
