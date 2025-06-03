@@ -6,14 +6,20 @@ import './globals.css';
 
 import { fonts } from 'theme';
 
-import { Button, Flex, Typography } from 'components';
+import { Button, Flex } from 'components';
 
 import Logo from 'assets/logo.svg';
 
 import Footer from './Footer';
 import Nav from './Nav';
 
-import { Container } from './layout.styles';
+import {
+  Brand,
+  Container,
+  Header,
+  NavContainer,
+  PageContainer,
+} from './layout.styles';
 
 export const metadata = {
   title: 'Automa',
@@ -25,26 +31,24 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <html lang="en" className={fonts}>
       <link rel="icon" href="/favicon.svg" />
       <Container>
-        <Flex direction="column" className="mx-auto w-screen max-w-7xl px-6">
-          <Flex justifyContent="space-between">
+        <PageContainer>
+          <Header>
             <Link href="/">
               <Flex className="gap-2 py-4">
                 <Image src={Logo} alt="logo" className="size-8" />
-                <Typography className="text-2xl !font-bold lg:text-2xl">
-                  Automa
-                </Typography>
+                <Brand>Automa</Brand>
               </Flex>
             </Link>
-            <Flex alignItems="center" className="gap-6">
-              <Nav />
+            <NavContainer>
               <Button size="large" href={process.env.NEXT_PUBLIC_CONSOLE_URL!}>
                 Get Started
               </Button>
-            </Flex>
-          </Flex>
+              <Nav />
+            </NavContainer>
+          </Header>
           {children}
           <Footer />
-        </Flex>
+        </PageContainer>
       </Container>
     </html>
   );
