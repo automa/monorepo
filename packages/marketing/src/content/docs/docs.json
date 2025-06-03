@@ -121,8 +121,8 @@
             "pages": ["index"]
           },
           {
-            "group": "Bot Development",
-            "pages": ["bot-development/index"]
+            "group": "Agent Development",
+            "pages": ["agent-development/index"]
           },
           {
             "group": "Self Hosting",

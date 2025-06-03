@@ -11,6 +11,8 @@ import {
   HeroImageText,
   HeroImageTextWrapper,
   Section,
+  SectionSubtitle,
+  SectionTitle,
   Subtitle,
   Title,
 } from './page.styles';
@@ -58,7 +60,7 @@ const AppPage: React.FC = () => {
             Recurring maintenance
           </HeroImageText>
         </HeroImageTextWrapper>
-        {/* Inline script for animation sync because we didn't add text to the animation */}
+        {/* Animation sync because we didn't add text to it */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -81,6 +83,13 @@ const AppPage: React.FC = () => {
           }}
         />
       </Section>
+
+      {/* <Section>
+        <SectionTitle>Integrates with your favorite tools</SectionTitle>
+        <SectionSubtitle>
+          Works seamlessly with the tools your team already uses every day.
+        </SectionSubtitle>
+      </Section> */}
     </Container>
   );
 };

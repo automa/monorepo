@@ -5,12 +5,7 @@ import { Button, Flex, Typography } from 'components';
 export const Container = tw(Flex).attrs({
   direction: 'column',
   alignItems: 'center',
-})`max-w-7xl py-12 lg:py-16`;
-
-export const Header = tw(Flex).attrs({
-  direction: 'column',
-  alignItems: 'center',
-})`mb-16 gap-4`;
+})`py-12 lg:py-16 gap-12 lg:gap-16`;
 
 export const Title = tw(Typography).attrs({
   variant: 'title2',

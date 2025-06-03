@@ -23,7 +23,8 @@ import {
 
 export const metadata = {
   title: 'Automa',
-  description: 'A code automation platform',
+  description:
+    'Automa is a platform that automates coding tasks from your favorite apps and allows you to choose any remote coding agent for them. They complete in the background, generating a PR for you to review and merge.',
 };
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -40,7 +41,11 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </Flex>
             </Link>
             <NavContainer>
-              <Button size="large" href={process.env.NEXT_PUBLIC_CONSOLE_URL!}>
+              <Button
+                size="large"
+                href={process.env.NEXT_PUBLIC_CONSOLE_URL!}
+                className="hidden sm:block"
+              >
                 Get Started
               </Button>
               <Nav />
