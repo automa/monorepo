@@ -1,13 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 
-import { Flex } from 'components';
+import { Button, Flex } from 'components';
 
 import Hero from 'assets/hero.webp';
 
 import {
   Container,
-  HeroButton,
   HeroImageText,
   HeroImageTextWrapper,
   Section,
@@ -28,16 +27,21 @@ const AppPage: React.FC = () => {
           merge.
         </Subtitle>
         <Flex className="mt-4 gap-4">
-          <HeroButton href={process.env.NEXT_PUBLIC_CONSOLE_URL!} blank>
+          <Button
+            href={process.env.NEXT_PUBLIC_CONSOLE_URL!}
+            blank
+            size="xlarge"
+          >
             Get Started
-          </HeroButton>
-          <HeroButton
+          </Button>
+          <Button
             href="https://docs.automa.app/self-hosting"
             blank
             variant="secondary"
+            size="xlarge"
           >
             Self-host
-          </HeroButton>
+          </Button>
         </Flex>
       </Section>
       <Section>

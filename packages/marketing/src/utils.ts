@@ -6,6 +6,8 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
+import prisma from '@automa/prisma';
+
 import { common } from 'mdx-components';
 
 export const isBuildTime = process.env.NODE_ENV === 'production';
@@ -25,3 +27,14 @@ export const parseContent = <T = unknown>(path: string) =>
       },
     },
   });
+
+export const connectToDatabase = async () => {
+  const url =
+    process.env.DATABASE_URL || 'postgresql://automa@localhost:5432/automa';
+
+  const client = prisma(url);
+
+  await client.$connect();
+
+  return client;
+};
