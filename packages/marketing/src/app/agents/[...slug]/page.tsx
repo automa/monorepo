@@ -142,14 +142,14 @@ const extensions = [
 const AgentPage = async ({ params: { slug } }: Props) => {
   const bot = await getAgentBySlug(slug);
 
+  if (!bot) {
+    notFound();
+  }
+
   const description = generateHTML(
     (bot?.description as object) || { type: 'doc', content: [] },
     extensions,
   );
-
-  if (!bot) {
-    notFound();
-  }
 
   return (
     <Container>

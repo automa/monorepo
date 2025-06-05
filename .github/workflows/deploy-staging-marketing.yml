@@ -4,8 +4,6 @@ on:
     branches: [master]
     paths:
       - .github/workflows/deploy-staging-marketing.yml
-      - packages/prisma/schema.prisma
-      - packages/prisma/src/**
       - packages/marketing/public/**
       - packages/marketing/src/**
       - packages/marketing/next.config.mjs
@@ -38,6 +36,8 @@ jobs:
             deps-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Compile typescript
+        run: pnpm --filter @automa/prisma build
       - name: Build site
         env:
           NEXT_PUBLIC_NODE_ENV: staging
