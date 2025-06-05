@@ -91,11 +91,7 @@ const PricingPage: React.FC = () => {
             </FeatureItem>
           </FeaturesList>
 
-          <PlanButton
-            variant="secondary"
-            href="https://docs.automa.app/self-hosting"
-            blank
-          >
+          <PlanButton variant="secondary" href="/self-hosting">
             Get Started
           </PlanButton>
         </PlanCard>

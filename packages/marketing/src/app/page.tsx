@@ -34,12 +34,7 @@ const AppPage: React.FC = () => {
           >
             Get Started
           </Button>
-          <Button
-            href="https://docs.automa.app/self-hosting"
-            blank
-            variant="secondary"
-            size="xlarge"
-          >
+          <Button href="/self-hosting" variant="secondary" size="xlarge">
             Self-host
           </Button>
         </Flex>
