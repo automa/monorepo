@@ -59,6 +59,10 @@
             "href": "https://automa.app/pricing"
           },
           {
+            "label": "Self-hosting",
+            "href": "https://automa.app/self-hosting"
+          },
+          {
             "label": "Changelog",
             "href": "https://automa.app/changelog"
           }

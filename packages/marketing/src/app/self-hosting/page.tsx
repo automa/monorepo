@@ -38,6 +38,10 @@ const SelfHostingPage: React.FC = () => {
         </Button>
       </FreeBanner>
 
+      <Typography variant="title4" align="center">
+        For teams of 10+ engineers
+      </Typography>
+
       <iframe
         title="Contact us for Self-hosting"
         src="https://automa-app.notion.site/ebd/2094eabd7fe18069bfc2d2262253d98a"
