@@ -47,6 +47,12 @@ jobs:
             deps-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Compile typescript
+        run: pnpm --filter @automa/prisma build
+      - name: Start dependencies
+        env:
+          SEED: true
+        run: pnpm start-deps
       - name: Build stats
         run: pnpm build-stats
         working-directory: packages/marketing

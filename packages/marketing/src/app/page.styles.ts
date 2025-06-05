@@ -1,6 +1,6 @@
 import { tw } from 'theme';
 
-import { Button, Flex, Typography } from 'components';
+import { Flex, Typography } from 'components';
 
 export const Container = tw(Flex).attrs({
   direction: 'column',
@@ -22,11 +22,19 @@ export const Subtitle = tw(Typography).attrs({
   align: 'center',
 })`max-w-4xl md:text-xl text-base text-neutral-500`;
 
-export const HeroButton = tw(Button)`h-12 px-6 text-md md:text-lg`;
-
 export const HeroImageTextWrapper = tw.div`relative mt-2 w-full`;
 
 export const HeroImageText = tw(Typography).attrs({
+  variant: 'title4',
+  align: 'center',
+})`opacity-0 absolute top-0 left-1/2 -translate-x-1/2 w-full md:text-2xl text-xl`;
+
+export const SectionTitle = tw(Typography).attrs({
   variant: 'title3',
   align: 'center',
-})`opacity-0 absolute top-0 left-1/2 -translate-x-1/2 w-full`;
+})`text-neutral-900`;
+
+export const SectionSubtitle = tw(Typography).attrs({
+  variant: 'title6',
+  align: 'center',
+})`text-neutral-400 max-w-2xl leading-relaxed`;

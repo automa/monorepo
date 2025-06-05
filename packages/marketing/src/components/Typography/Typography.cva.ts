@@ -3,6 +3,7 @@ import { cva } from 'class-variance-authority';
 export const typography = cva('', {
   variants: {
     variant: {
+      xlarge: 'text-lg font-semibold lg:text-xl',
       large: 'text-base lg:text-lg',
       medium: 'text-sm font-medium lg:text-base lg:font-normal',
       small: 'text-xs font-medium lg:text-sm',

@@ -4,6 +4,8 @@ on:
     branches: [production]
     paths:
       - .github/workflows/deploy-production-marketing.yml
+      - packages/prisma/schema.prisma
+      - packages/prisma/src/**
       - packages/marketing/public/**
       - packages/marketing/src/**
       - packages/marketing/next.config.mjs
@@ -40,6 +42,7 @@ jobs:
         env:
           NEXT_PUBLIC_NODE_ENV: production
           NEXT_PUBLIC_CONSOLE_URL: ${{ secrets.PRODUCTION_CONSOLE_URL_MARKETING }}
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
         run: pnpm build
         working-directory: packages/marketing
       - name: Upload to S3

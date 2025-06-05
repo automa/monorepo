@@ -14,6 +14,7 @@ export const button = cva(
         small: 'h-8 px-3',
         medium: 'h-9 px-4 py-2',
         large: 'h-10 px-4',
+        xlarge: 'h-12 px-6 py-2 text-base md:text-lg',
       },
     },
     defaultVariants: {

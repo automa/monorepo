@@ -24,6 +24,11 @@ const Nav: React.FC<NavProps> = ({ ...props }) => {
     { href: '/changelog', label: 'Changelog' },
   ];
 
+  const mobileNavigationItems = [
+    ...navigationItems,
+    { href: process.env.NEXT_PUBLIC_CONSOLE_URL!, label: 'Get Started' },
+  ];
+
   return (
     <>
       {/* Desktop Navigation */}
@@ -59,7 +64,7 @@ const Nav: React.FC<NavProps> = ({ ...props }) => {
           <MobileMenuContent>
             <NavigationMenu.Root orientation="vertical">
               <NavList>
-                {navigationItems.map((item) => (
+                {mobileNavigationItems.map((item) => (
                   <NavigationMenu.Item key={item.href}>
                     <NavigationMenu.Link asChild>
                       <Link href={item.href}>

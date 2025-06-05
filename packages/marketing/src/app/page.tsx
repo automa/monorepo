@@ -1,16 +1,17 @@
 import React from 'react';
 import Image from 'next/image';
 
-import { Flex } from 'components';
+import { Button, Flex } from 'components';
 
 import Hero from 'assets/hero.webp';
 
 import {
   Container,
-  HeroButton,
   HeroImageText,
   HeroImageTextWrapper,
   Section,
+  SectionSubtitle,
+  SectionTitle,
   Subtitle,
   Title,
 } from './page.styles';
@@ -26,16 +27,16 @@ const AppPage: React.FC = () => {
           merge.
         </Subtitle>
         <Flex className="mt-4 gap-4">
-          <HeroButton href={process.env.NEXT_PUBLIC_CONSOLE_URL!} blank>
-            Get Started
-          </HeroButton>
-          <HeroButton
-            href="https://docs.automa.app/self-hosting"
+          <Button
+            href={process.env.NEXT_PUBLIC_CONSOLE_URL!}
             blank
-            variant="secondary"
+            size="xlarge"
           >
+            Get Started
+          </Button>
+          <Button href="/self-hosting" variant="secondary" size="xlarge">
             Self-host
-          </HeroButton>
+          </Button>
         </Flex>
       </Section>
       <Section>
@@ -58,7 +59,7 @@ const AppPage: React.FC = () => {
             Recurring maintenance
           </HeroImageText>
         </HeroImageTextWrapper>
-        {/* Inline script for animation sync because we didn't add text to the animation */}
+        {/* Animation sync because we didn't add text to it */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -81,6 +82,13 @@ const AppPage: React.FC = () => {
           }}
         />
       </Section>
+
+      {/* <Section>
+        <SectionTitle>Integrates with your favorite tools</SectionTitle>
+        <SectionSubtitle>
+          Works seamlessly with the tools your team already uses every day.
+        </SectionSubtitle>
+      </Section> */}
     </Container>
   );
 };

@@ -643,6 +643,9 @@ importers:
 
   packages/marketing:
     dependencies:
+      '@automa/prisma':
+        specifier: workspace:*
+        version: link:../prisma
       '@phosphor-icons/react':
         specifier: 'catalog:'
         version: 2.1.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -652,6 +655,33 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: 'catalog:'
         version: 1.1.6(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tiptap/extension-heading':
+        specifier: ~2.11.0
+        version: 2.11.0(@tiptap/core@2.11.0(@tiptap/pm@2.11.0))
+      '@tiptap/extension-link':
+        specifier: ~2.11.0
+        version: 2.11.0(@tiptap/core@2.11.0(@tiptap/pm@2.11.0))(@tiptap/pm@2.11.0)
+      '@tiptap/extension-table':
+        specifier: ~2.11.0
+        version: 2.11.1(@tiptap/core@2.11.0(@tiptap/pm@2.11.0))(@tiptap/pm@2.11.0)
+      '@tiptap/extension-table-cell':
+        specifier: ~2.11.0
+        version: 2.11.1(@tiptap/core@2.11.0(@tiptap/pm@2.11.0))
+      '@tiptap/extension-table-header':
+        specifier: ~2.11.0
+        version: 2.11.1(@tiptap/core@2.11.0(@tiptap/pm@2.11.0))
+      '@tiptap/extension-table-row':
+        specifier: ~2.11.0
+        version: 2.11.1(@tiptap/core@2.11.0(@tiptap/pm@2.11.0))
+      '@tiptap/html':
+        specifier: ~2.11.0
+        version: 2.11.9(@tiptap/core@2.11.0(@tiptap/pm@2.11.0))(@tiptap/pm@2.11.0)
+      '@tiptap/react':
+        specifier: ~2.11.0
+        version: 2.11.0(@tiptap/core@2.11.0(@tiptap/pm@2.11.0))(@tiptap/pm@2.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tiptap/starter-kit':
+        specifier: ~2.11.0
+        version: 2.11.0
       class-variance-authority:
         specifier: 'catalog:'
         version: 0.7.1
@@ -673,6 +703,15 @@ importers:
       react-twc:
         specifier: 'catalog:'
         version: 1.4.2(@types/react@18.3.3)(react@18.3.1)
+      rehype-autolink-headings:
+        specifier: ~7.1.0
+        version: 7.1.0
+      rehype-slug:
+        specifier: ~6.0.0
+        version: 6.0.0
+      remark-gfm:
+        specifier: ~4.0.0
+        version: 4.0.0
       tailwind-merge:
         specifier: 'catalog:'
         version: 2.2.2
@@ -692,15 +731,6 @@ importers:
       '@types/mdx':
         specifier: ~2.0.13
         version: 2.0.13
-      rehype-autolink-headings:
-        specifier: ~7.1.0
-        version: 7.1.0
-      rehype-slug:
-        specifier: ~6.0.0
-        version: 6.0.0
-      remark-gfm:
-        specifier: ~4.0.0
-        version: 4.0.0
 
   packages/prisma:
     dependencies:
@@ -5221,6 +5251,12 @@ packages:
     peerDependencies:
       '@tiptap/core': ^2.7.0
 
+  '@tiptap/html@2.11.9':
+    resolution: {integrity: sha512-u4rrxpcJLfse5IpfLuf2bLa23SuBQQzkCf3yoAhc4O2IuSw6Cpzm7OZaYTFxkSkItIjZc1NCUhxpWsV5kdtcow==}
+    peerDependencies:
+      '@tiptap/core': ^2.7.0
+      '@tiptap/pm': ^2.7.0
+
   '@tiptap/pm@2.11.0':
     resolution: {integrity: sha512-4RU6bpODkMY+ZshzdRFcuUc5jWlMW82LWXR6UOsHK/X/Mav41ZFS0Cyf+hQM6gxxTB09YFIICmGpEpULb+/CuA==}
 
@@ -7322,6 +7358,10 @@ packages:
 
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
+    engines: {node: '>=0.12'}
+
+  entities@5.0.0:
+    resolution: {integrity: sha512-BeJFvFRJddxobhvEdm5GqHzRV/X+ACeuw0/BuuxsCh1EUZcAIz8+kYmBp/LrQuloy6K1f3a0M7+IhmZ7QnkISA==}
     engines: {node: '>=0.12'}
 
   env-paths@2.2.1:
@@ -12959,6 +12999,10 @@ packages:
   yoctocolors-cjs@2.1.2:
     resolution: {integrity: sha512-cYVsTjKl8b+FrnidjibDWskAv7UKOfcwaVZdp/it9n1s9fU3IkgDbhdIRKCW4JDsAlECJY0ytoVPT3sK6kideA==}
     engines: {node: '>=18'}
+
+  zeed-dom@0.15.1:
+    resolution: {integrity: sha512-dtZ0aQSFyZmoJS0m06/xBN1SazUBPL5HpzlAcs/KcRW0rzadYw12deQBjeMhGKMMeGEp7bA9vmikMLaO4exBcg==}
+    engines: {node: '>=14.13.1'}
 
   zen-observable-ts@1.2.5:
     resolution: {integrity: sha512-QZWQekv6iB72Naeake9hS1KxHlotfRpe+WGNbNx5/ta+R3DNjVO2bswf63gXlWDcs+EMd7XY8HfVQyP1X6T4Zg==}
@@ -18985,6 +19029,12 @@ snapshots:
     dependencies:
       '@tiptap/core': 2.11.0(@tiptap/pm@2.11.0)
 
+  '@tiptap/html@2.11.9(@tiptap/core@2.11.0(@tiptap/pm@2.11.0))(@tiptap/pm@2.11.0)':
+    dependencies:
+      '@tiptap/core': 2.11.0(@tiptap/pm@2.11.0)
+      '@tiptap/pm': 2.11.0
+      zeed-dom: 0.15.1
+
   '@tiptap/pm@2.11.0':
     dependencies:
       prosemirror-changeset: 2.2.1
@@ -21403,6 +21453,8 @@ snapshots:
   entities@2.2.0: {}
 
   entities@4.5.0: {}
+
+  entities@5.0.0: {}
 
   env-paths@2.2.1: {}
 
@@ -28576,6 +28628,11 @@ snapshots:
   yocto-queue@1.0.0: {}
 
   yoctocolors-cjs@2.1.2: {}
+
+  zeed-dom@0.15.1:
+    dependencies:
+      css-what: 6.1.0
+      entities: 5.0.0
 
   zen-observable-ts@1.2.5:
     dependencies:

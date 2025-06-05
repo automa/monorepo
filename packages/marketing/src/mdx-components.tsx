@@ -16,6 +16,10 @@ export const common: MDXComponents = {
     </p>
   ),
   em: (props) => <em className="italic" {...props} />,
+  strong: (props) => <strong className="font-bold" {...props} />,
+  hr: (props) => (
+    <hr className="my-8 border-t-4 border-neutral-200" {...props} />
+  ),
 };
 
 export const useMDXComponents = (components: MDXComponents): MDXComponents => {

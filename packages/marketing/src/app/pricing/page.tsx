@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckCircle, XCircle } from '@phosphor-icons/react/dist/ssr';
 
-import { Typography } from 'components';
+import { Flex, Typography } from 'components';
 
 import {
   Comparison,
@@ -17,7 +17,6 @@ import {
   FeatureItem,
   FeaturesList,
   FeatureText,
-  Header,
   PlanButton,
   PlanCard,
   PlanDescription,
@@ -37,6 +36,12 @@ import {
   Title,
 } from './page.styles';
 
+export const metadata = {
+  title: 'Automa ‒ Pricing',
+  description:
+    'Start with Automa for free. Self-host up to 10 engineers, or use our cloud platform with pay-as-you-go coding agents.',
+};
+
 const CheckMark = () => (
   <CheckCircle weight="fill" className="size-6 text-green-500/80" />
 );
@@ -48,10 +53,10 @@ const CrossMark = () => (
 const PricingPage: React.FC = () => {
   return (
     <Container>
-      <Header>
+      <Flex direction="column" alignItems="center" className="gap-4">
         <Title>Simple, transparent pricing</Title>
         <Subtitle>Choose the plan that works best for your team.</Subtitle>
-      </Header>
+      </Flex>
 
       <PlansContainer>
         {/* Self-Hosted Plan */}
@@ -86,11 +91,7 @@ const PricingPage: React.FC = () => {
             </FeatureItem>
           </FeaturesList>
 
-          <PlanButton
-            variant="secondary"
-            href="https://docs.automa.app/self-hosting"
-            blank
-          >
+          <PlanButton variant="secondary" href="/self-hosting">
             Get Started
           </PlanButton>
         </PlanCard>
@@ -103,7 +104,7 @@ const PricingPage: React.FC = () => {
             <PlanDescription>Fully managed. No infrastructure.</PlanDescription>
             <PlanPrice>
               <Price>Free</Price>
-              <PriceUnit>platform</PriceUnit>
+              <PriceUnit>platform (for now)</PriceUnit>
             </PlanPrice>
             <PriceExtra>
               +{' '}
@@ -319,9 +320,9 @@ const PricingPage: React.FC = () => {
         <FAQItem>
           <FAQQuestion>Is the self-hosted version really free?</FAQQuestion>
           <FAQAnswer>
-            Yes! The self-hosted version is free for teams up to 10 engineers
-            under our BUSL license. After 10 engineers, it starts at{' '}
-            <span className="line-through">$100</span> $50/month.
+            Yes! The self-hosted version is free for personal usage and for
+            teams up to 10 engineers under our BUSL license. After 10 engineers,
+            it starts at <span className="line-through">$100</span> $50/month.
           </FAQAnswer>
         </FAQItem>
 
@@ -368,8 +369,8 @@ const PricingPage: React.FC = () => {
             You either host your own agents, or use agents from the marketplace
             which can either be self-hosted or on cloud. Each agent may have its
             own pricing model, which you pay directly to the agent provider.
-            Automa does not handle billing for self-hosted agents, so you manage
-            those payments separately.
+            Automa does not handle billing for agents, so you manage those
+            payments separately.
           </FAQAnswer>
         </FAQItem>
       </FAQ>

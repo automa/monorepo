@@ -2,7 +2,7 @@ import { tw } from 'theme';
 
 import { Flex, Typography } from 'components';
 
-export const Container = tw.main`mx-auto w-screen max-w-5xl px-8`;
+export const Container = tw.main`mx-auto max-w-5xl px-8`;
 
 export const Header = tw(Typography).attrs({
   variant: 'title2',
