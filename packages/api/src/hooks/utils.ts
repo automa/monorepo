@@ -39,6 +39,9 @@ export const getOptions = (comment: string, regex: RegExp) => {
     );
 };
 
+// TODO: Allow the user to not specify a bot and repo
+// - If only one of them exists
+// - If default bot and repo are set in the org
 export const getSelectedBotAndRepo = async (
   app: FastifyInstance,
   orgId: number,

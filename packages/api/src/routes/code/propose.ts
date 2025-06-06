@@ -30,7 +30,8 @@ export default async function (app: FastifyInstance) {
       proposal: {
         token: string;
         diff: string;
-        message?: string;
+        title?: string;
+        body?: string;
       };
     };
   }>('/propose', async (request, reply) => {
@@ -158,7 +159,7 @@ export default async function (app: FastifyInstance) {
 
     // Calculate the commit title & description for the proposal
     const title =
-      proposal.message || `Implemented automa@${task.id} using ${botName} bot`;
+      proposal.title || `Implemented automa@${task.id} using ${botName} bot`;
 
     // Create a working directory
     const workingDir = `/tmp/automa/propose/tasks/${task.id}`;
@@ -201,6 +202,9 @@ export default async function (app: FastifyInstance) {
       `/repos/${repo.orgs.provider_name}/${repo.name}/pulls`,
       {
         title,
+        ...(proposal.body && {
+          body: proposal.body,
+        }),
         head: branch,
         base: default_branch,
         maintainer_can_modify: true,

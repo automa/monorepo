@@ -11,19 +11,19 @@ import { BotName, Card, Container, Content } from './BotOnboarding.styles';
 // TODO: Add description as tooltip after loading these from DB
 const DEFAULT_BOTS = [
   {
+    botOrgName: 'openai',
+    botName: 'codex',
+    logo: 'https://avatars.githubusercontent.com/u/14957082?s=64',
+  },
+  {
+    botOrgName: 'anthropic',
+    botName: 'claude-code',
+    logo: 'https://avatars.githubusercontent.com/u/76263028?s=64',
+  },
+  {
     botOrgName: 'badges',
     botName: 'package-badges',
     logo: 'https://avatars.githubusercontent.com/u/6254238?s=64',
-  },
-  {
-    botOrgName: 'automa',
-    botName: 'github-runners',
-    logo: 'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg',
-  },
-  {
-    botOrgName: 'automa',
-    botName: 'aider',
-    logo: 'https://aider.chat/assets/icons/apple-touch-icon.png',
   },
 ];
 
