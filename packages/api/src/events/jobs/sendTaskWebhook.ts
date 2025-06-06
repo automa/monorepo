@@ -6,7 +6,6 @@ import {
   bot_installations,
   bots,
   orgs,
-  Prisma,
   repos,
   task_item,
 } from '@automa/prisma';
@@ -71,7 +70,8 @@ const sendTaskWebhook: JobDefinition<{
         );
       }
 
-      // TODO: Use AI to select the best repo
+      // TODO: Old logic to default to the first repo
+      // This should be probably removed in favor of erroring out
       repo = repos[0];
 
       // Update the task with the selected repo
@@ -83,9 +83,9 @@ const sendTaskWebhook: JobDefinition<{
         },
       });
     } else {
-      repo = await app.prisma.repos.findFirstOrThrow({
+      repo = await app.prisma.repos.findUniqueOrThrow({
         where: {
-          id: (repoTaskItem.data as Prisma.JsonObject).repoId as number,
+          id: repoTaskItem.repo_id!,
         },
         include: {
           orgs: true,
@@ -119,7 +119,8 @@ const sendTaskWebhook: JobDefinition<{
         );
       }
 
-      // TODO: Use AI to select the best bot
+      // TODO: Old logic to default to the first bot
+      // This should be probably removed in favor of erroring out
       botInstallation = botInstallations[0];
 
       // Update the task with the selected bot
@@ -132,10 +133,12 @@ const sendTaskWebhook: JobDefinition<{
       });
     } else {
       // TODO: Handle case where bot has been uninstalled after task creation
-      botInstallation = await app.prisma.bot_installations.findFirstOrThrow({
+      botInstallation = await app.prisma.bot_installations.findUniqueOrThrow({
         where: {
-          bot_id: (botTaskItem.data as Prisma.JsonObject).botId as number,
-          org_id: task.org_id,
+          bot_id_org_id: {
+            bot_id: botTaskItem.bot_id!,
+            org_id: task.org_id,
+          },
         },
         include: {
           bots: {
