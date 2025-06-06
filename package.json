@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "format": "prettier --write .",
+    "format": "prettier --write . --log-level warn",
     "format-check": "prettier --check .",
     "graphql-generate": "graphql-codegen --config graphql-codegen.ts",
     "graphql-publish": "rover graph publish $APOLLO_GRAPH_ID@current --schema schema.graphql",
