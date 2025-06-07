@@ -52,6 +52,8 @@ const eventsPlugin: FastifyPluginAsync<{
     maxRetriesPerRequest: null,
   });
 
+  // Don't want to change the queue name since we
+  // already have a queue named 'events' in production.
   const queue = new Queue('events', {
     connection,
     defaultJobOptions: {

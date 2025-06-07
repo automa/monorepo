@@ -116,7 +116,6 @@ export const handleMention = async (
   const reponseComment = [];
 
   // Only create the task if we have a bot and repo
-  // TODO: Allow the user to not specify a bot and repo
   if (selectedBot && selectedRepo) {
     // Retrieve the issue
     const [issue, org] = await Promise.all([

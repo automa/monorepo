@@ -953,7 +953,8 @@ suite('code/propose', () => {
           token: 'abcdef',
         },
         {
-          message: 'Custom message',
+          title: 'Custom title',
+          body: 'Custom body',
         },
       );
     });
@@ -1029,7 +1030,7 @@ suite('code/propose', () => {
           'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit -m ',
           '',
         ],
-        'Custom message',
+        'Custom title',
       ]);
       assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
         ['git push -f origin HEAD:refs/heads/', ''],
@@ -1052,7 +1053,8 @@ suite('code/propose', () => {
       assert.equal(postStub.getCall(1).args[0], '/repos/org-0/repo-0/pulls');
 
       assert.deepEqual(postStub.getCall(1).args[1], {
-        title: 'Custom message',
+        title: 'Custom title',
+        body: 'Custom body',
         head: `automa/org-0/bot-0/${task.id}`,
         base: 'default-branch',
         maintainer_can_modify: true,
@@ -1237,7 +1239,8 @@ const propose = async (
   proposal?: {
     token?: string;
     diff?: string;
-    message?: string;
+    title?: string;
+    body?: string;
   },
 ) =>
   call(app, '/code/propose', {
@@ -1245,7 +1248,7 @@ const propose = async (
     payload: {
       task,
       proposal: {
-        message: proposal?.message ?? '',
+        ...proposal,
         token: proposal?.token ?? 'ghijkl',
         diff:
           proposal?.diff ??
