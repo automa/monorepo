@@ -701,6 +701,7 @@ suite('code/propose', () => {
 
       assert.deepEqual(postStub.getCall(1).args[1], {
         title: `Implemented automa@${task.id} using org-0/bot-0 bot`,
+        body: `This PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [org-0/bot-0](http://localhost:3000/org-0/bots/org-0/bot-0) bot using [Automa](https://automa.app).`,
         head: `automa/org-0/bot-0/${task.id}`,
         base: 'default-branch',
         maintainer_can_modify: true,
@@ -891,6 +892,7 @@ suite('code/propose', () => {
 
       assert.deepEqual(postStub.getCall(1).args[1], {
         title: `Implemented automa@${task.id} using bot-0 bot`,
+        body: `This PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [bot-0](http://localhost:3000/org-0/bots/automa/bot-0) bot using [Automa](https://automa.app).`,
         head: `automa/bot-0/${task.id}`,
         base: 'default-branch',
         maintainer_can_modify: true,
@@ -1054,7 +1056,372 @@ suite('code/propose', () => {
 
       assert.deepEqual(postStub.getCall(1).args[1], {
         title: 'Custom title',
-        body: 'Custom body',
+        body: `Custom body\n\nThis PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [org-0/bot-0](http://localhost:3000/org-0/bots/org-0/bot-0) bot using [Automa](https://automa.app).`,
+        head: `automa/org-0/bot-0/${task.id}`,
+        base: 'default-branch',
+        maintainer_can_modify: true,
+      });
+    });
+
+    test('should mark the task as submitted', async () => {
+      task = await app.prisma.tasks.findFirstOrThrow({
+        where: { id: task.id },
+      });
+
+      assert.equal(task.state, 'submitted');
+    });
+
+    test('should update the task with the proposal', async () => {
+      const proposals = await app.prisma.task_items.findMany({
+        where: { type: 'proposal' },
+      });
+
+      assert.lengthOf(proposals, 1);
+      assert.deepOwnInclude(proposals[0], {
+        task_id: task.id,
+        data: {
+          prId: 123456,
+          prNumber: 123,
+          prTitle: 'PR Title',
+          prState: 'open',
+          prMerged: false,
+          prHead: `org-0:automa/org-0/bot-0/${task.id}`,
+          prBase: 'default-branch',
+        },
+        repo_id: repo.id,
+        bot_id: bot.id,
+      });
+    });
+
+    test('should not create task activity', async () => {
+      const items = await app.prisma.task_items.findMany({
+        where: { task_id: task.id, type: 'activity' },
+      });
+
+      assert.isEmpty(items);
+    });
+
+    test('should delete the cloned repo', async () => {
+      assert.isFalse(existsSync(`/tmp/automa/propose/tasks/${task.id}`));
+    });
+
+    test('should delete the diff', async () => {
+      assert.isFalse(existsSync(`/tmp/automa/propose/tasks/${task.id}.diff`));
+    });
+  });
+
+  suite('with linear origin', () => {
+    setup(async () => {
+      await app.prisma.task_items.create({
+        data: {
+          task_id: task.id,
+          type: 'origin',
+          data: {
+            integration: 'linear',
+            organizationId: 'aa0479aa-f603-4508-8669-e283bca5a17f',
+            organizationName: 'Automa',
+            teamId: '7b9f50fa-75b4-43bd-9a0a-0e0994f0ccd9',
+            teamKey: 'DEMO',
+            teamName: 'Demo',
+            userId: 'db18fe9b-d550-44c5-816a-49ac71fccce9',
+            userName: 'Pavan Sunkara',
+            userEmail: 'pavan.sunkara@automa.app',
+            issueId: 'cfb003a0-5c42-48da-b34e-ebbacb9282bb',
+            issueTitle: 'Track "User Logged In" event',
+            issueIdentifier: 'DEMO-11',
+            commentId: '661237eb-3f3d-4bb8-ad22-9245aff0a5d9',
+          },
+        },
+      });
+
+      response = await propose(app, {
+        id: task.id,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 204', () => {
+      assert.equal(response.statusCode, 204);
+    });
+
+    test('should not return any data', () => {
+      assert.isEmpty(response.body);
+    });
+
+    test('should get token from github', async () => {
+      assert.equal(postStub.callCount, 2);
+      assert.equal(
+        postStub.firstCall.args[0],
+        'https://api.github.com/app/installations/123/access_tokens',
+      );
+    });
+
+    test('should commit and push the diff', async () => {
+      assert.equal(zxCmdStub.callCount, 7);
+      assert.equal(zxCmdArgsStub.callCount, 7);
+
+      assert.deepEqual(zxCmdStub.getCall(0).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(1).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(2).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(3).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(4).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(5).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(6).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(1).args, [
+        [
+          'git remote add origin https://x-access-token:',
+          '@github.com/',
+          '/',
+          '',
+        ],
+        'abcdef',
+        'org-0',
+        'repo-0',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(2).args, [
+        ['git fetch --depth 1 origin ', ''],
+        '123456',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [
+        ['git checkout ', ''],
+        '123456',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
+        ['git apply --index ', '.diff'],
+        `/tmp/automa/propose/tasks/${task.id}`,
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
+        [
+          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit -m ',
+          '',
+        ],
+        `Implemented automa@${task.id} using org-0/bot-0 bot`,
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
+        ['git push -f origin HEAD:refs/heads/', ''],
+        `automa/org-0/bot-0/${task.id}`,
+      ]);
+    });
+
+    test('should create a PR', async () => {
+      assert.equal(getStub.callCount, 2);
+
+      assert.equal(getStub.getCall(0).args[0], '/repos/org-0/repo-0');
+      assert.equal(getStub.getCall(1).args[0], '/repos/org-0/repo-0/pulls');
+      assert.deepEqual(getStub.getCall(1).args[1], {
+        params: {
+          head: `org-0:automa/org-0/bot-0/${task.id}`,
+          base: 'default-branch',
+        },
+      });
+
+      assert.equal(postStub.getCall(1).args[0], '/repos/org-0/repo-0/pulls');
+
+      assert.deepEqual(postStub.getCall(1).args[1], {
+        title: `Implemented automa@${task.id} using org-0/bot-0 bot`,
+        body: `Fixes DEMO-11\n\nThis PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [org-0/bot-0](http://localhost:3000/org-0/bots/org-0/bot-0) bot using [Automa](https://automa.app).`,
+        head: `automa/org-0/bot-0/${task.id}`,
+        base: 'default-branch',
+        maintainer_can_modify: true,
+      });
+    });
+
+    test('should mark the task as submitted', async () => {
+      task = await app.prisma.tasks.findFirstOrThrow({
+        where: { id: task.id },
+      });
+
+      assert.equal(task.state, 'submitted');
+    });
+
+    test('should update the task with the proposal', async () => {
+      const proposals = await app.prisma.task_items.findMany({
+        where: { type: 'proposal' },
+      });
+
+      assert.lengthOf(proposals, 1);
+      assert.deepOwnInclude(proposals[0], {
+        task_id: task.id,
+        data: {
+          prId: 123456,
+          prNumber: 123,
+          prTitle: 'PR Title',
+          prState: 'open',
+          prMerged: false,
+          prHead: `org-0:automa/org-0/bot-0/${task.id}`,
+          prBase: 'default-branch',
+        },
+        repo_id: repo.id,
+        bot_id: bot.id,
+      });
+    });
+
+    test('should not create task activity', async () => {
+      const items = await app.prisma.task_items.findMany({
+        where: { task_id: task.id, type: 'activity' },
+      });
+
+      assert.isEmpty(items);
+    });
+
+    test('should delete the cloned repo', async () => {
+      assert.isFalse(existsSync(`/tmp/automa/propose/tasks/${task.id}`));
+    });
+
+    test('should delete the diff', async () => {
+      assert.isFalse(existsSync(`/tmp/automa/propose/tasks/${task.id}.diff`));
+    });
+  });
+
+  suite('with linear origin with proposal options', () => {
+    setup(async () => {
+      await app.prisma.task_items.create({
+        data: {
+          task_id: task.id,
+          type: 'origin',
+          data: {
+            integration: 'linear',
+            organizationId: 'aa0479aa-f603-4508-8669-e283bca5a17f',
+            organizationName: 'Automa',
+            teamId: '7b9f50fa-75b4-43bd-9a0a-0e0994f0ccd9',
+            teamKey: 'DEMO',
+            teamName: 'Demo',
+            userId: 'db18fe9b-d550-44c5-816a-49ac71fccce9',
+            userName: 'Pavan Sunkara',
+            userEmail: 'pavan.sunkara@automa.app',
+            issueId: 'cfb003a0-5c42-48da-b34e-ebbacb9282bb',
+            issueTitle: 'Track "User Logged In" event',
+            issueIdentifier: 'DEMO-11',
+            commentId: '661237eb-3f3d-4bb8-ad22-9245aff0a5d9',
+          },
+        },
+      });
+
+      response = await propose(
+        app,
+        {
+          id: task.id,
+          token: 'abcdef',
+        },
+        {
+          title: 'Custom title',
+          body: 'Custom body',
+        },
+      );
+    });
+
+    test('should return 204', () => {
+      assert.equal(response.statusCode, 204);
+    });
+
+    test('should not return any data', () => {
+      assert.isEmpty(response.body);
+    });
+
+    test('should get token from github', async () => {
+      assert.equal(postStub.callCount, 2);
+      assert.equal(
+        postStub.firstCall.args[0],
+        'https://api.github.com/app/installations/123/access_tokens',
+      );
+    });
+
+    test('should commit and push the diff', async () => {
+      assert.equal(zxCmdStub.callCount, 7);
+      assert.equal(zxCmdArgsStub.callCount, 7);
+
+      assert.deepEqual(zxCmdStub.getCall(0).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(1).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(2).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(3).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(4).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(5).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(6).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(1).args, [
+        [
+          'git remote add origin https://x-access-token:',
+          '@github.com/',
+          '/',
+          '',
+        ],
+        'abcdef',
+        'org-0',
+        'repo-0',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(2).args, [
+        ['git fetch --depth 1 origin ', ''],
+        '123456',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [
+        ['git checkout ', ''],
+        '123456',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
+        ['git apply --index ', '.diff'],
+        `/tmp/automa/propose/tasks/${task.id}`,
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
+        [
+          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit -m ',
+          '',
+        ],
+        'Custom title',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
+        ['git push -f origin HEAD:refs/heads/', ''],
+        `automa/org-0/bot-0/${task.id}`,
+      ]);
+    });
+
+    test('should create a PR', async () => {
+      assert.equal(getStub.callCount, 2);
+
+      assert.equal(getStub.getCall(0).args[0], '/repos/org-0/repo-0');
+      assert.equal(getStub.getCall(1).args[0], '/repos/org-0/repo-0/pulls');
+      assert.deepEqual(getStub.getCall(1).args[1], {
+        params: {
+          head: `org-0:automa/org-0/bot-0/${task.id}`,
+          base: 'default-branch',
+        },
+      });
+
+      assert.equal(postStub.getCall(1).args[0], '/repos/org-0/repo-0/pulls');
+
+      assert.deepEqual(postStub.getCall(1).args[1], {
+        title: 'Custom title',
+        body: `Fixes DEMO-11\n\nCustom body\n\nThis PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [org-0/bot-0](http://localhost:3000/org-0/bots/org-0/bot-0) bot using [Automa](https://automa.app).`,
         head: `automa/org-0/bot-0/${task.id}`,
         base: 'default-branch',
         maintainer_can_modify: true,

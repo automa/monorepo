@@ -3,7 +3,9 @@ import { mkdir, rm, unlink, writeFile } from 'node:fs/promises';
 import { FastifyInstance } from 'fastify';
 import { $ } from 'zx';
 
-import { task_item, task_state } from '@automa/prisma';
+import { integration, task_item, task_state } from '@automa/prisma';
+
+import { env } from '../../env';
 
 import { caller } from '../../clients/github';
 import { taskUpdateState } from '../../db';
@@ -105,7 +107,6 @@ export default async function (app: FastifyInstance) {
       },
     );
 
-    // Return early and no need to clone the repository if the PR already exists
     const finish = async () => {
       // Not doing `Promise.all` in order to be fault tolerant
       // Not using taskUpdateState since we don't want to create an activity
@@ -144,6 +145,7 @@ export default async function (app: FastifyInstance) {
       return reply.code(204).send();
     };
 
+    // Return early and no need to clone the repository if the PR already exists
     if (pr) {
       return finish();
     }
@@ -158,8 +160,16 @@ export default async function (app: FastifyInstance) {
     }
 
     // Calculate the commit title & description for the proposal
+    const taskLink = `${env.CLIENT_URI}/${repo.orgs.name}/tasks/${task.id}`;
+    const botLink = `${env.CLIENT_URI}/${repo.orgs.name}/bots/${bot.orgs.name}/${bot.name}`;
+
     const title =
       proposal.title || `Implemented automa@${task.id} using ${botName} bot`;
+    let body = `${
+      proposal.body ? `${proposal.body}\n\n` : ''
+    }This PR was created for task [${
+      task.id
+    }](${taskLink}) by [${botName}](${botLink}) bot using [Automa](https://automa.app).`;
 
     // Create a working directory
     const workingDir = `/tmp/automa/propose/tasks/${task.id}`;
@@ -196,15 +206,32 @@ export default async function (app: FastifyInstance) {
     await rm(workingDir, { recursive: true, force: true });
     await unlink(`${workingDir}.diff`);
 
+    // Check the integration info to let the PR close the task if merged
+    const origin = task.task_items.find(
+      (item) => item.type === task_item.origin,
+    );
+
+    if (
+      origin?.data &&
+      typeof origin.data === 'object' &&
+      !Array.isArray(origin.data)
+    ) {
+      if (origin.data.integration === integration.linear) {
+        const issueId = origin.data.issueIdentifier as string;
+
+        if (issueId) {
+          body = `Fixes ${issueId}\n\n${body}`;
+        }
+      }
+    }
+
     // Create a pull request
     // TODO: Add a way to set the PR description
     ({ data: pr } = await axios.post<PullRequest>(
       `/repos/${repo.orgs.provider_name}/${repo.name}/pulls`,
       {
         title,
-        ...(proposal.body && {
-          body: proposal.body,
-        }),
+        ...(body && { body }),
         head: branch,
         base: default_branch,
         maintainer_can_modify: true,
