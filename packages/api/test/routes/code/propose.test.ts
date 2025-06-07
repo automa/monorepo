@@ -701,6 +701,7 @@ suite('code/propose', () => {
 
       assert.deepEqual(postStub.getCall(1).args[1], {
         title: `Implemented automa@${task.id} using org-0/bot-0 bot`,
+        body: `This PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [org-0/bot-0](http://localhost:3000/org-0/bots/org-0/bot-0) bot using [Automa](https://automa.app).`,
         head: `automa/org-0/bot-0/${task.id}`,
         base: 'default-branch',
         maintainer_can_modify: true,
@@ -891,6 +892,7 @@ suite('code/propose', () => {
 
       assert.deepEqual(postStub.getCall(1).args[1], {
         title: `Implemented automa@${task.id} using bot-0 bot`,
+        body: `This PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [bot-0](http://localhost:3000/org-0/bots/automa/bot-0) bot using [Automa](https://automa.app).`,
         head: `automa/bot-0/${task.id}`,
         base: 'default-branch',
         maintainer_can_modify: true,
@@ -1054,7 +1056,7 @@ suite('code/propose', () => {
 
       assert.deepEqual(postStub.getCall(1).args[1], {
         title: 'Custom title',
-        body: 'Custom body',
+        body: `Custom body\n\nThis PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [org-0/bot-0](http://localhost:3000/org-0/bots/org-0/bot-0) bot using [Automa](https://automa.app).`,
         head: `automa/org-0/bot-0/${task.id}`,
         base: 'default-branch',
         maintainer_can_modify: true,
@@ -1233,7 +1235,7 @@ suite('code/propose', () => {
 
       assert.deepEqual(postStub.getCall(1).args[1], {
         title: `Implemented automa@${task.id} using org-0/bot-0 bot`,
-        body: 'Fixes DEMO-11\n\n',
+        body: `Fixes DEMO-11\n\nThis PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [org-0/bot-0](http://localhost:3000/org-0/bots/org-0/bot-0) bot using [Automa](https://automa.app).`,
         head: `automa/org-0/bot-0/${task.id}`,
         base: 'default-branch',
         maintainer_can_modify: true,
@@ -1419,7 +1421,7 @@ suite('code/propose', () => {
 
       assert.deepEqual(postStub.getCall(1).args[1], {
         title: 'Custom title',
-        body: 'Fixes DEMO-11\n\nCustom body',
+        body: `Fixes DEMO-11\n\nCustom body\n\nThis PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [org-0/bot-0](http://localhost:3000/org-0/bots/org-0/bot-0) bot using [Automa](https://automa.app).`,
         head: `automa/org-0/bot-0/${task.id}`,
         base: 'default-branch',
         maintainer_can_modify: true,

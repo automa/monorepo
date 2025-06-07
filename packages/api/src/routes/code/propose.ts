@@ -5,6 +5,8 @@ import { $ } from 'zx';
 
 import { integration, task_item, task_state } from '@automa/prisma';
 
+import { env } from '../../env';
+
 import { caller } from '../../clients/github';
 import { taskUpdateState } from '../../db';
 
@@ -158,9 +160,16 @@ export default async function (app: FastifyInstance) {
     }
 
     // Calculate the commit title & description for the proposal
+    const taskLink = `${env.CLIENT_URI}/${repo.orgs.name}/tasks/${task.id}`;
+    const botLink = `${env.CLIENT_URI}/${repo.orgs.name}/bots/${bot.orgs.name}/${bot.name}`;
+
     const title =
       proposal.title || `Implemented automa@${task.id} using ${botName} bot`;
-    let body = proposal.body;
+    let body = `${
+      proposal.body ? `${proposal.body}\n\n` : ''
+    }This PR was created for task [${
+      task.id
+    }](${taskLink}) by [${botName}](${botLink}) bot using [Automa](https://automa.app).`;
 
     // Create a working directory
     const workingDir = `/tmp/automa/propose/tasks/${task.id}`;
@@ -211,7 +220,7 @@ export default async function (app: FastifyInstance) {
         const issueId = origin.data.issueIdentifier as string;
 
         if (issueId) {
-          body = `Fixes ${issueId}\n\n${body ?? ''}`;
+          body = `Fixes ${issueId}\n\n${body}`;
         }
       }
     }
