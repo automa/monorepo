@@ -28,7 +28,7 @@ import sendTaskWebhook from '../../src/events/jobs/sendTaskWebhook';
 suite('events/sendTaskWebhook', () => {
   let app: FastifyInstance, sandbox: SinonSandbox, user: users;
   let org: orgs, nonMemberOrg: orgs;
-  let repo: repos, bot: bots;
+  let repo: repos, secondRepo: repos, bot: bots, secondBot: bots;
 
   suiteSetup(async () => {
     app = await server();
@@ -36,13 +36,17 @@ suite('events/sendTaskWebhook', () => {
 
     [user] = await seedUsers(app, 1);
     [org, nonMemberOrg] = await seedOrgs(app, 2);
-    [repo] = await seedRepos(app, [org]);
-    [bot] = await seedBots(app, [nonMemberOrg]);
+    [repo, secondRepo] = await seedRepos(app, [org, org]);
+    [bot, secondBot] = await seedBots(app, [nonMemberOrg, nonMemberOrg]);
 
     await app.prisma.bot_installations.createMany({
       data: [
         {
           bot_id: bot.id,
+          org_id: org.id,
+        },
+        {
+          bot_id: secondBot.id,
           org_id: org.id,
         },
       ],
@@ -82,11 +86,11 @@ suite('events/sendTaskWebhook', () => {
               },
               {
                 type: 'repo',
-                repo_id: repo.id,
+                repo_id: secondRepo.id,
               },
               {
                 type: 'bot',
-                bot_id: bot.id,
+                bot_id: secondBot.id,
               },
             ],
           },
@@ -121,8 +125,8 @@ suite('events/sendTaskWebhook', () => {
             ],
           },
           repo: {
-            id: repo.id,
-            name: 'repo-0',
+            id: secondRepo.id,
+            name: 'repo-1',
             is_private: false,
           },
           org: {
@@ -134,7 +138,7 @@ suite('events/sendTaskWebhook', () => {
       };
 
       assert.equal(postStub.callCount, 1);
-      assert.equal(postStub.firstCall.args[0], 'http://test.local/webhook/0');
+      assert.equal(postStub.firstCall.args[0], 'http://test.local/webhook/1');
       assert.deepNestedInclude(postStub.firstCall.args[1], body);
       assert.match(postStub.firstCall.args[1].timestamp, regexTimestamp);
 
@@ -145,7 +149,7 @@ suite('events/sendTaskWebhook', () => {
             new Date(postStub.firstCall.args[1].timestamp).getTime() / 1000,
           ),
           'webhook-signature': generateWebhookSignature(
-            'atma_whsec_0',
+            'atma_whsec_1',
             postStub.firstCall.args[1].timestamp,
             body,
           ),
@@ -313,10 +317,7 @@ suite('events/sendTaskWebhook', () => {
 
     suite('with only archived repo', () => {
       setup(async () => {
-        await app.prisma.repos.update({
-          where: {
-            id: repo.id,
-          },
+        await app.prisma.repos.updateMany({
           data: {
             is_archived: true,
           },
@@ -345,10 +346,7 @@ suite('events/sendTaskWebhook', () => {
 
     suite('with only uninstalled repo', () => {
       setup(async () => {
-        await app.prisma.repos.update({
-          where: {
-            id: repo.id,
-          },
+        await app.prisma.repos.updateMany({
           data: {
             has_installation: false,
           },
