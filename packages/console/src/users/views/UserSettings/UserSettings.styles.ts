@@ -9,8 +9,6 @@ export const Container = tw(
   Flex,
 )`gap-8 lg:gap-10 xl:gap-12 flex-wrap md:flex-nowrap mx-auto max-w-8xl p-6 xl:px-10`;
 
-export const EmptyTopNav = tw.div`h-11 w-full bg-white shadow-border`;
-
 export const Nav = tw(
   NavigationMenu.List,
 )`flex flex-col w-48 p-1 bg-white rounded-lg overflow-y-auto scrollbar-none shadow-card`;
