@@ -2,8 +2,8 @@ import { lazy } from 'react';
 
 import { Route } from 'shared';
 
-import { routes as orgsRoutes } from 'orgs';
-import { routes as usersRoutes } from 'users';
+import { routes as orgsRoutes } from 'orgs/routes';
+import { routes as usersRoutes } from 'users/routes';
 
 const routes = [
   {

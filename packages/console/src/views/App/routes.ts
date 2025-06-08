@@ -2,8 +2,8 @@ import { lazy } from 'react';
 
 import { Route } from 'shared';
 
-import { routes as authRoutes } from 'auth';
-import { setupRoutes as integrationsSetupRoutes } from 'integrations';
+import { routes as authRoutes } from 'auth/routes';
+import { setupRoutes as integrationsSetupRoutes } from 'integrations/routes';
 
 const routes = [
   ...authRoutes,

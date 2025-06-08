@@ -11,16 +11,12 @@ import {
   useRelativeMatch,
 } from 'shared';
 
+import { EmptyTopNav } from 'orgs';
+
 import routes from './routes';
 import { UserSettingsProps } from './types';
 
-import {
-  Container,
-  Content,
-  EmptyTopNav,
-  Item,
-  Nav,
-} from './UserSettings.styles';
+import { Container, Content, Item, Nav } from './UserSettings.styles';
 
 const UserSettings: React.FC<UserSettingsProps> = () => {
   const isUserSettingsView = useRelativeMatch('.');
