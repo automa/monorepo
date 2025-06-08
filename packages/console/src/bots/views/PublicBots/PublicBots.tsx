@@ -4,7 +4,9 @@ import { useQuery } from '@apollo/client';
 import { useAnalyticsPage } from 'analytics';
 import { Button, Flex, Loader, ToggleGroup, useFilters } from 'shared';
 
-import { PublicBot, publicBotsfilters } from 'bots';
+import { publicBotsfilters } from 'bots';
+
+import PublicBot from 'bots/components/PublicBot';
 
 import { PublicBotsProps } from './types';
 

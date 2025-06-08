@@ -11,9 +11,11 @@ import {
 } from 'shared';
 
 import { useAuth } from 'auth';
-import { BotOnboarding } from 'bots';
-import { EmptyTopNav, useOrg, useOrgs } from 'orgs';
-import { RepoOnboarding } from 'repos';
+import { useOrg, useOrgs } from 'orgs';
+
+import BotOnboarding from 'bots/components/BotOnboarding';
+import { EmptyTopNav } from 'orgs/components';
+import RepoOnboarding from 'repos/components/RepoOnboarding';
 
 import routes from './routes';
 import { OrgProps } from './types';

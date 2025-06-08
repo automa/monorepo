@@ -8,7 +8,8 @@ import { TaskItemType } from 'gql/graphql';
 import { Button, Flex, Loader, toast, Tooltip, Typography } from 'shared';
 
 import { useOrg } from 'orgs';
-import { Task } from 'tasks';
+
+import Task from 'tasks/components/Task';
 
 import { BotInstallationProps } from './types';
 

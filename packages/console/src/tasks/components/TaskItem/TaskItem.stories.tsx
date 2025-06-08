@@ -9,7 +9,7 @@ import {
   TaskState,
 } from 'gql/graphql';
 
-import { USER_AVATAR_FRAGMENT } from 'users';
+import { USER_AVATAR_FRAGMENT } from 'users/components';
 
 import TaskItem from './TaskItem';
 

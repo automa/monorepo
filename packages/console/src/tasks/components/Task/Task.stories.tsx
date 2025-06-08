@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { makeFragmentData } from 'gql';
 import { ProviderType, TaskItemType, TaskState } from 'gql/graphql';
 
-import { USER_AVATAR_FRAGMENT } from 'users';
+import { USER_AVATAR_FRAGMENT } from 'users/components';
 
 import { TASK_ITEM_FRAGMENT } from '../TaskItem';
 

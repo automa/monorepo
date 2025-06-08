@@ -6,11 +6,10 @@ import { getFragment } from 'gql';
 import { TaskItemType } from 'gql/graphql';
 import { Avatar, Flex, Tooltip, Typography } from 'shared';
 
-import { UserAvatar } from 'users';
-
 import Logo from 'assets/logo.svg?react';
 
 import { getTaskItemUser } from 'tasks/utils';
+import { UserAvatar } from 'users/components';
 
 import { TASK_ITEM_FRAGMENT } from '../TaskItem';
 import TaskItemBadge from '../TaskItemBadge';

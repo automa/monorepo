@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Loader, Typography } from 'shared';
 
-import { Bot } from 'bots';
+import Bot from 'bots/components/Bot';
 
 import { BotsProps } from './types';
 

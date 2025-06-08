@@ -18,7 +18,8 @@ import {
   Typography,
 } from 'shared';
 
-import { BOT_BASE_FRAGMENT, InputPaths } from 'bots';
+import { BOT_BASE_FRAGMENT } from 'bots/components/BotBase';
+import InputPaths from 'bots/components/InputPaths';
 
 import { BotCreateProps } from './types';
 

@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { makeFragmentData } from 'gql';
 import { BotType } from 'gql/graphql';
 
-import { BOT_BASE_FRAGMENT } from 'bots';
+import { BOT_BASE_FRAGMENT } from 'bots/components/BotBase';
 
 import Bot from './Bot';
 

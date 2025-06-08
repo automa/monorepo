@@ -14,11 +14,10 @@ import { IntegrationType, TaskItemType } from 'gql/graphql';
 import { Anchor, Avatar, Flex, Tooltip, Typography } from 'shared';
 import Editor from 'shared/components/Editor';
 
-import { USER_AVATAR_FRAGMENT, UserAvatar } from 'users';
-
 import Logo from 'assets/logo.svg?react';
 
 import { getTaskItemUser } from 'tasks/utils';
+import { USER_AVATAR_FRAGMENT, UserAvatar } from 'users/components';
 
 import { TaskItemProps } from './types';
 import {

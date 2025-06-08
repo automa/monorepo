@@ -9,7 +9,8 @@ import { Button, Flex, Loader, Tooltip, Typography } from 'shared';
 
 import { getOrgSettingsLink } from 'orgs';
 import { getRepoLink } from 'repos';
-import { Task } from 'tasks';
+
+import Task from 'tasks/components/Task';
 
 import { RepoProps } from './types';
 

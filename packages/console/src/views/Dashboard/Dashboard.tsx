@@ -4,10 +4,10 @@ import { NetworkStatus, useQuery } from '@apollo/client';
 
 import { Flex, Loader, RoutesLoader, useRelativeMatch } from 'shared';
 
-import { EmptyTopNav, OrgList } from 'orgs';
-import { UserNavbar } from 'users';
-
 import Logo from 'assets/logo.svg?react';
+
+import { EmptyTopNav, OrgList } from 'orgs/components';
+import { UserNavbar } from 'users/components';
 
 import routes from './routes';
 import { DashboardProps } from './types';

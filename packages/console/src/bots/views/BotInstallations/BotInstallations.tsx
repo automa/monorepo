@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client';
 import { useAnalyticsPage } from 'analytics';
 import { Button, Flex, Loader, Typography } from 'shared';
 
-import { BotInstallation } from 'bots';
+import BotInstallation from 'bots/components/BotInstallation';
 
 import { BotInstallationsProps } from './types';
 

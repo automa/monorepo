@@ -3,7 +3,9 @@ import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Loader, ToggleGroup, useFilters } from 'shared';
 
-import { Task, tasksFilters } from 'tasks';
+import { tasksFilters } from 'tasks';
+
+import Task from 'tasks/components/Task';
 
 import { TasksProps } from './types';
 

@@ -5,7 +5,8 @@ import { useQuery } from '@apollo/client';
 import { getFragment } from 'gql';
 import { Flex, Loader, Typography } from 'shared';
 
-import { TASK_FRAGMENT, TaskItem } from 'tasks';
+import { TASK_FRAGMENT } from 'tasks/components/Task';
+import TaskItem from 'tasks/components/TaskItem';
 
 import { TaskProps } from './types';
 

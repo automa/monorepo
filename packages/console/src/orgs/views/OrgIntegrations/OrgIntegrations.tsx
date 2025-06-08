@@ -5,7 +5,9 @@ import { IntegrationType } from 'gql/graphql';
 import { Flex, Loader } from 'shared';
 import { objectKeys } from 'utils';
 
-import { IntegrationConnectCard, integrations } from 'integrations';
+import { integrations } from 'integrations';
+
+import IntegrationConnectCard from 'integrations/components/IntegrationConnectCard';
 
 import { OrgIntegrationsProps } from './types';
 

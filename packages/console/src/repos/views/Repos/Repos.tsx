@@ -5,7 +5,8 @@ import { useAnalyticsPage } from 'analytics';
 import { Button, Flex, Loader, Typography } from 'shared';
 
 import { getOrgInstallLink, getOrgSettingsLink } from 'orgs';
-import { Repo } from 'repos';
+
+import Repo from 'repos/components/Repo';
 
 import { ReposProps } from './types';
 

@@ -8,7 +8,6 @@ import { botUpdateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
 import { BotUpdateInput } from 'gql/graphql';
-import { useGateValue } from 'optimizer';
 import {
   Button,
   Flex,
@@ -20,8 +19,7 @@ import {
 } from 'shared';
 import InputEditor from 'shared/components/InputEditor';
 
-import { InputPaths } from 'bots';
-
+import InputPaths from 'bots/components/InputPaths';
 import { botTypeDefinition } from 'bots/utils';
 
 import { BotProps } from './types';

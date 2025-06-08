@@ -4,7 +4,11 @@ import { useQuery } from '@apollo/client';
 import { getFragment } from 'gql';
 import { Button, Flex, Tooltip, Typography } from 'shared';
 
-import { USER_AVATAR_FRAGMENT, USER_QUERY, USER_QUERY_FRAGMENT } from 'users';
+import {
+  USER_AVATAR_FRAGMENT,
+  USER_QUERY,
+  USER_QUERY_FRAGMENT,
+} from 'users/components';
 
 import { UserSettingsConnectionsProps } from './types';
 import { providers } from './utils';

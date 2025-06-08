@@ -13,7 +13,7 @@ import { Avatar, Button, Flex, Input, toast, Typography } from 'shared';
 import ComboBox from 'shared/components/ComboBox';
 import InputEditor from 'shared/components/InputEditor';
 
-import { TASK_FRAGMENT } from 'tasks';
+import { TASK_FRAGMENT } from 'tasks/components/Task';
 
 import { TaskCreateProps } from './types';
 

@@ -16,8 +16,9 @@ import {
 } from 'shared';
 import Editor from 'shared/components/Editor';
 
-import { BOT_INSTALLATION_FRAGMENT } from 'bots';
 import { useOrg } from 'orgs';
+
+import { BOT_INSTALLATION_FRAGMENT } from 'bots/components/BotInstallation';
 
 import { PublicBotProps } from './types';
 
