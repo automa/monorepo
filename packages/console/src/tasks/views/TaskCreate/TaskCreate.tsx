@@ -72,6 +72,14 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     setValue('bot_installation_id', botInstallation.id);
   }, [searchParams, botInstallations, setValue]);
 
+  useEffect(() => {
+    const botInstallationId = parseInt(searchParams.get('bot') ?? '0', 10);
+
+    if (!botInstallationId && botInstallations.length > 0) {
+      setValue('bot_installation_id', botInstallations[0].id);
+    }
+  }, [searchParams, botInstallations, setValue]);
+
   // Load repositories
   const { data: repositoriesData, loading: repositoriesLoading } = useQuery(
     REPOSITORIES_AS_OPTIONS_QUERY,
@@ -102,6 +110,14 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
     if (!repo) return;
 
     setValue('repo_id', repo.id);
+  }, [searchParams, repositories, setValue]);
+
+  useEffect(() => {
+    const repoId = parseInt(searchParams.get('repo') ?? '0', 10);
+
+    if (!repoId && repositories.length > 0) {
+      setValue('repo_id', repositories[0].id);
+    }
   }, [searchParams, repositories, setValue]);
 
   // TODO: Handle error
