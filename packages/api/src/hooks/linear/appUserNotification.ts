@@ -38,7 +38,7 @@ const issueAssignedToYou: LinearEventActionHandler<{
 
 // TODO: Handle the following:
 // - issueMention
-// - issueUnassignedFromYou (not working)
+// - issueUnassignedFromYou
 export default {
   issueAssignedToYou,
 };

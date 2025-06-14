@@ -196,6 +196,34 @@ suite('linear hook Comment event', () => {
           parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
         });
       });
+
+      suite('create on same issue again', () => {
+        setup(async () => {
+          response = await callWithFixture(app, 'Comment', 'create/create');
+        });
+
+        test('should return 200', async () => {
+          assert.equal(response.statusCode, 200);
+        });
+
+        test('should not create task', async () => {
+          const tasks = await app.prisma.tasks.findMany();
+
+          assert.equal(tasks.length, 1);
+        });
+
+        test('should not get information about issue', async () => {
+          assert.equal(issueStub.callCount, 1);
+        });
+
+        test('should not get information about organization', async () => {
+          assert.equal(organizationStub.callCount, 1);
+        });
+
+        test('should not create any comment', async () => {
+          assert.equal(createCommentStub.callCount, 1);
+        });
+      });
     });
 
     suite('create in comment thread', () => {
@@ -783,7 +811,7 @@ suite('linear hook Comment event', () => {
         assert.equal(organizationStub.callCount, 0);
       });
 
-      test('should not be able to create any comment', async () => {
+      test('should not create any comment', async () => {
         assert.equal(createCommentStub.callCount, 0);
       });
     });
@@ -891,6 +919,34 @@ suite('linear hook Comment event', () => {
           body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
           parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
+
+      suite('update on same issue again', () => {
+        setup(async () => {
+          response = await callWithFixture(app, 'Comment', 'update/update');
+        });
+
+        test('should return 200', async () => {
+          assert.equal(response.statusCode, 200);
+        });
+
+        test('should not create task', async () => {
+          const tasks = await app.prisma.tasks.findMany();
+
+          assert.equal(tasks.length, 1);
+        });
+
+        test('should not get information about issue', async () => {
+          assert.equal(issueStub.callCount, 1);
+        });
+
+        test('should not get information about organization', async () => {
+          assert.equal(organizationStub.callCount, 1);
+        });
+
+        test('should not create any comment', async () => {
+          assert.equal(createCommentStub.callCount, 1);
         });
       });
     });

@@ -1,6 +1,6 @@
 {
   "type": "AppUserNotification",
-  "action": "issueAssignedToYou",
+  "action": "issueUnassignedFromYou",
   "createdAt": "2025-05-23T14:02:48.830Z",
   "organizationId": "6cb652a9-8f3f-40b7-9695-df81e161fe07",
   "oauthClientId": "7e8e41eb-5881-4206-968f-fd33b4cf49bf",
@@ -10,7 +10,7 @@
     "createdAt": "2025-05-23T14:02:48.776Z",
     "updatedAt": "2025-05-23T14:02:48.776Z",
     "archivedAt": null,
-    "type": "issueAssignedToYou",
+    "type": "issueUnassignedFromYou",
     "actorId": "5611201a-9594-4407-9490-731894376791",
     "externalUserActorId": null,
     "userId": "3e2886bd-3d5e-44c1-bfa0-3db5f94f3d18",
