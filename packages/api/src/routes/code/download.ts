@@ -58,7 +58,7 @@ export default async function (app: FastifyInstance) {
     const proposalToken = randomBytes(128).toString('base64url');
 
     // Get the head commit hash and store it along with the download token
-    const commit = await $({
+    const { stdout: commitHash } = await $({
       cwd: workingDir,
     })`git rev-parse HEAD`;
 
@@ -68,7 +68,7 @@ export default async function (app: FastifyInstance) {
       },
       data: {
         proposal_token: proposalToken,
-        proposal_base_commit: commit.stdout.trim(),
+        proposal_base_commit: commitHash.trim(),
       },
     });
 
