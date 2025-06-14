@@ -2,28 +2,30 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from '@phosphor-icons/react';
 
-import { Flex, Typography } from 'shared';
+import { Flex, Tooltip, Typography } from 'shared';
 
 import { BotOnboardingProps } from './types';
 
 import { BotName, Card, Container, Content } from './BotOnboarding.styles';
 
-// TODO: Add description as tooltip after loading these from DB
 const DEFAULT_BOTS = [
   {
     botOrgName: 'openai',
     botName: 'codex',
     logo: 'https://avatars.githubusercontent.com/u/14957082?s=64',
+    shortDescription: "OpenAI's coding agent",
   },
   {
     botOrgName: 'anthropic',
     botName: 'claude-code',
     logo: 'https://avatars.githubusercontent.com/u/76263028?s=64',
+    shortDescription: "Anthropic's coding agent",
   },
   {
     botOrgName: 'badges',
     botName: 'package-badges',
     logo: 'https://avatars.githubusercontent.com/u/6254238?s=64',
+    shortDescription: 'Adds package manager badges to public packages',
   },
 ];
 
@@ -39,19 +41,23 @@ const BotOnboarding: React.FC<BotOnboardingProps> = ({ ...props }) => {
         </Typography>
       </Flex>
       <Flex className="gap-2 lg:gap-4">
-        {DEFAULT_BOTS.map(({ botOrgName, botName, logo }, index) => (
-          <Card key={index} to={`bots/new/${botOrgName}/${botName}`}>
-            <Content>
-              <img src={logo} alt={`${botName} logo`} className="size-16" />
-              <Flex direction="column" className="gap-1 lg:gap-2">
-                <BotName>{botName}</BotName>
-                <Typography variant="xsmall" className="text-neutral-600">
-                  by {botOrgName}
-                </Typography>
-              </Flex>
-            </Content>
-          </Card>
-        ))}
+        {DEFAULT_BOTS.map(
+          ({ botOrgName, botName, logo, shortDescription }, index) => (
+            <Tooltip key={index} body={shortDescription}>
+              <Card key={index} to={`bots/new/${botOrgName}/${botName}`}>
+                <Content>
+                  <img src={logo} alt={`${botName} logo`} className="size-16" />
+                  <Flex direction="column" className="gap-1 lg:gap-2">
+                    <BotName>{botName}</BotName>
+                    <Typography variant="xsmall" className="text-neutral-600">
+                      by {botOrgName}
+                    </Typography>
+                  </Flex>
+                </Content>
+              </Card>
+            </Tooltip>
+          ),
+        )}
       </Flex>
       <Link to="bots/new">
         <Flex alignItems="center" className="relative left-2 gap-1">

@@ -13,14 +13,16 @@ import StarterKit from '@tiptap/starter-kit';
 
 import { twp } from 'theme';
 
-import { Button, Flex, Typography } from 'components';
+import { Button, Flex, Tooltip, Typography } from 'components';
 
 import { TypographyComponentProps } from 'components/Typography';
 import { typography } from 'components/Typography/Typography.cva';
 
 import { getAgentBySlug, listAgents } from '../utils';
 
-import { Badge, Container, Fallback, ImageContainer } from './page.styles';
+import AgentBadges from '../AgentBadges';
+
+import { Container, Fallback, ImageContainer } from './page.styles';
 
 export const generateStaticParams = listAgents;
 
@@ -173,23 +175,12 @@ const AgentPage = async ({ params: { slug } }: Props) => {
         <Flex direction="column" className="gap-3 md:gap-4">
           <Flex alignItems="baseline" wrap="wrap" className="gap-4">
             <Typography variant="title3">{bot.name}</Typography>
-            <Flex alignItems="center" className="gap-2">
+            <Flex alignItems="center" className="gap-4">
               <Typography variant="large" className="text-neutral-500">
                 by {bot.orgs.name}
               </Typography>
 
-              <Flex className="gap-2">
-                <Badge
-                  className={
-                    bot.is_deterministic
-                      ? 'border-green-200 bg-green-100 text-green-800'
-                      : 'border-blue-200 bg-blue-100 text-blue-800'
-                  }
-                >
-                  {bot.is_deterministic ? 'Deterministic' : 'Uses AI'}
-                </Badge>
-                <Badge>{bot.type === 'manual' ? 'Manual' : 'Scheduled'}</Badge>
-              </Flex>
+              <AgentBadges bot={bot} />
             </Flex>
           </Flex>
           <Typography
@@ -206,15 +197,23 @@ const AgentPage = async ({ params: { slug } }: Props) => {
       </Typography>
 
       <Flex justifyContent="center" className="py-6">
-        <Button
-          href={`${process.env.NEXT_PUBLIC_CONSOLE_URL!}/$/bots/new/${
-            bot.orgs.name
-          }/${bot.name}`}
-          blank
-          size="xlarge"
-        >
-          Install Agent
-        </Button>
+        {bot.is_preview ? (
+          <Tooltip body="Coming soon!">
+            <Button size="xlarge" disabled>
+              Install Agent
+            </Button>
+          </Tooltip>
+        ) : (
+          <Button
+            href={`${process.env.NEXT_PUBLIC_CONSOLE_URL!}/$/bots/new/${
+              bot.orgs.name
+            }/${bot.name}`}
+            blank
+            size="xlarge"
+          >
+            Install Agent
+          </Button>
+        )}
       </Flex>
 
       {/* Description */}
