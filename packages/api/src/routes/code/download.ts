@@ -81,6 +81,21 @@ export default async function (app: FastifyInstance) {
       cwd: workingDir,
     })`git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit --allow-empty -m "Downloaded code"`;
 
+    app.analytics.track(
+      'Code Download Requested',
+      {
+        task_id: task.id,
+        repo_id: repo.id,
+        repo_name: repo.name,
+        org_id: repo.orgs.id,
+        org_name: repo.orgs.name,
+        bot_name: bot.name,
+        bot_org_name: bot.orgs.name,
+      },
+      undefined,
+      repo.orgs,
+    );
+
     // Attach the download token to the response
     reply.header('x-automa-proposal-token', proposalToken);
 

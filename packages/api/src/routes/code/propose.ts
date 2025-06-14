@@ -1,4 +1,4 @@
-import { mkdir, rm, unlink, writeFile } from 'node:fs/promises';
+import { mkdir, rm } from 'node:fs/promises';
 
 import { FastifyInstance } from 'fastify';
 import { $ } from 'zx';
@@ -242,6 +242,24 @@ export default async function (app: FastifyInstance) {
         maintainer_can_modify: true,
       },
     ));
+
+    app.analytics.track(
+      'Code Proposal Created',
+      {
+        task_id: task.id,
+        repo_id: repo.id,
+        repo_name: repo.name,
+        org_id: repo.orgs.id,
+        org_name: repo.orgs.name,
+        bot_name: bot.name,
+        bot_org_name: bot.orgs.name,
+        org_provider_type: repo.orgs.provider_type,
+        org_provider_name: repo.orgs.provider_name,
+        proposal_provider_number: pr.number,
+      },
+      undefined,
+      repo.orgs,
+    );
 
     return finish();
   });
