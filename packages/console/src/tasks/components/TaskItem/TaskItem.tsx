@@ -35,7 +35,6 @@ const TaskItemContainer: React.FC<{
   timestamp: string;
   children: ReactNode;
 }> = ({ icon: Icon, timestamp, children }) => {
-  // TODO: Link to the task item
   return (
     <Line>
       <Icon className="mr-1 size-4" />

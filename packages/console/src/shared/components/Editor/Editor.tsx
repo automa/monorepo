@@ -231,7 +231,7 @@ const Editor: React.FC<EditorProps> = ({
             <CodeSimple />
           </Button>
         </Tooltip>
-        {/* TODO: Add link */}
+        {/* TODO: Add link and markdown support for it */}
         {editor?.isActive('link') && (
           <Tooltip body="Remove link">
             <Button
