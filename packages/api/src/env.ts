@@ -54,6 +54,9 @@ const schema = Type.Object({
     CALLBACK_URI: Type.String({
       default: '/callbacks/github',
     }),
+    SLUG: Type.String({
+      default: `automa${environment === 'production' ? '' : `-${environment}`}`,
+    }),
     CLIENT_ID: Type.String({
       default: '',
     }),
