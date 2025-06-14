@@ -92,6 +92,10 @@ const AdminSetupGithub: React.FC<AdminSetupGithubProps> = () => {
         environment variables for the API:
       </Typography>
       <Flex className="gap-2">
+        <Name>GITHUB_APP_SLUG</Name>
+        <Secret>{secrets.slug}</Secret>
+      </Flex>
+      <Flex className="gap-2">
         <Name>GITHUB_APP_CLIENT_ID</Name>
         <Secret>{secrets.client_id}</Secret>
       </Flex>
