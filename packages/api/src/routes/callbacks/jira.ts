@@ -129,7 +129,10 @@ export default async function (app: FastifyInstance) {
 
       // Check for errors for webhook registration
       if ('errors' in data) {
-        if (data.errors[0].startsWith('A maximum')) {
+        if (
+          data.errors[0].startsWith('A maximum') ||
+          data.errors[0].startsWith('Only a single URL')
+        ) {
           // Get all webhooks for the app
           const {
             data: { values: webhooks },

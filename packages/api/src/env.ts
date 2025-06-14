@@ -138,6 +138,6 @@ type Schema = Static<typeof schema>;
 export const env = envSchema<Schema>({
   schema,
   dotenv: {
-    path: join(dirname(__dirname), '.env'),
+    path: join(dirname(__dirname), isTest ? '.env.test' : '.env'),
   },
 });
