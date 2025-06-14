@@ -2,7 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { getFragment } from 'gql';
-import { DropdownMenu, DropdownMenuItem, DropdownMenuLabel } from 'shared';
+import DropdownMenu, {
+  DropdownMenuItem,
+  DropdownMenuLabel,
+} from 'shared/components/DropdownMenu';
 
 import UserAvatar from '../UserAvatar';
 

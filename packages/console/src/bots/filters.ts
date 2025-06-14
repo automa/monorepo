@@ -1,5 +1,5 @@
 import { BotType } from 'gql/graphql';
-import { FiltersDefinition, FilterType } from 'shared';
+import { FiltersDefinition, FilterType } from 'shared/hooks/useFilters';
 
 export const publicBotsfilters: FiltersDefinition = {
   scheduled: {

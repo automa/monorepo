@@ -10,7 +10,7 @@ beforeEach(() => {
 
 test('redirects to /admin/setup/code', async () => {
   render(<AdminSetup />, {
-    history: ['/admin/setup'],
+    path: '/admin/setup',
   });
 
   expect(mockedNavigate).toHaveBeenCalledTimes(1);

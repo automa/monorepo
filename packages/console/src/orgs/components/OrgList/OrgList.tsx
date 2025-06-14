@@ -12,14 +12,15 @@ import { getFragment } from 'gql';
 import {
   Anchor,
   Avatar,
-  DropdownMenu,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   Flex,
   toast,
   Typography,
   useRelativeMatch,
 } from 'shared';
+import DropdownMenu, {
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from 'shared/components/DropdownMenu';
 import { appName, getOrgAvatarUrl } from 'utils';
 
 import { useOrg, useOrgs } from '../../hooks';

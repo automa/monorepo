@@ -1,9 +1,9 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import { isProduction } from 'env';
 
-import { Loader, RoutesLoader, Typography } from 'shared';
+import { Loader, RoutesLoader, Typography, useRelativeMatch } from 'shared';
 
 import { useApp } from 'app';
 
@@ -15,9 +15,9 @@ import { Container } from './AdminSetup.styles';
 const AdminSetup: React.FC<AdminSetupProps> = () => {
   const { app } = useApp();
 
-  const location = useLocation();
+  const isAdminSetupView = useRelativeMatch('.');
 
-  if (location.pathname === '/admin/setup') {
+  if (isAdminSetupView) {
     return <Navigate to="/admin/setup/code" replace />;
   }
 
