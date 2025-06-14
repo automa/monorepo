@@ -115,8 +115,12 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
   useEffect(() => {
     const repoId = parseInt(searchParams.get('repo') ?? '0', 10);
 
-    if (!repoId && repositories.length > 0) {
-      setValue('repo_id', repositories[0].id);
+    if (!repoId) {
+      const firstEnabledRepo = repositories.find((repo) => !repo.disabled);
+
+      if (firstEnabledRepo) {
+        setValue('repo_id', firstEnabledRepo.id);
+      }
     }
   }, [searchParams, repositories, setValue]);
 
