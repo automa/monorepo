@@ -57,7 +57,11 @@ const App: React.FC<{}> = () => {
   }, [location.search]);
 
   useEffect(() => {
-    if (!user && !authLoading && location.pathname !== '/auth/login') {
+    const isNonAuthRoute = [/^\/auth\/login$/].some((p) =>
+      p.test(location.pathname),
+    );
+
+    if (!user && !authLoading && !isNonAuthRoute) {
       navigate('/auth/login', {
         state: { from: window.location.href },
       });
