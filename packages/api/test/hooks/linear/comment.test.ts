@@ -92,319 +92,1030 @@ suite('linear hook Comment event', () => {
     await app.prisma.tasks.deleteMany();
   });
 
-  suite('update', () => {
-    setup(async () => {
-      response = await callWithFixture(app, 'Comment', 'update');
-    });
-
-    test('should return 200', async () => {
-      assert.equal(response.statusCode, 200);
-    });
-
-    test('should create task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
-
-      assert.equal(tasks.length, 1);
-      assert.deepOwnInclude(tasks[0], {
-        org_id: org.id,
-        title: 'Delete tokens when user revokes Github App',
-        is_scheduled: false,
-        state: 'started',
-      });
-      assert.isDefined(tasks[0].token);
-
-      const taskItems = await app.prisma.task_items.findMany({
-        where: {
-          task_id: tasks[0].id,
-        },
+  suite('create', () => {
+    suite('create', () => {
+      setup(async () => {
+        response = await callWithFixture(app, 'Comment', 'create/create');
       });
 
-      assert.equal(taskItems.length, 4);
-      assert.deepOwnInclude(taskItems[0], {
-        type: 'message',
-        data: {
-          content:
-            '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
-        },
-        actor_user_id: null,
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
       });
-      assert.deepOwnInclude(taskItems[1], {
-        type: 'origin',
-        data: {
-          integration: 'linear',
-          organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
-          organizationUrlKey: 'automa',
-          organizationName: 'Automa',
-          teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
-          teamKey: 'PRO',
-          teamName: 'Product',
-          userId: '5611201a-9594-4407-9490-731894376791',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
+
+      test('should create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 1);
+        assert.deepOwnInclude(tasks[0], {
+          org_id: org.id,
+          title: 'Delete tokens when user revokes Github App',
+          is_scheduled: false,
+          state: 'started',
+        });
+        assert.isDefined(tasks[0].token);
+
+        const taskItems = await app.prisma.task_items.findMany({
+          where: {
+            task_id: tasks[0].id,
+          },
+        });
+
+        assert.equal(taskItems.length, 4);
+        assert.deepOwnInclude(taskItems[0], {
+          type: 'message',
+          data: {
+            content:
+              '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
+          },
+          actor_user_id: null,
+        });
+        assert.deepOwnInclude(taskItems[1], {
+          type: 'origin',
+          data: {
+            integration: 'linear',
+            organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+            organizationUrlKey: 'automa',
+            organizationName: 'Automa',
+            teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+            teamKey: 'PRO',
+            teamName: 'Product',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+            issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+            issueIdentifier: 'PRO-93',
+            issueTitle: 'Delete tokens when user revokes Github App',
+            commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+          },
+          actor_user_id: null,
+        });
+        assert.deepOwnInclude(taskItems[2], {
+          type: 'repo',
+          data: {
+            integration: 'linear',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+          },
+          actor_user_id: null,
+          repo_id: repo.id,
+        });
+        assert.deepOwnInclude(taskItems[3], {
+          type: 'bot',
+          data: {
+            integration: 'linear',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+          },
+          actor_user_id: null,
+          bot_id: secondBot.id,
+        });
+      });
+
+      test('should get information about issue', async () => {
+        assert.equal(issueStub.callCount, 1);
+        assert.equal(
+          issueStub.firstCall.args[0],
+          'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+        );
+      });
+
+      test('should get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 1);
+        assert.lengthOf(organizationStub.firstCall.args, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
-          issueIdentifier: 'PRO-93',
-          issueTitle: 'Delete tokens when user revokes Github App',
-          commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
-        },
-        actor_user_id: null,
-      });
-      assert.deepOwnInclude(taskItems[2], {
-        type: 'repo',
-        data: {
-          integration: 'linear',
-          userId: '5611201a-9594-4407-9490-731894376791',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
-        },
-        actor_user_id: null,
-        repo_id: repo.id,
-      });
-      assert.deepOwnInclude(taskItems[3], {
-        type: 'bot',
-        data: {
-          integration: 'linear',
-          userId: '5611201a-9594-4407-9490-731894376791',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
-        },
-        actor_user_id: null,
-        bot_id: secondBot.id,
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
       });
     });
 
-    test('should get information about issue', async () => {
-      assert.equal(issueStub.callCount, 1);
-      assert.equal(
-        issueStub.firstCall.args[0],
-        'f2f72e62-b1a4-46c3-b605-0962d24792d8',
-      );
-    });
-
-    test('should get information about organization', async () => {
-      assert.equal(organizationStub.callCount, 1);
-      assert.lengthOf(organizationStub.firstCall.args, 0);
-    });
-
-    test('should create comment about the task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
-
-      assert.equal(createCommentStub.callCount, 1);
-      assert.deepEqual(createCommentStub.firstCall.args[0], {
-        body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-        issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
-        parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
-      });
-    });
-  });
-
-  suite('update in comment thread', () => {
-    setup(async () => {
-      response = await callWithFixture(app, 'Comment', 'update_with_parent');
-    });
-
-    test('should return 200', async () => {
-      assert.equal(response.statusCode, 200);
-    });
-
-    test('should create task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
-
-      assert.equal(tasks.length, 1);
-      assert.deepOwnInclude(tasks[0], {
-        org_id: org.id,
-        title: 'Delete tokens when user revokes Github App',
-        is_scheduled: false,
-        state: 'started',
-      });
-      assert.isDefined(tasks[0].token);
-
-      const taskItems = await app.prisma.task_items.findMany({
-        where: {
-          task_id: tasks[0].id,
-        },
+    suite('create in comment thread', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'Comment',
+          'create/create_with_parent',
+        );
       });
 
-      assert.equal(taskItems.length, 4);
-      assert.deepOwnInclude(taskItems[0], {
-        type: 'message',
-        data: {
-          content:
-            '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
-        },
-        actor_user_id: null,
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
       });
-      assert.deepOwnInclude(taskItems[1], {
-        type: 'origin',
-        data: {
-          integration: 'linear',
-          organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
-          organizationUrlKey: 'automa',
-          organizationName: 'Automa',
-          teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
-          teamKey: 'PRO',
-          teamName: 'Product',
-          userId: '5611201a-9594-4407-9490-731894376791',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
+
+      test('should create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 1);
+        assert.deepOwnInclude(tasks[0], {
+          org_id: org.id,
+          title: 'Delete tokens when user revokes Github App',
+          is_scheduled: false,
+          state: 'started',
+        });
+        assert.isDefined(tasks[0].token);
+
+        const taskItems = await app.prisma.task_items.findMany({
+          where: {
+            task_id: tasks[0].id,
+          },
+        });
+
+        assert.equal(taskItems.length, 4);
+        assert.deepOwnInclude(taskItems[0], {
+          type: 'message',
+          data: {
+            content:
+              '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
+          },
+        });
+        assert.deepOwnInclude(taskItems[1], {
+          type: 'origin',
+          data: {
+            integration: 'linear',
+            organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+            organizationUrlKey: 'automa',
+            organizationName: 'Automa',
+            teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+            teamKey: 'PRO',
+            teamName: 'Product',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+            issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+            issueIdentifier: 'PRO-93',
+            issueTitle: 'Delete tokens when user revokes Github App',
+            commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+            parentId: '9ab4e3ef-0728-4972-a7a8-01775a9a51b6',
+          },
+        });
+        assert.deepOwnInclude(taskItems[2], {
+          type: 'repo',
+          data: {
+            integration: 'linear',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+          },
+          actor_user_id: null,
+          repo_id: repo.id,
+        });
+        assert.deepOwnInclude(taskItems[3], {
+          type: 'bot',
+          data: {
+            integration: 'linear',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+          },
+          actor_user_id: null,
+          bot_id: secondBot.id,
+        });
+      });
+
+      test('should get information about issue', async () => {
+        assert.equal(issueStub.callCount, 1);
+        assert.equal(
+          issueStub.firstCall.args[0],
+          'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+        );
+      });
+
+      test('should get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 1);
+        assert.lengthOf(organizationStub.firstCall.args, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
           issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
-          issueIdentifier: 'PRO-93',
-          issueTitle: 'Delete tokens when user revokes Github App',
-          commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
           parentId: '9ab4e3ef-0728-4972-a7a8-01775a9a51b6',
-        },
-        actor_user_id: null,
-      });
-      assert.deepOwnInclude(taskItems[2], {
-        type: 'repo',
-        data: {
-          integration: 'linear',
-          userId: '5611201a-9594-4407-9490-731894376791',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
-        },
-        actor_user_id: null,
-        repo_id: repo.id,
-      });
-      assert.deepOwnInclude(taskItems[3], {
-        type: 'bot',
-        data: {
-          integration: 'linear',
-          userId: '5611201a-9594-4407-9490-731894376791',
-          userName: 'Pavan Kumar Sunkara',
-          userEmail: 'pavan@example.com',
-        },
-        actor_user_id: null,
-        bot_id: secondBot.id,
+        });
       });
     });
 
-    test('should get information about issue', async () => {
-      assert.equal(issueStub.callCount, 1);
-      assert.equal(
-        issueStub.firstCall.args[0],
-        'f2f72e62-b1a4-46c3-b605-0962d24792d8',
-      );
-    });
+    suite('create with no bot specified', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'Comment',
+          'create/create_no_bot',
+        );
+      });
 
-    test('should get information about organization', async () => {
-      assert.equal(organizationStub.callCount, 1);
-      assert.lengthOf(organizationStub.firstCall.args, 0);
-    });
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
 
-    test('should create comment about the task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
 
-      assert.equal(createCommentStub.callCount, 1);
-      assert.deepEqual(createCommentStub.firstCall.args[0], {
-        body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
-        issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
-        parentId: '9ab4e3ef-0728-4972-a7a8-01775a9a51b6',
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Bot not specified. Use `bot=name` to specify a bot.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
       });
     });
-  });
 
-  suite('update with no bot and no repo specified', () => {
-    setup(async () => {
-      response = await callWithFixture(app, 'Comment', 'update_no_bot_repo');
-    });
+    suite('create with wrong bot specified', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'Comment',
+          'create/create_bot_bad',
+        );
+      });
 
-    test('should return 200', async () => {
-      assert.equal(response.statusCode, 200);
-    });
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
 
-    test('should not create task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
 
-      assert.equal(tasks.length, 0);
-    });
+        assert.equal(tasks.length, 0);
+      });
 
-    test('should not get information about issue', async () => {
-      assert.equal(issueStub.callCount, 0);
-    });
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
 
-    test('should not get information about organization', async () => {
-      assert.equal(organizationStub.callCount, 0);
-    });
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
 
-    test('should create comment about the task', async () => {
-      assert.equal(createCommentStub.callCount, 1);
-      assert.deepEqual(createCommentStub.firstCall.args[0], {
-        body: "We encountered the following issues while creating the task:\n- Bot not specified. Use `bot=name` to specify a bot.\n- Repo not specified. Use `repo=name` to specify a repo.\n\n*NOTE: We don't support assigning issues yet.*",
-        issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
-        parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Bot `bot-2` not found.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
       });
     });
-  });
 
-  suite('create with non-automa comment', () => {
-    setup(async () => {
-      response = await callWithFixture(app, 'Comment', 'update_ignore');
+    suite('create with no repo specified', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'Comment',
+          'create/create_no_repo',
+        );
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Repo not specified. Use `repo=name` to specify a repo.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
     });
 
-    test('should return 200', async () => {
-      assert.equal(response.statusCode, 200);
-    });
-
-    test('should not create task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
-
-      assert.equal(tasks.length, 0);
-    });
-
-    test('should not get information about issue', async () => {
-      assert.equal(issueStub.callCount, 0);
-    });
-
-    test('should not get information about organization', async () => {
-      assert.equal(organizationStub.callCount, 0);
-    });
-
-    test('should not be able to create any comment', async () => {
-      assert.equal(createCommentStub.callCount, 0);
-    });
-  });
-
-  suite('create with missing integration', () => {
-    setup(async () => {
-      await app.prisma.integrations.update({
-        where: {
-          org_id_type: {
-            org_id: org.id,
-            type: 'linear',
+    suite('create with archived repo specified', () => {
+      suiteSetup(async () => {
+        await app.prisma.repos.update({
+          where: {
+            id: repo.id,
           },
-        },
-        data: {
-          config: {
-            id: '123e4567-e89b-12d3-a456-426614174000',
-            name: 'Workspace',
-            slug: 'workspace',
+          data: {
+            is_archived: true,
           },
-        },
+        });
       });
 
-      response = await callWithFixture(app, 'Comment', 'update');
+      suiteTeardown(async () => {
+        await app.prisma.repos.update({
+          where: {
+            id: repo.id,
+          },
+          data: {
+            is_archived: false,
+          },
+        });
+      });
+
+      setup(async () => {
+        response = await callWithFixture(app, 'Comment', 'create/create');
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Repo `repo-1` is archived.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
     });
 
-    test('should return 200', async () => {
-      assert.equal(response.statusCode, 200);
+    suite('create with uninstalled repo specified', () => {
+      suiteSetup(async () => {
+        await app.prisma.repos.update({
+          where: {
+            id: repo.id,
+          },
+          data: {
+            has_installation: false,
+          },
+        });
+      });
+
+      suiteTeardown(async () => {
+        await app.prisma.repos.update({
+          where: {
+            id: repo.id,
+          },
+          data: {
+            has_installation: true,
+          },
+        });
+      });
+
+      setup(async () => {
+        response = await callWithFixture(app, 'Comment', 'create/create');
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Repo `repo-1` is not connected to Automa.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
     });
 
-    test('should not create task', async () => {
-      const tasks = await app.prisma.tasks.findMany();
+    suite('create with wrong repo specified', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'Comment',
+          'create/create_repo_bad',
+        );
+      });
 
-      assert.equal(tasks.length, 0);
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Repo `repo-2` not found.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
     });
 
-    test('should not get information about issue', async () => {
-      assert.equal(issueStub.callCount, 0);
+    suite('create with no bot and no repo specified', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'Comment',
+          'create/create_no_bot_repo',
+        );
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Bot not specified. Use `bot=name` to specify a bot.\n- Repo not specified. Use `repo=name` to specify a repo.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
     });
 
-    test('should not get information about organization', async () => {
-      assert.equal(organizationStub.callCount, 0);
+    suite('create with matching user', () => {
+      setup(async () => {
+        await app.prisma.users.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            email: 'pavan@example.com',
+          },
+        });
+
+        response = await callWithFixture(app, 'Comment', 'create/create');
+      });
+
+      teardown(async () => {
+        await app.prisma.users.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            email: 'user-0@example.com',
+          },
+        });
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 1);
+        assert.deepOwnInclude(tasks[0], {
+          org_id: org.id,
+          title: 'Delete tokens when user revokes Github App',
+          is_scheduled: false,
+          state: 'started',
+        });
+        assert.isDefined(tasks[0].token);
+
+        const taskItems = await app.prisma.task_items.findMany({
+          where: {
+            task_id: tasks[0].id,
+          },
+        });
+
+        assert.equal(taskItems.length, 4);
+        assert.deepOwnInclude(taskItems[0], {
+          type: 'message',
+          data: {
+            content:
+              '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
+          },
+          actor_user_id: null,
+        });
+        assert.deepOwnInclude(taskItems[1], {
+          type: 'origin',
+          data: {
+            organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+            organizationUrlKey: 'automa',
+            organizationName: 'Automa',
+            teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+            teamKey: 'PRO',
+            teamName: 'Product',
+            issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+            issueIdentifier: 'PRO-93',
+            issueTitle: 'Delete tokens when user revokes Github App',
+            commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+          },
+          actor_user_id: user.id,
+        });
+        assert.deepOwnInclude(taskItems[2], {
+          type: 'repo',
+          data: {},
+          actor_user_id: user.id,
+          repo_id: repo.id,
+        });
+        assert.deepOwnInclude(taskItems[3], {
+          type: 'bot',
+          data: {},
+          actor_user_id: user.id,
+          bot_id: secondBot.id,
+        });
+      });
+
+      test('should get information about issue', async () => {
+        assert.equal(issueStub.callCount, 1);
+        assert.equal(
+          issueStub.firstCall.args[0],
+          'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+        );
+      });
+
+      test('should get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 1);
+        assert.lengthOf(organizationStub.firstCall.args, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
     });
 
-    test('should not be able to create any comment', async () => {
-      assert.equal(createCommentStub.callCount, 0);
+    suite('create with non-automa comment', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'Comment',
+          'create/create_ignore',
+        );
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should not be able to create any comment', async () => {
+        assert.equal(createCommentStub.callCount, 0);
+      });
+    });
+
+    suite('create with missing integration', () => {
+      setup(async () => {
+        await app.prisma.integrations.update({
+          where: {
+            org_id_type: {
+              org_id: org.id,
+              type: 'linear',
+            },
+          },
+          data: {
+            config: {
+              id: '123e4567-e89b-12d3-a456-426614174000',
+              name: 'Workspace',
+              slug: 'workspace',
+            },
+          },
+        });
+
+        response = await callWithFixture(app, 'Comment', 'create/create');
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should not be able to create any comment', async () => {
+        assert.equal(createCommentStub.callCount, 0);
+      });
+    });
+  });
+
+  suite('update', () => {
+    suite('update', () => {
+      setup(async () => {
+        response = await callWithFixture(app, 'Comment', 'update/update');
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 1);
+        assert.deepOwnInclude(tasks[0], {
+          org_id: org.id,
+          title: 'Delete tokens when user revokes Github App',
+          is_scheduled: false,
+          state: 'started',
+        });
+        assert.isDefined(tasks[0].token);
+
+        const taskItems = await app.prisma.task_items.findMany({
+          where: {
+            task_id: tasks[0].id,
+          },
+        });
+
+        assert.equal(taskItems.length, 4);
+        assert.deepOwnInclude(taskItems[0], {
+          type: 'message',
+          data: {
+            content:
+              '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
+          },
+          actor_user_id: null,
+        });
+        assert.deepOwnInclude(taskItems[1], {
+          type: 'origin',
+          data: {
+            integration: 'linear',
+            organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+            organizationUrlKey: 'automa',
+            organizationName: 'Automa',
+            teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+            teamKey: 'PRO',
+            teamName: 'Product',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+            issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+            issueIdentifier: 'PRO-93',
+            issueTitle: 'Delete tokens when user revokes Github App',
+            commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+          },
+          actor_user_id: null,
+        });
+        assert.deepOwnInclude(taskItems[2], {
+          type: 'repo',
+          data: {
+            integration: 'linear',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+          },
+          actor_user_id: null,
+          repo_id: repo.id,
+        });
+        assert.deepOwnInclude(taskItems[3], {
+          type: 'bot',
+          data: {
+            integration: 'linear',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+          },
+          actor_user_id: null,
+          bot_id: secondBot.id,
+        });
+      });
+
+      test('should get information about issue', async () => {
+        assert.equal(issueStub.callCount, 1);
+        assert.equal(
+          issueStub.firstCall.args[0],
+          'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+        );
+      });
+
+      test('should get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 1);
+        assert.lengthOf(organizationStub.firstCall.args, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
+    });
+
+    suite('update in comment thread', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'Comment',
+          'update/update_with_parent',
+        );
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 1);
+        assert.deepOwnInclude(tasks[0], {
+          org_id: org.id,
+          title: 'Delete tokens when user revokes Github App',
+          is_scheduled: false,
+          state: 'started',
+        });
+        assert.isDefined(tasks[0].token);
+
+        const taskItems = await app.prisma.task_items.findMany({
+          where: {
+            task_id: tasks[0].id,
+          },
+        });
+
+        assert.equal(taskItems.length, 4);
+        assert.deepOwnInclude(taskItems[0], {
+          type: 'message',
+          data: {
+            content:
+              '* Delete the github refresh token stored in DB\n* Clear all sessions for the user',
+          },
+          actor_user_id: null,
+        });
+        assert.deepOwnInclude(taskItems[1], {
+          type: 'origin',
+          data: {
+            integration: 'linear',
+            organizationId: '6cb652a9-8f3f-40b7-9695-df81e161fe07',
+            organizationUrlKey: 'automa',
+            organizationName: 'Automa',
+            teamId: 'b7e7eb03-9d67-41b3-a268-84c14a6757d6',
+            teamKey: 'PRO',
+            teamName: 'Product',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+            issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+            issueIdentifier: 'PRO-93',
+            issueTitle: 'Delete tokens when user revokes Github App',
+            commentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+            parentId: '9ab4e3ef-0728-4972-a7a8-01775a9a51b6',
+          },
+          actor_user_id: null,
+        });
+        assert.deepOwnInclude(taskItems[2], {
+          type: 'repo',
+          data: {
+            integration: 'linear',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+          },
+          actor_user_id: null,
+          repo_id: repo.id,
+        });
+        assert.deepOwnInclude(taskItems[3], {
+          type: 'bot',
+          data: {
+            integration: 'linear',
+            userId: '5611201a-9594-4407-9490-731894376791',
+            userName: 'Pavan Kumar Sunkara',
+            userEmail: 'pavan@example.com',
+          },
+          actor_user_id: null,
+          bot_id: secondBot.id,
+        });
+      });
+
+      test('should get information about issue', async () => {
+        assert.equal(issueStub.callCount, 1);
+        assert.equal(
+          issueStub.firstCall.args[0],
+          'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+        );
+      });
+
+      test('should get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 1);
+        assert.lengthOf(organizationStub.firstCall.args, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: `Created task: http://localhost:3000/org-0/tasks/${tasks[0].id}`,
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: '9ab4e3ef-0728-4972-a7a8-01775a9a51b6',
+        });
+      });
+    });
+
+    suite('update with no bot and no repo specified', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'Comment',
+          'update/update_no_bot_repo',
+        );
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should create comment about the task', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+        assert.deepEqual(createCommentStub.firstCall.args[0], {
+          body: "We encountered the following issues while creating the task:\n- Bot not specified. Use `bot=name` to specify a bot.\n- Repo not specified. Use `repo=name` to specify a repo.\n\n*NOTE: We don't support assigning issues yet.*",
+          issueId: 'f2f72e62-b1a4-46c3-b605-0962d24792d8',
+          parentId: 'a41c315a-3130-4c8e-a9ca-6e9219c156b7',
+        });
+      });
+    });
+
+    suite('create with non-automa comment', () => {
+      setup(async () => {
+        response = await callWithFixture(
+          app,
+          'Comment',
+          'update/update_ignore',
+        );
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should not be able to create any comment', async () => {
+        assert.equal(createCommentStub.callCount, 0);
+      });
+    });
+
+    suite('create with missing integration', () => {
+      setup(async () => {
+        await app.prisma.integrations.update({
+          where: {
+            org_id_type: {
+              org_id: org.id,
+              type: 'linear',
+            },
+          },
+          data: {
+            config: {
+              id: '123e4567-e89b-12d3-a456-426614174000',
+              name: 'Workspace',
+              slug: 'workspace',
+            },
+          },
+        });
+
+        response = await callWithFixture(app, 'Comment', 'update/update');
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 0);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 0);
+      });
+
+      test('should not get information about organization', async () => {
+        assert.equal(organizationStub.callCount, 0);
+      });
+
+      test('should not be able to create any comment', async () => {
+        assert.equal(createCommentStub.callCount, 0);
+      });
     });
   });
 });

@@ -11,7 +11,7 @@ import { taskCreate } from '../../db';
 
 import { LinearEventActionHandler } from './types';
 
-const update: LinearEventActionHandler<{
+const create: LinearEventActionHandler<{
   url: string;
   actor: {
     id: string;
@@ -229,5 +229,6 @@ export const handleMention = async (
 };
 
 export default {
-  update,
+  create,
+  update: create,
 };
