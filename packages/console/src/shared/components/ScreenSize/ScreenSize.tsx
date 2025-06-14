@@ -7,7 +7,7 @@ import {
   useIsMediumOnly,
   useIsScreenSize,
   useIsSmallOnly,
-} from 'shared';
+} from 'shared/hooks/useMediaQueries';
 
 import { ScreenSizeHelperProps, ScreenSizeProps } from './types';
 

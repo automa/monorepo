@@ -1,7 +1,8 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { Button, Flex, Loader, ToggleGroup, useFilters } from 'shared';
+import { Button, Flex, Loader, ToggleGroup } from 'shared';
+import useFilters from 'shared/hooks/useFilters';
 
 import { Task, tasksFilters } from 'tasks';
 

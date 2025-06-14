@@ -2,13 +2,8 @@ import React, { useEffect, useMemo } from 'react';
 import { Navigate, NavLink, useParams } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import {
-  Flex,
-  Loader,
-  RoutesLoader,
-  Typography,
-  useRelativeMatch,
-} from 'shared';
+import { Flex, Loader, RoutesLoader, Typography } from 'shared';
+import { useRelativeMatch } from 'shared/hooks';
 
 import { useAuth } from 'auth';
 import { BotOnboarding } from 'bots';

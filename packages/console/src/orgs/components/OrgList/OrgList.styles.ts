@@ -2,7 +2,8 @@ import { TwcComponentProps } from 'react-twc';
 
 import { tw } from 'theme';
 
-import { DropdownMenuItem, Flex, Typography } from 'shared';
+import { Flex, Typography } from 'shared';
+import { DropdownMenuItem } from 'shared/components/DropdownMenu';
 
 export const Switcher = tw(
   Flex,

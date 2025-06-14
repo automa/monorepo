@@ -1,4 +1,4 @@
-import { FiltersDefinition, FilterType } from 'shared';
+import { FiltersDefinition, FilterType } from 'shared/hooks/useFilters';
 
 export const tasksFilters: FiltersDefinition = {
   scheduled: {

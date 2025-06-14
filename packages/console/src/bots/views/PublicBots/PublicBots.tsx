@@ -2,7 +2,8 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import { useAnalyticsPage } from 'analytics';
-import { Button, Flex, Loader, ToggleGroup, useFilters } from 'shared';
+import { Button, Flex, Loader, ToggleGroup } from 'shared';
+import useFilters from 'shared/hooks/useFilters';
 
 import { PublicBot, publicBotsfilters } from 'bots';
 
