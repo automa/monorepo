@@ -10,6 +10,16 @@ import { bots, orgs, repos, tasks } from '@automa/prisma';
 import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from '../../mocks';
 import { call, seedBots, seedOrgs, seedRepos, server } from '../../utils';
 
+const diff = [
+  'diff --git a/file.txt b/file.txt',
+  'new file mode 100644',
+  'index 0000000..81ab81a',
+  '--- /dev/null',
+  '+++ b/file.txt',
+  '@@ -0,0 +1,1 @@',
+  '+new',
+].join('\n');
+
 suite('code/propose', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
   let org: orgs, bot: bots, repo: repos, task: tasks;
@@ -623,8 +633,8 @@ suite('code/propose', () => {
     });
 
     test('should commit and push the diff', async () => {
-      assert.equal(zxCmdStub.callCount, 7);
-      assert.equal(zxCmdArgsStub.callCount, 7);
+      assert.equal(zxCmdStub.callCount, 9);
+      assert.equal(zxCmdArgsStub.callCount, 9);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
@@ -639,7 +649,7 @@ suite('code/propose', () => {
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
       ]);
       assert.deepEqual(zxCmdStub.getCall(4).args, [
-        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        { cwd: `/tmp/automa/propose/tasks/${task.id}`, input: diff },
       ]);
       assert.deepEqual(zxCmdStub.getCall(5).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
@@ -647,8 +657,14 @@ suite('code/propose', () => {
       assert.deepEqual(zxCmdStub.getCall(6).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
       ]);
+      assert.deepEqual(zxCmdStub.getCall(7).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(8).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
 
-      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init --bare']]);
       assert.deepEqual(zxCmdArgsStub.getCall(1).args, [
         [
           'git remote add origin https://x-access-token:',
@@ -665,22 +681,30 @@ suite('code/propose', () => {
         '123456',
       ]);
       assert.deepEqual(zxCmdArgsStub.getCall(3).args, [
-        ['git checkout ', ''],
+        ['git read-tree ', ''],
         '123456',
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
-        ['git apply --index ', '.diff'],
-        `/tmp/automa/propose/tasks/${task.id}`,
-      ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git apply --cached']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [['git write-tree']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
         [
-          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit -m ',
+          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit-tree ',
+          ' -p ',
+          ' -m ',
           '',
         ],
+        '7d9ff19f227379dabecd6dfd07514c13a412a466',
+        '123456',
         `Implemented automa@${task.id} using org-0/bot-0 bot`,
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
-        ['git push -f origin HEAD:refs/heads/', ''],
+      assert.deepEqual(zxCmdArgsStub.getCall(7).args, [
+        ['git update-ref refs/heads/', ' ', ''],
+        `automa/org-0/bot-0/${task.id}`,
+        '85e10273ac6513bd5bad6148e0657bc3c4b8d946',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(8).args, [
+        ['git push -f origin refs/heads/', ':refs/heads/', ''],
+        `automa/org-0/bot-0/${task.id}`,
         `automa/org-0/bot-0/${task.id}`,
       ]);
     });
@@ -814,8 +838,8 @@ suite('code/propose', () => {
     });
 
     test('should commit and push the diff', async () => {
-      assert.equal(zxCmdStub.callCount, 7);
-      assert.equal(zxCmdArgsStub.callCount, 7);
+      assert.equal(zxCmdStub.callCount, 9);
+      assert.equal(zxCmdArgsStub.callCount, 9);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
@@ -830,7 +854,7 @@ suite('code/propose', () => {
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
       ]);
       assert.deepEqual(zxCmdStub.getCall(4).args, [
-        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        { cwd: `/tmp/automa/propose/tasks/${task.id}`, input: diff },
       ]);
       assert.deepEqual(zxCmdStub.getCall(5).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
@@ -838,8 +862,14 @@ suite('code/propose', () => {
       assert.deepEqual(zxCmdStub.getCall(6).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
       ]);
+      assert.deepEqual(zxCmdStub.getCall(7).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(8).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
 
-      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init --bare']]);
       assert.deepEqual(zxCmdArgsStub.getCall(1).args, [
         [
           'git remote add origin https://x-access-token:',
@@ -856,22 +886,30 @@ suite('code/propose', () => {
         '123456',
       ]);
       assert.deepEqual(zxCmdArgsStub.getCall(3).args, [
-        ['git checkout ', ''],
+        ['git read-tree ', ''],
         '123456',
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
-        ['git apply --index ', '.diff'],
-        `/tmp/automa/propose/tasks/${task.id}`,
-      ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git apply --cached']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [['git write-tree']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
         [
-          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit -m ',
+          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit-tree ',
+          ' -p ',
+          ' -m ',
           '',
         ],
+        '7d9ff19f227379dabecd6dfd07514c13a412a466',
+        '123456',
         `Implemented automa@${task.id} using bot-0 bot`,
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
-        ['git push -f origin HEAD:refs/heads/', ''],
+      assert.deepEqual(zxCmdArgsStub.getCall(7).args, [
+        ['git update-ref refs/heads/', ' ', ''],
+        `automa/bot-0/${task.id}`,
+        '85e10273ac6513bd5bad6148e0657bc3c4b8d946',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(8).args, [
+        ['git push -f origin refs/heads/', ':refs/heads/', ''],
+        `automa/bot-0/${task.id}`,
         `automa/bot-0/${task.id}`,
       ]);
     });
@@ -978,8 +1016,8 @@ suite('code/propose', () => {
     });
 
     test('should commit and push the diff', async () => {
-      assert.equal(zxCmdStub.callCount, 7);
-      assert.equal(zxCmdArgsStub.callCount, 7);
+      assert.equal(zxCmdStub.callCount, 9);
+      assert.equal(zxCmdArgsStub.callCount, 9);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
@@ -994,7 +1032,7 @@ suite('code/propose', () => {
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
       ]);
       assert.deepEqual(zxCmdStub.getCall(4).args, [
-        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        { cwd: `/tmp/automa/propose/tasks/${task.id}`, input: diff },
       ]);
       assert.deepEqual(zxCmdStub.getCall(5).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
@@ -1002,8 +1040,14 @@ suite('code/propose', () => {
       assert.deepEqual(zxCmdStub.getCall(6).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
       ]);
+      assert.deepEqual(zxCmdStub.getCall(7).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(8).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
 
-      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init --bare']]);
       assert.deepEqual(zxCmdArgsStub.getCall(1).args, [
         [
           'git remote add origin https://x-access-token:',
@@ -1020,22 +1064,30 @@ suite('code/propose', () => {
         '123456',
       ]);
       assert.deepEqual(zxCmdArgsStub.getCall(3).args, [
-        ['git checkout ', ''],
+        ['git read-tree ', ''],
         '123456',
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
-        ['git apply --index ', '.diff'],
-        `/tmp/automa/propose/tasks/${task.id}`,
-      ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git apply --cached']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [['git write-tree']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
         [
-          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit -m ',
+          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit-tree ',
+          ' -p ',
+          ' -m ',
           '',
         ],
+        '7d9ff19f227379dabecd6dfd07514c13a412a466',
+        '123456',
         'Custom title',
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
-        ['git push -f origin HEAD:refs/heads/', ''],
+      assert.deepEqual(zxCmdArgsStub.getCall(7).args, [
+        ['git update-ref refs/heads/', ' ', ''],
+        `automa/org-0/bot-0/${task.id}`,
+        '85e10273ac6513bd5bad6148e0657bc3c4b8d946',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(8).args, [
+        ['git push -f origin refs/heads/', ':refs/heads/', ''],
+        `automa/org-0/bot-0/${task.id}`,
         `automa/org-0/bot-0/${task.id}`,
       ]);
     });
@@ -1157,8 +1209,8 @@ suite('code/propose', () => {
     });
 
     test('should commit and push the diff', async () => {
-      assert.equal(zxCmdStub.callCount, 7);
-      assert.equal(zxCmdArgsStub.callCount, 7);
+      assert.equal(zxCmdStub.callCount, 9);
+      assert.equal(zxCmdArgsStub.callCount, 9);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
@@ -1173,7 +1225,7 @@ suite('code/propose', () => {
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
       ]);
       assert.deepEqual(zxCmdStub.getCall(4).args, [
-        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        { cwd: `/tmp/automa/propose/tasks/${task.id}`, input: diff },
       ]);
       assert.deepEqual(zxCmdStub.getCall(5).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
@@ -1181,8 +1233,14 @@ suite('code/propose', () => {
       assert.deepEqual(zxCmdStub.getCall(6).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
       ]);
+      assert.deepEqual(zxCmdStub.getCall(7).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(8).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
 
-      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init --bare']]);
       assert.deepEqual(zxCmdArgsStub.getCall(1).args, [
         [
           'git remote add origin https://x-access-token:',
@@ -1199,22 +1257,30 @@ suite('code/propose', () => {
         '123456',
       ]);
       assert.deepEqual(zxCmdArgsStub.getCall(3).args, [
-        ['git checkout ', ''],
+        ['git read-tree ', ''],
         '123456',
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
-        ['git apply --index ', '.diff'],
-        `/tmp/automa/propose/tasks/${task.id}`,
-      ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git apply --cached']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [['git write-tree']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
         [
-          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit -m ',
+          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit-tree ',
+          ' -p ',
+          ' -m ',
           '',
         ],
+        '7d9ff19f227379dabecd6dfd07514c13a412a466',
+        '123456',
         `Implemented automa@${task.id} using org-0/bot-0 bot`,
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
-        ['git push -f origin HEAD:refs/heads/', ''],
+      assert.deepEqual(zxCmdArgsStub.getCall(7).args, [
+        ['git update-ref refs/heads/', ' ', ''],
+        `automa/org-0/bot-0/${task.id}`,
+        '85e10273ac6513bd5bad6148e0657bc3c4b8d946',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(8).args, [
+        ['git push -f origin refs/heads/', ':refs/heads/', ''],
+        `automa/org-0/bot-0/${task.id}`,
         `automa/org-0/bot-0/${task.id}`,
       ]);
     });
@@ -1343,8 +1409,8 @@ suite('code/propose', () => {
     });
 
     test('should commit and push the diff', async () => {
-      assert.equal(zxCmdStub.callCount, 7);
-      assert.equal(zxCmdArgsStub.callCount, 7);
+      assert.equal(zxCmdStub.callCount, 9);
+      assert.equal(zxCmdArgsStub.callCount, 9);
 
       assert.deepEqual(zxCmdStub.getCall(0).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
@@ -1359,7 +1425,7 @@ suite('code/propose', () => {
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
       ]);
       assert.deepEqual(zxCmdStub.getCall(4).args, [
-        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        { cwd: `/tmp/automa/propose/tasks/${task.id}`, input: diff },
       ]);
       assert.deepEqual(zxCmdStub.getCall(5).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
@@ -1367,8 +1433,14 @@ suite('code/propose', () => {
       assert.deepEqual(zxCmdStub.getCall(6).args, [
         { cwd: `/tmp/automa/propose/tasks/${task.id}` },
       ]);
+      assert.deepEqual(zxCmdStub.getCall(7).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
+      assert.deepEqual(zxCmdStub.getCall(8).args, [
+        { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+      ]);
 
-      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init --bare']]);
       assert.deepEqual(zxCmdArgsStub.getCall(1).args, [
         [
           'git remote add origin https://x-access-token:',
@@ -1385,22 +1457,30 @@ suite('code/propose', () => {
         '123456',
       ]);
       assert.deepEqual(zxCmdArgsStub.getCall(3).args, [
-        ['git checkout ', ''],
+        ['git read-tree ', ''],
         '123456',
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
-        ['git apply --index ', '.diff'],
-        `/tmp/automa/propose/tasks/${task.id}`,
-      ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [
+      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [['git apply --cached']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(5).args, [['git write-tree']]);
+      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
         [
-          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit -m ',
+          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit-tree ',
+          ' -p ',
+          ' -m ',
           '',
         ],
+        '7d9ff19f227379dabecd6dfd07514c13a412a466',
+        '123456',
         'Custom title',
       ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
-        ['git push -f origin HEAD:refs/heads/', ''],
+      assert.deepEqual(zxCmdArgsStub.getCall(7).args, [
+        ['git update-ref refs/heads/', ' ', ''],
+        `automa/org-0/bot-0/${task.id}`,
+        '85e10273ac6513bd5bad6148e0657bc3c4b8d946',
+      ]);
+      assert.deepEqual(zxCmdArgsStub.getCall(8).args, [
+        ['git push -f origin refs/heads/', ':refs/heads/', ''],
+        `automa/org-0/bot-0/${task.id}`,
         `automa/org-0/bot-0/${task.id}`,
       ]);
     });
@@ -1617,17 +1697,7 @@ const propose = async (
       proposal: {
         ...proposal,
         token: proposal?.token ?? 'ghijkl',
-        diff:
-          proposal?.diff ??
-          [
-            'diff --git a/file.txt b/file.txt',
-            'new file mode 100644',
-            'index 0000000..81ab81a',
-            '--- /dev/null',
-            '+++ b/file.txt',
-            '@@ -0,0 +1,1 @@',
-            '+new',
-          ].join('\n'),
+        diff: proposal?.diff ?? diff,
       },
     },
   });

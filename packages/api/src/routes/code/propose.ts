@@ -177,8 +177,8 @@ export default async function (app: FastifyInstance) {
     await rm(workingDir, { recursive: true, force: true });
     await mkdir(workingDir, { recursive: true });
 
-    // Do a shallow clone of the repository for a specific commit
-    await $({ cwd: workingDir })`git init`;
+    // Initialize as bare repo and fetch the specific commit
+    await $({ cwd: workingDir })`git init --bare`;
     await $({
       cwd: workingDir,
     })`git remote add origin https://x-access-token:${accessToken}@github.com/${repo.orgs.provider_name}/${repo.name}`;
@@ -186,25 +186,31 @@ export default async function (app: FastifyInstance) {
       cwd: workingDir,
     })`git fetch --depth 1 origin ${task.proposal_base_commit}`;
 
-    // Write the diff to a file
-    await writeFile(`${workingDir}.diff`, proposal.diff);
+    // Read the base commit tree & apply the diff
+    await $({ cwd: workingDir })`git read-tree ${task.proposal_base_commit}`;
+    await $({ cwd: workingDir, input: proposal.diff })`git apply --cached`;
 
-    // Checkout and commit the diff
-    // TODO: Find a way to apply the commit without checking out
-    await $({ cwd: workingDir })`git checkout ${task.proposal_base_commit}`;
+    // Create tree and commit objects
+    const { stdout: treeHash } = await $({ cwd: workingDir })`git write-tree`;
+
+    const { stdout: commitHash } = await $({
+      cwd: workingDir,
+    })`git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit-tree ${treeHash.trim()} -p ${
+      task.proposal_base_commit
+    } -m ${title}`;
+
+    // Update the branch reference to point to the new commit
     await $({
       cwd: workingDir,
-    })`git apply --index ${workingDir}.diff`;
-    await $({
-      cwd: workingDir,
-    })`git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit -m ${title}`;
+    })`git update-ref refs/heads/${branch} ${commitHash.trim()}`;
 
     // Push the changes
-    await $({ cwd: workingDir })`git push -f origin HEAD:refs/heads/${branch}`;
+    await $({
+      cwd: workingDir,
+    })`git push -f origin refs/heads/${branch}:refs/heads/${branch}`;
 
-    // Remove the working directory and the diff
+    // Remove the working directory
     await rm(workingDir, { recursive: true, force: true });
-    await unlink(`${workingDir}.diff`);
 
     // Check the integration info to let the PR close the task if merged
     const origin = task.task_items.find(
@@ -226,7 +232,6 @@ export default async function (app: FastifyInstance) {
     }
 
     // Create a pull request
-    // TODO: Add a way to set the PR description
     ({ data: pr } = await axios.post<PullRequest>(
       `/repos/${repo.orgs.provider_name}/${repo.name}/pulls`,
       {
