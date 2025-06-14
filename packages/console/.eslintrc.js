@@ -1,6 +1,8 @@
 const product = 'automa';
 const modules = ['analytics', 'optimizer', 'utils'];
 const features = [
+  'admin',
+  'app',
   'auth',
   'bots',
   'integrations',

@@ -1,7 +1,6 @@
 FROM node:22-alpine AS builder
 
 ENV NODE_ENV=production
-ENV VITE_CLOUD=
 
 ENV VITE_API_URI=__API_URI__
 ENV VITE_GRAPHQL_URI=__GRAPHQL_URI__

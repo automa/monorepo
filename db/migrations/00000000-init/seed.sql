@@ -11,12 +11,12 @@ VALUES
 
 INSERT INTO public.users (name, email)
 VALUES
-  ('Andrej Karpathy', 'andrey@karpathy.com'),
+  ('Andrej Karpathy', 'andrej@karpathy.com'),
   ('Pavan Sunkara', 'pavan.sss1991@gmail.com');
 
 INSERT INTO public.user_providers (user_id, provider_type, provider_id, provider_email, refresh_token)
 VALUES
-  (1, 'github', '241138', 'andrey@karpathy.com', 'refresh_token');
+  (1, 'github', '241138', 'andrej@karpathy.com', 'refresh_token');
 
 INSERT INTO public.user_orgs (user_id, org_id)
 VALUES (1, 1);

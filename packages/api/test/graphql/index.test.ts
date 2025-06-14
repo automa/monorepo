@@ -24,8 +24,8 @@ suite('graphql', () => {
     const response = await graphql(
       app,
       `
-        query user {
-          user {
+        query orgs {
+          orgs {
             id
           }
         }

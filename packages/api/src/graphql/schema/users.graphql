@@ -1,5 +1,6 @@
 type Query {
-  user: User!
+  # Nullable user query to allow for unauthenticated access
+  user: User
 }
 
 type Mutation {

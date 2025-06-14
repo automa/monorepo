@@ -54,10 +54,18 @@ const schema = Type.Object({
     CALLBACK_URI: Type.String({
       default: '/callbacks/github',
     }),
-    CLIENT_ID: Type.String(),
-    CLIENT_SECRET: Type.String(),
-    PEM: Type.String(),
-    WEBHOOK_SECRET: Type.String(),
+    CLIENT_ID: Type.String({
+      default: '',
+    }),
+    CLIENT_SECRET: Type.String({
+      default: '',
+    }),
+    PEM: Type.String({
+      default: '',
+    }),
+    WEBHOOK_SECRET: Type.String({
+      default: '',
+    }),
   }),
   JIRA_APP: Type.Object({
     ACCESS_TOKEN_URL: Type.String({
@@ -75,8 +83,12 @@ const schema = Type.Object({
     CALLBACK_URI: Type.String({
       default: '/callbacks/jira',
     }),
-    CLIENT_ID: Type.String(),
-    CLIENT_SECRET: Type.String(),
+    CLIENT_ID: Type.String({
+      default: '',
+    }),
+    CLIENT_SECRET: Type.String({
+      default: '',
+    }),
   }),
   LINEAR_APP: Type.Object({
     ACCESS_TOKEN_URL: Type.String({
@@ -91,9 +103,15 @@ const schema = Type.Object({
     CALLBACK_URI: Type.String({
       default: '/callbacks/linear',
     }),
-    CLIENT_ID: Type.String(),
-    CLIENT_SECRET: Type.String(),
-    WEBHOOK_SECRET: Type.String(),
+    CLIENT_ID: Type.String({
+      default: '',
+    }),
+    CLIENT_SECRET: Type.String({
+      default: '',
+    }),
+    WEBHOOK_SECRET: Type.String({
+      default: '',
+    }),
   }),
   PORT: Type.Number({
     default: 8080,

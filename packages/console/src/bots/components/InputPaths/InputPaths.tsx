@@ -52,6 +52,8 @@ const InputPaths: React.FC<InputPathsComponentProps> = ({
     }
   };
 
+  // TODO: Add info about pressing Enter, otherwise users might
+  // fully add a path not knowing they can add multiple paths.
   return (
     <Flex {...props} fullWidth direction="column" className="gap-2">
       <Label label={label} optional={optional} name={name} />

@@ -9,6 +9,10 @@ import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
   user: (root, args, { userId, prisma }) => {
+    if (!userId) {
+      return null;
+    }
+
     return prisma.users.findUniqueOrThrow({
       where: {
         id: userId,

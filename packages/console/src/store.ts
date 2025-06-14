@@ -3,10 +3,12 @@ import { combineSlices, configureStore } from '@reduxjs/toolkit';
 
 import { isProduction } from 'env';
 
+import { appReducer } from 'app/slices';
 import { authReducer } from 'auth/slices';
 import { orgsReducer } from 'orgs/slices';
 
 export const reducer = combineSlices({
+  app: appReducer,
   auth: authReducer,
   orgs: orgsReducer,
 });

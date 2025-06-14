@@ -3,7 +3,6 @@
 
 interface ImportMetaEnv {
   readonly VITE_API_URI: string;
-  readonly VITE_CLOUD: string;
   readonly VITE_GRAPHQL_URI: string;
   readonly VITE_SEGMENT_KEY: string;
   readonly VITE_SEGMENT_HOST: string;

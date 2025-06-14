@@ -44,7 +44,6 @@ const OrgList: React.FC<OrgListProps> = ({
 
   const [syncLoading, setSyncLoading] = useState(false);
 
-  // Redirect to first org if on home page
   useEffect(() => {
     setOrgs(data.orgs);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,6 +67,7 @@ const OrgList: React.FC<OrgListProps> = ({
   };
 
   // Redirect to first org if on home page
+  // TODO: Use local storage to remember last visited org
   if (data.orgs.length && isDashboardView) {
     return <Navigate to={data.orgs[0].name} replace />;
   }

@@ -1,17 +1,19 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useQuery } from '@apollo/client';
 
 import { errors, ErrorType } from '@automa/common';
 
 import { useAnalytics } from 'analytics';
 import { useOptimizerUser } from 'optimizer';
-import { Loader, RoutesLoader, toast, useAsyncEffect } from 'shared';
+import { Loader, RoutesLoader, toast } from 'shared';
 
+import { useApp } from 'app';
 import { useAuth, useUser } from 'auth';
 
 import routes from './routes';
 
+import { APP_QUERY } from './App.queries';
 import { Container } from './App.styles';
 
 const App: React.FC<{}> = () => {
@@ -19,7 +21,9 @@ const App: React.FC<{}> = () => {
 
   const { updateOptimizerUser } = useOptimizerUser();
 
-  const { setAuth, setAuthLoading, authLoading } = useAuth();
+  const { setApp } = useApp();
+
+  const { setAuth } = useAuth();
 
   const user = useUser();
 
@@ -27,21 +31,33 @@ const App: React.FC<{}> = () => {
 
   const location = useLocation();
 
-  useAsyncEffect(async () => {
-    try {
-      // TODO: Use graphql (maybe dashboard query) here
-      const { data } = await axios.create().get('/api/session');
+  const { data, loading } = useQuery(APP_QUERY);
 
-      if (data) {
-        setAuth({
-          ...data,
-          id: `${data.id}`,
-        });
-      }
-    } catch {}
+  useEffect(() => {
+    if (data?.app) {
+      setApp(data.app);
+    }
 
-    setAuthLoading(false);
-  }, []);
+    if (data?.user) {
+      setAuth({
+        ...data.user,
+        id: `${data.user.id}`,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  useEffect(() => {
+    const isNonAuthRoute = [/^\/auth\/login$/, /^\/admin\/setup(\/.*)?$/].some(
+      (p) => p.test(location.pathname),
+    );
+
+    if (!data?.user && !loading && !isNonAuthRoute) {
+      navigate('/auth/login', {
+        state: { from: window.location.href },
+      });
+    }
+  }, [data?.user, loading, navigate, location]);
 
   useEffect(() => {
     const error = parseInt(
@@ -58,20 +74,12 @@ const App: React.FC<{}> = () => {
   }, [location.search]);
 
   useEffect(() => {
-    if (!user && !authLoading && location.pathname !== '/auth/login') {
-      navigate('/auth/login', {
-        state: { from: window.location.href },
-      });
-    }
-  }, [user, authLoading, navigate, location]);
-
-  useEffect(() => {
     identify(user);
     updateOptimizerUser(user);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  if (authLoading) {
+  if (loading) {
     return <Loader />;
   }
 

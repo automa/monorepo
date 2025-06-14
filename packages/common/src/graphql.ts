@@ -22,6 +22,22 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type App = {
+  __typename?: 'App';
+  client_uri: Scalars['String']['output'];
+  cloud: Scalars['Boolean']['output'];
+  integrations: AppIntegrations;
+};
+
+export type AppIntegrations = {
+  __typename?: 'AppIntegrations';
+  github: Scalars['Boolean']['output'];
+  gitlab: Scalars['Boolean']['output'];
+  jira: Scalars['Boolean']['output'];
+  linear: Scalars['Boolean']['output'];
+  slack: Scalars['Boolean']['output'];
+};
+
 export type Bot = BotBase & {
   __typename?: 'Bot';
   created_at: Scalars['DateTime']['output'];
@@ -229,6 +245,7 @@ export type PublicOrg = {
 
 export type Query = {
   __typename?: 'Query';
+  app: App;
   bot: Bot;
   botInstallations: Array<BotInstallation>;
   bots: Array<Bot>;
@@ -240,7 +257,7 @@ export type Query = {
   repos: Array<Repo>;
   task: Task;
   tasks: Array<Task>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 
@@ -484,6 +501,8 @@ export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = 
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  App: ResolverTypeWrapper<App>;
+  AppIntegrations: ResolverTypeWrapper<AppIntegrations>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Bot: ResolverTypeWrapper<bots>;
   BotBase: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['BotBase']>;
@@ -525,6 +544,8 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  App: App;
+  AppIntegrations: AppIntegrations;
   Boolean: Scalars['Boolean']['output'];
   Bot: bots;
   BotBase: ResolversInterfaceTypes<ResolversParentTypes>['BotBase'];
@@ -563,6 +584,22 @@ export type InheritsDirectiveArgs = {
 };
 
 export type InheritsDirectiveResolver<Result, Parent, ContextType = any, Args = InheritsDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type AppResolvers<ContextType = any, ParentType extends ResolversParentTypes['App'] = ResolversParentTypes['App']> = {
+  client_uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  cloud?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  integrations?: Resolver<ResolversTypes['AppIntegrations'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AppIntegrationsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppIntegrations'] = ResolversParentTypes['AppIntegrations']> = {
+  github?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  gitlab?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  jira?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  linear?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  slack?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type BotResolvers<ContextType = any, ParentType extends ResolversParentTypes['Bot'] = ResolversParentTypes['Bot']> = {
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -689,6 +726,7 @@ export type PublicOrgResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  app?: Resolver<ResolversTypes['App'], ParentType, ContextType>;
   bot?: Resolver<ResolversTypes['Bot'], ParentType, ContextType, RequireFields<QueryBotArgs, 'name' | 'org_id'>>;
   botInstallations?: Resolver<Array<ResolversTypes['BotInstallation']>, ParentType, ContextType, RequireFields<QueryBotInstallationsArgs, 'org_id'>>;
   bots?: Resolver<Array<ResolversTypes['Bot']>, ParentType, ContextType, RequireFields<QueryBotsArgs, 'org_id'>>;
@@ -700,7 +738,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   repos?: Resolver<Array<ResolversTypes['Repo']>, ParentType, ContextType, RequireFields<QueryReposArgs, 'org_id'>>;
   task?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<QueryTaskArgs, 'id' | 'org_id'>>;
   tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTasksArgs, 'org_id'>>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
 export type RepoResolvers<ContextType = any, ParentType extends ResolversParentTypes['Repo'] = ResolversParentTypes['Repo']> = {
@@ -775,6 +813,8 @@ export type UserProviderResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type Resolvers<ContextType = any> = {
+  App?: AppResolvers<ContextType>;
+  AppIntegrations?: AppIntegrationsResolvers<ContextType>;
   Bot?: BotResolvers<ContextType>;
   BotBase?: BotBaseResolvers<ContextType>;
   BotInstallation?: BotInstallationResolvers<ContextType>;
