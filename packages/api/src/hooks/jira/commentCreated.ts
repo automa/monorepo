@@ -73,6 +73,36 @@ const commentCreated: JiraEventHandler<{
     refresh_token: connection.secrets.refresh_token as string,
   };
 
+  // Find if a task already exists for this issue
+  const existingTask = await app.prisma.tasks.findFirst({
+    where: {
+      org_id: connection.org_id,
+      task_items: {
+        some: {
+          type: task_item.origin,
+          AND: [
+            {
+              data: {
+                path: ['integration'],
+                equals: integration.jira,
+              },
+            },
+            {
+              data: {
+                path: ['issueId'],
+                equals: body.issue.id,
+              },
+            },
+          ],
+        },
+      },
+    },
+  });
+
+  if (existingTask) {
+    return;
+  }
+
   // Select the bot and repo
   const { selectedBot, selectedRepo, problems } = await getSelectedBotAndRepo(
     app,
@@ -132,8 +162,6 @@ const commentCreated: JiraEventHandler<{
     const comment = issue.fields.comment.comments.find(
       (comment) => comment.id === body.comment.id,
     );
-
-    // TODO: Check if the issue is already linked to a task
 
     // Find automa user using email if they exist
     // TODO: Unify this logic across the app in db/users.ts

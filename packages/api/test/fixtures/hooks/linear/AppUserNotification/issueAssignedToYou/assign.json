@@ -14,10 +14,6 @@
     "actorId": "5611201a-9594-4407-9490-731894376791",
     "externalUserActorId": null,
     "userId": "3e2886bd-3d5e-44c1-bfa0-3db5f94f3d18",
-    "readAt": null,
-    "emailedAt": null,
-    "snoozedUntilAt": null,
-    "unsnoozedAt": null,
     "issueId": "f2f72e62-b1a4-46c3-b605-0962d24792d8",
     "issue": {
       "id": "f2f72e62-b1a4-46c3-b605-0962d24792d8",

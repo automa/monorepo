@@ -101,9 +101,35 @@ export const handleMention = async (
     return;
   }
 
-  const client = new LinearClient({
-    accessToken: connection.secrets.access_token as string,
+  // Find if a task already exists for this issue
+  const existingTask = await app.prisma.tasks.findFirst({
+    where: {
+      org_id: connection.org_id,
+      task_items: {
+        some: {
+          type: task_item.origin,
+          AND: [
+            {
+              data: {
+                path: ['integration'],
+                equals: integration.linear,
+              },
+            },
+            {
+              data: {
+                path: ['issueId'],
+                equals: body.issue.id,
+              },
+            },
+          ],
+        },
+      },
+    },
   });
+
+  if (existingTask) {
+    return;
+  }
 
   // Select the bot and repo
   const { selectedBot, selectedRepo, problems } = await getSelectedBotAndRepo(
@@ -112,6 +138,10 @@ export const handleMention = async (
     text,
     regex,
   );
+
+  const client = new LinearClient({
+    accessToken: connection.secrets.access_token as string,
+  });
 
   const reponseComment = [];
 
@@ -122,8 +152,6 @@ export const handleMention = async (
       client.issue(body.issue.id),
       client.organization,
     ]);
-
-    // TODO: Check if the issue is already linked to a task
 
     // Find automa user using email if they exist
     // TODO: Unify this logic across the app in db/users.ts
@@ -228,6 +256,8 @@ export const handleMention = async (
   return;
 };
 
+// TODO: Handle the following:
+// - remove
 export default {
   create,
   update: create,
