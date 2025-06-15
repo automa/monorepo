@@ -284,6 +284,30 @@ suite('jira hook comment_created & comment_updated event', () => {
         },
       });
     });
+
+    suite('create on same issue again', () => {
+      setup(async () => {
+        response = await callWithFixture(app, 'comment_created', 'create');
+      });
+
+      test('should return 200', async () => {
+        assert.equal(response.statusCode, 200);
+      });
+
+      test('should not create task', async () => {
+        const tasks = await app.prisma.tasks.findMany();
+
+        assert.equal(tasks.length, 1);
+      });
+
+      test('should not get information about issue', async () => {
+        assert.equal(issueStub.callCount, 1);
+      });
+
+      test('should not create any comment', async () => {
+        assert.equal(createCommentStub.callCount, 1);
+      });
+    });
   });
 
   suite('create with expired token', () => {
@@ -1394,7 +1418,7 @@ suite('jira hook comment_created & comment_updated event', () => {
       assert.equal(issueStub.callCount, 0);
     });
 
-    test('should not be able to create any comment', async () => {
+    test('should not create any comment', async () => {
       assert.equal(createCommentStub.callCount, 0);
     });
   });
