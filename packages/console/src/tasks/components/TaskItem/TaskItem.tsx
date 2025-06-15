@@ -28,7 +28,7 @@ import {
 } from './utils';
 
 import { TASK_ITEM_FRAGMENT } from './TaskItem.queries';
-import { Line, Subject } from './TaskItem.styles';
+import { Line, LineText, Subject } from './TaskItem.styles';
 
 const TaskItemContainer: React.FC<{
   icon: Icon;
@@ -37,14 +37,16 @@ const TaskItemContainer: React.FC<{
 }> = ({ icon: Icon, timestamp, children }) => {
   return (
     <Line>
-      <Icon className="mr-1 size-4" />
-      {children}
-      <Typography variant="small">·</Typography>
-      <Tooltip body={format(timestamp, 'MMM d, yyyy, h:mm:ss a')}>
-        <Typography variant="xsmall">
-          {formatDistanceToNow(timestamp, { addSuffix: true })}
-        </Typography>
-      </Tooltip>
+      <Icon className="mr-1 size-4 min-w-4" />
+      <LineText>
+        {children}
+        <Typography variant="small">·</Typography>
+        <Tooltip body={format(timestamp, 'MMM d, yyyy, h:mm:ss a')}>
+          <Typography variant="xsmall">
+            {formatDistanceToNow(timestamp, { addSuffix: true })}
+          </Typography>
+        </Tooltip>
+      </LineText>
     </Line>
   );
 };
