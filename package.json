@@ -46,7 +46,7 @@
     "build": "vite build",
     "build-analyze": "BUILD_SOURCEMAP=1 pnpm build && source-map-explorer 'build/assets/*.js'",
     "build-stats": "BUILD_STATS=1 pnpm build",
-    "format": "prettier --write .",
+    "format": "prettier --write . --log-level warn",
     "format-check": "prettier --check .",
     "graphql-generate": "graphql-codegen --config graphql-codegen.ts",
     "lint": "eslint .",
