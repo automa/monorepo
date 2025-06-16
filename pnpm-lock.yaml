@@ -19,8 +19,8 @@ catalogs:
       specifier: ~1.1.6
       version: 1.1.6
     axios:
-      specifier: ~1.7.4
-      version: 1.7.4
+      specifier: ~1.8.2
+      version: 1.8.4
     class-variance-authority:
       specifier: ~0.7.1
       version: 0.7.1
@@ -46,8 +46,8 @@ catalogs:
       specifier: ~2.2.1
       version: 2.2.2
     zod:
-      specifier: ~3.24.1
-      version: 3.24.4
+      specifier: ~3.25.65
+      version: 3.25.65
 
 importers:
 
@@ -326,12 +326,9 @@ importers:
       '@sentry/node':
         specifier: ~7.59.3
         version: 7.59.3
-      '@sinclair/typebox':
-        specifier: ~0.25.21
-        version: 0.25.24
       axios:
         specifier: 'catalog:'
-        version: 1.7.4
+        version: 1.8.4
       bullmq:
         specifier: ~5.34.5
         version: 5.34.5
@@ -363,8 +360,8 @@ importers:
         specifier: ~9.0.0
         version: 9.0.2
       nested-env-schema:
-        specifier: ~1.2.0
-        version: 1.2.0
+        specifier: ~1.3.1
+        version: 1.3.1
       parse-link-header:
         specifier: ~2.0.0
         version: 2.0.0
@@ -376,7 +373,7 @@ importers:
         version: 7.4.3
       zod:
         specifier: 'catalog:'
-        version: 3.24.4
+        version: 3.25.65
       zx:
         specifier: ~8.1.4
         version: 8.1.4
@@ -407,7 +404,7 @@ importers:
         version: 2.2.0
       zod:
         specifier: 'catalog:'
-        version: 3.24.4
+        version: 3.25.65
 
   packages/config:
     dependencies:
@@ -515,7 +512,7 @@ importers:
         version: 2.11.0
       axios:
         specifier: 'catalog:'
-        version: 1.7.4
+        version: 1.8.4
       cal-sans:
         specifier: ~1.0.1
         version: 1.0.1
@@ -3982,9 +3979,6 @@ packages:
   '@sideway/pinpoint@2.0.0':
     resolution: {integrity: sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==}
 
-  '@sinclair/typebox@0.25.24':
-    resolution: {integrity: sha512-XJfwUVUKDHF5ugKwIcxEgc9k8b7HbznCp6eUfWgu710hMPNIO4aw4/zB5RogDQz8nd6gyCDpU9O/m6qYEWY6yQ==}
-
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
@@ -6149,6 +6143,9 @@ packages:
 
   axios@1.7.4:
     resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
+
+  axios@1.8.4:
+    resolution: {integrity: sha512-eBSYY4Y68NNlHbHBMdeDmKNtDgXWhQsJcGqzO3iLUM0GraQFSS9cVgPX5I9b3lbdFKyYoAEGAZF1DwhTaljNAw==}
 
   axobject-query@3.2.1:
     resolution: {integrity: sha512-jsyHu61e6N4Vbz/v18DHwWYKK0bSWLqn47eeDSKPB7m8tqMHF9YJ+mhIk2lVteyZrY8tnSj/jHOv4YiTCuCJgg==}
@@ -9935,8 +9932,8 @@ packages:
     resolution: {integrity: sha512-Z4SmBUweYa09+o6pG+eASabEpP6QkQ70yHj351pQoEXIs8uHbaU2DWVmzBANKgflPa47A50PtB2+NgRpQvr7vA==}
     engines: {node: '>= 10'}
 
-  nested-env-schema@1.2.0:
-    resolution: {integrity: sha512-6sDauVjuU1JyOAhqjZqf6B+1JYrq4DPqdOe3kz56e64Xn6+jXpAgJ4qwLv+kza4MnZi9YLDa2AbhHF2UwkIX8Q==}
+  nested-env-schema@1.3.1:
+    resolution: {integrity: sha512-sHcEatLyybEThcGM+jTMDTDnP+xVTWmi1noq7Hz4CRThr8q53ya+0pzI4SfPkiZz10BeBiW3LLdvnKt91UaFJw==}
 
   netmask@2.0.2:
     resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
@@ -13020,6 +13017,9 @@ packages:
 
   zod@3.24.4:
     resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
+
+  zod@3.25.65:
+    resolution: {integrity: sha512-kMyE2qsXK1p+TAvO7zsf5wMFiCejU3obrUDs9bR1q5CBKykfvp7QhhXrycUylMoOow0iEUSyjLlZZdCsHwSldQ==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -17021,8 +17021,6 @@ snapshots:
 
   '@sideway/pinpoint@2.0.0': {}
 
-  '@sinclair/typebox@0.25.24': {}
-
   '@sinclair/typebox@0.27.8': {}
 
   '@sindresorhus/is@5.6.0': {}
@@ -20123,6 +20121,14 @@ snapshots:
       - debug
 
   axios@1.7.4:
+    dependencies:
+      follow-redirects: 1.15.6(debug@4.3.4)
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.8.4:
     dependencies:
       follow-redirects: 1.15.6(debug@4.3.4)
       form-data: 4.0.0
@@ -25057,7 +25063,7 @@ snapshots:
 
   neotraverse@0.6.18: {}
 
-  nested-env-schema@1.2.0:
+  nested-env-schema@1.3.1:
     dependencies:
       '@dotenvx/dotenvx': 1.11.1
       ajv: 8.12.0
@@ -28647,6 +28653,8 @@ snapshots:
   zod@3.23.8: {}
 
   zod@3.24.4: {}
+
+  zod@3.25.65: {}
 
   zwitch@2.0.4: {}
 
