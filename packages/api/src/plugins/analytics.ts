@@ -50,7 +50,7 @@ const analyticsPlugin: FastifyPluginAsync = async (app) => {
 
     if (isAnalyticsEnabled) {
       analytics = new Analytics({
-        writeKey: env.SEGMENT_KEY,
+        writeKey: env.SEGMENT_KEY!,
         ...(!isProduction && { maxEventsInBatch: 1 }),
       });
     }

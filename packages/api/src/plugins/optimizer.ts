@@ -38,7 +38,7 @@ const optimizerPlugin: FastifyPluginAsync = async (app) => {
 
   await tracer.startActiveSpan('optimizer:initialize', async (span) => {
     if (isOptimizerEnabled) {
-      await Statsig.initialize(env.STATSIG_KEY, {
+      await Statsig.initialize(env.STATSIG_KEY!, {
         environment: {
           tier: environment,
         },
