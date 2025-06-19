@@ -29,11 +29,16 @@ export const listAgents = async () => {
       is_published: true,
     },
     select: botSelectFields,
-    orderBy: {
-      bot_installations: {
-        _count: 'desc',
+    orderBy: [
+      {
+        is_preview: 'asc',
       },
-    },
+      {
+        bot_installations: {
+          _count: 'desc',
+        },
+      },
+    ],
   });
 
   await client.$disconnect();

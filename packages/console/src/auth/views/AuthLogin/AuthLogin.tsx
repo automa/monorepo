@@ -94,6 +94,16 @@ const AuthLogin: React.FC<AuthLoginProps> = () => {
             <Flex className="gap-1">Continue with GitLab</Flex>
           </LoginButton>
         </Tooltip>
+        <Typography variant="xsmall" className="mt-4 text-neutral-600">
+          By continuing, you agree to our{' '}
+          <Link to="https://automa.app/terms" className="text-black">
+            Terms
+          </Link>{' '}
+          and{' '}
+          <Link to="https://automa.app/privacy" className="text-black">
+            Privacy
+          </Link>
+        </Typography>
       </Flex>
     </>
   );
