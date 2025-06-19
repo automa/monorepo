@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { LinearClient } from '@linear/sdk';
 
-import { integration, task_item } from '@automa/prisma';
+import { integration, task_item, task_state } from '@automa/prisma';
 
 import { env } from '../../env';
 
@@ -105,6 +105,9 @@ export const handleMention = async (
   const existingTask = await app.prisma.tasks.findFirst({
     where: {
       org_id: connection.org_id,
+      state: {
+        notIn: [task_state.cancelled, task_state.failed],
+      },
       task_items: {
         some: {
           type: task_item.origin,
