@@ -143,7 +143,7 @@ const Editor: React.FC<EditorProps> = ({
         },
         codeBlock: {
           HTMLAttributes: {
-            class: twp`mb-2 rounded-md bg-neutral-200 p-2`,
+            class: twp`my-4 overflow-x-scroll whitespace-pre rounded-md bg-neutral-200 p-2`,
           },
         },
       }),

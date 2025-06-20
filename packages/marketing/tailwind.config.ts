@@ -52,14 +52,20 @@ const config: Config = {
         heroText2: 'heroText2 25.36s linear infinite',
         heroText3: 'heroText3 25.36s linear infinite',
       },
+      maxHeight: {
+        '13': '3.25rem',
+      },
       maxWidth: {
         '8xl': '90rem',
+      },
+      minWidth: {
+        '150': '37.5rem',
       },
       padding: {
         'cal-sans': '0.1em',
       },
       screens: {
-        hero: '444px',
+        hero: '417px',
         short: { raw: '(max-height: 700px)' },
       },
       width: {

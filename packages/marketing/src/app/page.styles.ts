@@ -15,7 +15,7 @@ export const Section = tw(Flex).attrs({
 export const Title = tw(Typography).attrs({
   variant: 'title1',
   align: 'center',
-})`hero:max-w-4xl !leading-normal md:text-5xl text-3xl max-w-72`;
+})`md:!max-w-3xl hero:max-w-md !leading-normal md:text-5xl text-3xl max-w-64`;
 
 export const Subtitle = tw(Typography).attrs({
   variant: 'title5',
@@ -30,11 +30,32 @@ export const HeroImageText = tw(Typography).attrs({
 })`opacity-0 absolute top-0 left-1/2 -translate-x-1/2 w-full md:text-2xl text-xl`;
 
 export const SectionTitle = tw(Typography).attrs({
-  variant: 'title3',
+  variant: 'title2',
   align: 'center',
-})`text-neutral-900`;
+})`md:text-4xl text-2xl`;
 
 export const SectionSubtitle = tw(Typography).attrs({
   variant: 'title6',
   align: 'center',
-})`text-neutral-400 max-w-2xl leading-relaxed`;
+})`text-neutral-500 md:text-lg text-base lg:max-w-7xl md:max-w-xl`;
+
+export const BentoGrid = tw.div`mt-8 grid w-full auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-12 lg:grid-cols-3 lg:gap-6 xl:gap-8`;
+
+export const BentoCard = tw.div`overflow-hidden rounded-2xl border border-neutral-200/60 bg-gradient-to-br from-white to-neutral-50/30 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:border-neutral-300/80 hover:shadow-xl hover:shadow-neutral-200/20 lg:p-8`;
+
+export const BentoCardContent = tw(Flex).attrs({
+  direction: 'column',
+})`h-full gap-2 lg:gap-4`;
+
+export const BentoCardTitle = tw(Typography).attrs({
+  variant: 'title4',
+})`md:text-2xl text-xl tracking-normal`;
+
+export const BentoCardSubtitle = tw(
+  Typography,
+)`text-neutral-500 pt-cal-sans font-display tracking-wide flex-1 md:text-sm text-xs md:min-h-12 max-h-13`;
+
+export const BentoCardImage = tw(Flex).attrs({
+  alignItems: 'center',
+  justifyContent: 'center',
+})`h-full`;
