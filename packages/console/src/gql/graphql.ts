@@ -333,6 +333,7 @@ export type ReposFilter = {
 
 export type Task = {
   __typename?: 'Task';
+  cost_in_cents?: Maybe<Scalars['Int']['output']>;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   is_scheduled: Scalars['Boolean']['output'];

@@ -15,3 +15,6 @@ coverage:
       default: false
     patch:
       default: false
+ignore:
+  - packages/common/src/graphql.ts
+  - packages/console/src/gql

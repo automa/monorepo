@@ -76,7 +76,7 @@ jobs:
         run: pnpm lint
       - name: Lint fix check
         run: |
-          pnpm lint --fix
+          pnpm lint-fix
           git diff --exit-code
       - name: Formatting check
         run: pnpm format-check
