@@ -20,6 +20,10 @@ export const common: MDXComponents = {
   hr: (props) => (
     <hr className="my-8 border-t-4 border-neutral-200" {...props} />
   ),
+  ul: (props) => (
+    <ul className="list-disc pl-6 text-base lg:text-lg" {...props} />
+  ),
+  li: (props) => <li className="py-1" {...props} />,
 };
 
 export const useMDXComponents = (components: MDXComponents): MDXComponents => {

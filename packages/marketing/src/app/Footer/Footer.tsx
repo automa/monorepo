@@ -47,8 +47,8 @@ const Footer: React.FC<FooterProps> = ({ ...props }) => {
             <LinkGroup>
               <LinkGroupTitle>Resources</LinkGroupTitle>
               <Link href="/manifesto">Manifesto</Link>
-              <Link href="/privacy">Privacy Policy</Link>
-              <Link href="/terms">Terms of Service</Link>
+              <Link href="/privacy">Privacy</Link>
+              <Link href="/terms">Terms</Link>
             </LinkGroup>
           </LinkGroupWrapper>
           <LinkGroupWrapper>

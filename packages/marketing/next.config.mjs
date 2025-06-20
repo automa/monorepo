@@ -1,4 +1,6 @@
 import createMDX from '@next/mdx';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
 
@@ -32,6 +34,7 @@ const nextConfig = {
 const withMDX = createMDX({
   options: {
     remarkPlugins: [remarkGfm],
+    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
   },
 });
 
