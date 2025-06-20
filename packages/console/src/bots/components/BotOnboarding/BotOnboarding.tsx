@@ -12,13 +12,13 @@ const DEFAULT_BOTS = [
   {
     botOrgName: 'openai',
     botName: 'codex',
-    logo: 'https://avatars.githubusercontent.com/u/14957082?s=64',
+    logo: 'https://automa.app/logos/openai_light.svg',
     shortDescription: "OpenAI's coding agent",
   },
   {
     botOrgName: 'anthropic',
     botName: 'claude-code',
-    logo: 'https://avatars.githubusercontent.com/u/76263028?s=64',
+    logo: 'https://automa.app/logos/claude.svg',
     shortDescription: "Anthropic's coding agent",
   },
   {
