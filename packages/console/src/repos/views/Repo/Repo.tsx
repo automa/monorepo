@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { Code } from '@phosphor-icons/react';
+import { ArrowsClockwise, Code } from '@phosphor-icons/react';
 
 import { useAnalyticsPage } from 'analytics';
 import { TaskItemType } from 'gql/graphql';
@@ -31,7 +31,7 @@ const Repo: React.FC<RepoProps> = ({ org }) => {
   const repo = repoData?.repo;
 
   // TODO: Add infinite scroll (with pagination cache)
-  const { data, loading } = useQuery(REPO_TASKS_QUERY, {
+  const { data, loading, refetch } = useQuery(REPO_TASKS_QUERY, {
     variables: {
       org_id: org.id,
       repo_id: repo?.id as number,
@@ -53,7 +53,21 @@ const Repo: React.FC<RepoProps> = ({ org }) => {
             <Typography variant="title4">{repoName}</Typography>
             <Flex alignItems="center" className="gap-2">
               {repo.has_installation && !repo.is_archived ? (
-                <Button to={`../tasks/new?repo=${repo.id}`}>Create Task</Button>
+                <>
+                  <Tooltip body="Refresh tasks">
+                    <Button
+                      variant="ghost"
+                      icon
+                      onClick={() => refetch()}
+                      disabled={loading}
+                    >
+                      <ArrowsClockwise />
+                    </Button>
+                  </Tooltip>
+                  <Button to={`../tasks/new?repo=${repo.id}`}>
+                    Create Task
+                  </Button>
+                </>
               ) : (
                 !repo.has_installation && (
                   <Tooltip body="Connect repository from provider">
