@@ -1,5 +1,6 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
+import { ArrowsClockwise } from '@phosphor-icons/react';
 
 import { Button, Flex, Loader, ToggleGroup } from 'shared';
 import useFilters from 'shared/hooks/useFilters';
@@ -15,7 +16,7 @@ const Tasks: React.FC<TasksProps> = ({ org }) => {
     useFilters(tasksFilters);
 
   // TODO: Add infinite scroll (with pagination cache)
-  const { data, loading } = useQuery(TASKS_QUERY, {
+  const { data, loading, refetch } = useQuery(TASKS_QUERY, {
     variables: {
       org_id: org.id,
       filter: filterParams,
@@ -33,6 +34,9 @@ const Tasks: React.FC<TasksProps> = ({ org }) => {
             onValueChange={filterChangeFns.scheduled}
           />
         </Flex>
+        <Button variant="secondary" icon onClick={() => refetch()}>
+          <ArrowsClockwise className="size-5" />
+        </Button>
         <Button to="../tasks/new">Create Task</Button>
       </Flex>
       {loading && !data ? (
