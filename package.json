@@ -84,6 +84,8 @@
     "@graphql-codegen/client-preset": "~4.5.0",
     "@graphql-codegen/fragment-matcher": "~5.0.2",
     "@graphql-eslint/eslint-plugin": "~4.3.0",
+    "@stagewise/toolbar-react": "~0.4.8",
+    "@stagewise-plugins/react": "~0.4.8",
     "@storybook/addon-coverage": "~1.0.3",
     "@storybook/addon-essentials": "~8.1.11",
     "@storybook/addon-interactions": "~8.1.11",
