@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
-import { Robot, Trash } from '@phosphor-icons/react';
+import { ArrowsClockwise, Robot, Trash } from '@phosphor-icons/react';
 
 import { useAnalyticsPage } from 'analytics';
 import { TaskItemType } from 'gql/graphql';
@@ -45,7 +45,7 @@ const BotInstallation: React.FC<BotInstallationProps> = ({ org }) => {
   const bot = botData?.publicBot;
 
   // TODO: Add infinite scroll (with pagination cache)
-  const { data, loading } = useQuery(BOT_INSTALLATION_TASKS_QUERY, {
+  const { data, loading, refetch } = useQuery(BOT_INSTALLATION_TASKS_QUERY, {
     variables: {
       org_id: org.id,
       bot_id: bot?.id as number,
@@ -131,6 +131,16 @@ const BotInstallation: React.FC<BotInstallationProps> = ({ org }) => {
             </Flex>
             {bot.installation && (
               <Flex alignItems="center" className="gap-2">
+                <Tooltip body="Refresh tasks">
+                  <Button
+                    variant="ghost"
+                    icon
+                    onClick={() => refetch()}
+                    disabled={loading}
+                  >
+                    <ArrowsClockwise />
+                  </Button>
+                </Tooltip>
                 {bot.type === 'manual' && (
                   <Button to={`../tasks/new?bot=${bot.installation.id}`}>
                     Create Task
