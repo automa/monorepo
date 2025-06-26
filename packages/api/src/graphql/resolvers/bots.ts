@@ -16,16 +16,7 @@ import { env } from '../../env';
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  bots: async (root, { org_id }, { userId, prisma }) => {
-    // TODO: Convert the org check into a directive and/or use resolver composition, and cache this in session
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
+  bots: async (root, { org_id }, { prisma }) => {
     return prisma.bots.findMany({
       where: {
         org_id,
@@ -35,15 +26,7 @@ export const Query: QueryResolvers<Context> = {
       },
     });
   },
-  bot: async (root, { org_id, name }, { userId, prisma }) => {
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
+  bot: async (root, { org_id, name }, { prisma }) => {
     return prisma.bots.findFirstOrThrow({
       where: {
         org_id,
@@ -125,15 +108,7 @@ export const Query: QueryResolvers<Context> = {
 };
 
 export const Mutation: MutationResolvers<Context> = {
-  botCreate: async (_, { org_id, input }, { userId, prisma }) => {
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
+  botCreate: async (_, { org_id, input }, { prisma }) => {
     const data = botCreateSchema.parse(input);
 
     // Generate a webhook secret
@@ -151,15 +126,7 @@ export const Mutation: MutationResolvers<Context> = {
       },
     });
   },
-  botUpdate: async (_, { org_id, name, input }, { userId, prisma }) => {
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
+  botUpdate: async (_, { org_id, name, input }, { prisma }) => {
     const data = botUpdateSchema.parse(input);
 
     const bot = await prisma.bots.findUniqueOrThrow({
@@ -194,15 +161,7 @@ export const Mutation: MutationResolvers<Context> = {
       },
     });
   },
-  botPublish: async (_, { org_id, name }, { userId, prisma }) => {
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
+  botPublish: async (_, { org_id, name }, { prisma }) => {
     return prisma.bots.update({
       where: {
         org_id_name: {

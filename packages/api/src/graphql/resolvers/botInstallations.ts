@@ -13,15 +13,7 @@ import { throwGraphQLError } from '../utils';
 import { botInstall } from '../../db';
 
 export const Query: QueryResolvers<Context> = {
-  botInstallations: async (root, { org_id, filter }, { userId, prisma }) => {
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
+  botInstallations: async (root, { org_id, filter }, { prisma }) => {
     return prisma.bot_installations.findMany({
       where: {
         org_id,
@@ -37,19 +29,7 @@ export const Query: QueryResolvers<Context> = {
 };
 
 export const Mutation: MutationResolvers<Context> = {
-  botInstall: async (
-    _,
-    { org_id, input: { bot_id } },
-    { userId, prisma, events },
-  ) => {
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
+  botInstall: async (_, { org_id, input: { bot_id } }, { prisma, events }) => {
     // Check if org owns the bot or if the bot is published
     const bot = await prisma.bots.findFirst({
       where: {
@@ -77,15 +57,7 @@ export const Mutation: MutationResolvers<Context> = {
       },
     );
   },
-  botUninstall: async (_, { org_id, bot_id }, { userId, prisma }) => {
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
+  botUninstall: async (_, { org_id, bot_id }, { prisma }) => {
     const { count } = await prisma.bot_installations.deleteMany({
       where: {
         org_id,
