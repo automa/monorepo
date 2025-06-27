@@ -12,7 +12,7 @@ const DEFAULT_BOTS = [
   {
     botOrgName: 'openai',
     botName: 'codex',
-    logo: 'https://automa.app/logos/openai_light.svg',
+    logo: 'https://automa.app/logos/openai.svg',
     shortDescription: "OpenAI's coding agent",
   },
   {
