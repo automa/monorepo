@@ -73,6 +73,7 @@ const schema = z.object({
   SEGMENT_KEY: z.string().optional(),
   SENTRY_DSN: z.string().optional(),
   STATSIG_KEY: z.string().optional(),
+  WEBHOOK_URI: z.string().optional(),
 });
 
 type Schema = z.infer<typeof schema>;
