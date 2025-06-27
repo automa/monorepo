@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ErrorType } from '@automa/common';
 import { integration } from '@automa/prisma';
 
-import { env, isProduction, isTest } from '../../env';
+import { env } from '../../env';
 
 export default async function (app: FastifyInstance) {
   app.get<{
@@ -13,7 +13,7 @@ export default async function (app: FastifyInstance) {
       state: string;
     };
   }>('/jira', async (request, reply) => {
-    const { JIRA_APP, BASE_URI, CLIENT_URI } = env;
+    const { JIRA_APP, BASE_URI, CLIENT_URI, WEBHOOK_URI } = env;
 
     const org = await app.prisma.orgs.findFirst({
       where: {
@@ -101,9 +101,7 @@ export default async function (app: FastifyInstance) {
       }>(
         `${JIRA_APP.API_URI}/${jiraOrg.id}/rest/api/3/webhook`,
         {
-          url: `${
-            isTest || isProduction ? BASE_URI : 'https://automa.in.ngrok.io'
-          }/hooks/jira`,
+          url: `${WEBHOOK_URI ?? BASE_URI}/hooks/jira`,
           webhooks: [
             {
               events: ['comment_created', 'comment_updated'],
