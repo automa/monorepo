@@ -102,6 +102,7 @@ CREATE TABLE public.bots (
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   is_preview BOOLEAN NOT NULL DEFAULT FALSE,
   is_deterministic BOOLEAN NOT NULL DEFAULT FALSE,
+  is_sponsored BOOLEAN NOT NULL DEFAULT FALSE,
   UNIQUE (org_id, name)
 );
 

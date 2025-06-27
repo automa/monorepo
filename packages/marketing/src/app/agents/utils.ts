@@ -31,7 +31,13 @@ export const listAgents = async () => {
     select: botSelectFields,
     orderBy: [
       {
+        is_sponsored: 'desc',
+      },
+      {
         is_preview: 'asc',
+      },
+      {
+        is_deterministic: 'asc',
       },
       {
         bot_installations: {

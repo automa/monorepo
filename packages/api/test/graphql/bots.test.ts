@@ -370,7 +370,7 @@ suite('graphql bots', () => {
     suiteSetup(async () => {
       await seedBots(
         app,
-        [org, secondOrg, nonMemberOrg],
+        [org, secondOrg, nonMemberOrg, nonMemberOrg],
         [org, secondOrg, nonMemberOrg],
       );
 
@@ -380,6 +380,15 @@ suite('graphql bots', () => {
         },
         where: {
           org_id: org.id,
+        },
+      });
+
+      await app.prisma.bots.updateMany({
+        data: {
+          is_sponsored: true,
+        },
+        where: {
+          org_id: secondOrg.id,
         },
       });
 
@@ -440,34 +449,15 @@ suite('graphql bots', () => {
 
       assert.isUndefined(errors);
 
-      assert.lengthOf(bots, 3);
+      assert.lengthOf(bots, 4);
 
+      // First, sponsored bots
       assert.isNumber(bots[0].id);
-      assert.equal(bots[0].name, 'bot-0');
-      assert.equal(bots[0].short_description, 'Bot 0');
-      assert.equal(bots[0].image_url, 'https://example.com/image/0.png');
+      assert.equal(bots[0].name, 'bot-1');
+      assert.equal(bots[0].short_description, 'Bot 1');
+      assert.equal(bots[0].image_url, 'https://example.com/image/1.png');
       assert.isEmpty(bots[0].paths);
       assert.deepEqual(bots[0].description, {
-        type: 'doc',
-        content: [
-          {
-            type: 'paragraph',
-            content: [{ type: 'text', text: 'Bot 0 long description' }],
-          },
-        ],
-      });
-      assert.equal(bots[0].homepage, 'https://example0.com');
-      assert.isTrue(bots[0].is_published);
-      assert.isFalse(bots[0].is_preview);
-      assert.isTrue(bots[0].is_deterministic);
-      assert.equal(bots[0].org.name, 'org-0');
-
-      assert.isNumber(bots[1].id);
-      assert.equal(bots[1].name, 'bot-1');
-      assert.equal(bots[1].short_description, 'Bot 1');
-      assert.equal(bots[1].image_url, 'https://example.com/image/1.png');
-      assert.isEmpty(bots[0].paths);
-      assert.deepEqual(bots[1].description, {
         type: 'doc',
         content: [
           {
@@ -476,18 +466,61 @@ suite('graphql bots', () => {
           },
         ],
       });
-      assert.equal(bots[1].homepage, 'https://example1.com');
+      assert.equal(bots[0].homepage, 'https://example1.com');
+      assert.isTrue(bots[0].is_published);
+      assert.isFalse(bots[0].is_preview);
+      assert.isFalse(bots[0].is_deterministic);
+      assert.equal(bots[0].org.name, 'org-1');
+
+      // Then AI bots
+      assert.isNumber(bots[1].id);
+      assert.equal(bots[1].name, 'bot-3');
+      assert.equal(bots[1].short_description, 'Bot 3');
+      assert.equal(bots[1].image_url, 'https://example.com/image/3.png');
+      assert.isEmpty(bots[1].paths);
+      assert.deepEqual(bots[1].description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 3 long description' }],
+          },
+        ],
+      });
+      assert.equal(bots[1].homepage, 'https://example3.com');
       assert.isTrue(bots[1].is_published);
       assert.isFalse(bots[1].is_preview);
       assert.isFalse(bots[1].is_deterministic);
-      assert.equal(bots[1].org.name, 'org-1');
+      assert.equal(bots[1].org.name, 'org-2');
 
+      // Then non-beta bots
       assert.isNumber(bots[2].id);
-      assert.equal(bots[2].name, 'bot-2');
-      assert.equal(bots[2].short_description, 'Bot 2');
-      assert.equal(bots[2].image_url, 'https://example.com/image/2.png');
-      assert.deepEqual(bots[2].paths, ['path-0', 'path-1']);
+      assert.equal(bots[2].name, 'bot-0');
+      assert.equal(bots[2].short_description, 'Bot 0');
+      assert.equal(bots[2].image_url, 'https://example.com/image/0.png');
+      assert.deepEqual(bots[2].paths, []);
       assert.deepEqual(bots[2].description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 0 long description' }],
+          },
+        ],
+      });
+      assert.equal(bots[2].homepage, 'https://example0.com');
+      assert.isTrue(bots[2].is_published);
+      assert.isFalse(bots[2].is_preview);
+      assert.isTrue(bots[2].is_deterministic);
+      assert.equal(bots[2].org.name, 'org-0');
+
+      // Finally, beta bots
+      assert.isNumber(bots[3].id);
+      assert.equal(bots[3].name, 'bot-2');
+      assert.equal(bots[3].short_description, 'Bot 2');
+      assert.equal(bots[3].image_url, 'https://example.com/image/2.png');
+      assert.deepEqual(bots[3].paths, ['path-0', 'path-1']);
+      assert.deepEqual(bots[3].description, {
         type: 'doc',
         content: [
           {
@@ -496,11 +529,11 @@ suite('graphql bots', () => {
           },
         ],
       });
-      assert.equal(bots[2].homepage, 'https://example2.com');
-      assert.isTrue(bots[2].is_published);
-      assert.isTrue(bots[2].is_preview);
-      assert.isFalse(bots[2].is_deterministic);
-      assert.equal(bots[2].org.name, 'org-2');
+      assert.equal(bots[3].homepage, 'https://example2.com');
+      assert.isTrue(bots[3].is_published);
+      assert.isTrue(bots[3].is_preview);
+      assert.isFalse(bots[3].is_deterministic);
+      assert.equal(bots[3].org.name, 'org-2');
     });
 
     test('should return only published non-deterministic bots from all orgs with filter.is_deterministic = false', async () => {
@@ -541,8 +574,9 @@ suite('graphql bots', () => {
 
       assert.isUndefined(errors);
 
-      assert.lengthOf(bots, 2);
+      assert.lengthOf(bots, 3);
 
+      // First, sponsored bots
       assert.isNumber(bots[0].id);
       assert.equal(bots[0].name, 'bot-1');
       assert.equal(bots[0].short_description, 'Bot 1');
@@ -563,12 +597,34 @@ suite('graphql bots', () => {
       assert.isFalse(bots[0].is_deterministic);
       assert.equal(bots[0].org.name, 'org-1');
 
+      // Then non-beta bots
       assert.isNumber(bots[1].id);
-      assert.equal(bots[1].name, 'bot-2');
-      assert.equal(bots[1].short_description, 'Bot 2');
-      assert.equal(bots[1].image_url, 'https://example.com/image/2.png');
-      assert.deepEqual(bots[1].paths, ['path-0', 'path-1']);
+      assert.equal(bots[1].name, 'bot-3');
+      assert.equal(bots[1].short_description, 'Bot 3');
+      assert.equal(bots[1].image_url, 'https://example.com/image/3.png');
+      assert.isEmpty(bots[1].paths);
       assert.deepEqual(bots[1].description, {
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Bot 3 long description' }],
+          },
+        ],
+      });
+      assert.equal(bots[1].homepage, 'https://example3.com');
+      assert.isTrue(bots[1].is_published);
+      assert.isFalse(bots[1].is_preview);
+      assert.isFalse(bots[1].is_deterministic);
+      assert.equal(bots[1].org.name, 'org-2');
+
+      // Finally, beta bots
+      assert.isNumber(bots[2].id);
+      assert.equal(bots[2].name, 'bot-2');
+      assert.equal(bots[2].short_description, 'Bot 2');
+      assert.equal(bots[2].image_url, 'https://example.com/image/2.png');
+      assert.deepEqual(bots[2].paths, ['path-0', 'path-1']);
+      assert.deepEqual(bots[2].description, {
         type: 'doc',
         content: [
           {
@@ -577,11 +633,11 @@ suite('graphql bots', () => {
           },
         ],
       });
-      assert.equal(bots[1].homepage, 'https://example2.com');
-      assert.isTrue(bots[1].is_published);
-      assert.isTrue(bots[1].is_preview);
-      assert.isFalse(bots[1].is_deterministic);
-      assert.equal(bots[1].org.name, 'org-2');
+      assert.equal(bots[2].homepage, 'https://example2.com');
+      assert.isTrue(bots[2].is_published);
+      assert.isTrue(bots[2].is_preview);
+      assert.isFalse(bots[2].is_deterministic);
+      assert.equal(bots[2].org.name, 'org-2');
     });
 
     test('should return only published deterministic bots from all orgs with filter.is_deterministic = true', async () => {
@@ -736,22 +792,25 @@ suite('graphql bots', () => {
 
       assert.isUndefined(errors);
 
-      assert.lengthOf(bots, 5);
+      assert.lengthOf(bots, 6);
 
       assert.isNumber(bots[0].id);
-      assert.equal(bots[0].name, 'bot-0');
+      assert.equal(bots[0].name, 'bot-1');
 
       assert.isNumber(bots[1].id);
-      assert.equal(bots[1].name, 'bot-1');
+      assert.equal(bots[1].name, 'bot-5');
 
       assert.isNumber(bots[2].id);
-      assert.equal(bots[2].name, 'bot-2');
+      assert.equal(bots[2].name, 'bot-3');
 
       assert.isNumber(bots[3].id);
-      assert.equal(bots[3].name, 'bot-3');
+      assert.equal(bots[3].name, 'bot-0');
 
       assert.isNumber(bots[4].id);
       assert.equal(bots[4].name, 'bot-4');
+
+      assert.isNumber(bots[5].id);
+      assert.equal(bots[5].name, 'bot-2');
     });
   });
 

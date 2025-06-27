@@ -76,9 +76,20 @@ export const Query: QueryResolvers<Context> = {
         type: filter?.type ?? undefined,
         is_deterministic: filter?.is_deterministic ?? undefined,
       },
-      orderBy: {
-        id: 'asc',
-      },
+      orderBy: [
+        {
+          is_sponsored: 'desc',
+        },
+        {
+          is_preview: 'asc',
+        },
+        {
+          is_deterministic: 'asc',
+        },
+        {
+          id: 'asc',
+        },
+      ],
       select: publicBotFields,
     });
   },
