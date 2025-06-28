@@ -175,154 +175,657 @@ suite('auth/github', () => {
     suite('with no user and no provider', () => {
       let response: LightMyRequestResponse;
 
-      setup(async () => {
-        await app.prisma.orgs.createMany({
-          data: [
-            {
+      suite('with email and name', () => {
+        setup(async () => {
+          await app.prisma.orgs.createMany({
+            data: [
+              {
+                name: 'automa',
+                provider_type: 'github',
+                provider_id: '1234',
+                provider_name: 'automa',
+                github_installation_id: 1234,
+              },
+              {
+                name: 'automa-demo',
+                provider_type: 'github',
+                provider_id: '5678',
+                provider_name: 'automa-demo',
+                github_installation_id: 5678,
+              },
+            ],
+          });
+
+          response = await call(app, '/callbacks/github?code=abcd&state=1234');
+        });
+
+        teardown(async () => {
+          await app.prisma.orgs.deleteMany();
+        });
+
+        test('should request access token', async () => {
+          assert.equal(postStub.callCount, 1);
+          assert.equal(
+            postStub.firstCall.args[0],
+            'https://github.com/login/oauth/access_token',
+          );
+          assert.deepEqual(postStub.firstCall.args[1], {
+            client_id: 'Iv1.bee7999253d03200',
+            client_secret: env.GITHUB_APP.CLIENT_SECRET,
+            code: 'abcd',
+            redirect_uri: 'http://localhost:8080/callbacks/github',
+          });
+        });
+
+        test('should retrieve user information', async () => {
+          assert.equal(userStub.callCount, 1);
+          assert.lengthOf(userStub.firstCall.args, 2);
+          assert.equal(
+            userStub.firstCall.args[0],
+            'https://api.github.com/user',
+          );
+          assert.deepEqual(userStub.firstCall.args[1], {
+            headers: {
+              Authorization: 'Bearer abcdef',
+            },
+          });
+        });
+
+        test('should redirect to referer', async () => {
+          assert.equal(response.statusCode, 302);
+
+          const location = response.headers.location;
+
+          assert.isString(location);
+          assert.equal(location, '/orgs');
+        });
+
+        suite('and user', () => {
+          let users: users[];
+
+          setup(async () => {
+            users = await app.prisma.users.findMany();
+          });
+
+          test('should be created', async () => {
+            assert.lengthOf(users, 1);
+
+            assert.deepOwnInclude(users[0], {
+              email: 'pavan@example.com',
+              name: 'Pavan Kumar Sunkara',
+            });
+          });
+
+          test('should be connected to github provider', async () => {
+            const providers = await app.prisma.user_providers.findMany({
+              where: {
+                user_id: users[0].id,
+              },
+            });
+
+            assert.lengthOf(providers, 1);
+            assert.deepOwnInclude(providers[0], {
+              provider_type: 'github',
+              provider_id: '123',
+              provider_email: 'pavan@example.com',
+              refresh_token: '123456',
+            });
+          });
+
+          test('should have their orgs retrieved', async () => {
+            assert.isAtLeast(installationsStub.callCount, 2);
+            assert.lengthOf(installationsStub.firstCall.args, 1);
+            assert.deepEqual(
+              installationsStub.firstCall.args[0],
+              '/user/installations?per_page=100',
+            );
+            assert.lengthOf(installationsStub.secondCall.args, 1);
+            assert.deepEqual(
+              installationsStub.secondCall.args[0],
+              '/user/installations?per_page=100&page=2',
+            );
+          });
+
+          test('should be added to orgs', async () => {
+            const userOrgs = await app.prisma.user_orgs.findMany({
+              where: {
+                user_id: users[0].id,
+              },
+              select: {
+                user_id: true,
+                orgs: true,
+              },
+              orderBy: {
+                org_id: 'asc',
+              },
+            });
+
+            assert.lengthOf(userOrgs, 3);
+
+            assert.equal(userOrgs[0].user_id, users[0].id);
+            assert.deepOwnInclude(userOrgs[0].orgs, {
               name: 'automa',
               provider_type: 'github',
               provider_id: '1234',
               provider_name: 'automa',
               github_installation_id: 1234,
-            },
-            {
+            });
+
+            assert.equal(userOrgs[1].user_id, users[0].id);
+            assert.deepOwnInclude(userOrgs[1].orgs, {
               name: 'automa-demo',
               provider_type: 'github',
               provider_id: '5678',
               provider_name: 'automa-demo',
               github_installation_id: 5678,
-            },
-          ],
-        });
+            });
 
-        response = await call(app, '/callbacks/github?code=abcd&state=1234');
-      });
-
-      teardown(async () => {
-        await app.prisma.orgs.deleteMany();
-      });
-
-      test('should request access token', async () => {
-        assert.equal(postStub.callCount, 1);
-        assert.equal(
-          postStub.firstCall.args[0],
-          'https://github.com/login/oauth/access_token',
-        );
-        assert.deepEqual(postStub.firstCall.args[1], {
-          client_id: 'Iv1.bee7999253d03200',
-          client_secret: env.GITHUB_APP.CLIENT_SECRET,
-          code: 'abcd',
-          redirect_uri: 'http://localhost:8080/callbacks/github',
+            assert.equal(userOrgs[2].user_id, users[0].id);
+            assert.deepOwnInclude(userOrgs[2].orgs, {
+              name: 'pksunkara',
+              provider_type: 'github',
+              provider_id: '123',
+              provider_name: 'pksunkara',
+              github_installation_id: null,
+            });
+          });
         });
       });
 
-      test('should retrieve user information', async () => {
-        assert.equal(userStub.callCount, 1);
-        assert.lengthOf(userStub.firstCall.args, 2);
-        assert.equal(userStub.firstCall.args[0], 'https://api.github.com/user');
-        assert.deepEqual(userStub.firstCall.args[1], {
-          headers: {
-            Authorization: 'Bearer abcdef',
-          },
-        });
-      });
-
-      test('should redirect to referer', async () => {
-        assert.equal(response.statusCode, 302);
-
-        const location = response.headers.location;
-
-        assert.isString(location);
-        assert.equal(location, '/orgs');
-      });
-
-      suite('and user', () => {
-        let users: users[];
+      suite('with no public email', () => {
+        let response: LightMyRequestResponse;
 
         setup(async () => {
-          users = await app.prisma.users.findMany();
-        });
+          userStub
+            .resolves({
+              data: {
+                id: 123,
+                email: null,
+                name: 'Pavan Kumar Sunkara',
+                login: 'pksunkara',
+              },
+            })
+            .withArgs('https://api.github.com/user/emails')
+            .resolves({
+              data: [
+                {
+                  email: 'pavan@example.com',
+                  verified: true,
+                },
+              ],
+            });
 
-        test('should be created', async () => {
-          assert.lengthOf(users, 1);
-
-          assert.deepOwnInclude(users[0], {
-            email: 'pavan@example.com',
-            name: 'Pavan Kumar Sunkara',
+          await app.prisma.orgs.createMany({
+            data: [
+              {
+                name: 'automa',
+                provider_type: 'github',
+                provider_id: '1234',
+                provider_name: 'automa',
+                github_installation_id: 1234,
+              },
+              {
+                name: 'automa-demo',
+                provider_type: 'github',
+                provider_id: '5678',
+                provider_name: 'automa-demo',
+                github_installation_id: 5678,
+              },
+            ],
           });
+
+          response = await call(app, '/callbacks/github?code=abcd&state=1234');
         });
 
-        test('should be connected to github provider', async () => {
-          const providers = await app.prisma.user_providers.findMany({
-            where: {
-              user_id: users[0].id,
+        teardown(async () => {
+          userStub.resolves({
+            data: {
+              id: 123,
+              email: 'pavan@example.com',
+              name: 'Pavan Kumar Sunkara',
+              login: 'pksunkara',
             },
           });
 
-          assert.lengthOf(providers, 1);
-          assert.deepOwnInclude(providers[0], {
-            provider_type: 'github',
-            provider_id: '123',
-            provider_email: 'pavan@example.com',
-            refresh_token: '123456',
-          });
+          await app.prisma.orgs.deleteMany();
         });
 
-        test('should have their orgs retrieved', async () => {
-          assert.isAtLeast(installationsStub.callCount, 2);
-          assert.lengthOf(installationsStub.firstCall.args, 1);
-          assert.deepEqual(
-            installationsStub.firstCall.args[0],
-            '/user/installations?per_page=100',
+        test('should request access token', async () => {
+          assert.equal(postStub.callCount, 1);
+          assert.equal(
+            postStub.firstCall.args[0],
+            'https://github.com/login/oauth/access_token',
           );
-          assert.lengthOf(installationsStub.secondCall.args, 1);
-          assert.deepEqual(
-            installationsStub.secondCall.args[0],
-            '/user/installations?per_page=100&page=2',
-          );
+          assert.deepEqual(postStub.firstCall.args[1], {
+            client_id: 'Iv1.bee7999253d03200',
+            client_secret: env.GITHUB_APP.CLIENT_SECRET,
+            code: 'abcd',
+            redirect_uri: 'http://localhost:8080/callbacks/github',
+          });
         });
 
-        test('should be added to orgs', async () => {
-          const userOrgs = await app.prisma.user_orgs.findMany({
-            where: {
-              user_id: users[0].id,
-            },
-            select: {
-              user_id: true,
-              orgs: true,
-            },
-            orderBy: {
-              org_id: 'asc',
+        test('should retrieve user information', async () => {
+          assert.equal(userStub.callCount, 2);
+
+          assert.lengthOf(userStub.firstCall.args, 2);
+          assert.equal(
+            userStub.firstCall.args[0],
+            'https://api.github.com/user',
+          );
+          assert.deepEqual(userStub.firstCall.args[1], {
+            headers: {
+              Authorization: 'Bearer abcdef',
             },
           });
 
-          assert.lengthOf(userOrgs, 3);
+          assert.lengthOf(userStub.secondCall.args, 2);
+          assert.equal(
+            userStub.secondCall.args[0],
+            'https://api.github.com/user/emails',
+          );
+          assert.deepEqual(userStub.secondCall.args[1], {
+            headers: {
+              Authorization: 'Bearer abcdef',
+            },
+          });
+        });
 
-          assert.equal(userOrgs[0].user_id, users[0].id);
-          assert.deepOwnInclude(userOrgs[0].orgs, {
-            name: 'automa',
-            provider_type: 'github',
-            provider_id: '1234',
-            provider_name: 'automa',
-            github_installation_id: 1234,
+        test('should redirect to referer', async () => {
+          assert.equal(response.statusCode, 302);
+
+          const location = response.headers.location;
+
+          assert.isString(location);
+          assert.equal(location, '/orgs');
+        });
+
+        suite('and user', () => {
+          let users: users[];
+
+          setup(async () => {
+            users = await app.prisma.users.findMany();
           });
 
-          assert.equal(userOrgs[1].user_id, users[0].id);
-          assert.deepOwnInclude(userOrgs[1].orgs, {
-            name: 'automa-demo',
-            provider_type: 'github',
-            provider_id: '5678',
-            provider_name: 'automa-demo',
-            github_installation_id: 5678,
+          test('should be created', async () => {
+            assert.lengthOf(users, 1);
+
+            assert.deepOwnInclude(users[0], {
+              email: 'pavan@example.com',
+              name: 'Pavan Kumar Sunkara',
+            });
           });
 
-          assert.equal(userOrgs[2].user_id, users[0].id);
-          assert.deepOwnInclude(userOrgs[2].orgs, {
-            name: 'pksunkara',
-            provider_type: 'github',
-            provider_id: '123',
-            provider_name: 'pksunkara',
-            github_installation_id: null,
+          test('should be connected to github provider', async () => {
+            const providers = await app.prisma.user_providers.findMany({
+              where: {
+                user_id: users[0].id,
+              },
+            });
+
+            assert.lengthOf(providers, 1);
+            assert.deepOwnInclude(providers[0], {
+              provider_type: 'github',
+              provider_id: '123',
+              provider_email: 'pavan@example.com',
+              refresh_token: '123456',
+            });
+          });
+
+          test('should have their orgs retrieved', async () => {
+            assert.isAtLeast(installationsStub.callCount, 2);
+            assert.lengthOf(installationsStub.firstCall.args, 1);
+            assert.deepEqual(
+              installationsStub.firstCall.args[0],
+              '/user/installations?per_page=100',
+            );
+            assert.lengthOf(installationsStub.secondCall.args, 1);
+            assert.deepEqual(
+              installationsStub.secondCall.args[0],
+              '/user/installations?per_page=100&page=2',
+            );
+          });
+
+          test('should be added to orgs', async () => {
+            const userOrgs = await app.prisma.user_orgs.findMany({
+              where: {
+                user_id: users[0].id,
+              },
+              select: {
+                user_id: true,
+                orgs: true,
+              },
+              orderBy: {
+                org_id: 'asc',
+              },
+            });
+
+            assert.lengthOf(userOrgs, 3);
+
+            assert.equal(userOrgs[0].user_id, users[0].id);
+            assert.deepOwnInclude(userOrgs[0].orgs, {
+              name: 'automa',
+              provider_type: 'github',
+              provider_id: '1234',
+              provider_name: 'automa',
+              github_installation_id: 1234,
+            });
+
+            assert.equal(userOrgs[1].user_id, users[0].id);
+            assert.deepOwnInclude(userOrgs[1].orgs, {
+              name: 'automa-demo',
+              provider_type: 'github',
+              provider_id: '5678',
+              provider_name: 'automa-demo',
+              github_installation_id: 5678,
+            });
+
+            assert.equal(userOrgs[2].user_id, users[0].id);
+            assert.deepOwnInclude(userOrgs[2].orgs, {
+              name: 'pksunkara',
+              provider_type: 'github',
+              provider_id: '123',
+              provider_name: 'pksunkara',
+              github_installation_id: null,
+            });
+          });
+        });
+      });
+
+      suite('with no verified email', () => {
+        let response: LightMyRequestResponse;
+
+        setup(async () => {
+          userStub
+            .resolves({
+              data: {
+                id: 123,
+                email: null,
+                name: 'Pavan Kumar Sunkara',
+                login: 'pksunkara',
+              },
+            })
+            .withArgs('https://api.github.com/user/emails')
+            .resolves({
+              data: [
+                {
+                  email: 'pavan@example.com',
+                  verified: false,
+                },
+              ],
+            });
+
+          await app.prisma.orgs.createMany({
+            data: [
+              {
+                name: 'automa',
+                provider_type: 'github',
+                provider_id: '1234',
+                provider_name: 'automa',
+                github_installation_id: 1234,
+              },
+              {
+                name: 'automa-demo',
+                provider_type: 'github',
+                provider_id: '5678',
+                provider_name: 'automa-demo',
+                github_installation_id: 5678,
+              },
+            ],
+          });
+
+          response = await call(app, '/callbacks/github?code=abcd&state=1234');
+        });
+
+        teardown(async () => {
+          userStub.resolves({
+            data: {
+              id: 123,
+              email: 'pavan@example.com',
+              name: 'Pavan Kumar Sunkara',
+              login: 'pksunkara',
+            },
+          });
+
+          await app.prisma.orgs.deleteMany();
+        });
+
+        test('should request access token', async () => {
+          assert.equal(postStub.callCount, 1);
+          assert.equal(
+            postStub.firstCall.args[0],
+            'https://github.com/login/oauth/access_token',
+          );
+          assert.deepEqual(postStub.firstCall.args[1], {
+            client_id: 'Iv1.bee7999253d03200',
+            client_secret: env.GITHUB_APP.CLIENT_SECRET,
+            code: 'abcd',
+            redirect_uri: 'http://localhost:8080/callbacks/github',
+          });
+        });
+
+        test('should retrieve user information', async () => {
+          assert.equal(userStub.callCount, 2);
+
+          assert.lengthOf(userStub.firstCall.args, 2);
+          assert.equal(
+            userStub.firstCall.args[0],
+            'https://api.github.com/user',
+          );
+          assert.deepEqual(userStub.firstCall.args[1], {
+            headers: {
+              Authorization: 'Bearer abcdef',
+            },
+          });
+
+          assert.lengthOf(userStub.secondCall.args, 2);
+          assert.equal(
+            userStub.secondCall.args[0],
+            'https://api.github.com/user/emails',
+          );
+          assert.deepEqual(userStub.secondCall.args[1], {
+            headers: {
+              Authorization: 'Bearer abcdef',
+            },
+          });
+        });
+
+        test('should redirect to referer', async () => {
+          assert.equal(response.statusCode, 302);
+
+          const location = response.headers.location;
+
+          assert.isString(location);
+          assert.equal(location, '/orgs?error=1006');
+        });
+
+        suite('and user', () => {
+          let users: users[];
+
+          setup(async () => {
+            users = await app.prisma.users.findMany();
+          });
+
+          test('should not be created', async () => {
+            assert.lengthOf(users, 0);
+          });
+
+          test('should not have their orgs retrieved', async () => {
+            assert.isAtLeast(installationsStub.callCount, 0);
+          });
+        });
+      });
+
+      suite('with no name', () => {
+        setup(async () => {
+          userStub.resolves({
+            data: {
+              id: 123,
+              email: 'pavan@example.com',
+              name: null,
+              login: 'pksunkara',
+            },
+          });
+
+          await app.prisma.orgs.createMany({
+            data: [
+              {
+                name: 'automa',
+                provider_type: 'github',
+                provider_id: '1234',
+                provider_name: 'automa',
+                github_installation_id: 1234,
+              },
+              {
+                name: 'automa-demo',
+                provider_type: 'github',
+                provider_id: '5678',
+                provider_name: 'automa-demo',
+                github_installation_id: 5678,
+              },
+            ],
+          });
+
+          response = await call(app, '/callbacks/github?code=abcd&state=1234');
+        });
+
+        teardown(async () => {
+          userStub.resolves({
+            data: {
+              id: 123,
+              email: 'pavan@example.com',
+              name: 'Pavan Kumar Sunkara',
+              login: 'pksunkara',
+            },
+          });
+
+          await app.prisma.orgs.deleteMany();
+        });
+
+        test('should request access token', async () => {
+          assert.equal(postStub.callCount, 1);
+          assert.equal(
+            postStub.firstCall.args[0],
+            'https://github.com/login/oauth/access_token',
+          );
+          assert.deepEqual(postStub.firstCall.args[1], {
+            client_id: 'Iv1.bee7999253d03200',
+            client_secret: env.GITHUB_APP.CLIENT_SECRET,
+            code: 'abcd',
+            redirect_uri: 'http://localhost:8080/callbacks/github',
+          });
+        });
+
+        test('should retrieve user information', async () => {
+          assert.equal(userStub.callCount, 1);
+          assert.lengthOf(userStub.firstCall.args, 2);
+          assert.equal(
+            userStub.firstCall.args[0],
+            'https://api.github.com/user',
+          );
+          assert.deepEqual(userStub.firstCall.args[1], {
+            headers: {
+              Authorization: 'Bearer abcdef',
+            },
+          });
+        });
+
+        test('should redirect to referer', async () => {
+          assert.equal(response.statusCode, 302);
+
+          const location = response.headers.location;
+
+          assert.isString(location);
+          assert.equal(location, '/orgs');
+        });
+
+        suite('and user', () => {
+          let users: users[];
+
+          setup(async () => {
+            users = await app.prisma.users.findMany();
+          });
+
+          test('should be created', async () => {
+            assert.lengthOf(users, 1);
+
+            assert.deepOwnInclude(users[0], {
+              email: 'pavan@example.com',
+              name: 'pavan',
+            });
+          });
+
+          test('should be connected to github provider', async () => {
+            const providers = await app.prisma.user_providers.findMany({
+              where: {
+                user_id: users[0].id,
+              },
+            });
+
+            assert.lengthOf(providers, 1);
+            assert.deepOwnInclude(providers[0], {
+              provider_type: 'github',
+              provider_id: '123',
+              provider_email: 'pavan@example.com',
+              refresh_token: '123456',
+            });
+          });
+
+          test('should have their orgs retrieved', async () => {
+            assert.isAtLeast(installationsStub.callCount, 2);
+            assert.lengthOf(installationsStub.firstCall.args, 1);
+            assert.deepEqual(
+              installationsStub.firstCall.args[0],
+              '/user/installations?per_page=100',
+            );
+            assert.lengthOf(installationsStub.secondCall.args, 1);
+            assert.deepEqual(
+              installationsStub.secondCall.args[0],
+              '/user/installations?per_page=100&page=2',
+            );
+          });
+
+          test('should be added to orgs', async () => {
+            const userOrgs = await app.prisma.user_orgs.findMany({
+              where: {
+                user_id: users[0].id,
+              },
+              select: {
+                user_id: true,
+                orgs: true,
+              },
+              orderBy: {
+                org_id: 'asc',
+              },
+            });
+
+            assert.lengthOf(userOrgs, 3);
+
+            assert.equal(userOrgs[0].user_id, users[0].id);
+            assert.deepOwnInclude(userOrgs[0].orgs, {
+              name: 'automa',
+              provider_type: 'github',
+              provider_id: '1234',
+              provider_name: 'automa',
+              github_installation_id: 1234,
+            });
+
+            assert.equal(userOrgs[1].user_id, users[0].id);
+            assert.deepOwnInclude(userOrgs[1].orgs, {
+              name: 'automa-demo',
+              provider_type: 'github',
+              provider_id: '5678',
+              provider_name: 'automa-demo',
+              github_installation_id: 5678,
+            });
+
+            assert.equal(userOrgs[2].user_id, users[0].id);
+            assert.deepOwnInclude(userOrgs[2].orgs, {
+              name: 'pksunkara',
+              provider_type: 'github',
+              provider_id: '123',
+              provider_name: 'pksunkara',
+              github_installation_id: null,
+            });
           });
         });
       });

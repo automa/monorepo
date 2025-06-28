@@ -62,7 +62,7 @@ export default async function (app: FastifyInstance) {
     const { data } = await axios.get<{
       id: number;
       email: string | null;
-      name: string;
+      name: string | null;
       login: string;
     }>(`${GITHUB_APP.API_URI}/user`, {
       headers: {
@@ -150,7 +150,7 @@ export default async function (app: FastifyInstance) {
       } else {
         user = await app.prisma.users.create({
           data: {
-            name,
+            name: name ?? email.split('@')[0],
             email,
           },
         });
