@@ -224,9 +224,10 @@ export default async function (app: FastifyInstance) {
     ) {
       if (origin.data.integration === integration.linear) {
         const issueId = origin.data.issueIdentifier as string;
+        const organizationUrlKey = origin.data.organizationUrlKey as string;
 
-        if (issueId) {
-          body = `Fixes ${issueId}\n\n${body}`;
+        if (issueId && organizationUrlKey) {
+          body = `Fixes [${issueId}](https://linear.app/${organizationUrlKey}/issue/${issueId})\n\n${body}`;
         }
       }
     }
