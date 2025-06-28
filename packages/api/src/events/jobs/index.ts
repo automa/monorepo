@@ -5,6 +5,7 @@ import scheduleBotInstallation from './scheduleBotInstallation';
 import scheduleBots from './scheduleBots';
 import scheduleTask from './scheduleTask';
 import sendTaskWebhook from './sendTaskWebhook';
+import sendWebhookProposalClosed from './sendWebhookProposalClosed';
 import syncGithubOrgUsers from './syncGithubOrgUsers';
 import syncGithubRepoUsers from './syncGithubRepoUsers';
 
@@ -16,6 +17,7 @@ const queues = {
   scheduleBots,
   scheduleTask,
   sendTaskWebhook,
+  sendWebhookProposalClosed,
   syncGithubOrgUsers,
   syncGithubRepoUsers,
 };

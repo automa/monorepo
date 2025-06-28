@@ -1,6 +1,7 @@
 import { createHmac } from 'node:crypto';
 
 import axios from 'axios';
+import stableStringify from 'json-stable-stringify';
 
 import { bots } from '@automa/prisma';
 
@@ -18,16 +19,14 @@ export const sendWebhook = <D>(
 
   const payload = {
     id: webhookId,
+    timestamp: timestamp.toISOString(),
     type,
     data,
-    // Better to keep the timestamp last to avoid issues with JSON serialization
-    // in tests for generating the signature
-    timestamp: timestamp.toISOString(),
   };
 
   // Create webhook signature
   const signature = createHmac('sha256', bot.webhook_secret.slice(11))
-    .update(`${webhookId}.${unixTimestamp}.${JSON.stringify(payload)}`)
+    .update(`${webhookId}.${unixTimestamp}.${stableStringify(payload)}`)
     .digest('base64');
 
   // Send webhook to bot

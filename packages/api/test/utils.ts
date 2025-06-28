@@ -11,6 +11,7 @@ import '../src/routes/api/orgs/_org/autohooks';
 import { createHmac } from 'node:crypto';
 
 import { FastifyInstance, InjectOptions } from 'fastify';
+import stableStringify from 'json-stable-stringify';
 
 export { server } from '../src';
 
@@ -145,7 +146,7 @@ export const generateWebhookSignature = (
     .update(
       `${payload.id}.${Math.floor(
         new Date(timestamp).getTime() / 1000,
-      )}.${JSON.stringify({
+      )}.${stableStringify({
         ...payload,
         timestamp: new Date(timestamp).toISOString(),
       })}`,

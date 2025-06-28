@@ -33,10 +33,20 @@ const changeState: GithubEventActionHandler<{
   const taskItem = await app.prisma.task_items.findFirst({
     where: {
       type: task_item.proposal,
-      data: {
-        path: ['prId'],
-        equals: body.pull_request.id,
-      },
+      AND: [
+        {
+          data: {
+            path: ['prId'],
+            equals: body.pull_request.id,
+          },
+        },
+        {
+          data: {
+            path: ['prState'],
+            equals: 'open',
+          },
+        },
+      ],
     },
     include: {
       tasks: true,
@@ -89,6 +99,10 @@ const changeState: GithubEventActionHandler<{
       data: userData,
     },
   );
+
+  await app.events.sendWebhookProposalClosed.publish(taskItem.id, {
+    proposalItemId: taskItem.id,
+  });
 };
 
 export default {
