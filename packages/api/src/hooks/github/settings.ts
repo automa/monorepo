@@ -44,19 +44,21 @@ export const syncSettings = async (
     },
     data: {
       last_commit_synced: commit,
-      repo_settings: {
-        createMany: {
-          data: [
-            {
-              cause,
-              commit,
-              settings: settings === null ? Prisma.JsonNull : settingsJSON,
-              // @ts-ignore
-              validation_errors: errors === null ? Prisma.JsonNull : errors,
-            },
-          ],
+      ...(commit && {
+        repo_settings: {
+          createMany: {
+            data: [
+              {
+                cause,
+                commit,
+                settings: settings === null ? Prisma.JsonNull : settingsJSON,
+                // @ts-ignore
+                validation_errors: errors === null ? Prisma.JsonNull : errors,
+              },
+            ],
+          },
         },
-      },
+      }),
     },
   });
 };
