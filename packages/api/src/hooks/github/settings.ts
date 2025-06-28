@@ -38,27 +38,30 @@ export const syncSettings = async (
     }
   }
 
-  await app.prisma.repos.update({
-    where: {
-      id: repo.id,
-    },
-    data: {
-      last_commit_synced: commit,
-      repo_settings: {
-        createMany: {
-          data: [
-            {
-              cause,
-              commit,
-              settings: settings === null ? Prisma.JsonNull : settingsJSON,
-              // @ts-ignore
-              validation_errors: errors === null ? Prisma.JsonNull : errors,
-            },
-          ],
-        },
-      },
-    },
-  });
+	const updateData: Prisma.reposUpdateArgs['data'] = {
+	  last_commit_synced: commit,
+	};
+
+	if (commit !== null) {
+	  updateData.repo_settings = {
+	    createMany: {
+	      data: [
+	        {
+	          cause,
+	          commit,
+	          settings: settings === null ? Prisma.JsonNull : settingsJSON,
+	          // @ts-ignore
+	          validation_errors: errors === null ? Prisma.JsonNull : errors,
+	        },
+	      ],
+	    },
+	  };
+	}
+
+	await app.prisma.repos.update({
+	  where: { id: repo.id },
+	  data: updateData,
+	});
 };
 
 const readSettings = async (
