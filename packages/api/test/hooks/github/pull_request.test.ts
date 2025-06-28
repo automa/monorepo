@@ -210,17 +210,17 @@ suite('github hook pull_request event', () => {
       assert.equal(response.statusCode, 200);
     });
 
-    test('should mark the task as submitted', async () => {
+    test('should not update task state', async () => {
       task = await app.prisma.tasks.findFirstOrThrow({
         where: {
           id: task.id,
         },
       });
 
-      assert.equal(task.state, 'submitted');
+      assert.equal(task.state, 'completed');
     });
 
-    test('should update the task item', async () => {
+    test('should not update the task item', async () => {
       const taskItem = await app.prisma.task_items.findFirstOrThrow({
         where: {
           id: proposal.id,
@@ -231,39 +231,22 @@ suite('github hook pull_request event', () => {
         prId: 2094521303,
         prNumber: 103,
         prTitle: 'PR Title',
-        prState: 'open',
-        prMerged: false,
+        prState: 'closed',
+        prMerged: true,
         prHead: `org-0:automa/bot-0/${task.id}`,
         prBase: 'default-branch',
       });
     });
 
-    test('should create task activity', async () => {
+    test('should not create task activity', async () => {
       const activities = await app.prisma.task_items.findMany({
         where: {
           task_id: task.id,
           type: task_item.activity,
         },
-        include: {
-          task_activities: true,
-        },
       });
 
-      assert.lengthOf(activities, 1);
-      assert.deepOwnInclude(activities[0], {
-        actor_user_id: null,
-        bot_id: null,
-        data: {
-          integration: 'github',
-          userId: 174703,
-          userName: 'pksunkara',
-        },
-      });
-      assert.deepOwnInclude(activities[0].task_activities, {
-        type: 'state',
-        from_state: 'completed',
-        to_state: 'submitted',
-      });
+      assert.isEmpty(activities);
     });
   });
 

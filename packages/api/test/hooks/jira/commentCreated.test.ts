@@ -170,6 +170,9 @@ suite('jira hook comment_created & comment_updated event', () => {
         where: {
           task_id: tasks[0].id,
         },
+        orderBy: {
+          created_at: 'asc',
+        },
       });
 
       assert.equal(taskItems.length, 4);
