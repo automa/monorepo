@@ -15,7 +15,7 @@ export const Section = tw(Flex).attrs({
 export const Title = tw(Typography).attrs({
   variant: 'title1',
   align: 'center',
-})`md:!max-w-3xl hero:max-w-md !leading-normal md:text-5xl text-3xl max-w-64`;
+})`md:max-w-full max-w-xs !leading-normal md:text-5xl text-3xl`;
 
 export const Subtitle = tw(Typography).attrs({
   variant: 'title5',
@@ -41,7 +41,7 @@ export const SectionSubtitle = tw(Typography).attrs({
 
 export const BentoGrid = tw.div`mt-8 grid w-full auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-12 lg:grid-cols-3 lg:gap-6 xl:gap-8`;
 
-export const BentoCard = tw.div`overflow-hidden rounded-2xl border border-neutral-200/60 bg-gradient-to-br from-white to-neutral-50/30 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:border-neutral-300/80 hover:shadow-xl hover:shadow-neutral-200/20 lg:p-8`;
+export const BentoCard = tw.div`overflow-hidden rounded-2xl border border-neutral-200/60 bg-gradient-to-br from-white to-neutral-50/30 p-6 shadow-sm backdrop-blur-sm hover:border-neutral-400/80 hover:shadow-xl hover:shadow-neutral-200/20 lg:p-8`;
 
 export const BentoCardContent = tw(Flex).attrs({
   direction: 'column',

@@ -44,6 +44,7 @@ export default async function (app: FastifyInstance) {
         return;
       }
 
+      // TODO: We can create a scoped token and directly send it instead
       const { accessToken } = await caller(repo.orgs.github_installation_id!);
       const workingDir = `/tmp/automa/download/tasks/${task.id}`;
 

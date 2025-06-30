@@ -3,18 +3,18 @@ import Image from 'next/image';
 
 import { Button, Flex } from 'components';
 
-import Activity from 'assets/landing/activity.svg';
-import Analytics from 'assets/landing/analytics.svg';
-import Async from 'assets/landing/async.svg';
-import Chat from 'assets/landing/chat.svg';
-import Concurrent from 'assets/landing/concurrent.svg';
-import Context from 'assets/landing/context.svg';
-import CustomAgent from 'assets/landing/custom_agent.svg';
-import Dashboard from 'assets/landing/dashboard.svg';
+import Activity from 'assets/landing/activity@2x.png';
+import Analytics from 'assets/landing/analytics@2x.png';
+import Async from 'assets/landing/async@2x.png';
+import Chat from 'assets/landing/chat@2x.png';
+import Concurrent from 'assets/landing/concurrent@2x.png';
+import Context from 'assets/landing/context@2x.png';
+import CustomAgent from 'assets/landing/custom_agent@2x.png';
+import Dashboard from 'assets/landing/dashboard@2x.png';
 import Hero from 'assets/landing/hero.webp';
-import Marketplace from 'assets/landing/marketplace.svg';
-import ProjectManagement from 'assets/landing/project_management.svg';
-import PullRequest from 'assets/landing/pull_request.svg';
+import Marketplace from 'assets/landing/marketplace@2x.png';
+import ProjectManagement from 'assets/landing/project_management@2x.png';
+import PullRequest from 'assets/landing/pull_request@2x.png';
 
 import {
   BentoCard,
@@ -37,7 +37,7 @@ const AppPage: React.FC = () => {
   return (
     <Container>
       <Section>
-        <Title>Automate your grunt work. Ship faster.</Title>
+        <Title>Automate grunt work. Ship faster.</Title>
         <Subtitle>
           Trigger tasks from your go-to apps with any coding agent. They
           complete in the background, generating a PR for you to review and
@@ -107,39 +107,39 @@ const AppPage: React.FC = () => {
           while the agents are your choice.
         </SectionSubtitle>
         <BentoGrid className="lg:grid-cols-2 xl:grid-cols-3">
-          <BentoCard className="!pb-0 md:col-span-2 md:row-span-2">
+          <BentoCard className="md:col-span-2 md:row-span-2">
             <BentoCardContent>
               <BentoCardTitle>One Home for Agents</BentoCardTitle>
               <BentoCardSubtitle>
                 Track every task across all your agents and tools in one unified
                 dashboard.
               </BentoCardSubtitle>
-              <BentoCardImage className="items-end">
+              <BentoCardImage>
                 <Image src={Dashboard} alt="Dashboard" />
               </BentoCardImage>
             </BentoCardContent>
           </BentoCard>
-          <BentoCard className="!pb-0">
-            <BentoCardContent>
-              <BentoCardTitle>Bring Your Own Agent</BentoCardTitle>
-              <BentoCardSubtitle>
-                Build custom agents in your preferred language to solve unique
-                problems.
-              </BentoCardSubtitle>
-              <BentoCardImage className="items-end">
-                <Image src={CustomAgent} alt="CustomAgent" />
-              </BentoCardImage>
-            </BentoCardContent>
-          </BentoCard>
-          <BentoCard className="!pb-0">
+          <BentoCard>
             <BentoCardContent>
               <BentoCardTitle>Discover Agents</BentoCardTitle>
               <BentoCardSubtitle>
                 Choose from trusted, pre-built agents, or from a vibrant
                 marketplace.
               </BentoCardSubtitle>
-              <BentoCardImage className="items-end">
+              <BentoCardImage>
                 <Image src={Marketplace} alt="Marketplace" />
+              </BentoCardImage>
+            </BentoCardContent>
+          </BentoCard>
+          <BentoCard>
+            <BentoCardContent>
+              <BentoCardTitle>Bring Your Own Agent</BentoCardTitle>
+              <BentoCardSubtitle>
+                Build custom agents in your preferred language to solve unique
+                problems.
+              </BentoCardSubtitle>
+              <BentoCardImage>
+                <Image src={CustomAgent} alt="CustomAgent" />
               </BentoCardImage>
             </BentoCardContent>
           </BentoCard>
