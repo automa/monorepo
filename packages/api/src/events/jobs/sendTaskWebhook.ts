@@ -1,6 +1,9 @@
+import { LinearClient } from '@linear/sdk';
+
 import {
   bot_installations,
   bots,
+  integration,
   orgs,
   repos,
   task_item,
@@ -8,6 +11,8 @@ import {
 
 import { JobDefinition } from '../types';
 import { sendWebhook } from '../utils';
+
+import { getRegex } from '../../hooks/utils';
 
 const sendTaskWebhook: JobDefinition<{
   taskId: number;
@@ -34,6 +39,9 @@ const sendTaskWebhook: JobDefinition<{
     );
     const botTaskItem = task.task_items.find(
       (item) => item.type === task_item.bot,
+    );
+    const originTaskItem = task.task_items.find(
+      (item) => item.type === task_item.origin,
     );
 
     let repo: repos & { orgs: orgs },
@@ -141,6 +149,53 @@ const sendTaskWebhook: JobDefinition<{
           },
         },
       });
+    }
+
+    if (
+      originTaskItem?.data &&
+      typeof originTaskItem.data === 'object' &&
+      !Array.isArray(originTaskItem.data) &&
+      originTaskItem.data.integration === integration.linear &&
+      originTaskItem.data.issueId
+    ) {
+      const connection = await app.prisma.integrations.findFirst({
+        where: {
+          type: integration.linear,
+          org_id: task.org_id,
+        },
+      });
+
+      if (
+        connection?.secrets &&
+        typeof connection.secrets === 'object' &&
+        !Array.isArray(connection.secrets) &&
+        connection.secrets.access_token
+      ) {
+        try {
+          const client = new LinearClient({
+            accessToken: connection.secrets.access_token as string,
+          });
+
+          const issue = await client.issue(
+            originTaskItem.data.issueId as string,
+          );
+          const comments = (await issue.comments()).nodes;
+
+          const regex = getRegex(true);
+
+          originTaskItem.data.issueComments = (
+            await Promise.all(
+              comments.map(async ({ body, user, externalUser }) => ({
+                body,
+                userName: (await user)?.name ?? (await externalUser)?.name,
+              })),
+            )
+          ).filter(
+            ({ body, userName }) =>
+              !regex.test(body) && !userName?.startsWith('Automa'),
+          );
+        } catch {}
+      }
     }
 
     const data = {
