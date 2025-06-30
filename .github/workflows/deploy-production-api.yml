@@ -10,6 +10,7 @@ on:
       - packages/config/schemas/**
       - packages/config/src/**
       - packages/api/src/**
+      - packages/api/Dockerfile
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}

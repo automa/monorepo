@@ -65,7 +65,6 @@ const config: Config = {
         'cal-sans': '0.1em',
       },
       screens: {
-        hero: '417px',
         short: { raw: '(max-height: 700px)' },
       },
       width: {

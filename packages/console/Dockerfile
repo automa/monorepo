@@ -28,7 +28,8 @@ RUN pnpm install --frozen-lockfile
 COPY packages/common/src ./packages/common/src
 COPY packages/console/src ./packages/console/src
 COPY packages/console/public ./packages/console/public
-COPY packages/console/index.html packages/console/postcss.config.js packages/console/tailwind.config.ts packages/console/vite.config.mts ./packages/console/
+COPY packages/console/index.html packages/console/postcss.config.js packages/console/vite.config.mts packages/console/tailwind.config.ts ./packages/console/
+COPY packages/console/nginx.conf ./packages/console/
 
 RUN pnpm --filter @automa/common build
 RUN pnpm --filter @automa/console build
@@ -41,9 +42,12 @@ LABEL org.opencontainers.image.description="Console service for Automa"
 ENV API_URI=
 
 COPY --from=builder /app/packages/console/build /usr/share/nginx/html
+COPY --from=builder /app/packages/console/nginx.conf /etc/nginx/conf.d/default.conf
 
 RUN echo '#!/bin/sh' > /docker-entrypoint.d/30-envsubst.sh \
     && echo 'find /usr/share/nginx/html -name "*.js" -exec sed -i "s|__API_URI__|${API_URI}|g" {} \;' >> /docker-entrypoint.d/30-envsubst.sh \
     && echo 'find /usr/share/nginx/html -name "*.js" -exec sed -i "s|__GRAPHQL_URI__|${API_URI}/graphql|g" {} \;' >> /docker-entrypoint.d/30-envsubst.sh
 
 RUN chmod +x /docker-entrypoint.d/30-envsubst.sh
+
+EXPOSE 80

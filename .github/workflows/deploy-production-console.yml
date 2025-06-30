@@ -10,6 +10,8 @@ on:
       - packages/console/index.html
       - packages/console/vite.config.mts
       - packages/console/tailwind.config.ts
+      - packages/console/Dockerfile
+      - packages/console/nginx.conf
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}

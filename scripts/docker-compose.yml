@@ -13,7 +13,7 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
   redis:
     container_name: automa-redis
-    image: redis:alpine
+    image: redis:7-alpine
     ports:
       - 6379:6379
   jaeger:
