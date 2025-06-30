@@ -84,6 +84,7 @@ cd packages/console && pnpm test
 #### Linting
 
 ```sh
+pnpm graphql-generate
 pnpm lint
 ```
 
@@ -105,3 +106,9 @@ pnpm graphql-generate
 ```
 
 This regenerates schema in `schema.graphql`, shared types in `packages/common/src/graphql.ts`, and client types in `packages/console/src/gql`.
+
+## Legal Boilerplate
+
+We require contributors to agree to a legal boilerplate before their contributions can be accepted (also known as Contributor License Agreement or CLA). This is to ensure that we have the freedom to change the license of the project in the future to a more permissive one ([Open Source](https://opensource.org/)).
+
+While we do agree that [CLAs are not fair](https://ben.balter.com/2018/01/02/why-you-probably-shouldnt-add-a-cla-to-your-open-source-project/) to contributors, we believe that this is the only way to ensure that we can change the license in the future.
