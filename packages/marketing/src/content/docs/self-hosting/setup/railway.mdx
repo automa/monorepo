@@ -1,0 +1,76 @@
+---
+title: Railway
+description: A step-by-step guide to setting up Automa using Railway templates
+---
+
+import SelfHostingConfiguringIntegrations from '/snippets/self-hosting/configuring-integrations.mdx';
+
+Automa publishes official [Railway](https://railway.com) templates for the whole application. This section will help you set it up using Railway.
+
+## Setting up
+
+There are 3 steps in the setup process:
+
+- Start the needed services.
+- Check if the services are working.
+- Configure third-party integrations.
+
+### Start services
+
+You will need an account on [Railway](https://railway.com) to get started. Once you have an account, go to the [Automa template](https://railway.com/deploy/PKfjlB?referralCode=Ri3kTG) and deploy it by clicking on the "**Deploy Now**" button.
+
+<video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="mx-auto rounded-xl"
+  src="/videos/self-hosting/railway-deploy.mp4"
+/>
+
+### Check the setup
+
+If you have successfully deployed the template, you should see 4 healthy services in your Railway project: **API**, **Console**, **Postgres**, and **Redis**.
+
+The **Console** service in the Railway project should have been automatically assigned a domain name by Railway in the form of `<random>.up.railway.app`. You can find this by clicking on the service, and if you visit this domain in your browser, you should see the **Automa Console** interface.
+
+<video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="mx-auto w-3/4 rounded-xl"
+  src="/videos/self-hosting/railway-domain.mp4"
+/>
+
+### Configuring integrations
+
+<SelfHostingConfiguringIntegrations />
+
+#### Adding environment variables
+
+When you are configuring third-party integrations, you will need to add environment variables to the **API** service in the Railway project.
+
+For example, to add a Jira integration, go to the **API** service in your Railway project, click on the "**Variables**" tab, and add the new environment variables.
+
+<video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="mx-auto rounded-xl"
+  src="/videos/self-hosting/railway-env-var.mp4"
+/>
+
+## Updating
+
+We recommend updating periodically to ensure you have the latest features and security updates. To update your **API** and **Console** services, go to each service in your Railway project, click on the "**Deployments**" tab, click on **three dots** on active deployment, and then choose the "**Redeploy**" option. This will pull the latest changes and redeploy your service.
+
+<video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="mx-auto rounded-xl"
+  src="/videos/self-hosting/railway-redeploy.mp4"
+/>

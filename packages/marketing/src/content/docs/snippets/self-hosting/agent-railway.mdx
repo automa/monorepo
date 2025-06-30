@@ -1,0 +1,36 @@
+<video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="mx-auto rounded-xl"
+  src="/videos/self-hosting/railway-agent-deploy.mp4"
+/>
+
+#### Check the setup
+
+If you have successfully deployed the template, you should see 2 healthy services in your Railway project: **Agent** and **Redis**.
+
+The **Agent** service in the Railway project should have been automatically assigned a domain name by Railway in the form of `<random>.up.railway.app`. You can find this by clicking on the service. Make sure to update the webhook URL of the agent in Automa to match this domain.
+
+<video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="mx-auto w-3/4 rounded-xl"
+  src="/videos/self-hosting/railway-agent-domain.mp4"
+/>
+
+### Updating
+
+We recommend updating periodically to ensure you have the latest features and security updates. To update your **Agent** service, go to the service in your Railway project, click on the "**Deployments**" tab, click on **three dots** on active deployment, and then choose the "**Redeploy**" option. This will pull the latest changes and redeploy your service.
+
+<video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="mx-auto rounded-xl"
+  src="/videos/self-hosting/railway-agent-redeploy.mp4"
+/>

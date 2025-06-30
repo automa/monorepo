@@ -1,0 +1,87 @@
+---
+title: Claude Code
+description: A step-by-step guide to setup Claude Code agent for Automa
+---
+
+import SelfHostingAgent from '/snippets/self-hosting/agent.mdx';
+import SelfHostingAgentRailway from '/snippets/self-hosting/agent-railway.mdx';
+
+Claude Code agent for Automa is based on [Anthropic's Claude Code](https://anthropic.com/claude-code) CLI tool. It's source code is available on [GitHub](https://github.com/automa/claude-code).
+
+<SelfHostingAgent title="Claude Code" />
+
+- **Docker**: to run the cache, and Claude Code agent container.
+- **Docker network**: containers must share a user-defined network (e.g. `automa-claude-code`).
+- **Anthropic API Key**: to use Anthropic's models.
+
+#### Cache
+
+We use [Redis](https://redis.io/) for the key-value store. The Redis container will store its data in a Docker volume named `automa-claude-code-redis-data`. It listens on port 6379. Make sure to replace `<cache-password>` with a secure password of your choice.
+
+```bash icon="terminal"
+docker run -d --name automa-claude-code-redis \
+  --network automa-claude-code \
+  -e REDIS_PASSWORD=<cache-password> \
+  -v automa-claude-code-redis-data:/data \
+  -p 6379:6379 \
+  redis:7-alpine
+```
+
+<Tip>
+  If you are self-hosting Automa, you can use the **Cache** service from it
+  instead of setting up a separate cache. Just make sure the Claude Code agent
+  is on the same network as your Automa services.
+</Tip>
+
+#### Agent
+
+We use the latest [Automa Claude Code agent image](https://ghcr.io/automa/claude-code). The Agent will connect to the Redis container. It listens on port 8000. Make sure to replace `<anthropic-api-key>` with your Anthropic API key, `<webhook-secret>` with the webhook secret you copied from Automa earlier and `<cache-password>` with the password you set earlier.
+
+```bash icon="terminal"
+docker run -d --name automa-claude-code \
+  --network automa-claude-code \
+  -e ANTHROPIC_API_KEY=<anthropic-api-key> \
+  -e AUTOMA_WEBHOOK_SECRET=<webhook-secret> \
+  -e REDIS_URL=redis://:<cache-password>@localhost:6379 \
+  -p 8000:8000 \
+  ghcr.io/automa/claude-code
+```
+
+#### Check the setup
+
+You can check if the containers are running with the following command:
+
+```bash icon="terminal"
+docker ps
+```
+
+### Updating
+
+We recommend updating periodically to ensure you have the latest features and security updates. To update your services:
+
+```bash icon="terminal"
+docker pull ghcr.io/automa/claude-code
+docker restart automa-claude-code
+```
+
+## Railway
+
+Automa publishes official [Railway](https://railway.com) templates for the Claude Code agent. This section will help you set it up using Railway.
+
+### Setting up
+
+There are 2 steps in the setup process:
+
+- Start the needed services.
+- Check if the services are working.
+
+#### Start services
+
+You will need an account on [Railway](https://railway.com) to get started. Once you have an account, go to the [Automa Claude Code agent template](https://railway.com/deploy/UQSi48?referralCode=Ri3kTG) and deploy it by clicking on the "**Deploy Now**" button.
+
+You would need to provide the following environment variables for the **Agent** service:
+
+- `ANTHROPIC_API_KEY`: Your Anthropic API key.
+- `AUTOMA_WEBHOOK_SECRET`: The webhook secret you copied from Automa earlier.
+
+<SelfHostingAgentRailway />

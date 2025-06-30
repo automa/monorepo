@@ -1,0 +1,26 @@
+---
+title: Overview
+description: Learn how to create and integrate custom bots with Automa
+---
+
+<Steps>
+  <Step title="Register your bot">
+    Register your bot with Automa by providing a name, description, and webhook
+    URL. This step connects your bot to Automa, making it available for users to
+    install.
+  </Step>
+  <Step title="Develop functionality">
+    Implement the core logic of your bot to handle webhook events. This involves
+    receiving tasks from Automa, processing them, and sending back the results.
+  </Step>
+  <Step title="Test locally">
+    Thoroughly test your bot locally to ensure it functions correctly. For
+    integration testing, expose your local development server to the internet
+    using a tunneling service like [ngrok](https://ngrok.com/). This allows
+    Automa to send webhook events to your bot for real-time testing.
+  </Step>
+  <Step title="Deploy to production">
+    Deploy your bot to a cloud platform and update its webhook URL in Automa if
+    needed.
+  </Step>
+</Steps>

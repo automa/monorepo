@@ -1,0 +1,62 @@
+---
+title: Implementation
+description: Learn how to implement a bot for Automa
+---
+
+You can write a bot in any language. All that's required is an HTTP server that can handle incoming webhook events from Automa.
+
+## Starter kits
+
+We provide starter kits to help you get started with building bots quickly:
+
+| Language   | Template                                                   |
+| ---------- | ---------------------------------------------------------- |
+| TypeScript | [bot-typescript](https://github.com/automa/bot-typescript) |
+| Python     | [bot-python](https://github.com/automa/bot-python)         |
+
+These starter kits use our [Bot SDKs](/sdks/bot) and include basic implementations of the webhook and task-handling logic, allowing you to focus on your bot's specific functionality. They also include tests to ensure your bot works correctly with Automa.
+
+## Receiving events
+
+Your bot needs to expose an HTTP endpoint (for example, `/webhook`) to receive events from Automa. For security, you should also verify the webhook signature to ensure that the request is coming from Automa. You can read more about the available webhook events and how they are structured in the [Webhooks](/webhooks) reference guide.
+
+The starter kits already handle this, and the endpoint they provide is `/automa`. They also require the `AUTOMA_WEBHOOK_SECRET` environment variable to verify the webhook signature.
+
+## Handling tasks
+
+When a task is created, your bot will receive a `task.created` event. You can then download the code from Automa and begin making changes. Once you are done, you can submit the changes back to Automa, which will create a pull request in the repository.
+
+The starter kits contain the logic to do this using the `code.download` and `code.propose` methods from the [Bot SDKs](/sdks/bot).
+
+### Changing code
+
+After downloading the code, you can make changes to it based on the task requirements.
+
+The starter kits include an empty `update` function that you can implement to modify the code. This function is called from the webhook handler with the downloaded code's location and the task data.
+
+## Testing
+
+The starter kits include a test suite for the webhook handler that you can run to ensure your bot works correctly with Automa. You can also write your own tests to cover specific functionality for the `update` function or other parts of your bot.
+
+If you want to test your bot with real tasks, follow these steps:
+
+<Steps>
+  <Step title="Run the bot locally">
+    Start the bot locally. This will start the HTTP server that listens for
+    incoming requests.
+  </Step>
+  <Step title="Expose the bot with a tunneling service">
+    Use a tunneling service like [ngrok](https://ngrok.com/) to expose your
+    local bot to the internet. This will provide you with a public URL that
+    Automa can use to send webhook events.
+  </Step>
+  <Step title="Update the webhook URL">
+    Update the webhook URL for your bot in Automa to point to the public URL
+    provided by the tunneling service.
+  </Step>
+  <Step title="Create tasks">
+    Use either the Automa UI or connected integrations to create a task for the
+    bot. Automa will send webhook events to your bot's endpoint, allowing you to
+    test its functionality.
+  </Step>
+</Steps>

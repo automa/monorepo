@@ -1,0 +1,55 @@
+---
+title: Overview
+description: Learn about the webhooks sent by Automa
+---
+
+In Automa, webhooks are used to notify your bot about various events, such as task creation, proposal updates, and more. This allows your bot to respond to changes in real-time.
+
+Automa's webhooks follow the [Standard Webhooks](https://www.standardwebhooks.com/) specification, which means they are designed to be secure and reliable. Therefore, all the events use the following payload structure:
+
+- `id`: Unique identifier for the webhook event.
+- `type`: The type of event (e.g., `task.created`, `proposal.accepted`).
+- `timestamp`: The time when the event occurred, in ISO 8601 format.
+- `data`: The event-specific data, which varies based on the event type.
+
+```json
+{
+  "id": "whmsg_task_created_1234",
+  "type": "task.created",
+  "timestamp": "2025-07-28T04:58:00.000Z",
+  "data": {
+    /* task, repo, org, items */
+  }
+}
+```
+
+The events are also accompanied by the following headers:
+
+- `webhook-id`: the same as payload `id`
+- `webhook-timestamp`: UNIX timestamp of when the event occurred (seconds since epoch)
+- `webhook-signature`: the signature(s) of the webhook used to verify the payload
+- `x-automa-server-host`: the URL of the Automa server that sent the webhook
+
+### Verifying signatures
+
+To ensure the integrity and origin of webhooks, Automa signs each one using HMAC-SHA256. The signature is passed in the `webhook-signature` header, which includes a version identifier and the signature in base64 format, separated by a comma (e.g., `v1,d82n...`).
+
+The signature is generated using your bot's webhook secret (excluding the `atma_whsec_` prefix). The content that is signed is a string made by concatenating the webhook ID, the timestamp in unix format, and the raw request body, joined by periods.
+
+```
+{id}.{timestamp}.{body}
+```
+
+We strongly recommend using our [Bot SDKs](/sdks/bot), which provide a helper function to verify the signature for you.
+
+## Retries
+
+When a webhook event is sent, Automa ensures that it is delivered successfully. If a delivery fails due to a non-2xx response or a network issue, Automa will retry.
+
+The retry policy uses an **exponential backoff** strategy, with an initial delay of **10 minutes** and a maximum of **5 attempts**. The delay doubles with each subsequent retry.
+
+To prevent side effects from repeated deliveries:
+
+- Use the webhook id to detect and discard duplicate requests.
+- Ensure your webhook handler is idempotent (safe to run multiple times).
+- Use locking to protect shared resources from race conditions.
