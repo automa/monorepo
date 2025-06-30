@@ -7,3 +7,5 @@ coverage
 .env.keys
 
 schema.graphql
+
+.env.local
