@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question
+    url: https://discord.com/channels/1260932252737601617/1260957384906641479
+    about: Get help with a problem or question about this project
+  - name: Feature Request
+    url: https://github.com/automa/feedback/issues/new
+    about: Suggest an idea for this project

@@ -1,4 +1,3 @@
-.jj
 build
 .next
 coverage
@@ -10,3 +9,5 @@ packages/common/src/graphql.ts
 packages/console/src/gql
 
 packages/api/test/fixtures/settings/bad.json
+
+.jj

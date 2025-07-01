@@ -9,7 +9,7 @@ export const Container = tw(Flex).attrs({
 export const ImageContainer = tw(Flex).attrs({
   alignItems: 'center',
   justifyItems: 'center',
-})`size-20 min-w-20 rounded-2xl bg-neutral-100`;
+})`size-20 min-w-20 rounded-2xl`;
 
 export const Fallback = tw(Flex).attrs({
   alignItems: 'center',

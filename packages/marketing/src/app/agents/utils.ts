@@ -7,10 +7,10 @@ const botSelectFields = {
   name: true,
   type: true,
   short_description: true,
-  paths: true,
   image_url: true,
   description: true,
   homepage: true,
+  paths: true,
   is_preview: true,
   is_deterministic: true,
   orgs: {
