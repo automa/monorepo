@@ -24,7 +24,7 @@ import {
 export const metadata = {
   title: 'Automa',
   description:
-    'Automa is a platform that automates coding tasks from your favorite apps and allows you to choose any remote coding agent for them. They complete in the background, generating a PR for you to review and merge.',
+    'Automa is an automation platform to complete tasks remotely with any coding agent from your favorite apps.',
 };
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {

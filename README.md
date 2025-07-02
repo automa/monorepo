@@ -1,10 +1,6 @@
 # Automa
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/automa/monorepo/refs/heads/master/packages/marketing/src/assets/landing/hero.png" />
-</p>
-
-[Automa](https://automa.app) is a code automation platform that allows the user to complete coding tasks with any coding agent (Claude Code, Codex, Gemini, etc or custom) from integrations like (GitHub, Linear, Jira, Slack, etc).
+[Automa](https://automa.app) is an automation platform that allows the user to complete coding tasks remotely with any coding agent (Claude Code, Codex, Gemini, etc, or custom) from integrations (GitHub, Linear, Jira, Slack, etc) directly with all the required context.
 
 Some links to get started:
 
@@ -14,7 +10,14 @@ Some links to get started:
 - [Agent Development](https://docs.automa.app/agent-development)
 - [SDKs](https://docs.automa.app/sdks)
 - [Discord](https://discord.gg/z4Gqd7T2WQ)
-- [Licensing](https://docs.automa.app/licensing)
+- [Licensing](https://docs.automa.app/self-hosting/licensing)
+
+<p align="center">
+  <br/>
+  <img width="450px" src="https://raw.githubusercontent.com/automa/monorepo/refs/heads/master/packages/marketing/src/assets/landing/hero.png" />
+  <br/>
+  <br/>
+</p>
 
 ## Contributing
 
