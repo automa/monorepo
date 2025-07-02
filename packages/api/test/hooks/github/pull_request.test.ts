@@ -1,5 +1,6 @@
 import { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { assert } from 'chai';
+import { createSandbox, SinonSandbox, SinonStub } from 'sinon';
 
 import {
   bots,
@@ -19,8 +20,10 @@ suite('github hook pull_request event', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
   let org: orgs, repo: repos, bot: bots;
   let task: tasks, proposal: task_items;
+  let sandbox: SinonSandbox, publishStub: SinonStub;
 
   suiteSetup(async () => {
+    sandbox = createSandbox();
     app = await server();
 
     [org] = await seedOrgs(app, 1);
@@ -34,6 +37,10 @@ suite('github hook pull_request event', () => {
   });
 
   setup(async () => {
+    publishStub = sandbox
+      .stub(app.events.sendWebhookProposalClosed, 'publish')
+      .resolves();
+
     task = await app.prisma.tasks.create({
       data: {
         title: 'Task 1',
@@ -63,6 +70,7 @@ suite('github hook pull_request event', () => {
   });
 
   teardown(async () => {
+    sandbox.restore();
     await app.prisma.tasks.deleteMany();
   });
 
@@ -95,6 +103,76 @@ suite('github hook pull_request event', () => {
       });
 
       assert.isEmpty(activities);
+    });
+
+    test('should not send webhook', () => {
+      assert.equal(publishStub.callCount, 0);
+    });
+  });
+
+  suite('with closed proposal', () => {
+    setup(async () => {
+      await app.prisma.task_items.update({
+        where: {
+          id: proposal.id,
+        },
+        data: {
+          data: {
+            ...(proposal.data as object),
+            prState: 'closed',
+            prMerged: false,
+          },
+        },
+      });
+
+      response = await callWithFixture(app, 'pull_request', 'merged');
+    });
+
+    test('should return 200', () => {
+      assert.equal(response.statusCode, 200);
+    });
+
+    test('should not update task state', async () => {
+      task = await app.prisma.tasks.findFirstOrThrow({
+        where: {
+          id: task.id,
+        },
+      });
+
+      assert.equal(task.state, 'submitted');
+    });
+
+    test('should not update the task item', async () => {
+      const taskItem = await app.prisma.task_items.findFirstOrThrow({
+        where: {
+          id: proposal.id,
+        },
+      });
+
+      assert.deepEqual(taskItem.data, {
+        prId: 2094521303,
+        prNumber: 103,
+        prTitle: 'PR Title',
+        prState: 'closed',
+        prMerged: false,
+        prHead: `org-0:automa/bot-0/${task.id}`,
+        prBase: 'default-branch',
+      });
+    });
+
+    test('should not create task activity', async () => {
+      const activities = await app.prisma.task_items.findMany({
+        where: {
+          task_id: task.id,
+          type: task_item.activity,
+        },
+      });
+
+      assert.isEmpty(activities);
+    });
+
+    test('should not send webhook', () => {
+      assert.equal(publishStub.callCount, 0);
     });
   });
 
@@ -177,6 +255,14 @@ suite('github hook pull_request event', () => {
           to_state: state,
         });
       });
+
+      test('should send webhook', () => {
+        assert.equal(publishStub.callCount, 1);
+        assert.deepEqual(publishStub.firstCall.args, [
+          proposal.id,
+          { proposalItemId: proposal.id },
+        ]);
+      });
     });
   });
 
@@ -210,17 +296,17 @@ suite('github hook pull_request event', () => {
       assert.equal(response.statusCode, 200);
     });
 
-    test('should mark the task as submitted', async () => {
+    test('should not update task state', async () => {
       task = await app.prisma.tasks.findFirstOrThrow({
         where: {
           id: task.id,
         },
       });
 
-      assert.equal(task.state, 'submitted');
+      assert.equal(task.state, 'completed');
     });
 
-    test('should update the task item', async () => {
+    test('should not update the task item', async () => {
       const taskItem = await app.prisma.task_items.findFirstOrThrow({
         where: {
           id: proposal.id,
@@ -231,39 +317,26 @@ suite('github hook pull_request event', () => {
         prId: 2094521303,
         prNumber: 103,
         prTitle: 'PR Title',
-        prState: 'open',
-        prMerged: false,
+        prState: 'closed',
+        prMerged: true,
         prHead: `org-0:automa/bot-0/${task.id}`,
         prBase: 'default-branch',
       });
     });
 
-    test('should create task activity', async () => {
+    test('should not create task activity', async () => {
       const activities = await app.prisma.task_items.findMany({
         where: {
           task_id: task.id,
           type: task_item.activity,
         },
-        include: {
-          task_activities: true,
-        },
       });
 
-      assert.lengthOf(activities, 1);
-      assert.deepOwnInclude(activities[0], {
-        actor_user_id: null,
-        bot_id: null,
-        data: {
-          integration: 'github',
-          userId: 174703,
-          userName: 'pksunkara',
-        },
-      });
-      assert.deepOwnInclude(activities[0].task_activities, {
-        type: 'state',
-        from_state: 'completed',
-        to_state: 'submitted',
-      });
+      assert.isEmpty(activities);
+    });
+
+    test('should not send webhook', () => {
+      assert.equal(publishStub.callCount, 0);
     });
   });
 
@@ -345,6 +418,14 @@ suite('github hook pull_request event', () => {
         from_state: 'submitted',
         to_state: 'completed',
       });
+    });
+
+    test('should send webhook', () => {
+      assert.equal(publishStub.callCount, 1);
+      assert.deepEqual(publishStub.firstCall.args, [
+        proposal.id,
+        { proposalItemId: proposal.id },
+      ]);
     });
   });
 });

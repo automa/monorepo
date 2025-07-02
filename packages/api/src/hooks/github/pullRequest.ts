@@ -22,14 +22,31 @@ const changeState: GithubEventActionHandler<{
   organization: GithubOrganization;
   pull_request: PullRequest;
 }> = async (app, body) => {
+  const { state, merged } = body.pull_request;
+
+  // Ignore reopening PRs
+  if (state !== 'closed') {
+    return;
+  }
+
   // Find the task associated with the PR
   const taskItem = await app.prisma.task_items.findFirst({
     where: {
       type: task_item.proposal,
-      data: {
-        path: ['prId'],
-        equals: body.pull_request.id,
-      },
+      AND: [
+        {
+          data: {
+            path: ['prId'],
+            equals: body.pull_request.id,
+          },
+        },
+        {
+          data: {
+            path: ['prState'],
+            equals: 'open',
+          },
+        },
+      ],
     },
     include: {
       tasks: true,
@@ -58,8 +75,6 @@ const changeState: GithubEventActionHandler<{
       }
     : null;
 
-  const { state, merged } = body.pull_request;
-
   // Update the data inside the task proposal item
   await app.prisma.task_items.update({
     where: {
@@ -78,16 +93,16 @@ const changeState: GithubEventActionHandler<{
   await taskUpdateState(
     app,
     taskItem.tasks.id,
-    state === 'open'
-      ? task_state.submitted
-      : merged
-      ? task_state.completed
-      : task_state.cancelled,
+    merged ? task_state.completed : task_state.cancelled,
     {
       user_id: automaUser?.users.id,
       data: userData,
     },
   );
+
+  await app.events.sendWebhookProposalClosed.publish(taskItem.id, {
+    proposalItemId: taskItem.id,
+  });
 };
 
 export default {
