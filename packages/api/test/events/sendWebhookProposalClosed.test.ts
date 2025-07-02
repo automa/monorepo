@@ -122,19 +122,21 @@ suite('events/sendWebhookProposalClosed', () => {
       };
 
       assert.equal(postStub.callCount, 1);
+
+      const timestamp = JSON.parse(postStub.firstCall.args[1]).timestamp;
+
       assert.equal(postStub.firstCall.args[0], 'http://test.local/webhook/0');
-      assert.deepNestedInclude(postStub.firstCall.args[1], body);
-      assert.match(postStub.firstCall.args[1].timestamp, regexTimestamp);
+      assert.deepNestedInclude(JSON.parse(postStub.firstCall.args[1]), body);
+      assert.match(timestamp, regexTimestamp);
 
       assert.deepEqual(postStub.firstCall.args[2], {
         headers: {
+          'content-type': 'application/json',
           'webhook-id': body.id,
-          'webhook-timestamp': Math.floor(
-            new Date(postStub.firstCall.args[1].timestamp).getTime() / 1000,
-          ),
+          'webhook-timestamp': Math.floor(new Date(timestamp).getTime() / 1000),
           'webhook-signature': generateWebhookSignature(
             'atma_whsec_0',
-            postStub.firstCall.args[1].timestamp,
+            timestamp,
             body,
           ),
           'x-automa-server-host': 'http://localhost:8080',
@@ -193,19 +195,21 @@ suite('events/sendWebhookProposalClosed', () => {
       };
 
       assert.equal(postStub.callCount, 1);
+
+      const timestamp = JSON.parse(postStub.firstCall.args[1]).timestamp;
+
       assert.equal(postStub.firstCall.args[0], 'http://test.local/webhook/0');
-      assert.deepNestedInclude(postStub.firstCall.args[1], body);
-      assert.match(postStub.firstCall.args[1].timestamp, regexTimestamp);
+      assert.deepNestedInclude(JSON.parse(postStub.firstCall.args[1]), body);
+      assert.match(timestamp, regexTimestamp);
 
       assert.deepEqual(postStub.firstCall.args[2], {
         headers: {
+          'content-type': 'application/json',
           'webhook-id': body.id,
-          'webhook-timestamp': Math.floor(
-            new Date(postStub.firstCall.args[1].timestamp).getTime() / 1000,
-          ),
+          'webhook-timestamp': Math.floor(new Date(timestamp).getTime() / 1000),
           'webhook-signature': generateWebhookSignature(
             'atma_whsec_0',
-            postStub.firstCall.args[1].timestamp,
+            timestamp,
             body,
           ),
           'x-automa-server-host': 'http://localhost:8080',
