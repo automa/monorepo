@@ -344,6 +344,9 @@ importers:
       fastify-plugin:
         specifier: ~4.5.1
         version: 4.5.1
+      fastify-type-provider-zod:
+        specifier: ~2.1.0
+        version: 2.1.0(fastify@4.10.2)(zod@3.25.65)
       graphql:
         specifier: 'catalog:'
         version: 16.8.2
@@ -7812,6 +7815,12 @@ packages:
 
   fastify-plugin@4.5.1:
     resolution: {integrity: sha512-stRHYGeuqpEZTL1Ef0Ovr2ltazUT9g844X5z/zEBFLG8RYlpDiOCIG+ATvYEp+/zmc7sN29mcIMp8gvYplYPIQ==}
+
+  fastify-type-provider-zod@2.1.0:
+    resolution: {integrity: sha512-p0plQyrxVR1IxJaOVbKRkduYh74HAS6Pm2szhFrc/vFdfIEu8UWo/cPFZCrcKyeo8ICjWbHH1zkx8lWw/ivpqg==}
+    peerDependencies:
+      fastify: ^4.0.0
+      zod: ^3.14.2
 
   fastify@4.10.2:
     resolution: {integrity: sha512-0T+4zI6N3S8ex0LCZi3H4FasJR4AzWw834fUkPWvV8r6GBJkLmAOfFxH8f5V29Plef24IK0QSQD/tz1Nx+1UOA==}
@@ -22189,6 +22198,12 @@ snapshots:
 
   fastify-plugin@4.5.1: {}
 
+  fastify-type-provider-zod@2.1.0(fastify@4.10.2)(zod@3.25.65):
+    dependencies:
+      fastify: 4.10.2
+      zod: 3.25.65
+      zod-to-json-schema: 3.24.5(zod@3.25.65)
+
   fastify@4.10.2:
     dependencies:
       '@fastify/ajv-compiler': 3.5.0
@@ -28764,6 +28779,10 @@ snapshots:
   zod-to-json-schema@3.24.5(zod@3.24.4):
     dependencies:
       zod: 3.24.4
+
+  zod-to-json-schema@3.24.5(zod@3.25.65):
+    dependencies:
+      zod: 3.25.65
 
   zod@3.23.8: {}
 
