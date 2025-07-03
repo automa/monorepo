@@ -37,7 +37,7 @@ const AppPage: React.FC = () => {
   return (
     <Container>
       <Section>
-        <Title>Your coding tasks, using any agent, from anywhere.</Title>
+        <Title>Automate your grunt work. Ship faster.</Title>
         <Subtitle>
           Trigger tasks from your go-to apps with any coding agent. They
           complete in the background, generating a PR for you to review and

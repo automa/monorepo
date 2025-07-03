@@ -10,6 +10,7 @@ import fastifyHelmet from '@fastify/helmet';
 import fastifySensible from '@fastify/sensible';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
+import { validatorCompiler } from 'fastify-type-provider-zod';
 import httpErrors from 'http-errors';
 
 import { Prisma } from '@automa/prisma';
@@ -79,6 +80,8 @@ export const server = async () => {
 
     return reply.internalServerError();
   });
+
+  app.setValidatorCompiler(validatorCompiler);
 
   if (!isProduction) {
     await app.register(fastifySwagger, {

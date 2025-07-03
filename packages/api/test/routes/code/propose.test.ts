@@ -111,6 +111,397 @@ suite('code/propose', () => {
     await app.prisma.orgs.deleteMany();
   });
 
+  suite('with empty body', () => {
+    setup(async () => {
+      response = await call(app, '/code/propose', {
+        method: 'POST',
+        payload: {},
+      });
+    });
+
+    test('should return 400', () => {
+      assert.equal(response.statusCode, 400);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.error, 'Bad Request');
+      assert.equal(data.statusCode, 400);
+
+      const errors = JSON.parse(data.message);
+
+      assert.deepEqual(errors, [
+        {
+          code: 'invalid_type',
+          expected: 'object',
+          received: 'undefined',
+          path: ['task'],
+          message: 'Required',
+        },
+        {
+          code: 'invalid_type',
+          expected: 'object',
+          received: 'undefined',
+          path: ['proposal'],
+          message: 'Required',
+        },
+      ]);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(getStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+    });
+  });
+
+  suite('with missing task id', () => {
+    setup(async () => {
+      response = await propose(
+        app,
+        // @ts-ignore
+        {
+          token: 'abcdef',
+        },
+      );
+    });
+
+    test('should return 400', () => {
+      assert.equal(response.statusCode, 400);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.error, 'Bad Request');
+      assert.equal(data.statusCode, 400);
+
+      const errors = JSON.parse(data.message);
+
+      assert.deepEqual(errors, [
+        {
+          code: 'invalid_type',
+          expected: 'number',
+          received: 'undefined',
+          path: ['task', 'id'],
+          message: 'Required',
+        },
+      ]);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(getStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+    });
+  });
+
+  suite('with null task id', () => {
+    setup(async () => {
+      response = await propose(app, {
+        // @ts-ignore
+        id: null,
+        token: 'abcdef',
+      });
+    });
+
+    test('should return 400', () => {
+      assert.equal(response.statusCode, 400);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.error, 'Bad Request');
+      assert.equal(data.statusCode, 400);
+
+      const errors = JSON.parse(data.message);
+
+      assert.deepEqual(errors, [
+        {
+          code: 'invalid_type',
+          expected: 'number',
+          received: 'null',
+          path: ['task', 'id'],
+          message: 'Expected number, received null',
+        },
+      ]);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(getStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+    });
+  });
+
+  suite('with missing task token', () => {
+    setup(async () => {
+      response = await propose(
+        app,
+        // @ts-ignore
+        {
+          id: 1,
+        },
+      );
+    });
+
+    test('should return 400', () => {
+      assert.equal(response.statusCode, 400);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.error, 'Bad Request');
+      assert.equal(data.statusCode, 400);
+
+      const errors = JSON.parse(data.message);
+
+      assert.deepEqual(errors, [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'undefined',
+          path: ['task', 'token'],
+          message: 'Required',
+        },
+      ]);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(getStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+    });
+  });
+
+  suite('with null task token', () => {
+    setup(async () => {
+      response = await propose(app, {
+        id: 1,
+        // @ts-ignore
+        token: null,
+      });
+    });
+
+    test('should return 400', () => {
+      assert.equal(response.statusCode, 400);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.error, 'Bad Request');
+      assert.equal(data.statusCode, 400);
+
+      const errors = JSON.parse(data.message);
+
+      assert.deepEqual(errors, [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'null',
+          path: ['task', 'token'],
+          message: 'Expected string, received null',
+        },
+      ]);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(getStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+    });
+  });
+
+  suite('with missing proposal token', () => {
+    setup(async () => {
+      response = await call(app, '/code/propose', {
+        method: 'POST',
+        payload: {
+          task: {
+            id: 1,
+            token: 'abcdef',
+          },
+          proposal: {
+            diff: diff,
+          },
+        },
+      });
+    });
+
+    test('should return 400', () => {
+      assert.equal(response.statusCode, 400);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.error, 'Bad Request');
+      assert.equal(data.statusCode, 400);
+
+      const errors = JSON.parse(data.message);
+
+      assert.deepEqual(errors, [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'undefined',
+          path: ['proposal', 'token'],
+          message: 'Required',
+        },
+      ]);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(getStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+    });
+  });
+
+  suite('with null proposal token', () => {
+    setup(async () => {
+      response = await call(app, '/code/propose', {
+        method: 'POST',
+        payload: {
+          task: {
+            id: 1,
+            token: 'abcdef',
+          },
+          proposal: {
+            token: null,
+            diff: diff,
+          },
+        },
+      });
+    });
+
+    test('should return 400', () => {
+      assert.equal(response.statusCode, 400);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.error, 'Bad Request');
+      assert.equal(data.statusCode, 400);
+
+      const errors = JSON.parse(data.message);
+
+      assert.deepEqual(errors, [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'null',
+          path: ['proposal', 'token'],
+          message: 'Expected string, received null',
+        },
+      ]);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(getStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+    });
+  });
+
+  suite('with missing proposal diff', () => {
+    setup(async () => {
+      response = await call(app, '/code/propose', {
+        method: 'POST',
+        payload: {
+          task: {
+            id: 1,
+            token: 'abcdef',
+          },
+          proposal: {
+            token: 'ghijkl',
+          },
+        },
+      });
+    });
+
+    test('should return 400', () => {
+      assert.equal(response.statusCode, 400);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.error, 'Bad Request');
+      assert.equal(data.statusCode, 400);
+
+      const errors = JSON.parse(data.message);
+
+      assert.deepEqual(errors, [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'undefined',
+          path: ['proposal', 'diff'],
+          message: 'Required',
+        },
+      ]);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(getStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+    });
+  });
+
+  suite('with null proposal diff', () => {
+    setup(async () => {
+      response = await call(app, '/code/propose', {
+        method: 'POST',
+        payload: {
+          task: {
+            id: 1,
+            token: 'abcdef',
+          },
+          proposal: {
+            token: 'ghijkl',
+            diff: null,
+          },
+        },
+      });
+    });
+
+    test('should return 400', () => {
+      assert.equal(response.statusCode, 400);
+    });
+
+    test('should return error message', () => {
+      const data = response.json();
+
+      assert.equal(data.error, 'Bad Request');
+      assert.equal(data.statusCode, 400);
+
+      const errors = JSON.parse(data.message);
+
+      assert.deepEqual(errors, [
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'null',
+          path: ['proposal', 'diff'],
+          message: 'Expected string, received null',
+        },
+      ]);
+    });
+
+    test('should not get token from github', async () => {
+      assert.equal(postStub.callCount, 0);
+      assert.equal(getStub.callCount, 0);
+      assert.equal(zxCmdStub.callCount, 0);
+    });
+  });
+
   suite('non-existent task', () => {
     setup(async () => {
       response = await propose(app, {
