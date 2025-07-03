@@ -89,7 +89,7 @@ suite('events/syncGithubOrgUsers', () => {
     sandbox.restore();
   });
 
-  test('should do get information about org members', async () => {
+  test('without github installation should not get information about org members', async () => {
     await syncGithubOrgUsers.handler?.(app, { orgId: org.id });
 
     assert.isTrue(postStub.notCalled);
@@ -103,6 +103,29 @@ suite('events/syncGithubOrgUsers', () => {
 
     assert.isTrue(postStub.notCalled);
     assert.isTrue(getStub.notCalled);
+  });
+
+  test('with user org should not get information about org members', async () => {
+    await app.prisma.user_orgs.deleteMany();
+
+    await app.prisma.orgs.update({
+      where: {
+        id: org.id,
+      },
+      data: {
+        is_user: true,
+        github_installation_id: 123,
+      },
+    });
+
+    await syncGithubOrgUsers.handler?.(app, { orgId: org.id });
+
+    assert.isTrue(postStub.notCalled);
+    assert.isTrue(getStub.notCalled);
+
+    const userOrgs = await app.prisma.user_orgs.findMany();
+
+    assert.lengthOf(userOrgs, 0);
   });
 
   suite('with github installation', () => {

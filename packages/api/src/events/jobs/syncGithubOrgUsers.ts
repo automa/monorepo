@@ -28,6 +28,12 @@ const syncGithubOrgUsers: JobDefinition<{
       );
     }
 
+    // If the org is a user, we don't need to sync its users
+    // The user will be synced when they log in
+    if (org.is_user) {
+      return;
+    }
+
     const { paginate } = await caller(org.github_installation_id);
 
     const pages = paginate<{ id: number }[]>(
