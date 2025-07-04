@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { List } from '@phosphor-icons/react/dist/ssr';
@@ -28,6 +30,16 @@ const Nav: React.FC<NavProps> = ({ ...props }) => {
     ...navigationItems,
     { href: process.env.NEXT_PUBLIC_CONSOLE_URL!, label: 'Get Started' },
   ];
+
+  const hideMobileMenu = () => {
+    const checkbox = document.getElementById(
+      'mobile-menu-toggle',
+    ) as HTMLInputElement;
+
+    if (checkbox?.checked) {
+      checkbox.checked = false;
+    }
+  };
 
   return (
     <>
@@ -67,7 +79,7 @@ const Nav: React.FC<NavProps> = ({ ...props }) => {
                 {mobileNavigationItems.map((item) => (
                   <NavigationMenu.Item key={item.href}>
                     <NavigationMenu.Link asChild>
-                      <Link href={item.href}>
+                      <Link href={item.href} onClick={hideMobileMenu}>
                         <MobileMenuLink>{item.label}</MobileMenuLink>
                       </Link>
                     </NavigationMenu.Link>

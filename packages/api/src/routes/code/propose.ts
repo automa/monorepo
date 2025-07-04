@@ -157,6 +157,7 @@ export default async function (app: FastifyInstance) {
         return finish();
       }
 
+      // TODO: Move it up
       // Complete the task if the diff is empty
       if (!proposal.diff) {
         await taskUpdateState(app, task.id, task_state.skipped, {
@@ -189,6 +190,7 @@ export default async function (app: FastifyInstance) {
       await $({
         cwd: workingDir,
       })`git remote add origin https://x-access-token:${accessToken}@github.com/${repo.orgs.provider_name}/${repo.name}`;
+      // TODO: We need to have a timeout for this to safeguard against malicious users
       await $({
         cwd: workingDir,
       })`git fetch --depth 1 origin ${task.proposal_base_commit}`;
