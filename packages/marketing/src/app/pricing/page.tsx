@@ -39,7 +39,7 @@ import {
 export const metadata = {
   title: 'Automa ‒ Pricing',
   description:
-    'Start with Automa for free. Self-host up to 10 engineers, or use our cloud platform with pay-as-you-go coding agents.',
+    'Start with Automa for free. Self-host up to 10 people, or use our cloud platform with pay-as-you-go coding agents.',
 };
 
 const CheckMark = () => (
@@ -68,7 +68,7 @@ const PricingPage: React.FC = () => {
             </PlanDescription>
             <PlanPrice>
               <Price>Free</Price>
-              <PriceUnit>up to 10 engineers</PriceUnit>
+              <PriceUnit>up to 10 people</PriceUnit>
             </PlanPrice>
             <PriceExtra>
               Then <span className="text-neutral-400 line-through">$100+</span>{' '}
@@ -321,8 +321,8 @@ const PricingPage: React.FC = () => {
           <FAQQuestion>Is the self-hosted version really free?</FAQQuestion>
           <FAQAnswer>
             Yes! The self-hosted version is free for personal usage and for
-            teams up to 10 engineers under our BUSL license. After 10 engineers,
-            it starts at <span className="line-through">$100</span> $50/month.
+            teams up to 10 people under our BUSL license. After 10 people, it
+            starts at <span className="line-through">$100</span> $50/month.
           </FAQAnswer>
         </FAQItem>
 
@@ -343,7 +343,7 @@ const PricingPage: React.FC = () => {
             What&apos;s the difference between self-hosted free and paid?
           </FAQQuestion>
           <FAQAnswer>
-            The free self-hosted version is limited to teams up to 10 engineers.
+            The free self-hosted version is limited to teams up to 10 people.
             While it includes all existing platform features, it does not
             include priority support.
           </FAQAnswer>
