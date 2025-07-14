@@ -25,6 +25,7 @@ suite('graphql app', () => {
             app {
               cloud
               client_uri
+              webhook_uri
               integrations {
                 github
                 gitlab
@@ -60,6 +61,7 @@ suite('graphql app', () => {
 
       assert.isTrue(app.cloud);
       assert.equal(app.client_uri, 'http://localhost:3000');
+      assert.equal(app.webhook_uri, 'http://test.ngrok.io');
 
       assert.isTrue(app.integrations.github);
       assert.isFalse(app.integrations.gitlab);

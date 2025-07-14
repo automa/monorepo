@@ -5,6 +5,7 @@ type Query {
 type App {
   cloud: Boolean!
   client_uri: String!
+  webhook_uri: String!
   integrations: AppIntegrations!
 }
 

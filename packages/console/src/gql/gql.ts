@@ -48,7 +48,7 @@ const documents = {
     "\n  fragment UserQuery on Query {\n    user {\n      email\n      ...UserAvatar\n    }\n  }\n": types.UserQueryFragmentDoc,
     "\n  query User {\n    ...UserQuery\n  }\n": types.UserDocument,
     "\n  mutation UserUpdate($input: UserUpdateInput!) {\n    userUpdate(input: $input) {\n      id\n      name\n      email\n    }\n  }\n": types.UserUpdateDocument,
-    "\n  query App {\n    app {\n      cloud\n      client_uri\n      integrations {\n        github\n        gitlab\n        linear\n        jira\n        slack\n      }\n    }\n    user {\n      id\n      email\n    }\n  }\n": types.AppDocument,
+    "\n  query App {\n    app {\n      cloud\n      client_uri\n      webhook_uri\n      integrations {\n        github\n        gitlab\n        linear\n        jira\n        slack\n      }\n    }\n    user {\n      id\n      email\n    }\n  }\n": types.AppDocument,
     "\n  query Dashboard {\n    ...UserQuery\n    ...OrgsQuery\n  }\n": types.DashboardDocument,
 };
 
@@ -205,7 +205,7 @@ export function gql(source: "\n  mutation UserUpdate($input: UserUpdateInput!) {
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query App {\n    app {\n      cloud\n      client_uri\n      integrations {\n        github\n        gitlab\n        linear\n        jira\n        slack\n      }\n    }\n    user {\n      id\n      email\n    }\n  }\n"): (typeof documents)["\n  query App {\n    app {\n      cloud\n      client_uri\n      integrations {\n        github\n        gitlab\n        linear\n        jira\n        slack\n      }\n    }\n    user {\n      id\n      email\n    }\n  }\n"];
+export function gql(source: "\n  query App {\n    app {\n      cloud\n      client_uri\n      webhook_uri\n      integrations {\n        github\n        gitlab\n        linear\n        jira\n        slack\n      }\n    }\n    user {\n      id\n      email\n    }\n  }\n"): (typeof documents)["\n  query App {\n    app {\n      cloud\n      client_uri\n      webhook_uri\n      integrations {\n        github\n        gitlab\n        linear\n        jira\n        slack\n      }\n    }\n    user {\n      id\n      email\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

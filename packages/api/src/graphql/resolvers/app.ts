@@ -9,6 +9,7 @@ export const Query: QueryResolvers<Context> = {
     return {
       cloud: env.CLOUD,
       client_uri: env.CLIENT_URI,
+      webhook_uri: env.WEBHOOK_URI ?? env.BASE_URI,
       integrations: {
         github:
           !!env.GITHUB_APP.CLIENT_ID &&

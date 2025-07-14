@@ -31,7 +31,7 @@ const AdminSetupCode: React.FC<AdminSetupCodeProps> = () => {
         request_oauth_on_install: false,
         setup_on_update: false,
         hook_attributes: {
-          url: 'https://example.com/hooks/github',
+          url: `${app.webhook_uri}/hooks/github`,
           active: true,
         },
         redirect_url: `${app.client_uri}/admin/setup/github`,
