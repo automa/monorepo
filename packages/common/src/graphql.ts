@@ -27,6 +27,7 @@ export type App = {
   client_uri: Scalars['String']['output'];
   cloud: Scalars['Boolean']['output'];
   integrations: AppIntegrations;
+  webhook_uri: Scalars['String']['output'];
 };
 
 export type AppIntegrations = {
@@ -589,6 +590,7 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
   client_uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   cloud?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   integrations?: Resolver<ResolversTypes['AppIntegrations'], ParentType, ContextType>;
+  webhook_uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

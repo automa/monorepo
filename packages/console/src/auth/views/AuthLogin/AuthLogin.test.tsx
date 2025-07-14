@@ -4,6 +4,19 @@ import { mockedNavigate, render } from 'tests';
 
 import AuthLogin from './AuthLogin';
 
+const app = {
+  cloud: true,
+  client_uri: 'http://localhost:3000',
+  webhook_uri: 'http://test.ngrok.io',
+  integrations: {
+    github: true,
+    gitlab: false,
+    linear: false,
+    jira: false,
+    slack: false,
+  },
+};
+
 beforeEach(() => {
   vi.clearAllMocks();
 });
@@ -13,14 +26,10 @@ test('with no github and no gitlab redirects to /admin/setup', async () => {
     state: {
       app: {
         app: {
-          cloud: true,
-          client_uri: 'http://localhost:3000',
+          ...app,
           integrations: {
+            ...app.integrations,
             github: false,
-            gitlab: false,
-            linear: false,
-            jira: false,
-            slack: false,
           },
         },
       },
@@ -38,17 +47,7 @@ test('with github and with no user renders', async () => {
   render(<AuthLogin />, {
     state: {
       app: {
-        app: {
-          cloud: true,
-          client_uri: 'http://localhost:3000',
-          integrations: {
-            github: true,
-            gitlab: false,
-            linear: false,
-            jira: false,
-            slack: false,
-          },
-        },
+        app,
       },
     },
   });
@@ -60,17 +59,7 @@ test('with github and user redirects to /', async () => {
   render(<AuthLogin />, {
     state: {
       app: {
-        app: {
-          cloud: true,
-          client_uri: 'http://localhost:3000',
-          integrations: {
-            github: true,
-            gitlab: false,
-            linear: false,
-            jira: false,
-            slack: false,
-          },
-        },
+        app,
       },
       auth: {
         user: {

@@ -316,7 +316,7 @@ suite('api/orgs/integrations/connect/jira', () => {
             'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
           );
           assert.deepEqual(postStub.secondCall.args[1], {
-            url: 'http://localhost:8080/hooks/jira',
+            url: 'http://test.ngrok.io/hooks/jira',
             webhooks: [
               {
                 events: ['comment_created', 'comment_updated'],
@@ -394,7 +394,7 @@ suite('api/orgs/integrations/connect/jira', () => {
             'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
           );
           assert.deepEqual(postStub.secondCall.args[1], {
-            url: 'http://localhost:8080/hooks/jira',
+            url: 'http://test.ngrok.io/hooks/jira',
             webhooks: [
               {
                 events: ['comment_created', 'comment_updated'],
@@ -482,7 +482,7 @@ suite('api/orgs/integrations/connect/jira', () => {
               'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
             );
             assert.deepEqual(postStub.secondCall.args[1], {
-              url: 'http://localhost:8080/hooks/jira',
+              url: 'http://test.ngrok.io/hooks/jira',
               webhooks: [
                 {
                   events: ['comment_created', 'comment_updated'],
@@ -531,7 +531,7 @@ suite('api/orgs/integrations/connect/jira', () => {
               'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
             );
             assert.deepEqual(postStub.thirdCall.args[1], {
-              url: 'http://localhost:8080/hooks/jira',
+              url: 'http://test.ngrok.io/hooks/jira',
               webhooks: [
                 {
                   events: ['comment_created', 'comment_updated'],
@@ -609,7 +609,7 @@ suite('api/orgs/integrations/connect/jira', () => {
               'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
             );
             assert.deepEqual(postStub.secondCall.args[1], {
-              url: 'http://localhost:8080/hooks/jira',
+              url: 'http://test.ngrok.io/hooks/jira',
               webhooks: [
                 {
                   events: ['comment_created', 'comment_updated'],
@@ -658,7 +658,7 @@ suite('api/orgs/integrations/connect/jira', () => {
               'https://api.atlassian.com/ex/jira/5678/rest/api/3/webhook',
             );
             assert.deepEqual(postStub.thirdCall.args[1], {
-              url: 'http://localhost:8080/hooks/jira',
+              url: 'http://test.ngrok.io/hooks/jira',
               webhooks: [
                 {
                   events: ['comment_created', 'comment_updated'],

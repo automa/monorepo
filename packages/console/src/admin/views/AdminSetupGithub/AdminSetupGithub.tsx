@@ -2,14 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-import {
-  Anchor,
-  Button,
-  Flex,
-  Loader,
-  Typography,
-  useAsyncEffect,
-} from 'shared';
+import { Anchor, Flex, Loader, Typography, useAsyncEffect } from 'shared';
 
 import { AdminSetupGithubProps } from './types';
 
@@ -112,18 +105,17 @@ const AdminSetupGithub: React.FC<AdminSetupGithubProps> = () => {
         <Secret>{secrets.webhook_secret}</Secret>
       </Flex>
       <hr />
-      <Typography>
-        We have used an example URL for the webhook in the GitHub App. We
-        recommend changing it to be pointed to the API service. If you are
-        running the API locally, you can use a service like{' '}
-        <Anchor href="https://ngrok.com" blank>
-          <span className="underline">ngrok</span>
+      <Typography variant="xsmall">
+        If you are planning to change{' '}
+        <code className="rounded bg-neutral-300 px-1 pt-0.5">WEBHOOK_URI</code>{' '}
+        environment variable for the API service, or if you are running the API
+        service locally and have yet to configure it, you will need to update
+        the webhook URL in your{' '}
+        <Anchor href={`https://github.com/settings/apps/${secrets.slug}`} blank>
+          <span className="underline">GitHub App</span>
         </Anchor>{' '}
-        to expose your local server.
+        settings.
       </Typography>
-      <Button href={`https://github.com/settings/apps/${secrets.slug}`} blank>
-        Change webhook URL
-      </Button>
     </Flex>
   );
 };

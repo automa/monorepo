@@ -5,6 +5,7 @@ export const APP_QUERY = gql(`
     app {
       cloud
       client_uri
+      webhook_uri
       integrations {
         github
         gitlab

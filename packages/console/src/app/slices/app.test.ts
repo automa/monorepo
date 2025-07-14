@@ -5,7 +5,8 @@ import { App } from 'gql/graphql';
 import reducer, { setApp, unsetApp } from './app';
 
 const dummyApp: App = {
-  client_uri: 'uri',
+  client_uri: 'http://localhost:3000',
+  webhook_uri: 'http://test.ngrok.io',
   cloud: true,
   integrations: {
     github: true,

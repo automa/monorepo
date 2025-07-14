@@ -4,6 +4,19 @@ import { mockedNavigate, render, screen } from 'tests';
 
 import AdminSetupCode from './AdminSetupCode';
 
+const app = {
+  cloud: true,
+  client_uri: 'http://localhost:3000',
+  webhook_uri: 'http://test.ngrok.io',
+  integrations: {
+    github: false,
+    gitlab: false,
+    linear: false,
+    jira: false,
+    slack: false,
+  },
+};
+
 beforeEach(() => {
   vi.clearAllMocks();
 });
@@ -12,17 +25,7 @@ test('with no github and no gitlab renders', async () => {
   render(<AdminSetupCode />, {
     state: {
       app: {
-        app: {
-          cloud: true,
-          client_uri: 'http://localhost:3000',
-          integrations: {
-            github: false,
-            gitlab: false,
-            linear: false,
-            jira: false,
-            slack: false,
-          },
-        },
+        app,
       },
     },
   });
@@ -38,14 +41,10 @@ test('with github redirects to /', async () => {
     state: {
       app: {
         app: {
-          cloud: true,
-          client_uri: 'http://localhost:3000',
+          ...app,
           integrations: {
+            ...app.integrations,
             github: true,
-            gitlab: false,
-            linear: false,
-            jira: false,
-            slack: false,
           },
         },
       },
@@ -61,14 +60,10 @@ test('with gitlab redirects to /', async () => {
     state: {
       app: {
         app: {
-          cloud: true,
-          client_uri: 'http://localhost:3000',
+          ...app,
           integrations: {
-            github: false,
+            ...app.integrations,
             gitlab: true,
-            linear: false,
-            jira: false,
-            slack: false,
           },
         },
       },
