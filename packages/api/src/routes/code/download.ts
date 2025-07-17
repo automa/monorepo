@@ -44,51 +44,6 @@ export default async function (app: FastifyInstance) {
         return;
       }
 
-      // TODO: We can create a scoped token and directly send it instead
-      const { accessToken } = await caller(repo.orgs.github_installation_id!);
-      const workingDir = `/tmp/automa/download/tasks/${task.id}`;
-
-      // Clone the repository
-      await rm(workingDir, { recursive: true, force: true });
-      await $`git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:${accessToken}@github.com/${repo.orgs.provider_name}/${repo.name} ${workingDir}`;
-
-      // Checkout the specified paths
-      if (bot.paths.length) {
-        await $({
-          cwd: workingDir,
-        })`git -c core.ignoreCase=true sparse-checkout set --no-cone .gitignore ${bot.paths}`;
-      }
-
-      await $({ cwd: workingDir })`git -c core.ignoreCase=true checkout`;
-
-      // We ask the bots to send this token along with code proposal in order to
-      // prevent race conditions when bots work on the same task at the same time
-      const proposalToken = randomBytes(128).toString('base64url');
-
-      // Get the head commit hash and store it along with the download token
-      const { stdout: commitHash } = await $({
-        cwd: workingDir,
-      })`git rev-parse HEAD`;
-
-      await app.prisma.tasks.update({
-        where: {
-          id: task.id,
-        },
-        data: {
-          proposal_token: proposalToken,
-          proposal_base_commit: commitHash.trim(),
-        },
-      });
-
-      // Refresh the .git directory
-      await rm(join(workingDir, '.git'), { recursive: true, force: true });
-
-      await $({ cwd: workingDir })`git init`;
-      await $({ cwd: workingDir })`git add .`;
-      await $({
-        cwd: workingDir,
-      })`git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit --allow-empty -m "Downloaded code"`;
-
       app.analytics.track(
         'Code Download Requested',
         {
@@ -104,8 +59,77 @@ export default async function (app: FastifyInstance) {
         repo.orgs,
       );
 
-      // Attach the download token to the response
-      reply.header('x-automa-proposal-token', proposalToken);
+      let commitHash: string | undefined = undefined;
+
+      const addProposalToken = async () => {
+        // We ask the bots to send this token along with code proposal in order to
+        // prevent race conditions when bots work on the same task at the same time
+        const proposalToken = randomBytes(128).toString('base64url');
+
+        await app.prisma.tasks.update({
+          where: {
+            id: task.id,
+          },
+          data: {
+            proposal_token: proposalToken,
+            proposal_base_commit: commitHash?.trim(),
+          },
+        });
+
+        // Attach the proposal token to the response
+        reply.header('x-automa-proposal-token', proposalToken);
+      };
+
+      // If no paths are specified for the bot, create a scoped access
+      // token for the bot to download the entire repository and only that
+      if (!bot.paths.length) {
+        const { accessToken } = await caller(
+          repo.orgs.github_installation_id!,
+          [Number(repo.provider_id)],
+          {
+            contents: 'read',
+          },
+        );
+
+        await addProposalToken();
+
+        return reply.send({
+          type: 'direct',
+          url: `https://x-access-token:${accessToken}@github.com/${repo.orgs.provider_name}/${repo.name}`,
+        });
+      }
+
+      // If the bot has specified paths, we will download only those paths
+      // from the repository for security reasons
+      const { accessToken } = await caller(repo.orgs.github_installation_id!);
+      const workingDir = `/tmp/automa/download/tasks/${task.id}`;
+
+      // Clone the repository
+      await rm(workingDir, { recursive: true, force: true });
+      await $`git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:${accessToken}@github.com/${repo.orgs.provider_name}/${repo.name} ${workingDir}`;
+
+      // Checkout the specified paths
+      await $({
+        cwd: workingDir,
+      })`git -c core.ignoreCase=true sparse-checkout set --no-cone .gitignore ${bot.paths}`;
+
+      await $({ cwd: workingDir })`git -c core.ignoreCase=true checkout`;
+
+      // Get the head commit hash and store it along with the download token
+      ({ stdout: commitHash } = await $({
+        cwd: workingDir,
+      })`git rev-parse HEAD`);
+
+      // Refresh the .git directory
+      await rm(join(workingDir, '.git'), { recursive: true, force: true });
+
+      await $({ cwd: workingDir })`git init`;
+      await $({ cwd: workingDir })`git add .`;
+      await $({
+        cwd: workingDir,
+      })`git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit --allow-empty -m "Downloaded code"`;
+
+      await addProposalToken();
 
       // Create an archive and stream it as a response
       reply.header('Content-Type', 'application/gzip');

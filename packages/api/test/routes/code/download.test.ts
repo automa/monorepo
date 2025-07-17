@@ -639,18 +639,21 @@ suite('code/download', () => {
       assert.equal(response.statusCode, 200);
     });
 
-    test('should return code', () => {
-      assert.equal(response.headers['content-type'], 'application/gzip');
+    test('should return direct url with token', () => {
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
 
-      assert.equal(response.body, '1234567890');
+      assert.deepEqual(response.json(), {
+        type: 'direct',
+        url: 'https://x-access-token:abcdef@github.com/org-0/repo-0',
+      });
     });
 
-    test('should update task with commit hash and proposal token', async () => {
+    test('should update task with proposal token', async () => {
       assert.lengthOf(task.proposal_token ?? '', 171);
-      assert.equal(
-        task.proposal_base_commit,
-        '353fabbf70ac7a2cad3d9e27889bfc77f419d61b',
-      );
+      assert.isNull(task.proposal_base_commit);
     });
 
     test('should get token from github', async () => {
@@ -659,6 +662,12 @@ suite('code/download', () => {
         postStub.firstCall.args[0],
         'https://api.github.com/app/installations/123/access_tokens',
       );
+      assert.deepEqual(postStub.firstCall.args[1], {
+        repository_ids: [Number(repo.provider_id)],
+        permissions: {
+          contents: 'read',
+        },
+      });
     });
 
     test('should return proposal token in response', () => {
@@ -668,69 +677,13 @@ suite('code/download', () => {
       );
     });
 
-    test('should clone and checkout the repo', async () => {
-      assert.equal(zxCmdStub.callCount, 6);
-      assert.equal(zxCmdArgsStub.callCount, 5);
-
-      assert.deepEqual(zxCmdStub.getCall(0).args, [
-        [
-          'git clone --filter=tree:0 --no-checkout --depth=1 https://x-access-token:',
-          '@github.com/',
-          '/',
-          ' ',
-          '',
-        ],
-        'abcdef',
-        'org-0',
-        'repo-0',
-        `/tmp/automa/download/tasks/${task.id}`,
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(1).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(2).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(3).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(4).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-      assert.deepEqual(zxCmdStub.getCall(5).args, [
-        { cwd: `/tmp/automa/download/tasks/${task.id}` },
-      ]);
-
-      assert.deepEqual(zxCmdArgsStub.getCall(0).args, [
-        ['git -c core.ignoreCase=true checkout'],
-      ]);
-      assert.deepEqual(zxCmdArgsStub.getCall(1).args, [['git rev-parse HEAD']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(2).args, [['git init']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(3).args, [['git add .']]);
-      assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
-        [
-          'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit --allow-empty -m "Downloaded code"',
-        ],
-      ]);
-    });
-
-    test('should compress code', () => {
-      assert.equal(tarCreateStub.callCount, 1);
-      assert.deepEqual(tarCreateStub.firstCall.args, [
-        {
-          gzip: true,
-          cwd: `/tmp/automa/download/tasks/${task.id}`,
-        },
-        ['.'],
-      ]);
-    });
-
-    test('should delete the cloned repo', async () => {
-      assert.isFalse(existsSync(`/tmp/automa/download/tasks/${task.id}`));
+    test('should not clone and checkout the repo', async () => {
+      assert.equal(zxCmdStub.callCount, 0);
+      assert.equal(zxCmdArgsStub.callCount, 0);
     });
   });
 
-  suite('with bot paths', () => {
+  suite('valid task with bot paths', () => {
     setup(async () => {
       await app.prisma.bots.update({
         where: {
@@ -784,6 +737,7 @@ suite('code/download', () => {
         postStub.firstCall.args[0],
         'https://api.github.com/app/installations/123/access_tokens',
       );
+      assert.deepEqual(postStub.firstCall.args[1], {});
     });
 
     test('should clone and checkout the repo', async () => {

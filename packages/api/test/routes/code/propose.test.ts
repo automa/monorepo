@@ -924,6 +924,236 @@ suite('code/propose', () => {
     });
   });
 
+  suite('base commit not tracked', () => {
+    setup(async () => {
+      await app.prisma.tasks.updateMany({
+        where: {
+          id: task.id,
+        },
+        data: {
+          proposal_base_commit: null,
+        },
+      });
+    });
+
+    suite('with missing base commit', () => {
+      setup(async () => {
+        response = await propose(app, {
+          id: task.id,
+          token: 'abcdef',
+        });
+      });
+
+      test('should return 400', () => {
+        assert.equal(response.statusCode, 400);
+      });
+
+      test('should return error message', () => {
+        const data = response.json();
+
+        assert.equal(data.error, 'Bad Request');
+        assert.equal(data.statusCode, 400);
+
+        const errors = JSON.parse(data.message);
+
+        assert.deepEqual(errors, [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            received: 'undefined',
+            path: ['proposal', 'base_commit'],
+            message: 'Required',
+          },
+        ]);
+      });
+
+      test('should not get token from github', async () => {
+        assert.equal(postStub.callCount, 0);
+        assert.equal(getStub.callCount, 0);
+        assert.equal(zxCmdStub.callCount, 0);
+      });
+    });
+
+    suite('valid proposal with base commit', () => {
+      setup(async () => {
+        response = await propose(
+          app,
+          {
+            id: task.id,
+            token: 'abcdef',
+          },
+          {
+            base_commit: '123456',
+          },
+        );
+      });
+
+      test('should return 204', () => {
+        assert.equal(response.statusCode, 204);
+      });
+
+      test('should not return any data', () => {
+        assert.isEmpty(response.body);
+      });
+
+      test('should get token from github', async () => {
+        assert.equal(postStub.callCount, 2);
+        assert.equal(
+          postStub.firstCall.args[0],
+          'https://api.github.com/app/installations/123/access_tokens',
+        );
+      });
+
+      test('should commit and push the diff', async () => {
+        assert.equal(zxCmdStub.callCount, 9);
+        assert.equal(zxCmdArgsStub.callCount, 9);
+
+        assert.deepEqual(zxCmdStub.getCall(0).args, [
+          { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        ]);
+        assert.deepEqual(zxCmdStub.getCall(1).args, [
+          { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        ]);
+        assert.deepEqual(zxCmdStub.getCall(2).args, [
+          { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        ]);
+        assert.deepEqual(zxCmdStub.getCall(3).args, [
+          { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        ]);
+        assert.deepEqual(zxCmdStub.getCall(4).args, [
+          { cwd: `/tmp/automa/propose/tasks/${task.id}`, input: diff },
+        ]);
+        assert.deepEqual(zxCmdStub.getCall(5).args, [
+          { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        ]);
+        assert.deepEqual(zxCmdStub.getCall(6).args, [
+          { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        ]);
+        assert.deepEqual(zxCmdStub.getCall(7).args, [
+          { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        ]);
+        assert.deepEqual(zxCmdStub.getCall(8).args, [
+          { cwd: `/tmp/automa/propose/tasks/${task.id}` },
+        ]);
+
+        assert.deepEqual(zxCmdArgsStub.getCall(0).args, [['git init --bare']]);
+        assert.deepEqual(zxCmdArgsStub.getCall(1).args, [
+          [
+            'git remote add origin https://x-access-token:',
+            '@github.com/',
+            '/',
+            '',
+          ],
+          'abcdef',
+          'org-0',
+          'repo-0',
+        ]);
+        assert.deepEqual(zxCmdArgsStub.getCall(2).args, [
+          ['git fetch --depth 1 origin ', ''],
+          '123456',
+        ]);
+        assert.deepEqual(zxCmdArgsStub.getCall(3).args, [
+          ['git read-tree ', ''],
+          '123456',
+        ]);
+        assert.deepEqual(zxCmdArgsStub.getCall(4).args, [
+          ['git apply --cached'],
+        ]);
+        assert.deepEqual(zxCmdArgsStub.getCall(5).args, [['git write-tree']]);
+        assert.deepEqual(zxCmdArgsStub.getCall(6).args, [
+          [
+            'git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit-tree ',
+            ' -p ',
+            ' -m ',
+            '',
+          ],
+          '7d9ff19f227379dabecd6dfd07514c13a412a466',
+          '123456',
+          `Implemented automa@${task.id} using org-0/bot-0 bot`,
+        ]);
+        assert.deepEqual(zxCmdArgsStub.getCall(7).args, [
+          ['git update-ref refs/heads/', ' ', ''],
+          `automa/org-0/bot-0/${task.id}`,
+          '85e10273ac6513bd5bad6148e0657bc3c4b8d946',
+        ]);
+        assert.deepEqual(zxCmdArgsStub.getCall(8).args, [
+          ['git push -f origin refs/heads/', ':refs/heads/', ''],
+          `automa/org-0/bot-0/${task.id}`,
+          `automa/org-0/bot-0/${task.id}`,
+        ]);
+      });
+
+      test('should create a PR', async () => {
+        assert.equal(getStub.callCount, 2);
+
+        assert.equal(getStub.getCall(0).args[0], '/repos/org-0/repo-0');
+        assert.equal(getStub.getCall(1).args[0], '/repos/org-0/repo-0/pulls');
+        assert.deepEqual(getStub.getCall(1).args[1], {
+          params: {
+            head: `org-0:automa/org-0/bot-0/${task.id}`,
+            base: 'default-branch',
+          },
+        });
+
+        assert.equal(postStub.getCall(1).args[0], '/repos/org-0/repo-0/pulls');
+
+        assert.deepEqual(postStub.getCall(1).args[1], {
+          title: `Implemented automa@${task.id} using org-0/bot-0 bot`,
+          body: `This PR was created for task [${task.id}](http://localhost:3000/org-0/tasks/${task.id}) by [org-0/bot-0](http://localhost:3000/org-0/bots/org-0/bot-0) bot using [Automa](https://automa.app).`,
+          head: `automa/org-0/bot-0/${task.id}`,
+          base: 'default-branch',
+          maintainer_can_modify: true,
+        });
+      });
+
+      test('should mark the task as submitted', async () => {
+        task = await app.prisma.tasks.findFirstOrThrow({
+          where: { id: task.id },
+        });
+
+        assert.equal(task.state, 'submitted');
+      });
+
+      test('should update the task with the proposal', async () => {
+        const proposals = await app.prisma.task_items.findMany({
+          where: { type: 'proposal' },
+        });
+
+        assert.lengthOf(proposals, 1);
+        assert.deepOwnInclude(proposals[0], {
+          task_id: task.id,
+          data: {
+            prId: 123456,
+            prNumber: 123,
+            prTitle: 'PR Title',
+            prState: 'open',
+            prMerged: false,
+            prHead: `org-0:automa/org-0/bot-0/${task.id}`,
+            prBase: 'default-branch',
+          },
+          repo_id: repo.id,
+          bot_id: bot.id,
+        });
+      });
+
+      test('should not create task activity', async () => {
+        const items = await app.prisma.task_items.findMany({
+          where: { task_id: task.id, type: 'activity' },
+        });
+
+        assert.isEmpty(items);
+      });
+
+      test('should delete the cloned repo', async () => {
+        assert.isFalse(existsSync(`/tmp/automa/propose/tasks/${task.id}`));
+      });
+
+      test('should delete the diff', async () => {
+        assert.isFalse(existsSync(`/tmp/automa/propose/tasks/${task.id}.diff`));
+      });
+    });
+  });
+
   suite('empty diff', () => {
     setup(async () => {
       response = await propose(
@@ -2081,6 +2311,7 @@ const propose = async (
     diff?: string;
     title?: string;
     body?: string;
+    base_commit?: string;
   },
 ) =>
   call(app, '/code/propose', {

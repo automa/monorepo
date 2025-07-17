@@ -39,6 +39,7 @@ export default async function (app: FastifyInstance) {
             diff: z.string(),
             title: z.string().optional(),
             body: z.string().optional(),
+            base_commit: z.string().optional(),
           }),
         }),
       },
@@ -55,6 +56,23 @@ export default async function (app: FastifyInstance) {
       // TODO: Allow empty proposal token if no download has happened
       if (task.proposal_token !== proposal.token) {
         return reply.forbidden('Wrong proposal token provided');
+      }
+
+      const proposalBaseCommit =
+        task.proposal_base_commit || proposal.base_commit;
+
+      if (!proposalBaseCommit) {
+        return reply.badRequest(
+          JSON.stringify([
+            {
+              code: 'invalid_type',
+              expected: 'string',
+              received: 'undefined',
+              path: ['proposal', 'base_commit'],
+              message: 'Required',
+            },
+          ]),
+        );
       }
 
       const repo = await getRepo(app, reply, task);
@@ -193,12 +211,12 @@ export default async function (app: FastifyInstance) {
       // TODO: We need to have a timeout for this to safeguard against malicious users
       await $({
         cwd: workingDir,
-      })`git fetch --depth 1 origin ${task.proposal_base_commit}`;
+      })`git fetch --depth 1 origin ${proposalBaseCommit}`;
 
       // Read the base commit tree & apply the diff
       await $({
         cwd: workingDir,
-      })`git read-tree ${task.proposal_base_commit}`;
+      })`git read-tree ${proposalBaseCommit}`;
       await $({ cwd: workingDir, input: proposal.diff })`git apply --cached`;
 
       // Create tree and commit objects
@@ -208,9 +226,7 @@ export default async function (app: FastifyInstance) {
 
       const { stdout: commitHash } = await $({
         cwd: workingDir,
-      })`git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit-tree ${treeHash.trim()} -p ${
-        task.proposal_base_commit
-      } -m ${title}`;
+      })`git -c user.name="automa[bot]" -c user.email="60525818+automa[bot]@users.noreply.github.com" commit-tree ${treeHash.trim()} -p ${proposalBaseCommit} -m ${title}`;
 
       // Update the branch reference to point to the new commit
       await $({
