@@ -31,12 +31,17 @@ const getInstallationAccessToken = async (
   uri: string,
   id: string,
   pem: string,
+  repositoryIds?: number[],
+  permissions?: Record<string, 'read' | 'write' | 'admin'>,
 ) => {
   const token = generateAppToken(id, pem);
 
   const { data } = await axios.post(
     `${uri}/app/installations/${installationId}/access_tokens`,
-    {},
+    {
+      ...(repositoryIds ? { repository_ids: repositoryIds } : {}),
+      ...(permissions ? { permissions } : {}),
+    },
     {
       headers: {
         Accept: 'application/vnd.github+json',
@@ -65,7 +70,18 @@ export const createCallers = (accessToken: string) => {
   };
 };
 
-export const caller = async (installationId: number) => {
+export const caller = async (
+  installationId: number,
+  ...args: Parameters<typeof getInstallationAccessToken> extends [
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    ...infer Rest,
+  ]
+    ? Rest
+    : never
+) => {
   const { GITHUB_APP } = env;
 
   const accessToken = await getInstallationAccessToken(
@@ -73,6 +89,7 @@ export const caller = async (installationId: number) => {
     GITHUB_APP.API_URI,
     GITHUB_APP.CLIENT_ID,
     GITHUB_APP.PEM,
+    ...args,
   );
 
   return {

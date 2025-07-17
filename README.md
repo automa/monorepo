@@ -7,7 +7,7 @@ Some links to get started:
 - [Website](https://automa.app)
 - [Documentation](https://docs.automa.app)
 - [Self-hosting](https://docs.automa.app/self-hosting)
-- [Agent Development](https://docs.automa.app/agent-development)
+- [Bot Development](https://docs.automa.app/bot-development)
 - [SDKs](https://docs.automa.app/sdks)
 - [Discord](https://discord.gg/z4Gqd7T2WQ)
 - [Licensing](https://docs.automa.app/self-hosting/licensing)
