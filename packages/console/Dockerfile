@@ -49,5 +49,3 @@ RUN echo '#!/bin/sh' > /docker-entrypoint.d/30-envsubst.sh \
     && echo 'find /usr/share/nginx/html -name "*.js" -exec sed -i "s|__GRAPHQL_URI__|${API_URI}/graphql|g" {} \;' >> /docker-entrypoint.d/30-envsubst.sh
 
 RUN chmod +x /docker-entrypoint.d/30-envsubst.sh
-
-EXPOSE 80
