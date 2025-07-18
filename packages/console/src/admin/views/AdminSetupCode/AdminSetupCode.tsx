@@ -15,7 +15,6 @@ import { Card, Container } from './AdminSetupCode.styles';
 const AdminSetupCode: React.FC<AdminSetupCodeProps> = () => {
   const { app } = useApp();
 
-
   const githubManifest = useMemo(
     () =>
       JSON.stringify({
