@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { Navigate } from 'react-router-dom';
 
 import { isProduction } from 'env';
 
@@ -16,8 +15,6 @@ import { Card, Container } from './AdminSetupCode.styles';
 const AdminSetupCode: React.FC<AdminSetupCodeProps> = () => {
   const { app } = useApp();
 
-  const needsRepositorySetup =
-    !app.integrations.github && !app.integrations.gitlab;
 
   const githubManifest = useMemo(
     () =>
@@ -64,9 +61,8 @@ const AdminSetupCode: React.FC<AdminSetupCodeProps> = () => {
     [app],
   );
 
-  // If no repository setup is needed,
-  if (!needsRepositorySetup) {
-    return <Navigate to="/" replace />;
+  if (app.integrations.github) {
+    return null;
   }
 
   return (

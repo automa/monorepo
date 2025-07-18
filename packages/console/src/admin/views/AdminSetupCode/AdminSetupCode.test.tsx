@@ -36,7 +36,7 @@ test('with no github and no gitlab renders', async () => {
   // expect(screen.getByText('GitLab')).toBeInTheDocument();
 });
 
-test('with github redirects to /', async () => {
+test('with github integration hides the GitHub card', async () => {
   render(<AdminSetupCode />, {
     state: {
       app: {
@@ -51,11 +51,11 @@ test('with github redirects to /', async () => {
     },
   });
 
-  expect(mockedNavigate).toHaveBeenCalledTimes(1);
-  expect(mockedNavigate).toHaveBeenCalledWith({ to: '/', replace: true });
+  expect(mockedNavigate).toHaveBeenCalledTimes(0);
+  expect(screen.queryByText('GitHub')).toBeNull();
 });
 
-test('with gitlab redirects to /', async () => {
+test('with gitlab integration still shows the GitHub card', async () => {
   render(<AdminSetupCode />, {
     state: {
       app: {
@@ -70,6 +70,6 @@ test('with gitlab redirects to /', async () => {
     },
   });
 
-  expect(mockedNavigate).toHaveBeenCalledTimes(1);
-  expect(mockedNavigate).toHaveBeenCalledWith({ to: '/', replace: true });
+  expect(mockedNavigate).toHaveBeenCalledTimes(0);
+  expect(screen.getByText('GitHub')).toBeInTheDocument();
 });
