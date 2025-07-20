@@ -39,9 +39,8 @@ const AppPage: React.FC = () => {
       <Section>
         <Title>Automate grunt work. Ship faster.</Title>
         <Subtitle>
-          Trigger tasks from your go-to apps with any coding agent. They
-          complete in the background, generating a PR for you to review and
-          merge.
+          Trigger tasks from your go-to apps with any coding agent. They run in
+          the cloud, generating a PR for you to review and merge.
         </Subtitle>
         <Flex className="mt-4 gap-4">
           <Button

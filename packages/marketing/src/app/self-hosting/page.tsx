@@ -28,7 +28,10 @@ const SelfHostingPage: React.FC = () => {
         <Typography variant="title4">Licensed under BUSL-1.1</Typography>
         <Typography variant="small" className="text-neutral-500">
           Check out our{' '}
-          <a href="/licensing" className="text-black">
+          <a
+            href="https://docs.automa.app/self-hosting/licensing"
+            className="text-black"
+          >
             licensing docs
           </a>{' '}
           for more details.

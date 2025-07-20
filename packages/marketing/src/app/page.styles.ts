@@ -20,7 +20,7 @@ export const Title = tw(Typography).attrs({
 export const Subtitle = tw(Typography).attrs({
   variant: 'title5',
   align: 'center',
-})`max-w-4xl md:text-xl text-base text-neutral-500`;
+})`max-w-3xl md:text-xl text-base text-neutral-500`;
 
 export const HeroImageTextWrapper = tw.div`relative mt-2 w-full`;
 
