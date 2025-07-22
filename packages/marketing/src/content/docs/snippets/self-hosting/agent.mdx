@@ -1,0 +1,31 @@
+It contains the following components:
+
+- **Cache**: A key-value store for jobs & caching.
+- **Agent**: The agent that responds to Automa and implements tasks.
+
+## Automa bot
+
+You would need to [register a bot](/bot-development/registration) of [manual](/bots/types#manual) type in Automa (Cloud or Self-hosted) and configure it's webhook URL to point to the **Agent** service. The webhook URL will be `http://<your-server>/hooks/automa` if you are running it on a server with either a public IP address or domain name. Make sure to copy the **Webhook Secret** from Automa.
+
+<Note>
+  If you are running the agent on your local machine, you'll need to expose your
+  local **Agent** service to the public internet so that Automa's webhooks can
+  reach it. A tool like [ngrok](https://ngrok.com/) can create a secure tunnel
+  to your `localhost`. You would then set the public URL provided by the tool as
+  the webhook URL for the agent in Automa.
+</Note>
+
+## Docker
+
+Automa publishes official [Docker](https://www.docker.com) images for the {title} agent which can be run on any system with Docker installed. This section will help you set it up using Docker.
+
+### Setting up
+
+You can set all this up locally on your machine or on a server.
+
+There are 2 steps in the setup process:
+
+- Start the needed services.
+- Check if the services are working.
+
+You will need:

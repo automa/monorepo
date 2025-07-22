@@ -1,0 +1,161 @@
+---
+title: Docker
+description: A step-by-step guide to setting up Automa using Docker containers
+---
+
+import SelfHostingConfiguringIntegrations from '/snippets/self-hosting/configuring-integrations.mdx';
+
+Automa publishes official [Docker](https://docker.com) images for the **API** and **Console** services which can be run on any system with Docker installed. This section will help you set it up using Docker containers.
+
+## Setting up
+
+You can set all this up locally on your machine or on a server. The setup is the same in both cases, but you may need to adjust the URLs and ports based on your environment.
+
+There are 4 steps in the setup process:
+
+- Start the needed services.
+- Initialize the database schema.
+- Check if the services are working.
+- Configure third-party integrations.
+
+### Start services
+
+You will need:
+
+- **Docker**: to run the database, cache, and Automa containers.
+- **Docker network**: containers must share a user-defined network (e.g. `automa`).
+
+#### Database
+
+We use [PostgreSQL](https://www.postgresql.org/) for the database. The PostgreSQL container will store its data in a Docker volume named `automa-postgres-data`. It listens on port 5432. Make sure to replace `<db-password>` with a secure password of your choice.
+
+```bash icon="terminal"
+docker run -d --name automa-postgres \
+  --network automa \
+  -e POSTGRES_USER=automa \
+  -e POSTGRES_PASSWORD=<db-password> \
+  -v automa-postgres-data:/var/lib/postgresql/data \
+  -p 5432:5432 \
+  postgres:15-alpine
+```
+
+#### Cache
+
+We use [Redis](https://redis.io/) for the key-value store. The Redis container will store its data in a Docker volume named `automa-redis-data`. It listens on port 6379. Make sure to replace `<cache-password>` with a secure password of your choice.
+
+```bash icon="terminal"
+docker run -d --name automa-redis \
+  --network automa \
+  -e REDIS_PASSWORD=<cache-password> \
+  -v automa-redis-data:/data \
+  -p 6379:6379 \
+  redis:7-alpine
+```
+
+#### API
+
+We use the latest [Automa API image](https://ghcr.io/automa/api). The API will connect to the PostgreSQL and Redis containers. It listens on port 8080. Make sure to replace `<your-cookie-secret>` with a secure secret for session management, and `<db-password>` and `<cache-password>` with the passwords you set earlier.
+
+We also set the `BASE_URI` and `CLIENT_URI` environment variables to point to the URLs where the **API** and **Console** services will be accessible, respectively. We recommend using the server's public IP address or domain name for these variables. If you are running this on your local machine, you can use `localhost` in place of `<your-server>`.
+
+<Note>
+  The **Console** service while not yet available, will be served on port 80.
+</Note>
+
+```bash icon="terminal"
+docker run -d --name automa-api \
+  --network automa \
+  -e BASE_URI=http://<your-server>:8080 \
+  -e CLIENT_URI=http://<your-server> \
+  -e COOKIE_SECRET=<your-cookie-secret> \
+  -e DATABASE_URL=postgresql://automa:<db-password>@localhost:5432/automa \
+  -e REDIS_URL=redis://:<cache-password>@localhost:6379 \
+  -p 8080:8080 \
+  ghcr.io/automa/api
+```
+
+<Note>
+  If you are running this on your local machine, you'll need to expose your
+  local API service to the public internet so that any integrations that use
+  webhooks can reach it. A tool like [ngrok](https://ngrok.com/) can create a
+  secure tunnel to your `localhost`. You would then set the public URL provided
+  by the tool as the `WEBHOOK_URI` environment variable for the `automa-api`
+  container.
+</Note>
+
+#### Console
+
+We use the latest [Automa Console image](https://ghcr.io/automa/console). The Console will connect to the API container. It listens on port 80. Make sure to set the `API_URI` environment variable to the URL of the **API** service. We recommend using the server's public IP address or domain name for this variable. If you are running this on your local machine, you can use `localhost` in place of `<your-server>`.
+
+```bash icon="terminal"
+docker run -d --name automa-console \
+  --network automa \
+  -e API_URI=http://<your-server>:8080 \
+  -p 80:80 \
+  ghcr.io/automa/console
+```
+
+### Initialize database
+
+To set up the database schema, you need to run the following command in the **API** container. This will create the necessary tables and indexes in your PostgreSQL database.
+
+```bash icon="terminal"
+docker exec -it automa-api sh -c "crude up"
+```
+
+### Check the setup
+
+You can check if the containers are running with the following command:
+
+```bash icon="terminal"
+docker ps
+```
+
+And if you visit `http://<your-server>` in your browser, you should see the **Automa Console** interface. If you are running this on your local machine, you can use `http://localhost` instead.
+
+### Configuring integrations
+
+<SelfHostingConfiguringIntegrations />
+
+#### Adding environment variables
+
+When you are configuring third-party integrations, you will need to add environment variables to the **API** service. These variables typically include client IDs, secrets, and other configuration details required for the integration to work.
+
+For example, to add a Jira integration, first, stop and remove the container:
+
+```bash icon="terminal"
+docker rm -f automa-api
+```
+
+Then, create the service again while adding your new environment variables.
+
+```bash icon="terminal"
+docker run -d --name automa-api \
+  --network automa \
+  -e BASE_URI=http://<your-server>:8080 \
+  -e CLIENT_URI=http://<your-server> \
+  -e COOKIE_SECRET=<your-cookie-secret> \
+  -e DATABASE_URL=postgresql://automa:<db-password>@localhost:5432/automa \
+  -e REDIS_URL=redis://:<cache-password>@localhost:6379 \
+  -e JIRA_APP_CLIENT_ID=<your-jira-client-id> \
+  -e JIRA_APP_CLIENT_SECRET=<your-jira-client-secret> \
+  -p 8080:8080 \
+  ghcr.io/automa/api
+```
+
+## Updating
+
+We recommend updating periodically to ensure you have the latest features and security updates. To update your services:
+
+```bash icon="terminal"
+docker pull ghcr.io/automa/api ghcr.io/automa/console
+docker restart automa-api automa-console
+```
+
+### Migrate database
+
+Run the following command to apply any pending changes to database schema. It is safe to run this command even if there are no schema changes.
+
+```bash icon="terminal"
+docker exec -it automa-api sh -c "crude up"
+```

@@ -1,4 +1,49 @@
 ---
-title: Introduction
-description:
+title: Overview
+description: Discover how to self-host Automa & agents on your own infrastructure
 ---
+
+## Automa
+
+Automa is a source-available platform for code automation that you can run on your own servers. Its source code is available on [GitHub](https://github.com/automa/monorepo).
+
+It contains the following components:
+
+- **Database**: A database for storing data.
+- **Cache**: A key-value store for jobs, caching, and session management.
+- **API**: The backend server that handles requests and integrates with external tools.
+- **Console**: The web UI for interacting with the API to manage agents, tasks, and settings.
+
+You can set up Automa in various ways, depending on your infrastructure and preferences. Below are the recommended methods:
+
+<Columns cols={2}>
+  <Card arrow title="Docker" icon="docker" href="/self-hosting/setup/docker">
+    Set up Automa using Docker containers
+  </Card>
+  <Card
+    arrow
+    title="Railway"
+    icon="train-track"
+    href="/self-hosting/setup/railway"
+  >
+    Set up Automa using Railway templates
+  </Card>
+</Columns>
+
+## Agents
+
+Automa also provides open-source agents that you can run on your own servers. Their source code is available in our GitHub [organization](https://github.com/automa).
+
+Below are some of the agents that you can self-host:
+
+<Columns cols={2}>
+  <Card arrow title="Codex" href="/self-hosting/agents/codex">
+    Set up Codex agent for Automa
+  </Card>
+  <Card arrow title="Claude Code" href="/self-hosting/agents/claude-code">
+    Set up Claude Code agent for Automa
+  </Card>
+  <Card arrow title="Gemini" href="/self-hosting/agents/gemini">
+    Set up Gemini agent for Automa
+  </Card>
+</Columns>

@@ -1,0 +1,41 @@
+---
+title: GitHub
+description: A step-by-step guide to configure GitHub integration for Automa
+---
+
+Automa supports [GitHub](https://github.com) integration for:
+
+- **Source Code Management:** Allows users to let the bots read the code. And allows bots to create pull requests to propose code changes after working on a task.
+
+## Creating app
+
+Assuming you have already [set up Automa](/self-hosting#automa), when you open **Automa Console** for the first time, if Automa doesn't detect a GitHub integration configuration, it will prompt you to create a [Github App](https://docs.github.com/en/apps/using-github-apps/about-using-github-apps). And once you complete it, we retrieve the necessary secrets which would need to be set as environment variables.
+
+<video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="mx-auto rounded-xl"
+  src="/videos/self-hosting/integrations-github.mp4"
+/>
+
+<Tip>
+  It only prompts you if you have not configured any **source code management**
+  integration. If you haven't been prompted and still want to create a GitHub
+  app and configure it, you can do so by visiting `/admin/setup/code`.
+</Tip>
+
+## Adding environment variables
+
+To configure the GitHub integration, you need to set the following environment variables:
+
+- `GITHUB_APP_SLUG`: The slug of your GitHub App.
+- `GITHUB_APP_CLIENT_ID`: The client ID of your GitHub App.
+- `GITHUB_APP_CLIENT_SECRET`: The client secret of your GitHub App.
+- `GITHUB_APP_PEM`: The PEM file of your GitHub App, which contains the private key.
+- `GITHUB_APP_WEBHOOK_SECRET`: The webhook secret for the webhook in your GitHub App.
+
+import SelfHostingIntegrationEnvVars from '/snippets/self-hosting/integration-env-vars.mdx';
+
+<SelfHostingIntegrationEnvVars />

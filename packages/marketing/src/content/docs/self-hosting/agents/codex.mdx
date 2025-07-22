@@ -1,0 +1,87 @@
+---
+title: Codex
+description: A step-by-step guide to setup Codex agent for Automa
+---
+
+import SelfHostingAgent from '/snippets/self-hosting/agent.mdx';
+import SelfHostingAgentRailway from '/snippets/self-hosting/agent-railway.mdx';
+
+Codex agent for Automa is based on [OpenAI's Codex](https://github.com/openai/codex) CLI tool. It's source code is available on [GitHub](https://github.com/automa/codex).
+
+<SelfHostingAgent title="Codex" />
+
+- **Docker**: to run the cache, and Codex agent container.
+- **Docker network**: containers must share a user-defined network (e.g. `automa-codex`).
+- **OpenAI API Key**: to use OpenAI's models.
+
+#### Cache
+
+We use [Redis](https://redis.io/) for the key-value store. The Redis container will store its data in a Docker volume named `automa-codex-redis-data`. It listens on port 6379. Make sure to replace `<cache-password>` with a secure password of your choice.
+
+```bash icon="terminal"
+docker run -d --name automa-codex-redis \
+  --network automa-codex \
+  -e REDIS_PASSWORD=<cache-password> \
+  -v automa-codex-redis-data:/data \
+  -p 6379:6379 \
+  redis:7-alpine
+```
+
+<Tip>
+  If you are self-hosting Automa, you can use the **Cache** service from it
+  instead of setting up a separate cache. Just make sure the Codex agent is on
+  the same network as your Automa services.
+</Tip>
+
+#### Agent
+
+We use the latest [Automa Codex agent image](https://ghcr.io/automa/codex). The Agent will connect to the Redis container. It listens on port 8000. Make sure to replace `<openai-api-key>` with your OpenAI API key, `<webhook-secret>` with the webhook secret you copied from Automa earlier and `<cache-password>` with the password you set earlier.
+
+```bash icon="terminal"
+docker run -d --name automa-codex \
+  --network automa-codex \
+  -e OPENAI_API_KEY=<openai-api-key> \
+  -e AUTOMA_WEBHOOK_SECRET=<webhook-secret> \
+  -e REDIS_URL=redis://:<cache-password>@localhost:6379 \
+  -p 8000:8000 \
+  ghcr.io/automa/codex
+```
+
+#### Check the setup
+
+You can check if the containers are running with the following command:
+
+```bash icon="terminal"
+docker ps
+```
+
+### Updating
+
+We recommend updating periodically to ensure you have the latest features and security updates. To update your services:
+
+```bash icon="terminal"
+docker pull ghcr.io/automa/codex
+docker restart automa-codex
+```
+
+## Railway
+
+Automa publishes official [Railway](https://railway.com) templates for the Codex agent. This section will help you set it up using Railway.
+
+### Setting up
+
+There are 2 steps in the setup process:
+
+- Start the needed services.
+- Check if the services are working.
+
+#### Start services
+
+You will need an account on [Railway](https://railway.com) to get started. Once you have an account, go to the [Automa Codex agent template](https://railway.com/deploy/htbpnU?referralCode=Ri3kTG) and deploy it by clicking on the "**Deploy Now**" button.
+
+You would need to provide the following environment variables for the **Agent** service:
+
+- `OPENAI_API_KEY`: Your OpenAI API key.
+- `AUTOMA_WEBHOOK_SECRET`: The webhook secret you copied from Automa earlier.
+
+<SelfHostingAgentRailway />

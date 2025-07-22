@@ -1,0 +1,64 @@
+---
+title: Linear
+description: A step-by-step guide to configure Linear integration for Automa
+---
+
+Automa supports [Linear](https://linear.app) integration for:
+
+- **Project Management:** Allows users to create tasks from Linear issues and update issues based on bot actions.
+
+## Creating app
+
+You can create a [Linear App](https://linear.app/developers) by going to [Settings > API > +](https://linear.app/settings/api/applications/new) in Linear.
+
+<Steps>
+  <Step title="Get server URL">
+    Retrieve the URL for the **API** service after you [set up Automa](/self-hosting#automa).
+  </Step>
+  <Step title="Callback URL">
+    Set the callback URL to `https://<your-api-server>/callbacks/linear`.
+  </Step>
+  <Step title="Turn on webhooks">
+    Switch on the toggle for "Webhooks" to enable webhook support.
+  </Step>
+  <Step title="Webhook URL">
+    Set the webhook URL to `https://<your-api-server>/hooks/linear`.
+  </Step>
+  <Step title="Select events">
+    Choose the events you want to receive webhooks for:
+
+    - Comments
+    - Inbox notifications
+    - Permission changes
+
+  </Step>
+  <Step title="Copy the secrets">
+    Copy the required secrets:
+
+    - Client ID
+    - Client Secret
+    - Webhook Signing Secret
+
+  </Step>
+</Steps>
+
+<video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="mx-auto rounded-xl"
+  src="/videos/self-hosting/integrations-linear.mp4"
+/>
+
+## Adding environment variables
+
+To configure the Linear integration, you need to set the following environment variables:
+
+- `LINEAR_API_CLIENT_ID`: The client ID of your Linear App.
+- `LINEAR_APP_CLIENT_SECRET`: The client secret of your Linear App.
+- `LINEAR_APP_WEBHOOK_SECRET`: The webhook secret for the webhook in your Linear App.
+
+import SelfHostingIntegrationEnvVars from '/snippets/self-hosting/integration-env-vars.mdx';
+
+<SelfHostingIntegrationEnvVars />

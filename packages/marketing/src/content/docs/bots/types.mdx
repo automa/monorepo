@@ -1,0 +1,35 @@
+---
+title: Types
+description: Learn about the different types of bots in Automa.
+---
+
+Bots in Automa are categorized along two dimensions: how they are triggered and how they execute tasks. Understanding these helps you choose or build the right bot for your needs.
+
+## Trigger
+
+This dimension defines how a task is initiated and assigned to a bot.
+
+### Manual
+
+Manual bots are triggered by direct user action, either through the Automa UI or via integrations. They are perfect for on-demand tasks where you need full control over when the bot runs.
+
+### Scheduled
+
+Scheduled bots operate on a fixed, recurring schedule. Automa automatically creates and assigns tasks to them at set intervals, making them ideal for routine maintenance and other recurring automations.
+
+<Warning>
+  Right now, scheduled bots run once a week on Monday at 00:00 UTC. We're
+  working to add more scheduling options soon!
+</Warning>
+
+## Logic
+
+This dimension defines how a bot processes tasks and makes decisions.
+
+### Deterministic
+
+Deterministic bots operate based on a predefined set of rules. They deliver consistent, predictable outcomes, making them ideal for repeatable tasks like scaffolding, code generation, or simple refactoring.
+
+### AI
+
+AI bots use machine learning models (like LLMs) to analyze context and generate solutions dynamically. They excel at open-ended tasks like implementing features, writing unit tests, or drafting documentation.

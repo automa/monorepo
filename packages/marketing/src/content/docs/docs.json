@@ -3,7 +3,7 @@
   "theme": "mint",
   "name": "Automa Docs",
   "description": "Documentation for Automa - A code automation platform",
-  "favicon": "https://automa.app/favicon.svg",
+  "favicon": "/images/logo.svg",
   "logo": {
     "light": "/images/full_light.svg",
     "dark": "/images/full_dark.svg",
@@ -125,12 +125,84 @@
             "pages": ["index"]
           },
           {
-            "group": "Agent Development",
-            "pages": ["agent-development/index"]
+            "group": "Bots",
+            "pages": ["bots/index", "bots/types", "bots/task-lifecycle"]
+          },
+          {
+            "group": "Bot Development",
+            "pages": [
+              "bot-development/index",
+              "bot-development/registration",
+              "bot-development/implementation"
+            ]
           },
           {
             "group": "Self Hosting",
-            "pages": ["self-hosting/index"]
+            "pages": [
+              "self-hosting/index",
+              {
+                "group": "Setup",
+                "pages": [
+                  "self-hosting/setup/docker",
+                  "self-hosting/setup/railway"
+                ]
+              },
+              {
+                "group": "Agents",
+                "pages": [
+                  "self-hosting/agents/codex",
+                  "self-hosting/agents/claude-code",
+                  "self-hosting/agents/gemini"
+                ]
+              },
+              {
+                "group": "Integrations",
+                "pages": [
+                  "self-hosting/integrations/github",
+                  "self-hosting/integrations/linear",
+                  "self-hosting/integrations/jira"
+                ]
+              },
+              "self-hosting/licensing"
+            ]
+          },
+          {
+            "group": "SDKs",
+            "pages": ["sdks/bot"]
+          },
+          {
+            "group": "Platform",
+            "pages": [
+              "platform/index",
+              {
+                "group": "Integrations",
+                "pages": [
+                  "platform/integrations/github",
+                  "platform/integrations/linear",
+                  "platform/integrations/jira"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Webhooks",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": ["webhooks/index"]
+          },
+          {
+            "group": "Task",
+            "pages": ["webhooks/task-created"]
+          },
+          {
+            "group": "Proposal",
+            "pages": [
+              "webhooks/proposal-accepted",
+              "webhooks/proposal-rejected"
+            ]
           }
         ]
       },

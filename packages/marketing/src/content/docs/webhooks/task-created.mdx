@@ -1,0 +1,126 @@
+---
+title: task.created
+---
+
+<ResponseField name="task" type="Task">
+  The task object containing details about the task that was created.
+
+  <Expandable title="properties">
+    <ResponseField name="id" type="number">
+      The unique identifier for the task.
+    </ResponseField>
+
+    <ResponseField name="token" type="string">
+      A unique token for the task, used to request access to the code base.
+    </ResponseField>
+
+    <ResponseField name="title" type="string">
+      The title of the task.
+    </ResponseField>
+
+    <ResponseField name="items" type="object[]">
+      Detailed items related to the task.
+
+      <Expandable title="items">
+        <ResponseField name="type" type="enum">
+          The type of the item.
+
+          <Expandable title="values">
+            <ResponseField name="origin" type="string">Origin of the task</ResponseField>
+            <ResponseField name="message" type="string">Comment on the task</ResponseField>
+          </Expandable>
+        </ResponseField>
+
+        <ResponseField name="data" type="object">
+          The content of the item.
+
+          - `origin`: It contains the data associated with the integration from where the task originated.
+          - `message`: It contains the content of the message on the task.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="repo" type="Repository">
+  The repository on which the tasks is to be implemented.
+
+  <Expandable title="properties">
+    <ResponseField name="id" type="number">
+      The unique identifier for the repository.
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      The name of the repository.
+    </ResponseField>
+
+    <ResponseField name="is_private" type="boolean">
+      Indicates whether the repository is private.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="org" type="Organization">
+  The organization where the task was created.
+
+  <Expandable title="properties">
+    <ResponseField name="id" type="number">
+      The unique identifier for the organization.
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      The name of the organization.
+    </ResponseField>
+
+    <ResponseField name="provider_type" type="enum">
+      The provider behind the organization.
+
+      <Expandable title="values">
+        <ResponseField name="github" type="string">GitHub</ResponseField>
+        <ResponseField name="gitlab" type="string">GitLab</ResponseField>
+      </Expandable>
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseExample>
+```json Event
+{
+  "type": "task.created",
+  "data": {
+    "task": {
+      "id": 2,
+      "token": "abc123xyz",
+      "title": "Ignore disabled repos when trying to auto-select the first repo option in task creation",
+      "items": [
+        {
+          "type": "origin",
+          "data": {
+            "orgId": 1
+          }
+        },
+        {
+          "type": "message",
+          "data": {
+            "content": "In the file named `TaskCreate.tsx`, when we are trying to use `setValue` on the first repository option, we should ignore disabled repository options."
+          }
+        }
+      ]
+    },
+    "repo": {
+      "id": 1,
+      "name": "monorepo",
+      "is_private": true
+    },
+    "org": {
+      "id": 1,
+      "name": "automa",
+      "provider_type": "github"
+    }
+  }
+}
+```
+</ResponseExample>

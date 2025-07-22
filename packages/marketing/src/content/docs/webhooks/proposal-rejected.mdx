@@ -1,0 +1,88 @@
+---
+title: proposal.rejected
+---
+
+<ResponseField name="proposal" type="Proposal">
+  The proposal that was rejected.
+
+  <Expandable title="properties">
+    <ResponseField name="id" type="number">
+      The unique identifier of the proposal.
+    </ResponseField>
+
+    <ResponseField name="data" type="object">
+      The data associated with the proposal from the provider.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="task" type="Task">
+  The task for which the proposal was originally created.
+
+  <Expandable title="properties">
+    <ResponseField name="id" type="number">
+      The unique identifier for the task.
+    </ResponseField>
+
+    <ResponseField name="title" type="string">
+      The title of the task.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="org" type="Organization">
+  The organization containing the proposal.
+
+  <Expandable title="properties">
+    <ResponseField name="id" type="number">
+      The unique identifier for the organization
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      The name of the organization.
+    </ResponseField>
+
+    <ResponseField name="provider_type" type="enum">
+      The provider behind the organization.
+
+      <Expandable title="values">
+        <ResponseField name="github" type="string">GitHub</ResponseField>
+        <ResponseField name="gitlab" type="string">GitLab</ResponseField>
+      </Expandable>
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseExample>
+```json Event
+{
+  "type": "proposal.rejected",
+  "data": {
+    "proposal": {
+      "id": 123,
+      "data": {
+        "prId": 2593079484,
+        "prBase": "master",
+        "prHead": "automa:automa/openai/codex/2",
+        "prState": "closed",
+        "prTitle": "Auto-select only first enabled repository",
+        "prMerged": false,
+        "prNumber": 205
+      }
+    },
+    "task": {
+      "id": 2,
+      "title": "Ignore disabled repos when trying to auto-select the first repo option in task creation"
+    },
+    "org": {
+      "id": 1,
+      "name": "automa",
+      "provider_type": "github"
+    }
+  }
+}
+```
+</ResponseExample>
