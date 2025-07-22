@@ -1,6 +1,6 @@
 import { connectToDatabase } from 'utils';
 
-export type Bot = Awaited<ReturnType<typeof getAgentBySlug>>;
+export type Bot = Awaited<ReturnType<typeof getBotBySlug>>;
 
 const botSelectFields = {
   id: true,
@@ -21,10 +21,10 @@ const botSelectFields = {
   },
 };
 
-export const listAgents = async () => {
+export const listBots = async () => {
   const client = await connectToDatabase();
 
-  const listAgents = await client.bots.findMany({
+  const listBots = await client.bots.findMany({
     where: {
       is_published: true,
     },
@@ -49,27 +49,25 @@ export const listAgents = async () => {
 
   await client.$disconnect();
 
-  return listAgents.map((agent) => ({
-    slug: [agent.orgs.name, agent.name],
-    ...agent,
+  return listBots.map((bot) => ({
+    slug: [bot.orgs.name, bot.name],
+    ...bot,
   }));
 };
 
-export const getAgentBySlug = async (slug: string[]) => {
+export const getBotBySlug = async (slug: string[]) => {
   const client = await connectToDatabase();
 
   if (slug.length !== 2) {
-    throw new Error(
-      'Invalid slug format. Expected format: [orgName, agentName]',
-    );
+    throw new Error('Invalid slug format. Expected format: [orgName, botName]');
   }
 
-  const [orgName, agentName] = slug;
+  const [orgName, botName] = slug;
 
-  // Find the agent by name and org name
-  const agent = await client.bots.findFirst({
+  // Find the bot by name and org name
+  const bot = await client.bots.findFirst({
     where: {
-      name: agentName,
+      name: botName,
       is_published: true,
       orgs: {
         name: orgName,
@@ -80,9 +78,9 @@ export const getAgentBySlug = async (slug: string[]) => {
 
   await client.$disconnect();
 
-  if (!agent) {
-    throw new Error(`Agent not found for slug: ${slug.join('/')}`);
+  if (!bot) {
+    throw new Error(`Bot not found for slug: ${slug.join('/')}`);
   }
 
-  return agent;
+  return bot;
 };

@@ -2,11 +2,11 @@ import React from 'react';
 
 import { Flex } from 'components';
 
-import { AgentBadgesProps } from './types';
+import { BotBadgesProps } from './types';
 
-import { Badge } from './AgentBadges.styles';
+import { Badge } from './BotBadges.styles';
 
-const AgentBadges: React.FC<AgentBadgesProps> = ({ bot, ...props }) => {
+const BotBadges: React.FC<BotBadgesProps> = ({ bot, ...props }) => {
   return (
     <Flex className="gap-2" {...props}>
       {bot.is_preview && (
@@ -23,9 +23,9 @@ const AgentBadges: React.FC<AgentBadgesProps> = ({ bot, ...props }) => {
       >
         {bot.is_deterministic ? 'Deterministic' : 'Uses AI'}
       </Badge>
-      <Badge>{bot.type === 'manual' ? 'Manual' : 'Scheduled'}</Badge>
+      {bot.type === 'scheduled' ? <Badge>Scheduled</Badge> : null}
     </Flex>
   );
 };
 
-export default AgentBadges;
+export default BotBadges;

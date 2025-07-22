@@ -26,7 +26,7 @@ export const integrations: {
     logo: GithubLogo,
     name: 'GitHub',
     description:
-      'Connect your GitHub account to provide access to your code repositories and creating tasks from issues and pull requests.',
+      'Connect your GitHub account to provide access to your code repositories and create tasks from issues and pull requests.',
     info: (config) => ({
       org: config.provider_name,
     }),

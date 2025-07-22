@@ -3,9 +3,9 @@ import Image from 'next/image';
 
 import { Anchor, Flex, Typography } from 'components';
 
-import AgentBadges from '../AgentBadges';
+import BotBadges from '../BotBadges';
 
-import { AgentCardProps } from './types';
+import { BotCardProps } from './types';
 
 import {
   Container,
@@ -13,12 +13,12 @@ import {
   Fallback,
   ImageContainer,
   OrgName,
-} from './AgentCard.styles';
+} from './BotCard.styles';
 
-const AgentCard: React.FC<AgentCardProps> = ({ bot, ...props }) => {
+const BotCard: React.FC<BotCardProps> = ({ bot, ...props }) => {
   return (
     <Anchor
-      href={`/agents/${bot.orgs.name.toLowerCase()}/${bot.name.toLowerCase()}`}
+      href={`/bots/${bot.orgs.name.toLowerCase()}/${bot.name.toLowerCase()}`}
     >
       <Container {...props}>
         <ImageContainer>
@@ -45,11 +45,11 @@ const AgentCard: React.FC<AgentCardProps> = ({ bot, ...props }) => {
 
           <Description className="mb-3">{bot.short_description}</Description>
 
-          <AgentBadges bot={bot} />
+          <BotBadges bot={bot} />
         </Flex>
       </Container>
     </Anchor>
   );
 };
 
-export default AgentCard;
+export default BotCard;

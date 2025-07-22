@@ -2,14 +2,14 @@ import React from 'react';
 
 import { Flex, Typography } from 'components';
 
-import { listAgents } from './utils';
+import { listBots } from './utils';
 
-import AgentCard from './AgentCard';
+import BotCard from './BotCard';
 
 import { Container, List } from './page.styles';
 
-const AgentsPage: React.FC = async () => {
-  const bots = await listAgents();
+const BotsPage: React.FC = async () => {
+  const bots = await listBots();
 
   return (
     <Container>
@@ -19,24 +19,24 @@ const AgentsPage: React.FC = async () => {
           align="center"
           className="text-3xl md:text-4xl"
         >
-          Explore Agents
+          Explore Bots
         </Typography>
         <Typography
           variant="title6"
           align="center"
           className="text-neutral-500"
         >
-          Discover a variety of agents to work alongside you
+          Discover a variety of bots to work alongside you
         </Typography>
       </Flex>
 
       <List>
         {bots.map((bot) => (
-          <AgentCard key={bot.id} bot={bot} />
+          <BotCard key={bot.id} bot={bot} />
         ))}
       </List>
     </Container>
   );
 };
 
-export default AgentsPage;
+export default BotsPage;
