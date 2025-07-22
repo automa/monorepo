@@ -12,15 +12,7 @@ import { throwGraphQLError } from '../utils';
 import { taskCreate } from '../../db';
 
 export const Query: QueryResolvers<Context> = {
-  tasks: async (root, { org_id, filter }, { userId, prisma }) => {
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
+  tasks: async (root, { org_id, filter }, { prisma }) => {
     return prisma.tasks.findMany({
       where: {
         org_id,
@@ -48,15 +40,7 @@ export const Query: QueryResolvers<Context> = {
       },
     });
   },
-  task: async (root, { org_id, id }, { userId, prisma }) => {
-    // Check if the user is a member of the org the task belongs to
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
+  task: async (root, { org_id, id }, { prisma }) => {
     return prisma.tasks.findUniqueOrThrow({
       where: {
         id,
@@ -68,14 +52,6 @@ export const Query: QueryResolvers<Context> = {
 
 export const Mutation: MutationResolvers<Context> = {
   taskCreate: async (_, { org_id, input }, { userId, prisma, events }) => {
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
     const data = taskCreateSchema.parse(input);
 
     const [repo, botInstallation] = await Promise.all([

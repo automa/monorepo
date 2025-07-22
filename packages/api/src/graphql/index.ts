@@ -43,9 +43,43 @@ const isAuthenticated: ResolversComposition =
     return next(root, args, context, info);
   };
 
+const isOrgMember: ResolversComposition =
+  (next) => async (root, args, context: Context, info) => {
+    const { userId, prisma } = context;
+    const orgId = args.org_id;
+
+    // Error out for cases where we mistakenly set this resolver
+    if (!orgId) {
+      throw new GraphQLError(
+        'Variable "$org_id" of non-null type "Int!" must not be null.',
+        {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            http: {
+              status: 400,
+            },
+          },
+        },
+      );
+    }
+
+    // TODO: Cache this in session?
+    await prisma.user_orgs.findFirstOrThrow({
+      where: {
+        user_id: userId!,
+        org_id: orgId,
+      },
+    });
+
+    return next(root, args, context, info);
+  };
+
 const composedResolvers = resolvers.map((resolver) =>
   composeResolvers(resolver, {
-    '!PublicBot.!{app,user,publicBot,publicBots}': [isAuthenticated],
+    '!PublicBot.!{app,publicBot,publicBots,user}': [isAuthenticated],
+    '{Query,Mutation}.!{app,publicBots,publicBot,orgs,user,userUpdate}': [
+      isOrgMember,
+    ],
   }),
 );
 

@@ -5,14 +5,6 @@ import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
   repos: async (root, { org_id, filter }, { userId, prisma }) => {
-    // Check if the user is a member of the org
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
     const result = await prisma.user_repos.findMany({
       where: {
         user_id: userId,
@@ -34,14 +26,6 @@ export const Query: QueryResolvers<Context> = {
     return result.map((r) => r.repos);
   },
   repo: async (root, { org_id, name }, { userId, prisma }) => {
-    // Check if the user is a member of the org the task belongs to
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId,
-        org_id,
-      },
-    });
-
     return prisma.repos.findFirst({
       where: {
         name,
