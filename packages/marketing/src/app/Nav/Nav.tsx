@@ -21,7 +21,7 @@ const Nav: React.FC<NavProps> = ({ ...props }) => {
   const navigationItems = [
     { href: '/manifesto', label: 'Manifesto' },
     { href: '/pricing', label: 'Pricing' },
-    { href: '/agents', label: 'Agents' },
+    { href: '/bots', label: 'Bots' },
     { href: 'https://docs.automa.app', label: 'Docs' },
     { href: '/changelog', label: 'Changelog' },
   ];

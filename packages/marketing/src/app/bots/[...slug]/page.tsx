@@ -18,13 +18,13 @@ import { Button, Flex, Tooltip, Typography } from 'components';
 import { TypographyComponentProps } from 'components/Typography';
 import { typography } from 'components/Typography/Typography.cva';
 
-import { getAgentBySlug, listAgents } from '../utils';
+import { getBotBySlug, listBots } from '../utils';
 
-import AgentBadges from '../AgentBadges';
+import BotBadges from '../BotBadges';
 
 import { Container, Fallback, ImageContainer } from './page.styles';
 
-export const generateStaticParams = listAgents;
+export const generateStaticParams = listBots;
 
 type Props = {
   params: Awaited<ReturnType<typeof generateStaticParams>>[0];
@@ -141,8 +141,8 @@ const extensions = [
   }),
 ];
 
-const AgentPage = async ({ params: { slug } }: Props) => {
-  const bot = await getAgentBySlug(slug);
+const BotPage = async ({ params: { slug } }: Props) => {
+  const bot = await getBotBySlug(slug);
 
   if (!bot) {
     notFound();
@@ -180,7 +180,7 @@ const AgentPage = async ({ params: { slug } }: Props) => {
                 by {bot.orgs.name}
               </Typography>
 
-              <AgentBadges bot={bot} />
+              <BotBadges bot={bot} />
             </Flex>
           </Flex>
           <Typography
@@ -200,7 +200,7 @@ const AgentPage = async ({ params: { slug } }: Props) => {
         {bot.is_preview ? (
           <Tooltip body="Coming soon!">
             <Button size="xlarge" disabled>
-              Install Agent
+              Install Bot
             </Button>
           </Tooltip>
         ) : (
@@ -211,7 +211,7 @@ const AgentPage = async ({ params: { slug } }: Props) => {
             blank
             size="xlarge"
           >
-            Install Agent
+            Install Bot
           </Button>
         )}
       </Flex>
@@ -222,4 +222,4 @@ const AgentPage = async ({ params: { slug } }: Props) => {
   );
 };
 
-export default AgentPage;
+export default BotPage;

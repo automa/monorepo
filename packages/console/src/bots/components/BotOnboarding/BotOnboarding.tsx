@@ -22,10 +22,10 @@ const DEFAULT_BOTS = [
     shortDescription: "Anthropic's coding agent",
   },
   {
-    botOrgName: 'badges',
-    botName: 'package-badges',
-    logo: 'https://avatars.githubusercontent.com/u/6254238?s=64',
-    shortDescription: 'Adds package manager badges to public packages',
+    botOrgName: 'google',
+    botName: 'gemini',
+    logo: 'https://automa.app/logos/gemini.svg',
+    shortDescription: "Google's coding agent",
   },
 ];
 
