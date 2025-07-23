@@ -122,7 +122,7 @@
         "groups": [
           {
             "group": "Get Started",
-            "pages": ["index"]
+            "pages": ["index", "ideal-workflow"]
           },
           {
             "group": "Bots",
@@ -205,6 +205,10 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "GraphQL API",
+        "href": "https://studio.apollographql.com/public/automa"
       },
       {
         "tab": "Changelog",

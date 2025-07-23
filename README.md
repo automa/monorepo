@@ -14,9 +14,23 @@ Some links to get started:
 
 <p align="center">
   <br/>
-  <img width="450px" src="https://raw.githubusercontent.com/automa/monorepo/refs/heads/master/packages/marketing/src/assets/landing/hero.png" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./packages/marketing/src/assets/landing/hero_dark.png">
+    <img width="450px" src="./packages/marketing/src/assets/landing/hero_light.png" alt="Automa Hero Image">
+  </picture>
   <br/>
   <br/>
+</p>
+
+## Ideal developer workflow
+
+The software development process has been in a constant state of flux with the rise of LLMs and AI tools. Please find below the current ideal workflow which we will try our best to keep up to date.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./packages/marketing/src/content/docs/images/workflow_dark.png">
+    <img src="./packages/marketing/src/content/docs/images/workflow_light.png" alt="Ideal workflow">
+  </picture>
 </p>
 
 ## Contributing
