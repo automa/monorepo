@@ -36,6 +36,9 @@ RUN rm -rf node_modules
 RUN pnpm install --frozen-lockfile --prod --ignore-scripts
 RUN pnpm --filter @automa/prisma prisma-generate
 
+# Copy database migrations
+COPY db/migrations ./db/migrations
+
 FROM node:22-alpine AS runner
 
 LABEL org.opencontainers.image.title="Automa API"
@@ -66,5 +69,8 @@ COPY --from=builder /app/packages/api/node_modules ./packages/api/node_modules
 COPY --from=builder /app/packages/config/node_modules ./packages/config/node_modules
 COPY --from=builder /app/packages/common/node_modules ./packages/common/node_modules
 COPY --from=builder /app/packages/prisma/node_modules ./packages/prisma/node_modules
+
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/db/migrations ./db/migrations
 
 CMD ["node", "packages/api/build/index.js"]

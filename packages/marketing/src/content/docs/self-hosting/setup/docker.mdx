@@ -100,7 +100,7 @@ docker run -d --name automa-console \
 To set up the database schema, you need to run the following command in the **API** container. This will create the necessary tables and indexes in your PostgreSQL database.
 
 ```bash icon="terminal"
-docker exec -it automa-api sh -c "crude up"
+docker exec -it automa-api sh -c "npm run db-migrate"
 ```
 
 ### Check the setup
@@ -157,5 +157,5 @@ docker restart automa-api automa-console
 Run the following command to apply any pending changes to database schema. It is safe to run this command even if there are no schema changes.
 
 ```bash icon="terminal"
-docker exec -it automa-api sh -c "crude up"
+docker exec -it automa-api sh -c "npm run db-migrate"
 ```

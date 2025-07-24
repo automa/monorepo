@@ -1,21 +1,16 @@
-name: Testing (api)
+name: Testing (db)
 on:
   pull_request:
     branches: [master]
     paths:
-      - .github/workflows/test-api.yml
+      - .github/workflows/test-db.yml
       - db/**
-      - packages/common/src/**
-      - packages/prisma/src/**
-      - packages/prisma/schema.prisma
-      - packages/api/src/**
-      - packages/api/test/**
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  test-api:
+  test-db:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,17 +31,18 @@ jobs:
           key: deps-${{ hashFiles('**/pnpm-lock.yaml', '**/schema.prisma') }}
           restore-keys: |
             deps-
+      - name: Install pg_dump
+        run: |
+          echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get remove --purge postgresql-client-16
+          sudo apt-get install -y postgresql-client-17
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Start dependencies
         run: pnpm start-deps
-      - name: Run tests
-        run: pnpm test-cover
-        working-directory: packages/api
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/api/coverage/lcov.info
-          flags: api
-          name: api.${{ github.event.number }}
+      - name: Schema check
+        run: |
+          sed -i '/^-- Dumped by pg_dump version/d' db/schema.sql
+          git diff --exit-code
