@@ -1,5 +1,3 @@
-BEGIN;
-
 CREATE EXTENSION citext;
 CREATE EXTENSION "uuid-ossp";
 
@@ -183,5 +181,3 @@ CREATE TABLE public.task_items (
 
 CREATE INDEX task_items_task_id_created_at_idx
 ON public.task_items (task_id, created_at ASC);
-
-COMMIT;
