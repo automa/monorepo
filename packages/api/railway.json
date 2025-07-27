@@ -6,6 +6,8 @@
     "watchPatterns": ["packages/prisma", "packages/common", "packages/api"]
   },
   "deploy": {
+    "preDeployCommand": ["npm run db-migrate"],
+    "healthcheckPath": "/health/live",
     "restartPolicyType": "ALWAYS"
   }
 }
