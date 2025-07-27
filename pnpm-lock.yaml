@@ -52,6 +52,10 @@ catalogs:
 importers:
 
   .:
+    dependencies:
+      '@termapps/crude':
+        specifier: ~0.1.2
+        version: 0.1.2
     devDependencies:
       '@apollo/rover':
         specifier: ~0.22.0
@@ -5033,6 +5037,45 @@ packages:
   '@tanstack/table-core@8.5.30':
     resolution: {integrity: sha512-3IhJVOpX7EDiAa2BcXowEJHOflmGI/hHhVY8UpEmtNxvDWo2QK7ohSXPndz35GK36mNoMXX4a5UA9BbVU1A0aw==}
     engines: {node: '>=12'}
+
+  '@termapps/crude-darwin-arm64@0.1.2':
+    resolution: {integrity: sha512-lPLsP3BPwVg/mIiNsL5qwnuhhA7OBUqUFcFshca9ixf6vGmMA9kk1uMx4nnmkKa28/IDvov1S8hEqY0sZTN7qg==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@termapps/crude-darwin-x64@0.1.2':
+    resolution: {integrity: sha512-G93bBk17yhncEnC8WaCeEvYsKcmwXCnYKZtFfS8jANDExiURwB/TI0rqt9fif6qycxvESninNSVpRKGLQkJYSQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@termapps/crude-linux-ia32-glibc@0.1.2':
+    resolution: {integrity: sha512-KA6xK6Jw5TJ7swa8Ah55EEuRIN6uas2QPN8r0wFZC3B7RIKEwSmUeg8B7ip54W4zWJKoJKJXzcyoxPb3Ht+bdQ==}
+    cpu: [ia32]
+    os: [linux]
+
+  '@termapps/crude-linux-x64-glibc@0.1.2':
+    resolution: {integrity: sha512-8E+I62GEH0tpBPjqd3/3I5w0+hh/3U+xgc5n/P5Oui7dI/zDfaKBGNhlq5xMzQJAFKsNHcRb0cOdnuvQqw90eQ==}
+    cpu: [x64]
+    os: [linux]
+
+  '@termapps/crude-linux-x64-musl@0.1.2':
+    resolution: {integrity: sha512-L0qwmPlHt9wXSJcd9Z7PYcXucr9xR7WkenN8YvgwoPHIzpOBGl5gT6RX4vBmmC+REKggRz7ex2QmyeNeBdODaw==}
+    cpu: [x64]
+    os: [linux]
+
+  '@termapps/crude-windows-ia32@0.1.2':
+    resolution: {integrity: sha512-Qw5d76Bg2InXZcEJxjOOjxkEJ+smRzrFLsI18vENEDne3L1jJ1UBEvDUwyqHqddHoGNJ5SUPATYv22Yo+QA4kg==}
+    cpu: [ia32]
+    os: [windows]
+
+  '@termapps/crude-windows-x64@0.1.2':
+    resolution: {integrity: sha512-k7iRZXyol/WWravjAW9BCEQe8u7YeGobtVrY96Cj5cOA2biknK/6aERP3/AotWoOkKq8s35ROmQvq5YtRnkLKQ==}
+    cpu: [x64]
+    os: [windows]
+
+  '@termapps/crude@0.1.2':
+    resolution: {integrity: sha512-vS4g0PmX0MHIGqW+1q6brw1qSuCu0xqt6tmWjNlUeczNQQx/jz9tLrrDQTLBzYQnFINc52d400IGGHeI0N/W3g==}
+    hasBin: true
 
   '@testing-library/dom@10.1.0':
     resolution: {integrity: sha512-wdsYKy5zupPyLCW2Je5DLHSxSfbIp6h80WoHOQc+RPtmPGA52O9x5MJEkv92Sjonpq+poOAtUKhh1kBGAXBrNA==}
@@ -18909,6 +18952,39 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
 
   '@tanstack/table-core@8.5.30': {}
+
+  '@termapps/crude-darwin-arm64@0.1.2':
+    optional: true
+
+  '@termapps/crude-darwin-x64@0.1.2':
+    optional: true
+
+  '@termapps/crude-linux-ia32-glibc@0.1.2':
+    optional: true
+
+  '@termapps/crude-linux-x64-glibc@0.1.2':
+    optional: true
+
+  '@termapps/crude-linux-x64-musl@0.1.2':
+    optional: true
+
+  '@termapps/crude-windows-ia32@0.1.2':
+    optional: true
+
+  '@termapps/crude-windows-x64@0.1.2':
+    optional: true
+
+  '@termapps/crude@0.1.2':
+    dependencies:
+      detect-libc: 2.0.4
+    optionalDependencies:
+      '@termapps/crude-darwin-arm64': 0.1.2
+      '@termapps/crude-darwin-x64': 0.1.2
+      '@termapps/crude-linux-ia32-glibc': 0.1.2
+      '@termapps/crude-linux-x64-glibc': 0.1.2
+      '@termapps/crude-linux-x64-musl': 0.1.2
+      '@termapps/crude-windows-ia32': 0.1.2
+      '@termapps/crude-windows-x64': 0.1.2
 
   '@testing-library/dom@10.1.0':
     dependencies:

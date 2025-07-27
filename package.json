@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "db-migrate": "crude up",
     "format": "prettier --write . --log-level warn",
     "format-check": "prettier --check .",
     "graphql-generate": "graphql-codegen --config graphql-codegen.ts",
@@ -16,6 +17,9 @@
   },
   "engines": {
     "node": ">=22.3.0"
+  },
+  "dependencies": {
+    "@termapps/crude": "~0.1.2"
   },
   "devDependencies": {
     "@apollo/rover": "~0.22.0",

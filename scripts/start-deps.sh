@@ -1,11 +1,13 @@
 #!/bin/bash
 
-docker compose -f scripts/docker-compose.yml up -d --remove-orphans
+docker compose -f scripts/docker-compose.yml up -d --remove-orphans --build
 
 pnpm --filter @automa/api build
 
-psql -h localhost -U automa -w automa -f db/migrations/00000000-init/up.sql
+export DATABASE_URL=postgresql://automa@localhost:5432/automa
+export SCHEMA_FILE=db/schema.sql
 
-if [ "$SEED" = true ]; then
-	psql -h localhost -U automa  -w automa -f db/migrations/00000000-init/seed.sql
-fi
+pnpm db-migrate
+
+# Remove the line in schema.sql starting with `-- Dumped by pg_dump version`
+sed -i '/^-- Dumped by pg_dump version/d' $SCHEMA_FILE
