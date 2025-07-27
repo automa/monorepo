@@ -8,13 +8,13 @@ import { Container, Content } from './HoverCard.styles';
 const HoverCardTriggerWrapper = React.forwardRef<
   HTMLDivElement,
   { children: React.ReactNode }
->(({ children, ...props }, ref) => (
-  <div ref={ref} {...props}>
-    {children}
-  </div>
-));
-
-HoverCardTriggerWrapper.displayName = 'HoverCardTriggerWrapper';
+>(function HoverCardTriggerWrapper({ children, ...props }, ref) {
+  return (
+    <div ref={ref} {...props}>
+      {children}
+    </div>
+  );
+});
 
 const HoverCard: React.FC<HoverCardComponentProps> = ({
   side,
