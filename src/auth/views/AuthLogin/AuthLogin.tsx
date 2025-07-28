@@ -3,11 +3,9 @@ import { Navigate } from 'react-router-dom';
 
 import { useUser } from 'auth';
 
-import { AuthLoginProps } from './types';
-
 import { Container } from './AuthLogin.styles';
 
-const AuthLogin: React.FC<AuthLoginProps> = () => {
+const AuthLogin: React.FC = () => {
   const user = useUser();
 
   if (user) {

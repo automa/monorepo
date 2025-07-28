@@ -3,7 +3,7 @@
     "baseUrl": "./src",
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "lib": ["dom", "dom.iterable", "esnext"],
     "strict": true,
     "esModuleInterop": true,

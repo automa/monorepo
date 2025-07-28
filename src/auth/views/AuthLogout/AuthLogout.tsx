@@ -5,11 +5,9 @@ import { useAsyncEffect } from 'shared';
 
 import { logout, useAuth, useUser } from 'auth';
 
-import { AuthLogoutProps } from './types';
-
 import { Container } from './AuthLogout.styles';
 
-const AuthLogout: React.FC<AuthLogoutProps> = () => {
+const AuthLogout: React.FC = () => {
   const user = useUser();
 
   const { setAuthLoading } = useAuth();

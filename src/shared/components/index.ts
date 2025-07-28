@@ -8,7 +8,6 @@ export { default as Flex } from './Flex';
 export { default as Input } from './Input';
 export { default as Label } from './Label';
 export { default as Loader } from './Loader';
-export { default as RoutesLoader } from './RoutesLoader';
 export { default as Select } from './Select';
 export * from './Select';
 export { default as Textarea } from './Textarea';
