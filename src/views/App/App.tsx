@@ -43,6 +43,18 @@ const App: React.FC<{}> = () => {
   }, []);
 
   useEffect(() => {
+    const isNonAuthRoute = [/^\/auth\/login$/].some((p) =>
+      p.test(location.pathname),
+    );
+
+    if (!user && !authLoading && !isNonAuthRoute) {
+      navigate('/auth/login', {
+        state: { from: window.location.href },
+      });
+    }
+  }, [user, authLoading, navigate, location]);
+
+  useEffect(() => {
     const error = parseInt(
       new URLSearchParams(location.search).get('error') || '',
       10,
@@ -55,18 +67,6 @@ const App: React.FC<{}> = () => {
       });
     }
   }, [location.search]);
-
-  useEffect(() => {
-    const isNonAuthRoute = [/^\/auth\/login$/].some((p) =>
-      p.test(location.pathname),
-    );
-
-    if (!user && !authLoading && !isNonAuthRoute) {
-      navigate('/auth/login', {
-        state: { from: window.location.href },
-      });
-    }
-  }, [user, authLoading, navigate, location]);
 
   useEffect(() => {
     identify(user);
