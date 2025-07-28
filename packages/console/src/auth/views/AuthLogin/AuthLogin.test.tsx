@@ -22,19 +22,24 @@ beforeEach(() => {
 });
 
 test('with no github and no gitlab redirects to /admin/setup', async () => {
-  render(<AuthLogin />, {
-    state: {
-      app: {
+  render(
+    {
+      Component: AuthLogin,
+    },
+    {
+      state: {
         app: {
-          ...app,
-          integrations: {
-            ...app.integrations,
-            github: false,
+          app: {
+            ...app,
+            integrations: {
+              ...app.integrations,
+              github: false,
+            },
           },
         },
       },
     },
-  });
+  );
 
   expect(mockedNavigate).toHaveBeenCalledTimes(1);
   expect(mockedNavigate).toHaveBeenCalledWith({
@@ -44,32 +49,42 @@ test('with no github and no gitlab redirects to /admin/setup', async () => {
 });
 
 test('with github and with no user renders', async () => {
-  render(<AuthLogin />, {
-    state: {
-      app: {
-        app,
+  render(
+    {
+      Component: AuthLogin,
+    },
+    {
+      state: {
+        app: {
+          app,
+        },
       },
     },
-  });
+  );
 
   expect(mockedNavigate).toHaveBeenCalledTimes(0);
 });
 
 test('with github and user redirects to /', async () => {
-  render(<AuthLogin />, {
-    state: {
-      app: {
-        app,
-      },
-      auth: {
-        user: {
-          id: '1',
-          email: 'john@example.com',
-          org_id: '1',
+  render(
+    {
+      Component: AuthLogin,
+    },
+    {
+      state: {
+        app: {
+          app,
+        },
+        auth: {
+          user: {
+            id: '1',
+            email: 'john@example.com',
+            org_id: '1',
+          },
         },
       },
     },
-  });
+  );
 
   expect(mockedNavigate).toHaveBeenCalledTimes(1);
   expect(mockedNavigate).toHaveBeenCalledWith({ to: '/' });

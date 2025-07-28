@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { ArrowsClockwise, Robot, Trash } from '@phosphor-icons/react';
 
@@ -7,10 +7,8 @@ import { useAnalyticsPage } from 'analytics';
 import { TaskItemType } from 'gql/graphql';
 import { Button, Flex, Loader, toast, Tooltip, Typography } from 'shared';
 
-import { useOrg } from 'orgs';
+import { Org, useOrg } from 'orgs';
 import { Task } from 'tasks';
-
-import { BotInstallationProps } from './types';
 
 import {
   BOT_INSTALLATION_BOT_QUERY,
@@ -18,7 +16,9 @@ import {
   BOT_UNINSTALL_MUTATION,
 } from './BotInstallation.queries';
 
-const BotInstallation: React.FC<BotInstallationProps> = ({ org }) => {
+const BotInstallation: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   const { botOrgName, botName } = useParams();
 
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ const BotInstallation: React.FC<BotInstallationProps> = ({ org }) => {
         variant: 'success',
       });
 
-      navigate(`../bots/new/${botOrgName}/${botName}`);
+      navigate(`../new/${botOrgName}/${botName}`);
     },
     update(cache) {
       if (!bot?.installation) return;
@@ -142,7 +142,7 @@ const BotInstallation: React.FC<BotInstallationProps> = ({ org }) => {
                   </Button>
                 </Tooltip>
                 {bot.type === 'manual' && (
-                  <Button to={`../tasks/new?bot=${bot.installation.id}`}>
+                  <Button to={`../../tasks/new?bot=${bot.installation.id}`}>
                     Create Task
                   </Button>
                 )}

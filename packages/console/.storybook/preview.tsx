@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider as StoreProvider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { createMemoryRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { MockedProvider as ApolloProvider } from '@apollo/client/testing';
 import { withThemeByClassName } from '@storybook/addon-themes';
 import { Preview } from '@storybook/react';
@@ -36,7 +36,7 @@ const preview: Preview = {
       defaultTheme: 'light',
     }),
     (Story, { parameters }) => {
-      const { requests, cached, state } = parameters;
+      const { requests, cached, state, route } = parameters;
 
       cache.restore(cached);
 
@@ -47,14 +47,26 @@ const preview: Preview = {
           <OptimizerProvider>
             <ApolloProvider mocks={requests} cache={cache}>
               <StoreProvider store={store}>
-                <BrowserRouter>
-                  <Tooltip.Provider delayDuration={500}>
-                    <Toast.Provider>
-                      <Toast.Viewport />
-                      <AppContainer>{Story()}</AppContainer>
-                    </Toast.Provider>
-                  </Tooltip.Provider>
-                </BrowserRouter>
+                <Tooltip.Provider delayDuration={500}>
+                  <Toast.Provider>
+                    <Toast.Viewport />
+                    <AppContainer>
+                      <RouterProvider
+                        router={createMemoryRouter([
+                          {
+                            element: <Outlet context={route?.context} />,
+                            children: [
+                              {
+                                path: '*',
+                                Component: Story,
+                              },
+                            ],
+                          },
+                        ])}
+                      />
+                    </AppContainer>
+                  </Toast.Provider>
+                </Tooltip.Provider>
               </StoreProvider>
             </ApolloProvider>
           </OptimizerProvider>

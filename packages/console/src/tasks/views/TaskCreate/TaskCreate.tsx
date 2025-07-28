@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useOutletContext } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plugs } from '@phosphor-icons/react';
@@ -13,9 +13,8 @@ import { Avatar, Button, Flex, Input, toast, Typography } from 'shared';
 import ComboBox from 'shared/components/ComboBox';
 import InputEditor from 'shared/components/InputEditor';
 
+import { Org } from 'orgs';
 import { TASK_FRAGMENT } from 'tasks';
-
-import { TaskCreateProps } from './types';
 
 import {
   BOT_INSTALLATIONS_AS_OPTIONS_QUERY,
@@ -23,7 +22,9 @@ import {
   TASK_CREATE_MUTATION,
 } from './TaskCreate.queries';
 
-const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
+const TaskCreate: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   const location = useLocation();
 
   const {
@@ -168,7 +169,7 @@ const TaskCreate: React.FC<TaskCreateProps> = ({ org }) => {
   if (!loading && data) {
     const task = getFragment(TASK_FRAGMENT, data.taskCreate);
 
-    return <Navigate to={`../tasks/${task.id}`} />;
+    return <Navigate to={`../${task.id}`} />;
   }
 
   return (

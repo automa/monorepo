@@ -4,12 +4,10 @@ import { useQuery } from '@apollo/client';
 
 import { Loader, Typography } from 'shared';
 
-import { IntegrationSetupGithubProps } from './types';
-
 import { INTEGRATION_SETUP_GITHUB_QUERY } from './IntegrationSetupGithub.queries';
 import { Container } from './IntegrationSetupGithub.styles';
 
-const IntegrationSetupGithub: React.FC<IntegrationSetupGithubProps> = () => {
+const IntegrationSetupGithub: React.FC = () => {
   const location = useLocation();
 
   const navigate = useNavigate();

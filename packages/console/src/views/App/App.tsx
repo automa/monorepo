@@ -1,22 +1,20 @@
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { errors, ErrorType } from '@automa/common';
 
 import { useAnalytics } from 'analytics';
 import { useOptimizerUser } from 'optimizer';
-import { Loader, RoutesLoader, toast } from 'shared';
+import { Loader, toast } from 'shared';
 
 import { useApp } from 'app';
 import { useAuth, useUser } from 'auth';
 
-import routes from './routes';
-
 import { APP_QUERY } from './App.queries';
 import { Container } from './App.styles';
 
-const App: React.FC<{}> = () => {
+const App: React.FC = () => {
   const { identify } = useAnalytics();
 
   const { updateOptimizerUser } = useOptimizerUser();
@@ -53,7 +51,7 @@ const App: React.FC<{}> = () => {
     );
 
     if (!data?.user && !loading && !isNonAuthRoute) {
-      navigate('/auth/login', {
+      navigate('auth/login', {
         state: { from: window.location.href },
       });
     }
@@ -85,7 +83,9 @@ const App: React.FC<{}> = () => {
 
   return (
     <Container>
-      <RoutesLoader fallback={<Loader />} routes={routes} />
+      <Suspense fallback={<Loader />}>
+        <Outlet />
+      </Suspense>
     </Container>
   );
 };

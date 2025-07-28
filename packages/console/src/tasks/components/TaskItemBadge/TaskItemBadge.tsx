@@ -10,10 +10,11 @@ import { Container, Content } from './TaskItemBadge.styles';
 
 const TaskItemBadge: React.FC<TaskItemBadgeComponentProps> = ({
   taskItem,
+  linkPrefix = '',
   variant,
   ...props
 }) => {
-  const definition = getBadgeDefinition(taskItem);
+  const definition = getBadgeDefinition(taskItem, linkPrefix);
 
   if (!definition) {
     return null;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { useAnalyticsPage } from 'analytics';
@@ -7,12 +8,13 @@ import ToggleGroup from 'shared/components/ToggleGroup';
 import useFilters from 'shared/hooks/useFilters';
 
 import { PublicBot, publicBotsfilters } from 'bots';
-
-import { PublicBotsProps } from './types';
+import { Org } from 'orgs';
 
 import { PUBLIC_BOTS_QUERY } from './PublicBots.queries';
 
-const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
+const PublicBots: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   useAnalyticsPage('Bots', 'Public Bots Overview');
 
   const { filterValues, filterParams, filterOptions, filterChangeFns } =
@@ -43,7 +45,7 @@ const PublicBots: React.FC<PublicBotsProps> = ({ org }) => {
             onValueChange={filterChangeFns.ai}
           />
         </Flex>
-        <Button to="../settings/bots/new">Create Bot</Button>
+        <Button to="../../settings/bots/new">Create Bot</Button>
       </Flex>
       {loading && !data ? (
         <Loader />

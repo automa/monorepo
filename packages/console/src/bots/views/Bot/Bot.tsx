@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
@@ -21,10 +21,9 @@ import InputEditor from 'shared/components/InputEditor';
 
 import { useApp } from 'app';
 import { InputPaths } from 'bots';
+import { Org } from 'orgs';
 
 import { botTypeDefinition } from 'bots/utils';
-
-import { BotProps } from './types';
 
 import {
   BOT_FRAGMENT,
@@ -34,7 +33,9 @@ import {
 } from './Bot.queries';
 import { Label, SectionTitle } from './Bot.styles';
 
-const Bot: React.FC<BotProps> = ({ org }) => {
+const Bot: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   const { botName } = useParams();
 
   const { app } = useApp();

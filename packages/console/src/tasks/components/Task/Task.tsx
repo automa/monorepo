@@ -26,6 +26,8 @@ const Task: React.FC<TaskProps> = ({
   filteredOn = [],
   ...props
 }) => {
+  const linkPrefix = filteredOn.length === 0 ? '' : '../';
+
   const task = getFragment(TASK_FRAGMENT, data);
   const items = task.items.map((item) => getFragment(TASK_ITEM_FRAGMENT, item));
 
@@ -39,13 +41,17 @@ const Task: React.FC<TaskProps> = ({
       <Flex wrap="wrap" justifyContent="space-between" className="gap-2">
         <Flex alignItems="center" className="h-6 gap-2">
           <TaskStateIcon state={task.state} />
-          <Title to={`../tasks/${task.id}`}>{task.title}</Title>
+          <Title to={`${linkPrefix}../tasks/${task.id}`}>{task.title}</Title>
         </Flex>
         <Flex alignItems="center" className="gap-2">
           {items
             .filter(({ type }) => !filteredOn.includes(type))
             .map((taskItem) => (
-              <TaskItemBadge key={taskItem.id} taskItem={taskItem} />
+              <TaskItemBadge
+                key={taskItem.id}
+                taskItem={taskItem}
+                linkPrefix={linkPrefix}
+              />
             ))}
           <Tooltip
             body={`Created at ${format(

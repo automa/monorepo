@@ -1,6 +1,11 @@
 import React, { FC, ReactElement, ReactNode } from 'react';
 import { Provider as StoreProvider } from 'react-redux';
-import { MemoryRouter, NavigateProps, Route, Routes } from 'react-router-dom';
+import {
+  createMemoryRouter,
+  NavigateProps,
+  RouteObject,
+  RouterProvider,
+} from 'react-router-dom';
 import { vi } from 'vitest';
 import { NormalizedCacheObject } from '@apollo/client';
 import {
@@ -25,36 +30,38 @@ store.replaceReducer((state, { type, payload }) => {
 });
 
 const customRender = (
-  ui: ReactElement,
+  uiOrRoute: ReactElement | RouteObject,
   {
     requests,
     cached = {},
     state,
     history,
-    path,
+    uri,
     ...options
   }: RenderOptions & {
     requests?: MockedProviderProps['mocks'];
     cached?: NormalizedCacheObject;
     state?: Partial<RootState>;
     history?: string[];
-    path?: string;
+    uri?: string;
   } = {},
 ) => {
   cache.restore(cached);
 
   store.dispatch({ type: 'REPLACE', payload: state });
 
+  const isRoute =
+    typeof uiOrRoute === 'object' &&
+    ('path' in uiOrRoute || 'Component' in uiOrRoute);
+
+  const entry = uri ?? (isRoute ? uiOrRoute.path : undefined);
+
   const AllTheProviders: FC<{ children: ReactNode }> = ({ children }) => {
     return (
       <AnalyticsProvider>
         <ApolloProvider mocks={requests} cache={cache}>
           <StoreProvider store={store}>
-            <MemoryRouter initialEntries={path && !history ? [path] : history}>
-              <Tooltip.Provider delayDuration={500}>
-                {children}
-              </Tooltip.Provider>
-            </MemoryRouter>
+            <Tooltip.Provider delayDuration={500}>{children}</Tooltip.Provider>
           </StoreProvider>
         </ApolloProvider>
       </AnalyticsProvider>
@@ -65,12 +72,22 @@ const customRender = (
     store,
     cache,
     ...render(
-      path ? (
-        <Routes>
-          <Route path={path} element={ui} />
-        </Routes>
+      isRoute ? (
+        <RouterProvider
+          router={createMemoryRouter(
+            [
+              {
+                path: uiOrRoute.children ? undefined : '',
+                ...uiOrRoute,
+              },
+            ],
+            {
+              initialEntries: entry && !history ? [entry] : history,
+            },
+          )}
+        />
       ) : (
-        ui
+        (uiOrRoute as ReactElement)
       ),
       {
         wrapper: AllTheProviders,

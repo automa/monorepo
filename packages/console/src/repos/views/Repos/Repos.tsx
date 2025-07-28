@@ -1,17 +1,18 @@
 import React, { useMemo } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { useAnalyticsPage } from 'analytics';
 import { Button, Flex, Loader, Typography } from 'shared';
 
-import { getOrgInstallLink, getOrgSettingsLink } from 'orgs';
+import { getOrgInstallLink, getOrgSettingsLink, Org } from 'orgs';
 import { Repo } from 'repos';
-
-import { ReposProps } from './types';
 
 import { REPOS_QUERY } from './Repos.queries';
 
-const Repos: React.FC<ReposProps> = ({ org }) => {
+const Repos: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   useAnalyticsPage('Repositories', 'Repositories Overview');
 
   // TODO: Add infinite scroll (with pagination cache)

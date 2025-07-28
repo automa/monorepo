@@ -11,11 +11,9 @@ import { Button, Flex, Input, toast, Typography } from 'shared';
 
 import { USER_AVATAR_FRAGMENT, USER_QUERY, USER_QUERY_FRAGMENT } from 'users';
 
-import { UserSettingsGeneralProps } from './types';
-
 import { USER_UPDATE_MUTATION } from './UserSettingsGeneral.queries';
 
-const UserSettingsGeneral: React.FC<UserSettingsGeneralProps> = () => {
+const UserSettingsGeneral: React.FC = () => {
   const { data: fullData } = useQuery(USER_QUERY);
 
   const meData = getFragment(USER_QUERY_FRAGMENT, fullData)?.user;

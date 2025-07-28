@@ -1,15 +1,9 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import { Link, Outlet } from 'react-router-dom';
 import { NetworkStatus, useQuery } from '@apollo/client';
 
 import { useGateValue } from 'optimizer';
-import {
-  Flex,
-  Loader,
-  RoutesLoader,
-  Typography,
-  useRelativeMatch,
-} from 'shared';
+import { Flex, Loader, Typography, useRelativeMatch } from 'shared';
 
 import { useApp } from 'app';
 import { EmptyTopNav, OrgList } from 'orgs';
@@ -17,13 +11,10 @@ import { UserNavbar } from 'users';
 
 import Logo from 'assets/logo.svg?react';
 
-import routes from './routes';
-import { DashboardProps } from './types';
-
 import { DASHBOARD_QUERY } from './Dashboard.queries';
 import { Header } from './Dashboard.styles';
 
-const Dashboard: React.FC<DashboardProps> = () => {
+const Dashboard: React.FC = () => {
   const { app } = useApp();
 
   const isAbleToAccess = useGateValue('access');
@@ -75,15 +66,16 @@ const Dashboard: React.FC<DashboardProps> = () => {
         </>
       )}
       {data && (
-        <RoutesLoader
+        <Suspense
           fallback={
             <>
               <EmptyTopNav />
               <Loader />
             </>
           }
-          routes={routes}
-        />
+        >
+          <Outlet />
+        </Suspense>
       )}
     </>
   );

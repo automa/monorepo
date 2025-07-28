@@ -31,10 +31,10 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
         trigger={<UserAvatar user={data.user} size="large" />}
       >
         <DropdownMenuLabel>{data.user.email}</DropdownMenuLabel>
-        <Link to="/account">
+        <Link to="account">
           <DropdownMenuItem>Preferences</DropdownMenuItem>
         </Link>
-        <Link to="/auth/logout">
+        <Link to="auth/logout">
           <DropdownMenuItem>Log out</DropdownMenuItem>
         </Link>
       </DropdownMenu>

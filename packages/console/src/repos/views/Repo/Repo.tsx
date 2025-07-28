@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { ArrowsClockwise, Code } from '@phosphor-icons/react';
 
@@ -7,18 +7,20 @@ import { useAnalyticsPage } from 'analytics';
 import { TaskItemType } from 'gql/graphql';
 import { Button, Flex, Loader, Tooltip, Typography } from 'shared';
 
-import { getOrgSettingsLink } from 'orgs';
+import { getOrgSettingsLink, Org } from 'orgs';
 import { getRepoLink } from 'repos';
 import { Task } from 'tasks';
 
-import { RepoProps } from './types';
-
 import { REPO_QUERY, REPO_TASKS_QUERY } from './Repo.queries';
 
-const Repo: React.FC<RepoProps> = ({ org }) => {
+const Repo: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   const { repoName } = useParams();
 
-  useAnalyticsPage('Repositories', 'Repository Overview');
+  useAnalyticsPage('Repositories', 'Repository Overview', {
+    repoName,
+  });
 
   const { data: repoData, loading: repoLoading } = useQuery(REPO_QUERY, {
     variables: {
@@ -64,7 +66,7 @@ const Repo: React.FC<RepoProps> = ({ org }) => {
                       <ArrowsClockwise />
                     </Button>
                   </Tooltip>
-                  <Button to={`../tasks/new?repo=${repo.id}`}>
+                  <Button to={`../../tasks/new?repo=${repo.id}`}>
                     Create Task
                   </Button>
                 </>

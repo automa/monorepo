@@ -1,24 +1,21 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
 
 import { isProduction } from 'env';
 
-import { Loader, RoutesLoader, Typography, useRelativeMatch } from 'shared';
+import { Loader, Typography, useRelativeMatch } from 'shared';
 
 import { useApp } from 'app';
 
-import routes from './routes';
-import { AdminSetupProps } from './types';
-
 import { Container } from './AdminSetup.styles';
 
-const AdminSetup: React.FC<AdminSetupProps> = () => {
+const AdminSetup: React.FC = () => {
   const { app } = useApp();
 
   const isAdminSetupView = useRelativeMatch('.');
 
   if (isAdminSetupView) {
-    return <Navigate to="/admin/setup/code" replace />;
+    return <Navigate to="code" replace />;
   }
 
   // If in production and cloud
@@ -31,7 +28,9 @@ const AdminSetup: React.FC<AdminSetupProps> = () => {
       <Typography variant="title4">
         {!isProduction ? 'Development' : 'Self-hosted'} Setup
       </Typography>
-      <RoutesLoader fallback={<Loader />} routes={routes} />
+      <Suspense fallback={<Loader />}>
+        <Outlet />
+      </Suspense>
     </Container>
   );
 };

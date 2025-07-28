@@ -1,5 +1,10 @@
 import React from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import {
+  Link,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { Gear, Question, Robot } from '@phosphor-icons/react';
 
@@ -17,9 +22,7 @@ import {
 import Editor from 'shared/components/Editor';
 
 import { BOT_INSTALLATION_FRAGMENT } from 'bots';
-import { useOrg } from 'orgs';
-
-import { PublicBotProps } from './types';
+import { Org, useOrg } from 'orgs';
 
 import { BOT_INSTALL_MUTATION, PUBLIC_BOT_QUERY } from './PublicBot.queries';
 import {
@@ -29,7 +32,9 @@ import {
   DetailsTitle,
 } from './PublicBot.styles';
 
-const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
+const PublicBot: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   const { botOrgName, botName } = useParams();
 
   const navigate = useNavigate();
@@ -60,7 +65,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
         variant: 'success',
       });
 
-      navigate(`../bots/${botOrgName}/${botName}`);
+      navigate(`../../${botOrgName}/${botName}`);
     },
     update(cache, { data }) {
       if (!bot || !data) return;
@@ -169,11 +174,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
               )
             ) : (
               <Tooltip body="Bot installation settings">
-                <Button
-                  to={`../bots/${botOrgName}/${botName}`}
-                  size="large"
-                  icon
-                >
+                <Button to={`../../${botOrgName}/${botName}`} size="large" icon>
                   <Gear />
                 </Button>
               </Tooltip>
@@ -203,7 +204,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ org }) => {
               </Flex>
               <Flex direction="column" className="gap-2">
                 <DetailsTitle>Category</DetailsTitle>
-                <Link to={`../bots/new?ai=${!bot.is_deterministic}`}>
+                <Link to={`..?ai=${!bot.is_deterministic}`}>
                   <Badge variant="info">
                     {bot.is_deterministic ? 'Deterministic' : 'Uses AI'}
                   </Badge>

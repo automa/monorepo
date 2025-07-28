@@ -92,7 +92,10 @@ const proposalDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
   },
 };
 
-export const getBadgeDefinition = (item: TaskItemFragment) => {
+export const getBadgeDefinition = (
+  item: TaskItemFragment,
+  linkPrefix: string,
+) => {
   if (item.type === TaskItemType.Origin) {
     return originDefinitions[item.data.integration as IntegrationType];
   }
@@ -106,7 +109,7 @@ export const getBadgeDefinition = (item: TaskItemFragment) => {
     return {
       logo,
       title: () => item.repo!.name,
-      to: () => `../repos/${item.repo!.name}`,
+      to: () => `${linkPrefix}../repos/${item.repo!.name}`,
       href: undefined,
       content: () => (
         <Flex direction="column" className="gap-2">
@@ -136,7 +139,7 @@ export const getBadgeDefinition = (item: TaskItemFragment) => {
       ),
       title: () => botName,
       href: undefined,
-      to: () => `../bots/${botName}`,
+      to: () => `${linkPrefix}../bots/${botName}`,
       content: () => (
         <Flex direction="column" className="gap-2">
           <Flex alignItems="center" className="gap-1">
