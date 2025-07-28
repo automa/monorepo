@@ -15,6 +15,14 @@ import { OptimizerProvider } from '../src/optimizer';
 import store, { reducer, RootState } from '../src/store';
 import { Container as AppContainer } from '../src/views/App/App.styles';
 
+store.replaceReducer((state, { type, payload }) => {
+  if (type === 'REPLACE') {
+    return { ...state, ...(payload as RootState) };
+  }
+
+  return reducer(state, { type, payload });
+});
+
 const preview: Preview = {
   decorators: [
     withThemeByClassName({
@@ -29,9 +37,7 @@ const preview: Preview = {
 
       cache.restore(cached);
 
-      store.replaceReducer((_, { payload }) => payload as RootState);
       store.dispatch({ type: 'REPLACE', payload: state });
-      store.replaceReducer(reducer);
 
       return (
         <AnalyticsProvider>

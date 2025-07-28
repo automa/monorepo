@@ -16,6 +16,14 @@ import store, { reducer, RootState } from 'store';
 
 import { AnalyticsProvider } from 'analytics';
 
+store.replaceReducer((state, { type, payload }) => {
+  if (type === 'REPLACE') {
+    return { ...state, ...(payload as RootState) };
+  }
+
+  return reducer(state, { type, payload });
+});
+
 const customRender = (
   ui: ReactElement,
   {
@@ -35,9 +43,7 @@ const customRender = (
 ) => {
   cache.restore(cached);
 
-  store.replaceReducer((_, { payload }) => payload as RootState);
   store.dispatch({ type: 'REPLACE', payload: state });
-  store.replaceReducer(reducer);
 
   const AllTheProviders: FC<{ children: ReactNode }> = ({ children }) => {
     return (
