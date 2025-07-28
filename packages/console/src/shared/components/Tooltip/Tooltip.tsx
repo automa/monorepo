@@ -8,13 +8,13 @@ import { Container, Content } from './Tooltip.styles';
 const TooltipTriggerWrapper = React.forwardRef<
   HTMLDivElement,
   { children: React.ReactNode }
->(({ children, ...props }, ref) => (
-  <div ref={ref} {...props}>
-    {children}
-  </div>
-));
-
-TooltipTriggerWrapper.displayName = 'TooltipTriggerWrapper';
+>(function TooltipTriggerWrapper({ children, ...props }, ref) {
+  return (
+    <div ref={ref} {...props}>
+      {children}
+    </div>
+  );
+});
 
 const Tooltip: React.FC<TooltipComponentProps> = ({
   side,
