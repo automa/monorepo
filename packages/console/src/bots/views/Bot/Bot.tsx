@@ -8,7 +8,6 @@ import { botUpdateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
 import { BotUpdateInput } from 'gql/graphql';
-import { useGateValue } from 'optimizer';
 import {
   Button,
   Flex,

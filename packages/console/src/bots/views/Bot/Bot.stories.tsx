@@ -18,6 +18,15 @@ const meta = {
       bot_installations_count: 1,
     },
   },
+  parameters: {
+    state: {
+      app: {
+        app: {
+          cloud: true,
+        },
+      },
+    },
+  },
 } satisfies Meta<typeof Bot>;
 
 export default meta;
