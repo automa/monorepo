@@ -2,7 +2,8 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { ArrowsClockwise } from '@phosphor-icons/react';
 
-import { Button, Flex, Loader, ToggleGroup, Tooltip } from 'shared';
+import { Button, Flex, Loader, Tooltip } from 'shared';
+import ToggleGroup from 'shared/components/ToggleGroup';
 import useFilters from 'shared/hooks/useFilters';
 
 import { Task, tasksFilters } from 'tasks';

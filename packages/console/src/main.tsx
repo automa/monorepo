@@ -10,8 +10,8 @@ import 'cal-sans';
 
 import 'index.css';
 
-import 'env';
 import 'telemetry';
+import { isProduction, isTest } from 'env';
 
 import client from 'client';
 import { ErrorBoundary } from 'error';
@@ -24,11 +24,14 @@ import { Toasts } from 'shared';
 
 import App from 'views/App';
 
-loadFonts().then(() => {
+loadFonts().then(async () => {
   const root = createRoot(document.getElementById('root')!);
+
+  const DevTools = await devtools();
 
   root.render(
     <React.StrictMode>
+      <DevTools />
       <AnalyticsProvider>
         <OptimizerProvider>
           <ApolloProvider client={client}>
@@ -48,3 +51,23 @@ loadFonts().then(() => {
     </React.StrictMode>,
   );
 });
+
+// Dynamically import the devtools to avoid increasing the bundle size in production builds
+const devtools = async () => {
+  if (isProduction || isTest) {
+    return () => null;
+  }
+
+  const [{ StagewiseToolbar }, { ReactPlugin }] = await Promise.all([
+    import('@stagewise/toolbar-react'),
+    import('@stagewise-plugins/react'),
+  ]);
+
+  const DevTools = () => (
+    <>
+      <StagewiseToolbar config={{ plugins: [ReactPlugin] }} />
+    </>
+  );
+
+  return DevTools;
+};

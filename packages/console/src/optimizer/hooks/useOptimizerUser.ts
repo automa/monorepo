@@ -8,6 +8,8 @@ const useOptimizerUser = () => {
 
   const updateOptimizerUser = useCallback(
     (user: User | null) => {
+      if (!user) return;
+
       updateUserAsync({
         userID: user?.id,
         email: user?.email,

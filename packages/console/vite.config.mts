@@ -40,6 +40,7 @@ export default defineConfig({
     process.env.BUILD_STATS ? webpackStats() : undefined,
   ],
   server: {
+    host: true,
     port: 3000,
     open: 'http://localhost:3000',
   },
