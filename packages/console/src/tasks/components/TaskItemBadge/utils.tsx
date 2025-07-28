@@ -64,24 +64,6 @@ const originDefinitions: Partial<Record<IntegrationType, BadgeFunction>> = {
   },
 };
 
-const repoDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
-  [ProviderType.Github]: {
-    logo: <GithubLogo className="size-3" />,
-    title: ({ repo }) => repo!.name,
-    to: ({ repo }) => `../repos/${repo!.name}`,
-    content: ({ repo }) => (
-      <Flex direction="column" className="gap-2">
-        <Flex alignItems="center" className="gap-1">
-          <GithubLogo className="size-3" />
-          <Typography variant="xsmall" className="text-neutral-600">
-            {repo!.org.provider_name} / {repo!.name}
-          </Typography>
-        </Flex>
-      </Flex>
-    ),
-  },
-};
-
 const proposalDefinitions: Partial<Record<ProviderType, BadgeFunction>> = {
   [ProviderType.Github]: {
     logo: ({ data }) =>
@@ -116,7 +98,27 @@ export const getBadgeDefinition = (item: TaskItemFragment) => {
   }
 
   if (item.type === TaskItemType.Repo) {
-    return repoDefinitions[item.repo!.org.provider_type];
+    const logo =
+      item.repo!.org.provider_type === ProviderType.Github ? (
+        <GithubLogo className="size-3" />
+      ) : null;
+
+    return {
+      logo,
+      title: () => item.repo!.name,
+      to: () => `../repos/${item.repo!.name}`,
+      href: undefined,
+      content: () => (
+        <Flex direction="column" className="gap-2">
+          <Flex alignItems="center" className="gap-1">
+            {logo}
+            <Typography variant="xsmall" className="text-neutral-600">
+              {item.repo!.org.provider_name} / {item.repo!.name}
+            </Typography>
+          </Flex>
+        </Flex>
+      ),
+    };
   }
 
   if (item.type === TaskItemType.Bot) {
