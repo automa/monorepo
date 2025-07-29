@@ -8,11 +8,9 @@ import { useApp } from 'app';
 
 import GithubLogo from 'assets/logos/github.svg?react';
 
-import { AdminSetupCodeProps } from './types';
-
 import { Card, Container } from './AdminSetupCode.styles';
 
-const AdminSetupCode: React.FC<AdminSetupCodeProps> = () => {
+const AdminSetupCode: React.FC = () => {
   const { app } = useApp();
 
   const githubManifest = useMemo(

@@ -5,9 +5,7 @@ import { useAsyncEffect } from 'shared';
 
 import { logout, useUser } from 'auth';
 
-import { AuthLogoutProps } from './types';
-
-const AuthLogout: React.FC<AuthLogoutProps> = () => {
+const AuthLogout: React.FC = () => {
   const user = useUser();
 
   useAsyncEffect(async () => {
@@ -21,7 +19,7 @@ const AuthLogout: React.FC<AuthLogoutProps> = () => {
   }, [user]);
 
   if (!user) {
-    return <Navigate to="/auth/login" />;
+    return <Navigate to="../login" />;
   }
 
   return null;

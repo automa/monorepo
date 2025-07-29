@@ -1,4 +1,5 @@
 import React from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { ArrowsClockwise } from '@phosphor-icons/react';
 
@@ -6,13 +7,14 @@ import { Button, Flex, Loader, Tooltip } from 'shared';
 import ToggleGroup from 'shared/components/ToggleGroup';
 import useFilters from 'shared/hooks/useFilters';
 
+import { Org } from 'orgs';
 import { Task, tasksFilters } from 'tasks';
-
-import { TasksProps } from './types';
 
 import { TASKS_QUERY } from './Tasks.queries';
 
-const Tasks: React.FC<TasksProps> = ({ org }) => {
+const Tasks: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   const { filterValues, filterParams, filterOptions, filterChangeFns } =
     useFilters(tasksFilters);
 
@@ -50,7 +52,7 @@ const Tasks: React.FC<TasksProps> = ({ org }) => {
               <ArrowsClockwise />
             </Button>
           </Tooltip>
-          <Button to="../tasks/new">Create Task</Button>
+          <Button to="new">Create Task</Button>
         </Flex>
       </Flex>
       {loading && !data ? (

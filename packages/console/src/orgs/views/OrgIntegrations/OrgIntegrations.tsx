@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { IntegrationType } from 'gql/graphql';
@@ -7,12 +8,13 @@ import { objectKeys } from 'utils';
 
 import { useApp } from 'app';
 import { IntegrationConnectCard, integrations } from 'integrations';
-
-import { OrgIntegrationsProps } from './types';
+import { Org } from 'orgs';
 
 import { INTEGRATIONS_QUERY } from './OrgIntegrations.queries';
 
-const OrgIntegrations: React.FC<OrgIntegrationsProps> = ({ org }) => {
+const OrgIntegrations: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   const { app } = useApp();
 
   const { data, loading } = useQuery(INTEGRATIONS_QUERY, {

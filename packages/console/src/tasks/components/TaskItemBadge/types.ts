@@ -10,9 +10,10 @@ import { taskItemBadge } from './TaskItemBadge.cva';
 type TaskItemBadgeProps = $<
   {},
   VariantProps<typeof taskItemBadge>,
-  HTMLAttributes<HTMLDivElement> & {
+  {
     taskItem: TaskItemFragment;
-  }
+    linkPrefix?: string;
+  } & HTMLAttributes<HTMLDivElement>
 >;
 
 export type TaskItemBadgeComponentProps = Component<TaskItemBadgeProps>;

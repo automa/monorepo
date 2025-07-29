@@ -131,7 +131,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
         <Typography variant="small">
           decided to implement the task in
         </Typography>
-        <Anchor to={`../repos/${taskItem.repo!.name}`}>
+        <Anchor to={`../../repos/${taskItem.repo!.name}`}>
           <Flex alignItems="center" className="gap-1">
             <definition.icon className="ml-0.5 size-3" />
             <Subject>
@@ -167,7 +167,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
           )}
         </Subject>
         <Typography variant="small">assigned the task to</Typography>
-        <Anchor to={`../bots/${botName}`}>
+        <Anchor to={`../../bots/${botName}`}>
           <Flex alignItems="center" className="gap-1">
             <Avatar
               src={taskItem.bot!.image_url ?? null}
@@ -195,7 +195,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
 
     return (
       <TaskItemContainer icon={GitPullRequest} timestamp={taskItem.created_at}>
-        <Anchor to={`../bots/${botName}`}>
+        <Anchor to={`../../bots/${botName}`}>
           <Flex alignItems="center" className="gap-1">
             <Avatar
               src={taskItem.bot!.image_url ?? null}
@@ -231,7 +231,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
             <Typography variant="small">{actorUser.name}</Typography>
           </Subject>
         ) : taskItem.bot ? (
-          <Anchor to={`../bots/${botName}`}>
+          <Anchor to={`../../bots/${botName}`}>
             <Flex alignItems="center" className="gap-1">
               <Avatar
                 src={taskItem.bot.image_url ?? null}

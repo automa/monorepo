@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useOutletContext } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
@@ -19,12 +19,13 @@ import {
 } from 'shared';
 
 import { BOT_BASE_FRAGMENT, InputPaths } from 'bots';
-
-import { BotCreateProps } from './types';
+import { Org } from 'orgs';
 
 import { BOT_CREATE_MUTATION } from './BotCreate.queries';
 
-const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
+const BotCreate: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   const {
     register,
     control,
@@ -73,7 +74,7 @@ const BotCreate: React.FC<BotCreateProps> = ({ org }) => {
   if (!loading && data?.botCreate) {
     const bot = getFragment(BOT_BASE_FRAGMENT, data.botCreate);
 
-    return <Navigate to={`../bots/${bot.name}`} />;
+    return <Navigate to={`../${bot.name}`} />;
   }
 
   return (

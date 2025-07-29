@@ -1,24 +1,15 @@
-import React, { useMemo } from 'react';
-import { Navigate, NavLink } from 'react-router-dom';
+import React, { Suspense, useMemo } from 'react';
+import { Navigate, NavLink, Outlet } from 'react-router-dom';
 import { Gear, Plugs } from '@phosphor-icons/react';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import {
-  Flex,
-  Loader,
-  RoutesLoader,
-  Typography,
-  useRelativeMatch,
-} from 'shared';
+import { Flex, Loader, Typography, useRelativeMatch } from 'shared';
 
 import { EmptyTopNav } from 'orgs';
 
-import routes from './routes';
-import { UserSettingsProps } from './types';
-
 import { Container, Content, Item, Nav } from './UserSettings.styles';
 
-const UserSettings: React.FC<UserSettingsProps> = () => {
+const UserSettings: React.FC = () => {
   const isUserSettingsView = useRelativeMatch('.');
 
   const tabs = useMemo(() => {
@@ -62,7 +53,9 @@ const UserSettings: React.FC<UserSettingsProps> = () => {
           </Nav>
         </NavigationMenu.Root>
         <Content direction="column" fullWidth>
-          <RoutesLoader fallback={<Loader />} routes={routes} />
+          <Suspense fallback={<Loader />}>
+            <Outlet />
+          </Suspense>
         </Content>
       </Container>
     </>

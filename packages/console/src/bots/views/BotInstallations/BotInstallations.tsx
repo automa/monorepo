@@ -1,17 +1,18 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useOutletContext } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { useAnalyticsPage } from 'analytics';
 import { Button, Flex, Loader, Typography } from 'shared';
 
 import { BotInstallation } from 'bots';
-
-import { BotInstallationsProps } from './types';
+import { Org } from 'orgs';
 
 import { BOT_INSTALLATIONS_QUERY } from './BotInstallations.queries';
 
-const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
+const BotInstallations: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   useAnalyticsPage('Bots', 'Bot Installations Overview');
 
   // TODO: Add infinite scroll (with pagination cache)
@@ -26,14 +27,14 @@ const BotInstallations: React.FC<BotInstallationsProps> = ({ org }) => {
     !org.bot_installations_count ||
     (!loading && !data?.botInstallations.length)
   ) {
-    return <Navigate to="../bots/new" replace />;
+    return <Navigate to="new" replace />;
   }
 
   return (
     <Flex direction="column" className="gap-8">
       <Flex justifyContent="space-between" alignItems="center" className="h-9">
         <Typography variant="title6">Installed bots</Typography>
-        <Button to="../bots/new">Install Bot</Button>
+        <Button to="new">Install Bot</Button>
       </Flex>
       {loading && !data ? (
         <Loader />

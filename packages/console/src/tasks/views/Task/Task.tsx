@@ -1,19 +1,20 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { getFragment } from 'gql';
 import { Flex, Loader, Typography } from 'shared';
 
+import { Org } from 'orgs';
 import { TASK_FRAGMENT, TaskItem } from 'tasks';
-
-import { TaskProps } from './types';
 
 import { TASK_QUERY } from './Task.queries';
 import { Container } from './Task.styles';
 
-const Task: React.FC<TaskProps> = ({ org }) => {
-  const { id } = useParams<{ id: string }>();
+const Task: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
+  const { id } = useParams();
 
   const { data, loading } = useQuery(TASK_QUERY, {
     variables: {

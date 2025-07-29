@@ -10,11 +10,9 @@ import Logo from 'assets/logo.svg?react';
 import GithubLogo from 'assets/logos/github_fill.svg?react';
 import GitlabLogo from 'assets/logos/gitlab_fill.svg?react';
 
-import { AuthLoginProps } from './types';
-
 import { LoginButton } from './AuthLogin.styles';
 
-const AuthLogin: React.FC<AuthLoginProps> = () => {
+const AuthLogin: React.FC = () => {
   const { app } = useApp();
 
   const user = useUser();

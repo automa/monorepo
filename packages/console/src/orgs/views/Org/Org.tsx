@@ -1,8 +1,16 @@
-import React, { useEffect, useMemo } from 'react';
-import { Navigate, NavLink, useParams } from 'react-router-dom';
+import React, { Suspense, useEffect, useMemo } from 'react';
+import {
+  Navigate,
+  NavLink,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import { Flex, Loader, RoutesLoader, Typography } from 'shared';
+import { useAnalytics } from 'analytics';
+import { Flex, Loader, Typography } from 'shared';
 import { useRelativeMatch } from 'shared/hooks';
 
 import { useAuth } from 'auth';
@@ -10,15 +18,18 @@ import { BotOnboarding } from 'bots';
 import { EmptyTopNav, useOrg, useOrgs } from 'orgs';
 import { RepoOnboarding } from 'repos';
 
-import routes from './routes';
-import { OrgProps } from './types';
-
 import { Content, Item, Nav } from './Org.styles';
 
-const Org: React.FC<OrgProps> = () => {
+const Org: React.FC = () => {
   const { orgName } = useParams() as {
     orgName: string;
   };
+
+  const location = useLocation();
+
+  const navigate = useNavigate();
+
+  const { page } = useAnalytics();
 
   const isOrgIndexView = useRelativeMatch('.');
   const isOrgTasksView = useRelativeMatch('tasks', false);
@@ -26,16 +37,32 @@ const Org: React.FC<OrgProps> = () => {
 
   const { setUserOrg } = useAuth();
 
-  const { orgsLoading } = useOrgs();
+  const { orgs, orgsLoading } = useOrgs();
   const { org, setOrg } = useOrg();
 
   // Set current org from URL
   useEffect(() => {
-    if (!orgsLoading && orgName) {
-      setOrg(orgName);
+    if (!orgsLoading && orgs && orgName) {
+      if (orgName !== '$') {
+        setOrg(orgName);
+        return;
+      }
+
+      // Helper to deep link while ignoring the org name in the URL
+      page('Convenience', 'Deep Link', {
+        path: location.pathname,
+        url: `${window.location.origin}${location.pathname}`,
+      });
+
+      // TODO: Either store the last visited org in local storage and read it
+      // or ask the user to select an org if they have access to multiple
+      const toOrg = org || orgs[0];
+      const to = location.pathname.replace('$', `${toOrg.name}`);
+
+      navigate(to, { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orgsLoading, orgName]);
+  }, [orgs, orgsLoading, org, orgName]);
 
   // Set user.org_id to current org
   useEffect(() => {
@@ -121,7 +148,9 @@ const Org: React.FC<OrgProps> = () => {
             ) : shouldShowBotOnboarding ? (
               <BotOnboarding org={org} />
             ) : (
-              <RoutesLoader fallback={<Loader />} routes={routes} org={org} />
+              <Suspense fallback={<Loader />}>
+                <Outlet context={{ org }} />
+              </Suspense>
             )}
           </Content>
         </>

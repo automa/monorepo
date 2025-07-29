@@ -4,11 +4,9 @@ import axios from 'axios';
 
 import { Anchor, Flex, Loader, Typography, useAsyncEffect } from 'shared';
 
-import { AdminSetupGithubProps } from './types';
-
 import { Name, Secret } from './AdminSetupGithub.styles';
 
-const AdminSetupGithub: React.FC<AdminSetupGithubProps> = () => {
+const AdminSetupGithub: React.FC = () => {
   const location = useLocation();
 
   const searchParams = new URLSearchParams(location.search);

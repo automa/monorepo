@@ -17,7 +17,7 @@ const PublicBot: React.FC<PublicBotProps> = ({ publicBot: data, ...props }) => {
   const botBase = getFragment(BOT_BASE_FRAGMENT, publicBot);
 
   return (
-    <Link to={`../bots/new/${publicBot.org.name}/${botBase.name}`}>
+    <Link to={`${publicBot.org.name}/${botBase.name}`}>
       <Container {...props}>
         <Flex justifyContent="space-between" alignItems="center">
           <BotBase bot={publicBot} namePrefix={`${publicBot.org.name} / `} />

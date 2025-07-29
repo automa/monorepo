@@ -40,6 +40,7 @@ export const Connected = {
 
 export const ConnectedUser = {
   args: {
+    integration: IntegrationType.Jira,
     connected: true,
     config: {
       name: 'org',

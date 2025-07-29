@@ -1,17 +1,18 @@
-import React, { useMemo } from 'react';
-import { Navigate, NavLink } from 'react-router-dom';
+import React, { Suspense, useMemo } from 'react';
+import { Navigate, NavLink, Outlet, useOutletContext } from 'react-router-dom';
 import { CreditCard, Robot } from '@phosphor-icons/react';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
-import { Flex, Loader, RoutesLoader, Typography } from 'shared';
+import { Flex, Loader, Typography } from 'shared';
 import { useRelativeMatch } from 'shared/hooks';
 
-import routes from './routes';
-import { OrgSettingsProps } from './types';
+import { Org } from 'orgs';
 
 import { Container, Content, Item, Nav } from './OrgSettings.styles';
 
-const OrgSettings: React.FC<OrgSettingsProps> = ({ org }) => {
+const OrgSettings: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   const isOrgSettingsView = useRelativeMatch('.');
 
   const tabs = useMemo(() => {
@@ -55,7 +56,9 @@ const OrgSettings: React.FC<OrgSettingsProps> = ({ org }) => {
         </Nav>
       </NavigationMenu.Root>
       <Content direction="column" fullWidth>
-        <RoutesLoader fallback={<Loader />} routes={routes} org={org} />
+        <Suspense fallback={<Loader />}>
+          <Outlet context={{ org }} />
+        </Suspense>
       </Content>
     </Container>
   );

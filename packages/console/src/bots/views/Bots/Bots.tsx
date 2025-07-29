@@ -1,15 +1,17 @@
 import React from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
 import { Button, Flex, Loader, Typography } from 'shared';
 
 import { Bot } from 'bots';
-
-import { BotsProps } from './types';
+import { Org } from 'orgs';
 
 import { BOTS_QUERY } from './Bots.queries';
 
-const Bots: React.FC<BotsProps> = ({ org }) => {
+const Bots: React.FC = () => {
+  const { org } = useOutletContext<{ org: Org }>();
+
   // TODO: Add infinite scroll (with pagination cache)
   const { data, loading } = useQuery(BOTS_QUERY, {
     variables: {
@@ -21,7 +23,7 @@ const Bots: React.FC<BotsProps> = ({ org }) => {
     <>
       <Flex justifyContent="space-between" alignItems="center" className="h-9">
         <Typography variant="title6">Automa Bots</Typography>
-        <Button to="../bots/new">Create Bot</Button>
+        <Button to="new">Create Bot</Button>
       </Flex>
       {loading && !data ? (
         <Loader />

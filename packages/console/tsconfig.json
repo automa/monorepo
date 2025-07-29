@@ -5,6 +5,7 @@
     "baseUrl": "./src",
     "target": "esnext",
     "module": "esnext",
+    "moduleResolution": "bundler",
     "lib": ["dom", "dom.iterable", "esnext"],
     "declaration": false,
     "declarationMap": false,

@@ -6,12 +6,11 @@ import { Button, Flex, Tooltip, Typography } from 'shared';
 
 import { USER_AVATAR_FRAGMENT, USER_QUERY, USER_QUERY_FRAGMENT } from 'users';
 
-import { UserSettingsConnectionsProps } from './types';
 import { providers } from './utils';
 
 import { Card, Tag } from './UserSettingsConnections.styles';
 
-const UserSettingsConnections: React.FC<UserSettingsConnectionsProps> = () => {
+const UserSettingsConnections: React.FC = () => {
   const { data: fullData } = useQuery(USER_QUERY);
 
   const data = getFragment(

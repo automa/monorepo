@@ -1,6 +1,7 @@
 import {
   ApolloClient,
   ApolloLink,
+  createQueryPreloader,
   HttpLink,
   InMemoryCache,
 } from '@apollo/client';
@@ -105,6 +106,8 @@ const client = new ApolloClient({
   },
   connectToDevTools: !isProduction,
 });
+
+export const preloadQuery = createQueryPreloader(client);
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URI;
 axios.defaults.withCredentials = true;

@@ -9,13 +9,13 @@ beforeEach(() => {
 });
 
 test('redirects to /admin/setup/code', async () => {
-  render(<AdminSetup />, {
-    path: '/admin/setup',
+  render({
+    Component: AdminSetup,
   });
 
   expect(mockedNavigate).toHaveBeenCalledTimes(1);
   expect(mockedNavigate).toHaveBeenCalledWith({
-    to: '/admin/setup/code',
+    to: 'code',
     replace: true,
   });
 });
