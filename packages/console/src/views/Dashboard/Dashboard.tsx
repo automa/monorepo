@@ -2,8 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { NetworkStatus, useQuery } from '@apollo/client';
 
-import { Flex, Loader, RoutesLoader, useRelativeMatch } from 'shared';
+import { useGateValue } from 'optimizer';
+import {
+  Flex,
+  Loader,
+  RoutesLoader,
+  Typography,
+  useRelativeMatch,
+} from 'shared';
 
+import { useApp } from 'app';
 import { EmptyTopNav, OrgList } from 'orgs';
 import { UserNavbar } from 'users';
 
@@ -16,9 +24,26 @@ import { DASHBOARD_QUERY } from './Dashboard.queries';
 import { Header } from './Dashboard.styles';
 
 const Dashboard: React.FC<DashboardProps> = () => {
+  const { app } = useApp();
+
+  const isAbleToAccess = useGateValue('access');
+
   const isDashboardView = useRelativeMatch('.');
 
   const { data, loading, refetch, networkStatus } = useQuery(DASHBOARD_QUERY);
+
+  if (app.cloud && !isAbleToAccess) {
+    return (
+      <Flex alignItems="center" direction="column" className="mt-40 gap-4">
+        <Typography variant="title5" className="text-center">
+          Successfully joined the waitlist!
+        </Typography>
+        <Typography>
+          We will notify you via email when cloud is available.
+        </Typography>
+      </Flex>
+    );
+  }
 
   return (
     <>
