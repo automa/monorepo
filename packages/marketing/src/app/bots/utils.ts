@@ -13,6 +13,7 @@ const botSelectFields = {
   paths: true,
   is_preview: true,
   is_deterministic: true,
+  self_hostable_repo: true,
   orgs: {
     select: {
       id: true,
@@ -34,6 +35,9 @@ export const listBots = async () => {
         is_sponsored: 'desc',
       },
       {
+        is_self_hostable: 'desc',
+      },
+      {
         is_preview: 'asc',
       },
       {
@@ -43,6 +47,9 @@ export const listBots = async () => {
         bot_installations: {
           _count: 'desc',
         },
+      },
+      {
+        id: 'asc',
       },
     ],
   });

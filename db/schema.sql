@@ -200,7 +200,9 @@ CREATE TABLE public.bots (
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     is_preview boolean DEFAULT false NOT NULL,
     is_deterministic boolean DEFAULT false NOT NULL,
-    is_sponsored boolean DEFAULT false NOT NULL
+    is_sponsored boolean DEFAULT false NOT NULL,
+    self_hostable_repo public.citext,
+    is_self_hostable boolean GENERATED ALWAYS AS ((self_hostable_repo IS NOT NULL)) STORED
 );
 
 

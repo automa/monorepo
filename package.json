@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "db-dev": "crude -s db/schema.sql -u postgresql://automa@localhost:5432/automa",
+    "db-dump-fix": "sed -i '/^-- Dumped by pg_dump version/d' db/schema.sql",
     "db-migrate": "crude up",
     "format": "prettier --write . --log-level warn",
     "format-check": "prettier --check .",
