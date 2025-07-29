@@ -28,7 +28,7 @@ const Nav: React.FC<NavProps> = ({ ...props }) => {
 
   const mobileNavigationItems = [
     ...navigationItems,
-    { href: process.env.NEXT_PUBLIC_CONSOLE_URL!, label: 'Get Started' },
+    { href: '/self-hosting', label: 'Self-host' },
   ];
 
   const hideMobileMenu = () => {

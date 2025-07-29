@@ -36,11 +36,16 @@ import {
 const CTA: React.FC = () => {
   return (
     <>
-      <Button href={process.env.NEXT_PUBLIC_CONSOLE_URL!} blank size="xlarge">
-        Get Started
-      </Button>
-      <Button href="/self-hosting" variant="secondary" size="xlarge">
+      <Button href="/self-hosting" size="xlarge">
         Self-host
+      </Button>
+      <Button
+        href={process.env.NEXT_PUBLIC_CONSOLE_URL!}
+        blank
+        size="xlarge"
+        variant="secondary"
+      >
+        Cloud waitlist
       </Button>
     </>
   );

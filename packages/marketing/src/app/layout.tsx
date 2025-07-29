@@ -43,10 +43,10 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <NavContainer>
               <Button
                 size="large"
-                href={process.env.NEXT_PUBLIC_CONSOLE_URL!}
+                href="/self-hosting"
                 className="hidden sm:block"
               >
-                Get Started
+                Self-host
               </Button>
               <Nav />
             </NavContainer>
