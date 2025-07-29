@@ -33,6 +33,19 @@ import {
   Title,
 } from './page.styles';
 
+const CTA: React.FC = () => {
+  return (
+    <>
+      <Button href={process.env.NEXT_PUBLIC_CONSOLE_URL!} blank size="xlarge">
+        Get Started
+      </Button>
+      <Button href="/self-hosting" variant="secondary" size="xlarge">
+        Self-host
+      </Button>
+    </>
+  );
+};
+
 const AppPage: React.FC = () => {
   return (
     <Container>
@@ -43,16 +56,7 @@ const AppPage: React.FC = () => {
           the cloud, generating a PR for you to review and merge.
         </Subtitle>
         <Flex className="mt-4 gap-4">
-          <Button
-            href={process.env.NEXT_PUBLIC_CONSOLE_URL!}
-            blank
-            size="xlarge"
-          >
-            Get Started
-          </Button>
-          <Button href="/self-hosting" variant="secondary" size="xlarge">
-            Self-host
-          </Button>
+          <CTA />
         </Flex>
       </Section>
       <Section>
@@ -266,16 +270,7 @@ const AppPage: React.FC = () => {
           Automate the mundane, so you can focus on what matters most.
         </SectionSubtitle>
         <Flex className="mt-8 gap-4">
-          <Button
-            href={process.env.NEXT_PUBLIC_CONSOLE_URL!}
-            blank
-            size="xlarge"
-          >
-            Get Started
-          </Button>
-          <Button href="/self-hosting" variant="secondary" size="xlarge">
-            Self-host
-          </Button>
+          <CTA />
         </Flex>
       </Section>
     </Container>
