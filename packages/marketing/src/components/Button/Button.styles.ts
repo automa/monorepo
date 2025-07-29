@@ -8,8 +8,8 @@ import { button } from './Button.cva';
 
 export const Container = tw.button<
   TwcComponentProps<'button'> & ButtonStyledProps
->(({ $variant, $size, $fullWidth, disabled }) => [
-  button({ variant: $variant, size: $size }),
+>(({ $variant, $size, $icon, $fullWidth, disabled }) => [
+  button({ variant: $variant, size: $size, icon: $icon }),
   $fullWidth && 'w-full justify-center',
   disabled && 'cursor-default opacity-50',
 ]);
