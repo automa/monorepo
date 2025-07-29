@@ -52,6 +52,7 @@
     "graphql-generate": "graphql-codegen --config graphql-codegen.ts",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
+    "preview": "vite preview --port 3000",
     "start": "vite",
     "storybook": "NODE_ENV=test storybook dev -p 6006",
     "storybook-build": "NODE_ENV=test storybook build",
