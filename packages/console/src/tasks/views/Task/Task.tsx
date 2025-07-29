@@ -6,7 +6,9 @@ import { getFragment } from 'gql';
 import { Flex, Loader, Typography } from 'shared';
 
 import { Org } from 'orgs';
-import { TASK_FRAGMENT, TaskItem } from 'tasks';
+import { TASK_FRAGMENT } from 'tasks';
+
+import TaskItem from 'tasks/components/TaskItem';
 
 import { TASK_QUERY } from './Task.queries';
 import { Container } from './Task.styles';

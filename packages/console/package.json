@@ -63,6 +63,7 @@
     "build": "vite build",
     "build-analyze": "BUILD_SOURCEMAP=1 pnpm build && source-map-explorer 'build/assets/*.js'",
     "build-stats": "BUILD_STATS=1 pnpm build",
+    "preview": "vite preview --port 3000",
     "start": "vite",
     "storybook": "NODE_ENV=test storybook dev -p 6006",
     "storybook-build": "NODE_ENV=test storybook build",

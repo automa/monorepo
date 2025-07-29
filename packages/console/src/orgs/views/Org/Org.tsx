@@ -14,9 +14,10 @@ import { Flex, Loader, Typography } from 'shared';
 import { useRelativeMatch } from 'shared/hooks';
 
 import { useAuth } from 'auth';
-import { BotOnboarding } from 'bots';
 import { EmptyTopNav, useOrg, useOrgs } from 'orgs';
-import { RepoOnboarding } from 'repos';
+
+import BotOnboarding from 'bots/components/BotOnboarding';
+import RepoOnboarding from 'repos/components/RepoOnboarding';
 
 import { Content, Item, Nav } from './Org.styles';
 
