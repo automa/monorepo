@@ -21,7 +21,7 @@ const schema = z.object({
   BASE_URI: z.string().default('http://localhost:8080'),
   CLIENT_URI: z.string().default('http://localhost:3000'),
   COOKIE_SECRET: z.string().default('cookie_secret_for_development_purpose'),
-  CLOUD: z.boolean().default(true),
+  CLOUD: z.boolean().default(false),
   DATABASE_URL: z.string().default('postgresql://automa@localhost:5432/automa'),
   GCP: z.object({
     CREDENTIALS: z.string().default('{}'),

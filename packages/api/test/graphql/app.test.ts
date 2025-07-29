@@ -59,7 +59,7 @@ suite('graphql app', () => {
         data: { app },
       } = response.json();
 
-      assert.isTrue(app.cloud);
+      assert.isFalse(app.cloud);
       assert.equal(app.client_uri, 'http://localhost:3000');
       assert.equal(app.webhook_uri, 'http://test.ngrok.io');
 
