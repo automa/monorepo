@@ -12,6 +12,7 @@ const Button: React.FC<ButtonComponentProps> = ({
   link,
   variant,
   size,
+  icon,
   fullWidth,
   type = 'button',
   disabled,
@@ -28,6 +29,7 @@ const Button: React.FC<ButtonComponentProps> = ({
       <Container
         $variant={variant}
         $size={size}
+        $icon={icon}
         $fullWidth={fullWidth}
         type={type}
         disabled={disabled}

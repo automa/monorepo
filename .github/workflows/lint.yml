@@ -15,7 +15,7 @@ jobs:
         uses: poseidon/wait-for-status-checks@v0.6.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          match_pattern: lockfile|lint|test-api|test-config|test-console|test-db|relative-console|relative-marketing
+          match_pattern: lockfile|lint|test-api|test-config|test-console|test-db|chromatic-console|chromatic-marketing|relative-console|relative-marketing
   lockfile:
     runs-on: ubuntu-latest
     steps:

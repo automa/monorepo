@@ -51,10 +51,10 @@ VALUES
   (2, 'package-badges', 'Adds package manager badges to public packages', 'https://avatars.githubusercontent.com/u/6254238?s=64', 'scheduled', 'http://localhost:5005/hooks/automa', 'atma_whsec_package-badges', 'https://github.com/automa/package-badges', NOW(), TRUE, FALSE, TRUE, ARRAY['readme.md', 'readme.rst', 'package.json', 'Cargo.toml', 'pyproject.toml'], ARRAY['readme.md', 'readme.rst', 'package.json', 'Cargo.toml', 'pyproject.toml']),
   (3, 'codex', 'OpenAI''s coding agent', 'https://automa.app/logos/openai.svg', 'manual', 'http://localhost:5007/hooks/automa', 'atma_whsec_codex', 'https://openai.com', NOW(), FALSE, FALSE, TRUE, DEFAULT, DEFAULT),
   (4, 'claude-code', 'Anthropic''s coding agent', 'https://automa.app/logos/claude.svg', 'manual', 'http://localhost:5008/hooks/automa', 'atma_whsec_claude-code', 'https://anthropic.com', NOW(), FALSE, FALSE, TRUE, DEFAULT, DEFAULT),
-  (5, 'aider', 'Open source coding agent', 'https://automa.app/logos/aider.svg', 'manual', 'https://localhost:5009/hooks/automa', 'atma_whsec_aider', 'https://aider.chat', NOW(), FALSE, FALSE, FALSE, DEFAULT, DEFAULT),
-  (6, 'open-hands', 'All Hands'' coding agent', 'https://avatars.githubusercontent.com/u/169105795?s=64', 'manual', 'http://localhost:5010/hooks/automa', 'atma_whsec_open-hands', 'https://all-hands.dev', NOW(), FALSE, FALSE, FALSE, DEFAULT, DEFAULT),
-  (7, 'github-runners', 'Changes GitHub CI configuration to use Depot runners', 'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg', 'scheduled', 'http://localhost:5004/hooks/automa', 'atma_whsec_github-runners', 'https://depot.dev', NOW(), TRUE, FALSE, FALSE, ARRAY['.github/workflows'], ARRAY['.github/workflows']),
-  (8, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', 'manual', 'http://localhost:5006/hooks/automa', 'atma_whsec_posthog', 'https://posthog.com', NOW(), FALSE, FALSE, FALSE, DEFAULT, ARRAY['data']),
+  (6, 'open-hands', 'All Hands'' coding agent', 'https://avatars.githubusercontent.com/u/169105795?s=64', 'manual', 'http://localhost:5010/hooks/automa', 'atma_whsec_open-hands', 'https://all-hands.dev', NOW(), FALSE, TRUE, FALSE, DEFAULT, DEFAULT),
+  (5, 'aider', 'Open source coding agent', 'https://automa.app/logos/aider.svg', 'manual', 'https://localhost:5009/hooks/automa', 'atma_whsec_aider', 'https://aider.chat', NOW(), FALSE, TRUE, FALSE, DEFAULT, DEFAULT),
+  (7, 'github-runners', 'Changes GitHub CI configuration to use Depot runners', 'https://depot.dev/assets/brand/1693758816/depot-icon-on-light.svg', 'scheduled', 'http://localhost:5004/hooks/automa', 'atma_whsec_github-runners', 'https://depot.dev', NOW(), TRUE, TRUE, FALSE, ARRAY['.github/workflows'], ARRAY['.github/workflows']),
+  (8, 'posthog', 'Adds code to track a new analytics event using Posthog', 'https://posthog.com/brand/posthog-logomark.svg', 'manual', 'http://localhost:5006/hooks/automa', 'atma_whsec_posthog', 'https://posthog.com', NOW(), FALSE, TRUE, TRUE, DEFAULT, ARRAY['data']),
   (9, 'gemini', 'Google''s coding agent', 'https://automa.app/logos/gemini.svg', 'manual', 'http://localhost:5011/hooks/automa', 'atma_whsec_gemini', 'https://deepmind.google/models/gemini/', NOW(), FALSE, FALSE, TRUE, DEFAULT, DEFAULT);
 
 UPDATE bots SET
@@ -66,7 +66,8 @@ VALUES
   (4, 1),
   (5, 1),
   (6, 1),
-  (9, 1);
+  (9, 1),
+  (11, 1);
 
 INSERT INTO public.tasks (org_id, title, is_scheduled, token, created_at, state)
 VALUES

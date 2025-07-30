@@ -2,9 +2,13 @@ import { tw } from 'theme';
 
 import { Flex, Typography } from 'components';
 
-export const Container = tw(
-  Flex,
-)`group relative gap-4 rounded-lg border border-neutral-200 bg-white p-6 shadow-sm transition-all duration-200 hover:border-neutral-300 hover:shadow-md`;
+export const Container = tw(Flex).attrs({
+  direction: 'column',
+})`group relative gap-6 rounded-lg border border-neutral-200 bg-white pt-6 shadow-sm transition-all duration-200 hover:border-neutral-300 hover:shadow-md`;
+
+export const Banner = tw(Typography).attrs({
+  variant: 'small',
+})`size-full rounded-b-lg bg-neutral-700 py-0.5 text-center text-white`;
 
 export const ImageContainer = tw(Flex).attrs({
   alignItems: 'center',

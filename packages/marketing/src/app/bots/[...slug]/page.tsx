@@ -13,7 +13,7 @@ import StarterKit from '@tiptap/starter-kit';
 
 import { twp } from 'theme';
 
-import { Button, Flex, Tooltip, Typography } from 'components';
+import { Anchor, Button, Flex, Tooltip, Typography } from 'components';
 
 import { TypographyComponentProps } from 'components/Typography';
 import { typography } from 'components/Typography/Typography.cva';
@@ -173,7 +173,7 @@ const BotPage = async ({ params: { slug } }: Props) => {
         </ImageContainer>
 
         <Flex direction="column" className="gap-3 md:gap-4">
-          <Flex alignItems="baseline" wrap="wrap" className="gap-4">
+          <Flex alignItems="baseline" className="flex-col gap-4 md:flex-row">
             <Typography variant="title3">{bot.name}</Typography>
             <Flex alignItems="center" className="gap-4">
               <Typography variant="large" className="text-neutral-500">
@@ -195,6 +195,15 @@ const BotPage = async ({ params: { slug } }: Props) => {
       <Typography variant="large" className="block text-neutral-600 md:hidden">
         {bot.short_description}
       </Typography>
+
+      {bot.self_hostable_repo && (
+        <Anchor href={bot.self_hostable_repo} blank>
+          <Typography className="w-full rounded-lg bg-neutral-600 p-2 text-center text-white">
+            This bot can be self-hosted. <br className="block md:hidden" />
+            Please refer to the documentation here.
+          </Typography>
+        </Anchor>
+      )}
 
       <Flex justifyContent="center" className="py-6">
         {bot.is_preview ? (

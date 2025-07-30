@@ -12,7 +12,7 @@ import Logo from 'assets/logo.svg?react';
 
 import { getTaskItemUser } from 'tasks/utils';
 
-import { TASK_ITEM_FRAGMENT } from '../TaskItem';
+import { TASK_ITEM_FRAGMENT } from '../TaskItem/TaskItem.queries';
 import TaskItemBadge from '../TaskItemBadge';
 import TaskStateIcon from '../TaskStateIcon';
 

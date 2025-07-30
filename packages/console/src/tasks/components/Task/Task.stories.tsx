@@ -5,7 +5,7 @@ import { ProviderType, TaskItemType, TaskState } from 'gql/graphql';
 
 import { USER_AVATAR_FRAGMENT } from 'users';
 
-import { TASK_ITEM_FRAGMENT } from '../TaskItem';
+import { TASK_ITEM_FRAGMENT } from '../TaskItem/TaskItem.queries';
 
 import Task from './Task';
 

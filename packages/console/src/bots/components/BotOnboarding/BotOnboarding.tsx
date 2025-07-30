@@ -4,6 +4,8 @@ import { ArrowUpRight } from '@phosphor-icons/react';
 
 import { Flex, Tooltip, Typography } from 'shared';
 
+import { useApp } from 'app';
+
 import { BotOnboardingProps } from './types';
 
 import { BotName, Card, Container, Content } from './BotOnboarding.styles';
@@ -30,28 +32,44 @@ const DEFAULT_BOTS = [
 ];
 
 const BotOnboarding: React.FC<BotOnboardingProps> = ({ ...props }) => {
+  const { app } = useApp();
+
   return (
     <Container {...props}>
       <Flex direction="column" alignItems="center" className="gap-2 lg:gap-4">
         <Typography variant="title4" align="center">
-          Install bots
+          {app.cloud ? 'Install' : 'Self-host'} bots
         </Typography>
         <Typography variant="small" align="center" className="text-neutral-600">
-          We need to know the bots that you want to run on your code.
+          {app.cloud
+            ? 'We need to know the bots that you want to run on your code.'
+            : 'Make sure to self-host the bots you want to use before installing them.'}
         </Typography>
       </Flex>
       <Flex className="gap-2 lg:gap-4">
         {DEFAULT_BOTS.map(
           ({ botOrgName, botName, logo, shortDescription }, index) => (
             <Tooltip key={index} body={shortDescription}>
-              <Card key={index} to={`bots/new/${botOrgName}/${botName}`}>
+              <Card
+                key={index}
+                {...(app.cloud
+                  ? {
+                      to: `bots/new/${botOrgName}/${botName}`,
+                    }
+                  : {
+                      href: `https://docs.automa.app/self-hosting/agents/${botName}`,
+                      blank: true,
+                    })}
+              >
                 <Content>
                   <img src={logo} alt={`${botName} logo`} className="size-16" />
                   <Flex direction="column" className="gap-1 lg:gap-2">
                     <BotName>{botName}</BotName>
-                    <Typography variant="xsmall" className="text-neutral-600">
-                      by {botOrgName}
-                    </Typography>
+                    {app.cloud && (
+                      <Typography variant="xsmall" className="text-neutral-600">
+                        by {botOrgName}
+                      </Typography>
+                    )}
                   </Flex>
                 </Content>
               </Card>
@@ -61,7 +79,11 @@ const BotOnboarding: React.FC<BotOnboardingProps> = ({ ...props }) => {
       </Flex>
       <Link to="bots/new">
         <Flex alignItems="center" className="relative left-2 gap-1">
-          <Typography align="center">Or explore bots to install</Typography>
+          <Typography align="center">
+            {app.cloud
+              ? 'Or explore bots to install'
+              : 'Finished self-hosting? Install bots'}
+          </Typography>
           <ArrowUpRight className="size-4" />
         </Flex>
       </Link>
