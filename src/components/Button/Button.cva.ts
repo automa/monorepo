@@ -12,9 +12,31 @@ export const button = cva('flex cursor-pointer items-center', {
       medium: '',
       large: '',
     },
+    icon: {
+      true: 'justify-center p-0',
+      false: '',
+    },
   },
+  compoundVariants: [
+    {
+      size: 'small',
+      icon: true,
+      class: '',
+    },
+    {
+      size: 'medium',
+      icon: true,
+      class: '',
+    },
+    {
+      size: 'large',
+      icon: true,
+      class: '',
+    },
+  ],
   defaultVariants: {
     variant: 'primary',
     size: 'medium',
+    icon: false,
   },
 });
