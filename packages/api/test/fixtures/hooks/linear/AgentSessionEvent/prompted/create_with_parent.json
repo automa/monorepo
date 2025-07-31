@@ -1,0 +1,70 @@
+{
+  "type": "AgentSessionEvent",
+  "action": "prompted",
+  "createdAt": "2025-07-31T22:00:38.553Z",
+  "organizationId": "6cb652a9-8f3f-40b7-9695-df81e161fe07",
+  "oauthClientId": "7e8e41eb-5881-4206-968f-fd33b4cf49bf",
+  "appUserId": "3e2886bd-3d5e-44c1-bfa0-3db5f94f3d18",
+  "agentSession": {
+    "id": "13ae8ec9-e210-4c31-8975-d1214483f138",
+    "createdAt": "2024-05-29T00:26:31.749Z",
+    "updatedAt": "2024-05-29T00:26:31.749Z",
+    "archivedAt": null,
+    "creatorId": "5611201a-9594-4407-9490-731894376791",
+    "appUserId": "3e2886bd-3d5e-44c1-bfa0-3db5f94f3d18",
+    "commentId": "9ab4e3ef-0728-4972-a7a8-01775a9a51b6",
+    "issueId": "f2f72e62-b1a4-46c3-b605-0962d24792d8",
+    "status": "error",
+    "startedAt": null,
+    "endedAt": null,
+    "type": "commentThread",
+    "externalLink": null,
+    "summary": null,
+    "sourceMetadata": {
+      "type": "comment",
+      "agentSessionMetadata": {
+        "sourceCommentId": "a41c315a-3130-4c8e-a9ca-6e9219c156b7"
+      }
+    },
+    "organizationId": "6cb652a9-8f3f-40b7-9695-df81e161fe07",
+    "creator": {
+      "id": "5611201a-9594-4407-9490-731894376791",
+      "name": "Pavan Kumar Sunkara",
+      "email": "pavan@example.com",
+      "url": "https://linear.app/automa/profiles/pavan"
+    },
+    "comment": {
+      "id": "9ab4e3ef-0728-4972-a7a8-01775a9a51b6",
+      "body": "On it!",
+      "userId": "5611201a-9594-4407-9490-731894376791",
+      "issueId": "f2f72e62-b1a4-46c3-b605-0962d24792d8"
+    },
+    "issue": {
+      "id": "f2f72e62-b1a4-46c3-b605-0962d24792d8",
+      "title": "Delete tokens when user revokes Github App",
+      "teamId": "b7e7eb03-9d67-41b3-a268-84c14a6757d6",
+      "team": {
+        "id": "b7e7eb03-9d67-41b3-a268-84c14a6757d6",
+        "key": "PRO",
+        "name": "Product"
+      },
+      "identifier": "PRO-93",
+      "url": "https://linear.app/automa/issue/PRO-93/handle-when-user-revokes-github-app"
+    }
+  },
+  "agentActivity": {
+    "id": "e34c7c92-e29f-4ca6-8798-d56da2d6aaff",
+    "createdAt": "2025-08-01T01:03:35.158Z",
+    "updatedAt": "2025-08-01T01:03:35.158Z",
+    "archivedAt": null,
+    "agentSessionId": "13ae8ec9-e210-4c31-8975-d1214483f138",
+    "sourceCommentId": "7a527025-452a-4b05-8e6e-83b442a5e294",
+    "sourceMetadata": null,
+    "content": {
+      "type": "prompt",
+      "body": "@automa bot=bot-1 repo=repo-1"
+    }
+  },
+  "webhookTimestamp": 1716942391810,
+  "webhookId": "57079e35-210f-40b1-be30-7d66dedc0fb6"
+}

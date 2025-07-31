@@ -25,4 +25,4 @@ export const zxCmdArgsStub = quibbleSandbox.stub().callsFake((args) => {
 
 export const zxCmdStub = quibbleSandbox.stub().returns(zxCmdArgsStub);
 
-quibble('zx', { $: zxCmdStub });
+quibble('zx', { $: zxCmdStub, sleep: quibbleSandbox.stub() });
