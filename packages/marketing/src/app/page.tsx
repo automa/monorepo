@@ -132,7 +132,7 @@ const AppPage: React.FC = () => {
               <BentoCardTitle>Discover Agents</BentoCardTitle>
               <BentoCardSubtitle>
                 Choose from trusted, pre-built agents, or from a vibrant
-                marketplace.
+                community.
               </BentoCardSubtitle>
               <BentoCardImage>
                 <Image src={Marketplace} alt="Marketplace" />

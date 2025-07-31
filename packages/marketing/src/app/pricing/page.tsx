@@ -134,7 +134,7 @@ const PricingPage: React.FC = () => {
           </FeaturesList>
 
           <PlanButton href={process.env.NEXT_PUBLIC_CONSOLE_URL!} blank>
-            Start Free
+            Join waitlist
           </PlanButton>
         </PlanCard>
       </PlansContainer>
