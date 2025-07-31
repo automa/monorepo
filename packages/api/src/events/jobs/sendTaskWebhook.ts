@@ -192,7 +192,7 @@ const sendTaskWebhook: JobDefinition<{
             )
           ).filter(
             ({ body, userName }) =>
-              !regex.test(body) && !userName?.startsWith('Automa'),
+              !regex.test(body) && userName && !userName.startsWith('Automa'),
           );
         } catch {}
       }

@@ -435,6 +435,9 @@ suite('events/sendTaskWebhook', () => {
             },
           },
           {
+            body: 'This thread is for an agent session with automa.',
+          },
+          {
             body: '@automa bot=bot-0 repo=repo-0',
             get user() {
               return userStub();
