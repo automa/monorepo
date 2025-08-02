@@ -56,7 +56,7 @@ suite('api/orgs/integrations/connect/linear', () => {
 
     assert.match(
       location as string,
-      /^https:\/\/linear.app\/oauth\/authorize\?client_id=896839d929f08c9c54d1fef96550fa9c&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallbacks%2Flinear&response_type=code&scope=read%2Ccomments%3Acreate%2Capp%3Aassignable%2Capp%3Amentionable&state=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}&prompt=consent&actor=app/,
+      /^https:\/\/linear.app\/oauth\/authorize\?client_id=896839d929f08c9c54d1fef96550fa9c&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallbacks%2Flinear&response_type=code&scope=read%2Cwrite%2Ccomments%3Acreate%2Capp%3Aassignable%2Capp%3Amentionable&state=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}&prompt=consent&actor=app/,
     );
   });
 
@@ -67,7 +67,7 @@ suite('api/orgs/integrations/connect/linear', () => {
       postStub = sandbox.stub(axios, 'post').resolves({
         data: {
           access_token: 'abcdef',
-          scope: 'read comments:create app:assignable app:mentionable',
+          scope: 'read write comments:create app:assignable app:mentionable',
         },
       });
     });
@@ -222,6 +222,7 @@ suite('api/orgs/integrations/connect/linear', () => {
           slug: 'automa',
           scopes: [
             'read',
+            'write',
             'comments:create',
             'app:assignable',
             'app:mentionable',

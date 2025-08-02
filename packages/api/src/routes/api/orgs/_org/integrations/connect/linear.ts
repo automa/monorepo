@@ -21,9 +21,13 @@ export default async function (app: FastifyInstance) {
     params.append('response_type', 'code');
     params.append(
       'scope',
-      ['read', 'comments:create', 'app:assignable', 'app:mentionable'].join(
-        ',',
-      ),
+      [
+        'read',
+        'write',
+        'comments:create',
+        'app:assignable',
+        'app:mentionable',
+      ].join(','),
     );
     params.append('state', state);
     params.append('prompt', 'consent');

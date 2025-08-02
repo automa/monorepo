@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { LinearClient } from '@linear/sdk';
+import { sleep } from 'zx';
 
 import { integration, task_item, task_state } from '@automa/prisma';
 
@@ -10,9 +11,14 @@ import { getRegex, getSelectedBotAndRepo } from '../utils';
 import { taskCreate } from '../../db';
 
 import { LinearEventActionHandler } from './types';
+import { checkConnection, commentEventKey } from './utils';
 
+// We also handle comment events in case the user forgets to mention the bot
+// and simply writes it as text. But, since we don't want to create duplicate tasks,
+// we wait to see if an agent session event is handled in a different hook.
 const create: LinearEventActionHandler<{
   url: string;
+  organizationId: string;
   actor: {
     id: string;
     name: string;
@@ -31,23 +37,53 @@ const create: LinearEventActionHandler<{
       };
     };
   };
-  organizationId: string;
-}> = (app, body) =>
-  handleMention(app, {
+}> = async (app, body) => {
+  // Short-circuit if the comment is not a mention
+  const text = body.data.body.trim();
+  const regex = getRegex(true);
+
+  if (!regex.test(text)) {
+    return;
+  }
+
+  // Wait to see if an agent session is created in a different hook
+  await sleep(3000);
+
+  // We need to check if the comment is already associated with an agent session
+  if ((await app.redis.get(commentEventKey(body.data.id))) === text) {
+    return;
+  }
+
+  const result = await handleAssignment(app, {
     organizationId: body.organizationId,
     issue: body.data.issue,
     comment: {
       id: body.data.id,
-      body: body.data.body,
+      body: text,
     },
     parentCommentId: body.data.parentId,
     actor: body.actor,
   });
 
-export const handleMention = async (
+  if (!result) {
+    return;
+  }
+
+  const { client, content } = result;
+
+  // Create a comment to notify the user
+  await client.createComment({
+    body: content.body,
+    issueId: body.data.issue.id,
+    parentId: body.data.parentId || body.data.id,
+  });
+};
+
+export const handleAssignment = async (
   app: FastifyInstance,
   body: {
     organizationId: string;
+    agentSessionId?: string;
     issue: {
       id: string;
       team: {
@@ -75,36 +111,21 @@ export const handleMention = async (
     return;
   }
 
-  // Find the integration for the organization
-  const connection = await app.prisma.integrations.findFirst({
-    where: {
-      type: integration.linear,
-      config: {
-        path: ['id'],
-        equals: body.organizationId,
-      },
-    },
-    include: {
-      orgs: true,
-    },
-  });
+  const { accessToken, orgId, orgName } = await checkConnection(
+    app,
+    body.organizationId,
+  );
 
-  // Check if we have the access token
-  if (
-    !(
-      connection?.secrets &&
-      typeof connection.secrets === 'object' &&
-      !Array.isArray(connection.secrets) &&
-      connection.secrets.access_token
-    )
-  ) {
+  if (!orgId) {
     return;
   }
+
+  const client = new LinearClient({ accessToken });
 
   // Find if a task already exists for this issue
   const existingTask = await app.prisma.tasks.findFirst({
     where: {
-      org_id: connection.org_id,
+      org_id: orgId,
       state: {
         notIn: [task_state.cancelled, task_state.failed],
       },
@@ -131,22 +152,27 @@ export const handleMention = async (
   });
 
   if (existingTask) {
-    return;
+    // Only reply if it's an agent session
+    if (!body.agentSessionId) {
+      return;
+    }
+
+    return {
+      client,
+      content: {
+        type: 'error',
+        body: `A task already exists for this issue: ${env.CLIENT_URI}/${orgName}/tasks/${existingTask.id}`,
+      },
+    };
   }
 
   // Select the bot and repo
   const { selectedBot, selectedRepo, problems } = await getSelectedBotAndRepo(
     app,
-    connection.org_id,
+    orgId,
     text,
     regex,
   );
-
-  const client = new LinearClient({
-    accessToken: connection.secrets.access_token as string,
-  });
-
-  const reponseComment = [];
 
   // Only create the task if we have a bot and repo
   if (selectedBot && selectedRepo) {
@@ -174,7 +200,7 @@ export const handleMention = async (
 
     // Create the task
     const task = await taskCreate(app, {
-      org_id: connection.org_id,
+      org_id: orgId,
       title: issue.title.slice(0, 255),
       task_items: {
         create: [
@@ -190,6 +216,7 @@ export const handleMention = async (
           {
             type: task_item.origin,
             data: {
+              integration: integration.linear,
               organizationId: org.id,
               organizationUrlKey: org.urlKey,
               organizationName: org.name,
@@ -202,6 +229,7 @@ export const handleMention = async (
               issueTitle: issue.title,
               commentId: body.comment.id,
               parentId: body.parentCommentId,
+              agentSessionId: body.agentSessionId,
             },
             actor_user_id: automaUser?.id,
           },
@@ -233,9 +261,16 @@ export const handleMention = async (
       },
     });
 
-    reponseComment.push(
-      `Created task: ${env.CLIENT_URI}/${connection.orgs.name}/tasks/${task.id}`,
-    );
+    return {
+      client,
+      content: {
+        type: 'action',
+        action: 'Created task',
+        parameter: orgName,
+        result: `${env.CLIENT_URI}/${orgName}/tasks/${task.id}`,
+        body: `Created task: ${env.CLIENT_URI}/${orgName}/tasks/${task.id}`,
+      },
+    };
   }
 
   // Notify the user if there were any problems
@@ -244,19 +279,23 @@ export const handleMention = async (
       .map((problem) => `- ${problem}`)
       .join('\n');
 
-    reponseComment.push(
-      `We encountered the following issues while creating the task:\n${problemsMessage}\n\n*NOTE: We don't support assigning issues yet.*`,
-    );
+    return {
+      client,
+      content: {
+        type: 'error',
+        body: `We encountered the following issues while creating the task:\n${problemsMessage}\n\n*NOTE: We don't support assigning issues yet.*`,
+      },
+    };
   }
 
-  // Create a comment to notify the user
-  await client.createComment({
-    body: reponseComment.join('\n\n'),
-    issueId: body.issue.id,
-    parentId: body.parentCommentId || body.comment.id,
-  });
-
-  return;
+  // Not sure if we should reach here, but just in case
+  return {
+    client,
+    content: {
+      type: 'error',
+      body: 'We encountered an unknown error while creating the task and are looking into it.',
+    },
+  };
 };
 
 // TODO: Handle the following:

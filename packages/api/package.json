@@ -23,7 +23,7 @@
     "@graphql-tools/merge": "~9.0.4",
     "@graphql-tools/resolvers-composition": "~7.0.1",
     "@graphql-tools/schema": "~10.0.3",
-    "@linear/sdk": "~22.0.0",
+    "@linear/sdk": "~54.0.0",
     "@opentelemetry/exporter-metrics-otlp-grpc": "~0.53.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "~0.53.0",
     "@opentelemetry/instrumentation-fastify": "~0.44.0",

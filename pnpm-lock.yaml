@@ -298,8 +298,8 @@ importers:
         specifier: ~10.0.3
         version: 10.0.3(graphql@16.8.2)
       '@linear/sdk':
-        specifier: ~22.0.0
-        version: 22.0.0
+        specifier: ~54.0.0
+        version: 54.0.0
       '@opentelemetry/exporter-metrics-otlp-grpc':
         specifier: ~0.53.0
         version: 0.53.0(@opentelemetry/api@1.9.0)
@@ -2819,8 +2819,8 @@ packages:
   '@leichtgewicht/ip-codec@2.0.5':
     resolution: {integrity: sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==}
 
-  '@linear/sdk@22.0.0':
-    resolution: {integrity: sha512-sKzTb09w8jfWWuz1TIrVYx4J+9T8AQPxbR6xDlyX19h/bAfwATKf4EHfwJyMoRHDUTW0jhosrzBynpj0DfZuFA==}
+  '@linear/sdk@54.0.0':
+    resolution: {integrity: sha512-K/le4oxUWbT/6t1x/c/NbhcofE3hGXIh/1+dQ5Bciy7gAf51NLdS/UDIBAzuiBWmzzKwJWyxMQShEZGqHG7AMQ==}
     engines: {node: '>=12.x', yarn: 1.x}
 
   '@lukeed/csprng@1.1.0':
@@ -15671,7 +15671,7 @@ snapshots:
 
   '@leichtgewicht/ip-codec@2.0.5': {}
 
-  '@linear/sdk@22.0.0':
+  '@linear/sdk@54.0.0':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@15.8.0)
       graphql: 15.8.0

@@ -1,13 +1,13 @@
 import { LinearEventHandler, LinearEventType } from './types';
 
-import appUserNotification from './appUserNotification';
+import agentSessionEvent from './agentSessionEvent';
 import comment from './comment';
 import oauthApp from './oauthApp';
 
 export const eventHandlers: {
   [type in LinearEventType]: LinearEventHandler;
 } = {
-  [LinearEventType.AppUserNotification]: appUserNotification,
+  [LinearEventType.AgentSessionEvent]: agentSessionEvent,
   [LinearEventType.Comment]: comment,
   [LinearEventType.OAuthApp]: oauthApp,
 };
