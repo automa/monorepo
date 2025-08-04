@@ -12,7 +12,9 @@ type ButtonProps = $<
   {
     fullWidth?: boolean;
   } & VariantProps<typeof button>,
-  Omit<AnchorProps, 'disabled' | 'children'> &
+  {
+    anchor?: Omit<AnchorProps, 'href' | 'blank' | 'disabled' | 'children'>;
+  } & Pick<AnchorProps, 'href' | 'blank'> &
     ButtonHTMLAttributes<HTMLButtonElement>
 >;
 
