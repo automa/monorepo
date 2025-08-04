@@ -3,7 +3,7 @@ import { QueryResolvers, Resolvers } from '@automa/common';
 import { Context } from '../types';
 
 export const Query: QueryResolvers<Context> = {
-  orgs: async (root, args, { userId, prisma }) => {
+  orgs: async (root, args, { userId, session, prisma }) => {
     const result = await prisma.user_orgs.findMany({
       where: {
         user_id: userId,
@@ -13,7 +13,12 @@ export const Query: QueryResolvers<Context> = {
       },
     });
 
-    return result.map((r) => r.orgs);
+    const orgs = result.map((r) => r.orgs);
+
+    // Store the user's orgs in the session
+    session.orgs = orgs.map(({ id, name }) => ({ id, name }));
+
+    return orgs;
   },
 };
 

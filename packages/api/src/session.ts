@@ -9,6 +9,7 @@ declare module 'fastify' {
   interface Session {
     userId?: number;
     orgId?: number;
+    orgs?: { id: number; name: string }[];
     referer?: string;
     githubAccessToken?: string;
     integrationOauthState?: string;
