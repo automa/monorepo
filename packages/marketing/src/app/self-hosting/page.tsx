@@ -40,7 +40,7 @@ const SelfHostingPage: React.FC = () => {
 
       <FreeBanner>
         <Typography variant="large" className="font-semibold text-neutral-600">
-          For individuals and teams up to 10 people
+          Free for individuals and teams up to 10 people
         </Typography>
         <Button
           variant="secondary"

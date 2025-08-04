@@ -1,6 +1,6 @@
 import { tw } from 'theme';
 
-import { Flex, Typography } from 'components';
+import { Anchor, Flex, Typography } from 'components';
 
 export const Container = tw(Flex).attrs({
   direction: 'column',
@@ -18,6 +18,8 @@ export const ImageContainer = tw(Flex).attrs({
 export const Fallback = tw(Flex).attrs({
   alignItems: 'center',
 })`size-full rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-lg font-semibold text-white text-center`;
+
+export const BotName = tw(Anchor)`after:absolute after:inset-0`;
 
 export const OrgName = tw(Typography).attrs({
   variant: 'small',
