@@ -18,3 +18,4 @@ coverage:
 ignore:
   - packages/common/src/graphql.ts
   - packages/console/src/gql
+  - '**/*.stories.tsx'
