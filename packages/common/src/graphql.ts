@@ -337,6 +337,7 @@ export type ReposFilter = {
 
 export type Task = {
   __typename?: 'Task';
+  cost_in_cents?: Maybe<Scalars['Int']['output']>;
   created_at: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   is_scheduled: Scalars['Boolean']['output'];
@@ -757,6 +758,7 @@ export type RepoResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
+  cost_in_cents?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   is_scheduled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;

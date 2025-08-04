@@ -41,11 +41,16 @@ export default async function (app: FastifyInstance) {
             body: z.string().optional(),
             base_commit: z.string().optional(),
           }),
+          metadata: z
+            .object({
+              cost_in_cents: z.number().optional(),
+            })
+            .optional(),
         }),
       },
     },
     async (request, reply) => {
-      const { proposal } = request.body;
+      const { proposal, metadata } = request.body;
 
       const task = await getTask(app, reply, request.body.task);
 
@@ -146,6 +151,9 @@ export default async function (app: FastifyInstance) {
                 : pr.merged
                 ? task_state.completed
                 : task_state.cancelled,
+            ...(metadata?.cost_in_cents
+              ? { cost_in_cents: metadata.cost_in_cents }
+              : {}),
           },
         });
 

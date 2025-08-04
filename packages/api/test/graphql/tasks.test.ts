@@ -97,6 +97,7 @@ suite('graphql tasks', () => {
             is_scheduled: true,
             org_id: org.id,
             state: 'completed',
+            cost_in_cents: 87,
           },
         ],
       });
@@ -149,6 +150,7 @@ suite('graphql tasks', () => {
                 title
                 state
                 created_at
+                cost_in_cents
               }
             }
           `,
@@ -184,11 +186,13 @@ suite('graphql tasks', () => {
         assert.equal(tasks[0].title, 'task-3');
         assert.isString(tasks[0].created_at);
         assert.equal(tasks[0].state, 'completed');
+        assert.equal(tasks[0].cost_in_cents, 87);
 
         assert.isNumber(tasks[1].id);
         assert.equal(tasks[1].title, 'task-0');
         assert.isString(tasks[1].created_at);
         assert.equal(tasks[1].state, 'started');
+        assert.isNull(tasks[1].cost_in_cents);
       });
     });
 
@@ -618,6 +622,7 @@ suite('graphql tasks', () => {
                 title
                 state
                 created_at
+                cost_in_cents
               }
             }
           `,
@@ -652,6 +657,7 @@ suite('graphql tasks', () => {
         assert.equal(task.title, 'task-0');
         assert.isString(task.created_at);
         assert.equal(task.state, 'started');
+        assert.isNull(task.cost_in_cents);
       });
     });
 

@@ -22,6 +22,7 @@ type Task {
   is_scheduled: Boolean!
   state: TaskState!
   created_at: DateTime!
+  cost_in_cents: Int
 
   org: Org!
 
