@@ -332,7 +332,7 @@ suite('code/download', () => {
           id: task.id,
         },
         data: {
-          created_at: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
+          created_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 8),
         },
       });
 
@@ -351,7 +351,7 @@ suite('code/download', () => {
 
       assert.equal(
         data.message,
-        'Task is older than 7 days and thus cannot be worked upon anymore',
+        'Task is older than a week and thus cannot be worked upon anymore',
       );
       assert.equal(data.error, 'Forbidden');
       assert.equal(data.statusCode, 403);

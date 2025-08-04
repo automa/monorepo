@@ -59,7 +59,7 @@ const extendJiraWebhooks: JobDefinition<object> = {
           const refreshedAt = connection.config.refreshedAt as string;
 
           if (
-            Date.now() - 27 * 24 * 60 * 60 * 1000 <
+            Date.now() - 1000 * 60 * 60 * 24 * 27 <
             new Date(refreshedAt).getTime()
           ) {
             return;

@@ -47,6 +47,7 @@ export const server = async () => {
       ? [env.CLIENT_URI, 'https://studio.apollographql.com']
       : true,
     credentials: true,
+    maxAge: 60 * 60 * 24 * 7, // 1 week
   });
 
   await app.register(eventsPlugin);

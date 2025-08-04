@@ -41,7 +41,7 @@ suite('events/extendJiraWebhooks', () => {
         config: {
           id: 'jira-123',
           webhookId: 456,
-          refreshedAt: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000), // 29 days ago
+          refreshedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 29), // 29 days ago
         },
       },
     });

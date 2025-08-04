@@ -45,7 +45,7 @@ const isAuthenticated: ResolversComposition =
 
 const isOrgMember: ResolversComposition =
   (next) => async (root, args, context: Context, info) => {
-    const { userId, prisma } = context;
+    const { userId, session, prisma } = context;
     const orgId = args.org_id;
 
     // Error out for cases where we mistakenly set this resolver
@@ -54,22 +54,27 @@ const isOrgMember: ResolversComposition =
         'Variable "$org_id" of non-null type "Int!" must not be null.',
         {
           extensions: {
-            code: 'BAD_USER_INPUT',
-            http: {
-              status: 400,
-            },
+            code: ApolloServerErrorCode.BAD_USER_INPUT,
           },
         },
       );
     }
 
-    // TODO: Cache this in session?
-    await prisma.user_orgs.findFirstOrThrow({
-      where: {
-        user_id: userId!,
-        org_id: orgId,
-      },
-    });
+    // If orgs are not stored in the session, check against the database
+    if (!session.orgs) {
+      await prisma.user_orgs.findFirstOrThrow({
+        where: {
+          user_id: userId!,
+          org_id: orgId,
+        },
+      });
+    } else if (!session.orgs.find((o) => o.id === orgId)) {
+      throw new GraphQLError('Not Found', {
+        extensions: {
+          code: 'NOT_FOUND',
+        },
+      });
+    }
 
     return next(root, args, context, info);
   };
@@ -152,6 +157,7 @@ export default async function (app: FastifyInstance) {
     path: '/graphql',
     context: async (request) => ({
       userId: request.userId!,
+      session: request.session,
       prisma: app.prisma,
       events: app.events,
       analytics: app.analytics,

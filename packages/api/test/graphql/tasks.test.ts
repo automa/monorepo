@@ -23,6 +23,7 @@ import {
 
 suite('graphql tasks', () => {
   let app: FastifyInstance, user: users;
+  let sessionOrgs: orgs[] | undefined;
   let org: orgs, secondOrg: orgs, nonMemberOrg: orgs;
   let repo: repos,
     secondRepo: repos,
@@ -63,6 +64,7 @@ suite('graphql tasks', () => {
 
     app.addHook('preValidation', async (request) => {
       request.session.userId = user.id;
+      request.session.orgs = sessionOrgs;
     });
   });
 
@@ -70,6 +72,10 @@ suite('graphql tasks', () => {
     await app.prisma.orgs.deleteMany();
     await app.prisma.users.deleteMany();
     await app.close();
+  });
+
+  teardown(() => {
+    sessionOrgs = undefined;
   });
 
   suite('query tasks', () => {
@@ -197,6 +203,38 @@ suite('graphql tasks', () => {
     });
 
     test('for non-member org should fail', async () => {
+      const response = await graphql(
+        app,
+        `
+          query tasks($org_id: Int!) {
+            tasks(org_id: $org_id) {
+              id
+              title
+            }
+          }
+        `,
+        {
+          org_id: nonMemberOrg.id,
+        },
+      );
+
+      assert.equal(response.statusCode, 200);
+
+      assert.equal(
+        response.headers['content-type'],
+        'application/json; charset=utf-8',
+      );
+
+      const { errors } = response.json();
+
+      assert.lengthOf(errors, 1);
+      assert.equal(errors[0].message, 'Not Found');
+      assert.equal(errors[0].extensions.code, 'NOT_FOUND');
+    });
+
+    test('using session for non-member org should fail', async () => {
+      sessionOrgs = [org, secondOrg];
+
       const response = await graphql(
         app,
         `
