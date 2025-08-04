@@ -63,7 +63,7 @@ const eventsPlugin: FastifyPluginAsync<{
         delay: 10 * 60 * 1000, // 10 minutes
       },
       removeOnComplete: {
-        age: 24 * 60 * 60, // 1 day
+        age: 60 * 60 * 24, // 1 day
       },
       removeOnFail: false,
     },

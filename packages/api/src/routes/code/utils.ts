@@ -24,12 +24,12 @@ export const getTask = async (
   }
 
   // TODO: Remove this restriction
-  // If task was created more than 7 days ago, we return 403
-  if (task.created_at.getTime() < Date.now() - 7 * 24 * 60 * 60 * 1000) {
+  // If task was created more than 1 week ago, we return 403
+  if (task.created_at.getTime() < Date.now() - 1000 * 60 * 60 * 24 * 7) {
     app.log.warn({ task_id: body.id }, 'Task is too old');
 
     return reply.forbidden(
-      'Task is older than 7 days and thus cannot be worked upon anymore',
+      'Task is older than a week and thus cannot be worked upon anymore',
     );
   }
 

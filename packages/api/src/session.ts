@@ -29,7 +29,7 @@ export default async function (app: FastifyInstance) {
     saveUninitialized: false,
     secret: env.COOKIE_SECRET,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
       // Railway doesn't support secure cookies because of proxy routing
       secure: false,
       sameSite: 'lax',

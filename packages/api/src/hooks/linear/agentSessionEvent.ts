@@ -183,7 +183,7 @@ const handleCommentCreate = async (
       commentEventKey(comment.id),
       comment.body.trim(),
       'EX',
-      60 * 60 * 24 * 7, // 7 days
+      60 * 60 * 24 * 7, // 1 week
     );
   }
 
