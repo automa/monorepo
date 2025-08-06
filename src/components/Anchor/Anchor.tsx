@@ -6,9 +6,9 @@ import { AnchorProps } from './types';
 const Anchor: React.FC<AnchorProps> = ({
   href,
   blank,
-  link,
   disabled,
   children,
+  ...props
 }) => {
   if (disabled || !href) {
     return children;
@@ -18,7 +18,7 @@ const Anchor: React.FC<AnchorProps> = ({
     <Link
       href={href}
       {...{
-        ...link,
+        ...props,
         ...(blank && {
           target: '_blank',
           rel: 'noopener noreferrer',

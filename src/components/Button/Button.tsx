@@ -9,7 +9,7 @@ import { Container } from './Button.styles';
 const Button: React.FC<ButtonComponentProps> = ({
   href,
   blank,
-  link,
+  anchor,
   variant,
   size,
   icon,
@@ -23,8 +23,8 @@ const Button: React.FC<ButtonComponentProps> = ({
     <Anchor
       href={href}
       blank={blank}
-      link={link}
       disabled={disabled || type !== 'button'}
+      {...anchor}
     >
       <Container
         $variant={variant}

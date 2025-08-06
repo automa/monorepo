@@ -3,10 +3,9 @@ import Link from 'next/link';
 
 type LinkProps = ComponentProps<typeof Link>;
 
-export interface AnchorProps {
+export interface AnchorProps extends Omit<LinkProps, 'href'> {
   href?: LinkProps['href'];
   blank?: boolean;
-  link?: Omit<LinkProps, 'href'>;
   disabled?: boolean;
   children: ReactNode;
 }
