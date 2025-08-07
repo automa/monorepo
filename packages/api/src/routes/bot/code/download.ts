@@ -8,9 +8,9 @@ import { c as createTar } from 'tar';
 import z from 'zod';
 import { $ } from 'zx';
 
-import { caller } from '../../clients/github';
+import { getBot, getRepo, getTask } from '../utils';
 
-import { getBot, getRepo, getTask } from './utils';
+import { caller } from '../../../clients/github';
 
 export default async function (app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
