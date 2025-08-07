@@ -44,5 +44,5 @@ jobs:
         run: pnpm start-deps
       - name: Schema check
         run: |
-          sed -i '/^-- Dumped by pg_dump version/d' db/schema.sql
+          pnpm db-dump-fix
           git diff --exit-code
