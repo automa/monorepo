@@ -23,6 +23,7 @@ type Task {
   state: TaskState!
   created_at: DateTime!
   cost_in_cents: Int
+  log: JSON!
 
   org: Org!
 
