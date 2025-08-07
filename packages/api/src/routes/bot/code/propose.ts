@@ -7,12 +7,12 @@ import { $ } from 'zx';
 
 import { integration, task_item, task_state } from '@automa/prisma';
 
-import { env } from '../../env';
+import { env } from '../../../env';
 
-import { caller } from '../../clients/github';
-import { taskUpdateState } from '../../db';
+import { getBot, getRepo, getTask } from '../utils';
 
-import { getBot, getRepo, getTask } from './utils';
+import { caller } from '../../../clients/github';
+import { taskUpdateState } from '../../../db';
 
 type PullRequest = {
   id: number;
