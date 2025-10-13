@@ -7,8 +7,8 @@ import axios from 'axios';
 
 import { bots, orgs, repos, tasks } from '@automa/prisma';
 
-import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from '../../mocks';
-import { call, seedBots, seedOrgs, seedRepos, server } from '../../utils';
+import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from '../../../mocks';
+import { call, seedBots, seedOrgs, seedRepos, server } from '../../../utils';
 
 const diff = [
   'diff --git a/file.txt b/file.txt',
@@ -20,7 +20,7 @@ const diff = [
   '+new',
 ].join('\n');
 
-suite('code/propose', () => {
+suite('bot/code/propose', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
   let org: orgs, bot: bots, repo: repos, task: tasks;
   let sandbox: SinonSandbox, postStub: SinonStub, getStub: SinonStub;
@@ -113,7 +113,7 @@ suite('code/propose', () => {
 
   suite('with empty body', () => {
     setup(async () => {
-      response = await call(app, '/code/propose', {
+      response = await call(app, '/bot/code/propose', {
         method: 'POST',
         payload: {},
       });
@@ -318,7 +318,7 @@ suite('code/propose', () => {
 
   suite('with missing proposal token', () => {
     setup(async () => {
-      response = await call(app, '/code/propose', {
+      response = await call(app, '/bot/code/propose', {
         method: 'POST',
         payload: {
           task: {
@@ -364,7 +364,7 @@ suite('code/propose', () => {
 
   suite('with null proposal token', () => {
     setup(async () => {
-      response = await call(app, '/code/propose', {
+      response = await call(app, '/bot/code/propose', {
         method: 'POST',
         payload: {
           task: {
@@ -411,7 +411,7 @@ suite('code/propose', () => {
 
   suite('with missing proposal diff', () => {
     setup(async () => {
-      response = await call(app, '/code/propose', {
+      response = await call(app, '/bot/code/propose', {
         method: 'POST',
         payload: {
           task: {
@@ -457,7 +457,7 @@ suite('code/propose', () => {
 
   suite('with null proposal diff', () => {
     setup(async () => {
-      response = await call(app, '/code/propose', {
+      response = await call(app, '/bot/code/propose', {
         method: 'POST',
         payload: {
           task: {
@@ -2533,7 +2533,7 @@ const propose = async (
   },
   metadata?: Record<string, any>,
 ) =>
-  call(app, '/code/propose', {
+  call(app, '/bot/code/propose', {
     method: 'POST',
     payload: {
       task,

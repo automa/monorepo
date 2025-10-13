@@ -402,7 +402,9 @@ CREATE TABLE public.tasks (
     proposal_token character varying(255),
     proposal_base_commit character varying(40),
     created_at timestamp without time zone DEFAULT now() NOT NULL,
-    cost_in_cents integer
+    cost_in_cents integer,
+    log jsonb DEFAULT '[]'::jsonb NOT NULL,
+    CONSTRAINT task_log_array CHECK ((jsonb_typeof(log) = 'array'::text))
 );
 
 

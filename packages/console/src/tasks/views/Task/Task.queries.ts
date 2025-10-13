@@ -5,6 +5,7 @@ export const TASK_QUERY = gql(`
     task(org_id: $org_id, id: $id) {
       id
       ...Task
+      log
     }
   }
 `);

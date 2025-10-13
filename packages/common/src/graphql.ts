@@ -342,6 +342,7 @@ export type Task = {
   id: Scalars['Int']['output'];
   is_scheduled: Scalars['Boolean']['output'];
   items: Array<TaskItem>;
+  log: Scalars['JSON']['output'];
   org: Org;
   state: TaskState;
   title: Scalars['String']['output'];
@@ -763,6 +764,7 @@ export type TaskResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   is_scheduled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   items?: Resolver<Array<ResolversTypes['TaskItem']>, ParentType, ContextType>;
+  log?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   org?: Resolver<ResolversTypes['Org'], ParentType, ContextType>;
   state?: Resolver<ResolversTypes['TaskState'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

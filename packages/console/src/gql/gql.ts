@@ -39,7 +39,7 @@ const documents = {
     "\n  query Repos($org_id: Int!) {\n    repos(org_id: $org_id) {\n      id\n      ...Repo\n    }\n  }\n": types.ReposDocument,
     "\n  fragment Task on Task {\n    id\n    title\n    is_scheduled\n    state\n    created_at\n    items {\n      type\n      ...TaskItem\n    }\n  }\n": types.TaskFragmentDoc,
     "\n  fragment TaskItem on TaskItem {\n    id\n    type\n    data\n    created_at\n    actor_user {\n      ...UserAvatar\n    }\n    bot {\n      id\n      name\n      short_description\n      image_url\n      org {\n        id\n        name\n      }\n    }\n    repo {\n      id\n      name\n      org {\n        id\n        provider_type\n        provider_name\n      }\n    }\n    activity {\n      id\n      type\n      from_state\n      to_state\n    }\n  }\n": types.TaskItemFragmentDoc,
-    "\n  query Task($org_id: Int!, $id: Int!) {\n    task(org_id: $org_id, id: $id) {\n      id\n      ...Task\n    }\n  }\n": types.TaskDocument,
+    "\n  query Task($org_id: Int!, $id: Int!) {\n    task(org_id: $org_id, id: $id) {\n      id\n      ...Task\n      log\n    }\n  }\n": types.TaskDocument,
     "\n  mutation TaskCreate($org_id: Int!, $input: TaskCreateInput!) {\n    taskCreate(org_id: $org_id, input: $input) {\n      ...Task\n    }\n  }\n": types.TaskCreateDocument,
     "\n  query BotInstallationsAsOptions($org_id: Int!) {\n    botInstallations(org_id: $org_id, filter: { type: manual }) {\n      id\n      bot {\n        id\n        name\n        image_url\n        org {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.BotInstallationsAsOptionsDocument,
     "\n  query RepositoriesAsOptions($org_id: Int!) {\n    repos(org_id: $org_id, filter: { is_archived: false }) {\n      id\n      name\n      has_installation\n    }\n  }\n": types.RepositoriesAsOptionsDocument,
@@ -169,7 +169,7 @@ export function gql(source: "\n  fragment TaskItem on TaskItem {\n    id\n    ty
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query Task($org_id: Int!, $id: Int!) {\n    task(org_id: $org_id, id: $id) {\n      id\n      ...Task\n    }\n  }\n"): (typeof documents)["\n  query Task($org_id: Int!, $id: Int!) {\n    task(org_id: $org_id, id: $id) {\n      id\n      ...Task\n    }\n  }\n"];
+export function gql(source: "\n  query Task($org_id: Int!, $id: Int!) {\n    task(org_id: $org_id, id: $id) {\n      id\n      ...Task\n      log\n    }\n  }\n"): (typeof documents)["\n  query Task($org_id: Int!, $id: Int!) {\n    task(org_id: $org_id, id: $id) {\n      id\n      ...Task\n      log\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
