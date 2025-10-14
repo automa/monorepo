@@ -7,6 +7,8 @@ import '../src/plugins/optimizer';
 import '../src/plugins/prisma';
 import '../src/plugins/redis';
 import '../src/routes/api/orgs/_org/autohooks';
+// Import mocks to ensure they are loaded before server starts
+import './mocks';
 
 import { createHmac } from 'node:crypto';
 
@@ -14,8 +16,6 @@ import { FastifyInstance, InjectOptions } from 'fastify';
 import stableStringify from 'json-stable-stringify';
 
 export { server } from '../src';
-
-export * from './mocks';
 
 export const regexTimestamp = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/;
 

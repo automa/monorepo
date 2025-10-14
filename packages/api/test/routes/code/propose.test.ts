@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import { bots, orgs, repos, tasks } from '@automa/prisma';
 
-import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from '../../mocks';
+import { getStubs } from '../../mocks';
 import { call, seedBots, seedOrgs, seedRepos, server } from '../../utils';
 
 const diff = [
@@ -24,10 +24,12 @@ suite('code/propose', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
   let org: orgs, bot: bots, repo: repos, task: tasks;
   let sandbox: SinonSandbox, postStub: SinonStub, getStub: SinonStub;
+  let zxCmdStub: SinonStub, zxCmdArgsStub: SinonStub;
 
   suiteSetup(async () => {
     app = await server();
     sandbox = createSandbox();
+    ({ zxCmdStub, zxCmdArgsStub } = getStubs());
   });
 
   suiteTeardown(async () => {
@@ -105,7 +107,8 @@ suite('code/propose', () => {
   });
 
   teardown(async () => {
-    quibbleSandbox.resetHistory();
+    zxCmdStub.resetHistory();
+    zxCmdArgsStub.resetHistory();
     sandbox.restore();
     await app.prisma.tasks.deleteMany();
     await app.prisma.orgs.deleteMany();

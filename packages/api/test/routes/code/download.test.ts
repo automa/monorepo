@@ -9,17 +9,19 @@ import * as tar from 'tar';
 
 import { bots, orgs, repos, tasks } from '@automa/prisma';
 
-import { quibbleSandbox, zxCmdArgsStub, zxCmdStub } from '../../mocks';
+import { getStubs } from '../../mocks';
 import { call, seedBots, seedOrgs, seedRepos, server } from '../../utils';
 
 suite('code/download', () => {
   let app: FastifyInstance, response: LightMyRequestResponse;
   let org: orgs, bot: bots, repo: repos, task: tasks;
   let sandbox: SinonSandbox, postStub: SinonStub, tarCreateStub: SinonStub;
+  let zxCmdStub: SinonStub, zxCmdArgsStub: SinonStub;
 
   suiteSetup(async () => {
     app = await server();
     sandbox = createSandbox();
+    ({ zxCmdStub, zxCmdArgsStub } = getStubs());
   });
 
   suiteTeardown(async () => {
@@ -69,7 +71,8 @@ suite('code/download', () => {
   });
 
   teardown(async () => {
-    quibbleSandbox.resetHistory();
+    zxCmdStub.resetHistory();
+    zxCmdArgsStub.resetHistory();
     sandbox.restore();
     await app.prisma.tasks.deleteMany();
     await app.prisma.orgs.deleteMany();

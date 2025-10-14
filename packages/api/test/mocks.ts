@@ -4,7 +4,7 @@ import { createSandbox } from 'sinon';
 
 export const quibbleSandbox = createSandbox();
 
-export const zxCmdArgsStub = quibbleSandbox.stub().callsFake((args) => {
+const zxCmdArgsStub = quibbleSandbox.stub().callsFake((args) => {
   if (args[0].includes('git rev-parse HEAD')) {
     return Promise.resolve({
       stdout: '353fabbf70ac7a2cad3d9e27889bfc77f419d61b',
@@ -23,6 +23,21 @@ export const zxCmdArgsStub = quibbleSandbox.stub().callsFake((args) => {
   });
 });
 
-export const zxCmdStub = quibbleSandbox.stub().returns(zxCmdArgsStub);
+quibble('zx', {
+  $: quibbleSandbox.stub().returns(zxCmdArgsStub),
+  sleep: quibbleSandbox.stub(),
+});
 
-quibble('zx', { $: zxCmdStub, sleep: quibbleSandbox.stub() });
+// Export a getter function to access the actual quibbled stubs
+export const getStubs = () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const zx = require('zx');
+  const zxCmdArgsStub = zx.$();
+
+  zx.$.resetHistory();
+
+  return {
+    zxCmdStub: zx.$,
+    zxCmdArgsStub,
+  };
+};
