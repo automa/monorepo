@@ -78,7 +78,7 @@ const Task: React.FC<TaskProps> = ({
               />
             </Tooltip>
           ) : task.is_scheduled ? (
-            <Tooltip body={`Automa${task.is_scheduled ? '' : ' AI'}`}>
+            <Tooltip body="Automa">
               <Logo className="relative z-10 size-4" />
             </Tooltip>
           ) : (
