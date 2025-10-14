@@ -9,8 +9,8 @@ import { Container } from './Typography.styles';
 const Typography: React.FC<TypographyComponentProps> = ({
   href,
   blank,
-  link,
   disabled,
+  anchor,
   element = 'div',
   variant,
   transform,
@@ -45,7 +45,7 @@ const Typography: React.FC<TypographyComponentProps> = ({
   }, [element, variant]) as ElementType;
 
   return (
-    <Anchor href={href} blank={blank} link={link} disabled={disabled}>
+    <Anchor href={href} blank={blank} disabled={disabled} {...anchor}>
       <Container
         asChild
         $variant={variant}
