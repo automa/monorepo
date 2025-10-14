@@ -51,7 +51,7 @@ const TaskItemContainer: React.FC<{
   );
 };
 
-const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
+const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data }) => {
   const taskItem = getFragment(TASK_ITEM_FRAGMENT, data);
   const user = getFragment(USER_AVATAR_FRAGMENT, taskItem.actor_user);
   const actorUser = getTaskItemUser(taskItem.data);
@@ -122,9 +122,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
           ) : (
             <>
               <Logo className="size-4" />
-              <Typography variant="small">
-                Automa{scheduled ? '' : ' AI'}
-              </Typography>
+              <Typography variant="small">Automa</Typography>
             </>
           )}
         </Subject>
@@ -160,9 +158,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ taskItem: data, scheduled }) => {
           ) : (
             <>
               <Logo className="size-4" />
-              <Typography variant="small">
-                Automa{scheduled ? '' : ' AI'}
-              </Typography>
+              <Typography variant="small">Automa</Typography>
             </>
           )}
         </Subject>

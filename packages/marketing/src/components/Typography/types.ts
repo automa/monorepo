@@ -12,7 +12,9 @@ type TypographyProps = $<
   VariantProps<typeof typography>,
   {
     element?: Omit<ElementType, 'a' | 'button'>;
-  } & Omit<AnchorProps, 'children'> &
+  } & {
+    anchor?: Omit<AnchorProps, 'href' | 'blank' | 'children'>;
+  } & Pick<AnchorProps, 'href' | 'blank' | 'disabled'> &
     HTMLAttributes<HTMLDivElement>
 >;
 

@@ -143,7 +143,7 @@ export default async function (app: FastifyInstance) {
       );
 
       // Delete the working directory after we finish streaming the tar
-      tar.on('end', () => rm(workingDir, { recursive: true }));
+      tar.on('end', () => rm(workingDir, { recursive: true, force: true }));
 
       return reply.send(tar);
     },

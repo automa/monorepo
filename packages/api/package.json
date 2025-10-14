@@ -54,7 +54,7 @@
     "statsig-node": "~5.23.1",
     "tar": "~7.4.3",
     "zod": "catalog:",
-    "zx": "~8.1.4"
+    "zx": "~8.5.5"
   },
   "scripts": {
     "build": "rm -rf build && tsc -b --force",

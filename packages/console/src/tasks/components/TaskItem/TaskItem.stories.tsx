@@ -45,7 +45,6 @@ const meta = {
       },
       TASK_ITEM_FRAGMENT,
     ),
-    scheduled: false,
   },
 } satisfies Meta<typeof TaskItem>;
 
@@ -200,31 +199,6 @@ export const Bot = {
   },
 } satisfies Story;
 
-export const BotScheduled = {
-  args: {
-    taskItem: makeFragmentData(
-      {
-        id: 2,
-        type: TaskItemType.Bot,
-        created_at,
-        data: {},
-        bot: {
-          id: 1,
-          name: 'aider',
-          image_url: 'https://aider.chat/assets/icons/apple-touch-icon.png',
-          short_description: 'AI bot that codes',
-          org: {
-            id: 1,
-            name: 'automa',
-          },
-        },
-      },
-      TASK_ITEM_FRAGMENT,
-    ),
-    scheduled: true,
-  },
-} satisfies Story;
-
 export const BotAuthor = {
   args: {
     taskItem: makeFragmentData(
@@ -298,30 +272,6 @@ export const Repo = {
       },
       TASK_ITEM_FRAGMENT,
     ),
-  },
-} satisfies Story;
-
-export const RepoScheduled = {
-  args: {
-    taskItem: makeFragmentData(
-      {
-        id: 2,
-        type: TaskItemType.Repo,
-        created_at,
-        data: {},
-        repo: {
-          id: 1,
-          name: 'monorepo',
-          org: {
-            id: 1,
-            provider_type: ProviderType.Github,
-            provider_name: 'automa',
-          },
-        },
-      },
-      TASK_ITEM_FRAGMENT,
-    ),
-    scheduled: true,
   },
 } satisfies Story;
 

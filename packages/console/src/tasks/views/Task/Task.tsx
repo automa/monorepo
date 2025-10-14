@@ -39,11 +39,7 @@ const Task: React.FC = () => {
             <Typography variant="title4">{task.title}</Typography>
             <Flex direction="column" className="gap-6">
               {task.items.map((item, index) => (
-                <TaskItem
-                  key={index}
-                  taskItem={item}
-                  scheduled={task.is_scheduled}
-                />
+                <TaskItem key={index} taskItem={item} />
               ))}
             </Flex>
           </Flex>
