@@ -52,8 +52,6 @@ const InputPaths: React.FC<InputPathsComponentProps> = ({
     }
   };
 
-  // TODO: Add info about pressing Enter, otherwise users might
-  // fully add a path not knowing they can add multiple paths.
   return (
     <Flex {...props} fullWidth direction="column" className="gap-2">
       <Label label={label} optional={optional} name={name} />
@@ -92,6 +90,9 @@ const InputPaths: React.FC<InputPathsComponentProps> = ({
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
         />
+        <Text variant="xsmall">
+          Press enter or comma after each value to add it to the list.
+        </Text>
       </Container>
       <Text variant="xsmall" $error={error}>
         {error ? error : description}
