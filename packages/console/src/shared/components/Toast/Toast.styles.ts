@@ -38,4 +38,4 @@ export const Close = tw(Toast.Close)<
 
 export const Viewport = tw(
   Toast.Viewport,
-)`fixed top-0 z-50 flex max-h-screen w-full flex-col-reverse p-4 gap-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-sm`;
+)`fixed top-0 z-50 flex max-h-screen w-full flex-col-reverse gap-4 p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-sm`;

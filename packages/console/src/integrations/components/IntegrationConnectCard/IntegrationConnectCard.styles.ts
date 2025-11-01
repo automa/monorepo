@@ -8,7 +8,7 @@ export const Container = tw(Flex).attrs({
 
 export const OrgInfo = tw(Typography).attrs({
   variant: 'small',
-})`rounded-md bg-green-600 px-3 py-2 lg:text-xs text-white`;
+})`rounded-md bg-green-600 px-3 py-2 text-white lg:text-xs`;
 
 export const UserInfo = tw(Typography).attrs({
   variant: 'small',

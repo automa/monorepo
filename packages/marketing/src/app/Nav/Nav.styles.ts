@@ -6,7 +6,7 @@ export const Container = tw.div`hidden py-4 lg:block`;
 
 export const NavList = tw(
   NavigationMenu.List,
-)`flex flex-col lg:flex-row lg:gap-6 leading-8 text-neutral-800 font-medium`;
+)`flex flex-col font-medium leading-8 text-neutral-800 lg:flex-row lg:gap-6`;
 
 export const MobileContainer = tw.div`relative lg:hidden`;
 

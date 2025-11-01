@@ -6,8 +6,8 @@ export const Container = tw(Flex).attrs({
   direction: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-})`max-w-lg lg:max-w-xl mx-auto gap-12 lg:gap-16 pt-20 short:pt-12 lg:pt-28`;
+})`mx-auto max-w-lg gap-12 pt-20 lg:max-w-xl lg:gap-16 lg:pt-28 short:pt-12`;
 
 export const Card = tw(Button).attrs({
   variant: 'secondary',
-})`py-6 px-10 lg:py-8 lg:px-12 h-full rounded-lg`;
+})`h-full rounded-lg px-10 py-6 lg:px-12 lg:py-8`;

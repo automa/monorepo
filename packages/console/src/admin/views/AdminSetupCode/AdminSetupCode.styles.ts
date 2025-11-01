@@ -10,4 +10,4 @@ export const Container = tw(Flex).attrs({
 
 export const Card = tw(Button).attrs({
   variant: 'secondary',
-})`py-6 px-10 lg:py-8 lg:px-12 h-full rounded-lg`;
+})`h-full rounded-lg px-10 py-6 lg:px-12 lg:py-8`;

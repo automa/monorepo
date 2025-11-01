@@ -8,7 +8,7 @@ export const Container = tw.div`relative size-full cursor-pointer rounded-lg bg-
 
 export const Title = tw(Link)`after:absolute after:inset-0`;
 
-export const Item = tw(Badge)`py-3 gap-2`;
+export const Item = tw(Badge)`gap-2 py-3`;
 
 export const ItemText = tw(Typography).attrs({
   variant: 'xsmall',
