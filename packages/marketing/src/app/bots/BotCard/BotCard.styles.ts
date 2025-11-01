@@ -17,7 +17,7 @@ export const ImageContainer = tw(Flex).attrs({
 
 export const Fallback = tw(Flex).attrs({
   alignItems: 'center',
-})`size-full rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-lg font-semibold text-white text-center`;
+})`size-full rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-center text-lg font-semibold text-white`;
 
 export const BotName = tw(Anchor)`after:absolute after:inset-0`;
 
@@ -27,4 +27,4 @@ export const OrgName = tw(Typography).attrs({
 
 export const Description = tw(Typography).attrs({
   variant: 'small',
-})`leading-relaxed text-neutral-600 min-h-10`;
+})`min-h-10 leading-relaxed text-neutral-600`;

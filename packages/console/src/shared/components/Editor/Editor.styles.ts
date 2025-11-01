@@ -4,4 +4,4 @@ import { tw } from 'theme';
 
 export const BubbleMenuContainer = tw(
   BubbleMenu,
-)`flex flex-row gap-1 items-center justify-center bg-neutral-50 rounded-md shadow-menu p-1`;
+)`flex flex-row items-center justify-center gap-1 rounded-md bg-neutral-50 p-1 shadow-menu`;

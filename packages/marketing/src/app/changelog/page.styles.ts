@@ -8,7 +8,7 @@ export const Header = tw(Typography).attrs({
   variant: 'title2',
   as: 'header',
   align: 'center',
-})`my-10 lg:mt-16 lg:mb-24`;
+})`my-10 lg:mb-24 lg:mt-16`;
 
 export const Content = tw(Flex).attrs({
   direction: 'column',
@@ -16,4 +16,4 @@ export const Content = tw(Flex).attrs({
 
 export const Timestamp = tw(
   Typography,
-)`w-full lg:w-48 min-w-48 text-gray-700 font-semibold lg:font-medium mb-4 lg:mb-0 lg:mt-3 hover:underline`;
+)`mb-4 w-full min-w-48 font-semibold text-gray-700 hover:underline lg:mb-0 lg:mt-3 lg:w-48 lg:font-medium`;

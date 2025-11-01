@@ -14,11 +14,11 @@ export const Wrapper = tw(Flex).attrs({
 export const Brand = tw(Flex).attrs({
   justifyContent: 'space-between',
   alignItems: 'center',
-})`md:items-start min-w-16 md:min-w-20 lg:min-w-36`;
+})`min-w-16 md:min-w-20 md:items-start lg:min-w-36`;
 
 export const Links = tw(Flex).attrs({
   direction: 'column',
-})`gap-8 md:mt-1 lg:mt-0.5 sm:grid sm:grid-cols-2 md:grid-cols-3 flex-1`;
+})`flex-1 gap-8 sm:grid sm:grid-cols-2 md:mt-1 md:grid-cols-3 lg:mt-0.5`;
 
 export const LinkGroupWrapper = tw(Flex).attrs({
   direction: 'column',

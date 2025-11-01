@@ -6,11 +6,11 @@ export const Container = tw(Flex).attrs({
   direction: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-})`max-w-lg lg:max-w-xl mx-auto gap-12 lg:gap-16 pt-20 short:pt-12 lg:pt-28`;
+})`mx-auto max-w-lg gap-12 pt-20 lg:max-w-xl lg:gap-16 lg:pt-28 short:pt-12`;
 
 export const Card = tw(Button).attrs({
   variant: 'secondary',
-})`py-3 px-4 lg:py-4 lg:px-6 h-full rounded-lg`;
+})`h-full rounded-lg px-4 py-3 lg:px-6 lg:py-4`;
 
 export const Content = tw(Flex).attrs({
   direction: 'column',

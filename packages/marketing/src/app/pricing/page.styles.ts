@@ -5,7 +5,7 @@ import { Button, Flex, Typography } from 'components';
 export const Container = tw(Flex).attrs({
   direction: 'column',
   alignItems: 'center',
-})`py-12 lg:py-16 gap-12 lg:gap-16`;
+})`gap-12 py-12 lg:gap-16 lg:py-16`;
 
 export const Title = tw(Typography).attrs({
   variant: 'title2',
@@ -15,11 +15,11 @@ export const Title = tw(Typography).attrs({
 export const Subtitle = tw(Typography).attrs({
   variant: 'title6',
   align: 'center',
-})`max-w-72 md:max-w-xl text-neutral-500`;
+})`max-w-72 text-neutral-500 md:max-w-xl`;
 
 export const PlansContainer = tw(Flex).attrs({
   direction: 'column',
-})`max-w-3xl w-full gap-8 lg:flex-row lg:gap-12`;
+})`w-full max-w-3xl gap-8 lg:flex-row lg:gap-12`;
 
 export const PlanCard = tw(Flex).attrs({
   direction: 'column',
@@ -51,7 +51,7 @@ export const PriceUnit = tw(Typography).attrs({
 
 export const PriceExtra = tw(Typography).attrs({
   variant: 'small',
-})`mt-2 text-neutral-600 leading-relaxed bg-neutral-50 px-3 py-2 rounded-md border border-neutral-200`;
+})`mt-2 rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2 leading-relaxed text-neutral-600`;
 
 export const FeaturesList = tw.ul`mb-8 flex-1 space-y-3`;
 
@@ -68,7 +68,7 @@ export const PlanButton = tw(Button).attrs({
 
 export const Comparison = tw(Flex).attrs({
   direction: 'column',
-})`max-w-3xl mt-20 w-full gap-8`;
+})`mt-20 w-full max-w-3xl gap-8`;
 
 export const ComparisonTitle = tw(Typography).attrs({
   variant: 'title3',
