@@ -122,7 +122,7 @@
     "jsdom": "~22.1.0",
     "postcss": "~8.5.3",
     "prettier": "~3.0.1",
-    "prettier-plugin-tailwindcss": "~0.6.9",
+    "prettier-plugin-tailwindcss": "~0.7.1",
     "rollup-plugin-webpack-stats": "~0.2.6",
     "sharp": "~0.34.2",
     "source-map-explorer": "~2.5.2",
