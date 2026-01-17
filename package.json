@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "db-dev": "crude -s db/schema.sql -u postgresql://automa@localhost:5432/automa",
-    "db-dump-fix": "sed -i -e '/^-- Dumped by pg_dump version/d' -e '/^\\\\restrict [^[:space:]]\\+/{N;d;}' -e '/^\\\\unrestrict [^[:space:]]\\+/{N;d;}' db/schema.sql",
     "db-migrate": "crude up",
     "format": "prettier --write . --log-level warn",
     "format-check": "prettier --check .",
@@ -21,7 +20,7 @@
     "node": ">=22.3.0"
   },
   "dependencies": {
-    "@termapps/crude": "~0.1.2"
+    "@termapps/crude": "~0.1.4"
   },
   "devDependencies": {
     "@apollo/rover": "~0.22.0",

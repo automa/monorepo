@@ -54,8 +54,8 @@ importers:
   .:
     dependencies:
       '@termapps/crude':
-        specifier: ~0.1.2
-        version: 0.1.2
+        specifier: ~0.1.4
+        version: 0.1.4
     devDependencies:
       '@apollo/rover':
         specifier: ~0.22.0
@@ -5102,43 +5102,43 @@ packages:
     resolution: {integrity: sha512-3IhJVOpX7EDiAa2BcXowEJHOflmGI/hHhVY8UpEmtNxvDWo2QK7ohSXPndz35GK36mNoMXX4a5UA9BbVU1A0aw==}
     engines: {node: '>=12'}
 
-  '@termapps/crude-darwin-arm64@0.1.2':
-    resolution: {integrity: sha512-lPLsP3BPwVg/mIiNsL5qwnuhhA7OBUqUFcFshca9ixf6vGmMA9kk1uMx4nnmkKa28/IDvov1S8hEqY0sZTN7qg==}
+  '@termapps/crude-darwin-arm64@0.1.4':
+    resolution: {integrity: sha512-1iv9fNA2aBO1TnfyKRZkjqGbuumgWYZHSfCXOGMa/hnELaM5nrBE8gFzws+GweRZH6ggqIxOuzzV4WEOkviEvA==}
     cpu: [arm64]
     os: [darwin]
 
-  '@termapps/crude-darwin-x64@0.1.2':
-    resolution: {integrity: sha512-G93bBk17yhncEnC8WaCeEvYsKcmwXCnYKZtFfS8jANDExiURwB/TI0rqt9fif6qycxvESninNSVpRKGLQkJYSQ==}
+  '@termapps/crude-darwin-x64@0.1.4':
+    resolution: {integrity: sha512-R0UNFLfwrT8pe03Bbdra/0NrPgO0gaDctBUE+iZbsK/fKhL3GBM9qT/X49DmPGSXRHAY1Dz16uUTzNVjyVLmMQ==}
     cpu: [x64]
     os: [darwin]
 
-  '@termapps/crude-linux-ia32-glibc@0.1.2':
-    resolution: {integrity: sha512-KA6xK6Jw5TJ7swa8Ah55EEuRIN6uas2QPN8r0wFZC3B7RIKEwSmUeg8B7ip54W4zWJKoJKJXzcyoxPb3Ht+bdQ==}
+  '@termapps/crude-linux-ia32-glibc@0.1.4':
+    resolution: {integrity: sha512-sXBr9P3BNikYGwj6alxDkNioOilPflODWPYrsAlnCqcZjwHFDLkR7duuTPOPaKf4JZt3bpVMV3wP8uB+xpEaiw==}
     cpu: [ia32]
     os: [linux]
 
-  '@termapps/crude-linux-x64-glibc@0.1.2':
-    resolution: {integrity: sha512-8E+I62GEH0tpBPjqd3/3I5w0+hh/3U+xgc5n/P5Oui7dI/zDfaKBGNhlq5xMzQJAFKsNHcRb0cOdnuvQqw90eQ==}
+  '@termapps/crude-linux-x64-glibc@0.1.4':
+    resolution: {integrity: sha512-MYhFgVECWNKymccR9cHNQI4tOVFVaZ+6XXjfaSCxHyTl/TDi0jcEAdbehPNzs8VOvKXVJ2z2+TYZAFtxi6Sniw==}
     cpu: [x64]
     os: [linux]
 
-  '@termapps/crude-linux-x64-musl@0.1.2':
-    resolution: {integrity: sha512-L0qwmPlHt9wXSJcd9Z7PYcXucr9xR7WkenN8YvgwoPHIzpOBGl5gT6RX4vBmmC+REKggRz7ex2QmyeNeBdODaw==}
+  '@termapps/crude-linux-x64-musl@0.1.4':
+    resolution: {integrity: sha512-0LYu/BOQDQGyIMDSslEEhfbEmvMh2ue7FBiIZnE4mXhbv9iQHF14tYAS/CEt4zdaTUbkEJ0yfDsSRJgA0gScZQ==}
     cpu: [x64]
     os: [linux]
 
-  '@termapps/crude-windows-ia32@0.1.2':
-    resolution: {integrity: sha512-Qw5d76Bg2InXZcEJxjOOjxkEJ+smRzrFLsI18vENEDne3L1jJ1UBEvDUwyqHqddHoGNJ5SUPATYv22Yo+QA4kg==}
+  '@termapps/crude-windows-ia32@0.1.4':
+    resolution: {integrity: sha512-su4r7cipqyW1VwX/uv4P7T0e5GNVrnUjDCzXWx1vKM2S4/sxs6NzupKzzmabx2Rvs0tjVr2bBSOQ66TmAs8VXQ==}
     cpu: [ia32]
     os: [windows]
 
-  '@termapps/crude-windows-x64@0.1.2':
-    resolution: {integrity: sha512-k7iRZXyol/WWravjAW9BCEQe8u7YeGobtVrY96Cj5cOA2biknK/6aERP3/AotWoOkKq8s35ROmQvq5YtRnkLKQ==}
+  '@termapps/crude-windows-x64@0.1.4':
+    resolution: {integrity: sha512-E27gFOkBPDJuNSWt46OQGJVZOlH9NcApT5T3yK76hV7VArzzwv5Ngc6q04sxD2jrlqdzU4JyLwQA5VLE+AVIAg==}
     cpu: [x64]
     os: [windows]
 
-  '@termapps/crude@0.1.2':
-    resolution: {integrity: sha512-vS4g0PmX0MHIGqW+1q6brw1qSuCu0xqt6tmWjNlUeczNQQx/jz9tLrrDQTLBzYQnFINc52d400IGGHeI0N/W3g==}
+  '@termapps/crude@0.1.4':
+    resolution: {integrity: sha512-3RbtHiK2PIjffceYTa+5zN1ZDgHpAuGR3vs7kC2emLGVXGYUX/BrhtLVn30YazM6VWMlUjw7WiTfFkHYtoQZoQ==}
     hasBin: true
 
   '@testing-library/dom@10.1.0':
@@ -19061,38 +19061,38 @@ snapshots:
 
   '@tanstack/table-core@8.5.30': {}
 
-  '@termapps/crude-darwin-arm64@0.1.2':
+  '@termapps/crude-darwin-arm64@0.1.4':
     optional: true
 
-  '@termapps/crude-darwin-x64@0.1.2':
+  '@termapps/crude-darwin-x64@0.1.4':
     optional: true
 
-  '@termapps/crude-linux-ia32-glibc@0.1.2':
+  '@termapps/crude-linux-ia32-glibc@0.1.4':
     optional: true
 
-  '@termapps/crude-linux-x64-glibc@0.1.2':
+  '@termapps/crude-linux-x64-glibc@0.1.4':
     optional: true
 
-  '@termapps/crude-linux-x64-musl@0.1.2':
+  '@termapps/crude-linux-x64-musl@0.1.4':
     optional: true
 
-  '@termapps/crude-windows-ia32@0.1.2':
+  '@termapps/crude-windows-ia32@0.1.4':
     optional: true
 
-  '@termapps/crude-windows-x64@0.1.2':
+  '@termapps/crude-windows-x64@0.1.4':
     optional: true
 
-  '@termapps/crude@0.1.2':
+  '@termapps/crude@0.1.4':
     dependencies:
       detect-libc: 2.0.4
     optionalDependencies:
-      '@termapps/crude-darwin-arm64': 0.1.2
-      '@termapps/crude-darwin-x64': 0.1.2
-      '@termapps/crude-linux-ia32-glibc': 0.1.2
-      '@termapps/crude-linux-x64-glibc': 0.1.2
-      '@termapps/crude-linux-x64-musl': 0.1.2
-      '@termapps/crude-windows-ia32': 0.1.2
-      '@termapps/crude-windows-x64': 0.1.2
+      '@termapps/crude-darwin-arm64': 0.1.4
+      '@termapps/crude-darwin-x64': 0.1.4
+      '@termapps/crude-linux-ia32-glibc': 0.1.4
+      '@termapps/crude-linux-x64-glibc': 0.1.4
+      '@termapps/crude-linux-x64-musl': 0.1.4
+      '@termapps/crude-windows-ia32': 0.1.4
+      '@termapps/crude-windows-x64': 0.1.4
 
   '@testing-library/dom@10.1.0':
     dependencies:
