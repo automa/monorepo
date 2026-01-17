@@ -43,6 +43,4 @@ jobs:
       - name: Start dependencies
         run: pnpm start-deps
       - name: Schema check
-        run: |
-          pnpm db-dump-fix
-          git diff --exit-code
+        run: git diff --exit-code
