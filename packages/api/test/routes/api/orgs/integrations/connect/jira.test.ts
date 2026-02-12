@@ -356,7 +356,6 @@ suite('api/orgs/integrations/connect/jira', () => {
             webhookId: 123,
             userEmail: 'pavan@example.com',
           });
-          assert.containsAllKeys(integrations[0].config, ['refreshedAt']);
           assert.equal(integrations[0].created_by, user.id);
         });
       });
@@ -571,7 +570,6 @@ suite('api/orgs/integrations/connect/jira', () => {
               webhookId: 123,
               userEmail: 'pavan@example.com',
             });
-            assert.containsAllKeys(integrations[0].config, ['refreshedAt']);
             assert.equal(integrations[0].created_by, user.id);
           });
         });

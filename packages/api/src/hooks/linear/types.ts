@@ -3,7 +3,7 @@ import { FastifyInstance } from 'fastify';
 export enum LinearEventType {
   AgentSessionEvent = 'AgentSessionEvent',
   Comment = 'Comment',
-  OAuthApp = 'OAuthApp',
+  OAuthAuthorization = 'OAuthAuthorization',
 }
 
 export type LinearEventActionHandler<T = any> = (

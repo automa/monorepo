@@ -6,7 +6,7 @@ import { env } from '../../env';
 
 import { JobDefinition } from '../types';
 
-import { withJiraTokenRefresh } from '../../integrations';
+import { withTokenRefresh } from '../../integrations';
 
 const PAGE_SIZE = 5;
 
@@ -76,8 +76,9 @@ const extendJiraWebhooks: JobDefinition<object> = {
           const refreshUrl = `${JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/webhook/refresh`;
           const webhookId = connection.config.webhookId as number;
 
-          await withJiraTokenRefresh(
+          await withTokenRefresh(
             app,
+            'jira',
             connection.id,
             {
               access_token: connection.secrets.access_token as string,

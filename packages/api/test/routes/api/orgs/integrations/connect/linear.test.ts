@@ -67,6 +67,7 @@ suite('api/orgs/integrations/connect/linear', () => {
       postStub = sandbox.stub(axios, 'post').resolves({
         data: {
           access_token: 'abcdef',
+          refresh_token: 'ghijkl',
           scope: 'read write comments:create app:assignable app:mentionable',
         },
       });
@@ -215,7 +216,10 @@ suite('api/orgs/integrations/connect/linear', () => {
 
         assert.equal(integrations[0].org_id, org.id);
         assert.equal(integrations[0].type, 'linear');
-        assert.deepEqual(integrations[0].secrets, { access_token: 'abcdef' });
+        assert.deepEqual(integrations[0].secrets, {
+          access_token: 'abcdef',
+          refresh_token: 'ghijkl',
+        });
         assert.deepEqual(integrations[0].config, {
           id: '5678',
           name: 'Automa',

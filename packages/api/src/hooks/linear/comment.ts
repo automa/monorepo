@@ -9,6 +9,7 @@ import { env } from '../../env';
 import { getRegex, getSelectedBotAndRepo } from '../utils';
 
 import { taskCreate } from '../../db';
+import { withTokenRefresh } from '../../integrations/utils';
 
 import { LinearEventActionHandler } from './types';
 import { checkConnection, commentEventKey } from './utils';
@@ -54,29 +55,27 @@ const create: LinearEventActionHandler<{
     return;
   }
 
-  const result = await handleAssignment(app, {
-    organizationId: body.organizationId,
-    issue: body.data.issue,
-    comment: {
-      id: body.data.id,
-      body: text,
+  await handleAssignment(
+    app,
+    {
+      organizationId: body.organizationId,
+      issue: body.data.issue,
+      comment: {
+        id: body.data.id,
+        body: text,
+      },
+      parentCommentId: body.data.parentId,
+      actor: body.actor,
     },
-    parentCommentId: body.data.parentId,
-    actor: body.actor,
-  });
-
-  if (!result) {
-    return;
-  }
-
-  const { client, content } = result;
-
-  // Create a comment to notify the user
-  await client.createComment({
-    body: content.body,
-    issueId: body.data.issue.id,
-    parentId: body.data.parentId || body.data.id,
-  });
+    // Create a comment to notify the user
+    async (client, { body: commentBody }) => {
+      await client.createComment({
+        body: commentBody,
+        issueId: body.data.issue.id,
+        parentId: body.data.parentId || body.data.id,
+      });
+    },
+  );
 };
 
 export const handleAssignment = async (
@@ -103,6 +102,16 @@ export const handleAssignment = async (
       email: string;
     };
   },
+  call: (
+    client: LinearClient,
+    content: {
+      type: 'error' | 'action';
+      action?: string;
+      parameter?: string;
+      result?: string;
+      body: string;
+    },
+  ) => Promise<void>,
 ) => {
   const text = body.comment.body.trim();
   const regex = getRegex(true);
@@ -111,191 +120,186 @@ export const handleAssignment = async (
     return;
   }
 
-  const { accessToken, orgId, orgName } = await checkConnection(
-    app,
-    body.organizationId,
-  );
+  const { integrationId, accessToken, refreshToken, orgId, orgName } =
+    await checkConnection(app, body.organizationId);
 
   if (!orgId) {
     return;
   }
 
-  const client = new LinearClient({ accessToken });
-
-  // Find if a task already exists for this issue
-  const existingTask = await app.prisma.tasks.findFirst({
-    where: {
-      org_id: orgId,
-      state: {
-        notIn: [task_state.cancelled, task_state.failed],
-      },
-      task_items: {
-        some: {
-          type: task_item.origin,
-          AND: [
-            {
-              data: {
-                path: ['integration'],
-                equals: integration.linear,
-              },
-            },
-            {
-              data: {
-                path: ['issueId'],
-                equals: body.issue.id,
-              },
-            },
-          ],
-        },
-      },
-    },
-  });
-
-  if (existingTask) {
-    // Only reply if it's an agent session
-    if (!body.agentSessionId) {
-      return;
-    }
-
-    return {
-      client,
-      content: {
-        type: 'error',
-        body: `A task already exists for this issue: ${env.CLIENT_URI}/${orgName}/tasks/${existingTask.id}`,
-      },
-    };
-  }
-
-  // Select the bot and repo
-  const { selectedBot, selectedRepo, problems } = await getSelectedBotAndRepo(
-    app,
-    orgId,
-    text,
-    regex,
-  );
-
-  // Only create the task if we have a bot and repo
-  if (selectedBot && selectedRepo) {
-    // Retrieve the issue
-    const [issue, org] = await Promise.all([
-      client.issue(body.issue.id),
-      client.organization,
-    ]);
-
-    // Find automa user using email if they exist
-    // TODO: Unify this logic across the app in db/users.ts
-    const automaUser = await app.prisma.users.findFirst({
-      where: {
-        email: body.actor.email,
-      },
-    });
-    const userData = !automaUser
-      ? {
-          integration: integration.linear,
-          userId: body.actor.id,
-          userName: body.actor.name,
-          userEmail: body.actor.email,
-        }
-      : {};
-
-    // Create the task
-    const task = await taskCreate(app, {
-      org_id: orgId,
-      title: issue.title.slice(0, 255),
-      task_items: {
-        create: [
-          ...(issue.description
-            ? [
-                {
-                  type: task_item.message,
-                  // Linear returns the description as Markdown
-                  data: { content: issue.description },
-                },
-              ]
-            : []),
-          {
-            type: task_item.origin,
-            data: {
-              integration: integration.linear,
-              organizationId: org.id,
-              organizationUrlKey: org.urlKey,
-              organizationName: org.name,
-              teamId: body.issue.team.id,
-              teamKey: body.issue.team.key,
-              teamName: body.issue.team.name,
-              ...userData,
-              issueId: issue.id,
-              issueIdentifier: issue.identifier,
-              issueTitle: issue.title,
-              commentId: body.comment.id,
-              parentId: body.parentCommentId,
-              agentSessionId: body.agentSessionId,
-            },
-            actor_user_id: automaUser?.id,
-          },
-          ...(selectedRepo
-            ? [
-                {
-                  type: task_item.repo,
-                  data: {
-                    ...userData,
-                  },
-                  actor_user_id: automaUser?.id,
-                  repo_id: selectedRepo.id,
-                },
-              ]
-            : []),
-          ...(selectedBot
-            ? [
-                {
-                  type: task_item.bot,
-                  data: {
-                    ...userData,
-                  },
-                  actor_user_id: automaUser?.id,
-                  bot_id: selectedBot.bots.id,
-                },
-              ]
-            : []),
-        ],
-      },
-    });
-
-    return {
-      client,
-      content: {
-        type: 'action',
-        action: 'Created task',
-        parameter: orgName,
-        result: `${env.CLIENT_URI}/${orgName}/tasks/${task.id}`,
-        body: `Created task: ${env.CLIENT_URI}/${orgName}/tasks/${task.id}`,
-      },
-    };
-  }
-
-  // Notify the user if there were any problems
-  if (problems.length) {
-    const problemsMessage = problems
-      .map((problem) => `- ${problem}`)
-      .join('\n');
-
-    return {
-      client,
-      content: {
-        type: 'error',
-        body: `We encountered the following issues while creating the task:\n${problemsMessage}\n\n*NOTE: We don't support assigning issues yet.*`,
-      },
-    };
-  }
-
-  // Not sure if we should reach here, but just in case
-  return {
-    client,
-    content: {
-      type: 'error',
-      body: 'We encountered an unknown error while creating the task and are looking into it.',
-    },
+  const tokens = {
+    access_token: accessToken!,
+    refresh_token: refreshToken!,
   };
+
+  await withTokenRefresh(
+    app,
+    'linear',
+    integrationId!,
+    tokens,
+    async (token) => {
+      const client = new LinearClient({ accessToken: token });
+
+      // Find if a task already exists for this issue
+      const existingTask = await app.prisma.tasks.findFirst({
+        where: {
+          org_id: orgId,
+          state: {
+            notIn: [task_state.cancelled, task_state.failed],
+          },
+          task_items: {
+            some: {
+              type: task_item.origin,
+              AND: [
+                {
+                  data: {
+                    path: ['integration'],
+                    equals: integration.linear,
+                  },
+                },
+                {
+                  data: {
+                    path: ['issueId'],
+                    equals: body.issue.id,
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+
+      if (existingTask) {
+        // Only reply if it's an agent session
+        if (!body.agentSessionId) {
+          return;
+        }
+
+        return call(client, {
+          type: 'error' as const,
+          body: `A task already exists for this issue: ${env.CLIENT_URI}/${orgName}/tasks/${existingTask.id}`,
+        });
+      }
+
+      // Select the bot and repo
+      const { selectedBot, selectedRepo, problems } =
+        await getSelectedBotAndRepo(app, orgId, text, regex);
+
+      // Only create the task if we have a bot and repo
+      if (selectedBot && selectedRepo) {
+        // Retrieve the issue
+        const [issue, org] = await Promise.all([
+          client.issue(body.issue.id),
+          client.organization,
+        ]);
+
+        // Find automa user using email if they exist
+        // TODO: Unify this logic across the app in db/users.ts
+        const automaUser = await app.prisma.users.findFirst({
+          where: {
+            email: body.actor.email,
+          },
+        });
+        const userData = !automaUser
+          ? {
+              integration: integration.linear,
+              userId: body.actor.id,
+              userName: body.actor.name,
+              userEmail: body.actor.email,
+            }
+          : {};
+
+        // Create the task
+        const task = await taskCreate(app, {
+          org_id: orgId,
+          title: issue.title.slice(0, 255),
+          task_items: {
+            create: [
+              ...(issue.description
+                ? [
+                    {
+                      type: task_item.message,
+                      // Linear returns the description as Markdown
+                      data: { content: issue.description },
+                    },
+                  ]
+                : []),
+              {
+                type: task_item.origin,
+                data: {
+                  integration: integration.linear,
+                  organizationId: org.id,
+                  organizationUrlKey: org.urlKey,
+                  organizationName: org.name,
+                  teamId: body.issue.team.id,
+                  teamKey: body.issue.team.key,
+                  teamName: body.issue.team.name,
+                  ...userData,
+                  issueId: issue.id,
+                  issueIdentifier: issue.identifier,
+                  issueTitle: issue.title,
+                  commentId: body.comment.id,
+                  parentId: body.parentCommentId,
+                  agentSessionId: body.agentSessionId,
+                },
+                actor_user_id: automaUser?.id,
+              },
+              ...(selectedRepo
+                ? [
+                    {
+                      type: task_item.repo,
+                      data: {
+                        ...userData,
+                      },
+                      actor_user_id: automaUser?.id,
+                      repo_id: selectedRepo.id,
+                    },
+                  ]
+                : []),
+              ...(selectedBot
+                ? [
+                    {
+                      type: task_item.bot,
+                      data: {
+                        ...userData,
+                      },
+                      actor_user_id: automaUser?.id,
+                      bot_id: selectedBot.bots.id,
+                    },
+                  ]
+                : []),
+            ],
+          },
+        });
+
+        return call(client, {
+          type: 'action' as const,
+          action: 'Created task',
+          parameter: orgName,
+          result: `${env.CLIENT_URI}/${orgName}/tasks/${task.id}`,
+          body: `Created task: ${env.CLIENT_URI}/${orgName}/tasks/${task.id}`,
+        });
+      }
+
+      // Notify the user if there were any problems
+      if (problems.length) {
+        const problemsMessage = problems
+          .map((problem) => `- ${problem}`)
+          .join('\n');
+
+        return call(client, {
+          type: 'error' as const,
+          body: `We encountered the following issues while creating the task:\n${problemsMessage}\n\n*NOTE: We don't support assigning issues yet.*`,
+        });
+      }
+
+      // Not sure if we should reach here, but just in case
+      return call(client, {
+        type: 'error' as const,
+        body: 'We encountered an unknown error while creating the task and are looking into it.',
+      });
+    },
+  );
 };
 
 // TODO: Handle the following:

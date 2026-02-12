@@ -13,6 +13,7 @@ import { JobDefinition } from '../types';
 import { sendWebhook } from '../utils';
 
 import { getRegex } from '../../hooks/utils';
+import { withTokenRefresh } from '../../integrations/utils';
 
 const sendTaskWebhook: JobDefinition<{
   taskId: number;
@@ -165,34 +166,48 @@ const sendTaskWebhook: JobDefinition<{
         },
       });
 
+      const originTaskItemData = originTaskItem.data;
+
       if (
         connection?.secrets &&
         typeof connection.secrets === 'object' &&
         !Array.isArray(connection.secrets) &&
-        connection.secrets.access_token
+        connection.secrets.access_token &&
+        connection.secrets.refresh_token
       ) {
         try {
-          const client = new LinearClient({
-            accessToken: connection.secrets.access_token as string,
-          });
+          await withTokenRefresh(
+            app,
+            'linear',
+            connection.id,
+            {
+              access_token: connection.secrets.access_token as string,
+              refresh_token: connection.secrets.refresh_token as string,
+            },
+            async (accessToken) => {
+              const client = new LinearClient({ accessToken });
 
-          const issue = await client.issue(
-            originTaskItem.data.issueId as string,
-          );
-          const comments = (await issue.comments()).nodes;
+              const issue = await client.issue(
+                originTaskItemData.issueId as string,
+              );
+              const comments = (await issue.comments()).nodes;
 
-          const regex = getRegex(true);
+              const regex = getRegex(true);
 
-          originTaskItem.data.issueComments = (
-            await Promise.all(
-              comments.map(async ({ body, user, externalUser }) => ({
-                body,
-                userName: (await user)?.name ?? (await externalUser)?.name,
-              })),
-            )
-          ).filter(
-            ({ body, userName }) =>
-              !regex.test(body) && userName && !userName.startsWith('Automa'),
+              originTaskItemData.issueComments = (
+                await Promise.all(
+                  comments.map(async ({ body, user, externalUser }) => ({
+                    body,
+                    userName: (await user)?.name ?? (await externalUser)?.name,
+                  })),
+                )
+              ).filter(
+                ({ body, userName }) =>
+                  !regex.test(body) &&
+                  userName &&
+                  !userName.startsWith('Automa'),
+              );
+            },
           );
         } catch {}
       }

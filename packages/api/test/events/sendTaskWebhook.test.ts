@@ -555,6 +555,7 @@ suite('events/sendTaskWebhook', () => {
             type: 'linear',
             secrets: {
               access_token: 'abcdef',
+              refresh_token: 'zyxwvu',
             },
             config: {
               id: '6cb652a9-8f3f-40b7-9695-df81e161fe07',

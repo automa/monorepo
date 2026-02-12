@@ -575,7 +575,7 @@ suite('jira hook comment_created & comment_updated event', () => {
       });
     });
 
-    test('should get information about issue', async () => {
+    test('should try to get information about issue', async () => {
       assert.equal(issueStub.callCount, 2);
       assert.equal(
         issueStub.firstCall.args[0],
