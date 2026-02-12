@@ -22,20 +22,23 @@ export const checkConnection = async (
     },
   });
 
-  // Check if we have the access token
+  // Check if we have the access token and refresh token
   if (
     !(
       connection?.secrets &&
       typeof connection.secrets === 'object' &&
       !Array.isArray(connection.secrets) &&
-      connection.secrets.access_token
+      connection.secrets.access_token &&
+      connection.secrets.refresh_token
     )
   ) {
     return {};
   }
 
   return {
+    integrationId: connection.id,
     accessToken: connection.secrets.access_token as string,
+    refreshToken: connection.secrets.refresh_token as string,
     orgId: connection.org_id,
     orgName: connection.orgs.name,
   };

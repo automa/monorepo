@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { LinearClient } from '@linear/sdk';
 
 import { integration, task_item, task_state } from '@automa/prisma';
 
@@ -47,27 +48,26 @@ const created: LinearEventActionHandler<{
     );
   }
 
-  const result = await handleCommentCreate(
+  await handleCommentCreate(
     app,
     {
       agentSessionId: body.agentSession.id,
       actor: body.agentSession.creator,
       ...body.agentSession,
     },
+
+    // Create an agent session activity to notify the user
+    async (
+      client: LinearClient,
+      content: Parameters<Parameters<typeof handleAssignment>[2]>[1],
+    ) => {
+      await client.createAgentActivity({
+        agentSessionId: body.agentSession.id,
+        content,
+      });
+    },
     comment,
   );
-
-  if (!result) {
-    return;
-  }
-
-  const { client, content } = result;
-
-  // Create an agent session activity to notify the user
-  await client.createAgentActivity({
-    agentSessionId: body.agentSession.id,
-    content,
-  });
 };
 
 const prompted: LinearEventActionHandler<{
@@ -138,35 +138,34 @@ const prompted: LinearEventActionHandler<{
     return;
   }
 
-  const result = await handleCommentCreate(
+  await handleCommentCreate(
     app,
     {
       agentSessionId: body.agentSession.id,
       actor: body.agentSession.creator,
       ...body.agentSession,
     },
+    // Create an agent session activity to notify the user
+    async (
+      client: LinearClient,
+      content: Parameters<Parameters<typeof handleAssignment>[2]>[1],
+    ) => {
+      await client.createAgentActivity({
+        agentSessionId: body.agentSession.id,
+        content,
+      });
+    },
     {
       id: body.agentActivity.sourceCommentId,
       body: body.agentActivity.content.body,
     },
   );
-
-  if (!result) {
-    return;
-  }
-
-  const { client, content } = result;
-
-  // Create an agent session activity to notify the user
-  await client.createAgentActivity({
-    agentSessionId: body.agentSession.id,
-    content,
-  });
 };
 
 const handleCommentCreate = async (
   app: FastifyInstance,
   body: Omit<Parameters<typeof handleAssignment>[1], 'comment'>,
+  call: Parameters<typeof handleAssignment>[2],
   comment?: {
     id?: string;
     body: string;
@@ -187,10 +186,14 @@ const handleCommentCreate = async (
     );
   }
 
-  return handleAssignment(app, {
-    ...body,
-    comment,
-  });
+  return handleAssignment(
+    app,
+    {
+      ...body,
+      comment,
+    },
+    call,
+  );
 };
 
 export default {

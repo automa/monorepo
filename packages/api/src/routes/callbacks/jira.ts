@@ -195,7 +195,6 @@ export default async function (app: FastifyInstance) {
           scopes: jiraOrg.scopes,
           webhookId: data.createdWebhookId,
           userEmail: jiraUser.emailAddress,
-          refreshedAt: new Date(),
         },
         created_by: request.userId!,
       },

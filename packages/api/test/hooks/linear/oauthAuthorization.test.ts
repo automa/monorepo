@@ -7,7 +7,7 @@ import { seedOrgs, seedUsers, server } from '../../utils';
 
 import { callWithFixture } from './utils';
 
-suite('linear hook OAuthApp event', () => {
+suite('linear hook OAuthAuthorization event', () => {
   let app: FastifyInstance,
     user: users,
     org: orgs,
@@ -51,7 +51,7 @@ suite('linear hook OAuthApp event', () => {
 
   suite('revoked', () => {
     setup(async () => {
-      response = await callWithFixture(app, 'OAuthApp', 'revoked');
+      response = await callWithFixture(app, 'OAuthAuthorization', 'revoked');
     });
 
     test('should return 200', async () => {
@@ -83,7 +83,7 @@ suite('linear hook OAuthApp event', () => {
         },
       });
 
-      response = await callWithFixture(app, 'OAuthApp', 'revoked');
+      response = await callWithFixture(app, 'OAuthAuthorization', 'revoked');
     });
 
     test('should return 200', async () => {

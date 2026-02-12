@@ -7,7 +7,7 @@ import { env } from '../../env';
 import { getRegex, getSelectedBotAndRepo } from '../utils';
 
 import { taskCreate } from '../../db';
-import { fromAdfToMarkdown, withJiraTokenRefresh } from '../../integrations';
+import { fromAdfToMarkdown, withTokenRefresh } from '../../integrations';
 
 import { JiraEventHandler } from './types';
 
@@ -159,7 +159,7 @@ const commentCreated: JiraEventHandler<{
     ({
       result: { data: issue },
       tokens: tokens,
-    } = await withJiraTokenRefresh(app, connection.id, tokens, readIssue));
+    } = await withTokenRefresh(app, 'jira', connection.id, tokens, readIssue));
 
     // Find comment from list of comments in the issue
     const comment = issue.fields.comment.comments.find(
@@ -304,7 +304,7 @@ const commentCreated: JiraEventHandler<{
   // Create a comment to notify the user
   const commentUrl = `${env.JIRA_APP.API_URI}/${connection.config.id}/rest/api/3/issue/${body.issue.id}/comment`;
 
-  await withJiraTokenRefresh(app, connection.id, tokens, (token: string) =>
+  await withTokenRefresh(app, 'jira', connection.id, tokens, (token: string) =>
     axios.post(
       commentUrl,
       {

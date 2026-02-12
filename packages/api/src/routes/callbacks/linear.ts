@@ -38,9 +38,10 @@ export default async function (app: FastifyInstance) {
     }
 
     const {
-      data: { access_token: accessToken, scope },
+      data: { access_token: accessToken, refresh_token: refreshToken, scope },
     } = await axios.post<{
       access_token: string;
+      refresh_token: string;
       scope: string;
     }>(
       LINEAR_APP.ACCESS_TOKEN_URL,
@@ -59,7 +60,7 @@ export default async function (app: FastifyInstance) {
       },
     );
 
-    if (!accessToken) {
+    if (!accessToken || !refreshToken) {
       return replyError(ErrorType.UNABLE_TO_CONNECT_INTEGRATION);
     }
 
@@ -89,6 +90,7 @@ export default async function (app: FastifyInstance) {
         type: integration.linear,
         secrets: {
           access_token: accessToken,
+          refresh_token: refreshToken,
         },
         config: {
           id: linearOrg.id,

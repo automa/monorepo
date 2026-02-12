@@ -1,5 +1,5 @@
 {
-  "type": "OAuthApp",
+  "type": "OAuthAuthorization",
   "action": "revoked",
   "createdAt": "2024-06-28T08:08:37.389Z",
   "organizationId": "6cb652a9-8f3f-40b7-9695-df81e161fe07",

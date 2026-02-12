@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import axios, { AxiosError } from 'axios';
+import { AuthenticationLinearError } from '@linear/sdk';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { env } from '../../env';
 
@@ -8,8 +9,32 @@ type TokenPair = {
   refresh_token: string;
 };
 
-export async function withJiraTokenRefresh<T>(
+type RefreshConfig = {
+  env: { ACCESS_TOKEN_URL: string; CLIENT_ID: string; CLIENT_SECRET: string };
+  throwOn?: (e: unknown) => boolean;
+  requestConfig?: AxiosRequestConfig;
+};
+
+const refreshConfigs: Record<string, RefreshConfig> = {
+  jira: {
+    env: env.JIRA_APP,
+    throwOn: (e: unknown) => (e as AxiosError)?.response?.status !== 401,
+  },
+  linear: {
+    env: env.LINEAR_APP,
+    throwOn: (e: unknown) => !(e instanceof AuthenticationLinearError),
+    requestConfig: {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json',
+      },
+    },
+  },
+};
+
+export async function withTokenRefresh<T>(
   app: FastifyInstance,
+  type: keyof typeof refreshConfigs,
   integrationId: number,
   tokens: TokenPair,
   apiCall: (accessToken: string) => Promise<T>,
@@ -17,24 +42,25 @@ export async function withJiraTokenRefresh<T>(
   result: T;
   tokens: TokenPair;
 }> {
-  const { JIRA_APP } = env;
-
   try {
     const result = await apiCall(tokens.access_token);
 
     return { result, tokens };
   } catch (e) {
-    if ((e as AxiosError)?.response?.status !== 401) throw e;
+    const config = refreshConfigs[type];
+
+    if (config.throwOn?.(e)) throw e;
 
     // If the access token is expired, we need to refresh it
     const { data: newTokens } = await axios.post<TokenPair>(
-      JIRA_APP.ACCESS_TOKEN_URL,
+      config.env.ACCESS_TOKEN_URL,
       {
-        client_id: JIRA_APP.CLIENT_ID,
-        client_secret: JIRA_APP.CLIENT_SECRET,
+        client_id: config.env.CLIENT_ID,
+        client_secret: config.env.CLIENT_SECRET,
         refresh_token: tokens.refresh_token,
         grant_type: 'refresh_token',
       },
+      config.requestConfig ?? {},
     );
 
     if (!newTokens.access_token || !newTokens.refresh_token) throw e;
