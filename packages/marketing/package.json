@@ -1,6 +1,6 @@
 {
   "name": "@automa/marketing",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@automa/prisma": "workspace:*",
@@ -31,10 +31,6 @@
   "scripts": {
     "build": "next build",
     "build-stats": "BUILD_STATS=1 pnpm build",
-    "format": "prettier --write .",
-    "format-check": "prettier --check .",
-    "lint": "eslint .",
-    "lint-fix": "eslint --fix .",
     "start": "next dev -p 4000",
     "storybook": "NODE_ENV=test storybook dev -p 6006",
     "storybook-build": "NODE_ENV=test storybook build",
@@ -62,6 +58,7 @@
   },
   "devDependencies": {
     "@mdx-js/loader": "~3.1.0",
+    "@next/eslint-plugin-next": "~14.2.3",
     "@next/mdx": "~14.2.3",
     "@storybook/nextjs": "~8.1.11",
     "@storybook/react": "~8.1.11",
