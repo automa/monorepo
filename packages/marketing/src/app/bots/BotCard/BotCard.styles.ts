@@ -21,6 +21,8 @@ export const Fallback = tw(Flex).attrs({
 
 export const BotName = tw(Anchor)`after:absolute after:inset-0`;
 
+export const BotName = tw(Anchor)`after:absolute after:inset-0`;
+
 export const OrgName = tw(Typography).attrs({
   variant: 'small',
 })`text-neutral-500`;
