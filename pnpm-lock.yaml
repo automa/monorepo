@@ -81,12 +81,6 @@ importers:
       '@graphql-eslint/eslint-plugin':
         specifier: ~4.3.0
         version: 4.3.0(@types/node@22.13.10)(eslint@8.57.1)(graphql@16.8.2)(typescript@5.7.3)
-      '@stagewise-plugins/react':
-        specifier: ~0.4.8
-        version: 0.4.9(@stagewise/toolbar@0.4.9)
-      '@stagewise/toolbar-react':
-        specifier: ~0.4.8
-        version: 0.4.9(@types/react@18.3.3)(react@18.3.1)
       '@storybook/addon-coverage':
         specifier: ~1.0.3
         version: 1.0.4
@@ -440,8 +434,8 @@ importers:
         specifier: ~3.2.0
         version: 3.2.0(graphql@16.8.2)
       '@hookform/resolvers':
-        specifier: ~3.3.4
-        version: 3.3.4(react-hook-form@7.51.4(react@18.3.1))
+        specifier: ~5.2.2
+        version: 5.2.2(react-hook-form@7.55.0(react@18.3.1))
       '@phosphor-icons/react':
         specifier: 'catalog:'
         version: 2.1.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -563,11 +557,11 @@ importers:
         specifier: ~4.0.11
         version: 4.0.13(react@18.3.1)
       react-hook-form:
-        specifier: ~7.51.3
-        version: 7.51.4(react@18.3.1)
+        specifier: ~7.55.0
+        version: 7.55.0(react@18.3.1)
       react-hotkeys-hook:
-        specifier: ~4.5.0
-        version: 4.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ~5.2.4
+        version: 5.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-redux:
         specifier: ~9.1.0
         version: 9.1.2(@types/react@18.3.3)(react@18.3.1)(redux@5.0.1)
@@ -2296,10 +2290,10 @@ packages:
   '@hapi/topo@5.1.0':
     resolution: {integrity: sha512-foQZKJig7Ob0BMAYBfcJk8d77QtOe7Wo4ox7ff1lQYoNNAb6jwcY1ncdoy2e9wQZzvNy7ODZCYJkK8kzmcAnAg==}
 
-  '@hookform/resolvers@3.3.4':
-    resolution: {integrity: sha512-o5cgpGOuJYrd+iMKvkttOclgwRW86EsWJZZRC23prf0uU2i48Htq4PuT73AVb9ionFyZrwYEITuOFGF+BydEtQ==}
+  '@hookform/resolvers@5.2.2':
+    resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
     peerDependencies:
-      react-hook-form: ^7.0.0
+      react-hook-form: ^7.55.0
 
   '@humanwhocodes/config-array@0.13.0':
     resolution: {integrity: sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw==}
@@ -4079,19 +4073,8 @@ packages:
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
-  '@stagewise-plugins/react@0.4.9':
-    resolution: {integrity: sha512-njlmHe92sAAvEGPeeyZS+a+twuVBNNaEmjFuUGs02WWnG20HquoXMHRgdUFH5Ecr0cxHS2SP/AbKq/kYEFwMjA==}
-    peerDependencies:
-      '@stagewise/toolbar': 0.4.9
-
-  '@stagewise/toolbar-react@0.4.9':
-    resolution: {integrity: sha512-K27i8GT20EWQJTmY+XQTvgiZh4EDq83W82zSUdSF7Fo8v9ogypn+wZbyFlLg97F2OYysc0uhILwUlS5eVItpyQ==}
-    peerDependencies:
-      '@types/react': '>=18.0.0'
-      react: '>=18.0.0'
-
-  '@stagewise/toolbar@0.4.9':
-    resolution: {integrity: sha512-fBggX+4nLwRDHnevWk32BjpMpc6vjF2k9mdamsPqAUnbsKbJnkTCjm0o8DOKcjRO9M/PGwcED4Ct0AWHQvkR/Q==}
+  '@standard-schema/utils@0.3.0':
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@statsig/client-core@3.0.0':
     resolution: {integrity: sha512-8PJ1nn61vSTbs1RGYYsIMloGkfRameiCs0ULs+27dq3kkFnWIK7cN7ku2jOK0OUygr6N/Gn4iamQSuFcUQcGQA==}
@@ -11105,17 +11088,17 @@ packages:
     peerDependencies:
       react: '>=16.13.1'
 
-  react-hook-form@7.51.4:
-    resolution: {integrity: sha512-V14i8SEkh+V1gs6YtD0hdHYnoL4tp/HX/A45wWQN15CYr9bFRmmRdYStSO5L65lCCZRF+kYiSKhm9alqbcdiVA==}
-    engines: {node: '>=12.22.0'}
+  react-hook-form@7.55.0:
+    resolution: {integrity: sha512-XRnjsH3GVMQz1moZTW53MxfoWN7aDpUg/GpVNc4A3eXRVNdGXfbzJ4vM4aLQ8g6XCUh1nIbx70aaNCl7kxnjog==}
+    engines: {node: '>=18.0.0'}
     peerDependencies:
-      react: ^16.8.0 || ^17 || ^18
+      react: ^16.8.0 || ^17 || ^18 || ^19
 
-  react-hotkeys-hook@4.5.0:
-    resolution: {integrity: sha512-Samb85GSgAWFQNvVt3PS90LPPGSf9mkH/r4au81ZP1yOIFayLC3QAvqTgGtJ8YEDMXtPmaVBs6NgipHO6h4Mug==}
+  react-hotkeys-hook@5.2.4:
+    resolution: {integrity: sha512-BgKg+A1+TawkYluh5Bo4cTmcgMN5L29uhJbDUQdHwPX+qgXRjIPYU5kIDHyxnAwCkCBiu9V5OpB2mpyeluVF2A==}
     peerDependencies:
-      react: '>=16.8.1'
-      react-dom: '>=16.8.1'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -15121,9 +15104,10 @@ snapshots:
     dependencies:
       '@hapi/hoek': 9.3.0
 
-  '@hookform/resolvers@3.3.4(react-hook-form@7.51.4(react@18.3.1))':
+  '@hookform/resolvers@5.2.2(react-hook-form@7.55.0(react@18.3.1))':
     dependencies:
-      react-hook-form: 7.51.4(react@18.3.1)
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.55.0(react@18.3.1)
 
   '@humanwhocodes/config-array@0.13.0':
     dependencies:
@@ -17265,17 +17249,7 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
-  '@stagewise-plugins/react@0.4.9(@stagewise/toolbar@0.4.9)':
-    dependencies:
-      '@stagewise/toolbar': 0.4.9
-
-  '@stagewise/toolbar-react@0.4.9(@types/react@18.3.3)(react@18.3.1)':
-    dependencies:
-      '@stagewise/toolbar': 0.4.9
-      '@types/react': 18.3.3
-      react: 18.3.1
-
-  '@stagewise/toolbar@0.4.9': {}
+  '@standard-schema/utils@0.3.0': {}
 
   '@statsig/client-core@3.0.0': {}
 
@@ -26578,11 +26552,11 @@ snapshots:
       '@babel/runtime': 7.24.5
       react: 18.3.1
 
-  react-hook-form@7.51.4(react@18.3.1):
+  react-hook-form@7.55.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 
-  react-hotkeys-hook@4.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-hotkeys-hook@5.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
