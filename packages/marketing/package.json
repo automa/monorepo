@@ -18,7 +18,7 @@
     "@tiptap/starter-kit": "~2.11.0",
     "class-variance-authority": "catalog:",
     "date-fns": "catalog:",
-    "next": "~14.2.3",
+    "next": "~14.2.35",
     "next-mdx-remote": "~5.0.0",
     "react": "catalog:",
     "react-dom": "catalog:",
@@ -58,8 +58,8 @@
   },
   "devDependencies": {
     "@mdx-js/loader": "~3.1.0",
-    "@next/eslint-plugin-next": "~14.2.3",
-    "@next/mdx": "~14.2.3",
+    "@next/eslint-plugin-next": "~14.2.35",
+    "@next/mdx": "~14.2.35",
     "@storybook/nextjs": "~8.1.11",
     "@storybook/react": "~8.1.11",
     "@types/mdx": "~2.0.13"
