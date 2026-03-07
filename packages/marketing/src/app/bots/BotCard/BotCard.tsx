@@ -16,6 +16,7 @@ import {
   Description,
   Fallback,
   ImageContainer,
+  BotName,
   OrgName,
 } from './BotCard.styles';
 
