@@ -9,6 +9,7 @@ const CHUNK_SIZE = 10;
 const scheduleBots: JobDefinition<object> = {
   repeat: {
     pattern: '0 0 * * 1',
+    immediately: true,
   },
   handler: async (app, {}) => {
     let cursor: number | undefined;

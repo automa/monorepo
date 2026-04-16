@@ -56,7 +56,9 @@ const eventsPlugin: FastifyPluginAsync<{
 
   // Don't want to change the queue name since we
   // already have a queue named 'events' in production.
-  const queue = new Queue('events', {
+  const queueName = 'events';
+
+  const queue = new Queue(queueName, {
     connection,
     defaultJobOptions: {
       attempts: 5,
@@ -69,7 +71,7 @@ const eventsPlugin: FastifyPluginAsync<{
       },
       removeOnFail: false,
     },
-    telemetry: new BullMQOtel('events'),
+    telemetry: new BullMQOtel(queueName),
   });
 
   // Add cron jobs to the queue
@@ -78,7 +80,14 @@ const eventsPlugin: FastifyPluginAsync<{
       continue;
     }
 
-    await queue.upsertJobScheduler(key, job.repeat, {
+    // Only run immediately if the scheduler doesn't already exist in Redis
+    const existingScheduler = await queue.getJobScheduler(key);
+
+    const repeat = existingScheduler.next
+      ? { ...job.repeat, immediately: false }
+      : job.repeat;
+
+    await queue.upsertJobScheduler(key, repeat, {
       name: key,
       data: {},
     });
@@ -89,7 +98,7 @@ const eventsPlugin: FastifyPluginAsync<{
     void,
     keyof Jobs
   >(
-    'events',
+    queueName,
     async (job) => {
       const { handler } = jobs[job.name];
 
@@ -106,7 +115,7 @@ const eventsPlugin: FastifyPluginAsync<{
     },
     {
       connection,
-      telemetry: new BullMQOtel('events'),
+      telemetry: new BullMQOtel(queueName),
     },
   );
 
