@@ -42,5 +42,12 @@ module.exports = {
       script: 'pnpm',
       args: 'start',
     },
+    {
+      name: 'reset-events',
+      watch: ['packages/api/src/events/jobs/scheduleBots.ts'],
+      script: 'redis-cli',
+      args: 'flushall',
+      autorestart: false,
+    },
   ],
 };
