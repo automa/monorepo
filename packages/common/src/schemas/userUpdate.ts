@@ -4,7 +4,7 @@ import { UserUpdateInput } from '../graphql';
 
 import { ZodInferSchema } from './utils';
 
-export const userUpdateSchema = z.object<ZodInferSchema<UserUpdateInput>>({
+export const userUpdateSchema = z.object({
   name: z.string().trim().min(3).max(255),
-  email: z.string().trim().email(),
-});
+  email: z.email().trim(),
+}) satisfies ZodInferSchema<UserUpdateInput>;

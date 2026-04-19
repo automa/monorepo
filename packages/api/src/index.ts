@@ -6,11 +6,17 @@ import { env, isProduction, isTest, version } from './env';
 import fastify from 'fastify';
 import fastifyAutoload from '@fastify/autoload';
 import fastifyCors from '@fastify/cors';
+import { FastifyError } from '@fastify/error';
 import fastifyHelmet from '@fastify/helmet';
 import fastifySensible from '@fastify/sensible';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
-import { validatorCompiler } from 'fastify-type-provider-zod';
+import {
+  hasZodFastifySchemaValidationErrors,
+  jsonSchemaTransform,
+  jsonSchemaTransformObject,
+  validatorCompiler,
+} from 'fastify-type-provider-zod';
 import httpErrors from 'http-errors';
 
 import { Prisma } from '@automa/prisma';
@@ -57,14 +63,23 @@ export const server = async () => {
       return error;
     }
 
-    if (error.code === 'FST_ERR_VALIDATION') {
-      return reply.unprocessableEntity(error.message);
-    } else if (error.code === 'FST_ERR_CTP_BODY_TOO_LARGE') {
-      return reply.payloadTooLarge(error.message);
-    } else if (error.code === 'FST_ERR_CTP_INVALID_MEDIA_TYPE') {
-      return reply.unsupportedMediaType(error.message);
-    } else if (error.statusCode === 400) {
-      return reply.badRequest(error.message);
+    if (error instanceof FastifyError) {
+      if (error.code === 'FST_ERR_VALIDATION') {
+        return reply.unprocessableEntity(error.message);
+      } else if (error.code === 'FST_ERR_CTP_BODY_TOO_LARGE') {
+        return reply.payloadTooLarge(error.message);
+      } else if (error.code === 'FST_ERR_CTP_INVALID_MEDIA_TYPE') {
+        return reply.unsupportedMediaType(error.message);
+      } else if (error.statusCode === 400) {
+        return reply.badRequest(error.message);
+      }
+    }
+
+    if (hasZodFastifySchemaValidationErrors(error)) {
+      return reply.code(400).send({
+        ...error,
+        error: 'Bad Request',
+      });
     }
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -93,6 +108,8 @@ export const server = async () => {
           version,
         },
       },
+      transform: jsonSchemaTransform,
+      transformObject: jsonSchemaTransformObject,
     });
     await app.register(fastifySwaggerUi, {});
   }

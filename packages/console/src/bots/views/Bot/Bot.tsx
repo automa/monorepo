@@ -7,7 +7,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { botUpdateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
-import { BotUpdateInput } from 'gql/graphql';
 import {
   Button,
   Flex,
@@ -56,7 +55,7 @@ const Bot: React.FC = () => {
     control,
     handleSubmit,
     formState: { errors, isDirty, dirtyFields },
-  } = useForm<BotUpdateInput>({
+  } = useForm({
     resolver: zodResolver(botUpdateSchema),
   });
 

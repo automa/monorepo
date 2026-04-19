@@ -67,17 +67,22 @@ export default async function (app: FastifyInstance) {
         task.proposal_base_commit || proposal.base_commit;
 
       if (!proposalBaseCommit) {
-        return reply.badRequest(
-          JSON.stringify([
+        return reply.code(400).send({
+          error: 'Bad Request',
+          statusCode: 400,
+          validationContext: 'body',
+          validation: [
             {
-              code: 'invalid_type',
-              expected: 'string',
-              received: 'undefined',
-              path: ['proposal', 'base_commit'],
-              message: 'Required',
+              keyword: 'invalid_type',
+              instancePath: '/proposal/base_commit',
+              schemaPath: '#/proposal/base_commit/invalid_type',
+              params: {
+                expected: 'string',
+              },
+              message: 'Invalid input: expected string, received null',
             },
-          ]),
-        );
+          ],
+        });
       }
 
       const repo = await getRepo(app, reply, task);

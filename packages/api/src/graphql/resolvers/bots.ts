@@ -109,7 +109,7 @@ export const Query: QueryResolvers<Context> = {
 
 export const Mutation: MutationResolvers<Context> = {
   botCreate: async (_, { org_id, input }, { prisma }) => {
-    const data = botCreateSchema.parse(input);
+    const { description, ...data } = botCreateSchema.parse(input);
 
     // Generate a webhook secret
     const webhook_secret = `atma_whsec_${randomBytes(32).toString(
@@ -122,6 +122,7 @@ export const Mutation: MutationResolvers<Context> = {
         org_id,
         webhook_secret,
         paths: data.draft_paths,
+        description: description as Prisma.InputJsonValue,
         ...data,
       },
     });

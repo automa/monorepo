@@ -19,7 +19,7 @@ const telemetryPlugin: FastifyPluginAsync = async (app) => {
       {
         'http.request.id': request.id,
         [ATTR_HTTP_REQUEST_METHOD]: request.method,
-        [ATTR_HTTP_ROUTE]: request.routerPath,
+        [ATTR_HTTP_ROUTE]: request.routeOptions.url,
         [ATTR_URL_PATH]: request.url,
         [ATTR_CLIENT_ADDRESS]: request.ip,
       },
@@ -28,13 +28,13 @@ const telemetryPlugin: FastifyPluginAsync = async (app) => {
 
     requestCounter.add(1, {
       [ATTR_HTTP_REQUEST_METHOD]: request.method,
-      [ATTR_HTTP_ROUTE]: request.routerPath,
+      [ATTR_HTTP_ROUTE]: request.routeOptions.url,
       [ATTR_URL_PATH]: request.url,
     });
   });
 
   app.addHook('onResponse', async (request, reply) => {
-    const responseTime = reply.getResponseTime();
+    const responseTime = reply.elapsedTime;
 
     app.log.info(
       {
@@ -47,7 +47,7 @@ const telemetryPlugin: FastifyPluginAsync = async (app) => {
 
     responseTimer.record(responseTime, {
       [ATTR_HTTP_REQUEST_METHOD]: request.method,
-      [ATTR_HTTP_ROUTE]: request.routerPath,
+      [ATTR_HTTP_ROUTE]: request.routeOptions.url,
       [ATTR_URL_PATH]: request.url,
     });
   });

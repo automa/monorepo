@@ -7,7 +7,7 @@ import { env } from '../../../../../../env';
 export default async function (app: FastifyInstance) {
   app.addHook('preHandler', async (request, reply) => {
     // Get the integration from the router path
-    const integration = request.routerPath.replace(
+    const integration = request.routeOptions.url!.replace(
       /^\/api\/orgs\/:org\/integrations\/connect\//,
       '',
     );

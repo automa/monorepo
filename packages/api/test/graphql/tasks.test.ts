@@ -1022,11 +1022,10 @@ suite('graphql tasks', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          message: 'String must contain at least 5 character(s)',
+          message: 'Too small: expected string to have >=5 characters',
           path: ['title'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           minimum: 5,
         },
       ]);
@@ -1057,11 +1056,10 @@ suite('graphql tasks', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          message: 'String must contain at least 5 character(s)',
+          message: 'Too small: expected string to have >=5 characters',
           path: ['title'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           minimum: 5,
         },
       ]);
@@ -1147,12 +1145,11 @@ suite('graphql tasks', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          exact: false,
           inclusive: false,
-          message: 'Number must be greater than 0',
+          message: 'Too small: expected number to be >0',
           minimum: 0,
           path: ['bot_installation_id'],
-          type: 'number',
+          origin: 'number',
         },
       ]);
 
@@ -1301,12 +1298,11 @@ suite('graphql tasks', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          exact: false,
           inclusive: false,
-          message: 'Number must be greater than 0',
+          message: 'Too small: expected number to be >0',
           minimum: 0,
           path: ['repo_id'],
-          type: 'number',
+          origin: 'number',
         },
       ]);
 

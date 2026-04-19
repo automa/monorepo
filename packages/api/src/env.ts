@@ -1,7 +1,7 @@
 import { dirname, join } from 'node:path';
 
 import envSchema from 'nested-env-schema';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 import './telemetry';
 
