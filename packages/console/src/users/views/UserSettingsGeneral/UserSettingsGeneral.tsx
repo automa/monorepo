@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { userUpdateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
-import { UserUpdateInput } from 'gql/graphql';
 import { Button, Flex, Input, toast, Typography } from 'shared';
 
 import { USER_AVATAR_FRAGMENT, USER_QUERY, USER_QUERY_FRAGMENT } from 'users';
@@ -24,7 +23,7 @@ const UserSettingsGeneral: React.FC = () => {
     reset,
     handleSubmit,
     formState: { errors, isDirty },
-  } = useForm<UserUpdateInput>({
+  } = useForm({
     resolver: zodResolver(userUpdateSchema),
   });
 

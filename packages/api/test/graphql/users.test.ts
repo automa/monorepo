@@ -262,11 +262,10 @@ suite('graphql users', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          message: 'String must contain at least 3 character(s)',
+          message: 'Too small: expected string to have >=3 characters',
           path: ['name'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           minimum: 3,
         },
       ]);
@@ -303,11 +302,10 @@ suite('graphql users', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_big',
-          message: 'String must contain at most 255 character(s)',
+          message: 'Too big: expected string to have <=255 characters',
           path: ['name'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           maximum: 255,
         },
       ]);
@@ -374,10 +372,13 @@ suite('graphql users', () => {
 
       assert.deepEqual(errors[0].extensions.errors, [
         {
-          code: 'invalid_string',
-          message: 'Invalid email',
+          code: 'invalid_format',
+          format: 'email',
+          message: 'Invalid email address',
+          origin: 'string',
           path: ['email'],
-          validation: 'email',
+          pattern:
+            "/^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$/",
         },
       ]);
 

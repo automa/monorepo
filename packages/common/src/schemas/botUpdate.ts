@@ -4,16 +4,15 @@ import { BotUpdateInput } from '../graphql';
 
 import { ZodInferSchema } from './utils';
 
-export const botUpdateSchema = z.object<ZodInferSchema<BotUpdateInput>>({
-  webhook_url: z.string().url().trim().optional(),
+export const botUpdateSchema = z.object({
+  webhook_url: z.url().trim().optional(),
   short_description: z.string().trim().min(3).max(255).optional(),
   draft_paths: z.array(z.string().trim()).optional(),
-  description: z.object({}).passthrough().nullish(),
+  description: z.looseObject({}).nullish(),
   homepage: z
-    .string()
     .url()
     .trim()
     .or(z.literal(''))
-    .transform((value) => (value === '' ? null : value))
-    .nullish(),
-});
+    .nullish()
+    .overwrite((value) => (value === '' ? null : value)),
+}) satisfies ZodInferSchema<BotUpdateInput>;

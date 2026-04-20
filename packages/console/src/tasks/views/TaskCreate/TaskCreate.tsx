@@ -33,7 +33,7 @@ const TaskCreate: React.FC = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<TaskCreateInput>({
+  } = useForm({
     resolver: zodResolver(taskCreateSchema),
   });
 

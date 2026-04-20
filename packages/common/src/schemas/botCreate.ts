@@ -5,7 +5,7 @@ import { BotCreateInput, BotType } from '../graphql';
 
 import { ZodInferSchema } from './utils';
 
-export const botCreateSchema = z.object<ZodInferSchema<BotCreateInput>>({
+export const botCreateSchema = z.object({
   name: z
     .string()
     .trim()
@@ -16,18 +16,17 @@ export const botCreateSchema = z.object<ZodInferSchema<BotCreateInput>>({
       'Must only contain alphanumeric characters and dashes',
     )
     .refine((value) => !RESTRICTED_BOT_NAMES.includes(value), {
-      message: 'Must not be a reserved name',
+      error: 'Must not be a reserved name',
     }),
-  type: z.nativeEnum(BotType),
-  webhook_url: z.string().url().trim(),
+  type: z.enum(BotType),
+  webhook_url: z.url().trim(),
   short_description: z.string().trim().min(3).max(255),
   draft_paths: z.array(z.string().trim()),
-  description: z.object({}).passthrough().nullish(),
+  description: z.looseObject({}).nullish(),
   homepage: z
-    .string()
     .url()
     .trim()
     .or(z.literal(''))
-    .transform((value) => (value === '' ? null : value))
-    .nullish(),
-});
+    .nullish()
+    .overwrite((value) => (value === '' ? null : value)),
+}) satisfies ZodInferSchema<BotCreateInput>;

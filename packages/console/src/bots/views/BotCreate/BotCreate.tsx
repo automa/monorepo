@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { botCreateSchema } from '@automa/common';
 
 import { getFragment } from 'gql';
-import { BotCreateInput, BotType } from 'gql/graphql';
+import { BotType } from 'gql/graphql';
 import {
   Button,
   Flex,
@@ -31,7 +31,7 @@ const BotCreate: React.FC = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<BotCreateInput>({
+  } = useForm({
     resolver: zodResolver(botCreateSchema),
     defaultValues: {
       type: BotType.Manual,

@@ -1974,11 +1974,10 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          message: 'String must contain at least 3 character(s)',
+          message: 'Too small: expected string to have >=3 characters',
           path: ['name'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           minimum: 3,
         },
       ]);
@@ -2023,11 +2022,10 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_big',
-          message: 'String must contain at most 255 character(s)',
+          message: 'Too big: expected string to have <=255 characters',
           path: ['name'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           maximum: 255,
         },
       ]);
@@ -2071,10 +2069,12 @@ suite('graphql bots', () => {
 
       assert.deepEqual(errors[0].extensions.errors, [
         {
-          code: 'invalid_string',
+          code: 'invalid_format',
+          format: 'regex',
           message: 'Must only contain alphanumeric characters and dashes',
+          origin: 'string',
           path: ['name'],
-          validation: 'regex',
+          pattern: '/^[a-z0-9-]+$/i',
         },
       ]);
 
@@ -2117,18 +2117,19 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          message: 'String must contain at least 3 character(s)',
+          message: 'Too small: expected string to have >=3 characters',
           path: ['name'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           minimum: 3,
         },
         {
-          code: 'invalid_string',
+          code: 'invalid_format',
+          format: 'regex',
           message: 'Must only contain alphanumeric characters and dashes',
+          origin: 'string',
           path: ['name'],
-          validation: 'regex',
+          pattern: '/^[a-z0-9-]+$/i',
         },
       ]);
 
@@ -2336,11 +2337,10 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          message: 'String must contain at least 3 character(s)',
+          message: 'Too small: expected string to have >=3 characters',
           path: ['short_description'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           minimum: 3,
         },
       ]);
@@ -2385,11 +2385,10 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_big',
-          message: 'String must contain at most 255 character(s)',
+          message: 'Too big: expected string to have <=255 characters',
           path: ['short_description'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           maximum: 255,
         },
       ]);
@@ -2433,11 +2432,10 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          message: 'String must contain at least 3 character(s)',
+          message: 'Too small: expected string to have >=3 characters',
           path: ['short_description'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           minimum: 3,
         },
       ]);
@@ -2679,10 +2677,10 @@ suite('graphql bots', () => {
 
       assert.deepEqual(errors[0].extensions.errors, [
         {
-          code: 'invalid_string',
-          message: 'Invalid url',
+          code: 'invalid_format',
+          format: 'url',
+          message: 'Invalid URL',
           path: ['webhook_url'],
-          validation: 'url',
         },
       ]);
 
@@ -3382,10 +3380,9 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'invalid_type',
-          message: 'Expected string, received null',
+          message: 'Invalid input: expected string, received null',
           path: ['short_description'],
           expected: 'string',
-          received: 'null',
         },
       ]);
 
@@ -3450,11 +3447,10 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          message: 'String must contain at least 3 character(s)',
+          message: 'Too small: expected string to have >=3 characters',
           path: ['short_description'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           minimum: 3,
         },
       ]);
@@ -3520,11 +3516,10 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_big',
-          message: 'String must contain at most 255 character(s)',
+          message: 'Too big: expected string to have <=255 characters',
           path: ['short_description'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           maximum: 255,
         },
       ]);
@@ -3589,11 +3584,10 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'too_small',
-          message: 'String must contain at least 3 character(s)',
+          message: 'Too small: expected string to have >=3 characters',
           path: ['short_description'],
-          type: 'string',
+          origin: 'string',
           inclusive: true,
-          exact: false,
           minimum: 3,
         },
       ]);
@@ -3659,10 +3653,9 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'invalid_type',
-          message: 'Expected string, received null',
+          message: 'Invalid input: expected string, received null',
           path: ['webhook_url'],
           expected: 'string',
-          received: 'null',
         },
       ]);
 
@@ -3726,10 +3719,10 @@ suite('graphql bots', () => {
 
       assert.deepEqual(errors[0].extensions.errors, [
         {
-          code: 'invalid_string',
-          message: 'Invalid url',
+          code: 'invalid_format',
+          format: 'url',
+          message: 'Invalid URL',
           path: ['webhook_url'],
-          validation: 'url',
         },
       ]);
 
@@ -3794,10 +3787,9 @@ suite('graphql bots', () => {
       assert.deepEqual(errors[0].extensions.errors, [
         {
           code: 'invalid_type',
-          message: 'Expected array, received null',
+          message: 'Invalid input: expected array, received null',
           path: ['draft_paths'],
           expected: 'array',
-          received: 'null',
         },
       ]);
 

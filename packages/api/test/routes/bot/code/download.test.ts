@@ -94,15 +94,16 @@ suite('bot/code/download', () => {
       assert.equal(data.error, 'Bad Request');
       assert.equal(data.statusCode, 400);
 
-      const errors = JSON.parse(data.message);
-
-      assert.deepEqual(errors, [
+      assert.equal(data.validationContext, 'body');
+      assert.deepEqual(data.validation, [
         {
-          code: 'invalid_type',
-          expected: 'object',
-          received: 'undefined',
-          path: ['task'],
-          message: 'Required',
+          keyword: 'invalid_type',
+          instancePath: '/task',
+          schemaPath: '#/task/invalid_type',
+          params: {
+            expected: 'object',
+          },
+          message: 'Invalid input: expected object, received undefined',
         },
       ]);
     });
@@ -135,15 +136,16 @@ suite('bot/code/download', () => {
       assert.equal(data.error, 'Bad Request');
       assert.equal(data.statusCode, 400);
 
-      const errors = JSON.parse(data.message);
-
-      assert.deepEqual(errors, [
+      assert.equal(data.validationContext, 'body');
+      assert.deepEqual(data.validation, [
         {
-          code: 'invalid_type',
-          expected: 'number',
-          received: 'undefined',
-          path: ['task', 'id'],
-          message: 'Required',
+          keyword: 'invalid_type',
+          instancePath: '/task/id',
+          schemaPath: '#/task/id/invalid_type',
+          params: {
+            expected: 'number',
+          },
+          message: 'Invalid input: expected number, received undefined',
         },
       ]);
     });
@@ -174,15 +176,16 @@ suite('bot/code/download', () => {
       assert.equal(data.error, 'Bad Request');
       assert.equal(data.statusCode, 400);
 
-      const errors = JSON.parse(data.message);
-
-      assert.deepEqual(errors, [
+      assert.equal(data.validationContext, 'body');
+      assert.deepEqual(data.validation, [
         {
-          code: 'invalid_type',
-          expected: 'number',
-          received: 'null',
-          path: ['task', 'id'],
-          message: 'Expected number, received null',
+          keyword: 'invalid_type',
+          instancePath: '/task/id',
+          schemaPath: '#/task/id/invalid_type',
+          params: {
+            expected: 'number',
+          },
+          message: 'Invalid input: expected number, received null',
         },
       ]);
     });
@@ -215,15 +218,16 @@ suite('bot/code/download', () => {
       assert.equal(data.error, 'Bad Request');
       assert.equal(data.statusCode, 400);
 
-      const errors = JSON.parse(data.message);
-
-      assert.deepEqual(errors, [
+      assert.equal(data.validationContext, 'body');
+      assert.deepEqual(data.validation, [
         {
-          code: 'invalid_type',
-          expected: 'string',
-          received: 'undefined',
-          path: ['task', 'token'],
-          message: 'Required',
+          keyword: 'invalid_type',
+          instancePath: '/task/token',
+          schemaPath: '#/task/token/invalid_type',
+          params: {
+            expected: 'string',
+          },
+          message: 'Invalid input: expected string, received undefined',
         },
       ]);
     });
@@ -254,15 +258,16 @@ suite('bot/code/download', () => {
       assert.equal(data.error, 'Bad Request');
       assert.equal(data.statusCode, 400);
 
-      const errors = JSON.parse(data.message);
-
-      assert.deepEqual(errors, [
+      assert.equal(data.validationContext, 'body');
+      assert.deepEqual(data.validation, [
         {
-          code: 'invalid_type',
-          expected: 'string',
-          received: 'null',
-          path: ['task', 'token'],
-          message: 'Expected string, received null',
+          keyword: 'invalid_type',
+          instancePath: '/task/token',
+          schemaPath: '#/task/token/invalid_type',
+          params: {
+            expected: 'string',
+          },
+          message: 'Invalid input: expected string, received null',
         },
       ]);
     });

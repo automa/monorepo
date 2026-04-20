@@ -137,7 +137,7 @@ export default async function (app: FastifyInstance) {
           extensions: {
             ...formattedErr.extensions,
             code: ApolloServerErrorCode.BAD_USER_INPUT,
-            errors: innerErr.errors,
+            errors: innerErr.issues,
           },
         };
       }
