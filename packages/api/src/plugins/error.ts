@@ -6,6 +6,7 @@ import {
   env,
   environment,
   isProduction,
+  isTest,
   product,
   service,
   version,
@@ -41,7 +42,7 @@ const errorPlugin: FastifyPluginAsync = async (app) => {
               scope.setContext('error', { message: err.message, ...context });
               captureException(err);
             });
-          } else {
+          } else if (!isTest) {
             console.error(err);
           }
 

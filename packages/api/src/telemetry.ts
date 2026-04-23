@@ -108,9 +108,6 @@ export const meter = api.metrics.getMeter('default');
 process.on('SIGTERM', () => {
   sdk
     .shutdown()
-    .then(
-      () => console.log('Telemetry shut down successfully'),
-      () => console.log('Telemetry shut down failed'),
-    )
+    .catch(() => console.log('Telemetry shut down failed'))
     .finally(() => process.exit(0));
 });

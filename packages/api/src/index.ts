@@ -8,7 +8,7 @@ import fastifyAutoload from '@fastify/autoload';
 import fastifyCors from '@fastify/cors';
 import { FastifyError } from '@fastify/error';
 import fastifyHelmet from '@fastify/helmet';
-import fastifySensible from '@fastify/sensible';
+import fastifySensible, { HttpError } from '@fastify/sensible';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import {
@@ -17,7 +17,6 @@ import {
   jsonSchemaTransformObject,
   validatorCompiler,
 } from 'fastify-type-provider-zod';
-import httpErrors from 'http-errors';
 
 import { Prisma } from '@automa/prisma';
 
@@ -59,7 +58,7 @@ export const server = async () => {
   await app.register(eventsPlugin);
 
   app.setErrorHandler((error, request, reply) => {
-    if (error instanceof httpErrors.HttpError) {
+    if (error instanceof HttpError) {
       return error;
     }
 
