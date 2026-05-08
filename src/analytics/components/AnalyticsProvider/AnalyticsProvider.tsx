@@ -42,6 +42,7 @@ const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }) => {
   useAsyncEffect(async () => {
     if (isAnalyticsEnabled) {
       const anonymousId = (await analytics.user()).anonymousId();
+
       setAnonymousId(anonymousId);
     }
 

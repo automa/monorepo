@@ -1,12 +1,19 @@
-import { expect, test } from 'vitest';
-
 import { render, screen } from 'tests';
 
 import App from './App';
 
-test('home is default route', async () => {
-  render(<App />);
+test('renders children', async () => {
+  render({
+    Component: App,
+    children: [
+      {
+        path: '',
+        Component: () => 'child',
+      },
+    ],
+  });
 
-  const headline = await screen.findByText('Home');
-  expect(headline).toBeInTheDocument();
+  const child = await screen.findByText('child');
+
+  expect(child).toBeInTheDocument();
 });

@@ -67,6 +67,7 @@ export const Clickable = {
     const { getByText } = within(canvasElement);
 
     await userEvent.click(getByText('One'));
+
     expect(args.onClick).toHaveBeenCalled();
   },
 } satisfies Story;
