@@ -13,8 +13,6 @@ const config: Config = {
       fontSize: {
         '2xs': '0.625rem',
       },
-      height: {
-        '0.25': '0.0625rem',
       },
       maxWidth: {
         '8xl': '90rem',
@@ -22,7 +20,7 @@ const config: Config = {
       screens: {
         short: { raw: '(max-height: 700px)' },
       },
-      width: {
+      spacing: {
         '0.25': '0.0625rem',
       },
     },
