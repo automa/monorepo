@@ -35,6 +35,9 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    docs: {
+      codePanel: true,
+    },
     layout: 'fullscreen',
   },
 };
