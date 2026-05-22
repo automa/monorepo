@@ -21,13 +21,16 @@ suite('graphql repos', () => {
     app = await server();
 
     const [user] = await seedUsers(app, 1);
+
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
     await seedUserOrgs(app, user, [org, secondOrg]);
+
     const repos = await seedRepos(
       app,
       [org, org, org, secondOrg, nonMemberOrg],
       [org],
     );
+
     repo = repos[0];
 
     await app.prisma.repos.update({

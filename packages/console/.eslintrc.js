@@ -22,6 +22,7 @@ module.exports = {
     'plugin:import/recommended',
     'plugin:jsx-a11y/recommended',
     'plugin:prettier/recommended',
+    'plugin:@vitest/legacy-recommended',
     'plugin:storybook/recommended',
     'plugin:tailwindcss/recommended',
   ],
@@ -45,6 +46,43 @@ module.exports = {
               'Please import from `@automa/common`. For types, use `gql/graphql`.',
           },
         ],
+      },
+    ],
+    'padding-line-between-statements': [
+      'error',
+      // After directives (like 'use-strict'), except between directives
+      { blankLine: 'always', prev: 'directive', next: '*' },
+      { blankLine: 'any', prev: 'directive', next: 'directive' },
+      // Before and after every sequence of variable declarations
+      { blankLine: 'always', prev: '*', next: ['const', 'let', 'var'] },
+      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+      {
+        blankLine: 'any',
+        prev: ['const', 'let', 'var'],
+        next: ['const', 'let', 'var'],
+      },
+      // Before and after blocks & export statements
+      {
+        blankLine: 'always',
+        prev: ['block-like', 'export'],
+        next: '*',
+      },
+      {
+        blankLine: 'always',
+        prev: '*',
+        next: ['block-like', 'export'],
+      },
+      // Not between export statements
+      {
+        blankLine: 'any',
+        prev: 'export',
+        next: 'export',
+      },
+      // Before return statements
+      {
+        blankLine: 'always',
+        prev: '*',
+        next: ['return', 'continue', 'break', 'throw'],
       },
     ],
     '@typescript-eslint/ban-ts-comment': 'off',
@@ -99,6 +137,34 @@ module.exports = {
     'import/no-relative-packages': 'error',
     'import/no-self-import': 'error',
     'import/no-useless-path-segments': 'error',
+    '@vitest/expect-expect': [
+      'error',
+      {
+        assertFunctionNames: ['expect*', 'assert*'],
+      },
+    ],
+    '@vitest/consistent-each-for': [
+      'error',
+      {
+        describe: 'for',
+        test: 'for',
+      },
+    ],
+    '@vitest/consistent-test-it': [
+      'error',
+      {
+        fn: 'test',
+        withinDescribe: 'test',
+      },
+    ],
+    '@vitest/consistent-vitest-vi': 'error',
+    '@vitest/no-alias-methods': 'error',
+    '@vitest/no-duplicate-hooks': 'error',
+    '@vitest/no-importing-vitest-globals': 'error',
+    '@vitest/no-test-return-statement': 'error',
+    '@vitest/padding-around-all': 'error',
+    '@vitest/prefer-hooks-in-order': 'error',
+    '@vitest/prefer-hooks-on-top': 'error',
     'storybook/no-uninstalled-addons': 'off',
     'tailwindcss/classnames-order': 'off',
     'tailwindcss/enforces-negative-arbitrary-values': 'error',

@@ -29,6 +29,43 @@ module.exports = {
         ],
       },
     ],
+    'padding-line-between-statements': [
+      'error',
+      // After directives (like 'use-strict'), except between directives
+      { blankLine: 'always', prev: 'directive', next: '*' },
+      { blankLine: 'any', prev: 'directive', next: 'directive' },
+      // Before and after every sequence of variable declarations
+      { blankLine: 'always', prev: '*', next: ['const', 'let', 'var'] },
+      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+      {
+        blankLine: 'any',
+        prev: ['const', 'let', 'var'],
+        next: ['const', 'let', 'var'],
+      },
+      // Before and after blocks & export statements
+      {
+        blankLine: 'always',
+        prev: ['block-like', 'export'],
+        next: '*',
+      },
+      {
+        blankLine: 'always',
+        prev: '*',
+        next: ['block-like', 'export'],
+      },
+      // Not between export statements
+      {
+        blankLine: 'any',
+        prev: 'export',
+        next: 'export',
+      },
+      // Before return statements
+      {
+        blankLine: 'always',
+        prev: '*',
+        next: ['return', 'continue', 'break', 'throw'],
+      },
+    ],
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': 'warn',

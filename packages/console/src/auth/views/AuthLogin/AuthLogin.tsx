@@ -31,6 +31,7 @@ const AuthLogin: React.FC = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
+
     setIsSignup(searchParams.has('withSignUp'));
   }, [location, setIsSignup]);
 

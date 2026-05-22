@@ -26,6 +26,7 @@ suite('graphql botInstallations', () => {
     sandbox = createSandbox();
 
     const [user] = await seedUsers(app, 1);
+
     [org, secondOrg, nonMemberOrg] = await seedOrgs(app, 3);
     await seedUserOrgs(app, user, [org, secondOrg]);
     [bot, , secondOrgBot, nonMemberOrgBot, , nonPublishedBot] = await seedBots(
@@ -576,6 +577,7 @@ suite('graphql botInstallations', () => {
       });
 
       const timestamp = Date.now();
+
       sandbox.stub(Date, 'now').returns(timestamp);
 
       const response = await botInstall(app, org.id, {

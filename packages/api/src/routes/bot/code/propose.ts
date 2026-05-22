@@ -154,8 +154,8 @@ export default async function (app: FastifyInstance) {
               pr.state === 'open'
                 ? task_state.submitted
                 : pr.merged
-                ? task_state.completed
-                : task_state.cancelled,
+                  ? task_state.completed
+                  : task_state.cancelled,
             ...(metadata?.cost_in_cents
               ? { cost_in_cents: metadata.cost_in_cents }
               : {}),

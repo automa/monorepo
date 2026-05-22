@@ -17,6 +17,7 @@ export default async function (app: FastifyInstance) {
 
     if (!event || typeof event !== 'string' || !request.body) {
       request.log.error('No event');
+
       return reply.unauthorized();
     }
 
@@ -54,6 +55,7 @@ export default async function (app: FastifyInstance) {
 
     // Verify github sha256 signature
     let hmac = createHmac('sha256', env.GITHUB_APP.WEBHOOK_SECRET);
+
     hmac = hmac.update(JSON.stringify(request.body));
 
     const digest = Buffer.from(`sha256=${hmac.digest('hex')}`, 'utf8');

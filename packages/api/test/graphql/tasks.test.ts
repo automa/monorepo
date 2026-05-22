@@ -1049,6 +1049,7 @@ suite('graphql tasks', () => {
       );
 
       const { errors } = response.json();
+
       assert.lengthOf(errors, 1);
       assert.include(errors[0].message, 'Unprocessable Entity');
       assert.equal(errors[0].extensions.code, 'BAD_USER_INPUT');

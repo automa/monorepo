@@ -421,6 +421,7 @@ export const Clickable = {
     const { getByText } = within(canvasElement);
 
     await userEvent.click(getByText('One'));
+
     expect(args.onClick).toHaveBeenCalled();
   },
 } satisfies Story;
@@ -431,6 +432,7 @@ export const NonClickable = {
     const { getByText } = within(canvasElement);
 
     await userEvent.click(getByText('One'));
+
     expect(args.onClick).not.toHaveBeenCalled();
   },
 } satisfies Story;

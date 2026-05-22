@@ -1434,6 +1434,7 @@ suite('bot/code/propose', () => {
           is_user: false,
         },
       });
+
       await app.prisma.bots.update({
         where: {
           id: bot.id,

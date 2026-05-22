@@ -1,5 +1,3 @@
-import { expect, test, vi } from 'vitest';
-
 import { mockedNavigate, render, screen } from 'tests';
 
 import AdminSetupCode from './AdminSetupCode';

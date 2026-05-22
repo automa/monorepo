@@ -96,6 +96,7 @@ const reducer = (state: State, action: Action) => {
         ),
       };
     }
+
     case ActionType.REMOVE_TOAST: {
       if (action.toastId === undefined) {
         return {
@@ -130,6 +131,7 @@ let count = 0;
 
 const toast = ({ ...props }: ToastComponentProps) => {
   count = (count + 1) % Number.MAX_SAFE_INTEGER;
+
   const id = count.toString();
 
   const update = (props: ToastProps) =>

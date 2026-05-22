@@ -97,6 +97,7 @@ const run = async (
   );
 
   const endUpgradeTime = Date.now();
+
   console.log(`Time for upgrade: ${endUpgradeTime - startUpgradeTime}ms`);
 
   await command('cargo', ['add', `${dep}@~${version}`], { cwd: workingDir });
@@ -108,6 +109,7 @@ const run = async (
   await command('git', ['push', '-f', 'origin', branch], { cwd: workingDir });
 
   const endTime = Date.now();
+
   console.log(`Time for PR: ${endTime - startTime}ms`);
 
   await axios.post(`/repos/${uri}/pulls`, {

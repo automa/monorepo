@@ -17,6 +17,7 @@ suite('api/orgs/integrations/connect', () => {
 
     const [user] = await seedUsers(app, 1);
     const [org] = await seedOrgs(app, 2);
+
     await seedUserOrgs(app, user, [org]);
 
     await app.prisma.integrations.create({

@@ -130,6 +130,7 @@ export default async function (app: FastifyInstance) {
     // Update the provider data if it exists and return
     if (existingProvider) {
       await updateProvider(existingProvider.id);
+
       return finish(existingProvider.user_id);
     }
 

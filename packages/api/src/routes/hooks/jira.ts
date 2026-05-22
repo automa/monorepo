@@ -13,6 +13,7 @@ export default async function (app: FastifyInstance) {
 
     if (!event || typeof event !== 'string') {
       request.log.error('No event');
+
       return reply.unauthorized();
     }
 
