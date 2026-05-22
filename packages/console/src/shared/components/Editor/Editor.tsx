@@ -53,18 +53,22 @@ const Heading = TiptapHeading.extend({
     switch (level) {
       case 1:
         variant = 'title4';
+
         break;
 
       case 2:
         variant = 'title5';
+
         break;
 
       case 3:
         variant = 'title6';
+
         break;
 
       case 4:
         variant = 'xlarge';
+
         break;
 
       default:

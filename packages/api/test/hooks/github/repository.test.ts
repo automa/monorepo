@@ -337,6 +337,7 @@ suite('github hook repository event', () => {
         getStub.withArgs('/repos/automa/tmp/branches/production').callCount,
         1,
       );
+
       for (const file of CONFIG_FILES) {
         assert.equal(
           getStub.withArgs(`/repos/automa/tmp/contents/${file}`).callCount,

@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'vitest';
-
 import { ProviderType } from 'gql/graphql';
 
 import { type Org } from 'orgs/types';
@@ -34,7 +32,7 @@ const dummyOrgs: Org[] = [
 ];
 
 describe('orgsReducer', () => {
-  it('should return the initial state', () => {
+  test('should return the initial state', () => {
     expect(reducer(undefined, { type: '@@INIT' })).toEqual({
       orgs: null,
       org: null,
@@ -42,7 +40,7 @@ describe('orgsReducer', () => {
     });
   });
 
-  it('should set orgs', () => {
+  test('should set orgs', () => {
     expect(reducer(undefined, setOrgs(dummyOrgs))).toEqual({
       orgs: dummyOrgs,
       org: null,
@@ -50,7 +48,7 @@ describe('orgsReducer', () => {
     });
   });
 
-  it('should unset orgs', () => {
+  test('should unset orgs', () => {
     const result = reducer(
       {
         orgs: dummyOrgs,
@@ -67,7 +65,7 @@ describe('orgsReducer', () => {
     });
   });
 
-  it('should set org', () => {
+  test('should set org', () => {
     const result = reducer(
       {
         orgs: dummyOrgs,
@@ -84,7 +82,7 @@ describe('orgsReducer', () => {
     });
   });
 
-  it('should not set org when it is not in orgs', () => {
+  test('should not set org when it is not in orgs', () => {
     const result = reducer(
       {
         orgs: dummyOrgs,
@@ -101,7 +99,7 @@ describe('orgsReducer', () => {
     });
   });
 
-  it('should set orgs bot_installations_count', () => {
+  test('should set orgs bot_installations_count', () => {
     const result = reducer(
       {
         orgs: dummyOrgs,
@@ -124,7 +122,7 @@ describe('orgsReducer', () => {
     });
   });
 
-  it('should set org bot_installations_count', () => {
+  test('should set org bot_installations_count', () => {
     const result = reducer(
       {
         orgs: dummyOrgs,
@@ -150,7 +148,7 @@ describe('orgsReducer', () => {
     });
   });
 
-  it('should set orgs loading', () => {
+  test('should set orgs loading', () => {
     const result = reducer(
       {
         orgs: null,

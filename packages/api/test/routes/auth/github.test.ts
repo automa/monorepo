@@ -1150,6 +1150,7 @@ suite('auth/github', () => {
             name: 'Pavan Sunkara',
           },
         });
+
         await app.prisma.user_providers.create({
           data: {
             user_id: user.id,
@@ -1257,6 +1258,7 @@ suite('auth/github', () => {
               name: 'Pavan Sunkara',
             },
           });
+
           await app.prisma.user_providers.create({
             data: {
               user_id: user.id,
@@ -1368,6 +1370,7 @@ suite('auth/github', () => {
               name: 'Pavan Sunkara',
             },
           });
+
           await app.prisma.user_providers.create({
             data: {
               user_id: user.id,
@@ -1468,6 +1471,7 @@ suite('auth/github', () => {
               name: 'Pavan Sunkara',
             },
           });
+
           await app.prisma.user_providers.create({
             data: {
               user_id: user.id,

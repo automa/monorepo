@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 import { babelOptimizerPlugin } from '@graphql-codegen/client-preset';
 import react from '@vitejs/plugin-react';
 import { webpackStats } from 'rollup-plugin-webpack-stats';
-import checker from 'vite-plugin-checker';
+import { checker } from 'vite-plugin-checker';
 import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimizer';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -45,11 +45,13 @@ export default defineConfig({
     open: 'http://localhost:3000',
   },
   test: {
-    globals: true,
     environment: 'jsdom',
+    globals: true,
     setupFiles: './src/setupTests.ts',
+    passWithNoTests: true,
     coverage: {
       reporter: ['lcov'],
+      include: ['src'],
     },
   },
 });

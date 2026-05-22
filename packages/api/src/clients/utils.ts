@@ -34,6 +34,7 @@ export const createAxiosInstance = (config: CreateAxiosDefaults) => {
 
       while (requestUrl) {
         const response = await axiosInstance.get<T>(requestUrl, options);
+
         yield response.data;
 
         requestUrl = nextLinkHeader(response);

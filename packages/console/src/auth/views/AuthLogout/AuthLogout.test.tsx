@@ -1,5 +1,3 @@
-import { beforeEach, expect, test, vi } from 'vitest';
-
 import { mockedAxios, mockedNavigate, render, waitFor } from 'tests';
 
 import AuthLogout from './AuthLogout';

@@ -1,5 +1,3 @@
-import { expect, test, vi } from 'vitest';
-
 import { mockedNavigate, render } from 'tests';
 
 import AuthLogin from './AuthLogin';

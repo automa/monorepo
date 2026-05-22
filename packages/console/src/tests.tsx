@@ -6,7 +6,6 @@ import {
   RouteObject,
   RouterProvider,
 } from 'react-router-dom';
-import { vi } from 'vitest';
 import { NormalizedCacheObject } from '@apollo/client';
 import {
   MockedProvider as ApolloProvider,
@@ -109,6 +108,7 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockedUseNavigate,
   Navigate: (props: NavigateProps) => {
     mockedNavigate(props);
+
     return null;
   },
 }));

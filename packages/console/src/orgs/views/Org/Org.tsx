@@ -46,6 +46,7 @@ const Org: React.FC = () => {
     if (!orgsLoading && orgs && orgName) {
       if (orgName !== '$') {
         setOrg(orgName);
+
         return;
       }
 

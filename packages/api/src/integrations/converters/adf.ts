@@ -98,6 +98,7 @@ function convert(node: Node, parent?: Node): string {
       output += content
         .map((subNode) => {
           thCount += subNode.type === 'tableHeader' ? 1 : 0;
+
           return convert(subNode);
         })
         .join('');
@@ -126,22 +127,27 @@ function convertMarks(node: Node) {
     switch (mark.type) {
       case 'code':
         converted = `\`${converted}\``;
+
         break;
 
       case 'em':
         converted = `_${converted}_`;
+
         break;
 
       case 'link':
         converted = `[${converted}](${mark.attrs.href})`;
+
         break;
 
       case 'strike':
         converted = `~~${converted}~~`;
+
         break;
 
       case 'strong':
         converted = `**${converted}**`;
+
         break;
 
       // not supported

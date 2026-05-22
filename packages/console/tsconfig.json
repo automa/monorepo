@@ -10,7 +10,8 @@
     "declaration": false,
     "declarationMap": false,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["vitest/globals"]
   },
   "include": ["src"]
 }

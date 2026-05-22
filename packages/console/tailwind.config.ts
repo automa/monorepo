@@ -42,10 +42,6 @@ const config: Config = {
         '3': 'repeat(auto-fill, minmax(23rem, 1fr))',
         '4': 'repeat(auto-fill, minmax(17rem, 1fr))',
       },
-      height: {
-        '0.25': '0.0625rem',
-        '18': '4.5rem',
-      },
       maxWidth: {
         '8xl': '90rem',
       },
@@ -55,8 +51,11 @@ const config: Config = {
       screens: {
         short: { raw: '(max-height: 700px)' },
       },
-      width: {
+      spacing: {
         '0.25': '0.0625rem',
+        '18': '4.5rem',
+      },
+      width: {
         '180': '45rem',
       },
     },

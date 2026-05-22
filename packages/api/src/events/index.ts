@@ -109,6 +109,7 @@ const eventsPlugin: FastifyPluginAsync<{
           await handler(app, job.data);
         } catch (error) {
           app.error.capture(error);
+
           throw error;
         }
       }

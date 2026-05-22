@@ -1,5 +1,3 @@
-import { expect } from 'vitest';
-
 import { mockedUseNavigate, render } from 'tests';
 
 import { ProviderType } from 'gql/graphql';

@@ -10,6 +10,7 @@ suite('api/orgs', () => {
     app = await server();
 
     const [user] = await seedUsers(app, 1);
+
     await seedOrgs(app, 1);
 
     app.addHook('preValidation', async (request) => {
