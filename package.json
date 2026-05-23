@@ -17,7 +17,7 @@
     "stop": "bash ./scripts/stop.sh"
   },
   "engines": {
-    "node": ">=22.3.0"
+    "node": ">=22.12.0"
   },
   "dependencies": {
     "@termapps/crude": "~0.1.4"
@@ -43,7 +43,7 @@
     "@types/sinon": "~17.0.3",
     "@typescript-eslint/eslint-plugin": "~8.25.0",
     "@typescript-eslint/parser": "~8.25.0",
-    "@vitest/coverage-v8": "~3.2.4",
+    "@vitest/coverage-v8": "~4.1.7",
     "@vitest/eslint-plugin": "~1.6.16",
     "autoprefixer": "~10.5.0",
     "chai": "~4.3.6",
@@ -77,7 +77,7 @@
     "tailwindcss-animate": "~1.0.7",
     "ts-node": "~10.9.2",
     "typescript": "~5.7.3",
-    "vitest": "~3.2.4",
+    "vitest": "~4.1.7",
     "webpack-stats-plugin": "~1.1.3"
   }
 }
