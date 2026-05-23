@@ -8,7 +8,7 @@ on:
       - packages/console/public/**
       - packages/console/src/**
       - packages/console/index.html
-      - packages/console/vite.config.mts
+      - packages/console/vite.config.ts
       - packages/console/tailwind.config.ts
       - packages/console/Dockerfile
       - packages/console/nginx.conf

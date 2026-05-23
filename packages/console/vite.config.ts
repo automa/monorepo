@@ -10,6 +10,8 @@ import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimize
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
+const vendors = ['react-dom', '@radix-ui', '@segment'];
+
 export default defineConfig({
   define: {
     'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`,
@@ -17,6 +19,16 @@ export default defineConfig({
   build: {
     outDir: 'build',
     sourcemap: !!process.env.BUILD_SOURCEMAP,
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: vendors.map((vendor) => ({
+            test: new RegExp(`node_modules/${vendor}`),
+            name: `vendor-${vendor.replace('@', '')}`,
+          })),
+        },
+      },
+    },
   },
   plugins: [
     imageOptimizer(),

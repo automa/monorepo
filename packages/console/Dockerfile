@@ -28,7 +28,7 @@ RUN pnpm install --frozen-lockfile
 COPY packages/common/src ./packages/common/src
 COPY packages/console/src ./packages/console/src
 COPY packages/console/public ./packages/console/public
-COPY packages/console/index.html packages/console/postcss.config.js packages/console/vite.config.mts packages/console/tailwind.config.ts ./packages/console/
+COPY packages/console/index.html packages/console/postcss.config.js packages/console/vite.config.ts packages/console/tailwind.config.ts ./packages/console/
 COPY packages/console/nginx.conf ./packages/console/
 
 RUN pnpm --filter @automa/common build
