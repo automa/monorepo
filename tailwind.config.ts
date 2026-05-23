@@ -13,7 +13,6 @@ const config: Config = {
       fontSize: {
         '2xs': '0.625rem',
       },
-      },
       maxWidth: {
         '8xl': '90rem',
       },

@@ -5,10 +5,9 @@ const config: StorybookConfig = {
   stories: ['../src/**/*.docs.mdx', '../src/**/*.stories.@(ts|tsx)'],
   addons: [
     '@storybook/addon-links',
-    '@storybook/addon-essentials',
+    '@storybook/addon-docs',
     '@storybook/addon-themes',
-    '@storybook/addon-interactions',
-    '@storybook/addon-coverage',
+    '@storybook/addon-vitest',
   ],
   staticDirs: ['../public'],
   typescript: {

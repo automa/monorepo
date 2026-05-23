@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import {
   getCoreRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
+import { fn } from 'storybook/test';
 
 import Table from './Table';
 

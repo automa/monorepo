@@ -7,7 +7,7 @@ on:
       - public/**
       - src/**
       - index.html
-      - vite.config.mts
+      - vite.config.ts
       - tailwind.config.ts
       - pnpm-lock.yaml
   pull_request:
@@ -17,7 +17,7 @@ on:
       - public/**
       - src/**
       - index.html
-      - vite.config.mts
+      - vite.config.ts
       - tailwind.config.ts
       - pnpm-lock.yaml
 concurrency:

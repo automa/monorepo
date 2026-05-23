@@ -3,7 +3,7 @@ import { Provider as StoreProvider } from 'react-redux';
 import { createMemoryRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { MockedProvider as ApolloProvider } from '@apollo/client/testing';
 import { withThemeByClassName } from '@storybook/addon-themes';
-import { Preview } from '@storybook/react';
+import { Preview } from '@storybook/react-vite';
 import * as Toast from '@radix-ui/react-toast';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
@@ -80,6 +80,9 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/,
       },
+    },
+    docs: {
+      codePanel: true,
     },
     layout: 'fullscreen',
   },

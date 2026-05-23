@@ -209,7 +209,7 @@ module.exports = {
         'graphql-codegen.ts',
         'postcss.config.js',
         'tailwind.config.ts',
-        'vite.config.mts',
+        'vite.config.ts',
       ],
       env: {
         node: true,

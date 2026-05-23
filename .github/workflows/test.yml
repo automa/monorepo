@@ -5,7 +5,7 @@ on:
     paths:
       - .github/workflows/test.yml
       - src/**
-      - vite.config.mts
+      - vite.config.ts
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
