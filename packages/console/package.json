@@ -70,8 +70,8 @@
     "test": "NODE_ENV=test vitest run",
     "test-cover": "NODE_ENV=test vitest run --coverage",
     "test-watch": "NODE_ENV=test vitest watch",
-    "test-storybook": "NODE_ENV=test test-storybook",
-    "test-storybook-cover": "NODE_ENV=test test-storybook --coverage",
+    "test-storybook": "NODE_ENV=test vitest --project=storybook run",
+    "test-storybook-cover": "NODE_ENV=test vitest --project=storybook run --coverage",
     "update-boilerplate": "git pull --no-rebase -s subtree -X subtree=packages/console https://git.sr.ht/~pksunkara/frontend-react master"
   },
   "engines": {
@@ -93,8 +93,7 @@
     ]
   },
   "devDependencies": {
-    "@storybook/react": "~8.6.18",
-    "@storybook/react-vite": "~8.6.18",
+    "@storybook/react-vite": "~10.4.1",
     "@testing-library/jest-dom": "~6.4.6",
     "@testing-library/react": "~16.0.0",
     "@testing-library/user-event": "~14.5.2",
