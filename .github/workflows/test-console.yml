@@ -6,7 +6,7 @@ on:
       - .github/workflows/test-console.yml
       - packages/common/src/**
       - packages/console/src/**
-      - packages/console/vite.config.mts
+      - packages/console/vite.config.ts
       - pnpm-lock.yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

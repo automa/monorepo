@@ -228,7 +228,7 @@ module.exports = {
         '.prettierrc.js',
         'postcss.config.js',
         'tailwind.config.ts',
-        'vite.config.mts',
+        'vite.config.ts',
       ],
       env: {
         node: true,
