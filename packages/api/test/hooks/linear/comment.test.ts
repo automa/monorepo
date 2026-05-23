@@ -397,7 +397,7 @@ suite('linear hook Comment event', () => {
             task_id: tasks[0].id,
           },
           orderBy: {
-            created_at: 'asc',
+            type: 'asc',
           },
         });
 
