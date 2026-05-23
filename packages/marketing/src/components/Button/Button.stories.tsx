@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { expect, fn, userEvent, within } from '@storybook/test';
+import { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Gear } from '@phosphor-icons/react';
+import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { ButtonComponentProps } from './types';
 

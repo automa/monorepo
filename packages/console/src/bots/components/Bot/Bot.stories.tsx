@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { makeFragmentData } from 'gql';
 import { BotType } from 'gql/graphql';

@@ -4,6 +4,7 @@
     "baseUrl": "./src",
     "target": "es2018",
     "module": "esnext",
+    "moduleResolution": "bundler",
     "lib": ["dom", "dom.iterable", "esnext"],
     "declaration": false,
     "declarationMap": false,

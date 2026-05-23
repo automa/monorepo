@@ -1,6 +1,6 @@
 import React from 'react';
 import { withThemeByClassName } from '@storybook/addon-themes';
-import { Preview } from '@storybook/react';
+import { Preview } from '@storybook/nextjs-vite';
 
 import '../src/app/globals.css';
 
