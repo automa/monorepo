@@ -1,7 +1,8 @@
-/// <reference types="vitest" />
+/// <reference types="vitest/config" />
 
 import { defineConfig } from 'vite';
 import { babelOptimizerPlugin } from '@graphql-codegen/client-preset';
+import babel from '@rolldown/plugin-babel';
 import react from '@vitejs/plugin-react';
 import { webpackStats } from 'rollup-plugin-webpack-stats';
 import { checker } from 'vite-plugin-checker';
@@ -19,18 +20,17 @@ export default defineConfig({
   },
   plugins: [
     imageOptimizer(),
-    react({
-      babel: {
-        plugins: [
-          [
-            babelOptimizerPlugin,
-            {
-              artifactDirectory: './src/gql',
-              gqlTagName: 'gql',
-            },
-          ],
+    react(),
+    babel({
+      plugins: [
+        [
+          babelOptimizerPlugin,
+          {
+            artifactDirectory: './src/gql',
+            gqlTagName: 'gql',
+          },
         ],
-      },
+      ],
     }),
     svgr(),
     tsconfigPaths(),
@@ -49,6 +49,7 @@ export default defineConfig({
     globals: true,
     setupFiles: './src/setupTests.ts',
     passWithNoTests: true,
+    dir: 'src',
     coverage: {
       reporter: ['lcov'],
       include: ['src'],

@@ -64,7 +64,7 @@
     "test-cover": "nyc --reporter=lcov --reporter=text-summary pnpm test"
   },
   "engines": {
-    "node": ">=22.3.0"
+    "node": ">=22.12.0"
   },
   "devDependencies": {
     "@types/connect-redis": "~0.0.19",
