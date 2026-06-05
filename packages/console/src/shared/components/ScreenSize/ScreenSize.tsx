@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC, ReactElement } from 'react';
 
 import {
   useIsExtraLargeOnly,
@@ -11,44 +11,40 @@ import {
 
 import { ScreenSizeHelperProps, ScreenSizeProps } from './types';
 
-export const ExtraSmallOnly: React.FC<ScreenSizeHelperProps> = ({
-  children,
-}) => {
+export const ExtraSmallOnly: FC<ScreenSizeHelperProps> = ({ children }) => {
   const isExtraSmallOnly = useIsExtraSmallOnly();
 
-  return isExtraSmallOnly ? (children as JSX.Element) : null;
+  return isExtraSmallOnly ? (children as ReactElement) : null;
 };
 
-export const SmallOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
+export const SmallOnly: FC<ScreenSizeHelperProps> = ({ children }) => {
   const isSmallOnly = useIsSmallOnly();
 
-  return isSmallOnly ? (children as JSX.Element) : null;
+  return isSmallOnly ? (children as ReactElement) : null;
 };
 
-export const MediumOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
+export const MediumOnly: FC<ScreenSizeHelperProps> = ({ children }) => {
   const isMediumOnly = useIsMediumOnly();
 
-  return isMediumOnly ? (children as JSX.Element) : null;
+  return isMediumOnly ? (children as ReactElement) : null;
 };
 
-export const LargeOnly: React.FC<ScreenSizeHelperProps> = ({ children }) => {
+export const LargeOnly: FC<ScreenSizeHelperProps> = ({ children }) => {
   const isLargeOnly = useIsLargeOnly();
 
-  return isLargeOnly ? (children as JSX.Element) : null;
+  return isLargeOnly ? (children as ReactElement) : null;
 };
 
-export const ExtraLargeOnly: React.FC<ScreenSizeHelperProps> = ({
-  children,
-}) => {
+export const ExtraLargeOnly: FC<ScreenSizeHelperProps> = ({ children }) => {
   const isExtraLargeOnly = useIsExtraLargeOnly();
 
-  return isExtraLargeOnly ? (children as JSX.Element) : null;
+  return isExtraLargeOnly ? (children as ReactElement) : null;
 };
 
-const ScreenSize: React.FC<ScreenSizeProps> = ({ children, ...size }) => {
+const ScreenSize: FC<ScreenSizeProps> = ({ children, ...size }) => {
   const isScreenSize = useIsScreenSize(size);
 
-  return isScreenSize ? (children as JSX.Element) : null;
+  return isScreenSize ? (children as ReactElement) : null;
 };
 
 export default ScreenSize;

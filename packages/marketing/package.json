@@ -19,7 +19,7 @@
     "class-variance-authority": "catalog:",
     "date-fns": "catalog:",
     "next": "~14.2.35",
-    "next-mdx-remote": "~5.0.0",
+    "next-mdx-remote-client": "~2.1.11",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-twc": "catalog:",

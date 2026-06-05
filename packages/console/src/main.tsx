@@ -11,7 +11,6 @@ import 'cal-sans';
 import 'index.css';
 
 import 'env';
-import 'telemetry';
 
 import client from 'client';
 import { ErrorBoundary } from 'error';
