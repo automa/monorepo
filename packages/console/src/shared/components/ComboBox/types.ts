@@ -1,4 +1,4 @@
-import { HTMLAttributes, Key } from 'react';
+import { HTMLAttributes, Key, ReactElement } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 
 import { $, Component, Styled } from 'theme';
@@ -26,7 +26,7 @@ type ComboBoxProps<T extends ComboBoxOption> = $<
     emptyText: string;
     loading?: boolean;
     options: T[];
-    renderOption: (option: T) => JSX.Element;
+    renderOption: (option: T) => ReactElement;
   } & Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'>
 >;
 

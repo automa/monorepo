@@ -34,7 +34,7 @@ export const errorCapture = (
 
 export const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ReactErrorBoundary fallbackRender={ErrorCard}>
+    <ReactErrorBoundary FallbackComponent={ErrorCard}>
       {children}
     </ReactErrorBoundary>
   );
